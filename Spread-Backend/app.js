@@ -23,11 +23,11 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.resolve();
 
 // Middleware
 app.use(cors({
-  origin: ["https://spread-six.vercel.app","https://spread-backend.vercel.app","http://localhost:5173"], // Ensure this is the exact frontend URL
+  origin: "http://localhost:5173", // Ensure this is the exact frontend URL
   methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
   credentials: true, // Allow cookies
 }));
@@ -40,10 +40,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(multerFileUpload);
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
 
 //Login with google/gitub
 passportStrategies(passport)
@@ -95,6 +91,14 @@ User.belongsToMany(Post, { through: Archive, as: 'SavedPosts', foreignKey: 'User
 Post.belongsToMany(User, { through: Archive, as: 'UsersSaved', foreignKey: 'PostId' });
 Archive.belongsTo(User, { as: 'User', foreignKey: 'UserId' });
 Archive.belongsTo(Post, { as: 'Post', foreignKey: 'PostId' });
+
+
+
+app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")))
+app.get('*', (req, res, next) => {
+  if (req.originalUrl.startsWith('/api')) return next(); // Skip for API routes
+  res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
+});
 
 
 // Error Handling Middleware

@@ -4,11 +4,11 @@
   "description": "",
   "main": "app.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "dev": "nodemon app.js"
-  },
+ "scripts": {
+  "build": "npm install && npm install --prefix Spread-FrontEnd && npm run build --prefix Spread-FrontEnd",
+  "dev": "nodemon Spread-Backend/app.js",
+  "start": "node Spread-Backend/app.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

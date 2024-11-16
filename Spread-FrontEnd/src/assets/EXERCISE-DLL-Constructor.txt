@@ -1,0 +1,84 @@
+
+// THIS GOES IN YOUR MAIN CLASS TO TEST YOUR CODE:
+// -----------------------------------------------
+
+package datastructures.doublylinkedlist;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        DoublyLinkedList myDLL = new DoublyLinkedList(7);
+
+        myDLL.getHead();
+        myDLL.getTail();
+        myDLL.getLength();
+
+        System.out.println("\nDoubly Linked List:");
+        myDLL.printList();
+
+        /*
+            EXPECTED OUTPUT:
+            ----------------
+            Head: 7
+            Tail: 7
+            Length: 1
+
+            Doubly Linked List:
+            7
+
+        */
+
+    }
+
+}
+
+
+
+
+
+// THIS CODE GOES IN YOUR DOUBLYLINKEDLIST CLASS:
+// ----------------------------------------------
+      
+package datastructures.doublylinkedlist;
+
+
+public class DoublyLinkedList {
+
+	// CREATE CLASS VARIABLES, NODE CLASS, AND CONSTRUCTOR HERE //
+	//                                                          //
+	//                                                          //
+	//                                                          //
+	//                                                          //
+	//////////////////////////////////////////////////////////////
+
+    public void printList() {
+        Node temp = head;
+        while (temp != null) {
+            System.out.println(temp.value);
+            temp = temp.next;
+        }
+    }
+
+    public void getHead() {
+        if (head == null) {
+            System.out.println("Head: null");
+        } else {
+            System.out.println("Head: " + head.value);
+        }
+    }
+
+    public void getTail() {
+        if (head == null) {
+            System.out.println("Tail: null");
+        } else {
+            System.out.println("Tail: " + tail.value);
+        }
+    }
+
+    public void getLength() {
+        System.out.println("Length: " + length);
+    }
+
+}
+

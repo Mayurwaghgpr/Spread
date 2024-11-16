@@ -7,6 +7,10 @@ export default defineConfig({
     proxy:{
         '/api':'http://localhost:3000/',
     }
+
+  },
+  build: {
+    outDir: 'public', // Configure the output directory
   },
   plugins: [react()],
 })

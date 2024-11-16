@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "Spread-FrontEnd/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "Spread-FrontEnd/dist"
+      }
+    },
+    {
+      "src": "Spread-Backend/package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/Spread-Backend/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/Spread-FrontEnd/dist/$1"
+    }
+  ]
+}

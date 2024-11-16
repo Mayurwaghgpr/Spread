@@ -18,7 +18,18 @@ export const passportStrategies = (passport) => {
             if (!profile) {
             return
           }
-          let user = await User.findOne({ where: {username:profile.displayName } });
+          let user = await User.findOne({ where: {username:profile.displayName }, include: [
+                {
+                    model: User,
+                    as: 'Followers',
+                    through: { attributes: { exclude: ['password'] }},
+                },
+                {
+                    model: User,
+                    as: 'Following',
+                    through: { attributes: { exclude: ['password'] } },
+                }
+            ] });
           if (!user) {
             user = await User.create({
                 username: profile.displayName,
@@ -26,6 +37,7 @@ export const passportStrategies = (passport) => {
                 userImage: profile.picture,
                 password: profile.id, 
                 signedWith:profile.provider
+                
             });
           }
           done(null, user);
@@ -50,7 +62,18 @@ export const passportStrategies = (passport) => {
                 if (!profile) {
             return
           }
-          let user = await User.findOne({ where: { username:profile.username } });
+          let user = await User.findOne({ where: { username:profile.username } ,include: [
+                {
+                    model: User,
+                    as: 'Followers',
+                    through: { attributes: { exclude: ['password'] }},
+                },
+                {
+                    model: User,
+                    as: 'Following',
+                    through: { attributes: { exclude: ['password'] } },
+                }
+            ] });
           if (!user) {
             user = await User.create({
             username: profile.username,

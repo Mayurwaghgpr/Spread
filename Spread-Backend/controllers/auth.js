@@ -19,7 +19,6 @@ const CookieOptions = {
 // Sign up a new user
 export const SignUp = async (req, res,next) => {
     const { username, email, password } = req.body;
-console.log({ username, email, password })
     // Validate required fields
     if (!username || !email || !password) {
         return res.status(400).json({ message: "All fields are required" });
@@ -40,7 +39,6 @@ console.log({ username, email, password })
         // Hash the password and create a new user
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const newUser = await User.create({ username, email, password: hashedPassword,userImage:'images/placeholderImages/ProfOutlook.png' });
-
         // Generate access and refresh tokens
         const { AccessToken, RefreshToken } = AccessAndRefreshTokenGenerator({
             id: newUser.id,
@@ -55,7 +53,7 @@ console.log({ username, email, password })
         res.status(201)
             .cookie('AccessToken', AccessToken, CookieOptions)
             .cookie('RefreshToken', RefreshToken, CookieOptions)
-                       .cookie("_userDetail",newUser,{httpOnly:true})
+            .cookie("_userDetail",newUser,{httpOnly:true})
             .json({ user: newUser.dataValues, AccessToken, RefreshToken });
 
     } catch (err) {

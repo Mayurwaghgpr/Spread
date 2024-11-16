@@ -118,8 +118,8 @@ export const FollowUser = async (req, res, next) => {
     } else {
           // Create a new follow relationship
     await Follow.create({ followerId, followedId });
-    // await redisClient.del(followerId);
-
+      // await redisClient.del(followerId);
+      
     console.log('success')
     res.status(201).json({ status: "success" });
         

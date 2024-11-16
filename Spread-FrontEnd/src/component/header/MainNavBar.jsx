@@ -39,9 +39,9 @@ function MainNavBar() {
       className={`fixed top-0 transform-all duration-300 ease-in-out flex  justify-center w-full z-40`}
     >
       <nav
-        className={`relative  z-10 w-full  py-3 px-7 sm:px-20 lg:px-28 bg-slate-200 border border-inherit dark:border-[#383838]${
+        className={`relative  z-10 w-full  py-3 px-7 sm:px-20 lg:px-28 bg-white dark:border-[#383838] border-b dark:bg-black border-inherit dark:border-[#383838]${
           !isLogin
-            ? " bg-opacity-20 backdrop-blur-lg w-[80rem]  rounded-xl m-2"
+            ? " bg-opacity-20 backdrop-blur-lg w-[80rem]  border  rounded-xl m-2"
             : "dark:bg-[#222222] "
         } `}
       >

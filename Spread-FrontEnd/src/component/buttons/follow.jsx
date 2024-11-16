@@ -8,6 +8,7 @@ function Follow({ className, People }) {
   const { user } = useSelector((state) => state.auth);
   const { followUser, unfollowUser } = usePublicApis();
   const queryClient = useQueryClient();
+
   const invalidateQueries = () => {
     queryClient.invalidateQueries(["userProfile"]);
     queryClient.invalidateQueries(["loggedInUser"]);

@@ -37,7 +37,7 @@ function LoginMenu({ MenuOpen, setIsMenuOpen }) {
     {
       id: uuidv4(),
       lkname: "write",
-      icon: <i className="bi bi-pen"></i>,
+      icon: <i className="bi bi-feather"></i>,
       stub: "/write",
     },
     {
@@ -60,7 +60,7 @@ function LoginMenu({ MenuOpen, setIsMenuOpen }) {
     },
   ];
   return (
-    <div className="fixed z-[100] shadow-lg px-2  right-24 mt-2 rounded-lg dark:bg-[#222222] bg-white  dark:border-[#383838] dark:border">
+    <div className="fixed z-[100] shadow-lg px-2  right-5 sm:right-24 mt-2 rounded-lg dark:bg-[#222222] bg-white  dark:border-[#383838] dark:border">
       <div className="flex min-w-[17rem] flex-col h-full p-4 gap-3 items-start justify-between *:transition-all *:duration-200 dark:*:border-[#383838]">
         {/* Profile Link */}
         {LoginMenuLinks.map((link) => {

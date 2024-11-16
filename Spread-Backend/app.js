@@ -27,7 +27,7 @@ const __dirname = path.resolve();
 
 // Middleware
 app.use(cors({
-  origin: "https://spread-45xk.onrender.com", // Ensure this is the exact frontend URL
+  origin: ["https://spread-45xk.onrender.com","http://localhost:5173"], // Ensure this is the exact frontend URL
   methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
   credentials: true, // Allow cookies
 }));

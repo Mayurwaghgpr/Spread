@@ -78,7 +78,7 @@ function Viewblogs() {
 
   return (
     <main className="flex flex-col relative sm:flex-row   justify-end  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="flex flex-col items-end  relative w-[43rem]  mx-10">
+      <div className="flex flex-col items-end  relative sm:w-[43rem]  mx-10">
         <div className="flex transition-all text-xl font-medium duration-200 bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3 w-full  sticky top-20 ">
           <ul className="flex h-full items-center justify-between overflow-hidden bg-inherit w-full border-inherit">
             <li className="capitalize p-1.5 bg-inherit flex justify-center w-full hover:bg-gray-500 hover:bg-opacity-30">

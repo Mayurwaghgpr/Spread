@@ -69,8 +69,8 @@ function Theme({ className }) {
         }}
         className="min-w-28 w-fit relative capitalize text-center flex items-center justify-center gap-4 dark:bg-slate-700 bg-gray-200 rounded-md"
       >
-        {selectedTheme.icon}
-        {selectedTheme.value}
+        {selectedTheme?.icon}
+        {selectedTheme?.value}
         {
           <i
             className={`bi bi-caret-up  transition-all duration-300  ${

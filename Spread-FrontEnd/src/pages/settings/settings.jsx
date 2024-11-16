@@ -8,7 +8,7 @@ function Settings() {
   const navigate = useNavigate();
 
   const settingItem = [
-    { name: "General", icon: <i className="bi bi-gear"></i>, stub: "" },
+    { name: "General", icon: <i className="bi bi-gear"></i> || "G", stub: "" },
     { name: "Sync Github", icon: <LuGithub />, stub: "githubSynch" },
   ];
 

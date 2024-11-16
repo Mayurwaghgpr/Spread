@@ -41,7 +41,7 @@ function Bookmark({ className, post }) {
   const handleSavePost = useCallback(
     (post, icon) => {
       addToArchiveMutation.mutate(post);
-      setIcon(`${icon.id}-${post}`);
+      setIcon(`${icon?.id}-${post}`);
     },
     [addToArchiveMutation]
   );

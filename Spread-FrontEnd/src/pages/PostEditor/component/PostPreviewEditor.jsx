@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "react-query";
 import PostsApis from "../../../Apis/PostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../component/loaders/Spinner";
+import { createPortal } from "react-dom";
 
 const DEFAULT_ELEMENT = { type: "text", data: "", id: uuidv4(), index: 0 };
 
@@ -14,6 +15,7 @@ function PostPreviewEditor() {
   const [imageFiles, setImageFiles, handleTextChange] = useOutletContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [Topic, setTopic] = useState();
   const { elements } = useSelector((state) => state.posts);
 
@@ -76,12 +78,12 @@ function PostPreviewEditor() {
 
   const imageElements = elements?.filter((el) => el.type === "image");
 
-  return (
-    <main className="fixed top-0 right-0 left-0 z-[100] bg-white dark:bg-[#222222] bottom-0 w-full h-screen flex justify-center flex-col gap-5 items-center">
-      <div className="w-full max-w-[900px] text-center ">
-        <div className="w-full text-end">
-          <Link to={-1}> X</Link>
-        </div>
+  return createPortal(
+    <main className=" fixed top-0 right-0 z-40 bg-white px-10 h-full dark:bg-[#222222] w-full flex justify-center flex-col gap-10 m-auto items-center">
+      <div className="w-full  text-center ">
+        <Link className=" absolute right-5 text-4xl top-5" to={-1}>
+          <i className="bi bi-x-lg"></i>
+        </Link>
         <hgroup>
           <h1 className="text-2xl font-light text-black">
             Define your Preview
@@ -93,17 +95,14 @@ function PostPreviewEditor() {
         </hgroup>
       </div>
 
-      <article
-        aria-disabled={mutation.isLoading}
-        className="max-h-[500px] h-full w-full max-w-[900px] flex gap-2  "
-      >
+      <article className="  w-full max-w-[900px] flex sm:flex-row flex-col gap-5  ">
         <div className=" w-full flex flex-col justify-center items-center bg-inherit">
-          <h1 className="w-full text-lg mb-2">Post Preview</h1>
-          <div className="w-full h-[300px]   flex justify-center items-center bg-inherit">
+          <h1 className="w-full text-lg ">Post Preview</h1>
+          <div className="size-fit  flex justify-center items-center bg-inherit">
             <label className=" w-full h-full " htmlFor="titleimage">
               {imageElements?.length ? (
                 <img
-                  className=" w-full h-full "
+                  className="w-full "
                   src={imageElements[0]?.file}
                   alt="title image"
                 />
@@ -125,9 +124,11 @@ function PostPreviewEditor() {
               }
             />
           </div>
-          <div className="w-full h-full gap-1 flex flex-col justify-start items-center ">
+        </div>
+        <div className="w-full flex my-7 gap-5 flex-col">
+          <div className="w-full h-full gap-3   flex flex-col justify-start items-center ">
             <input
-              className=" p-2 w-full border-b placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
               type="text"
               name="title"
               defaultValue={elements[0]?.data}
@@ -138,7 +139,7 @@ function PostPreviewEditor() {
               }
             />
             <input
-              className=" p-2 w-full border-b placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
               type="text"
               name="subtitle"
               defaultValue={elements[1]?.data}
@@ -147,33 +148,21 @@ function PostPreviewEditor() {
                 handleTextChange(elements[1]?.id, e.target.value)
               }
             />
-          </div>
-        </div>
-        <div className="w-full flex  flex-col  px-3">
-          <div className="h-full flex  flex-col gap-3">
-            <div>
-              <h2 className="">Add Topics </h2>
-              <p className="text-md font-thin"></p>
-            </div>
-            <div>
+            <div className=" w-full">
               <input
-                className=" p-2 w-full border-b placeholder:text-sm  outline-none focus:border-black bg-inherit"
+                className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
                 type="text"
                 placeholder="Add Topics ..."
                 onChange={(e) => setTopic(e.target.value)}
               />
             </div>
-            <div className=" flex justify-start items-center  gap-1">
-              <h1>Author :</h1>
-              <p>{user.username}</p>
-            </div>
           </div>
-          <div className="h-full flex px-5 gap-3 items-start">
+          <div className="h-full flex gap-3 p items-start">
             <button
               onClick={handeSubmit}
               className={`flex gap-2 ${
-                mutation.isLoading ? "bg-orange-100 text-slate-400" : ""
-              } bg-orange-300 px-4 py-2 rounded-lg`}
+                mutation.isLoading ? "bg-sky-100 text-slate-400" : ""
+              } bg-sky-200 px-4 py-2 rounded-lg`}
               disabled={mutation.isLoading}
             >
               {mutation.isLoading && <Spinner className={" w-5 h-5"} />}
@@ -186,7 +175,8 @@ function PostPreviewEditor() {
           </div>
         </div>
       </article>
-    </main>
+    </main>,
+    document.getElementById("portal")
   );
 }
 

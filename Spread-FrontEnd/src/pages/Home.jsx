@@ -14,10 +14,10 @@ function Home() {
   return (
     <>
       <main className="relative dark:*:border-[#383838]">
-        <div className="relative min-h-[45rem] flex  items-center px-10 sm:py-24  py-10 text-start h-full border-inherit">
-          <div className=" absolute bg-black rounded-full min-w-fit min-h-fit  right-10  top-20">
+        <div className="relative min-h-[45rem] flex m-auto justify-center  items-center px-10  sm:py-24   text-start h-full border-inherit">
+          <div className=" absolute bg-black rounded-full min-w-fit min-h-fit  right-12 top-24">
             <video
-              className=" sm:size-[35rem] size-[10rem] m-1 border-white border-2 animate-fedin1s  object-cover object-center rounded-full "
+              className=" sm:size-[25rem] size-[10rem] m-1 border-white border-2 animate-fedin1s  object-cover object-center rounded-full "
               id="background-video"
               autoPlay
               muted
@@ -43,7 +43,7 @@ function Home() {
             <div className="w-full flex justify-center py-4 border-inherit">
               <Link
                 to="/write"
-                className="sm:py-2 px-4 text-inherit text-sm rounded-full border z-0 transition-all duration-300 border-inherit"
+                className="py-2 px-4 text-inherit text-sm rounded-full hover:bg-gray-500 hover:bg-opacity-20 border z-0 transition-all duration-300 border-inherit"
               >
                 Get Started
               </Link>

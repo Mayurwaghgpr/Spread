@@ -5,8 +5,8 @@ const CommonInput = forwardRef(function CommonInput(
   ref
 ) {
   return (
-    <div className={className}>
-      <label htmlFor={Iname} className=" w-full">
+    <div ref={ref} className={className}>
+      <label htmlFor={Iname} className="w-full">
         {labelname}
       </label>
       <input
@@ -14,7 +14,7 @@ const CommonInput = forwardRef(function CommonInput(
         type={type}
         id={Iname}
         name={Iname}
-        className={`p-3 border border-inherit bg-inherit outline-none  rounded-lg `}
+        className={`p-3  bg-inherit outline-none w-full rounded-lg `}
         // placeholder={Iname}
         disabled={disabled}
         {...props}

@@ -78,10 +78,10 @@ function Viewblogs() {
 
   return (
     <main className="flex flex-col relative sm:flex-row   justify-end  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="flex flex-col items-end  relative sm:w-[43rem]  mx-10">
-        <div className="flex transition-all text-xl font-medium duration-200 bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3 w-full  sticky top-20 ">
-          <ul className="flex h-full items-center justify-between overflow-hidden bg-inherit w-full border-inherit">
-            <li className="capitalize p-1.5 bg-inherit flex justify-center w-full hover:bg-gray-500 hover:bg-opacity-30">
+      <div className="flex flex-col items-center  relative sm:w-[43rem]  sm:mx-10 mx-5">
+        <div className="flex w-full transition-all text-lg font-medium duration-200 bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
+          <ul className="flex h-full items-center  justify-between overflow-hidden bg-inherit w-full border-inherit">
+            <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-500 hover:bg-opacity-30">
               <button
                 className="t-btn"
                 onClick={() => handleTopicClick("All")}
@@ -90,16 +90,16 @@ function Viewblogs() {
                 Feeds
               </button>
             </li>
-            <li className="capitalize p-1.5 bg-inherit flex justify-center w-full  hover:bg-gray-500  hover:bg-opacity-30">
+            <li className="capitalize  bg-inherit flex justify-center p-2 w-full  hover:bg-gray-500  hover:bg-opacity-30">
               <Link to="#" aria-label="Specialization">
-                Specialization
+                specific
               </Link>
             </li>
           </ul>
         </div>
         <div
           id="PostContainer"
-          className={`relative flex flex-col   mt-16 ${
+          className={`relative flex flex-col h-screen mt-16 ${
             !postsData && " py-10 "
           } w-full lg:w-[46rem]   sm:px-10 dark:border-[#383838] border-inherit`}
         >
@@ -122,11 +122,7 @@ function Viewblogs() {
               <Spinner />
             </div>
           )}
-          {!postsData && (
-            <div className="flex justify-center items-center w-full h-full text-3xl ">
-              <h2>No posts</h2>
-            </div>
-          )}
+          {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
         </div>
       </div>{" "}
       <Aside

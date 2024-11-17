@@ -12,12 +12,6 @@ function LoginMenu({ MenuOpen, setIsMenuOpen }) {
 
   const { userImageurl } = userImageSrc(user);
 
-  const emailMasked = useMemo(() => {
-    const email = user?.email || "";
-    if (email.length < 7) return email;
-    return `${email.slice(0, 2)}******${email.slice(6, email.length)}`;
-  }, [user]);
-
   const handleProfileClick = () => {
     setIsMenuOpen(false);
   };
@@ -33,12 +27,6 @@ function LoginMenu({ MenuOpen, setIsMenuOpen }) {
         />
       ),
       stub: `/profile/@${user?.username?.replace(/\s+/g, "")}/${user?.id}`,
-    },
-    {
-      id: uuidv4(),
-      lkname: "write",
-      icon: <i className="bi bi-feather"></i>,
-      stub: "/write",
     },
     {
       id: uuidv4(),
@@ -60,27 +48,14 @@ function LoginMenu({ MenuOpen, setIsMenuOpen }) {
     },
   ];
   return (
-    <div className="fixed z-[100] shadow-lg px-2  right-5 sm:right-24 mt-2 rounded-lg dark:bg-[#222222] bg-white  dark:border-[#383838] dark:border">
-      <div className="flex min-w-[17rem] flex-col h-full p-4 gap-3 items-start justify-between *:transition-all *:duration-200 dark:*:border-[#383838]">
+    <div className="fixed z-[100] shadow-lg px-2  right-5 sm:right-24 mt-2 rounded-lg dark:bg-black bg-white dark:border-[#383838] dark:border">
+      <div className="flex min-w-[17rem] flex-col py-2 h-full gap-3 items-start justify-between *:transition-all *:duration-200 dark:*:border-[#383838]">
         {/* Profile Link */}
         {LoginMenuLinks.map((link) => {
-          if (link.lkname === "write" && location.pathname != "/write") {
-            return (
-              <Link
-                key={link.id}
-                className="flex sm:hidden hover:bg-gray-400 dark:hover:bg-gray-600 px-1 rounded-md  justify-start items-center gap-2 w-full"
-                to={link.stub}
-                onClick={handleProfileClick}
-              >
-                {link.icon}
-                {link.lkname}
-              </Link>
-            );
-          }
           return (
             <Link
               key={link.id}
-              className="flex justify-start hover:bg-gray-100 dark:hover:bg-gray-600 px-1 rounded-md  items-center gap-2 w-full"
+              className="flex justify-start hover:bg-opacity-5 p-2 py-1 hover:bg-slate-500 dark:hover:bg-gray-600  rounded-md  items-center gap-2 w-full"
               to={link.stub}
               onClick={handleProfileClick}
             >
@@ -89,15 +64,11 @@ function LoginMenu({ MenuOpen, setIsMenuOpen }) {
             </Link>
           );
         })}
-        {/* Masked email Display */}
-        <div className="border-y py-2 border-0   w-full flex items-center gap-2">
-          <i className="bi bi-envelope-at"></i> <p>{emailMasked}</p>
-        </div>
         {/* Logout Button */}
         <button
           onClick={Logout}
           type="button"
-          className="flex gap-2 items-center w-full hover:bg-gray-100 dark:hover:bg-gray-600 px-1 rounded-md"
+          className="flex gap-2 items-center w-full hover:bg-opacity-5 p-2 py-1 hover:bg-slate-500 dark:hover:bg-gray-600 rounded-md"
         >
           <LuLogOut className="text-lg" />
           Sign out

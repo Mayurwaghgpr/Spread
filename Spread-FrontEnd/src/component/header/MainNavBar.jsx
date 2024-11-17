@@ -36,7 +36,7 @@ function MainNavBar() {
 
   return (
     <header
-      className={`fixed top-0 transform-all duration-300 ease-in-out flex  justify-center w-full z-40`}
+      className={`fixed top-0 transform-all duration-300 ease-in-out flex  justify-center w-full z-10`}
     >
       <nav
         className={`relative  z-10 w-full  py-3 px-7 sm:px-20 lg:px-28 bg-white dark:border-[#383838] border-b dark:bg-black border-inherit dark:border-[#383838]${
@@ -52,14 +52,6 @@ function MainNavBar() {
             </Link>
           </div>
           <div className="flex gap-8 justify-end items-center sm:w-full ">
-            {location.pathname === "/write" && isLogin && (
-              <Link
-                to={"/write/publish"}
-                className="bg-sky-100 dark:bg-gray-800 px-3 py-1 text-sm rounded-3xl"
-              >
-                Publish
-              </Link>
-            )}
             {location.pathname === "/" && isLogin && (
               <div
                 ref={searchRef}
@@ -118,7 +110,7 @@ function MainNavBar() {
                 )}
               </div>
             ) : (
-              <div className="flex gap-3 justify-end w-full items-center text-lg">
+              <div className="flex gap-3 justify-end w-full items-center text-md">
                 <Link
                   to="/auth/signin"
                   className="transition-colors duration-500 rounded-3xl sm:px-3 py-2"
@@ -127,9 +119,9 @@ function MainNavBar() {
                 </Link>
                 <Link
                   to="/auth/signup"
-                  className="border border-inherit transition-colors duration-500 rounded-full p-2"
+                  className="border border-inherit transition-colors duration-500 rounded-full px-3 py-1"
                 >
-                  Start Writing
+                  get started
                 </Link>
               </div>
             )}

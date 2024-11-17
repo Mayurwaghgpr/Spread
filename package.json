@@ -6,7 +6,7 @@
   "type": "module",
  "scripts": {
   "build": "npm install && npm install --prefix Spread-FrontEnd && npm run build --prefix Spread-FrontEnd",
-  "dev": "npm install && npm install --prefix Spread-FrontEnd && npm run build --prefix Spread-FrontEnd && nodemon Spread-Backend/app.js",
+  "dev": "nodemon Spread-Backend/app.js",
   "start": "node Spread-Backend/app.js"
 },
   "keywords": [],

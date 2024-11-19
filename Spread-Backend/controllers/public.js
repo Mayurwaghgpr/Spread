@@ -4,7 +4,8 @@ import Post from "../models/posts.js";
 import Follow from "../models/Follow.js";
 import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
-
+import { DataFetching } from "../operations/data-fetching.js";
+const dataFecter = new DataFetching()
 // Fetch all users except the current user and distinct topics
 export const userPrepsData = async (req, res,next) => {
     try {
@@ -84,14 +85,16 @@ export const LikePost = async (req, res, next) => {
         if (exist) {
             await exist.destroy();
           const updtLikes = await Likes.findAll({ where: { postId } })
-          console.log({updtLikes})
-        res.status(201).json({ message: 'removed like',updtLikes})
+
+
+          
+        res.status(201).cookie("_userDetail",userInfo,{httpOnly:true}).json({ message: 'removed like',updtLikes})
         }else{
             const result = await Likes.create({ likedBy: req.authUser, postId });
              const updtLikes = await Likes.findAll({where:{postId}})
-
+          const userInfo = await dataFecter.Profile( req.authUser.id)
         console.log('like',result)
-            res.status(201).json({ message: 'liked',updtLikes})
+            res.status(201).cookie("_userDetail",userInfo,{httpOnly:true}).json({ message: 'liked',updtLikes})
         }
     } catch (error) {
         next(error)
@@ -103,6 +106,7 @@ export const LikePost = async (req, res, next) => {
 export const FollowUser = async (req, res, next) => {
   const { followerId, followedId } = req.body;
 
+  // Prevent users from following themselves
   if (followerId === followedId) {
     return res.status(400).json({ status: "error", message: "You cannot follow yourself" });
   }
@@ -112,29 +116,41 @@ export const FollowUser = async (req, res, next) => {
     const existingFollow = await Follow.findOne({ where: { followerId, followedId } });
 
     if (existingFollow) {
-        await existingFollow.destroy();
-      // await redisClient.del(followerId);
-      res.status(200).json({ message: "Unfollowed successfully" });
-    } else {
-          // Create a new follow relationship
-    await Follow.create({ followerId, followedId });
-      // await redisClient.del(followerId);
-      
-    console.log('success')
-    res.status(201).json({ status: "success" });
-        
-    }
+      // Unfollow user
+      await existingFollow.destroy();
+      const userInfo = await dataFecter.Profile(req.authUser.id);
+      console.log(userInfo);
 
-  
-  } catch (error) {
-    if (error ) {
-      res.status(409).json({ status: "error", message: "You are already following this user" });
+      // Optionally clear Redis cache if implemented
+      // await redisClient.del(followerId);
+
+      res
+        .status(200)
+        .cookie("_userDetail",userInfo, { httpOnly: true }) // Serialize object before storing
+        .json({ message: "Unfollowed successfully" });
     } else {
-      console.error("Error following user:", error);
-      next(error);
+      // Follow user
+      await Follow.create({ followerId, followedId });
+      const userInfo = await dataFecter.Profile(req.authUser.id);
+      console.log(userInfo);
+
+      // Optionally clear Redis cache if implemented
+      // await redisClient.del(followerId);
+
+      res
+        .status(201)
+        .cookie("_userDetail",userInfo, { httpOnly: true }) // Serialize object before storing
+        .json({ status: "success", message: "Followed successfully" });
     }
+  } catch (error) {
+    console.error("Error in FollowUser:", error);
+
+    // General error handling
+    res.status(500).json({ status: "error", message: "An error occurred. Please try again later." });
+    next(error);
   }
 };
+
 
 
 
@@ -156,8 +172,10 @@ export const AddPostToArchive = async (req, res,next) => {
       PostId: postId,
       UserId: req.authUser.id
     });
+    
+          const userInfo = await dataFecter.Profile( req.authUser.id)
           // await redisClient.del(req.authUser.id);
-    res.status(200).json({ message: 'Post archived successfully', archived });
+    res.status(200).cookie("_userDetail",userInfo,{httpOnly:true}).json({ message: 'Post archived successfully', archived });
   } catch (error) {
     console.error('Error archiving post:', error);
     // res.status(500).json({ message: 'An error occurred while archiving the post' });

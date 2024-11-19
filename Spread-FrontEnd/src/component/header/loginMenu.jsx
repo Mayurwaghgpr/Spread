@@ -9,7 +9,7 @@ function LoginMenu({ MenuOpen, setIsMenuOpen }) {
   const { user, isLogin } = useSelector((state) => state.auth);
   const Logout = useLogout();
   const location = useLocation();
-
+  console.log(user);
   const { userImageurl } = userImageSrc(user);
 
   const handleProfileClick = () => {

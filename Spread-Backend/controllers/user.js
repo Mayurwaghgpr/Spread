@@ -5,13 +5,15 @@ import Post from "../models/posts.js";
 import formatPostData from "../utils/dataFormater.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import Likes from "../models/Likes.js";
+import {DataFetching} from "../operations/data-fetching.js";
 // import redisClient from "../utils/redisClient.js";
 
 const EXPIRATION = 3600;
-
-export const getLoginUser =async (req, res,nex) => {
-  const userInfo= req.cookies._userDetail 
-  
+const dataFecter = new DataFetching()
+    
+export const getLoginUser = async (req, res,nex) => {
+  const userInfo = req.cookies._userDetail 
+  console.log(userInfo)
    res.status(200).json(userInfo);
 }
 // Get user profile
@@ -25,16 +27,9 @@ export const getUserProfile = async (req, res,next) => {
     //   return res.status(200).json(JSON.parse(cachedUserData));
     // }
     // console.log('cach miss')
-    const userInfo = await User.findOne({
-      where: { id },
-      attributes: { exclude: ['password'] },
-      include: [
-        { model: User, as: 'Followers', through: { attributes: { exclude: ['password']}  }, attributes: ['id'] },
-        { model: User, as: 'Following', through: { attributes:{ exclude: ['password']} }, attributes: ['id'] },
-        { model: Post, as: 'SavedPosts', through: { attributes: [] } },
-      ]
-    });
 
+    const userInfo = await dataFecter.Profile(id)
+    
     if (userInfo) {
       // await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
       return res.status(200).cookie("_userDetail",userInfo,{httpOnly:true}).json(userInfo);

@@ -13,11 +13,11 @@ function Home() {
 
   return (
     <>
-      <main className="relative dark:*:border-[#383838]">
-        <div className="relative min-h-[45rem] flex m-auto justify-center  items-center px-10  sm:py-24   text-start h-full border-inherit">
-          <div className=" absolute bg-black rounded-full min-w-fit min-h-fit  right-12 top-24">
+      <main className="relative h-[50rem]  px-10 dark:*:border-[#383838]">
+        <div className="relative h-full flex m-auto box-border justify-between items-center   text-start border-inherit">
+          <div className=" absolute bg-black  rounded-full min-w-fit min-h-fit  right-12 top-32 ">
             <video
-              className=" sm:size-[25rem] size-[10rem] m-1 border-white border-2 animate-fedin1s  object-cover object-center rounded-full "
+              className=" sm:size-[15rem] lg:size-[20rem] xl:size-[25rem] size-[10rem] m-1 border-white border-2 animate-fedin1s  object-cover object-center rounded-full "
               id="background-video"
               autoPlay
               muted

@@ -13,7 +13,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
 
   const { userImageurl, IsuserFromOAth } = userImageSrc(userProfile);
   return (
-    <div className="flex flex-col justify-evenly dark:bg-inherit  dark:*:border-[#383838] dark:border-[#383838]   ">
+    <div className="flex flex-col justify-evenly dark:bg-inherit  dark:*:border-[#383838]  ">
       <div className="flex w-full justify-start items-center flex-col gap-2 pt-3  ">
         <div className="relative flex  h-full border p-2 py-5  w-full justify-start rounded-lg  items-basline   gap-5 sm:gap-9 border-inherit px-4">
           <div>
@@ -44,13 +44,13 @@ const ProfileHeader = React.memo(({ profileId }) => {
                     dispatch(
                       setFollowInfo({
                         Info: "Followers",
-                        count: userProfile?.Followers.length,
+                        count: userProfile?.Followers?.length,
                       })
                     )
                   }
                   className="flex   justify-start  items-start h-full gap-1 "
                 >
-                  <span>{userProfile?.Followers.length}</span>
+                  <span>{userProfile?.Followers?.length}</span>
                   <h1>Followers</h1>
                 </button>
                 <button
@@ -58,13 +58,13 @@ const ProfileHeader = React.memo(({ profileId }) => {
                     dispatch(
                       setFollowInfo({
                         Info: "Following",
-                        count: userProfile?.Following.length,
+                        count: userProfile?.Following?.length,
                       })
                     )
                   }
                   className="flex   justify-start  items-start h-full  gap-1   "
                 >
-                  <span>{userProfile?.Following.length}</span>
+                  <span>{userProfile?.Following?.length}</span>
                   <h1>Following</h1>
                 </button>
               </div>

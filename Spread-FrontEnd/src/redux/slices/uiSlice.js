@@ -17,6 +17,7 @@ const initialState = {
   
   isScale: false,
   // focusedIndex: 0,
+  MenuOpen:false,
 };
 
 const uiSlice = createSlice({
@@ -44,6 +45,9 @@ const uiSlice = createSlice({
     setIsScale: (state,action) => {
       state.isScale = !state.isScale
     },
+    setManuOpen: (state) => {
+      state.MenuOpen = !state.MenuOpen
+    }
     // setFocusedIndex: (state,action) => {
     //   state.focusedIndex= action.payload
     // },
@@ -51,6 +55,6 @@ const uiSlice = createSlice({
   },
 });
 
-export const { setConfirmBox, setIsConfirm, setToast, removeToast,setThemeMode ,setIsScale,removeAllToast} = uiSlice.actions;
+export const { setConfirmBox, setIsConfirm, setToast, removeToast,setThemeMode ,setIsScale,removeAllToast,setManuOpen} = uiSlice.actions;
 
 export default uiSlice.reducer;

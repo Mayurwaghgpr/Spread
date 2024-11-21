@@ -10,15 +10,16 @@ import useLastPostObserver from "../hooks/useLastPostObserver";
 import usePublicApis from "../Apis/publicApis";
 import Aside from "../component/homeComp/Aside";
 import PostsApis from "../Apis/PostsApis";
+import SideBar from "../component/homeComp/SideBar";
 
 function Viewblogs() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { isLogin, user } = useSelector((state) => state.auth);
+  const { MenuOpen } = useSelector((state) => state.ui);
   const { userPrepsData } = usePublicApis();
   const { fetchDataAll } = PostsApis();
 
   const selectedTopic = searchParams.get("topic");
-
   const {
     isLoading: isLoadingPreps,
     isFetching: fetchingPreps,
@@ -77,9 +78,10 @@ function Viewblogs() {
   }
 
   return (
-    <main className="flex flex-col relative sm:flex-row   justify-end  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="flex flex-col items-center  relative sm:w-[43rem]  sm:mx-10 mx-5">
-        <div className="flex w-full transition-all text-lg font-medium duration-200 bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
+    <main className="relative flex flex-col sm:flex-row justify-end h-full  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
+      <SideBar />
+      <div className="flex flex-col items-center  relative lg:w-[35rem] xl:w-[48rem] w-full ">
+        <div className="flex w-[80%] transition-all text-lg font-medium duration-200 bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
           <ul className="flex h-full items-center  justify-between overflow-hidden bg-inherit w-full border-inherit">
             <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-500 hover:bg-opacity-30">
               <button
@@ -99,9 +101,9 @@ function Viewblogs() {
         </div>
         <div
           id="PostContainer"
-          className={`relative flex flex-col h-screen mt-16 ${
+          className={`relative flex flex-col h-screen  ${
             !postsData && " py-10 "
-          } w-full lg:w-[46rem]   sm:px-10 dark:border-[#383838] border-inherit`}
+          } w-full    sm:px-10 dark:border-[#383838] border-inherit`}
         >
           {postsData?.pages?.map((page) =>
             page?.map((post, idx, arr) => (
@@ -126,7 +128,7 @@ function Viewblogs() {
         </div>
       </div>{" "}
       <Aside
-        className="lg:flex hidden  border-inherit flex-col w-[24rem] mt-20  px-10  justify-start gap-5  "
+        className="lg:flex hidden  border-inherit flex-col w-[20rem] xl:w-[24rem] mt-20  px-10  justify-start gap-5  "
         FechingPreps={fetchingPreps}
         isLoadingPreps={isLoadingPreps}
         PrepsData={prepsData}

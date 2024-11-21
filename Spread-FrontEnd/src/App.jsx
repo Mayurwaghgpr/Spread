@@ -13,6 +13,7 @@ import PersistentUser from "./utils/persistentUser";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
 import SearchBar from "./component/homeComp/searchBar";
+import TaskBar from "./component/phoneview/TaskBar";
 
 // Lazy load components
 
@@ -179,10 +180,18 @@ function App() {
             }
           />
           <Route path="*" element={<PageError />} />
-          <Route path="/Read" element={<ReadList />} />
+          <Route
+            path="/Read"
+            element={
+              <ProtectedRoute>
+                <ReadList />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/ForgotPass" element={<ForgotPass />} />
           <Route path="/Resetpassword/:token" element={<ResetPassword />} />
         </Routes>
+        {isLogin && <TaskBar />}
       </Suspense>
       <ConfirmationBox />
       {/* <ScrollToTopButton /> */}

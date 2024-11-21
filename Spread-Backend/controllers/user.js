@@ -32,7 +32,7 @@ export const getUserProfile = async (req, res,next) => {
     
     if (userInfo) {
       // await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
-      return res.status(200).cookie("_userDetail",userInfo,{httpOnly:true}).json(userInfo);
+      return res.status(200).json(userInfo);
     } else {
       return res.status(404).json({ message: 'User not found' });
     }

@@ -1,13 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 
-function PostBtn({ className, content }) {
+function PostBtn({ className, content, disabled }) {
+  const navigat = useNavigate();
+
   return (
     <div className={className}>
       {" "}
-      <Link to={"/write/publish"} className="w-full h-full">
+      <button
+        onClick={() => navigat("/write/publish")}
+        className="w-full h-full"
+        disabled={disabled}
+      >
         {content}
-      </Link>
+      </button>
     </div>
   );
 }

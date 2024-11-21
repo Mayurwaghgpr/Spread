@@ -1,7 +1,12 @@
 import React, { memo, useMemo } from "react";
 import { useSelector } from "react-redux";
 
-function InputTypeSelector({ imageInputRef, addElement, handleFileChange }) {
+function InputTypeSelector({
+  imageInputRef,
+  addElement,
+  handleFileChange,
+  className,
+}) {
   const { isScale } = useSelector((state) => state.ui);
 
   const buttonConsts = useMemo(
@@ -21,9 +26,7 @@ function InputTypeSelector({ imageInputRef, addElement, handleFileChange }) {
     [isScale]
   );
   return (
-    <div
-      className={`flex gap-2 absolute pointer-events-none  left-10 justify-center px-5 items-end transition-all duration-500 *:pointer-events-auto ease-in-out font-thin *:h-[2.5rem] *:w-[2.5rem] *:border *:rounded-full *:border-slate-500 text-slate-600 `}
-    >
+    <div className={`${className}`}>
       {buttonConsts.map((conf, idx) => (
         <button
           key={idx}

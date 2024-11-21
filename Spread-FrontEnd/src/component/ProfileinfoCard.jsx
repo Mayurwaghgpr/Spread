@@ -41,7 +41,7 @@ function ProfileinfoCard({ className }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`dark:bg-[#222222] animate-slide-in-right bg-white rounded-xl sm:mx-2 h-full sm:w-[500px] w-full overflow-hidden `}
+        className={`dark:bg-black border dark:border-[#383838] animate-slide-in-right bg-white rounded-xl sm:mx-2 h-full sm:w-[500px] w-full overflow-hidden `}
       >
         <div className="relative w-full h-16 p-6 text-center text-2xl">
           <h1>{FollowInfo.Info}</h1>

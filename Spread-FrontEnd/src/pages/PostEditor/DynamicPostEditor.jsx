@@ -33,10 +33,9 @@ function DynamicPostEditor() {
     <>
       <main className="flex flex-col justify-between mt-16 ">
         <PostBtn
-          className={
-            "absolute  sm:top-[13%] sm:right-32 top-[80%] right-10 text-4xl text-sky-400 rounded-full flex justify-center items-center"
-          }
+          className={`fixed  sm:top-[13%] sm:right-32 top-[80%] right-10 text-4xl ${elements.length >= 4 ? "text-sky-400" : "text-sky-200 "} rounded-full flex justify-center items-center`}
           content={<i className="bi bi-send"></i>}
+          disabled={elements.length > 3 ? false : true}
         />
         <div
           className={`flex  justify-center items-center  flex-col mt-4 gap-2`}
@@ -67,6 +66,7 @@ function DynamicPostEditor() {
                   imageInputRef={imageInputRef}
                   addElement={addElement}
                   handleFileChange={handleFileChange}
+                  className={`flex gap-2  absolute pointer-events-none  left-10 justify-center px-5 items-end transition-all duration-500 *:pointer-events-auto ease-in-out font-thin *:h-[2.5rem] *:w-[2.5rem] *:border *:rounded-full *:border-slate-500 text-slate-600 `}
                 />
               )}
               <div className="flex w-full  min-h-10">

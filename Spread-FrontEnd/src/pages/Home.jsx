@@ -13,22 +13,9 @@ function Home() {
 
   return (
     <>
-      <main className="relative h-[50rem]  px-10 dark:*:border-[#383838]">
-        <div className="relative h-full flex m-auto box-border justify-between items-center   text-start border-inherit">
-          <div className=" absolute bg-black  rounded-full min-w-fit min-h-fit  right-12 top-32 ">
-            <video
-              className=" sm:size-[15rem] lg:size-[20rem] xl:size-[25rem] size-[10rem] m-1 border-white border-2 animate-fedin1s  object-cover object-center rounded-full "
-              id="background-video"
-              autoPlay
-              muted
-              loop
-              playsInline
-            >
-              <source src={bgvideo} type="video/mp4" />
-            </video>
-          </div>
-
-          <div className=" p-7 sm:w-[50%] z-10  rounded-lg  flex flex-col gap-2 border-inherit">
+      <main className="relative h-screen px-10 dark:*:border-[#383838]">
+        <div className="relative h-full flex m-auto sm:flex-row flex-col-reverse gap-8 justify-center items-center   text-start border-inherit">
+          <div className=" p-7 sm:w-[50%]  rounded-lg h-fit  flex flex-col gap-2 border-inherit">
             <h1 className="xl:text-2xl lg:text-xl flex  items-center text-lg mb-4">
               <span>Spread.. </span>
               <i className="bi bi-feather pb-2"></i>
@@ -48,6 +35,18 @@ function Home() {
                 Get Started
               </Link>
             </div>
+          </div>
+          <div className="  bg-black ms-20  rounded-full min-w-fit min-h-fit  ">
+            <video
+              className=" sm:size-[15rem] lg:size-[20rem] xl:size-[25rem] size-[10rem] m-1 border-white border-2 animate-fedin1s  object-cover object-center rounded-full "
+              id="background-video"
+              autoPlay
+              muted
+              loop
+              playsInline
+            >
+              <source src={bgvideo} type="video/mp4" />
+            </video>
           </div>
         </div>
 
@@ -83,8 +82,8 @@ function Home() {
             </div>
           </article>
         </div> */}
+        <Footer />
       </main>
-      <Footer />
     </>
   );
 }

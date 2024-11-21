@@ -30,7 +30,7 @@ function PeoplesList({ people, index, className }) {
         >
           <h1 className="">{people?.username}</h1>
           {isUserhover && (
-            <div className=" absolute animate-fedin.2s z-30 w-auto flex flex-col gap-2 border  mt-[90px] bg-white border-inherit dark:bg-[#222222] font-normal text-[12px] p-3 overflow-hidden overflow-ellipsis rounded-md ">
+            <div className=" absolute animate-fedin.2s z-30 w-auto flex flex-col gap-2 border  mt-[90px] bg-white border-inherit dark:bg-black font-normal text-[12px] p-3 overflow-hidden overflow-ellipsis rounded-md ">
               <div className=" flex gap-4 justify-start items-center font-medium ">
                 {" "}
                 <img
@@ -49,7 +49,7 @@ function PeoplesList({ people, index, className }) {
       <Follow
         People={people}
         className={
-          "w-[85px] h-7 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 rounded-full"
+          " px-3  bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
         }
       />
     </li>

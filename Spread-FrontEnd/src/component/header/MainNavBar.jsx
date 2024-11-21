@@ -13,7 +13,6 @@ import profileIcon from "/ProfOutlook.png";
 import useClickOutside from "../../hooks/useClickOutside";
 import ProfileButton from "../ProfileButton";
 // import useScrollDirection from "../../hooks/useScrollDirection"; // Import the custom hook
-import LoginMenu from "./loginMenu";
 
 const ConfirmationBox = React.lazy(
   () => import("../otherUtilityComp/ConfirmationBox")
@@ -25,14 +24,10 @@ function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
   const location = useLocation();
   const dispatch = useDispatch();
-  const loginMenuRef = useRef();
   const searchRef = useRef();
 
   const { confirmBox, ThemeMode } = useSelector((state) => state.ui);
   const { isLogin, user } = useSelector((state) => state.auth);
-
-  const { isMenuOpen, setIsMenuOpen, isSearchBar, setSearchBar } =
-    useClickOutside(loginMenuRef, searchRef);
 
   return (
     <header
@@ -46,41 +41,10 @@ function MainNavBar() {
         } `}
       >
         <div className="flex items-center justify-between w-full m-auto">
-          <div className="py-1">
-            <Link to="/" className=" sm:text-2xl lg:text-3xl">
-              Spread
-            </Link>
-          </div>
+          <Link to="/" className="text-2xl font-bold ">
+            Spread
+          </Link>
           <div className="flex gap-8 justify-end items-center sm:w-full ">
-            {location.pathname === "/" && isLogin && (
-              <div
-                ref={searchRef}
-                className="flex sm:justify-end w-full sm:items-center items-start"
-              >
-                <Link
-                  className={`transition-all cursor-pointer z-20 duration-100 delay-200 ease-in ${
-                    isSearchBar ? "opacity-0 cursor-default " : "opacity-100 "
-                  }`}
-                  to={"/explore"}
-                  disabled={isSearchBar}
-                >
-                  <i className="bi bi-search"></i>
-                </Link>
-              </div>
-            )}
-
-            {location.pathname !== "/write" &&
-              location.pathname !== "/profile" &&
-              isLogin && (
-                <Link
-                  className="text-xl sm:block hidden"
-                  to="/write"
-                  tabIndex="-1"
-                  title="Write"
-                >
-                  <i className="bi bi-feather"></i>
-                </Link>
-              )}
             {isLogin && (
               <div className="relative sm:text-xl">
                 <i className="bi bi-bell"></i>
@@ -91,7 +55,7 @@ function MainNavBar() {
               </div>
             )}
             {isLogin ? (
-              <div className="relative text-left" ref={loginMenuRef}>
+              <div className="relative text-left">
                 <ProfileButton
                   className={` box-content ${
                     location.pathname.startsWith("/profile")
@@ -99,15 +63,7 @@ function MainNavBar() {
                       : ""
                   }`}
                   profileIcon={profileIcon}
-                  isMenuOpen={isMenuOpen}
-                  setIsMenuOpen={setIsMenuOpen}
                 />
-                {isMenuOpen && (
-                  <LoginMenu
-                    MenuOpen={isMenuOpen}
-                    setIsMenuOpen={setIsMenuOpen}
-                  />
-                )}
               </div>
             ) : (
               <div className="flex gap-3 justify-end w-full items-center text-md">

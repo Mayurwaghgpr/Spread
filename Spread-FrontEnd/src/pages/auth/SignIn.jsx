@@ -89,7 +89,7 @@ function SignIn() {
               <h1 className="text-2xl text-center font-medium my-4">Welcome</h1>
               <CommonInput
                 ref={userRef}
-                className={emailimputCred.className}
+                className={`${emailimputCred.className}`}
                 type={emailimputCred.type}
                 name={emailimputCred.name}
                 labelname={emailimputCred.labelname}

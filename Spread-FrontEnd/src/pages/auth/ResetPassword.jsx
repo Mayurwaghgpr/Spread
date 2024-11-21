@@ -60,7 +60,7 @@ function ResetPassword() {
             </h1>
 
             <CommonInput
-              className={"mb-4 flex flex-col gap-2 "}
+              className={"mb-4 flex flex-col gap-2"}
               type={"password"}
               name={"password"}
               labelname={"Password"}

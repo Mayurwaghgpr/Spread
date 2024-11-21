@@ -40,9 +40,9 @@ const ReadList = () => {
   );
 
   return (
-    <div className="relative w-full flex justify-center  items-center flex-col bg-inherit bg-white dark:*:border-[#383838] dark:bg-[#222222]">
-      <div className="h-full flex justify-center flex-col mt-20 items-center sm:w-[60%] w-full bg-inherit">
-        <div className="sticky top-20 z-10 p-5  font-medium flex flex-col justify-start items-start gap-4 border border-inherit rounded-b-lg  w-full bg-inherit">
+    <div className="relative w-full flex justify-center  items-center flex-col bg-inherit bg-white dark:*:border-[#383838] dark:bg-black">
+      <div className="h-full flex justify-center flex-col mt-16 items-center sm:w-fit w-full bg-inherit">
+        <div className="fixed top-16 z-10 p-5 flex flex-col sm:w-[50rem] w-full justify-start items-start gap-4 border border-inherit rounded-b-lg bg-inherit">
           <div className=" flex justify-center gap-4 items-center">
             <img
               className=" w-10  h-10 rounded-full"
@@ -51,8 +51,8 @@ const ReadList = () => {
             />
             <h2>{user.username}</h2>
           </div>
-          <div className="w-full text-3xl text-center  h-full bg-inherit">
-            <h1>Read List</h1>
+          <div className="w-full text-3xl  h-full bg-inherit">
+            <h1>Read </h1>
           </div>
         </div>
         {hasPosts ? (
@@ -80,9 +80,8 @@ const ReadList = () => {
             )}
           </div>
         ) : (
-          <div className="relative flex justify-center items-center  w-full text-5xl font-light text-center min-h-[60vh] mt-9">
+          <div className="relative flex justify-center items-center  w-full text-2xl  text-center min-h-[60vh] mt-9">
             <div className="">
-              <h1>Empty!</h1>
               <p>Nothing to Read</p>
             </div>
           </div>

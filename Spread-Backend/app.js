@@ -94,11 +94,11 @@ Archive.belongsTo(Post, { as: 'Post', foreignKey: 'PostId' });
 
 
 
-// app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")))
-// app.get('*', (req, res, next) => {
-//   if (req.originalUrl.startsWith('/api')) return next(); // Skip for API routes
-//   res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
-// });
+app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")))
+app.get('*', (req, res, next) => {
+  if (req.originalUrl.startsWith('/api')) return next(); // Skip for API routes
+  res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
+});
 
 
 // Error Handling Middleware

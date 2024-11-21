@@ -79,7 +79,6 @@ function Viewblogs() {
 
   return (
     <main className="relative flex flex-col sm:flex-row justify-end h-full  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <SideBar />
       <div className="flex flex-col items-center  relative lg:w-[35rem] xl:w-[48rem] w-full ">
         <div className="flex w-[80%] transition-all text-lg font-medium duration-200 bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
           <ul className="flex h-full items-center  justify-between overflow-hidden bg-inherit w-full border-inherit">

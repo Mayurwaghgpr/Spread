@@ -14,6 +14,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
 import SearchBar from "./component/homeComp/searchBar";
 import TaskBar from "./component/phoneview/TaskBar";
+import SideBar from "./component/homeComp/SideBar";
 
 // Lazy load components
 
@@ -93,6 +94,7 @@ function App() {
       {<ConfirmationBox />}
       <Suspense fallback={<LoaderScreen />}>
         <MainNavBar />
+        {isLogin && <SideBar />}
         <Routes>
           <Route
             path="/"

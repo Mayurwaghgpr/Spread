@@ -49,7 +49,7 @@ function PeoplesList({ people, index, className }) {
       <Follow
         People={people}
         className={
-          " px-3  bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
+          " p-2 transition-all duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
         }
       />
     </li>

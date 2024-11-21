@@ -25,7 +25,7 @@ function Follow({ className, People }) {
   return (
     <div className={className}>
       {followLoading ? (
-        <div className="w-full relative h-full flex justify-center  rounded-3xl bg-inherit transition-all duration-300 items-center">
+        <div className="w-full relative h-full flex justify-center  rounded-3xl bg-inherit items-center">
           <div className="dotloader"></div>
         </div>
       ) : People?.id !== user?.id ? (
@@ -33,13 +33,13 @@ function Follow({ className, People }) {
           onClick={() =>
             mutate({ followerId: user?.id, followedId: People?.id })
           }
-          className="w-full h-full bg-inherit rounded-3xl transition-all duration-300"
+          className="w-full h-full bg-inherit rounded-3xl "
           disabled={followLoading}
         >
           {isFollowing ? "Following" : "Follow"}
         </button>
       ) : (
-        <div className="flex justify-center items-center w-full h-full bg-inherit transition-all duration-300 rounded-full">
+        <div className="flex justify-center items-center w-full h-full bg-inherit rounded-full">
           You
         </div>
       )}

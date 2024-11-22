@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 function TaskBar() {
   const { user, isLogin } = useSelector((state) => state.auth);
@@ -40,13 +40,18 @@ function TaskBar() {
         {" "}
         {LoginMenuLinks.map((link) => {
           return (
-            <Link
+            <NavLink
               key={link.id}
-              className={` p-2 ${link?.className} text-gray-500 hover:text-black`}
+              isActive={(match, location) =>
+                location.pathname.startsWith(link.stub)
+              }
+              className={({ isActive }) =>
+                `flex ${isActive && "text-slate-500 dark:text-gray-600 text-opacity-20  dark:bg-opacity-20"} hover:text-slate-500 dark:hover:text-gray-600`
+              }
               to={link.stub}
             >
               {link.icon}
-            </Link>
+            </NavLink>
           );
         })}
       </div>

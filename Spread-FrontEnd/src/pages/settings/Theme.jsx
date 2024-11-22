@@ -67,10 +67,10 @@ function Theme({ className }) {
         onClick={() => {
           setShowThemeList((prev) => !prev);
         }}
-        className="min-w-28 w-fit relative capitalize text-center flex items-center justify-center gap-4 dark:bg-slate-700 bg-gray-200 rounded-md"
+        className="w-fit p-1 relative capitalize text-center flex items-center justify-center gap-4 dark:bg-slate-700 bg-gray-200 rounded-md"
       >
         {selectedTheme?.icon}
-        {selectedTheme?.value}
+        <span className="sm:block hidden">{selectedTheme?.value}</span>
         {
           <i
             className={`bi bi-caret-up  transition-all duration-300  ${
@@ -83,14 +83,14 @@ function Theme({ className }) {
         <ul className={className}>
           {Modes.map((mode) => (
             <li
-              className={`flex justify-start items-center cursor-pointer gap-1 w-full p-1 rounded-lg ${
+              className={`flex justify-start items-center cursor-pointer gap-1 w-full p-2 rounded-lg ${
                 ThemeMode === mode.value ? "bg-gray-500 bg-opacity-10" : ""
               }`}
               onClick={() => handeltheme(mode.value)}
               key={mode.value}
             >
-              {mode.icon}
-              {mode.name}
+              <span>{mode.icon}</span>
+              <span className="sm:block hidden"> {mode.name}</span>
             </li>
           ))}
         </ul>

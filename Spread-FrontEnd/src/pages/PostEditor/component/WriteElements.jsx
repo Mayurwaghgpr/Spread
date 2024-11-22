@@ -47,11 +47,17 @@ const WriteElements = ({
       return (
         <figure
           key={element.id}
-          // ref={(el) => (inputRefs.current[index] = el)}
+          ref={(el) => (inputRefs.current[index] = el)}
           onFocus={() => setFocusedIndex(index)}
           className="p-4 w-full"
           onKeyDown={(e) => handleKeyDown(e, element.id, index)}
         >
+          <button
+            onClick={(e) => handleKeyDown(e, element.id, index)}
+            className=" bg-gray-200 bg-opacity-20 hover:bg-opacity-100 absolute top-2 rounded-full right-4 text-lg size-5 sm:hidden flex justify-center items-center "
+          >
+            <i className="bi bi-x"></i>{" "}
+          </button>
           <img
             className="h-[100%] min-w-full p-2"
             src={element.file}

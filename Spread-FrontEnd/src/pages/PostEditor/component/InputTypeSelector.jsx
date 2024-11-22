@@ -7,7 +7,7 @@ function InputTypeSelector({
   handleFileChange,
   className,
 }) {
-  const { isScale } = useSelector((state) => state.ui);
+  // const { isScale } = useSelector((state) => state.ui);
 
   const buttonConsts = useMemo(
     () => [
@@ -18,13 +18,13 @@ function InputTypeSelector({
     []
   );
 
-  const getTransitionClass = useMemo(
-    () =>
-      `transition-all duration-200 ease-linear ${
-        isScale ? "scale-100 opacity-100 z-10" : "scale-0 opacity-0 -z-50"
-      }`,
-    [isScale]
-  );
+  // const getTransitionClass = useMemo(
+  //   () =>
+  //     `transition-all duration-200 ease-linear ${
+  //       isScale ? "scale-100 opacity-100 z-10" : "scale-0 opacity-0 -z-50"
+  //     }`,
+  //   [isScale]
+  // );
   return (
     <div className={`${className}`}>
       {buttonConsts.map((conf, idx) => (
@@ -33,7 +33,8 @@ function InputTypeSelector({
           name={conf.type}
           title={conf.type}
           aria-label={`Add ${conf.type}`}
-          className={getTransitionClass}
+          // className={getTransitionClass}
+          className={` hover:-translate-y-1 hover:scale-110`}
           onClick={() => addElement(conf.type)}
         >
           {conf.icon}
@@ -42,7 +43,7 @@ function InputTypeSelector({
       <label
         title="add an image"
         aria-label="Add an image"
-        className={`items-center flex justify-center ${getTransitionClass}`}
+        className={`items-center flex justify-center hover:-translate-y-1 hover:scale-110`}
         htmlFor="imgbtn"
       >
         <i className="bi bi-image-alt"></i>

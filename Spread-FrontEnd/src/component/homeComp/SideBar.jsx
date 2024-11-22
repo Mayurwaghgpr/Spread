@@ -1,20 +1,43 @@
 import React, { Fragment, memo, useCallback, useMemo } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import useLogout from "../../utils/logout";
 import userImageSrc from "../../utils/userImageSrc";
 import { v4 as uuidv4 } from "uuid";
 import { LuLogOut } from "react-icons/lu";
 import { setManuOpen } from "../../redux/slices/uiSlice";
+import { useMutation } from "react-query";
+import { Logout } from "../../Apis/authapi";
+import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
+import LoaderScreen from "../loaders/loaderScreen";
+import { setIsLogin } from "../../redux/slices/authSlice";
 
 function SideBar() {
   const { user, isLogin } = useSelector((state) => state.auth);
   const { MenuOpen } = useSelector((state) => state.ui);
-  const Logout = useLogout();
   const location = useLocation();
-  const navigat = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userImageurl } = userImageSrc(user);
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: Logout,
+    onSuccess: () => {
+      dispatch(setIsLogin(false));
+      dispatch(setUser(null));
+
+      localStorage.removeItem("AccessToken"); //if it is stored in localStorage
+      localStorage.removeItem("userAccount"); //if it is stored in localStorage
+      navigate("/");
+    },
+    onError: () => {
+      <SomthingWentWrong />;
+    },
+  });
+
+  if (isLoading) {
+    <LoaderScreen />;
+  }
+
   const LoginMenuLinks = [
     {
       id: uuidv4(),
@@ -53,7 +76,7 @@ function SideBar() {
       id: uuidv4(),
       lkname: "Stories",
       icon: <i className="bi bi-hourglass"></i>,
-      stub: "",
+      stub: "stories",
     },
     {
       id: uuidv4(),
@@ -74,19 +97,24 @@ function SideBar() {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r z-50 animate-slide-in-left sm:animate-none ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.3rem] h-screen    bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838] dark:border`}
+      className={`fixed border-r z-50 animate-slide-in-left sm:animate-none ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.1rem] h-screen    bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="p-10  w-fit dark:bg-black bg-white h-full sm:text-2xl text-xl"
       >
-        <div className="flex flex-col gap-7 text-gray-700 *:transition-all *:duration-300 sm:w-full justify-center  items-center ">
+        <div className="flex flex-col gap-7 text-gray-700 dark:text-white *:transition-all *:duration-300 sm:w-full justify-center  items-center ">
           {/* Profile Link */}
           {LoginMenuLinks.map((link) => {
             return (
-              <Link
+              <NavLink
                 key={link.id}
-                className={`flex ${location.pathname.startsWith(link.stub) && " text-black"} px-3 py-1 justify-start items-center hover:bg-opacity-5  hover:bg-slate-500 dark:hover:bg-gray-600  rounded-md  gap-5 w-full`}
+                isActive={(match, location) =>
+                  location.pathname.startsWith(link.stub)
+                }
+                className={({ isActive }) =>
+                  `flex ${isActive && "text-slate-500 dark:text-gray-600 text-opacity-40  dark:text-opacity-40"} px-3 py-1 justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
+                }
                 to={link.stub}
               >
                 {link.icon}
@@ -94,12 +122,12 @@ function SideBar() {
                   {" "}
                   <span>{link.lkname}</span>{" "}
                 </div>
-              </Link>
+              </NavLink>
             );
           })}
           {/* Logout Button */}
           <button
-            onClick={Logout}
+            onClick={mutate}
             type="button"
             aria-label="Logout"
             className="flex gap-5 items-center w-full hover:bg-opacity-5 px-3 py-1  hover:bg-slate-500 dark:hover:bg-gray-600 rounded-md"

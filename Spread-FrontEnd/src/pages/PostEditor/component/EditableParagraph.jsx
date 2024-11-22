@@ -32,7 +32,7 @@ const EditableParagraph = ({
         ref={(el) => (inputRefs.current[index] = el)}
         contentEditable="true"
         suppressContentEditableWarning
-        onInput={(e) => handleTextChange(element.id, e.target.innerHTML)}
+        onInput={(e) => handleTextChange(element.id, e.currentTarget.innerHTML)}
         onKeyDown={(e) => {
           if (e.key === "Backspace" || e.key === "Enter" || e.key === "delete")
             handleKeyDown(e, element.id, index);
@@ -40,8 +40,20 @@ const EditableParagraph = ({
         onFocus={handleFocus}
         onMouseUp={handleSelectedText}
         onKeyUp={handleSelectedText}
-        className={`border-l border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text ${(index == 0 && "text-3xl font-semibold") || (index == 1 && "text-xl")}`}
-      ></p>
+        className={`border-l border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text `}
+      >
+        {/* {index === 0 ? (
+          <span className="text-4xl text-gray-700 text-opacity-30">
+            "Title"
+          </span>
+        ) : (
+          index === 1 && (
+            <span className="text-2xl text-gray-700 text-opacity-30">
+              "subtitle"
+            </span>
+          )
+        )} */}
+      </p>
     </div>
   );
 };

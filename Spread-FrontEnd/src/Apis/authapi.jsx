@@ -44,3 +44,14 @@ export const ResetPasswordApi = async (newpassword, token) => {
     throw error.response;
   }
 };
+
+export const Logout = async () => {
+  try {
+    const result = await axios.post(`${BASE_URL}/auth/logout`, null, {
+      withCredentials: true,
+    });
+    return result.data;
+  } catch (error) {
+    throw error.response;
+  }
+};

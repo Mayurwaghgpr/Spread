@@ -17,14 +17,22 @@ function Settings() {
       onClick={(e) => {
         navigate(-1);
       }}
-      className="fixed  top-0 left-0 right-0 bottom-0 flex justify-center items-center z-[100] bg-black border-inherit bg-opacity-30 px-4"
+      className="fixed  top-0 left-0 right-0 bottom-0 flex justify-center items-center z-[100] bg-black border-inherit bg-opacity-30 sm:px-4"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className=" relative sm:w-[70%] h-[600px] flex flex-col  overflow-hidden items-center border bg-white dark:bg-[#222222] border-inherit rounded-lg"
+        className=" relative sm:w-[70%] sm:h-[600px] h-full w-full flex flex-col  overflow-hidden items-center border bg-white dark:bg-[#222222] border-inherit sm:rounded-lg"
       >
-        <header className="w-full text-4xl p-5 border-b border-inherit">
+        <header className="w-full text-4xl flex justify-between items-center p-5 border-b border-inherit">
           <h1> Settings</h1>
+          <button
+            onClick={(e) => {
+              navigate(-1);
+            }}
+            className="sm:hidden block"
+          >
+            <i className="bi bi-x-lg"></i>
+          </button>
         </header>
         <div className="h-full py-3 flex justify-between text-sm w-full border-inherit">
           <aside className=" h-full  px-6  min-w-fit flex flex-col gap-10 ">

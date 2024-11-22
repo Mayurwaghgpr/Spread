@@ -8,7 +8,7 @@ const PostFigure = ({ element, imageInputRef, index }) => {
     <div
       ref={(el) => (imageInputRef.current[index] = el)}
       key={element.id}
-      className="p-4 relative"
+      className="p-4 relative "
     >
       <figure onFocus={() => setFocusedIndex(index)}>
         <img

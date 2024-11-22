@@ -137,7 +137,6 @@ export const usePostCreator = () => {
     }),
     [dispatch]
   );
-  console.log({ imageFiles });
   const handleTextChange = useCallback(
     (id, value, lang = null) => {
       const updatedElements = elements.map((el) =>
@@ -174,6 +173,9 @@ export const usePostCreator = () => {
         .map((el, idx) => ({ ...el, index: idx }));
       dispatch(setElements(updatedElements));
 
+      // if (elements.length < 1) {
+      //   dispatch(setElements({ type, data: "", id: uuidv4(), index: 0 }));
+      // }
       return updatedElements.length;
     },
     [elements]
@@ -181,10 +183,20 @@ export const usePostCreator = () => {
   const handleKeyDown = useCallback(
     (event, id, index) => {
       console.log(event.target.innerText);
-      if (
-        (event.key === "Backspace" && !event.target.innerText) ||
-        (event.key === "delete" && !event.target.innerText)
+
+      const isEmpty =
+        event.target.innerText.startsWith("\n") || !event.target.innerText; // it checks if previos input have no content
+      if (event.type === "click") {
+        const newLength = removeElement(id);
+        if (newLength < elements.length) {
+          setTimeout(() => inputRefs.current[index - 1]?.focus(), 0);
+        }
+        setFocusedIndex(index - 1);
+      } else if (
+        (event.key == "Backspace" && isEmpty) ||
+        (event.key == "delete" && isEmpty)
       ) {
+        console.log({ event });
         const newLength = removeElement(id);
         if (newLength < elements.length) {
           setTimeout(() => inputRefs.current[index - 1]?.focus(), 0);

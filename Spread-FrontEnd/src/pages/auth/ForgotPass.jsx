@@ -10,6 +10,7 @@ function ForgotPass() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { data, mutate, isError, error, isLoading } = useMutation(
     (email) => forgotPassword(email),
     {

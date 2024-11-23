@@ -10,6 +10,7 @@ import { Logout } from "../../Apis/authapi";
 import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
 import LoaderScreen from "../loaders/loaderScreen";
 import { setIsLogin } from "../../redux/slices/authSlice";
+import Theme from "../otherUtilityComp/ThemeMenu";
 
 function SideBar() {
   const { user, isLogin } = useSelector((state) => state.auth);
@@ -125,12 +126,13 @@ function SideBar() {
               </NavLink>
             );
           })}
+
           {/* Logout Button */}
           <button
             onClick={mutate}
             type="button"
             aria-label="Logout"
-            className="flex gap-5 items-center w-full hover:bg-opacity-5 px-3 py-1  hover:bg-slate-500 dark:hover:bg-gray-600 rounded-md"
+            className="flex gap-5 items-center w-full hover:bg-opacity-5 px-3 py-1 rounded-md"
           >
             <LuLogOut className="" />
             <span className=" xl:block ">Sign out</span>

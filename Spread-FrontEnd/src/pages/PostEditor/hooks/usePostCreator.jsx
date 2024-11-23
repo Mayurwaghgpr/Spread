@@ -58,9 +58,9 @@ export const usePostCreator = () => {
         }
       }, 0);
 
-      dispatch(setIsScale(false));
+      // dispatch(setIsScale(false));
     },
-    [elements, dispatch, focusedIndex]
+    [elements, focusedIndex]
   );
 
   const handleFileChange = useCallback(
@@ -126,7 +126,7 @@ export const usePostCreator = () => {
           }
         }, 0);
       }
-      dispatch(setIsScale(false));
+      // dispatch(setIsScale(false));
     },
     [elements, dispatch, focusedIndex]
   );

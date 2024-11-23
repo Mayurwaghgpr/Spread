@@ -28,21 +28,18 @@ function DynamicPostEditor() {
   const dispatch = useDispatch();
   const { elements, beforsubmit } = useSelector((state) => state.posts);
   const { isScale } = useSelector((state) => state.ui);
-  const checkAllMatch = () => {
-    return elements.every(
-      (obj, i, arr) =>
-        arr.length > 3 && obj.name !== undefined && obj.name !== ""
-    );
-  };
+  const checkAllMatch = elements.every(
+    (obj, i, arr) => arr.length > 3 && obj.data !== undefined && obj.data !== ""
+  );
 
   console.log(elements);
   return (
     <>
       <main className="flex flex-col justify-between mt-16 ">
         <PostBtn
-          className={`fixed  sm:top-[13%] sm:right-32 top-[80%] right-10 text-4xl ${checkAllMatch() ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
+          className={`fixed  sm:top-[50%] sm:right-32 top-[80%] right-10 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
           content={<i className="bi bi-send"></i>}
-          disabled={checkAllMatch()}
+          disabled={elements.length > 3 ? false : true}
         />
         <div
           className={`flex  justify-center items-center lg:ms-24  flex-col mt-4 gap-2`}
@@ -84,12 +81,11 @@ function DynamicPostEditor() {
             </div>
           ))}
         </div>
-
         <InputTypeSelector
           imageInputRef={imageInputRef}
           addElement={addElement}
           handleFileChange={handleFileChange}
-          className={`flex gap-5 border p-3 rounded-full absolute pointer-events-none left-1 sm:left-[40%] bottom-20 justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-thin *:size-[2.5rem] *:border *:rounded-full *:border-black text-gray-600 `}
+          className={`bg-gray-600 absolute sm:bottom-10 bottom-20 rounded-r-lg before:  sm:right-52 shadow-xl hover:scale-x-110 gap-3  border-[#383838] p-3  bg-opacity-25 backdrop-blur-md border sm:rounded-full  pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-light *:size-[2.5rem] *:border *:rounded-full *:border-inherit  `}
         />
       </main>
       <Outlet context={[imageFiles, setImageFiles, handleTextChange]} />

@@ -40,19 +40,20 @@ const EditableParagraph = ({
         onFocus={handleFocus}
         onMouseUp={handleSelectedText}
         onKeyUp={handleSelectedText}
-        className={`border-l border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text `}
+        aria-placeholder="Title"
+        className={`border-l border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text ${index === 0 ? "text-4xl" : index === 1 && "text-2xl"} `}
       >
-        {/* {index === 0 ? (
-          <span className="text-4xl text-gray-700 text-opacity-30">
-            "Title"
+        {index === 0 ? (
+          <span className=" text-gray-700 text-opacity-30 dark:text-white dark:text-opacity-30">
+            Title
           </span>
         ) : (
           index === 1 && (
-            <span className="text-2xl text-gray-700 text-opacity-30">
-              "subtitle"
+            <span className=" text-gray-700  text-opacity-30 dark:text-white dark:text-opacity-30">
+              subtitle
             </span>
           )
-        )} */}
+        )}
       </p>
     </div>
   );

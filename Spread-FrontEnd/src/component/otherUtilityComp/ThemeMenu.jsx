@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setThemeMode } from "../../redux/slices/uiSlice";
 import { useLocation } from "react-router-dom";
 
-function Theme({ className }) {
+function ThemeMenu({ className }) {
   const [showThemeList, setShowThemeList] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -57,25 +57,23 @@ function Theme({ className }) {
     },
   ];
   const selectedTheme = useMemo(
-    () => Modes.find((mode) => mode.value === ThemeMode),
+    () => Modes.find((mode) => mode?.value === ThemeMode),
     [ThemeMode]
   );
 
   return (
-    <div className=" relative flex flex-col w-full">
+    <div className="relative flex flex-col ">
       <button
         onClick={() => {
           setShowThemeList((prev) => !prev);
         }}
-        className="w-fit p-1 relative capitalize text-center flex items-center justify-center gap-4 dark:bg-slate-700 bg-gray-200 rounded-md"
+        className=" p-1 relative capitalize text-center flex items-center justify-center gap-4 rounded-md"
       >
         {selectedTheme?.icon}
         <span className="sm:block hidden">{selectedTheme?.value}</span>
         {
           <i
-            className={`bi bi-caret-up  transition-all duration-300  ${
-              !showThemeList ? "rotate-180 " : ""
-            }`}
+            className={`bi bi-caret-up  ${!showThemeList ? "rotate-180 " : ""}`}
           ></i>
         }
       </button>
@@ -83,7 +81,7 @@ function Theme({ className }) {
         <ul className={className}>
           {Modes.map((mode) => (
             <li
-              className={`flex justify-start items-center cursor-pointer gap-1 w-full p-2 rounded-lg ${
+              className={`flex justify-start items-center cursor-pointer gap-1  p-2 rounded-lg ${
                 ThemeMode === mode.value ? "bg-gray-500 bg-opacity-10" : ""
               }`}
               onClick={() => handeltheme(mode.value)}
@@ -99,4 +97,4 @@ function Theme({ className }) {
   );
 }
 
-export default Theme;
+export default ThemeMenu;

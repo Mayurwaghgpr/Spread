@@ -39,9 +39,9 @@ function Follow({ className, People }) {
           {isFollowing ? "Following" : "Follow"}
         </button>
       ) : (
-        <div className="flex justify-center items-center w-full h-full bg-inherit rounded-full">
+        <span className="flex justify-center items-center w-full h-full bg-inherit rounded-full">
           You
-        </div>
+        </span>
       )}
     </div>
   );

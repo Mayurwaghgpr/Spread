@@ -19,6 +19,8 @@ const ConfirmationBox = React.lazy(
 );
 
 import SearchBar from "../homeComp/searchBar";
+import ThemeMenu from "../otherUtilityComp/ThemeMenu";
+import ThemeBtn from "../otherUtilityComp/ThemeBtn";
 
 function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
@@ -44,6 +46,7 @@ function MainNavBar() {
           <Link to="/" className="text-2xl font-bold ">
             Spread
           </Link>
+          <ThemeBtn />
           <div className="flex gap-8 justify-end items-center sm:w-full ">
             {isLogin && (
               <div className="relative sm:text-xl">
@@ -54,8 +57,9 @@ function MainNavBar() {
                 </span>
               </div>
             )}
+
             {isLogin ? (
-              <div className="relative text-left">
+              <div className="relative flex text-left">
                 <ProfileButton
                   className={` box-content ${
                     location.pathname.startsWith("/profile")

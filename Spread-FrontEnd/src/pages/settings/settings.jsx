@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useRef } from "react";
 
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import Theme from "./Theme";
+import Theme from "../../component/otherUtilityComp/ThemeMenu";
 import { LuGithub } from "react-icons/lu";
 
 function Settings() {

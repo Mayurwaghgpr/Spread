@@ -43,7 +43,7 @@ function InputTypeSelector({
           onClick={() => addElement(conf.type)}
         >
           {tooltip === conf.type && (
-            <div className=" flex justify-center gap-1 items-center flex-row  px-2 rounded-md animate-bounce before:size-2 before:absolute before:border-b before:border-r before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white bg-slate-100 absolute -top-10 border">
+            <div className=" flex justify-center gap-1 items-center flex-row  px-2 rounded-md  before:size-2 before:absolute before:border-b before:border-r before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white bg-slate-100 absolute -top-10 border">
               <span>add</span> {conf.type}
             </div>
           )}
@@ -59,7 +59,7 @@ function InputTypeSelector({
         onMouseOut={() => setTooltip("")}
       >
         {tooltip === "image" && (
-          <span className=" w-fit px-2 animate-bounce rounded-md before:size-2 before:absolute before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white bg-slate-100 absolute -top-10 border">
+          <span className=" w-fit px-2  rounded-md before:size-2 before:absolute before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white bg-slate-100 absolute -top-10 border">
             Image
           </span>
         )}

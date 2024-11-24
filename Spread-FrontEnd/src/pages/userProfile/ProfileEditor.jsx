@@ -126,20 +126,20 @@ function ProfileEditor() {
   ];
 
   return (
-    <div className=" relative flex h-screen justify-center items-start dark:*:border-[#0f0f0f]">
-      <article className=" w-full   flex flex-col max-w-[700px] mt-[70px] rounded-xl px-4  border-inherit  gap-6 sm:text-sm text-xs py-5">
+    <div className=" relative flex  justify-center items-start dark:*:border-[#0f0f0f] overflow-y-auto">
+      <article className=" flex flex-col w-fit rounded-xl h-[50%] overflow-y-auto mt-14 px-4  border-inherit  gap-6 py-5">
         <h1 className="w-full text-center text-2xl p-2  bg-inherit  ">
           User Information
         </h1>
         <div
-          className=" flex justify-start gap-3   w-full  border-inherit "
+          className=" flex justify-start gap-3 w-full border-inherit "
           aria-label="Upload profile picture"
         >
           <div className="flex flex-col  min-w-28 px-2 ">
             <label htmlFor="">Profile image</label>
             <img
               onClick={triggerFileInput}
-              className="sm:h-[100px]   sm:w-[100px] w-20 h-20 cursor-pointer object-cover object-top rounded-full p-1"
+              className="w-20 h-20 cursor-pointer object-cover object-top rounded-full p-1"
               src={ProfileImage}
               alt="Profile"
             />
@@ -174,7 +174,7 @@ function ProfileEditor() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col w-full items-end h-full   dark:*:border-[#383838] gap-2 px-2 ">
+        <div className="flex flex-col w-full items-end h-full   dark:*:border-[#383838]  px-2 ">
           {Inputcontant.map((input) => (
             <>
               {" "}
@@ -192,14 +192,12 @@ function ProfileEditor() {
             </>
           ))}
 
-          <div className="mt-5 py-2">
-            <button
-              className={`px-4 py-1 rounded-xl border border-sky-300`}
-              onClick={() => mutate(newInfo)}
-            >
-              {isLoading ? "Updating..." : "Save"}
-            </button>
-          </div>
+          <button
+            className={`px-4 py-1 rounded-xl mt-2 border border-sky-300`}
+            onClick={() => mutate(newInfo)}
+          >
+            {isLoading ? "Updating..." : "Save"}
+          </button>
         </div>
       </article>
     </div>

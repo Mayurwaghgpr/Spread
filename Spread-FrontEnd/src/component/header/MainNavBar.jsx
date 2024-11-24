@@ -36,9 +36,9 @@ function MainNavBar() {
       className={`fixed top-0 transform-all duration-300 ease-in-out flex  justify-center w-full z-10`}
     >
       <nav
-        className={`relative  z-10 w-full  py-3 px-7 sm:px-20 lg:px-28 bg-white dark:border-[#383838] border-b dark:bg-black border-inherit dark:border-[#383838]${
+        className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-white dark:border-[#383838] border dark:bg-black border-inherit dark:border-[#383838]${
           !isLogin
-            ? " bg-opacity-20 backdrop-blur-lg w-[80rem]  border  rounded-xl m-2"
+            ? " bg-opacity-20 backdrop-blur-lg border  rounded-xl m-2"
             : "dark:bg-[#222222] "
         } `}
       >
@@ -46,8 +46,9 @@ function MainNavBar() {
           <Link to="/" className="text-2xl font-bold ">
             Spread
           </Link>
-          <ThemeBtn />
-          <div className="flex gap-8 justify-end items-center sm:w-full ">
+
+          <div className="flex gap-8 justify-end items-center ">
+            <ThemeBtn />
             {isLogin && (
               <div className="relative sm:text-xl">
                 <i className="bi bi-bell"></i>
@@ -70,7 +71,7 @@ function MainNavBar() {
                 />
               </div>
             ) : (
-              <div className="flex gap-3 justify-end w-full items-center text-md">
+              <div className="flex gap-3 justify-end w-full items-center sm:text-lg text-xs">
                 <Link
                   to="/auth/signin"
                   className="transition-colors duration-500 rounded-3xl sm:px-3 py-2"
@@ -79,7 +80,7 @@ function MainNavBar() {
                 </Link>
                 <Link
                   to="/auth/signup"
-                  className="border border-inherit transition-colors duration-500 rounded-full px-3 py-1"
+                  className="border border-inherit  transition-colors duration-500 rounded-full px-3 py-1"
                 >
                   get started
                 </Link>

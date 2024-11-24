@@ -56,7 +56,7 @@ function ThemeBtn() {
   const currentMode = Modes.find((mode) => mode.value === ThemeMode);
 
   return (
-    <div>
+    <div className=" relative">
       <button
         onClick={changeTheme}
         aria-label="THEME"

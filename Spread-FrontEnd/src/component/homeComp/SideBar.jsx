@@ -9,7 +9,7 @@ import { useMutation } from "react-query";
 import { Logout } from "../../Apis/authapi";
 import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
 import LoaderScreen from "../loaders/loaderScreen";
-import { setIsLogin } from "../../redux/slices/authSlice";
+import { setIsLogin, setUser } from "../../redux/slices/authSlice";
 import Theme from "../otherUtilityComp/ThemeMenu";
 
 function SideBar() {
@@ -102,7 +102,7 @@ function SideBar() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="p-10  w-fit dark:bg-black bg-white h-full sm:text-2xl text-xl"
+        className="p-10  w-fit dark:bg-black bg-white h-full  text-xl"
       >
         <div className="flex flex-col gap-7 text-gray-700 dark:text-white *:transition-all *:duration-300 sm:w-full justify-center  items-center ">
           {/* Profile Link */}

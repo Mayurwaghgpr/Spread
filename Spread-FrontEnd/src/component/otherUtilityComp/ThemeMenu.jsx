@@ -87,7 +87,7 @@ function ThemeMenu({ className }) {
               onClick={() => handeltheme(mode.value)}
               key={mode.value}
             >
-              <span>{mode.icon}</span>
+              <span>{mode?.icon}</span>
               <span className="sm:block hidden"> {mode.name}</span>
             </li>
           ))}

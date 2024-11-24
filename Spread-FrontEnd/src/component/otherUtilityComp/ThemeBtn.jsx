@@ -6,23 +6,26 @@ function ThemeBtn() {
   // State to track the current theme
   const dispatch = useDispatch();
   const { ThemeMode } = useSelector((state) => state.ui);
-  const Modes = [
-    {
-      name: "Dark mode",
-      value: "dark",
-      icon: <i className="bi bi-moon-stars-fill"></i>,
-    },
-    {
-      name: "Light mode",
-      value: "light",
-      icon: <i className="bi bi-sun-fill"></i>,
-    },
-    {
-      name: "System",
-      value: "system",
-      icon: <i className="bi bi-circle-half"></i>,
-    },
-  ];
+  const Modes = useMemo(
+    () => [
+      {
+        name: "Dark mode",
+        value: "dark",
+        icon: <i className="bi bi-moon-stars-fill"></i>,
+      },
+      {
+        name: "Light mode",
+        value: "light",
+        icon: <i className="bi bi-sun-fill"></i>,
+      },
+      {
+        name: "System",
+        value: "system",
+        icon: <i className="bi bi-circle-half"></i>,
+      },
+    ],
+    [ThemeMode]
+  );
 
   const changeTheme = () => {
     // Cycle through the themes
@@ -59,7 +62,7 @@ function ThemeBtn() {
         aria-label="THEME"
         className="p-2  rounded-full flex items-center"
       >
-        {currentMode.icon}
+        {currentMode?.icon}
       </button>
     </div>
   );

@@ -8,10 +8,10 @@ function Bookmark({ className, post }) {
   const [bookmarkIcon, setIcon] = useState("");
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { ArchivePost, removePostFromArchive } = usePublicApis();
+  const { ArchivePost } = usePublicApis();
   const queryClient = useQueryClient();
 
-  const addToArchiveMutation = useMutation((id) => ArchivePost(id), {
+  const ArchiveMutation = useMutation((id) => ArchivePost(id), {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["loggedInUser"]);
       dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
@@ -27,23 +27,12 @@ function Bookmark({ className, post }) {
     },
   });
 
-  const removeFromArchiveMutation = useMutation(
-    (id) => removePostFromArchive(id),
-    {
-      onSuccess: (data) => {
-        console.log("this", data);
-        queryClient.invalidateQueries(["loggedInUser"]);
-        dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
-      },
-    }
-  );
-
   const handleSavePost = useCallback(
     (post, icon) => {
-      addToArchiveMutation.mutate(post);
+      ArchiveMutation.mutate(post);
       setIcon(`${icon?.id}-${post}`);
     },
-    [addToArchiveMutation]
+    [ArchiveMutation]
   );
   const isBookmarked = user?.SavedPosts?.some(
     (savedPost) => savedPost?.id === post?.id
@@ -55,15 +44,7 @@ function Bookmark({ className, post }) {
         id="bookmark"
         disabled={post?.user?.id === user?.id}
         onClick={(e) => {
-          const isPostSaved = user?.SavedPosts?.some(
-            (savedPost) => savedPost?.id === post?.id
-          );
-
-          if (!isPostSaved) {
-            handleSavePost(post?.id, e.target);
-          } else {
-            removeFromArchiveMutation.mutate(post?.id);
-          }
+          handleSavePost(post?.id, e.target);
         }}
         className={`bi cursor-pointer transition-all duration-700 ${
           isBookmarked || bookmarkIcon === `bookmark-${post?.id}`

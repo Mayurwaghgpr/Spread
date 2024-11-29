@@ -11,6 +11,7 @@ import usePublicApis from "../Apis/publicApis";
 import Aside from "../component/homeComp/Aside";
 import PostsApis from "../Apis/PostsApis";
 import SideBar from "../component/homeComp/SideBar";
+import LoaderScreen from "../component/loaders/loaderScreen";
 
 function Viewblogs() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,6 +65,9 @@ function Viewblogs() {
     [setSearchParams, refetch]
   );
 
+  if (isLoadingPosts) {
+    <LoaderScreen />;
+  }
   if (errorPreps || (errorPosts && errorPosts?.status !== 404)) {
     return (
       <SomthingWentWrong
@@ -102,7 +106,7 @@ function Viewblogs() {
           id="PostContainer"
           className={`relative flex flex-col h-screen  ${
             !postsData && " py-10 "
-          } w-full    sm:px-10 dark:border-[#383838] border-inherit`}
+          } w-full m-16  sm:px-10 dark:border-[#383838] border-inherit`}
         >
           {postsData?.pages?.map((page) =>
             page?.map((post, idx, arr) => (

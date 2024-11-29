@@ -4,7 +4,7 @@ const CodeEditor = lazy(
   () => import("../../../component/WriterTools/codeEditor")
 );
 
-const WriteElements = ({
+const ElementsProvider = ({
   element,
   index,
   handleKeyDown,
@@ -86,4 +86,4 @@ const WriteElements = ({
   }
 };
 
-export default WriteElements;
+export default ElementsProvider;

@@ -24,6 +24,32 @@ const EditableParagraph = ({
   const handleFocus = useCallback(() => {
     setFocusedIndex(index);
   }, [index]);
+  if (index === 0 || index === 1) {
+    return (
+      <div className=" w-full h-full">
+        <input
+          className={`border-l bg-white dark:bg-inherit border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text  ${index === 0 ? "text-4xl" : index === 1 && "text-2xl"}`}
+          ref={(el) => (inputRefs.current[index] = el)}
+          onChange={(e) => handleTextChange(element.id, e.currentTarget.value)}
+          placeholder={index == 0 ? "Title" : index == 1 && "SubTitle"}
+          onKeyDown={(e) => {
+            if (
+              e.key === "Backspace" ||
+              e.key === "Enter" ||
+              e.key === "delete"
+            )
+              handleKeyDown(e, element.id, index);
+          }}
+          onFocus={handleFocus}
+          onSelect={handleSelectedText}
+          // onKeyUp={handleSelectedText}
+          type="text"
+          name=""
+          id=""
+        />
+      </div>
+    );
+  }
 
   return (
     <div className=" w-full h-full">
@@ -41,20 +67,8 @@ const EditableParagraph = ({
         onMouseUp={handleSelectedText}
         onKeyUp={handleSelectedText}
         aria-placeholder="Title"
-        className={`border-l border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text ${index === 0 ? "text-4xl" : index === 1 && "text-2xl"} `}
-      >
-        {index === 0 ? (
-          <span className=" text-gray-700 text-opacity-30 dark:text-white dark:text-opacity-30">
-            Title
-          </span>
-        ) : (
-          index === 1 && (
-            <span className=" text-gray-700  text-opacity-30 dark:text-white dark:text-opacity-30">
-              subtitle
-            </span>
-          )
-        )}
-      </p>
+        className={`border-l border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text`}
+      ></p>
     </div>
   );
 };

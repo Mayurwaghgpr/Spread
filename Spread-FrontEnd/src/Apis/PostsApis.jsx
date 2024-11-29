@@ -26,6 +26,7 @@ function PostsApis() {
     }
   };
   const AddNewPost = async (newPost, signal) => {
+    console.log(newPost);
     try {
       const result = await axios.post(`${BASE_URL}/posts/add`, newPost, {
         withCredentials: true,

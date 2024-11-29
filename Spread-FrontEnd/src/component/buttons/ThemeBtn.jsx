@@ -18,11 +18,11 @@ function ThemeBtn() {
         value: "light",
         icon: <i className="bi bi-sun-fill"></i>,
       },
-      {
-        name: "System",
-        value: "system",
-        icon: <i className="bi bi-circle-half"></i>,
-      },
+      // {
+      //   name: "System",
+      //   value: "system",
+      //   icon: <i className="bi bi-circle-half"></i>,
+      // },
     ],
     [ThemeMode]
   );

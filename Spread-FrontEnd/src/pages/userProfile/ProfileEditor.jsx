@@ -11,6 +11,7 @@ import useProfileApi from "../../Apis/ProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
 import CommonInput from "../../component/otherUtilityComp/commonInput";
 import { v4 as uuidv4 } from "uuid";
+import Selector from "../../component/otherUtilityComp/Selector";
 function ProfileEditor() {
   const { user } = useSelector((state) => state.auth);
   const [newInfo, setNewInfo] = useState(user);
@@ -55,6 +56,7 @@ function ProfileEditor() {
 
   // Handle input changes
   const handleChange = debounce((event) => {
+    console.log(event.target.name);
     const { name, value, files } = event.target;
     if (name === "image" && files.length > 0) {
       const file = files[0];
@@ -101,14 +103,6 @@ function ProfileEditor() {
     },
     {
       id: uuidv4(),
-      labelname: "Pronouns",
-      Iname: "pronouns",
-      defaultValue: newInfo?.pronoun,
-      maxLength: 10,
-      length: `${newInfo?.pronouns?.length || 0} / 10`,
-    },
-    {
-      id: uuidv4(),
       labelname: "Email",
       Iname: "email",
       defaultValue: newInfo?.email,
@@ -143,7 +137,6 @@ function ProfileEditor() {
               src={ProfileImage}
               alt="Profile"
             />
-
             <div className="w-full">
               <input
                 className="w-full p-3 bg-inherit  border border-inherit"
@@ -172,6 +165,16 @@ function ProfileEditor() {
             <p className="text-start  break-words  ">
               Importent: Insert image in JPG,JPEG,PNG format and high quality
             </p>
+            <Selector
+              name={"pronouns"}
+              className={
+                "w-fit outline-none self-start my-2 flex flex-col gap-3 bg-inherit"
+              }
+              setOptions={handleChange}
+              options={["he/him", "she/her"]}
+              defaultValue={newInfo.pronouns}
+              disabled={isLoading}
+            />
           </div>
         </div>
         <div className="flex flex-col w-full items-end h-full   dark:*:border-[#383838]  px-2 ">

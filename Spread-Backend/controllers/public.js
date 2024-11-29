@@ -5,7 +5,7 @@ import Follow from "../models/Follow.js";
 import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
 import { DataFetching } from "../operations/data-fetching.js";
-const dataFecter = new DataFetching()
+const dataFetcher = new DataFetching()
 // Fetch all users except the current user and distinct topics
 export const userPrepsData = async (req, res,next) => {
     try {
@@ -63,7 +63,7 @@ export const searchData = async (req, res,next) => {
                     }
                 ]
             },
-            attributes: ['topic'],
+            // attributes: [],
             limit: 10
         });
         res.status(200).json(searchResult);
@@ -76,25 +76,22 @@ export const searchData = async (req, res,next) => {
 
 export const LikePost = async (req, res, next) => {
     const postId = req.body.likedPostId;
-  console.log(postId)
+  console.log({ postId })
+  console.log({likedBy: req.authUser.id,})
   
     try {
         const exist = await Likes.findOne({ where: { likedBy: req.authUser.id, postId: postId } });
-        
         // console.log(exist)
         if (exist) {
-            await exist.destroy();
-          const updtLikes = await Likes.findAll({ where: { postId } })
+          await exist.destroy();
+          const updtLikes = await Likes.findAll({ where: { postId }})
 
-
-          
-        res.status(201).cookie("_userDetail",userInfo,{httpOnly:true}).json({ message: 'removed like',updtLikes})
+          res.status(201).json({ message: 'removed like',updtLikes})
         }else{
-            const result = await Likes.create({ likedBy: req.authUser, postId });
-             const updtLikes = await Likes.findAll({where:{postId}})
-          const userInfo = await dataFecter.Profile( req.authUser.id)
-        console.log('like',result)
-            res.status(201).cookie("_userDetail",userInfo,{httpOnly:true}).json({ message: 'liked',updtLikes})
+          const result = await Likes.create({ likedBy: req.authUser.id, postId });
+          const updtLikes = await Likes.findAll({where:{postId}})
+        // console.log('like',result)
+          res.status(201).json({ message: 'added like',updtLikes})
         }
     } catch (error) {
         next(error)
@@ -118,7 +115,7 @@ export const FollowUser = async (req, res, next) => {
     if (existingFollow) {
       // Unfollow user
       await existingFollow.destroy();
-      const userInfo = await dataFecter.Profile(req.authUser.id);
+      const userInfo = await dataFetcher.Profile(req.authUser.id);
       console.log(userInfo);
 
       // Optionally clear Redis cache if implemented
@@ -131,7 +128,7 @@ export const FollowUser = async (req, res, next) => {
     } else {
       // Follow user
       await Follow.create({ followerId, followedId });
-      const userInfo = await dataFecter.Profile(req.authUser.id);
+      const userInfo = await dataFetcher.Profile(req.authUser.id);
       console.log(userInfo);
 
       // Optionally clear Redis cache if implemented
@@ -165,15 +162,17 @@ export const AddPostToArchive = async (req, res,next) => {
     });
     console.log({ exist })
     if (exist) {
-       return res.status(400).json({ message: "post already saved" });
+      await exist.destroy();
+    const userInfo = await dataFetcher.Profile( req.authUser.id)
+        //  await redisClient.del(UserId);
+    return res.status(200).cookie("_userDetail",userInfo,{httpOnly:true}).json({message:'succesfully removes'})
     }
 
     const archived = await Archive.create({
       PostId: postId,
       UserId: req.authUser.id
     });
-    
-          const userInfo = await dataFecter.Profile( req.authUser.id)
+          const userInfo = await dataFetcher.Profile( req.authUser.id)
           // await redisClient.del(req.authUser.id);
     res.status(200).cookie("_userDetail",userInfo,{httpOnly:true}).json({ message: 'Post archived successfully', archived });
   } catch (error) {
@@ -193,9 +192,7 @@ try {
         where:{PostId: postId,UserId}
         });
   if (exist) {
-    await exist.destroy();
-        //  await redisClient.del(UserId);
-    res.status(200).json({message:'succesfully removes'})
+    
   }
 } catch (error) {
    console.error('Error archiving post:', error);

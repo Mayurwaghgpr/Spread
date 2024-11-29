@@ -21,7 +21,7 @@ function ConfirmationBox() {
   return (
     confirmBox.status &&
     createPortal(
-      <div className="flex justify-center z-[30]  transition-transform delay-700 items-center fixed top-0 bottom-0 left-0 right-0  bg-opacity-40 bg-black  border-inherit ">
+      <div className="flex justify-center z-[50]  transition-transform delay-700 items-center fixed top-0 bottom-0 left-0 right-0  bg-opacity-40 bg-black  border-inherit ">
         <div className="p-3  flex flex-col justify-between bg-white dark:bg-[#222222]  text-inherit  h-[20rem] z-50  border border-inherit  sm:w-1/2 rounded-lg ">
           <div className="text-lg flex justify-end">
             <button className="" onClick={handleCancel}>

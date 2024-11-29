@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToast, removeAllToast } from "../../redux/slices/uiSlice";
 
@@ -6,13 +6,16 @@ function ToastItem({ ToastContent }) {
   const dispatch = useDispatch();
   const timerRef = useRef({});
   const { ToastState } = useSelector((state) => state.ui);
+  const [rmToastId, setrmToastId] = useState();
 
   useEffect(() => {
+    timerRef.current[ToastContent.id] = setTimeout(() => {
+      setrmToastId(ToastContent.id);
+    }, 1800);
     // Set timeout for each toast
     timerRef.current[ToastContent.id] = setTimeout(() => {
       dispatch(removeToast(ToastContent.id));
-    }, 2000);
-
+    }, 2300);
     // Clean up timeout when component unmounts or when toast is dismissed
     return () => {
       clearTimeout(timerRef.current[ToastContent.id]);
@@ -30,7 +33,7 @@ function ToastItem({ ToastContent }) {
 
   return (
     <span
-      className={`animate-slide-in-left transition-all duration-300 ease-in-out pointer-events-auto ${status} shadow-xl flex flex-col rounded-lg w-fit`}
+      className={`${rmToastId === ToastContent.id && " animate-slide-out-left"} " animate-slide-in-left" transition-all duration-300 ease-in-out pointer-events-auto ${status} shadow-xl flex flex-col rounded-lg w-fit`}
     >
       <div className="flex p-4">
         <div className="break-words flex">

@@ -17,9 +17,9 @@ import PostsApis from "../../Apis/PostsApis";
 import Spinner from "../loaders/Spinner"; // A spinner to show during lazy loading
 
 // Dynamically load components to optimize performance
-const Bookmark = lazy(() => import("../buttons/Bookmark"));
-const Like = lazy(() => import("../buttons/Like"));
-const Menu = lazy(() => import("./menu"));
+import Bookmark from "../buttons/Bookmark";
+import Like from "../buttons/Like";
+import Menu from "./menu";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   // const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               .join("")}/${post?.id}`}
             className="cursor-pointer h-full flex justify-between items-center gap-3"
           >
-            <div className="flex flex-col gap-1 leading-tight">
+            <div className="flex flex-col gap-1 leading-tight w-96  ">
               {post ? (
                 <>
                   <p className="font-bold text-sm sm:text-2xl overflow-hidden overflow-ellipsis">
@@ -85,13 +85,13 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 </>
               ) : (
                 <>
-                  <div className="rounded-lg sm:w-[350px] w-[100px] h-3 sm:h-5 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+                  <div className="rounded-lg sm:w-[20rem] w-[6.2rem] h-3 sm:h-5 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
                   <div className="rounded-lg sm:w-[400px] w-[150px] h-5 sm:h-12 bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
                 </>
               )}
             </div>
 
-            <div className="rounded-sm sm:h-[110px] h-[80px] sm:w-[160px] min-w-[100px] sm:max-w-[170px] bg-slate-200 dark:bg-slate-700">
+            <div className="rounded-sm h-[8rem] w-[10rem]  bg-slate-200 dark:bg-slate-700">
               {post && (
                 <img
                   className="object-cover object-center h-full w-full"
@@ -110,9 +110,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                     ? format(new Date(post?.createdAt), "LLL-dd-yyyy")
                     : ""}
                 </span>
-                <Suspense fallback={<Spinner />}>
-                  <Like className={""} post={post} />
-                </Suspense>
+                <Like className={""} post={post} />
                 <div className="flex cursor-pointer">
                   <button className="">
                     <i className="bi bi-chat"></i>
@@ -120,10 +118,8 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 </div>
               </div>
               <div className="flex justify-end gap-5 items-center">
-                <Suspense fallback={<Spinner />}>
-                  <Bookmark post={post || null} />
-                  <Menu post={post} />
-                </Suspense>
+                <Bookmark post={post || null} />
+                <Menu post={post} />
               </div>
             </div>
           )}

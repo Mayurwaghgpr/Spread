@@ -12,7 +12,7 @@ export const usePostCreator = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const imageInputRef = useRef();
   const inputRefs = useRef([]);
-  // console.log("imageFiles", imageFiles);
+  console.log("imageFiles", imageFiles);
   const addElement = useCallback(
     (type) => {
       const newElement = {
@@ -66,70 +66,61 @@ export const usePostCreator = () => {
   const handleFileChange = useCallback(
     (event) => {
       const file = event.target.files[0];
-      if (file) {
-        const newElement = {
-          type: "image",
-          file: URL.createObjectURL(file),
-          data: "",
-          id: uuidv4(),
-        };
+      if (!file) return;
 
-        let previousElements = [...elements];
-        let newIndex;
+      const newElement = {
+        type: "image",
+        file: URL.createObjectURL(file),
+        data: "",
+        id: uuidv4(),
+      };
 
-        if (
-          focusedIndex !== null &&
-          focusedIndex >= 0 &&
-          focusedIndex < elements.length &&
-          elements[focusedIndex].data !== ""
-        ) {
-          previousElements.splice(focusedIndex + 1, 0, newElement);
-          previousElements = previousElements.map((el, idx) => ({
-            ...el,
-            index: idx,
-          }));
+      let updatedElements = [...elements];
+      let newIndex;
+
+      if (
+        focusedIndex !== null &&
+        focusedIndex >= 0 &&
+        focusedIndex < elements.length
+      ) {
+        const focusedElement = elements[focusedIndex];
+        if (focusedElement.data !== "") {
+          // Insert after the focused index
           newIndex = focusedIndex + 1;
-          setFocusedIndex(newIndex);
-        } else if (
-          focusedIndex !== null &&
-          focusedIndex >= 0 &&
-          elements[focusedIndex].data === "" &&
-          !elements[focusedIndex].file
-        ) {
-          previousElements[focusedIndex] = newElement;
-          previousElements = previousElements.map((el, idx) => ({
-            ...el,
-            index: idx,
-          }));
-          setImageFiles((prev) => [
-            ...prev,
-            { ...newElement, file: file, index: focusedIndex },
-          ]);
-        } else {
-          newIndex = elements.length;
-          newElement.index = newIndex;
-          previousElements.push(newElement);
-          setImageFiles((prev) => [
-            ...prev,
-            { ...newElement, file: file, index: focusedIndex + 1 },
-          ]);
+          updatedElements.splice(newIndex, 0, newElement);
+        } else if (!focusedElement.file) {
+          // Replace the focused element
+          newIndex = focusedIndex;
+          updatedElements[focusedIndex] = newElement;
         }
-
-        dispatch(setElements(previousElements));
-        if (imageInputRef.current) {
-          imageInputRef.current.value = null;
-        }
-
-        setTimeout(() => {
-          if (inputRefs.current[newIndex]) {
-            inputRefs.current[newIndex].focus();
-          }
-        }, 0);
       }
-      // dispatch(setIsScale(false));
+      if (newIndex === undefined) {
+        // Append at the end
+        newIndex = updatedElements.length;
+        newElement.index = newIndex;
+        updatedElements.push(newElement);
+      }
+
+      // Update elements and image files
+      dispatch(setElements(updatedElements));
+      setImageFiles((prev) => [
+        ...prev,
+        { ...newElement, file, index: newIndex },
+      ]);
+
+      // Reset the file input
+      if (imageInputRef.current) imageInputRef.current.value = null;
+
+      // Focus the new element
+      setTimeout(() => {
+        if (inputRefs.current[newIndex]) {
+          inputRefs.current[newIndex].focus();
+        }
+      }, 0);
     },
     [elements, dispatch, focusedIndex]
   );
+
   // console.log({ imageFiles });
   const debouncedUpdateElements = useCallback(
     debounce((updatedElements) => {

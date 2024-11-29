@@ -60,11 +60,19 @@ function SideBar() {
       stub: "/",
       lkname: "Home",
     },
+
     {
       id: uuidv4(),
       icon: <i className="bi bi-search"></i>,
       stub: "/explore",
       lkname: "Explore",
+    },
+    {
+      id: uuidv4(),
+      icon: <i className="bi bi-feather"></i>,
+      stub: "/write",
+      className: "text-3xl",
+      lkname: "Write",
     },
     {
       id: uuidv4(),
@@ -79,13 +87,7 @@ function SideBar() {
       icon: <i className="bi bi-hourglass"></i>,
       stub: "stories",
     },
-    {
-      id: uuidv4(),
-      icon: <i className="bi bi-feather"></i>,
-      stub: "/write",
-      className: "text-3xl",
-      lkname: "Write",
-    },
+
     {
       id: uuidv4(),
       lkname: "Settings",
@@ -98,7 +100,7 @@ function SideBar() {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r z-50 animate-slide-in-left sm:animate-none ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.1rem] h-screen    bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
+      className={`fixed border-r z-40 animate-slide-in-left sm:animate-none ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.2rem] h-screen    bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -114,12 +116,12 @@ function SideBar() {
                   location.pathname.startsWith(link.stub)
                 }
                 className={({ isActive }) =>
-                  `flex ${isActive && "text-slate-500 dark:text-gray-600 text-opacity-40  dark:text-opacity-40"} px-3 py-1 justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
+                  `flex ${isActive && "text-slate-500  dark:text-gray-600 text-opacity-40  dark:text-opacity-40"} px-3 py-1 justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
                 }
                 to={link.stub}
               >
                 {link.icon}
-                <div className={`xl:flex flex-col  `}>
+                <div className={`xl:flex flex-col hidden  `}>
                   {" "}
                   <span>{link.lkname}</span>{" "}
                 </div>
@@ -135,7 +137,7 @@ function SideBar() {
             className="flex gap-5 items-center w-full hover:bg-opacity-5 px-3 py-1 rounded-md"
           >
             <LuLogOut className="" />
-            <span className=" xl:block ">Sign out</span>
+            <span className=" xl:block   hidden ">Sign out</span>
           </button>
         </div>
       </div>

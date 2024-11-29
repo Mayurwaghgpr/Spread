@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useCallback, useEffect, useMemo } from "react";
 
-import WriteElements from "./component/WriteElements";
+import ElementsProvider from "./component/ElementsProvider";
 
 import { usePostCreator } from "./hooks/usePostCreator";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,7 +35,7 @@ function DynamicPostEditor() {
   console.log(elements);
   return (
     <>
-      <main className="flex flex-col justify-between mt-16 ">
+      <main className="relative flex flex-col justify-between   mt-16 mb-32 ">
         <PostBtn
           className={`fixed  sm:top-[50%] sm:right-32 top-[80%] right-10 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
           content={<i className="bi bi-send"></i>}
@@ -66,7 +66,7 @@ function DynamicPostEditor() {
               </div> */}
 
               <div className="flex w-full  min-h-10">
-                <WriteElements
+                <ElementsProvider
                   element={element}
                   handleTextChange={handleTextChange}
                   index={index}
@@ -85,7 +85,7 @@ function DynamicPostEditor() {
           imageInputRef={imageInputRef}
           addElement={addElement}
           handleFileChange={handleFileChange}
-          className={`dark:bg-gray-600 absolute sm:bottom-10 bottom-20 rounded-r-lg before:  sm:right-52 shadow-xl hover:scale-x-105 gap-3  border-[#383838] p-3  bg-opacity-25 backdrop-blur-md border sm:rounded-full  pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-light *:size-[2.5rem] *:border *:rounded-full *:border-inherit  `}
+          className={`dark:bg-gray-600 fixed bg-white sm:bottom-10 bottom-20 rounded-r-lg before:  sm:right-36 shadow-xl hover:scale-x-105 gap-3  border-[#383838] p-3  bg-opacity-35 backdrop-blur-md border sm:rounded-full  pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-light *:size-[2.5rem] *:border *:rounded-full *:border-inherit  `}
         />
       </main>
       <Outlet context={[imageFiles, setImageFiles, handleTextChange]} />

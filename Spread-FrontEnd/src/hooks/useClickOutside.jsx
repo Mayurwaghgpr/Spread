@@ -41,8 +41,6 @@ function useClickOutside(MenuRef, searchRef) {
 
   return {
     isFixed,
-    isMenuOpen,
-    setIsMenuOpen,
     menuId,
     setMenuId,
   };

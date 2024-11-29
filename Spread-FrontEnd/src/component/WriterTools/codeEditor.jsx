@@ -17,12 +17,7 @@ function CodeEditor({
   // Ref to hold the Monaco editor instance
   const editorRef = useRef(null);
 
-  const languages = [
-    { name: "JavaScript", value: "javascript" },
-    { name: "Python", value: "python" },
-    { name: "CSS", value: "css" },
-    { name: "HTML", value: "markup" },
-  ];
+  const languages = ["JavaScript", "Python", "CSS", "HTML"];
 
   // Function to handle Monaco editor's mount event
   const handleEditorDidMount = (editor) => {

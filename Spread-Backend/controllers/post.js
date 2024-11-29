@@ -84,25 +84,33 @@ console.log("first")
 
 
 // Add a new post with associated content and images
-export const AddNewPost = async (req, res,next) => {
+export const AddNewPost = async (req, res, next) => {
+    console.log("Post adding...")
     let imageArr = [];
     try {
+        console.log(req.body.blog)
+
         // Parse blog data and handle images
         const otherData = JSON.parse(req.body.blog);
-        const imageFileArray = req.files;
+        console.log(otherData)
+
+        const imageFileArray = req.files || [];
+        console.log(imageFileArray)
         // console.log(imageFileArray)
         const topic = req.body.Topic.toLowerCase();
 
+        // extracting Title from Up-Comming Post data
         const postTitle = otherData.find(p => p.index === 0)?.data;
+        // extracting Subtitle from Up-Comming Post data
         const subtitleParagraph = otherData.at(1)?.data;
         const titleImage = imageFileArray?.at(0);
-        // console.log({postTitle,subtitleParagraph,titleImage})
-
-        if (!postTitle || !subtitleParagraph || !titleImage) {
+        console.log({postTitle,subtitleParagraph,titleImage})
+        // console.log(postTitle ,subtitleParagraph ,titleImage)
+        if (!postTitle || !subtitleParagraph) {
             return res.status(400).json({ error: 'Invalid data provided' });
         }
 
-        const titleImageUrl = titleImage.path;
+        const titleImageUrl = titleImage?.path;
 
         // Create new post
         const newPost = await Post.create({
@@ -112,9 +120,11 @@ export const AddNewPost = async (req, res,next) => {
             topic,
             authorId: req.authUser.id,
         });
+        console.log({otherData})
         let PostData;
         const otherPostData = otherData.filter(p => p.index !== 0 && p.index !== 1)
-        // Save post content
+        console.log(otherData)
+        // Arranging post content in sequence
         if (otherData.length) {
             imageFileArray.forEach((image,idx) => {
                 PostData = otherPostData.map(p => { 
@@ -125,9 +135,11 @@ export const AddNewPost = async (req, res,next) => {
                     }
                 });
             });
+
             await PostContent.bulkCreate(PostData);
         }
         res.status(201).json({ newData: newPost, message: 'Post created successfully' });
+
     } catch (error) {
         // Clean up images if there's an error
         await deletePostImage(imageArr);

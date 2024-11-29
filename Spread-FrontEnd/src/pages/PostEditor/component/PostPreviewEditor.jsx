@@ -79,7 +79,7 @@ function PostPreviewEditor() {
   const imageElements = elements?.filter((el) => el.type === "image");
 
   return createPortal(
-    <main className=" fixed top-0 right-0 z-40 bg-white px-10 h-full dark:bg-[#222222] w-full flex justify-center flex-col gap-10 m-auto items-center">
+    <main className=" fixed top-0 right-0 z-50 bg-white px-10 h-full dark:bg-[#222222] w-full flex justify-center flex-col gap-10 m-auto items-center">
       <div className="w-full  text-center ">
         <Link className=" absolute right-5 text-4xl top-5" to={-1}>
           <i className="bi bi-x-lg"></i>

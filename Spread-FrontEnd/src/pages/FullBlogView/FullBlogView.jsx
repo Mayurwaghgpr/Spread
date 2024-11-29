@@ -45,7 +45,7 @@ function FullBlogView() {
   }
   return (
     <main className="container mx-auto py-6 mt-16 dark:*:border-[#383838]">
-      <article className="max-w-4xl mx-auto p-6 rounded-lg flex flex-col justify-center items-center px-2 ">
+      <article className="max-w-3xl mx-auto p-6 rounded-lg flex flex-col justify-center items-center px-2 ">
         <header className="mb-6 w-full px-3">
           <section className="mb-6">
             <h1 className="text-3xl break-words lg:text-5xl font-bold mb-2">

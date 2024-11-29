@@ -182,8 +182,7 @@ export const EditUserProfile = async (req, res,next) => {
 
 
     if (updatedUser) {
-      res.cookies("_userDetail",updatedUser,{httpOnly:true})
-      res.status(200).json(updatedUser); // Return updated user info
+      res.status(200).cookie("_userDetail",updatedUser,{httpOnly:true}).json(updatedUser); // Return updated user info
     } else {
       res.status(400).json({ message: "User not found" });
     }

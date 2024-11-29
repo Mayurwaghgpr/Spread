@@ -92,7 +92,7 @@ function Profile() {
   }
   console.log(userProfile);
   return (
-    <div className="flex justify-center  mt-16  dark:*:border-[#383838]">
+    <div className="flex justify-center  mt-14  dark:*:border-[#383838]">
       <div className=" md:w-[80%]  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />

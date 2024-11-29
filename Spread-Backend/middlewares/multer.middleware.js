@@ -8,7 +8,7 @@ dotenv.config();
 // Uncomment these lines if needed in your project setup
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
-
+console.log("multer....")
 const storage = multer.diskStorage({
   // Define the destination folder based on the field name
   destination: function (req, file, cb) {

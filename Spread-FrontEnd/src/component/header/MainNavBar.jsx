@@ -20,7 +20,7 @@ const ConfirmationBox = React.lazy(
 
 import SearchBar from "../homeComp/searchBar";
 import ThemeMenu from "../otherUtilityComp/ThemeMenu";
-import ThemeBtn from "../otherUtilityComp/ThemeBtn";
+import ThemeBtn from "../buttons/ThemeBtn";
 
 function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
@@ -36,7 +36,7 @@ function MainNavBar() {
       className={`fixed top-0 transform-all duration-300 ease-in-out flex  justify-center w-full z-10`}
     >
       <nav
-        className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-white dark:border-[#383838] border dark:bg-black border-inherit dark:border-[#383838]${
+        className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-white dark:border-[#383838] border-b dark:bg-black border-inherit dark:border-[#383838]${
           !isLogin
             ? " bg-opacity-20 backdrop-blur-lg border  rounded-xl m-2"
             : "dark:bg-[#222222] "

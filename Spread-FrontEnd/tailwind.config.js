@@ -15,9 +15,17 @@ export default {
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(0%)' }, // Corrected typo here
         },
+        toRight: { // Corrected typo here
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(110%)' }, // Corrected typo here
+        },
          fromLeft: { // Corrected typo here
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(0%)' }, // Corrected typo here
+        },
+          toLeft: { // Corrected typo here
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' }, // Corrected typo here
          },
          fromTop: {
            '0%': { transform: 'translateY(-10%)'},
@@ -38,6 +46,10 @@ export default {
         'slide-in-right': 'fromRight .5s ease-in-out forwards',
         'slide-in-top': 'fromTop .5s ease-in-out forwards',
         'slide-out-top': 'toTop .5s ease-in-out forwards',
+        'slide-out-left': 'toLeft 1s ease-in-out forwards',
+        'slide-out-right': 'toRight .5s ease-in-out forwards',
+        
+
         'fedin2s':'fedin 2s  ease-in-out',
         'fedin1s':'fedin 1s  ease-in-out',
         'fedin.2s':'fedin .2s  ease-in-out'

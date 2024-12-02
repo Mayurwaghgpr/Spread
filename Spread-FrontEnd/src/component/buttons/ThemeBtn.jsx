@@ -60,7 +60,7 @@ function ThemeBtn() {
       <button
         onClick={changeTheme}
         aria-label="THEME"
-        className="p-2  rounded-full flex items-center"
+        className="p-2 transition-all duration-100 rounded-full flex items-center"
       >
         {currentMode?.icon}
       </button>

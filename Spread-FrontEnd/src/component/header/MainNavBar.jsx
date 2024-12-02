@@ -72,15 +72,12 @@ function MainNavBar() {
               </div>
             ) : (
               <div className="flex gap-3 justify-end w-full items-center sm:text-lg text-xs">
-                <Link
-                  to="/auth/signin"
-                  className="transition-colors duration-500 rounded-3xl sm:px-3 py-2"
-                >
+                <Link to="/auth/signin" className=" rounded-3xl sm:px-3 py-2">
                   SignIn
                 </Link>
                 <Link
                   to="/auth/signup"
-                  className="border border-inherit  transition-colors duration-500 rounded-full px-3 py-1"
+                  className="border border-inherit rounded-full px-3 py-1"
                 >
                   get started
                 </Link>

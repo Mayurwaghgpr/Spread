@@ -3,11 +3,13 @@ import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import usePublicApis from "../../Apis/publicApis";
+import { useNavigate } from "react-router-dom";
 
 function Bookmark({ className, post }) {
   const [bookmarkIcon, setIcon] = useState("");
-  const { user } = useSelector((state) => state.auth);
+  const { isLogin, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { ArchivePost } = usePublicApis();
   const queryClient = useQueryClient();
 
@@ -38,15 +40,19 @@ function Bookmark({ className, post }) {
     (savedPost) => savedPost?.id === post?.id
   );
   return (
-    <div className={`${className}`}>
+    <div className={`${className} `}>
       {" "}
       <i
         id="bookmark"
         disabled={post?.user?.id === user?.id}
         onClick={(e) => {
-          handleSavePost(post?.id, e.target);
+          if (isLogin) {
+            handleSavePost(post?.id, e.target);
+          } else {
+            navigate("/auth/signin");
+          }
         }}
-        className={`bi cursor-pointer transition-all duration-700 ${
+        className={` bi cursor-pointer transition-all duration-700 ${
           isBookmarked || bookmarkIcon === `bookmark-${post?.id}`
             ? "bi-bookmark-fill"
             : "bi-bookmark"

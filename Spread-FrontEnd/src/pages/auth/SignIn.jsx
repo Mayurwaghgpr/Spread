@@ -68,7 +68,7 @@ function SignIn() {
           </div>
         )}
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1)}
           className=" text-3xl absolute  top-0 p-5   right-3 text-shadow text-decoration-none"
           aria-label="Close"
         >

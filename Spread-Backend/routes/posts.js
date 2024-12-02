@@ -1,16 +1,16 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { getPosts, PostAllContent, AddNewPost, EditPost, DeletePost} from '../controllers/post.js';
+import { getPostPreview, getPostView, AddNewPost, EditPost, DeletePost} from '../controllers/post.js';
 import IsAuth from '../middlewares/isAuth.js';
 
 const router = express.Router();
 
 // Route to get all posts (authenticated users only)
-router.get("/all", IsAuth, getPosts);
+router.get("/all", IsAuth, getPostPreview);
 
 // Route to get a single post by ID
 // Requires authentication middleware
-router.get("/:id", IsAuth, PostAllContent);
+router.get("/:id", getPostView);
 
 
 // Route to add a new post

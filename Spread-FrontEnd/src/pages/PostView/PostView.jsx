@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import DOMPurify from "dompurify";
 import "boxicons";
 import { useQuery } from "react-query";
-
+import { v4 as uuidv4 } from "uuid";
 import Bookmark from "../../component/buttons/Bookmark";
 import usePublicApis from "../../Apis/publicApis";
 import Like from "../../component/buttons/Like";
@@ -24,7 +24,7 @@ function FullBlogView() {
   const { fetchDataById } = usePublicApis();
 
   const {
-    data: postFullview,
+    data: postView,
     isLoading,
     isError,
     error,
@@ -32,6 +32,35 @@ function FullBlogView() {
     queryKey: ["fullpostData", id],
     queryFn: () => fetchDataById(id),
   });
+
+  const menuItem = [
+    {
+      id: uuidv4(),
+      itemName: "Copy Link",
+      icon: <i className="bi bi-link text-lg"></i>,
+      itemMethod: () => {
+        navigator.clipboard.writeText(window.location.href);
+      },
+    },
+    {
+      id: uuidv4(),
+      itemName: "Share",
+      icon: <i className="bi bi-share"></i>,
+      itemMethod: () => {},
+    },
+    {
+      id: uuidv4(),
+      itemName: "Delete Post",
+      icon: <i className="bi bi-trash2"></i>,
+      itemMethod: () => confirmDeletePost(post?.id),
+    },
+    {
+      id: uuidv4(),
+      itemName: "Edite Post",
+      icon: <i className="bi bi-vignette"></i>,
+      itemMethod: () => {},
+    },
+  ];
 
   if (isError || error) {
     console.error("Error fetching data:", error);
@@ -48,42 +77,43 @@ function FullBlogView() {
       <article className="max-w-3xl mx-auto p-6 rounded-lg flex flex-col justify-center items-center px-2 ">
         <header className="mb-6 w-full px-3">
           <section className="mb-6">
+            <div className="w-full flex justify-end text-lg">
+              {" "}
+              <Menu Items={menuItem} post={postView} />
+            </div>
             <h1 className="text-3xl break-words lg:text-5xl font-bold mb-2">
-              {postFullview?.title}
+              {postView?.title}
             </h1>
-            <p className="text-lg lg:text-2xl leading-relaxed">
-              {postFullview?.subtitelpagraph}
+            <p className="text-lg text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-2xl leading-relaxed">
+              {postView?.subtitelpagraph}
             </p>
           </section>
           <div className="flex items-center my-4">
             <img
-              alt={`${postFullview?.User?.username}'s profile`}
-              src={
-                postFullview?.User?.userImage &&
-                `${postFullview?.User?.userImage}`
-              }
+              alt={`${postView?.User?.username}'s profile`}
+              src={postView?.User?.userImage && `${postView?.User?.userImage}`}
               className="w-12 h-12 rounded-full mr-4 object-cover object-top"
               loading="lazy"
             />
             <div>
               <Link
-                to={`/profile/@${postFullview?.User?.username
+                to={`/profile/@${postView?.User?.username
                   ?.split(" ")
                   .slice(0, -1)
-                  .join("")}/${postFullview?.User?.id}`}
+                  .join("")}/${postView?.User?.id}`}
               >
-                {postFullview?.User?.username}
+                {postView?.User?.username}
               </Link>
-              <p className="text-sm ">
-                {format(new Date(postFullview?.createdAt), "LLL dd, yyyy")}
+              <p className="text-sm text-black dark:text-white text-opacity-50">
+                {format(new Date(postView?.createdAt), "LLL dd, yyyy")}
               </p>
             </div>
           </div>
         </header>
 
-        <div className="flex justify-between   items-center border-inherit border-y px-3 py-3  font-light  w-full">
-          <div className="flex   gap-4">
-            <Like className={"text-sm"} post={postFullview} />
+        <div className="flex justify-between text-xl items-center border-inherit border-y px-3 py-3 w-full">
+          <div className="flex gap-4">
+            <Like className={""} post={postView} />
             <button
               onClick={() => setOpenComments(true)}
               className="flex items-center gap-1"
@@ -93,24 +123,23 @@ function FullBlogView() {
             </button>
           </div>
           <div className="flex gap-7 justify-between">
-            <Bookmark post={postFullview} />
-            <Menu post={postFullview} />
+            <Bookmark post={postView} />
           </div>
         </div>
 
-        {postFullview?.titleImage && (
+        {postView?.titleImage && (
           <figure className="my-6 w-full">
             <img
               className="w-full rounded-lg"
-              src={`${postFullview?.titleImage}`}
-              alt="Main Blog Image"
+              src={`${postView?.titleImage}`}
+              alt="Title Image"
               loading="lazy"
             />
             <figcaption></figcaption>
           </figure>
         )}
         {/* {console.log({ postDatabyId })} */}
-        {postFullview?.postContent?.map((item) => (
+        {postView?.postContent?.map((item) => (
           <section key={item.id} className="mb-6 w-full border-inherit ">
             {item.type === "image" && item.content && (
               <figure className="mb-4">

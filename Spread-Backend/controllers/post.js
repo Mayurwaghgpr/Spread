@@ -9,7 +9,7 @@ import { stringify } from "uuid";
 
 
 // Fetch all posts with optional topic filtering, pagination, and user inclusion
-export const getPosts = async (req, res,next) => {
+export const getPostPreview = async (req, res,next) => {
     // Extract query parameters with defaults
     const type = req.query.type?.toLowerCase().trim() || 'all';
     const limit = parseInt(req.query.limit?.trim()) || 3;
@@ -53,9 +53,9 @@ console.log(type,limit,page)
 };
 
 // Fetch a post by its ID along with associated content and images
-export const PostAllContent = async (req, res,next) => {
+export const getPostView = async (req, res,next) => {
     const id = req.params.id;
-console.log("first")
+// console.log("first")
     try {
         const post = await Post.findOne({
             where: { id },
@@ -85,6 +85,7 @@ console.log("first")
 
 // Add a new post with associated content and images
 export const AddNewPost = async (req, res, next) => {
+    
     console.log("Post adding...")
     let imageArr = [];
     try {

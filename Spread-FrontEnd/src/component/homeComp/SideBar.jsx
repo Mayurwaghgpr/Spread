@@ -112,7 +112,7 @@ function SideBar() {
             return (
               <NavLink
                 key={link.id}
-                isActive={(match, location) =>
+                isactive={(match, location) =>
                   location.pathname.startsWith(link.stub)
                 }
                 className={({ isActive }) =>

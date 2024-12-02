@@ -4,21 +4,23 @@ import { removeToast, removeAllToast } from "../../redux/slices/uiSlice";
 
 function ToastItem({ ToastContent }) {
   const dispatch = useDispatch();
-  const timerRef = useRef({});
+  const timerRefBf = useRef({});
+  const timerRefAf = useRef({});
   const { ToastState } = useSelector((state) => state.ui);
-  const [rmToastId, setrmToastId] = useState();
+  const [rmToastId, setrmToastId] = useState([]);
 
   useEffect(() => {
-    timerRef.current[ToastContent.id] = setTimeout(() => {
-      setrmToastId(ToastContent.id);
-    }, 1800);
+    timerRefBf.current[ToastContent.id] = setTimeout(() => {
+      setrmToastId((prv) => [...prv, ToastContent.id]);
+    }, 2000);
     // Set timeout for each toast
-    timerRef.current[ToastContent.id] = setTimeout(() => {
+    timerRefAf.current[ToastContent.id] = setTimeout(() => {
       dispatch(removeToast(ToastContent.id));
-    }, 2300);
+    }, 3000);
     // Clean up timeout when component unmounts or when toast is dismissed
     return () => {
-      clearTimeout(timerRef.current[ToastContent.id]);
+      clearTimeout(timerRefAf.current[ToastContent.id]);
+      clearTimeout(timerRefBf.current[ToastContent.id]);
     };
   }, [dispatch, ToastContent.id]);
 
@@ -33,7 +35,7 @@ function ToastItem({ ToastContent }) {
 
   return (
     <span
-      className={`${rmToastId === ToastContent.id && " animate-slide-out-left"} " animate-slide-in-left" transition-all duration-300 ease-in-out pointer-events-auto ${status} shadow-xl flex flex-col rounded-lg w-fit`}
+      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-left" : "animate-slide-in-left"} transition-all duration-300 ease-in-out pointer-events-auto ${status} shadow-xl flex flex-col rounded-lg w-fit`}
     >
       <div className="flex p-4">
         <div className="break-words flex">
@@ -41,7 +43,8 @@ function ToastItem({ ToastContent }) {
         </div>
         <button
           onClick={() => {
-            clearTimeout(timerRef.current[ToastContent.id]);
+            clearTimeout(timerRefBf.current[ToastContent.id]);
+            clearTimeout(timerRefAf.current[ToastContent.id]);
             dispatch(removeToast(ToastContent.id));
           }}
           className="ml-4"

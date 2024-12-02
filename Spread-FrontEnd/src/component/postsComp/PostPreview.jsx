@@ -11,6 +11,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient, useQuery } from "react-query";
 import { setToast } from "../../redux/slices/uiSlice";
+import { v4 as uuidv4 } from "uuid";
 
 import profileIcon from "/ProfOutlook.png";
 import PostsApis from "../../Apis/PostsApis";
@@ -26,6 +27,20 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   // const navigate = useNavigate();
 
   // const { user } = useSelector((state) => state.auth);
+  const menuItem = [
+    {
+      id: uuidv4(),
+      itemName: "Delete Post",
+      icon: <i className="bi bi-trash2"></i>,
+      itemMethod: () => confirmDeletePost(post?.id),
+    },
+    {
+      id: uuidv4(),
+      itemName: "Edite Post",
+      icon: <i className="bi bi-vignette"></i>,
+      itemMethod: () => {},
+    },
+  ];
 
   const renderImage = useCallback(() => {
     return post?.user?.userImage ? post.user.userImage : profileIcon;
@@ -67,7 +82,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             <h1 className="text-slate-700 text-sm rounded-lg">{post?.topic}</h1>
           </div>
           <Link
-            to={`/FullView/@${post?.user?.username
+            to={`/view/@${post?.user?.username
               .split(" ")
               .slice(0, post?.user?.username.length - 1)
               .join("")}/${post?.id}`}
@@ -105,7 +120,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           {post && (
             <div className="flex w-full h-full justify-between text-sm items-center mt-3">
               <div className="flex justify-start items-center gap-5">
-                <span className="font-light rounded-lg">
+                <span className="rounded-lg text-opacity-30 text-black">
                   {post?.createdAt
                     ? format(new Date(post?.createdAt), "LLL-dd-yyyy")
                     : ""}
@@ -119,7 +134,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </div>
               <div className="flex justify-end gap-5 items-center">
                 <Bookmark post={post || null} />
-                <Menu post={post} />
+                <Menu Items={menuItem} post={post} />
               </div>
             </div>
           )}

@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import PostPreview from "../../component/postsComp/PostPreview";
 import { setuserProfile } from "../../redux/slices/profileSlice";
 import ScrollToTopButton from "../../component/otherUtilityComp/ScrollToTopButton";
 import ProfileHeader from "./component/ProfileHeader";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
 import useLastPostObserver from "../../hooks/useLastPostObserver";
@@ -20,15 +20,21 @@ function Profile() {
   const { userProfile, FollowInfo } = useSelector((state) => state.profile);
   const profileId = params.id || user?.id;
 
-  const { isError, isFetching, isLoading } = useQuery(
-    ["userProfile", profileId],
-    async () => fetchUserProfile(profileId),
+  const { mutate, isError, isFetching, isLoading } = useMutation(
+    ["userProfile"],
+    async (id) => fetchUserProfile(id),
     {
       onSuccess: (data) => {
         dispatch(setuserProfile(data));
       },
     }
   );
+  useEffect(() => {
+    if (profileId !== user.id) {
+      mutate(profileId);
+    }
+    dispatch(setuserProfile(user));
+  }, [profileId]);
 
   const {
     data: postsData,
@@ -42,8 +48,10 @@ function Profile() {
     ["Userposts", profileId],
     ({ pageParam = 1 }) => fetchUserData(profileId, pageParam),
     {
-      getNextPageParam: (lastPage, allPages) =>
-        lastPage?.length ? allPages.length + 1 : undefined,
+      getNextPageParam: (lastPage, allPages) => {
+        if (!lastPage.data?.length) return undefined;
+        return pages.length + 1; // Return the next page number
+      },
       retry: false,
     }
   );
@@ -55,9 +63,9 @@ function Profile() {
   );
 
   const RenderPosts = () => {
-    if (postsData?.pages.length > 0) {
+    if (postsData?.pages?.length > 0) {
       return postsData.pages.map((page) =>
-        page.map((post, idx, arr) => (
+        page?.map((post, idx, arr) => (
           <PostPreview
             ref={arr.length === idx + 1 ? lastpostRef : null}
             key={post.id}
@@ -92,18 +100,18 @@ function Profile() {
   }
   console.log(userProfile);
   return (
-    <div className="flex justify-center  mt-14  dark:*:border-[#383838]">
+    <div className="flex justify-center h-screen  mt-14  dark:*:border-[#383838]">
       <div className=" md:w-[80%]  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />
-          <div className="w-full flex gap-5 border-t p-2 px-4 border-inherit">
-            <div className="w-full flex gap-5">
-              <p className="hover:underline cursor-pointer">Home</p>
-              <p className="hover:underline cursor-pointer">About</p>
+          <div className="w-full flex gap-5  p-2 px-4 border-inherit">
+            <div className="w-full flex gap-5 underline-offset-[.5rem] transition-all duration-400 ">
+              <p className="hover:border-b pb-1 cursor-pointer">Home</p>
+              <p className="hover:border-b pb-1 cursor-pointer">About</p>
             </div>
           </div>
           <div
-            className={`lg:px-5 p-3 pt-5 min-h-[50vh] dark:*:border-[#383838] ${
+            className={`lg:px-5 p-3 pt-5 h-full dark:*:border-[#383838] ${
               !postsData?.pages?.length && "flex justify-center items-center "
             }`}
           >

@@ -4,12 +4,14 @@ import { useMutation } from "react-query";
 import { setToast } from "../../redux/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import abbreviateNumber from "../../utils/numAbrivation";
-
+import { useNavigate, useNavigation } from "react-router-dom";
+// import clapSvg from "/public/clap-svgrepo-com.svg";
 function Like({ post, className }) {
   const [optimisLike, setOptimisLike] = useState("");
   const { LikePost } = usePublicApis();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { isLogin, user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   console.log(post.id);
   const { mutate } = useMutation({
@@ -32,11 +34,14 @@ function Like({ post, className }) {
   const isLiked = post?.Likes?.some((like) => like.likedBy === user.id);
 
   return (
-    <div className={`flex cursor-pointer items-end font-light ${className}`}>
-      {" "}
+    <div className={`flex cursor-pointer items-end ${className}`}>
       <button
         onClick={() => {
-          mutate(post.id);
+          if (isLogin) {
+            mutate(post.id);
+          } else {
+            navigate("/auth/signin");
+          }
         }}
         className=" flex items-end justify-center gap-1"
       >

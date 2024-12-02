@@ -22,8 +22,8 @@ const SignUp = lazy(() => import("./pages/auth/SignUp"));
 const SignIn = lazy(() => import("./pages/auth/SignIn"));
 const ForgotPass = lazy(() => import("./pages/auth/ForgotPass"));
 const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
-const ViewBlogs = lazy(() => import("./pages/ViewBlogs"));
 const Home = lazy(() => import("./pages/Home"));
+const Heros = lazy(() => import("./pages/Heros"));
 const PageError = lazy(() => import("./pages/ErrorPages/Page404"));
 const Profile = lazy(() => import("./pages/userProfile/Profile"));
 const DynamicPostEditor = lazy(
@@ -32,7 +32,7 @@ const DynamicPostEditor = lazy(
 const PostPreviewEditor = lazy(
   () => import("./pages/PostEditor/component/PostPreviewEditor")
 );
-const FullBlogView = lazy(() => import("./pages/FullBlogView/FullBlogView"));
+const PostView = lazy(() => import("./pages/PostView/PostView"));
 const ProfileEditor = lazy(() => import("./pages/userProfile/ProfileEditor"));
 const About = lazy(() => import("./pages/About"));
 const ReadList = lazy(() => import("./pages/ReadList"));
@@ -99,14 +99,18 @@ function App() {
           <Route
             path="/"
             element={
-              !isLogin ? (
-                <Home />
-              ) : (
+              isLogin ? (
                 <ProtectedRoute>
-                  <ViewBlogs />
+                  <Home />
                 </ProtectedRoute>
+              ) : (
+                <Navigate to="/heros" replace />
               )
             }
+          />
+          <Route
+            path="/heros"
+            element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
           />
           <Route
             path="/auth/signin"
@@ -161,18 +165,11 @@ function App() {
               }
             />
             <Route
-              path="githubSynch"
+              path="github/synch"
               element={<ProtectedRoute>{<div></div>}</ProtectedRoute>}
             />
           </Route>
-          <Route
-            path="/FullView/:username/:id"
-            element={
-              <ProtectedRoute>
-                <FullBlogView />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/view/:username/:id" element={<PostView />} />
           <Route
             path="/explore"
             element={

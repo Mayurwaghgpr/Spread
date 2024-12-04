@@ -38,8 +38,8 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 console.log('this is it')
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use(multerFileUpload);
+app.use('/images', express.static(path.join(__dirname,'Spread-Backend', 'images')));
+// app.use();
 
 
 //Login with google/gitub
@@ -92,8 +92,6 @@ User.belongsToMany(Post, { through: Archive, as: 'SavedPosts', foreignKey: 'User
 Post.belongsToMany(User, { through: Archive, as: 'UsersSaved', foreignKey: 'PostId' });
 Archive.belongsTo(User, { as: 'User', foreignKey: 'UserId' });
 Archive.belongsTo(Post, { as: 'Post', foreignKey: 'PostId' });
-
-
 
 app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")))
 app.get('*', (req, res, next) => {

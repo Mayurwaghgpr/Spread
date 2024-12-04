@@ -40,7 +40,7 @@ router.post('/signup', SignUp);
 router.post('/signin', SignIn);
 
 // Route to handle user logout, requires authentication
-router.post('/logout', IsAuth, Logout);
+router.delete('/logout', IsAuth, Logout);
 
 router.post('/forgotpassword',forgotPass)
 

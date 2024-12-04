@@ -8,6 +8,7 @@ function PeoplesList({ people, index, className }) {
   const [isUserhover, setuserHower] = useState(false);
   const userRef = useRef();
   const { userImageurl, IsuserFromOAth } = userImageSrc(people);
+  console.log(people);
   return (
     <li
       className={`flex mt-2 justify-between px-2 w-full  gap-3 font-medium capitalize items-center   ${className} relative dark:border-[#383838]`}
@@ -30,7 +31,7 @@ function PeoplesList({ people, index, className }) {
         >
           <h1 className="">{people?.username}</h1>
           {isUserhover && (
-            <div className=" absolute animate-fedin.2s z-30 w-auto flex flex-col gap-2 border  mt-[90px] bg-white border-inherit dark:bg-black font-normal text-[12px] p-3 overflow-hidden overflow-ellipsis rounded-md ">
+            <div className=" absolute animate-fedin.2s z-30 right-64 top-2 w-[20rem] flex flex-col gap-2 border bg-white border-inherit dark:bg-black font-normal text-[1rem] p-3 overflow-hidden overflow-ellipsis rounded-md ">
               <div className=" flex gap-4 justify-start items-center font-medium ">
                 {" "}
                 <img

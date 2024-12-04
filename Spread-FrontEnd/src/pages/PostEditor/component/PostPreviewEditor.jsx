@@ -26,7 +26,7 @@ function PostPreviewEditor() {
 
   const mutation = useMutation((NewPosts) => AddNewPost(NewPosts), {
     onSuccess: (response) => {
-      queryClient.invalidateQueries(["posts"]);
+      // queryClient.invalidateQueries(["posts"]);
       dispatch(
         setToast({
           message: `New Blog ${response.message} fully created`,
@@ -34,14 +34,15 @@ function PostPreviewEditor() {
         })
       );
       dispatch(setElements([DEFAULT_ELEMENT]));
+      navigate("/", { replace: true });
     },
     onError: (error) => {
       const errorMessage =
         error.response?.error || "An error occurred. Please try again.";
       dispatch(setToast({ message: errorMessage, type: "error" }));
       dispatch(setElements([DEFAULT_ELEMENT]));
+      navigate(-1, { replace: true });
     },
-    onSettled: () => navigate("/", { replace: true }),
   });
   const EditTitleImage = useCallback(
     (id, index, el) => {
@@ -58,23 +59,30 @@ function PostPreviewEditor() {
     [dispatch, elements, imageFiles]
   );
 
-  const handeSubmit = useCallback(() => {
-    console.log(elements);
-    if (elements.some((el) => el.data === "" && !el.file)) {
-      return;
-    }
+  const handeSubmit = useCallback(
+    (e) => {
+      // console.log(elements);
+      if (elements.some((el) => el.data === "" && !el.file)) {
+        return;
+      }
 
-    const formData = new FormData();
-    // const textElements = elements.filter((el) => el.type == "image");
-    formData.append("blog", JSON.stringify(elements));
-    formData.append("Topic", Topic);
-    imageFiles.forEach((el, idx) => {
-      formData.append(`image-${el.index}`, el.file);
-      formData.append(`description-${el.index}`, el.data);
-    });
-    // console.log(elements);
-    mutation.mutate(formData);
-  }, [dispatch, elements, Topic, mutation]);
+      const formData = new FormData();
+      // const textElements = elements.filter((el) => el.type == "image");
+      formData.append("blog", JSON.stringify(elements));
+      formData.append("Topic", Topic);
+      console.log({ imageFiles });
+      imageFiles.forEach((el, idx) => {
+        console.log(el);
+        formData.append(`image-${el.index}`, el.file);
+        formData.append(`description-${el.index}`, el.data);
+      });
+      // console.log(elements);
+      if (e === "fetch") {
+        mutation.mutate(formData);
+      }
+    },
+    [Topic]
+  );
 
   const imageElements = elements?.filter((el) => el.type === "image");
 
@@ -159,7 +167,7 @@ function PostPreviewEditor() {
           </div>
           <div className="h-full flex gap-3 p items-start">
             <button
-              onClick={handeSubmit}
+              onClick={() => handeSubmit("fetch")}
               className={`flex gap-2 ${
                 mutation.isLoading ? "bg-sky-100 text-slate-400" : ""
               } bg-sky-200 px-4 py-2 rounded-lg`}

@@ -85,33 +85,28 @@ export const usePostCreator = () => {
       ) {
         const focusedElement = elements[focusedIndex];
         if (focusedElement.data !== "") {
-          // Insert after the focused index
           newIndex = focusedIndex + 1;
           updatedElements.splice(newIndex, 0, newElement);
         } else if (!focusedElement.file) {
-          // Replace the focused element
           newIndex = focusedIndex;
           updatedElements[focusedIndex] = newElement;
         }
       }
       if (newIndex === undefined) {
-        // Append at the end
         newIndex = updatedElements.length;
-        newElement.index = newIndex;
         updatedElements.push(newElement);
       }
 
-      // Update elements and image files
+      updatedElements = updatedElements.map((el, index) => ({ ...el, index }));
+
       dispatch(setElements(updatedElements));
       setImageFiles((prev) => [
         ...prev,
         { ...newElement, file, index: newIndex },
       ]);
 
-      // Reset the file input
       if (imageInputRef.current) imageInputRef.current.value = null;
 
-      // Focus the new element
       setTimeout(() => {
         if (inputRefs.current[newIndex]) {
           inputRefs.current[newIndex].focus();
@@ -121,7 +116,6 @@ export const usePostCreator = () => {
     [elements, dispatch, focusedIndex]
   );
 
-  // console.log({ imageFiles });
   const debouncedUpdateElements = useCallback(
     debounce((updatedElements) => {
       dispatch(setElements(updatedElements));
@@ -176,7 +170,9 @@ export const usePostCreator = () => {
       console.log(event.target.innerText);
 
       const isEmpty =
-        event.target.innerText.startsWith("\n") || !event.target.innerText; // it checks if previos input have no content
+        event.target.innerText.startsWith("\n") &&
+        !event.target.innerText &&
+        !event.target.value; // it checks if previos input have no content
       if (event.type === "click") {
         const newLength = removeElement(id);
         if (newLength < elements.length) {

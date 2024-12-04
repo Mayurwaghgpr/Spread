@@ -13,20 +13,17 @@ function Heros() {
 
   return (
     <>
-      <main className="relative h-screen dark:*:border-[#383838]">
+      <main className=" h-[80vh] mt-[4.6rem]  dark:*:border-[#383838]">
         <section className="relative h-full px-10 flex m-auto sm:flex-row flex-col-reverse gap-8 justify-center items-center   text-start border-inherit">
-          <div className=" sm:w-[50%]  rounded-lg h-fit  flex flex-col gap-2 border-inherit">
+          <div className=" sm:w-[50%] z-[5] animate-fedin1s text-white  rounded-lg h-fit  flex flex-col gap-2 border-inherit">
             <h1 className="xl:text-2xl lg:text-xl flex  items-center text-lg mb-4">
               <span>Spread.. </span>
               <i className="bi bi-feather pb-2"></i>
             </h1>
-            <h2 className="xl:text-5xl lg:text-4xl sm:text-3xl text-2xl font-[440]">
-              Unleash Your Stories, Inspire the World
+            <h2 className="xl:text-7xl font-[poppins] lg:text-4xl sm:text-3xl text-2xl font-[440]">
+              Unleash Your ideas, Inspire the World
             </h2>
-            <p className="sm:text-xl text-sm">
-              Where you can read and write inspiring stories. Join our community
-              of writers and share your stories with a wider audience.
-            </p>
+            <p className="text-lg">Read,Write,Code,Share and Explor</p>
             <div className="w-full flex justify-center py-4 border-inherit">
               <Link
                 to="/write"
@@ -36,14 +33,10 @@ function Heros() {
               </Link>
             </div>
           </div>
-          <div className="  bg-black ms-20  rounded-full min-w-fit min-h-fit  ">
+          <div className=" absolute top-0 left-0 bottom-0 right-0 z-0 h-full ">
             <video
-              className=" sm:size-[15rem] lg:size-[20rem] xl:size-[25rem] size-[10rem] m-1 border-white border-2 animate-fedin1s  object-cover object-center rounded-full "
+              className=" border-white  h-full w-full  object-cover object-center "
               id="background-video"
-              autoPlay
-              muted
-              loop
-              playsInline
             >
               <source src={bgvideo} type="video/mp4" />
             </video>
@@ -72,7 +65,7 @@ function Heros() {
               <div className="shadow-lg flext justify-center items-center rounded-xl w-full max-w-[800px] border  overflow-hidden border-inherit">
                 <img
                   className="sm:object-cover object-center w-full rounded-xl border-inherit"
-                  src={image}
+                  src={""}
                   alt=""
                 />
               </div>

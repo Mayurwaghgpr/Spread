@@ -37,9 +37,7 @@ function MainNavBar() {
     >
       <nav
         className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-white dark:border-[#383838] border-b dark:bg-black border-inherit dark:border-[#383838]${
-          !isLogin
-            ? " bg-opacity-20 backdrop-blur-lg border  rounded-xl m-2"
-            : "dark:bg-[#222222] "
+          !isLogin ? " bg-opacity-20 backdrop-blur-lg" : "dark:bg-[#222222] "
         } `}
       >
         <div className="flex items-center justify-between w-full m-auto">

@@ -6,11 +6,11 @@ function Comment({ setOpenComments }) {
   return (
     <section
       onClick={({ target }) => setOpenComments(false)}
-      className="flex justify-end  w-full right-1 bg-black bg-opacity-10 shadow h-full fixed top-0 z-40 "
+      className="flex justify-end  w-full right-1 animate-fedin.2s bg-black bg-opacity-50 shadow h-full fixed top-0 z-40 "
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white h-full w-[430px] p-5 overflow-auto"
+        className="bg-white animate-slide-in-right dark:bg-[#272727] h-full w-[430px] p-5 overflow-auto"
       >
         <h1 className="text-xl">Comments</h1>
         <div className=" w-full shadow-xl  p-1 rounded-xl">

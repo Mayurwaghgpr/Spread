@@ -5,16 +5,10 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import AccessAndRefreshTokenGenerator from '../utils/AccessAndRefreshTokenGenerator.js';
 import { mailTransporter } from '../utils/sendMail.js';
+import { CookieOptions } from '../utils/cookie-options.js';
 
 dotenv.config();
 const saltRounds = 10;
-
-// Cookie options for setting secure, HTTP-only cookies
-const CookieOptions = {
- httpOnly: true,      // Accessible only by the server
-    secure: true,       // Not secure, since we're on HTTP on localhost
-    sameSite: 'none',
-};
 
 // Sign up a new user
 export const SignUp = async (req, res,next) => {

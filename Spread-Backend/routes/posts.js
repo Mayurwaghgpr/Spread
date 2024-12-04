@@ -2,6 +2,7 @@ import express from 'express';
 import { body } from 'express-validator';
 import { getPostPreview, getPostView, AddNewPost, EditPost, DeletePost} from '../controllers/post.js';
 import IsAuth from '../middlewares/isAuth.js';
+import { multerFileUpload } from '../middlewares/multer.middleware.js';
 
 const router = express.Router();
 
@@ -15,12 +16,11 @@ router.get("/:id", getPostView);
 
 // Route to add a new post
 // Requires authentication middleware
-router.post("/add", IsAuth, AddNewPost);    
-
+router.post("/add", IsAuth,multerFileUpload, AddNewPost);    
 
 // Route to edit an existing post by ID
 // Requires authentication middleware
-router.patch("/:id", IsAuth, EditPost);
+router.patch("/:id", IsAuth,multerFileUpload, EditPost);
 
 // Route to delete a post by ID
 // Requires authentication middleware

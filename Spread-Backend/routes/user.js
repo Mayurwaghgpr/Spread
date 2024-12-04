@@ -10,6 +10,7 @@ import {
 
 } from '../controllers/user.js';
 import IsAuth from '../middlewares/isAuth.js';
+import { multerFileUpload } from '../middlewares/multer.middleware.js';
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get('/following/:userId', IsAuth, getFollowing);
 router.get('/posts/archived', IsAuth, getArchivedPosts); 
 
 // Post Routes
-router.post('/profile/edit', IsAuth, EditUserProfile);
+router.post('/profile/edit', IsAuth,multerFileUpload, EditUserProfile);
 
 
 export default router;

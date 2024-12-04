@@ -11,7 +11,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient, useQuery } from "react-query";
 import { setToast } from "../../redux/slices/uiSlice";
-import { v4 as uuidv4 } from "uuid";
 
 import profileIcon from "/ProfOutlook.png";
 import PostsApis from "../../Apis/PostsApis";
@@ -26,22 +25,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   // const dispatch = useDispatch();
   // const navigate = useNavigate();
 
-  // const { user } = useSelector((state) => state.auth);
-  const menuItem = [
-    {
-      id: uuidv4(),
-      itemName: "Delete Post",
-      icon: <i className="bi bi-trash2"></i>,
-      itemMethod: () => confirmDeletePost(post?.id),
-    },
-    {
-      id: uuidv4(),
-      itemName: "Edite Post",
-      icon: <i className="bi bi-vignette"></i>,
-      itemMethod: () => {},
-    },
-  ];
-
+  const { user } = useSelector((state) => state.auth);
   const renderImage = useCallback(() => {
     return post?.user?.userImage ? post.user.userImage : profileIcon;
   }, [post?.user?.userImage]);
@@ -79,7 +63,9 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 <span className="w-20 h-3 bg-slate-300 animate-pulse dark:bg-slate-700 bg-inherit rounded-xl"></span>
               )}
             </div>
-            <h1 className="text-slate-700 text-sm rounded-lg">{post?.topic}</h1>
+            <h1 className="text-opacity-30 text-black dark:text-white dark:text-opacity-30 rounded-lg">
+              {post?.topic}
+            </h1>
           </div>
           <Link
             to={`/view/@${post?.user?.username
@@ -88,13 +74,13 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               .join("")}/${post?.id}`}
             className="cursor-pointer h-full flex justify-between items-center gap-3"
           >
-            <div className="flex flex-col gap-1 leading-tight w-96  ">
+            <div className="flex flex-col gap-1  w-96  ">
               {post ? (
                 <>
-                  <p className="font-bold text-sm sm:text-2xl overflow-hidden overflow-ellipsis">
+                  <p className="font-medium text-sm sm:text-3xl overflow-hidden overflow-ellipsis">
                     {post?.title}
                   </p>
-                  <p className="text-sm sm:text-base font-normal overflow-hidden overflow-ellipsis">
+                  <p className="text-sm sm:text-base text-opacity-60 text-black dark:text-white dark:text-opacity-60 font-normal overflow-hidden overflow-ellipsis">
                     {post?.subtitelpagraph}
                   </p>
                 </>
@@ -106,7 +92,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               )}
             </div>
 
-            <div className="rounded-sm h-[8rem] w-[10rem]  bg-slate-200 dark:bg-slate-700">
+            <div className="rounded-sm h-[10rem] w-[15rem]  bg-slate-200 dark:bg-slate-700">
               {post && (
                 <img
                   className="object-cover object-center h-full w-full"
@@ -120,7 +106,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           {post && (
             <div className="flex w-full h-full justify-between text-sm items-center mt-3">
               <div className="flex justify-start items-center gap-5">
-                <span className="rounded-lg text-opacity-30 text-black">
+                <span className="rounded-lg text-opacity-30 text-black dark:text-white dark:text-opacity-50">
                   {post?.createdAt
                     ? format(new Date(post?.createdAt), "LLL-dd-yyyy")
                     : ""}
@@ -134,7 +120,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </div>
               <div className="flex justify-end gap-5 items-center">
                 <Bookmark post={post || null} />
-                <Menu Items={menuItem} post={post} />
+                <Menu post={post} />
               </div>
             </div>
           )}

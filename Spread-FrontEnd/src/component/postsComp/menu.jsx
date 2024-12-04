@@ -2,11 +2,11 @@ import React, { useCallback, useRef, useState } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
-
+import { v4 as uuidv4 } from "uuid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import PostsApis from "../../Apis/PostsApis";
-function Menu({ post, Items }) {
+function Menu({ post }) {
   const [postIdToDelete, setPostIdToDelete] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ function Menu({ post, Items }) {
       }
     },
   });
+
   const confirmDeletePost = useCallback(
     (id) => {
       dispatch(
@@ -50,6 +51,34 @@ function Menu({ post, Items }) {
     },
     [dispatch]
   );
+  const menuItem = [
+    {
+      id: uuidv4(),
+      itemName: "Copy Link",
+      icon: <i className="bi bi-link text-lg"></i>,
+      itemMethod: () => {
+        navigator.clipboard.writeText(window.location.href);
+      },
+    },
+    {
+      id: uuidv4(),
+      itemName: "Share",
+      icon: <i className="bi bi-share"></i>,
+      itemMethod: () => {},
+    },
+    {
+      id: uuidv4(),
+      itemName: "Delete Post",
+      icon: <i className="bi bi-trash2"></i>,
+      itemMethod: () => confirmDeletePost(post?.id),
+    },
+    {
+      id: uuidv4(),
+      itemName: "Edite Post",
+      icon: <i className="bi bi-vignette"></i>,
+      itemMethod: () => {},
+    },
+  ];
 
   return (
     <div className={`relative flex justify-center items-center`}>
@@ -65,7 +94,7 @@ function Menu({ post, Items }) {
           ref={menuRef}
           className="absolute sm:top-5 mt-2 p-2 gap-2 flex flex-col w-36  bg-white dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t border-gray-300 rounded-lg"
         >
-          {Items.map((item, idx) => (
+          {menuItem.map((item, idx) => (
             <li
               key={item.id}
               className="w-full flex gap-2 items-center cursor-pointer"

@@ -11,7 +11,20 @@ export const userPrepsData = async (req, res,next) => {
     try {
         // Fetch users excluding the current user
         const AllSpreadUsers = await User.findAll({
-            where: { id: { [Op.ne]: req.authUser.id } },
+          where: { id: { [Op.ne]: req.authUser.id } },
+          incluse: [ {
+            model: User,
+            as: 'Followers',
+            through: { attributes: [] }, // Exclude through table attributes
+            attributes: ['id'], // Fetch only necessary fields
+          },
+          {
+            model: User,
+            as: 'Following',
+            through: { attributes: [] }, // Exclude through table attributes
+            attributes: ['id'], // Fetch only necessary fields
+          },],
+          
             attributes: ['id', 'username', 'userImage', 'bio'],
             order: [[sequelize.fn('RANDOM')]], // Random order
             

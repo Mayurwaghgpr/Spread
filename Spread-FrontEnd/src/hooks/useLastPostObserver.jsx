@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 function useLastPostObserver(
   fetchNextPage,
@@ -16,12 +16,13 @@ function useLastPostObserver(
 
       intObserver.current = new IntersectionObserver(
         (entries) => {
-          if (entries[0].isIntersecting && hasNextPage) {
+          console.log(entries);
+          if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
           }
         },
         {
-          threshold: 1.0,
+          threshold: 0.9,
         }
       );
 
@@ -29,7 +30,11 @@ function useLastPostObserver(
     },
     [isFetchingNextPage, isFetching, hasNextPage, fetchNextPage]
   );
-
+  useEffect(() => {
+    return () => {
+      if (intObserver.current) intObserver.current.disconnect();
+    };
+  }, []);
   return { lastpostRef };
 }
 

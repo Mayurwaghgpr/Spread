@@ -160,7 +160,7 @@ export const EditUserProfile = async (req, res,next) => {
 
   try {
     if (image.length > 0) {
-      updatedData.userImage = image[0].path; // Update user image path
+      updatedData.userImage = "images/userImages"+image[0].filename; // Update user image path
 
       if (data.userImage) {
         await deletePostImage([data.userImage]); // Delete old image

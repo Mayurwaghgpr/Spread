@@ -43,12 +43,15 @@ function Home() {
   } = useInfiniteQuery(
     ["Allposts", selectedTopic],
     ({ pageParam = 1 }) => fetchDataAll({ pageParam, topic: selectedTopic }),
+
     {
-      getNextPageParam: (lastPage, allPages) =>
-        lastPage?.length ? allPages.length + 1 : undefined,
-      retry: false,
+      getNextPageParam: (lastPage, allPages) => {
+        console.log(lastPage.length, allPages);
+        lastPage?.length ? allPages.length + 1 : undefined;
+      },
     }
   );
+  console.log({ hasNextPage, isFetchingNextPage });
 
   const { lastpostRef } = useLastPostObserver(
     fetchNextPage,
@@ -57,17 +60,10 @@ function Home() {
     hasNextPage
   );
 
-  const handleTopicClick = useCallback(
-    (topic) => {
-      setSearchParams({ topic });
-      refetch();
-    },
-    [setSearchParams, refetch]
-  );
+  const handleTopicClick = useCallback((topic) => {
+    setSearchParams({ topic });
+  }, []);
 
-  if (isLoadingPosts) {
-    <LoaderScreen />;
-  }
   if (errorPreps || (errorPosts && errorPosts?.status !== 404)) {
     return (
       <SomthingWentWrong
@@ -80,6 +76,8 @@ function Home() {
       />
     );
   }
+  console.log(postsData);
+  const posts = postsData?.pages.flatMap((page) => page) || [];
 
   return (
     <main className="relative flex flex-col sm:flex-row justify-end h-full  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
@@ -105,22 +103,21 @@ function Home() {
         <div
           id="PostContainer"
           className={`relative flex flex-col h-screen  ${
-            !postsData && " py-10 "
-          } w-full m-16  sm:px-10 dark:border-[#383838] border-inherit`}
+            !posts && " py-10 "
+          } w-full m-16 mb-0 sm:px-10 dark:border-[#383838] border-inherit`}
         >
-          {postsData?.pages?.map((page) =>
-            page?.map((post, idx, arr) => (
-              <PostPreview
-                className="border-inherit p-3"
-                ref={
-                  arr?.length > 3 && arr?.length === idx + 1
-                    ? lastpostRef
-                    : null
-                }
-                key={post?.id}
-                post={post}
-              />
-            ))
+          {posts?.map(
+            (post, idx, arr) => (
+              console.log(arr?.length, arr?.length % 3 === 0),
+              (
+                <PostPreview
+                  className="border-inherit p-3"
+                  ref={arr?.length % 3 === 0 ? lastpostRef : null}
+                  key={post?.id}
+                  post={post}
+                />
+              )
+            )
           )}
           {isFetchingNextPage && (
             <div className="w-full flex justify-center items-center h-full p-5">

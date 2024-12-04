@@ -47,7 +47,7 @@ export const ResetPasswordApi = async (newpassword, token) => {
 
 export const Logout = async () => {
   try {
-    const result = await axios.post(`${BASE_URL}/auth/logout`, null, {
+    const result = await axios.delete(`${BASE_URL}/auth/logout`, {
       withCredentials: true,
     });
     return result.data;

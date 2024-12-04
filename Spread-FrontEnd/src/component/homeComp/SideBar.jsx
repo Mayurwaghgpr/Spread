@@ -23,11 +23,11 @@ function SideBar() {
   const { mutate, isLoading } = useMutation({
     mutationFn: Logout,
     onSuccess: () => {
+      localStorage.removeItem("AccessToken"); //if it is stored in localStorage
+      localStorage.removeItem("userAccount"); //if it is stored in localStorage
       dispatch(setIsLogin(false));
       dispatch(setUser(null));
 
-      localStorage.removeItem("AccessToken"); //if it is stored in localStorage
-      localStorage.removeItem("userAccount"); //if it is stored in localStorage
       navigate("/");
     },
     onError: () => {
@@ -100,35 +100,36 @@ function SideBar() {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r z-40 animate-slide-in-left sm:animate-none ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.2rem] h-screen    bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
+      className={`fixed border-r z-40   sm:animate-none  animate-fedin.2s ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.2rem] h-screen bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="p-10  w-fit dark:bg-black bg-white h-full  text-xl"
+        className="p-10 w-fit dark:bg-black animate-slide-in-left sm:animate-none  bg-white h-full  text-xl"
       >
-        <div className="flex flex-col gap-7 text-gray-700 dark:text-white *:transition-all *:duration-300 sm:w-full justify-center  items-center ">
+        <div className="flex flex-col min-h-[90%] text-gray-700 dark:text-white *:transition-all *:duration-300 sm:w-full justify-between  items-center ">
           {/* Profile Link */}
-          {LoginMenuLinks.map((link) => {
-            return (
-              <NavLink
-                key={link.id}
-                isactive={(match, location) =>
-                  location.pathname.startsWith(link.stub)
-                }
-                className={({ isActive }) =>
-                  `flex ${isActive && "text-slate-500  dark:text-gray-600 text-opacity-40  dark:text-opacity-40"} px-3 py-1 justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
-                }
-                to={link.stub}
-              >
-                {link.icon}
-                <div className={`xl:flex flex-col hidden  `}>
-                  {" "}
-                  <span>{link.lkname}</span>{" "}
-                </div>
-              </NavLink>
-            );
-          })}
-
+          <div className="flex flex-col gap-7">
+            {LoginMenuLinks.map((link) => {
+              return (
+                <NavLink
+                  key={link.id}
+                  isactive={(match, location) =>
+                    location.pathname.startsWith(link.stub)
+                  }
+                  className={({ isActive }) =>
+                    `flex ${isActive && "text-slate-500  dark:text-gray-600"} px-3 py-1 justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
+                  }
+                  to={link.stub}
+                >
+                  {link.icon}
+                  <div className={`xl:flex flex-col hidden  `}>
+                    {" "}
+                    <span>{link.lkname}</span>{" "}
+                  </div>
+                </NavLink>
+              );
+            })}
+          </div>
           {/* Logout Button */}
           <button
             onClick={mutate}

@@ -14,7 +14,8 @@ export const getPostPreview = async (req, res,next) => {
     const type = req.query.type?.toLowerCase().trim() || 'all';
     const limit = parseInt(req.query.limit?.trim()) || 3;
     const page = parseInt(req.query.page?.trim()) || 1;
-console.log(type,limit,page)
+    console.log(type, limit, page)
+    
     // Create a filter for topics if not 'all'
     const topicFilter = type !== 'all' ? { topic: { [Op.or]: [
         { [Op.like]: `${type}%` },
@@ -23,7 +24,8 @@ console.log(type,limit,page)
     ] } } : {};
 
     try {
-        const posts = await Post.findAll({
+
+        const {count:totalPosts,rows:posts} = await Post.findAndCountAll({
             where: topicFilter,
             include: [
                 {
@@ -36,6 +38,7 @@ console.log(type,limit,page)
                 }],
             limit,
             offset: (page - 1) * limit
+        
         });
 
         // const postLikes = await Likes.findAll({})
@@ -89,30 +92,29 @@ export const AddNewPost = async (req, res, next) => {
     console.log("Post adding...")
     let imageArr = [];
     try {
-        console.log(req.body.blog)
+        // console.log(req.body.blog)
 
         // Parse blog data and handle images
         const otherData = JSON.parse(req.body.blog);
-        console.log(otherData)
+        // console.log(otherData)
 
         const imageFileArray = req.files || [];
         console.log(imageFileArray)
-        // console.log(imageFileArray)
-        const topic = req.body.Topic.toLowerCase();
 
+        console.log(req.body)
+        const topic = req.body.Topic.toLowerCase();console.log({topic})
         // extracting Title from Up-Comming Post data
         const postTitle = otherData.find(p => p.index === 0)?.data;
         // extracting Subtitle from Up-Comming Post data
         const subtitleParagraph = otherData.at(1)?.data;
         const titleImage = imageFileArray?.at(0);
-        console.log({postTitle,subtitleParagraph,titleImage})
+        // console.log({postTitle,subtitleParagraph,titleImage})
         // console.log(postTitle ,subtitleParagraph ,titleImage)
         if (!postTitle || !subtitleParagraph) {
             return res.status(400).json({ error: 'Invalid data provided' });
         }
-
-        const titleImageUrl = titleImage?.path;
-
+        // console.log(titleImage)
+        const titleImageUrl = titleImage?.filename ? `images/${titleImage.filename}` : null;
         // Create new post
         const newPost = await Post.create({
             title: postTitle,
@@ -121,26 +123,25 @@ export const AddNewPost = async (req, res, next) => {
             topic,
             authorId: req.authUser.id,
         });
-        console.log({otherData})
+        console.log(newPost)
+
         let PostData;
         const otherPostData = otherData.filter(p => p.index !== 0 && p.index !== 1)
-        console.log(otherData)
         // Arranging post content in sequence
         if (otherData.length) {
-            imageFileArray.forEach((image,idx) => {
-                PostData = otherPostData.map(p => { 
-                    if (p.type ==='image' && idx!==0 && p.index === Number(image.fieldname.split('-')[1]) ) {
-                    return { type:p.type, content:`${process.env.BASE_URL}${image.path}`,otherInfo:p.data,index:p.index, postId: newPost.id }
+            imageFileArray.forEach((image, idx) => {
+                PostData = otherPostData.map(p => {
+                    if (p.type === 'image' && idx !== 0 && p.index === Number(image.fieldname.split('-')[1])) {
+                        return { type: p.type, content: `${process.env.BASE_URL}${image.path}`, otherInfo: p.data, index: p.index, postId: newPost.id }
                     } else {
-                    return { type: p.type, content:p.data,index:p.index, postId: newPost.id }
+                        return { type: p.type, content: p.data, index: p.index, postId: newPost.id }
                     }
                 });
             });
-
             await PostContent.bulkCreate(PostData);
         }
         res.status(201).json({ newData: newPost, message: 'Post created successfully' });
-
+res.status(201)
     } catch (error) {
         // Clean up images if there's an error
         await deletePostImage(imageArr);

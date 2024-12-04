@@ -25,7 +25,7 @@ export default {
         },
           toLeft: { // Corrected typo here
           '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-100%)' }, // Corrected typo here
+          '100%': { transform: 'translateX(-110%)' }, // Corrected typo here
          },
          fromTop: {
            '0%': { transform: 'translateY(-10%)'},

@@ -4,7 +4,6 @@ import userApi from "../Apis/userApi";
 import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
 import useLastPostObserver from "../hooks/useLastPostObserver";
-import emptyPage from "../assets/empty-page.png";
 import { useSelector } from "react-redux";
 
 const ReadList = () => {

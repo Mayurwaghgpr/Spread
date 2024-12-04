@@ -33,35 +33,6 @@ function FullBlogView() {
     queryFn: () => fetchDataById(id),
   });
 
-  const menuItem = [
-    {
-      id: uuidv4(),
-      itemName: "Copy Link",
-      icon: <i className="bi bi-link text-lg"></i>,
-      itemMethod: () => {
-        navigator.clipboard.writeText(window.location.href);
-      },
-    },
-    {
-      id: uuidv4(),
-      itemName: "Share",
-      icon: <i className="bi bi-share"></i>,
-      itemMethod: () => {},
-    },
-    {
-      id: uuidv4(),
-      itemName: "Delete Post",
-      icon: <i className="bi bi-trash2"></i>,
-      itemMethod: () => confirmDeletePost(post?.id),
-    },
-    {
-      id: uuidv4(),
-      itemName: "Edite Post",
-      icon: <i className="bi bi-vignette"></i>,
-      itemMethod: () => {},
-    },
-  ];
-
   if (isError || error) {
     console.error("Error fetching data:", error);
     return <SomthingWentWrong />;
@@ -76,10 +47,10 @@ function FullBlogView() {
     <main className="container mx-auto py-6 mt-16 dark:*:border-[#383838]">
       <article className="max-w-3xl mx-auto p-6 rounded-lg flex flex-col justify-center items-center px-2 ">
         <header className="mb-6 w-full px-3">
-          <section className="mb-6">
+          <section className="flex flex-col gap-2">
             <div className="w-full flex justify-end text-lg">
               {" "}
-              <Menu Items={menuItem} post={postView} />
+              <Menu post={postView} />
             </div>
             <h1 className="text-3xl break-words lg:text-5xl font-bold mb-2">
               {postView?.title}

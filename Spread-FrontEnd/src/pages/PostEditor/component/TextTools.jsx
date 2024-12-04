@@ -38,7 +38,7 @@ const TextTools = ({ applyStyle }) => {
 
   return isInputVisible ? (
     <div
-      className={`flex justify-evenly items-center gap-2 border p-2 bg-inherit rounded-md transition-transform duration-100 z-50 -top-8 after:absolute after:bg-inherit after:size-3 after:-z-10 after:rotate-45 after:top-10 after:right-[50%]  absolute`}
+      className={`flex justify-evenly items-center gap-2 border p-2 bg-white dark:bg-black rounded-md transition-transform duration-100 z-50 -top-8 after:absolute after:bg-inherit after:size-3 after:-z-10 after:rotate-45 after:top-10 after:right-[50%]  absolute`}
     >
       <input
         placeholder="Enter url "
@@ -56,7 +56,7 @@ const TextTools = ({ applyStyle }) => {
     </div>
   ) : (
     <div
-      className={`dark:bg-[] bg-white border justify-evenly items-center p-2 px-5 rounded-md transition-transform duration-100 z-40 -top-8 after:absolute after:border  after:size-3 after:rotate-45 after:top-9 after:right-[50%] absolute`}
+      className={`bg-white dark:bg-black border justify-evenly items-center p-2 px-5 rounded-md transition-transform duration-100 z-40 -top-8 after:absolute after:border-r after:border-inherit dark:after:bg-black after:bg-white after:border-b  after:size-3 after:rotate-45 after:top-[2.4rem] after:right-[50%] absolute`}
     >
       <div className="flex w-full items-center gap-3 justify-between">
         {options.map((option, idx) => (

@@ -126,7 +126,6 @@ function Profile() {
       </div>
 
       {FollowInfo.Info && <ProfileinfoCard className={``} />}
-      <ScrollToTopButton />
     </div>
   );
 }

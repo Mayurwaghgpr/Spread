@@ -4,26 +4,35 @@ import { Link } from "react-router-dom";
 function Footer() {
   return (
     <footer className="border-t pt-6 pb-3 w-full border-inherit h-fit">
-      <div className="flex  items-center h-full  w-full pr-4">
-        <div className="flex justify-center gap-10 items-center w-full">
+      <div className="flex  items-center h-full  w-full   pr-4">
+        <div className="flex sm:justify-center gap-10 sm:flex-row flex-col justify-start p-4  sm:items-center w-full">
           <p className="sm:text-sm text-xs ">
             &copy; 2024 Spread | Developed by Mayur Wagh
           </p>
-          <div className=" flex w-fit gap-5 text-xl">
-            <a href="https://github.com/Mayurwaghgpr" target="_blank">
-              <i className="bi bi-github"></i>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/mayur-wagh-751b8a24b/"
+          <div className=" flex w-fit gap-5 text-xl *:transition-all *:duration-500 ease-linear ">
+            <Link
+              className=" hover:scale-150"
+              to="https://github.com/Mayurwaghgpr"
+              target="_blank"
+            >
+              <i className="bi bi-github "></i>
+            </Link>
+            <Link
+              className=" hover:scale-150"
+              to="https://www.linkedin.com/in/mayur-wagh-751b8a24b/"
               target="_blank"
             >
               {" "}
               <i className="bi bi-linkedin"></i>
-            </a>
-            <a href="https://x.com/mayurwagh152064 " target="_blank">
+            </Link>
+            <Link
+              className=" hover:scale-150"
+              to="https://x.com/mayurwagh152064 "
+              target="_blank"
+            >
               {" "}
               <i className="bi bi-twitter-x"></i>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

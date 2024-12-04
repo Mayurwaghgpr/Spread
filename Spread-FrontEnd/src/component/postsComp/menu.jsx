@@ -1,10 +1,10 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
 import { v4 as uuidv4 } from "uuid";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import PostsApis from "../../Apis/PostsApis";
 function Menu({ post }) {
   const [postIdToDelete, setPostIdToDelete] = useState("");
@@ -21,15 +21,13 @@ function Menu({ post }) {
 
   const { menuId, setMenuId } = useClickOutside(menuRef);
 
-  useQuery({
-    queryKey: "DeletePost",
-    queryFn: () => DeletePostApi(postIdToDelete),
+  const { mutate: deleteMutation } = useMutation((id) => DeletePostApi(id), {
+    mutationKey: "DeletePost",
     onSuccess: (data) => {
       queryClient.invalidateQueries(["Allposts"]);
       dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
     },
     onError: () => {},
-    enabled: !!(isConfirm.status && postIdToDelete),
     onSettled: () => {
       if (location.pathname !== "/") {
         navigate(-1);
@@ -51,6 +49,12 @@ function Menu({ post }) {
     },
     [dispatch]
   );
+  useEffect(() => {
+    if (isConfirm.status && postIdToDelete) {
+      deleteMutation(postIdToDelete);
+    }
+  }, [isConfirm.status, postIdToDelete]);
+
   const menuItem = [
     {
       id: uuidv4(),

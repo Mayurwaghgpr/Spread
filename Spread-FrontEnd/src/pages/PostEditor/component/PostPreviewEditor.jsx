@@ -87,30 +87,31 @@ function PostPreviewEditor() {
   const imageElements = elements?.filter((el) => el.type === "image");
 
   return createPortal(
-    <main className=" fixed top-0 right-0 z-50 bg-white px-10 h-full dark:bg-[#222222] w-full flex justify-center flex-col gap-10 m-auto items-center">
+    <main className=" fixed top-0 right-0 z-50 bg-white px-10  dark:bg-black w-full flex justify-center min-h-screen h-full flex-col gap-10 m-auto items-center overflow-y-auto">
       <div className="w-full  text-center ">
-        <Link className=" absolute right-5 text-4xl top-5" to={-1}>
+        <Link className=" absolute right-5 text-xl top-5" to={-1}>
           <i className="bi bi-x-lg"></i>
         </Link>
         <hgroup>
-          <h1 className="text-2xl font-light text-black">
-            Define your Preview
-          </h1>
-          <p className=" text-slate-700">
+          <h1 className="text-xl">Define your Preview</h1>
+          <p className="text-[.6rem] sm:text-lg px-10  dark:text-white  text-black dark:opacity-50 text-opacity-20">
             Define your posts preview and Add topice to know whats your post
             content about
           </p>
         </hgroup>
       </div>
 
-      <article className="  w-full max-w-[900px] flex sm:flex-row flex-col gap-5  ">
-        <div className=" w-full flex flex-col justify-center items-center bg-inherit">
-          <h1 className="w-full text-lg ">Post Preview</h1>
-          <div className="size-fit  flex justify-center items-center bg-inherit">
-            <label className=" w-full h-full " htmlFor="titleimage">
+      <article className="  w-full max-w-[60rem] flex sm:flex-row flex-col sm:gap-5 justify-center items-center  ">
+        <div className="w-full flex flex-col justify-center items-start bg-inherit">
+          <h1 className="">Post Preview</h1>
+          <div className="flex justify-center items-center bg-inherit">
+            <label
+              className="relative flex max-h-[10rem] w-full  sm:max-h-[20rem] h-full"
+              htmlFor="titleimage"
+            >
               {imageElements?.length ? (
                 <img
-                  className="w-full "
+                  className=" object-fill object-top "
                   src={imageElements[0]?.file}
                   alt="title image"
                 />
@@ -133,51 +134,60 @@ function PostPreviewEditor() {
             />
           </div>
         </div>
-        <div className="w-full flex my-7 gap-5 flex-col">
-          <div className="w-full h-full gap-3   flex flex-col justify-start items-center ">
-            <input
-              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
-              type="text"
-              name="title"
-              defaultValue={elements[0]?.data}
-              title=""
-              placeholder="Write Preview title"
-              onChange={(e) =>
-                handleTextChange(elements[0]?.id, e.target.value)
-              }
-            />
-            <input
-              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
-              type="text"
-              name="subtitle"
-              defaultValue={elements[1]?.data}
-              placeholder=" Write Preview Subtitle"
-              onChange={(e) =>
-                handleTextChange(elements[1]?.id, e.target.value)
-              }
-            />
-            <div className=" w-full">
+        <div className=" w-full flex my-7 gap-5 flex-col">
+          <div className="w-full h-full gap-6  flex flex-col justify-start items-center ">
+            <div className="w-full">
+              <label htmlFor="title">Title</label>
               <input
                 className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
                 type="text"
-                placeholder="Add Topics ..."
+                name="title"
+                defaultValue={elements[0]?.data}
+                title=""
+                placeholder="Write Preview title"
+                onChange={(e) =>
+                  handleTextChange(elements[0]?.id, e.target.value)
+                }
+              />
+            </div>
+
+            <div className="w-full">
+              <label htmlFor="subtitle">Subetitle</label>
+              <input
+                className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+                type="text"
+                name="subtitle"
+                defaultValue={elements[1]?.data}
+                placeholder=" Write Preview Subtitle"
+                onChange={(e) =>
+                  handleTextChange(elements[1]?.id, e.target.value)
+                }
+              />
+            </div>
+
+            <div className=" w-full">
+              <label htmlFor="Topics">Topic</label>
+              <input
+                className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+                type="text"
+                placeholder="Add Topics..."
                 onChange={(e) => setTopic(e.target.value)}
               />
             </div>
           </div>
-          <div className="h-full flex gap-3 p items-start">
+          <div className="h-full flex gap-3 items-start">
             <button
               onClick={() => handeSubmit("fetch")}
               className={`flex gap-2 ${
-                mutation.isLoading ? "bg-sky-100 text-slate-400" : ""
-              } bg-sky-200 px-4 py-2 rounded-lg`}
+                mutation.isLoading && "bg-sky-100 "
+              } dark:bg-sky-500 bg-sky-300  px-4 py-2 rounded-lg`}
               disabled={mutation.isLoading}
             >
               {mutation.isLoading && <Spinner className={" w-5 h-5"} />}
               {mutation.isLoading ? `Submitting...` : "Submit"}
             </button>
 
-            <Link className=" bg-slate-200 px-4 py-2 rounded-lg" to={-1}>
+            <Link className=" bg-slate-500 px-4 py-2 rounded-lg" to={-1}>
               Cancel
             </Link>
           </div>

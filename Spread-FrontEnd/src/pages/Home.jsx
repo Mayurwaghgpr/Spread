@@ -81,10 +81,10 @@ function Home() {
 
   return (
     <main className="relative flex flex-col sm:flex-row justify-end h-full  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="flex flex-col items-center  relative lg:w-[35rem] xl:w-[48rem] w-full ">
-        <div className="flex w-[80%] transition-all text-lg font-medium duration-200 bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
-          <ul className="flex h-full items-center  justify-between overflow-hidden bg-inherit w-full border-inherit">
-            <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-500 hover:bg-opacity-30">
+      <div className="flex flex-col items-end  relative lg:w-[35rem] xl:w-[45rem] w-full ">
+        <div className="flex w-full text-lg font-medium  bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
+          <ul className="flex h-full items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
+            <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-400 hover:bg-opacity-30">
               <button
                 className="t-btn"
                 onClick={() => handleTopicClick("All")}
@@ -93,7 +93,7 @@ function Home() {
                 Feeds
               </button>
             </li>
-            <li className="capitalize  bg-inherit flex justify-center p-2 w-full  hover:bg-gray-500  hover:bg-opacity-30">
+            <li className="capitalize  bg-inherit flex justify-center p-2 w-full  hover:bg-gray-400  hover:bg-opacity-30">
               <Link to="#" aria-label="Specialization">
                 specific
               </Link>
@@ -104,7 +104,7 @@ function Home() {
           id="PostContainer"
           className={`relative flex flex-col h-screen  ${
             !posts && " py-10 "
-          } w-full m-16 mb-0 sm:px-10 dark:border-[#383838] border-inherit`}
+          } w-full my-16 mb-0 dark:border-[#383838] border-inherit`}
         >
           {posts?.map(
             (post, idx, arr) => (
@@ -128,7 +128,7 @@ function Home() {
         </div>
       </div>{" "}
       <Aside
-        className="lg:flex hidden  border-inherit flex-col w-[20rem] xl:w-[24rem] mt-20  px-10  justify-start gap-5  "
+        className="lg:flex hidden  border-inherit flex-col w-[25rem] xl:w-[26rem] mt-20  px-10  justify-start gap-5  "
         FechingPreps={fetchingPreps}
         isLoadingPreps={isLoadingPreps}
         PrepsData={prepsData}

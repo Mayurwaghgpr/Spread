@@ -12,7 +12,7 @@ export const userPrepsData = async (req, res,next) => {
         // Fetch users excluding the current user
         const AllSpreadUsers = await User.findAll({
           where: { id: { [Op.ne]: req.authUser.id } },
-          incluse: [ {
+          include: [ {
             model: User,
             as: 'Followers',
             through: { attributes: [] }, // Exclude through table attributes

@@ -13,10 +13,10 @@ const ProfileHeader = React.memo(({ profileId }) => {
 
   const { userImageurl, IsuserFromOAth } = userImageSrc(userProfile);
   return (
-    <div className="relative flex flex-col border p-2 py-5   w-full justify-start  items-basline gap-5 dark:bg-inherit dark:border-[#383838] px-4">
+    <div className="relative flex flex-col border p-2 py-5   w-full justify-start rounded-lg  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">
       <div className="flex  gap-5 sm:gap-9">
         <div>
-          <div className="lg:min-w-[80px] lg:min-h-[80px] h-[70px] w-[70px]   ">
+          <div className="sm:size-[7rem] siz-[5rem]  ">
             <img
               className=" w-full h-full items-center  cursor-pointer rounded-full   object-cover object-top "
               src={userImageurl}
@@ -29,7 +29,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
           <div className="flex flex-col gap-3 w-full ">
             <div className="flex justify-start items-center">
               <div className=" w-full">
-                <h1 className="text-4xl  font-medium">
+                <h1 className="sm:text-4xl text-xl  font-medium">
                   {userProfile?.username}
                 </h1>
                 <span className="text-black dark:text-white text-opacity-70 dark:text-opacity-70 ">
@@ -84,15 +84,15 @@ const ProfileHeader = React.memo(({ profileId }) => {
           </Link>
         )}
       </div>
-      <div className="flex  items-center gap-4 text-xl h-full sm:w-fit ">
+      <div className="flex  items-center gap-4 text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
         {profileId !== user.id && (
           <Follow
             People={userProfile}
-            className={`p-3 py-1 flex w-full min-w-32 h-9 justify-center items-center rounded-3xl bg-sky-300`}
+            className={`p-3 py-1 flex w-full min-w-32 h-9 justify-center items-center rounded-full bg-sky-300 hover:bg-sky-400 dark:bg-sky-500 dark:hover:bg-sky-700`}
           />
         )}
         {profileId !== user.id && (
-          <button className=" bg-sky-300 px-4 py-1  text-xl rounded-xl  ">
+          <button className=" bg-sky-300 hover:bg-sky-400 dark:bg-sky-500 dark:hover:bg-sky-700 px-4 py-1   rounded-full  ">
             {/* <i className="bi bi-envelope"></i>
              */}
             Message

@@ -1,22 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox, setIsConfirm } from "../../redux/slices/uiSlice";
 import { createPortal } from "react-dom";
+import { useCallback } from "react";
 
 function ConfirmationBox() {
   const dispatch = useDispatch();
   const { confirmBox, isConfirm } = useSelector((state) => state.ui);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     // Logic for confirming action
     dispatch(setIsConfirm({ type: confirmBox.type, status: true }));
     dispatch(setConfirmBox({ message: "", status: false }));
-  };
+  }, [confirmBox.status, isConfirm.status]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     // Logic for cancelling action
     dispatch(setIsConfirm(false));
     dispatch(setConfirmBox({ message: "", status: false }));
-  };
+  }, [confirmBox.status, isConfirm.status]);
   // console.log(confirmBox);
   return (
     confirmBox.status &&

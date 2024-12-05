@@ -100,7 +100,7 @@ function SideBar() {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r z-40   sm:animate-none  animate-fedin.2s ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.2rem] h-screen bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
+      className={`fixed border-r z-40 sm:animate-none  animate-fedin.2s ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.1rem] h-screen bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}

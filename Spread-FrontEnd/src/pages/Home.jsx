@@ -81,9 +81,9 @@ function Home() {
 
   return (
     <main className="relative flex flex-col sm:flex-row justify-end h-full  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="flex flex-col items-end my-20  relative lg:w-[35rem] xl:w-[45rem] w-full ">
+      <div className="flex flex-col border-inherit items-end my-20  relative lg:w-[35rem] xl:w-[45rem] w-full ">
         <div className="flex w-full text-lg font-medium  bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
-          <ul className="flex h-full items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
+          <ul className="flex h-full  items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
             <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-400 hover:bg-opacity-30">
               <button
                 className="t-btn"

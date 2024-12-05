@@ -92,10 +92,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               )}
             </div>
 
-            <div className="rounded-sm sm:h-[10rem] sm:w-[15rem] h-[10rem] w-full bg-slate-200 dark:bg-slate-700">
+            <div className="rounded-sm sm:h-[10rem] z-0 sm:w-[15rem] h-[10rem] w-full bg-slate-200 dark:bg-slate-700">
               {post && (
                 <img
-                  className="object-fill object-center h-full w-full"
+                  className="object-fill object-center z-0 h-full w-full"
                   src={post?.titleImage && `${post?.titleImage}`}
                   loading="lazy"
                   alt="PreviewImage"

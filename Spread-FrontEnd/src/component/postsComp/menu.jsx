@@ -85,7 +85,9 @@ function Menu({ post }) {
   ];
 
   return (
-    <div className={`relative flex justify-center items-center`}>
+    <div
+      className={`relative flex dark:border-[#383838] justify-center items-center border-inherit`}
+    >
       <span
         className="cursor-pointer"
         onClick={() => setMenuId((prev) => (prev === "" ? post?.id : ""))}
@@ -96,7 +98,7 @@ function Menu({ post }) {
       {menuId === post?.id && (
         <ul
           ref={menuRef}
-          className="absolute  sm:top-5 mt-2 p-2 gap-2 hidden sm:flex flex-col w-36  bg-white dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t border-gray-300 rounded-lg"
+          className="absolute border-inherit  sm:top-5 mt-2 p-2 gap-2 hidden sm:flex flex-col w-36 z-10  bg-white dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t before:border-inherit rounded-lg"
         >
           {menuItem.map((item, idx) => (
             <li
@@ -112,7 +114,7 @@ function Menu({ post }) {
       )}
 
       {menuId === post?.id && (
-        <div className="fixed flex items-end left-0 bottom-0 right-0  z-40 h-full bg-slate-300 bg-opacity-25 backdrop-blur-[.5px]">
+        <div className="fixed flex items-end left-0 bottom-0 right-0  z-40 h-full sm:hidden bg-slate-300 bg-opacity-25 backdrop-blur-[.5px]">
           {" "}
           <ul
             ref={menuRef}

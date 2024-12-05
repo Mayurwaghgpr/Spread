@@ -1,6 +1,6 @@
-import React, { memo, useCallback, useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { memo, useCallback, useState } from "react";
 import TextTools from "./TextTools";
+
 const EditableParagraph = ({
   element,
   index,
@@ -13,46 +13,45 @@ const EditableParagraph = ({
   const [showToolbar, setShowToolbar] = useState(false);
 
   const applyStyle = useCallback((style, value = null) => {
-    document.execCommand(style, false, value);
+    if (document.queryCommandSupported(style)) {
+      document.execCommand(style, false, value);
+    }
   }, []);
 
   const handleSelectedText = useCallback(() => {
-    const selectedText = window.getSelection().toString();
+    const selectedText = window.getSelection
+      ? window.getSelection().toString()
+      : "";
     setShowToolbar(!!selectedText);
   }, []);
 
   const handleFocus = useCallback(() => {
     setFocusedIndex(index);
-  }, [index]);
+  }, [index, setFocusedIndex]);
+
   if (index === 0 || index === 1) {
     return (
-      <div className=" w-full h-full">
+      <div className="w-full h-full">
         <input
-          className={`border-l bg-white dark:bg-inherit border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text  ${index === 0 ? "text-4xl" : index === 1 && "text-2xl"}`}
+          className={`border-l bg-white dark:bg-inherit border-gray-300 p-2 w-full min-h-10 z-10 outline-none cursor-text ${index === 0 ? "text-4xl" : "text-2xl"}`}
           ref={(el) => (inputRefs.current[index] = el)}
           onChange={(e) => handleTextChange(element.id, e.currentTarget.value)}
-          placeholder={index == 0 ? "Title" : index == 1 && "SubTitle"}
+          placeholder={index === 0 ? "Title" : "Subtitle"}
           onKeyDown={(e) => {
-            if (
-              e.key === "Backspace" ||
-              e.key === "Enter" ||
-              e.key === "delete"
-            )
-              handleKeyDown(e, element.id, index);
+            if (["Backspace", "Enter", "delete"].includes(e.key)) {
+              handleKeyDown(e, element.id, index, "input");
+            }
           }}
           onFocus={handleFocus}
           onSelect={handleSelectedText}
-          // onKeyUp={handleSelectedText}
           type="text"
-          name=""
-          id=""
         />
       </div>
     );
   }
 
   return (
-    <div className=" w-full h-full">
+    <div className="w-full h-full">
       {showToolbar && <TextTools applyStyle={applyStyle} />}
       <p
         ref={(el) => (inputRefs.current[index] = el)}
@@ -60,14 +59,16 @@ const EditableParagraph = ({
         suppressContentEditableWarning
         onInput={(e) => handleTextChange(element.id, e.currentTarget.innerHTML)}
         onKeyDown={(e) => {
-          if (e.key === "Backspace" || e.key === "Enter" || e.key === "delete")
-            handleKeyDown(e, element.id, index);
+          if (["Backspace", "Enter", "delete"].includes(e.key)) {
+            handleKeyDown(e, element.id, index, "p");
+          }
         }}
         onFocus={handleFocus}
         onMouseUp={handleSelectedText}
         onKeyUp={handleSelectedText}
-        aria-placeholder="Title"
-        className={`border-l border-gray-300 p-2 w-full  min-h-10 z-10 outline-none cursor-text`}
+        className="border-l border-gray-300 p-2 w-full min-h-10 z-10 outline-none cursor-text"
+        role="textbox"
+        aria-placeholder="Editable paragraph"
       ></p>
     </div>
   );

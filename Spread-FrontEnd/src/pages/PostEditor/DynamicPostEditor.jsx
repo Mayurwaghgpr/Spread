@@ -29,16 +29,17 @@ function DynamicPostEditor() {
   const { elements, beforsubmit } = useSelector((state) => state.posts);
   const { isScale } = useSelector((state) => state.ui);
   const checkAllMatch = elements.every(
-    (obj, i, arr) => arr.length > 3 && obj.data !== undefined && obj.data !== ""
+    (obj, i, arr) =>
+      (arr.length >= 3 && obj.data !== undefined && obj.data !== "") ||
+      (arr.length >= 3 && obj.file && obj.data === "")
   );
 
-  console.log(elements);
   return (
     <>
       <main className="relative flex flex-col justify-between   mt-16 mb-32 ">
         <PostBtn
-          className={`fixed  sm:top-[50%] sm:right-32 top-[80%] right-10 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
-          content={<i className="bi bi-send"></i>}
+          className={`fixed   xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
+          content={<i className="bi bi-send-fill"></i>}
           disabled={elements.length > 3 ? false : true}
         />
         <div

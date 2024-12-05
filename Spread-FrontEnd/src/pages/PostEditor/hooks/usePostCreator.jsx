@@ -12,7 +12,6 @@ export const usePostCreator = () => {
   const [imageFiles, setImageFiles] = useState([]);
   const imageInputRef = useRef();
   const inputRefs = useRef([]);
-  console.log("imageFiles", imageFiles);
   const addElement = useCallback(
     (type) => {
       const newElement = {
@@ -166,22 +165,24 @@ export const usePostCreator = () => {
     [elements]
   );
   const handleKeyDown = useCallback(
-    (event, id, index) => {
+    (event, id, index, tag) => {
       console.log(event.target.innerText);
 
       const isEmpty =
-        event.target.innerText.startsWith("\n") || !event.target.innerText; // it checks if previos input have no content
+        tag === "p"
+          ? event.target.innerText.startsWith("\n") ||
+            event.target.innerText.startsWith("<br/>") ||
+            !event.target.innerText
+          : !event.target.value;
+      console.log(isEmpty); // it checks if previos input have no content
       if (event.type === "click") {
         const newLength = removeElement(id);
         if (newLength < elements.length) {
           setTimeout(() => inputRefs.current[index - 1]?.focus(), 0);
         }
         setFocusedIndex(index - 1);
-      } else if (
-        (event.key == "Backspace" && !event.target.value) ||
-        (event.key == "delete" && !event.target.value)
-      ) {
-        console.log({ event });
+      } else if (event.key == "Backspace" && isEmpty) {
+        // console.log({ event });
         const newLength = removeElement(id);
         if (newLength < elements.length) {
           setTimeout(() => inputRefs.current[index - 1]?.focus(), 0);

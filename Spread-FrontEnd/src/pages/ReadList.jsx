@@ -41,13 +41,13 @@ const ReadList = () => {
 
   return (
     <main className="relative w-full flex justify-center h-screen  items-center flex-col bg-inherit bg-white dark:*:border-[#383838] dark:bg-black">
-      <div className="h-full flex justify-start flex-col mt-40 items-center  sm:w-fit w-full bg-inherit">
-        <div className="fixed top-16 z-10 p-5 flex sm:left-[17%] w-full sm:w-fit  justify-center items-center gap-4 border border-inherit rounded-b-lg bg-inherit">
+      <div className="h-full flex justify-start flex-col mt-[10rem] items-center  sm:w-fit w-full bg-inherit">
+        <div className="fixed top-16 z-10 p-5 flex  w-full justify-center items-center gap-4 border border-inherit rounded-b-lg bg-inherit">
           <div className=" text-3xl  h-full bg-inherit">
             <h1>Read list </h1>
           </div>
         </div>
-        {/* {pages?.map((page, idx) => {
+        {pages?.map((page, idx) => {
           return (
             <PostPreview
               className={" "}
@@ -57,14 +57,14 @@ const ReadList = () => {
               Saved={true}
             />
           );
-        })} */}
+        })}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
             <Spinner />
           </div>
         )}
-        {hasPosts && (
-          <div className=" text-xl">
+        {!hasPosts && (
+          <div className=" m-auto text-xl">
             <p>Nothing to Read</p>
           </div>
         )}

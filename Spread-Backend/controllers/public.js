@@ -87,6 +87,8 @@ export const searchData = async (req, res,next) => {
     }
 };
 
+
+
 export const LikePost = async (req, res, next) => {
     const postId = req.body.likedPostId;
   console.log({ postId })

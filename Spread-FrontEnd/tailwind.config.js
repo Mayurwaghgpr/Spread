@@ -31,6 +31,11 @@ export default {
            '0%': { transform: 'translateY(-10%)'},
            '100%': { transform: 'translateY(0%)' },
   
+        },
+          fromBottom: {
+           '0%': { transform: 'translateY(100%)'},
+           '100%': { transform: 'translateY(0%)' },
+  
          },
          toTop: {  // New keyframes for sliding up on remove
           '0%': { transform: 'translateY(0%)' },
@@ -48,7 +53,7 @@ export default {
         'slide-out-top': 'toTop .5s ease-in-out forwards',
         'slide-out-left': 'toLeft 1s ease-in-out forwards',
         'slide-out-right': 'toRight .5s ease-in-out forwards',
-        
+        'slide-in-bottom': 'fromBottom .5s ease-in-out forwards',
 
         'fedin2s':'fedin 2s  ease-in-out',
         'fedin1s':'fedin 1s  ease-in-out',

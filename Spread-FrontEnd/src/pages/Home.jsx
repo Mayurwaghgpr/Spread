@@ -81,8 +81,8 @@ function Home() {
 
   return (
     <main className="relative flex flex-col sm:flex-row justify-end h-full  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="flex flex-col items-end  relative lg:w-[35rem] xl:w-[45rem] w-full ">
-        <div className="flex w-full text-lg font-medium  bg-opacity-0 overflow-hidden backdrop-blur-[10px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
+      <div className="flex flex-col items-end my-20  relative lg:w-[35rem] xl:w-[45rem] w-full ">
+        <div className="flex w-full text-lg font-medium  bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
           <ul className="flex h-full items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
             <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-400 hover:bg-opacity-30">
               <button
@@ -100,33 +100,27 @@ function Home() {
             </li>
           </ul>
         </div>
-        <div
-          id="PostContainer"
-          className={`relative flex flex-col h-screen  ${
-            !posts && " py-10 "
-          } w-full my-16 mb-0 dark:border-[#383838] border-inherit`}
-        >
-          {posts?.map(
-            (post, idx, arr) => (
-              console.log(arr?.length, arr?.length % 3 === 0),
-              (
-                <PostPreview
-                  className="border-inherit p-3"
-                  ref={arr?.length % 3 === 0 ? lastpostRef : null}
-                  key={post?.id}
-                  post={post}
-                />
-              )
+
+        {posts?.map(
+          (post, idx, arr) => (
+            console.log(arr?.length, arr?.length % 3 === 0),
+            (
+              <PostPreview
+                className="border-inherit p-5"
+                ref={arr?.length % 3 === 0 ? lastpostRef : null}
+                key={post?.id}
+                post={post}
+              />
             )
-          )}
-          {isFetchingNextPage && (
-            <div className="w-full flex justify-center items-center h-full p-5">
-              <Spinner />
-            </div>
-          )}
-          {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
-        </div>
-      </div>{" "}
+          )
+        )}
+        {isFetchingNextPage && (
+          <div className="w-full flex justify-center items-center h-full p-5">
+            <Spinner />
+          </div>
+        )}
+        {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
+      </div>
       <Aside
         className="lg:flex hidden  border-inherit flex-col w-[25rem] xl:w-[26rem] mt-20  px-10  justify-start gap-5  "
         FechingPreps={fetchingPreps}

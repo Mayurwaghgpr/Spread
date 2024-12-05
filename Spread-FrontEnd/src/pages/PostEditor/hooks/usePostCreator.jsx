@@ -170,9 +170,7 @@ export const usePostCreator = () => {
       console.log(event.target.innerText);
 
       const isEmpty =
-        event.target.innerText.startsWith("\n") &&
-        !event.target.innerText &&
-        !event.target.value; // it checks if previos input have no content
+        event.target.innerText.startsWith("\n") || !event.target.innerText; // it checks if previos input have no content
       if (event.type === "click") {
         const newLength = removeElement(id);
         if (newLength < elements.length) {
@@ -180,8 +178,8 @@ export const usePostCreator = () => {
         }
         setFocusedIndex(index - 1);
       } else if (
-        (event.key == "Backspace" && isEmpty) ||
-        (event.key == "delete" && isEmpty)
+        (event.key == "Backspace" && !event.target.value) ||
+        (event.key == "delete" && !event.target.value)
       ) {
         console.log({ event });
         const newLength = removeElement(id);

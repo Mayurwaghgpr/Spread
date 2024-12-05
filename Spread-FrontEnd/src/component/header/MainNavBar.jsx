@@ -21,6 +21,7 @@ const ConfirmationBox = React.lazy(
 import SearchBar from "../homeComp/searchBar";
 import ThemeMenu from "../otherUtilityComp/ThemeMenu";
 import ThemeBtn from "../buttons/ThemeBtn";
+import { setManuOpen } from "../../redux/slices/uiSlice";
 
 function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
@@ -60,12 +61,12 @@ function MainNavBar() {
             {isLogin ? (
               <div className="relative flex text-left">
                 <ProfileButton
-                  className={` box-content ${
+                  onClick={() => dispatch(setManuOpen())}
+                  className={` box-content size-10 ${
                     location.pathname.startsWith("/profile")
                       ? "border-2 border-black "
                       : ""
                   }`}
-                  profileIcon={profileIcon}
                 />
               </div>
             ) : (

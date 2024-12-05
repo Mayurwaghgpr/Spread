@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../utils/userImageSrc";
 import { setManuOpen } from "../redux/slices/uiSlice";
 
-const ProfileButton = ({ className }) => {
+const ProfileButton = ({ className, ...props }) => {
   const { isLogin, user } = useSelector((state) => state.auth);
   const [deviceSize, setDeviceSize] = useState();
   const { userImageurl } = userImageSrc(user);
@@ -19,9 +19,9 @@ const ProfileButton = ({ className }) => {
 
   return (
     <button
-      onClick={() => dispatch(setManuOpen())}
+      {...props}
       type="button"
-      className={` ${className} flex justify-center h-[40px] w-[40px] items-center  text-sm font-semibold text-gray-900 rounded-full`}
+      className={` ${className} flex justify-center items-center  text-sm font-semibold text-gray-900 rounded-full`}
       id="menu-button"
       disabled={deviceSize > 1023 ? true : false}
     >

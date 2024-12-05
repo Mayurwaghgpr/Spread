@@ -17,7 +17,7 @@ function userApi() {
 
   const getArchivedPosts = async ({ pageParam }) => {
     try {
-      const result = await axios.get(`${BASE_URL}/user/posts/archived`, {
+      const result = await axios.get(`${BASE_URL}/posts/archived`, {
         withCredentials: true,
         params: {
           page: pageParam,

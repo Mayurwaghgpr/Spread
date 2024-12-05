@@ -96,7 +96,7 @@ function Menu({ post }) {
       {menuId === post?.id && (
         <ul
           ref={menuRef}
-          className="absolute sm:top-5 mt-2 p-2 gap-2 flex flex-col w-36  bg-white dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t border-gray-300 rounded-lg"
+          className="absolute  sm:top-5 mt-2 p-2 gap-2 hidden sm:flex flex-col w-36  bg-white dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t border-gray-300 rounded-lg"
         >
           {menuItem.map((item, idx) => (
             <li
@@ -109,6 +109,27 @@ function Menu({ post }) {
             </li>
           ))}
         </ul>
+      )}
+
+      {menuId === post?.id && (
+        <div className="fixed flex items-end left-0 bottom-0 right-0  z-40 h-full bg-slate-300 bg-opacity-25 backdrop-blur-[.5px]">
+          {" "}
+          <ul
+            ref={menuRef}
+            className=" w-full  flex flex-col gap-2 animate-slide-in-bottom rounded-t-2xl  border sm:hidden right-20 bg-white dark:bg-[#0f0f0f]  py-6"
+          >
+            {menuItem.map((item, idx) => (
+              <li
+                key={item.id}
+                className="w-full flex gap-2 px-6 hover:bg-gray-400 hover:bg-opacity-25 p-2 items-center cursor-pointer"
+                onClick={item.itemMethod}
+              >
+                {item.icon}
+                {item.itemName}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

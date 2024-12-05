@@ -72,12 +72,12 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               .split(" ")
               .slice(0, post?.user?.username.length - 1)
               .join("")}/${post?.id}`}
-            className="cursor-pointer h-full flex justify-between items-center gap-3"
+            className="relative cursor-pointer h-full flex sm:flex-row flex-col-reverse justify-between items-center gap-3"
           >
-            <div className="flex flex-col gap-1  w-96  ">
+            <div className="flex flex-col gap-3">
               {post ? (
                 <>
-                  <p className="font-medium text-sm sm:text-3xl overflow-hidden overflow-ellipsis">
+                  <p className="font-medium text-xl sm:text-2xl overflow-hidden overflow-ellipsis">
                     {post?.title}
                   </p>
                   <p className="text-sm sm:text-base text-opacity-60 text-black dark:text-white dark:text-opacity-60 font-normal overflow-hidden overflow-ellipsis">
@@ -92,10 +92,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               )}
             </div>
 
-            <div className="rounded-sm h-[10rem] w-[15rem]  bg-slate-200 dark:bg-slate-700">
+            <div className="rounded-sm sm:h-[10rem] sm:w-[15rem] h-[10rem] w-full bg-slate-200 dark:bg-slate-700">
               {post && (
                 <img
-                  className="object-cover object-center h-full w-full"
+                  className="object-fill object-center h-full w-full"
                   src={post?.titleImage && `${post?.titleImage}`}
                   loading="lazy"
                   alt="PreviewImage"

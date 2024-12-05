@@ -49,7 +49,7 @@ export const getUserPostsById = async (req, res,next) => {
   const userId = req.params.userId;
   const limit = parseInt(req.query.limit?.trim()) || 3; // Default limit to 3
   const page = parseInt(req.query.page?.trim()) || 1; // Default page to 1
-
+console.log("getUserPostsById...")
   try {
     const posts = await Post.findAll({
       where: { authorId: userId },
@@ -111,46 +111,6 @@ export const getFollowing = async (req, res,next) => {
   }
 };
 
-
-// Get archived posts for the current user
-export const getArchivedPosts = async (req, res,next) => {
-  const userId = req.authUser.id;
-  const limit = parseInt(req.query.limit?.trim()) || 3; // Default limit to 3
-  const page = parseInt(req.query.page?.trim()) || 1; // Default page to 1
-
-  try {
-    const {SavedPosts} = await User.findByPk(userId, {
-      include: [{
-        model: Post,
-        as: 'SavedPosts',
-        through: { attributes: [] },
-        include: [
-          {
-                    model: User,
-                    attributes: ['id', 'username', 'userImage']
-                }, {
-                    model: Likes,  // Include likes
-                    as:'Likes',
-                    required: false
-                }
-        ],
- 
-      }],
-      limit,
-      offset: (page - 1) * limit
-    });
-
-    if (!SavedPosts || SavedPosts.length === 0) {
-      return res.status(404).json({ message: 'No archived posts found' });
-    }
-  const postData = formatPostData(SavedPosts);
-    res.status(200).json(postData);
-  } catch (error) {
-    console.error('Error fetching archived posts:', error);
-    // res.status(500).json({ message: 'An error occurred while fetching archived posts' });
-    next(error)
-  }
-};
 
 // Edit user profile
 export const EditUserProfile = async (req, res,next) => {

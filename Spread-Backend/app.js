@@ -88,10 +88,30 @@ Follow.belongsTo(User, { as: 'Follower', foreignKey: 'followerId' });
 Follow.belongsTo(User, { as: 'Followed', foreignKey: 'followedId' });
 
 // User and Post Archive association
-User.belongsToMany(Post, { through: Archive, as: 'SavedPosts', foreignKey: 'UserId' });
-Post.belongsToMany(User, { through: Archive, as: 'UsersSaved', foreignKey: 'PostId' });
-Archive.belongsTo(User, { as: 'User', foreignKey: 'UserId' });
-Archive.belongsTo(Post, { as: 'Post', foreignKey: 'PostId' });
+User.belongsToMany(Post, { 
+  through: Archive, 
+  as: 'SavedPosts', 
+  foreignKey: 'UserId',
+  otherKey: 'PostId' // Define the other key to be used in the junction table
+});
+
+Post.belongsToMany(User, { 
+  through: Archive, 
+  as: 'UsersSaved', 
+  foreignKey: 'PostId',
+  otherKey: 'UserId' // Define the other key to be used in the junction table
+});
+
+Archive.belongsTo(User, { 
+  as: 'User', 
+  foreignKey: 'UserId'
+});
+
+Archive.belongsTo(Post, { 
+  as: 'Post', 
+  foreignKey: 'PostId'
+});
+
 
 app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")))
 app.get('*', (req, res, next) => {

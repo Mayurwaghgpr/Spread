@@ -10,6 +10,7 @@ import Bookmark from "../../component/buttons/Bookmark";
 import usePublicApis from "../../Apis/publicApis";
 import Like from "../../component/buttons/Like";
 import Menu from "../../component/postsComp/menu";
+import Follow from "../../component/buttons/follow";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
 const Comment = lazy(() => import("../../component/postsComp/comment"));
@@ -40,19 +41,21 @@ function FullBlogView() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">Loading...</div>
+      <div className="flex justify-center items-center h-screen w-full">
+        <h1>Loading...</h1>
+      </div>
     );
   }
   return (
-    <main className="container mx-auto py-6 mt-16 dark:*:border-[#383838]">
-      <article className="max-w-3xl mx-auto p-6 rounded-lg flex flex-col justify-center items-center px-2 ">
+    <main className="container  py-4 mt-16 dark:*:border-[#383838]">
+      <article className="max-w-4xl 2xl:mx-auto xl:ml-auto xl:mr-16 ml-auto p-6 rounded-lg flex flex-col justify-center items-center">
         <header className="mb-6 w-full px-3">
           <section className="flex flex-col gap-2">
             <div className="w-full flex justify-end text-lg">
               {" "}
               <Menu post={postView} />
             </div>
-            <h1 className="text-3xl break-words lg:text-5xl font-bold mb-2">
+            <h1 className="text-3xl break-words lg:text-5xl w-full font-bold mb-2">
               {postView?.title}
             </h1>
             <p className="text-lg text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-2xl leading-relaxed">
@@ -67,14 +70,22 @@ function FullBlogView() {
               loading="lazy"
             />
             <div>
-              <Link
-                to={`/profile/@${postView?.User?.username
-                  ?.split(" ")
-                  .slice(0, -1)
-                  .join("")}/${postView?.User?.id}`}
-              >
-                {postView?.User?.username}
-              </Link>
+              <div className="flex gap-2">
+                {" "}
+                <Link
+                  to={`/profile/@${postView?.User?.username
+                    ?.split(" ")
+                    .slice(0, -1)
+                    .join("")}/${postView?.User?.id}`}
+                >
+                  {postView?.User?.username}
+                </Link>
+                <Follow
+                  People={postView?.User}
+                  className={` hover:underline underline-offset-4 `}
+                />
+              </div>
+
               <p className="text-sm text-black dark:text-white text-opacity-50">
                 {format(new Date(postView?.createdAt), "LLL dd, yyyy")}
               </p>
@@ -82,7 +93,7 @@ function FullBlogView() {
           </div>
         </header>
 
-        <div className="flex justify-between text-xl items-center border-inherit border-y px-3 py-3 w-full">
+        <div className="flex justify-between sm:text-xl items-center border-inherit border-y px-3 py-3 w-full">
           <div className="flex gap-4">
             <Like className={""} post={postView} />
             <button
@@ -137,7 +148,6 @@ function FullBlogView() {
           </section>
         ))}
       </article>
-      {openComments && <Comment setOpenComments={setOpenComments} />}
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { getPostPreview, getPostView, AddNewPost, EditPost, DeletePost} from '../controllers/post.js';
+import { getPostPreview, getPostView, AddNewPost, EditPost, DeletePost, getArchivedPosts} from '../controllers/post.js';
 import IsAuth from '../middlewares/isAuth.js';
 import { multerFileUpload } from '../middlewares/multer.middleware.js';
 
@@ -11,6 +11,7 @@ router.get("/all", IsAuth, getPostPreview);
 
 // Route to get a single post by ID
 // Requires authentication middleware
+router.get('/archived', IsAuth, getArchivedPosts); 
 router.get("/:id", getPostView);
 
 

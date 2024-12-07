@@ -12,8 +12,8 @@ const EXPIRATION = 3600;
 const dataFecter = new DataFetching()
     
 export const getLoginUser = async (req, res,nex) => {
-  const userInfo = req.cookies._userDetail 
-  console.log(userInfo)
+  const userInfo = req.cookies._userDetail
+  console.log("this",userInfo)
    res.status(200).json(userInfo);
 }
 // Get user profile
@@ -29,6 +29,7 @@ export const getUserProfile = async (req, res,next) => {
     // console.log('cach miss')
 
     const userInfo = await dataFecter.Profile(id)
+    console.log("dsds",userInfo)
     
     if (userInfo) {
       // await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));

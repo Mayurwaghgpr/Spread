@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import CommonInput from "../../component/otherUtilityComp/commonInput";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
+import EyeBtn from "../../component/buttons/EyeBtn";
 function ResetPassword() {
   const param = useParams();
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ function ResetPassword() {
               name={"password"}
               labelname={"Password"}
               disabled={isLoading}
+              comp={<EyeBtn />}
               required
             />
             <div className="mb-4">

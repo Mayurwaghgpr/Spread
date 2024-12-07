@@ -9,11 +9,13 @@ import CommonInput from "../../component/otherUtilityComp/commonInput.jsx";
 import { passwordRegex, emailRegex } from "../../utils/regex.js";
 import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";
+import EyeBtn from "../../component/buttons/EyeBtn.jsx";
 function SignUp() {
   const [validation, setValidation] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   const { isLoading, isError, error, mutate } = useMutation(RegisterUser, {
     onSuccess: (response) => {
       const { AccessToken } = response;
@@ -68,8 +70,10 @@ function SignUp() {
       type: "password",
       Iname: "password",
       labelname: "Password",
+
       className: "mb-3 w-full flex flex-col gap-2 border-inherit",
       autocomplete: "new-password",
+      comp: <EyeBtn />,
     },
   ];
 
@@ -110,6 +114,7 @@ function SignUp() {
                 labelname={input.labelname}
                 Iname={input.Iname}
                 disabled={isLoading}
+                comp={input.comp}
               />
             ))}
             <div className="flex justify-start w-full">
@@ -152,7 +157,11 @@ function SignUp() {
             <footer className="text-center">
               <small>
                 Already have an account?{" "}
-                <Link to="/signin" replace={true} className="text-blue-500">
+                <Link
+                  to="/auth/signin"
+                  replace={true}
+                  className="text-blue-500"
+                >
                   Sign In
                 </Link>
               </small>

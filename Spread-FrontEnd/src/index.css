@@ -7,33 +7,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family:
-    Helvetica Neue,
-    Helvetica Neue,
-    Helvetica,
-    Arial,
-    sans-serif;
 }
 
 body {
   background-color: #ffffff;
   color: black;
   scroll-behavior: smooth;
-}
-
-.Home-page1 {
-  background-color: #5e8af0;
-  background-size: cover;
-  background-position: center;
-  object-fit: fill;
-  color: white;
-  text-align: center;
-}
-
-.Home-page1 h1 {
-  font-size: 50px;
-  -webkit-text-stroke: 2px white;
-  color: transparent;
 }
 
 .popover-container {

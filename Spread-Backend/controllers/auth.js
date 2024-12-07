@@ -32,7 +32,7 @@ export const SignUp = async (req, res,next) => {
 
         // Hash the password and create a new user
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newUser = await User.create({ username, email, password: hashedPassword,userImage:'images/placeholderImages/ProfOutlook.png' });
+        const newAddedUser = await User.create({ username, email, password: hashedPassword,userImage:'images/placeholderImages/ProfOutlook.png' });
         // Generate access and refresh tokens
         const { AccessToken, RefreshToken } = AccessAndRefreshTokenGenerator({
             id: newUser.id,
@@ -42,6 +42,9 @@ export const SignUp = async (req, res,next) => {
         if (!AccessToken || !RefreshToken) {
             throw new Error("Failed to generate tokens");
         }
+
+    const newUser = { ...newAddedUser.toJSON() }
+       delete newUser.password
 
         // Set tokens as cookies and respond
         res.status(201)

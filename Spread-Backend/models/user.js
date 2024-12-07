@@ -19,7 +19,8 @@ const User = Database.define('User', {
         unique: true
     },
     pronouns: {
-          type: DataTypes.STRING,
+        type: DataTypes.STRING,
+        defaultValue:""
     },
     email: {
         type: DataTypes.STRING,
@@ -30,10 +31,12 @@ const User = Database.define('User', {
     },
     signedWith: {
         type: DataTypes.STRING, 
+                defaultValue:""
     },
     bio:{
         type: DataTypes.TEXT,
-        allowNull: true,
+                defaultValue:""
+
     },
     password: {
         type: DataTypes.STRING,

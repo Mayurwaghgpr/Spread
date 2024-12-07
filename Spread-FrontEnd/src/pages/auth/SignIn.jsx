@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { LoginUser } from "../../Apis/authapi";
 import CommonInput from "../../component/otherUtilityComp/commonInput";
 import OAuth from "./OAuth";
+import EyeBtn from "../../component/buttons/EyeBtn";
 
 function SignIn() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function SignIn() {
     type: "password",
     name: "password",
     labelname: "Password",
+    comp: <EyeBtn />,
   };
 
   if (!isLogin) {
@@ -104,6 +106,7 @@ function SignIn() {
                   labelname={passInputCred.labelname}
                   disabled={isLoading}
                   required
+                  comp={passInputCred.comp}
                 />
               )}
               <div className="mb-4 min-w-[200px] flex justify-between">
@@ -166,7 +169,11 @@ function SignIn() {
             <footer className="text-center">
               <small>
                 Don't have an Account?{" "}
-                <Link to={"/SignUp"} replace={true} className="text-blue-500">
+                <Link
+                  to={"/auth/signup"}
+                  replace={true}
+                  className="text-blue-500"
+                >
                   Sign Up
                 </Link>
               </small>

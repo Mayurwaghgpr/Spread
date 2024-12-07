@@ -1,6 +1,10 @@
 import React, { useCallback, useRef, useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { dark, lightfair } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import {
+  dark,
+  lightfair,
+  irBlack,
+} from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { FaCheck } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 const CopyToClipboardInput = ({ item }) => {
@@ -24,10 +28,10 @@ const CopyToClipboardInput = ({ item }) => {
   }, [item.type]);
 
   return (
-    <pre className={`  border rounded-lg `}>
-      <div className="w-full  min-h-[2.5rem] flex justify-end dark:bg-gray-700 bg-slate-400 rounded-t-lg "></div>
+    <pre className={`  border rounded-lg border-inherit `}>
+      <div className="w-full  min-h-[2.5rem] flex justify-end rounded-t-lg "></div>
       <div className="sticky top-[7rem] w-full">
-        <div className="absolute bottom-0 right-2 flex h-7 mb-1  items-center dark:bg-gray-700 bg-slate-400 rounded-lg text-xs ">
+        <div className="absolute bottom-0 right-2 flex h-7 mb-1  items-center dark:bg-[#3c3c3c] bg-[#faf5f0] rounded-lg text-xs ">
           <button
             className="flex  w-full  px-4  justify-center items-center gap-3  "
             onClick={handleCopyClick}
@@ -54,7 +58,7 @@ const CopyToClipboardInput = ({ item }) => {
             {item.type === "code" ? (
               <SyntaxHighlighter
                 language={item.lang}
-                style={ThemeMode === "dark" ? dark : lightfair}
+                style={ThemeMode === "dark" ? irBlack : lightfair}
                 wrapLines={true}
                 showLineNumbers={true}
               >

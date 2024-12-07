@@ -1,8 +1,10 @@
 import User from '../models/user.js'
 import Post from "../models/posts.js"; // Ensure Post is imported
 
-export  class DataFetching {
+export class DataFetching {
+
   async Profile(id) {
+      console.log("first...")
     try {
       // Validate the input
       if (!id) throw new Error("User ID is required");

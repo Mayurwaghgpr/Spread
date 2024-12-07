@@ -77,7 +77,7 @@ function ProfileEditor() {
   const triggerFileInput = () => {
     document.getElementById("fileInput").click();
   };
-
+  console.log(newInfo);
   const RemoveSelecteImage = () => {
     if (newInfo.userImage && newInfo.NewImageFile) {
       delete newInfo.NewImageFile;
@@ -129,25 +129,25 @@ function ProfileEditor() {
           className=" flex justify-start gap-3 w-full border-inherit "
           aria-label="Upload profile picture"
         >
-          <div className="flex flex-col  min-w-28 px-2 ">
-            <label htmlFor="">Profile image</label>
+          <div className="relative flex size-40  flex-col">
+            <label
+              className="absolute h-full w-full  z-10 text-xs m-auto"
+              htmlFor="fileInput"
+            ></label>
+            <input
+              className="w-full p-3 bg-inherit  border border-inherit"
+              id="fileInput"
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleChange}
+              style={{ display: "none" }}
+            />
             <img
-              onClick={triggerFileInput}
-              className="w-20 h-20 cursor-pointer object-cover object-top rounded-full p-1"
+              className=" cursor-pointer object-cover object-top rounded-full p-1"
               src={ProfileImage}
               alt="Profile"
             />
-            <div className="w-full">
-              <input
-                className="w-full p-3 bg-inherit  border border-inherit"
-                id="fileInput"
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                style={{ display: "none" }}
-              />
-            </div>
           </div>
           <div className="flex flex-col w-full ">
             <div className="py-1">
@@ -191,7 +191,9 @@ function ProfileEditor() {
                 onChange={handleChange}
                 defaultValue={input.defaultValue}
               />
-              <span className=" flex justify-end">{input.length}</span>
+              <span className=" flex text-gray-400 justify-end">
+                {input.length}
+              </span>
             </>
           ))}
 

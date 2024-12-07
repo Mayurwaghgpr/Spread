@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
@@ -62,4 +62,4 @@ function Bookmark({ className, post }) {
   );
 }
 
-export default Bookmark;
+export default memo(Bookmark);

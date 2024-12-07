@@ -114,11 +114,11 @@ function Menu({ post }) {
       )}
 
       {menuId === post?.id && (
-        <div className="fixed flex items-end left-0 bottom-0 right-0  z-40 h-full sm:hidden">
+        <div className="fixed flex border-inherit items-end left-0 bottom-0 right-0  z-40 h-full sm:hidden">
           {" "}
           <ul
             ref={menuRef}
-            className=" w-full  flex flex-col gap-2 animate-slide-in-bottom rounded-t-2xl  border sm:hidden right-20 bg-white dark:bg-[#0f0f0f]  py-6"
+            className=" w-full  flex flex-col gap-2 animate-slide-in-bottom rounded-t-2xl border-inherit  border sm:hidden right-20 bg-white dark:bg-[#0f0f0f]  py-6"
           >
             {menuItem.map((item, idx) => (
               <li

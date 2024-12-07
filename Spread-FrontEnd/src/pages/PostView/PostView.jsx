@@ -48,17 +48,17 @@ function FullBlogView() {
   }
   return (
     <main className="container  py-4 mt-16 dark:*:border-[#383838]">
-      <article className="max-w-4xl 2xl:mx-auto xl:ml-auto xl:mr-16 ml-auto p-6 rounded-lg flex flex-col justify-center items-center">
+      <article className="max-w-4xl 2xl:mx-auto xl:ml-auto xl:mr-16 px-6 rounded-lg flex flex-col justify-center items-center">
         <header className="mb-6 w-full px-3">
           <section className="flex flex-col gap-2">
             <div className="w-full flex justify-end text-lg">
               {" "}
               <Menu post={postView} />
             </div>
-            <h1 className="text-3xl break-words lg:text-5xl w-full font-bold mb-2">
+            <h1 className="text-xl break-words lg:text-5xl w-full font-semibold mb-2">
               {postView?.title}
             </h1>
-            <p className="text-lg text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-2xl leading-relaxed">
+            <p className="text-md text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-2xl leading-relaxed">
               {postView?.subtitelpagraph}
             </p>
           </section>
@@ -112,7 +112,7 @@ function FullBlogView() {
         {postView?.titleImage && (
           <figure className="my-6 w-full">
             <img
-              className="w-full rounded-lg"
+              className="w-full rounded-lg object-fill object-center "
               src={`${postView?.titleImage}`}
               alt="Title Image"
               loading="lazy"
@@ -124,7 +124,7 @@ function FullBlogView() {
         {postView?.postContent?.map((item) => (
           <section key={item.id} className="mb-6 w-full border-inherit ">
             {item.type === "image" && item.content && (
-              <figure className="mb-4">
+              <figure className="my-6 w-full h-auto">
                 <img
                   src={`${item.content}`}
                   alt="Content"

@@ -50,7 +50,7 @@ const ToastContainer = lazy(
 function App() {
   // const navigate = useNavigate();
   // const dispatch = useDispatch();
-  // const location = useLocation();
+  const { pathname } = useLocation();
   const { isLogin } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
   const [systemTheme, setSystemTheme] = useState(
@@ -94,7 +94,7 @@ function App() {
       {<ConfirmationBox />}
       <Suspense fallback={<LoaderScreen />}>
         <MainNavBar />
-        {isLogin && <SideBar />}
+        {isLogin && !pathname.startsWith("/view") && <SideBar />}
         <Routes>
           <Route
             path="/"

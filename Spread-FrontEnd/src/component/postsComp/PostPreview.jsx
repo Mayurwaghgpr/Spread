@@ -20,6 +20,7 @@ import Spinner from "../loaders/Spinner"; // A spinner to show during lazy loadi
 import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like";
 import Menu from "./menu";
+import FormatedTime from "../otherUtilityComp/FormatedTime";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   // const dispatch = useDispatch();
@@ -34,9 +35,9 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
     <>
       <article
         ref={ref}
-        className={` rounded-lg  border-inherit flex w-full  h flex-col ${className}`}
+        className={` border-b  border-inherit flex w-full  h flex-col ${className}`}
       >
-        <div className="p-3 flex leading-0 border-inherit flex-col h-full justify-center gap-3 w-full">
+        <div className="p-3 flex leading-0 border-inherit flex-col h-full justify-center gap-4 w-full">
           <div className="flex border-inherit gap-2 text-sm justify-start items-center">
             <Link
               to={`/profile/@${post?.user?.username
@@ -66,6 +67,12 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             <h1 className="text-opacity-30 text-black dark:text-white dark:text-opacity-30 rounded-lg">
               {post?.topic}
             </h1>
+            <FormatedTime
+              date={post?.createdAt}
+              className={
+                "rounded-lg font-light text-opacity-30 text-black dark:text-slate-400 dark:text-opacity-40"
+              }
+            />
           </div>
           <Link
             to={`/view/@${post?.user?.username
@@ -104,13 +111,8 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             </div>
           </Link>
           {post && (
-            <div className="flex w-full h-full justify-between text-sm border-t border-inherit p-3 items-center mt-3">
+            <div className="flex w-full h-full justify-between text-md border rounded-md border-inherit p-3 items-center ">
               <div className="flex justify-start items-center gap-5">
-                <span className="rounded-lg text-opacity-30 text-black dark:text-slate-200 dark:text-opacity-40">
-                  {post?.createdAt
-                    ? format(new Date(post?.createdAt), "LLL-dd-yyyy")
-                    : ""}
-                </span>
                 <Like className={""} post={post} />
                 <div className="flex cursor-pointer">
                   <button className="">

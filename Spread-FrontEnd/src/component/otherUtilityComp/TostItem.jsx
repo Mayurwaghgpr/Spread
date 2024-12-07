@@ -35,7 +35,7 @@ function ToastItem({ ToastContent }) {
 
   return (
     <span
-      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-left" : "animate-slide-in-left"} transition-all duration-300 ease-in-out pointer-events-auto ${status} shadow-md flex flex-col rounded-lg w-fit`}
+      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-left" : "animate-slide-in-left"} transition-all duration-300 ease-in-out pointer-events-auto ${status} flex flex-col rounded-lg w-fit`}
     >
       <div className="flex p-4">
         <div className="break-words flex">

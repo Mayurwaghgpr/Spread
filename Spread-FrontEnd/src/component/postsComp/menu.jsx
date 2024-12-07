@@ -114,7 +114,7 @@ function Menu({ post }) {
       )}
 
       {menuId === post?.id && (
-        <div className="fixed flex items-end left-0 bottom-0 right-0  z-40 h-full sm:hidden bg-slate-300 bg-opacity-25 backdrop-blur-[.5px]">
+        <div className="fixed flex items-end left-0 bottom-0 right-0  z-40 h-full sm:hidden">
           {" "}
           <ul
             ref={menuRef}

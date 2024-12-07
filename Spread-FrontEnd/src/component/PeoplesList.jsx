@@ -8,7 +8,6 @@ function PeoplesList({ people, index, className }) {
   const [isUserhover, setuserHower] = useState(false);
   const userRef = useRef();
   const { userImageurl, IsuserFromOAth } = userImageSrc(people);
-  console.log(JSON.stringify(people));
   return (
     <li
       className={`flex mt-2 justify-between px-2 w-full  gap-3 font-medium capitalize items-center   ${className} relative dark:border-[#383838]`}

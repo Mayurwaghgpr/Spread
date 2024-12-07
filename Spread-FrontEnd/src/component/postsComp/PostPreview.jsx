@@ -34,10 +34,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
     <>
       <article
         ref={ref}
-        className={`border-b border-inherit flex w-full mt-1 h flex-col ${className}`}
+        className={` rounded-lg  border-inherit flex w-full  h flex-col ${className}`}
       >
-        <div className="p-3 flex leading-0 flex-col h-full justify-center gap-3 w-full">
-          <div className="flex gap-2 text-sm justify-start items-center">
+        <div className="p-3 flex leading-0 border-inherit flex-col h-full justify-center gap-3 w-full">
+          <div className="flex border-inherit gap-2 text-sm justify-start items-center">
             <Link
               to={`/profile/@${post?.user?.username
                 .split(" ")
@@ -72,9 +72,9 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               .split(" ")
               .slice(0, post?.user?.username.length - 1)
               .join("")}/${post?.id}`}
-            className="relative cursor-pointer h-full flex sm:flex-row flex-col-reverse justify-between items-center gap-3"
+            className="relative cursor-pointer h-full border-inherit flex sm:flex-row flex-col-reverse justify-between items-center gap-3"
           >
-            <div className="flex flex-col gap-3">
+            <div className="flex w-full flex-col gap-1">
               {post ? (
                 <>
                   <p className="font-medium text-xl sm:text-2xl overflow-hidden overflow-ellipsis">
@@ -92,7 +92,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               )}
             </div>
 
-            <div className="rounded-sm sm:h-[10rem] z-0 sm:w-[15rem] h-[10rem] w-full bg-slate-200 dark:bg-slate-700">
+            <div className="rounded-lg sm:h-[10rem] border border-inherit z-0 sm:w-[15rem] h-[10rem] overflow-hidden w-full bg-slate-200 dark:bg-slate-700">
               {post && (
                 <img
                   className="object-fill object-center z-0 h-full w-full"
@@ -104,9 +104,9 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             </div>
           </Link>
           {post && (
-            <div className="flex w-full h-full justify-between text-sm items-center mt-3">
+            <div className="flex w-full h-full justify-between text-sm border-t border-inherit p-3 items-center mt-3">
               <div className="flex justify-start items-center gap-5">
-                <span className="rounded-lg text-opacity-30 text-black dark:text-white dark:text-opacity-50">
+                <span className="rounded-lg text-opacity-30 text-black dark:text-slate-200 dark:text-opacity-40">
                   {post?.createdAt
                     ? format(new Date(post?.createdAt), "LLL-dd-yyyy")
                     : ""}

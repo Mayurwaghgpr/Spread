@@ -100,8 +100,8 @@ function Profile() {
   }
   console.log(userProfile);
   return (
-    <div className="flex justify-center h-screen  mt-14  dark:*:border-[#383838]">
-      <div className=" md:w-[80%]  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
+    <div className="flex justify-center h-screen  dark:*:border-[#383838]">
+      <div className=" md:w-[80%] mt-14  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />
           <div className="w-full flex gap-5  p-2 px-4 border-inherit">

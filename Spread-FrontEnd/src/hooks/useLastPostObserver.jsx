@@ -4,7 +4,8 @@ function useLastPostObserver(
   fetchNextPage,
   isFetchingNextPage,
   isFetching,
-  hasNextPage
+  hasNextPage,
+  threshold = 0.5
 ) {
   const intObserver = useRef(); // Initialize the observer reference
 
@@ -22,7 +23,7 @@ function useLastPostObserver(
           }
         },
         {
-          threshold: 0.8,
+          threshold,
         }
       );
 
@@ -32,7 +33,10 @@ function useLastPostObserver(
   );
   useEffect(() => {
     return () => {
-      if (intObserver.current) intObserver.current.disconnect();
+      if (intObserver.current) {
+        intObserver.current.disconnect();
+        intObserver.current = null;
+      }
     };
   }, []);
   return { lastpostRef };

@@ -1,5 +1,4 @@
 function abbreviateNumber(num) {
-    console.log({num})
     if (num >= 1e9) {
         return (num / 1e9).toFixed(1) + ' B'; // Billion
     } else if (num >= 1e6) {

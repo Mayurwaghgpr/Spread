@@ -80,8 +80,8 @@ function Home() {
   const posts = postsData?.pages.flatMap((page) => page) || [];
 
   return (
-    <main className="relative flex flex-col sm:flex-row justify-end h-full  w-full bottom-0 border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="flex flex-col border-inherit items-end mt-20  relative lg:w-[35rem] xl:w-[45rem] w-full ">
+    <main className=" flex flex-col sm:flex-row justify-end h-full  w-full  border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
+      <div className="relative flex flex-col border-inherit items-end mt-16 mb-10 border   lg:w-[35rem] xl:w-[45rem] w-full ">
         <div className="flex w-full text-lg font-medium  bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] ease-in-out z-[5]  border rounded-lg  items-center  justify-start gap-3  sticky top-20 ">
           <ul className="flex h-full  items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
             <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-400 hover:bg-opacity-30">
@@ -100,20 +100,14 @@ function Home() {
             </li>
           </ul>
         </div>
-
-        {posts?.map(
-          (post, idx, arr) => (
-            console.log(arr?.length, arr?.length % 3 === 0),
-            (
-              <PostPreview
-                className="border-inherit p-5"
-                ref={arr?.length % 3 === 0 ? lastpostRef : null}
-                key={post?.id}
-                post={post}
-              />
-            )
-          )
-        )}
+        {posts?.map((post, idx, arr) => (
+          <PostPreview
+            className="border-inherit px-2"
+            ref={arr?.length === idx + 1 ? lastpostRef : null}
+            key={post?.id}
+            post={post}
+          />
+        ))}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
             <Spinner />

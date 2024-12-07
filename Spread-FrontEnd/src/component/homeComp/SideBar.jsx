@@ -11,6 +11,7 @@ import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
 import LoaderScreen from "../loaders/loaderScreen";
 import { setIsLogin, setUser } from "../../redux/slices/authSlice";
 import Theme from "../otherUtilityComp/ThemeMenu";
+import { createPortal } from "react-dom";
 
 function SideBar() {
   const { user, isLogin } = useSelector((state) => state.auth);
@@ -95,7 +96,7 @@ function SideBar() {
       stub: "/setting",
     },
   ];
-  return (
+  return createPortal(
     <div
       onClick={(e) => {
         dispatch(setManuOpen());
@@ -142,7 +143,8 @@ function SideBar() {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById("portal")
   );
 }
 

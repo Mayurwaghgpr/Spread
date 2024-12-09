@@ -10,7 +10,7 @@ import { Logout } from "../../Apis/authapi";
 import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
 import LoaderScreen from "../loaders/loaderScreen";
 import { setIsLogin, setUser } from "../../redux/slices/authSlice";
-import Theme from "../otherUtilityComp/ThemeMenu";
+import Theme from "../UtilityComp/ThemeMenu";
 import { createPortal } from "react-dom";
 
 function SideBar() {
@@ -101,11 +101,11 @@ function SideBar() {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r z-40 sm:animate-none  animate-fedin.2s ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] lg:block  w-full lg:w-fit left-0 top-0 lg:top-[4.1rem] h-screen bg-gray-500 bg-opacity-10 backdrop-blur-[.8px] lg:bg-white dark:border-[#383838]`}
+      className={`fixed border-r z-40 sm:animate-none animate-fedin.2s ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] xl:block w-full xl:w-fit left-0 top-0 xl:top-[4.1rem] h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:xl:bg-black dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="p-10 w-fit dark:bg-black animate-slide-in-left sm:animate-none  bg-white h-full  text-xl"
+        className="p-10 w-fit dark:bg-black animate-slide-in-left xl:animate-none   bg-[#f3efeb] h-full"
       >
         <div className="flex flex-col min-h-[90%] text-gray-700 dark:text-white *:transition-all *:duration-300 sm:w-full justify-between  items-center ">
           {/* Profile Link */}
@@ -118,7 +118,7 @@ function SideBar() {
                     location.pathname.startsWith(link.stub)
                   }
                   className={({ isActive }) =>
-                    `flex ${isActive && "text-slate-500  dark:text-gray-600"} px-3 py-1 justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
+                    `flex ${isActive && "text-slate-500  dark:text-gray-600"} px-3  justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
                   }
                   to={link.stub}
                 >
@@ -139,7 +139,7 @@ function SideBar() {
             className="flex gap-5 items-center w-full hover:bg-opacity-5 px-3 py-1 rounded-md"
           >
             <LuLogOut className="" />
-            <span className=" xl:block   hidden ">Sign out</span>
+            <span className=" xl:block sm:hidden block ">Sign out</span>
           </button>
         </div>
       </div>

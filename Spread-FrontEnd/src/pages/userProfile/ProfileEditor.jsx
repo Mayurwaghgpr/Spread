@@ -9,9 +9,9 @@ import { setToast } from "../../redux/slices/uiSlice";
 import { debounce } from "../../utils/debounce";
 import useProfileApi from "../../Apis/ProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
-import CommonInput from "../../component/otherUtilityComp/commonInput";
+import CommonInput from "../../component/UtilityComp/commonInput";
 import { v4 as uuidv4 } from "uuid";
-import Selector from "../../component/otherUtilityComp/Selector";
+import Selector from "../../component/UtilityComp/Selector";
 function ProfileEditor() {
   const { user } = useSelector((state) => state.auth);
   const [newInfo, setNewInfo] = useState(user);
@@ -74,9 +74,6 @@ function ProfileEditor() {
     }
   }, 600);
 
-  const triggerFileInput = () => {
-    document.getElementById("fileInput").click();
-  };
   console.log(newInfo);
   const RemoveSelecteImage = () => {
     if (newInfo.userImage && newInfo.NewImageFile) {
@@ -120,8 +117,8 @@ function ProfileEditor() {
   ];
 
   return (
-    <div className=" relative flex  justify-center items-start dark:*:border-[#0f0f0f] overflow-y-auto">
-      <article className=" flex flex-col w-fit rounded-xl h-[50%] overflow-y-auto mt-14 px-4  border-inherit  gap-6 py-5">
+    <div className=" relative f sm:h-screen h-1/2    dark:*:border-[#0f0f0f] overflow-y-auto">
+      <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto    my-14 px-4  border-inherit  gap-6 py-5">
         <h1 className="w-full text-center text-2xl p-2  bg-inherit  ">
           User Information
         </h1>
@@ -129,13 +126,15 @@ function ProfileEditor() {
           className=" flex justify-start gap-3 w-full border-inherit "
           aria-label="Upload profile picture"
         >
-          <div className="relative flex size-40  flex-col">
+          <div className="relative flex   flex-col">
             <label
-              className="absolute h-full w-full  z-10 text-xs m-auto"
+              className="absolute h-full w-full cursor-pointer flex justify-center items-center  z-10 text-xs m-auto"
               htmlFor="fileInput"
-            ></label>
+            >
+              <span className="m-auto"> add image.. </span>{" "}
+            </label>
             <input
-              className="w-full p-3 bg-inherit  border border-inherit"
+              className="w-full p-3 bg-inherit hidden  border border-inherit"
               id="fileInput"
               type="file"
               name="image"
@@ -144,7 +143,7 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className=" cursor-pointer object-cover object-top rounded-full p-1"
+              className="size-32 cursor-pointer object-cover object-top rounded-full p-1"
               src={ProfileImage}
               alt="Profile"
             />
@@ -162,7 +161,7 @@ function ProfileEditor() {
                 Remove
               </button>
             </div>
-            <p className="text-start  break-words  ">
+            <p className="text-start text-xs  break-words  ">
               Importent: Insert image in JPG,JPEG,PNG format and high quality
             </p>
             <Selector

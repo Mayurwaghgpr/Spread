@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import PostPreview from "../../component/postsComp/PostPreview";
 import { setuserProfile } from "../../redux/slices/profileSlice";
-import ScrollToTopButton from "../../component/otherUtilityComp/ScrollToTopButton";
+import ScrollToTopButton from "../../component/UtilityComp/ScrollToTopButton";
 import ProfileHeader from "./component/ProfileHeader";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import Spinner from "../../component/loaders/Spinner";

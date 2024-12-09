@@ -80,11 +80,11 @@ function Home() {
   const posts = postsData?.pages.flatMap((page) => page) || [];
 
   return (
-    <main className=" flex flex-col sm:flex-row justify-end h-full  w-full  border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="relative flex h-full flex-col border-inherit items-end mt-16 rounded-t-md border border-y-0   lg:w-[35rem] xl:w-[45rem] w-full ">
-        <div className="flex w-full text-lg font-medium  bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] ease-in-out z-[5]  border rounded  items-center  justify-start gap-3 sticky top-16 ">
-          <ul className="flex h-full  items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
-            <li className="capitalize bg-inherit flex justify-center  p-2 w-full  hover:bg-gray-400 hover:bg-opacity-30">
+    <main className=" flex flex-col sm:flex-row justify-end h-full w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
+      <div className="relative flex h-full flex-col border-inherit items-end border border-y-0  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full ">
+        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] ease-in-out z-[5] border rounded items-center justify-start gap-3 sticky top-16 ">
+          <ul className="flex h-full items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
+            <li className="capitalize bg-inherit flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
               <button
                 className="t-btn"
                 onClick={() => handleTopicClick("All")}
@@ -93,35 +93,37 @@ function Home() {
                 Feeds
               </button>
             </li>
-            <li className="capitalize  bg-inherit flex justify-center p-2 w-full  hover:bg-gray-400  hover:bg-opacity-30">
+            <li className="capitalize  bg-inherit flex justify-center p-2 w-full hover:bg-gray-400  hover:bg-opacity-30">
               <Link to="#" aria-label="Specialization">
                 specific
               </Link>
             </li>
           </ul>
         </div>
-        {posts?.map(
-          (post, idx, arr) => (
-            console.log(arr?.length === idx + 1),
-            (
-              <PostPreview
-                className="border-inherit px-2"
-                ref={arr?.length === idx + 1 ? lastpostRef : null}
-                key={post?.id}
-                post={post}
-              />
+        <div className="mt-16">
+          {posts?.map(
+            (post, idx, arr) => (
+              console.log(arr?.length === idx + 1),
+              (
+                <PostPreview
+                  className="border-inherit px-2"
+                  ref={arr?.length === idx + 1 ? lastpostRef : null}
+                  key={post?.id}
+                  post={post}
+                />
+              )
             )
-          )
-        )}
-        {isFetchingNextPage && (
-          <div className="w-full flex justify-center items-center h-full p-5">
-            <Spinner />
-          </div>
-        )}
-        {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
+          )}
+          {isFetchingNextPage && (
+            <div className="w-full flex justify-center items-center h-full p-5">
+              <Spinner />
+            </div>
+          )}
+          {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
+        </div>
       </div>
       <Aside
-        className="lg:flex hidden  border-inherit flex-col w-[25rem] xl:w-[26rem] mt-20  px-10  justify-start gap-5  "
+        className="lg:flex hidden text-xs  border-inherit flex-col w-[20rem] lg:w-[23] xl:w-[26rem] mt-20  px-10  justify-start gap-5  "
         FechingPreps={fetchingPreps}
         isLoadingPreps={isLoadingPreps}
         PrepsData={prepsData}

@@ -21,7 +21,7 @@ function Aside({
             {PrepsData?.topics?.map(({ topic }, index) => (
               <li
                 key={index}
-                className="text-[14px] font-normal rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
+                className=" font-normal rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
               >
                 <button
                   className="t-btn"
@@ -38,7 +38,7 @@ function Aside({
       </div>
       <div className="sticky flex flex-col justify-start min-h-[23rem] top-16 border rounded-xl p-5 border-inherit">
         <div className="h-full text-sm">
-          <h1 className="font-normal text-start w-full sm:text-sm lg:text-md xl:text-lg">
+          <h1 className="font-normal text-start w-full sm:text-sm ">
             Follow People
           </h1>
           {!FechingPreps ? (

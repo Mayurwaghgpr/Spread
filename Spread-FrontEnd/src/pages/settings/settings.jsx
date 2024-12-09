@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useRef } from "react";
 
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import Theme from "../../component/otherUtilityComp/ThemeMenu";
+import Theme from "../../component/UtilityComp/ThemeMenu";
 import { LuGithub } from "react-icons/lu";
 
 function Settings() {
@@ -21,7 +21,7 @@ function Settings() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className=" relative sm:w-[70%] sm:h-[600px] h-full w-full flex flex-col  overflow-hidden items-center border bg-white dark:bg-[#222222] border-inherit sm:rounded-lg"
+        className=" relative sm:w-[70%] sm:h-[40rem] h-full w-full flex flex-col  overflow-hidden items-center border bg-[#f3efeb] dark:bg-[#222222] border-inherit sm:rounded-lg"
       >
         <header className="w-full text-4xl flex justify-between items-center p-5 border-b border-inherit">
           <h1> Settings</h1>

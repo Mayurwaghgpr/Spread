@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { forgotPassword } from "../../Apis/authapi";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
-import CommonInput from "../../component/otherUtilityComp/commonInput";
+import CommonInput from "../../component/UtilityComp/commonInput";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 function ForgotPass() {

@@ -15,11 +15,11 @@ import ProfileButton from "../ProfileButton";
 // import useScrollDirection from "../../hooks/useScrollDirection"; // Import the custom hook
 
 const ConfirmationBox = React.lazy(
-  () => import("../otherUtilityComp/ConfirmationBox")
+  () => import("../UtilityComp/ConfirmationBox")
 );
 
 import SearchBar from "../homeComp/searchBar";
-import ThemeMenu from "../otherUtilityComp/ThemeMenu";
+import ThemeMenu from "../UtilityComp/ThemeMenu";
 import ThemeBtn from "../buttons/ThemeBtn";
 import { setManuOpen } from "../../redux/slices/uiSlice";
 
@@ -37,14 +37,14 @@ function MainNavBar() {
       className={`fixed top-0 transform-all duration-300 ease-in-out flex  justify-center w-full z-10`}
     >
       <nav
-        className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-white dark:bg-black dark:border-[#383838] border-b  border-inherit dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg `}
+        className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-inherit dark:bg-black dark:border-[#383838] border-b  border-inherit dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg `}
       >
-        <div className="flex items-center justify-between w-full m-auto">
+        <div className="flex border-inherit items-center justify-between w-full m-auto">
           <Link to="/" className="text-2xl font-bold ">
             Spread
           </Link>
 
-          <div className="flex gap-8 justify-end items-center ">
+          <div className="flex gap-8 justify-end items-center border-inherit ">
             <ThemeBtn />
             {isLogin && (
               <div className="relative sm:text-xl">
@@ -68,7 +68,7 @@ function MainNavBar() {
                 />
               </div>
             ) : (
-              <div className="flex gap-3 justify-end w-full items-center sm:text-lg text-xs">
+              <div className="flex gap-3 border-inherit justify-end w-full items-center sm:text-sm text-xs">
                 <Link to="/auth/signin" className=" rounded-3xl sm:px-3 py-2">
                   SignIn
                 </Link>

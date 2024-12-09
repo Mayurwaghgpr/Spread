@@ -5,7 +5,7 @@ import { setIsLogin } from "../../redux/slices/authSlice.js";
 import { setToast } from "../../redux/slices/uiSlice.js";
 import { useMutation, useQueryClient } from "react-query";
 import { RegisterUser } from "../../Apis/authapi.jsx";
-import CommonInput from "../../component/otherUtilityComp/commonInput.jsx";
+import CommonInput from "../../component/UtilityComp/commonInput.jsx";
 import { passwordRegex, emailRegex } from "../../utils/regex.js";
 import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";
@@ -78,7 +78,7 @@ function SignUp() {
   ];
 
   return (
-    <section className="sm:flex animate-fedin.2s relative justify-start z-50   h-[47rem]   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#ffff] dark:bg-[#222222]  dark:*:border-[#383838]">
+    <section className="sm:flex animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#f3efeb] dark:bg-[#222222]  dark:*:border-[#383838]">
       {(isError || validation) && (
         <div className="text-red-500 my-4 w-full flex justify-center bg-red-100 py-2">
           {error?.response?.data.message || validation}

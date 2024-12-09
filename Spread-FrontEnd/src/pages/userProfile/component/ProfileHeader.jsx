@@ -5,6 +5,7 @@ import Follow from "../../../component/buttons/follow";
 import { useDispatch, useSelector } from "react-redux";
 import { setFollowInfo } from "../../../redux/slices/profileSlice";
 import userImageSrc from "../../../utils/userImageSrc";
+import { LuMessageSquarePlus, LuMessagesSquare } from "react-icons/lu";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -74,29 +75,28 @@ const ProfileHeader = React.memo(({ profileId }) => {
             </p>
           </div>
         </div>
-
-        {profileId === user?.id && (
+      </div>
+      <div className="flex  items-center gap-4 text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
+        {profileId === user.id ? (
           <Link
             to="/profileEditor"
-            className=" absolute top-0 right-0  text-end text-sm   rounded-lg transition-colors duration-300 text-blue-600 my-2 mx-4"
+            className="  text-end text-sm   rounded-lg transition-colors duration-300 text-blue-600 my-2 mx-4"
           >
             Edite profile
           </Link>
-        )}
-      </div>
-      <div className="flex  items-center gap-4 text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
-        {profileId !== user.id && (
-          <Follow
-            People={userProfile}
-            className={`p-3 py-1 flex w-full min-w-32 h-9 justify-center items-center rounded-full bg-sky-300 hover:bg-sky-400 dark:bg-sky-500 dark:hover:bg-sky-700`}
-          />
-        )}
-        {profileId !== user.id && (
-          <button className=" bg-sky-300 hover:bg-sky-400 dark:bg-sky-500 dark:hover:bg-sky-700 px-4 py-1   rounded-full  ">
-            {/* <i className="bi bi-envelope"></i>
-             */}
-            Message
-          </button>
+        ) : (
+          <>
+            <Follow
+              People={userProfile}
+              className={`p-3 py-1 flex border w-full min-w-32 h-9 justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700`}
+            />
+            <button className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700 px-4 py-1   rounded-full  ">
+              {/* <i className="bi bi-envelope"></i>
+               */}
+              <LuMessagesSquare />
+              Message
+            </button>
+          </>
         )}
       </div>
     </div>

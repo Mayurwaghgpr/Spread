@@ -9,16 +9,16 @@ function Footer() {
           <p className="sm:text-sm text-xs ">
             &copy; 2024 Spread | Developed by Mayur Wagh
           </p>
-          <div className=" flex w-fit gap-5 text-xl *:transition-all *:duration-500 ease-linear ">
+          <div className=" flex w-fit gap-5 text-xl *:transition-all *:duration-200 ease-linear ">
             <Link
-              className=" hover:scale-150"
-              to="https://github.com/Mayurwaghgpr"
+              className=" hover:scale-110"
+              to="https://github.com/Mayurwaghgpr/Spread"
               target="_blank"
             >
               <i className="bi bi-github "></i>
             </Link>
             <Link
-              className=" hover:scale-150"
+              className=" hover:scale-110"
               to="https://www.linkedin.com/in/mayur-wagh-751b8a24b/"
               target="_blank"
             >
@@ -26,7 +26,7 @@ function Footer() {
               <i className="bi bi-linkedin"></i>
             </Link>
             <Link
-              className=" hover:scale-150"
+              className=" hover:scale-110"
               to="https://x.com/mayurwagh152064 "
               target="_blank"
             >

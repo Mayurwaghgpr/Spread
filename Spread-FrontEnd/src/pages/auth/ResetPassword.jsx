@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ResetPasswordApi } from "../../Apis/authapi";
 import { useMutation } from "react-query";
-import CommonInput from "../../component/otherUtilityComp/commonInput";
+import CommonInput from "../../component/UtilityComp/commonInput";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import EyeBtn from "../../component/buttons/EyeBtn";

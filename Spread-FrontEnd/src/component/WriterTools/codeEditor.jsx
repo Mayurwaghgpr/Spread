@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import Selector from "../otherUtilityComp/Selector";
+import Selector from "../UtilityComp/Selector";
 import Editor from "@monaco-editor/react";
 import { useSelector } from "react-redux";
 

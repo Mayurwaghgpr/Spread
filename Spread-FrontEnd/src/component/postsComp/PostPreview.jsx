@@ -20,7 +20,7 @@ import Spinner from "../loaders/Spinner"; // A spinner to show during lazy loadi
 import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like";
 import Menu from "./menu";
-import FormatedTime from "../otherUtilityComp/FormatedTime";
+import FormatedTime from "../UtilityComp/FormatedTime";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   // const dispatch = useDispatch();

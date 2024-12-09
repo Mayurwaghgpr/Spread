@@ -53,10 +53,10 @@ function ThemeBtn() {
   }, [ThemeMode]);
 
   // Get the current theme's icon
-  const currentMode = Modes.find((mode) => mode.value === ThemeMode);
+  const currentMode = Modes?.find((mode) => mode.value === ThemeMode);
 
   return (
-    <div className=" relative">
+    <div className="relative">
       <button
         onClick={changeTheme}
         aria-label="THEME"

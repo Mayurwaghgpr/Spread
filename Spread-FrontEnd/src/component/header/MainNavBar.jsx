@@ -76,7 +76,7 @@ function MainNavBar() {
                   to="/auth/signup"
                   className="border border-inherit rounded-full px-3 py-1"
                 >
-                  get started
+                  Get started
                 </Link>
               </div>
             )}

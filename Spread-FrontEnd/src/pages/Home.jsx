@@ -80,8 +80,10 @@ function Home() {
   const posts = postsData?.pages.flatMap((page) => page) || [];
 
   return (
-    <main className=" flex flex-col sm:flex-row justify-end h-full w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div className="relative flex h-full flex-col border-inherit items-end border border-y-0  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full ">
+    <main className=" flex flex-col sm:flex-row justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
+      <div
+        className={`relative flex  flex-col  ${!postsData && "h-screen"} border-inherit items-end border border-y-0  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full`}
+      >
         <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] ease-in-out z-[5] border rounded items-center justify-start gap-3 sticky top-16 ">
           <ul className="flex h-full items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
             <li className="capitalize bg-inherit flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
@@ -119,8 +121,8 @@ function Home() {
               <Spinner />
             </div>
           )}
-          {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
         </div>
+        {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
       </div>
       <Aside
         className="lg:flex hidden text-xs  border-inherit flex-col w-[20rem] lg:w-[23] xl:w-[26rem] mt-20  px-10  justify-start gap-5  "

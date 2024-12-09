@@ -123,7 +123,7 @@ function SideBar() {
                   to={link.stub}
                 >
                   {link.icon}
-                  <div className={`xl:flex flex-col hidden  `}>
+                  <div className={`xl:block sm:hidden block flex-col `}>
                     {" "}
                     <span>{link.lkname}</span>{" "}
                   </div>

@@ -1,8 +1,14 @@
-import React from "react";
+import React, { forwardRef } from "react";
+import Follow from "../buttons/follow";
 
-function UserPopover() {
+const UserPopover = forwardRef(({ people, styles, attributes }, ref) => {
   return (
-    <div className=" absolute animate-fedin.2s hidden z-30 px-4  sm:top-2 w-[20rem] sm:flex flex-col gap-3 border bg-[#f3efeb]  border-inherit dark:bg-black font-normal text-[1rem] p-3 overflow-hidden overflow-ellipsis rounded-md ">
+    <div
+      ref={ref}
+      className=" absolute animate-fedin.2s  z-30 px-4  sm:top-2 w-[20rem] flex flex-col gap-3 border bg-[#f3efeb]  border-inherit dark:bg-black font-normal text-[1rem] p-3 overflow-hidden overflow-ellipsis rounded-md "
+      style={styles.popper}
+      {...attributes.popper}
+    >
       <div className=" flex flex-row justify-between items-center font-medium ">
         {" "}
         <div className="flex gap-4 items-center">
@@ -40,6 +46,6 @@ function UserPopover() {
       </div>
     </div>
   );
-}
+});
 
 export default UserPopover;

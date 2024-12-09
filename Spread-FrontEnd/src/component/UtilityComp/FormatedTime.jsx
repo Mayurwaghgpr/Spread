@@ -1,10 +1,10 @@
 import { format } from "date-fns";
 import React from "react";
 
-function FormatedTime({ date, className }) {
+function FormatedTime({ date, className, content }) {
   return (
     <span className={`${className}`}>
-      {date ? format(new Date(date), "EE") + "" : ""}
+      {content} {date ? format(new Date(date), "MMM,yyy") + "" : ""}
     </span>
   );
 }

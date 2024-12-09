@@ -1,13 +1,33 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import profileIcon from "/ProfOutlook.png";
-
+import { usePopper } from "react-popper";
 import Follow from "./buttons/follow";
 import userImageSrc from "../utils/userImageSrc";
+import UserPopover from "./UtilityComp/UserPopover";
 function PeoplesList({ people, index, className }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef(null);
+  const boxRef = useRef(null);
   const [isUserhover, setuserHower] = useState(false);
-  const userRef = useRef();
   const { userImageurl, IsuserFromOAth } = userImageSrc(people);
+
+  const { styles, attributes } = usePopper(buttonRef.current, boxRef.current, {
+    placement: "bottom-start",
+    modifiers: [
+      {
+        name: "preventOverflow",
+        options: {
+          boundary: "viewport",
+        },
+      },
+      {
+        name: "offset",
+        options: {
+          offset: [0, 8], // Adjusts the gap between the button and the menu
+        },
+      },
+    ],
+  });
   return (
     <li
       className={`flex mt-2 justify-between px-2 w-full  gap-3 font-medium capitalize items-center   ${className} relative dark:border-[#383838]`}
@@ -29,9 +49,14 @@ function PeoplesList({ people, index, className }) {
           className=" flex ms-3 gap-2  justify-center overflow-hidden flex-col items-start border-inherit "
         >
           <h1 className="">{people?.username}</h1>
-          {/* {isUserhover && (
-            
-          )} */}
+          {isUserhover && (
+            <UserPopover
+              people={people}
+              ref={boxRef}
+              attributes={attributes}
+              styles={styles}
+            />
+          )}
         </div>
       </Link>
       <Follow

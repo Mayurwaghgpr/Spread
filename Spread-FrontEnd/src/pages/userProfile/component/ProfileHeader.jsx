@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFollowInfo } from "../../../redux/slices/profileSlice";
 import userImageSrc from "../../../utils/userImageSrc";
 import { LuMessageSquarePlus, LuMessagesSquare } from "react-icons/lu";
+import FormatedTime from "../../../component/UtilityComp/FormatedTime";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -76,7 +77,17 @@ const ProfileHeader = React.memo(({ profileId }) => {
           </div>
         </div>
       </div>
-      <div className="flex  items-center gap-4 text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
+      <div className="flex flex-col  items-center gap-4 text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
+        <FormatedTime
+          content={
+            <>
+              <i className="bi bi-calendar3 "></i> Joined
+            </>
+          }
+          className={"text-sm w-fit self-start"}
+          date={user.createdAt}
+        />
+
         {profileId === user.id ? (
           <Link
             to="/profileEditor"
@@ -85,7 +96,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
             Edite profile
           </Link>
         ) : (
-          <>
+          <div className="flex justify-start items-center gap-4 w-full">
             <Follow
               People={userProfile}
               className={`p-3 py-1 flex border w-full min-w-32 h-9 justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700`}
@@ -96,7 +107,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
               <LuMessagesSquare />
               Message
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>

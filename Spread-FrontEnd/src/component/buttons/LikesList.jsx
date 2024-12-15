@@ -3,7 +3,7 @@ import React from "react";
 import { BsHandThumbsUp } from "react-icons/bs";
 import { MdCelebration, MdOutlineCelebration } from "react-icons/md";
 import { IoHappyOutline } from "react-icons/io5";
-import { LuThumbsUp } from "react-icons/lu";
+// import { LuThumbsUp } from "react-icons/lu";
 import { PiHandsClappingLight } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 function LikesList({ setShowList }) {

@@ -39,7 +39,7 @@ function Like({ post, className }) {
       onMouseOut={() => setShowList("")}
       className={`relative flex ${isLiked && "dark:text-white text-inherit "} cursor-pointer items-end  ${className}`}
     >
-      {showList === post?.id && <LikesList setShowList={setShowList} />}
+      {/* {showList === post?.id && <LikesList setShowList={setShowList} />} */}
       <button
         onClick={() => {
           if (isLogin) {

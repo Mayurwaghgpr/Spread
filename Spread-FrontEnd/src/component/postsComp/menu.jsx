@@ -86,7 +86,7 @@ function Menu({ post }) {
 
   return (
     <div
-      className={`relative flex dark:border-[#383838] justify-center items-center border-inherit`}
+      className={`relative flex  dark:border-[#383838] justify-center items-center border-inherit`}
     >
       <span
         className="cursor-pointer"

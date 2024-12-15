@@ -34,7 +34,7 @@ function MainNavBar() {
 
   return (
     <header
-      className={`fixed top-0 transform-all duration-300 ease-in-out flex  justify-center w-full z-10`}
+      className={`fixed top-0  flex justify-center w-full transform-all duration-300 ease-in-out z-10`}
     >
       <nav
         className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-inherit dark:bg-black dark:border-[#383838] border-b  border-inherit dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg `}

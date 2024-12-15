@@ -26,7 +26,7 @@ function ToastItem({ ToastContent }) {
 
   const status =
     ToastContent.type === "success"
-      ? "bg-green-200 dark:bg-green-500"
+      ? "bg-green-200 dark:bg-green-300"
       : ToastContent.type === "error"
         ? "bg-red-300"
         : ToastContent.type === "warning"
@@ -35,7 +35,7 @@ function ToastItem({ ToastContent }) {
 
   return (
     <span
-      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-left" : "animate-slide-in-left"} transition-all duration-300 ease-in-out pointer-events-auto ${status} flex flex-col rounded-lg w-fit`}
+      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-left" : "animate-slide-in-left"} dark:text-black transition-all duration-300 ease-in-out pointer-events-auto ${status} flex flex-col rounded-lg w-fit`}
     >
       <div className="flex p-4">
         <div className="break-words flex">

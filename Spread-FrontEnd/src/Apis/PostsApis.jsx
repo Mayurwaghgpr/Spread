@@ -26,7 +26,6 @@ function PostsApis() {
     }
   };
   const AddNewPost = async (newPost, signal) => {
-    console.log(newPost);
     try {
       const result = await axios.post(`${BASE_URL}/posts/add`, newPost, {
         withCredentials: true,
@@ -51,7 +50,7 @@ function PostsApis() {
           withCredentials: true,
         }
       );
-      console.log("DeletePostApi response:", response);
+      // console.log("DeletePostApi response:", response);
       return response.data; // Return the actual data
     } catch (error) {
       if (error.response && error.response.status === 401) {

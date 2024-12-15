@@ -77,29 +77,32 @@ const ProfileHeader = React.memo(({ profileId }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col  items-center gap-4 text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
+      <div className="flex flex-col items-start gap-4 border-inherit text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
         <FormatedTime
           content={
-            <>
-              <i className="bi bi-calendar3 "></i> Joined
-            </>
+            <div className="">
+              <i className="bi bi-calendar text-[.7rem] "></i>{" "}
+              <span>Joined</span>
+            </div>
           }
-          className={"text-sm w-fit self-start"}
+          className={
+            "relative text-xs w-fit flex justify-center items-center gap-1  self-start"
+          }
           date={user.createdAt}
         />
 
         {profileId === user.id ? (
           <Link
             to="/profileEditor"
-            className="  text-end text-sm   rounded-lg transition-colors duration-300 text-blue-600 my-2 mx-4"
+            className="  text-end text-sm w-fit   rounded-lg transition-colors duration-300 text-blue-600  "
           >
             Edite profile
           </Link>
         ) : (
-          <div className="flex justify-start items-center gap-4 w-full">
+          <div className="flex justify-start items-center gap-4 w-full border-inherit">
             <Follow
               People={userProfile}
-              className={`p-3 py-1 flex border w-full min-w-32 h-9 justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700`}
+              className={`p-3 py-1 flex border border-inherit w-full min-w-32 h-9 justify-center items-center rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700`}
             />
             <button className="flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700 px-4 py-1   rounded-full  ">
               {/* <i className="bi bi-envelope"></i>

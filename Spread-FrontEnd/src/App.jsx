@@ -15,6 +15,7 @@ import LoaderScreen from "./component/loaders/loaderScreen";
 import SearchBar from "./component/homeComp/searchBar";
 import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/homeComp/SideBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Lazy load components
 
@@ -91,6 +92,7 @@ function App() {
     <>
       <ToastContainer />
       <PersistentUser />
+
       {<ConfirmationBox />}
       <Suspense fallback={<LoaderScreen />}>
         <MainNavBar />

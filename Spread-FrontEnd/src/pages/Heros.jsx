@@ -37,6 +37,7 @@ function Heros() {
             <img
               className="sm:w-[35rem] shadow-inner shadow-black sm:h-[25rem] rounded-sm  object-fill object-center "
               src={coverImg2}
+              loading="lazy"
             />
           </div>
         </section>

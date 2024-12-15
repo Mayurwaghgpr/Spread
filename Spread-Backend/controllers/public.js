@@ -91,8 +91,8 @@ export const searchData = async (req, res,next) => {
 
 export const LikePost = async (req, res, next) => {
     const postId = req.body.likedPostId;
-  console.log({ postId })
-  console.log({likedBy: req.authUser.id,})
+  // console.log({ postId })
+  // console.log({likedBy: req.authUser.id,})
   
     try {
         const exist = await Likes.findOne({ where: { likedBy: req.authUser.id, postId: postId } });
@@ -131,7 +131,7 @@ export const FollowUser = async (req, res, next) => {
       // Unfollow user
       await existingFollow.destroy();
       const userInfo = await dataFetcher.Profile(req.authUser.id);
-      console.log(userInfo);
+      // console.log(userInfo);
 
       // Optionally clear Redis cache if implemented
       // await redisClient.del(followerId);
@@ -144,7 +144,7 @@ export const FollowUser = async (req, res, next) => {
       // Follow user
       await Follow.create({ followerId, followedId });
       const userInfo = await dataFetcher.Profile(req.authUser.id);
-      console.log(userInfo);
+      // console.log(userInfo);
 
       // Optionally clear Redis cache if implemented
       // await redisClient.del(followerId);
@@ -175,7 +175,7 @@ export const AddPostToArchive = async (req, res,next) => {
       where:{PostId: postId,
       UserId: req.authUser.id}
     });
-    console.log({ exist })
+    // console.log({ exist })
     if (exist) {
       await exist.destroy();
     const userInfo = await dataFetcher.Profile( req.authUser.id)

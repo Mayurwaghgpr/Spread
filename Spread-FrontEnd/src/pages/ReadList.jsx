@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "react-query";
 import userApi from "../Apis/userApi";
 import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
-import useLastPostObserver from "../hooks/useLastPostObserver";
+import { useLastPostObserver } from "../hooks/useLastPostObserver";
 import { useSelector } from "react-redux";
 import ProfileButton from "../component/ProfileButton";
 
@@ -28,10 +28,10 @@ const ReadList = () => {
       retry: false,
     }
   );
-  console.log("saved", data);
+  // console.log("saved", data);
   const pages = data?.pages.flatMap((page) => page !== undefined && page) || [];
   const hasPosts = pages?.length > 0;
-  console.log({ pages });
+  // console.log({ pages });
   const { lastpostRef } = useLastPostObserver(
     fetchNextPage,
     isFetchingNextPage,

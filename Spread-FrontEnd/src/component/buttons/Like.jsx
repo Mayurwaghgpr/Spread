@@ -5,15 +5,16 @@ import { setToast } from "../../redux/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import abbreviateNumber from "../../utils/numAbrivation";
 import { useNavigate, useNavigation } from "react-router-dom";
+import LikesList from "./LikesList";
 // import clapSvg from "/public/clap-svgrepo-com.svg";
 function Like({ post, className }) {
   const [optimisLike, setOptimisLike] = useState("");
   const { LikePost } = usePublicApis();
+  const [showList, setShowList] = useState("");
   const dispatch = useDispatch();
   const { isLogin, user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  console.log(post.id);
   const { mutate } = useMutation({
     mutationFn: (postId) => LikePost(postId),
     onSuccess: (data) => {
@@ -21,7 +22,6 @@ function Like({ post, className }) {
       dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
     },
     onError: (error) => {
-      console.log(error);
       dispatch(
         setToast({
           message: ` ${error.response.data.message} ✨`,
@@ -34,7 +34,12 @@ function Like({ post, className }) {
   const isLiked = post?.Likes?.some((like) => like.likedBy === user.id);
 
   return (
-    <div className={`flex cursor-pointer items-end ${className}`}>
+    <div
+      // onMouseOver={() => setShowList(post?.id)}
+      // onMouseOut={() => setShowList("")}
+      className={`relative flex ${isLiked && "dark:text-white text-inherit "} cursor-pointer items-end  ${className}`}
+    >
+      {/* {showList === post?.id && <LikesList setShowList={setShowList} />} */}
       <button
         onClick={() => {
           if (isLogin) {
@@ -47,7 +52,7 @@ function Like({ post, className }) {
       >
         <i
           className={`bi ${
-            isLiked ? "bi-hand-thumbs-up-fill" : "bi-hand-thumbs-up"
+            isLiked ? "bi-hand-thumbs-up-fill " : "bi-hand-thumbs-up"
           }`}
         ></i>
         <span>{abbreviateNumber(post.Likes.length)}</span>

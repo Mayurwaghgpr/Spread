@@ -14,7 +14,7 @@ export const getPostPreview = async (req, res,next) => {
     const type = req.query.type?.toLowerCase().trim() || 'all';
     const limit = parseInt(req.query.limit?.trim()) || 3;
     const page = parseInt(req.query.page?.trim()) || 1;
-    console.log(type, limit, page)
+    // console.log(type, limit, page)
     
     // Create a filter for topics if not 'all'
     const topicFilter = type !== 'all' ? { topic: { [Op.or]: [
@@ -89,7 +89,7 @@ export const getPostView = async (req, res,next) => {
 // Add a new post with associated content and images
 export const AddNewPost = async (req, res, next) => {
     
-    console.log("Post adding...")
+    // console.log("Post adding...")
     let imageArr = [];
     try {
         // console.log(req.body.blog)
@@ -99,10 +99,11 @@ export const AddNewPost = async (req, res, next) => {
         // console.log(otherData)
 
         const imageFileArray = req.files || [];
-        console.log(imageFileArray)
+        // console.log(imageFileArray)
 
-        console.log(req.body)
-        const topic = req.body.Topic.toLowerCase();console.log({topic})
+        // console.log(req.body)
+        const topic = req.body.Topic.toLowerCase();
+        // console.log({ topic })
         // extracting Title from Up-Comming Post data
         const postTitle = otherData.find(p => p.index === 0)?.data;
         // extracting Subtitle from Up-Comming Post data
@@ -123,11 +124,11 @@ export const AddNewPost = async (req, res, next) => {
             topic,
             authorId: req.authUser.id,
         });
-        console.log(newPost)
+        // console.log(newPost)
 
         let PostData;
         const otherPostData = otherData.filter(p => p.index !== 0 && p.index !== 1)
-        // Arranging post content in sequence
+        // To arrange post content in sequence
         if (otherData.length) {
             imageFileArray.forEach((image, idx) => {
                 PostData = otherPostData.map(p => {
@@ -175,12 +176,12 @@ export const EditPost = async (req, res,next) => {
 };
 // Get archived posts for the current user
 export const getArchivedPosts = async (req, res, next) => {
-  console.log("getArchivedPosts....")
+//   console.log("getArchivedPosts....")
   const userId = req.authUser.id;
  const limit = req.query.limit?.trim() || 3; // Default limit to 3, min 1
   const page = req.query.page?.trim() || 1; // Default page to 1, min 1
 
-console.log({userId})
+// console.log({userId})
   try {
     const Posts = await User.findByPk(userId, {
       include: [{
@@ -202,7 +203,7 @@ console.log({userId})
       limit,
       offset: (page - 1) * limit
     });
-    console.log(Posts?.SavedPosts)
+    // console.log(Posts?.SavedPosts)
     if (!Posts?.SavedPosts || Posts?.SavedPosts.length === 0) {
       return res.status(404).json({ message: 'No archived posts found' });
     }
@@ -217,7 +218,7 @@ console.log({userId})
 // Delete a post by its ID and associated images
 export const DeletePost = async (req, res,next) => {
     const postId = req.params.postId;
-console.log({postId})
+// console.log({postId})
     try {
         const post = await Post.findOne({
             where: { id: postId },
@@ -254,7 +255,7 @@ console.log({postId})
         // Delete images if present
         if (imageUrls.length > 0) {
             const imagesDeleted = await deletePostImage(imageUrls);
-            console.log(imagesDeleted)
+            // console.log(imagesDeleted)
             if (!imagesDeleted) {
                 return res.status(500).json({ message: 'Error deleting images' });
             }

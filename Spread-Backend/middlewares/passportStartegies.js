@@ -56,7 +56,7 @@ export const passportStrategies = (passport) => {
         callbackURL: process.env.GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
-                  console.log(profile)
+                  // console.log(profile)
   
         try {
                 if (!profile) {

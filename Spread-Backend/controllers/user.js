@@ -13,7 +13,6 @@ const dataFecter = new DataFetching()
     
 export const getLoginUser = async (req, res,nex) => {
   const userInfo = req.cookies._userDetail
-  console.log("this",userInfo)
    res.status(200).json(userInfo);
 }
 // Get user profile
@@ -29,7 +28,7 @@ export const getUserProfile = async (req, res,next) => {
     // console.log('cach miss')
 
     const userInfo = await dataFecter.Profile(id)
-    console.log("dsds",userInfo)
+    // console.log("dsds",userInfo)
     
     if (userInfo) {
       // await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
@@ -50,7 +49,7 @@ export const getUserPostsById = async (req, res,next) => {
   const userId = req.params.userId;
   const limit = parseInt(req.query.limit?.trim()) || 3; // Default limit to 3
   const page = parseInt(req.query.page?.trim()) || 1; // Default page to 1
-console.log("getUserPostsById...")
+// console.log("getUserPostsById...")
   try {
     const posts = await Post.findAll({
       where: { authorId: userId },

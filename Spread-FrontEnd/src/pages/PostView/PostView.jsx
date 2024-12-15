@@ -70,9 +70,10 @@ function FullBlogView() {
               loading="lazy"
             />
             <div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 {" "}
                 <Link
+                  className=""
                   to={`/profile/@${postView?.User?.username
                     ?.split(" ")
                     .slice(0, -1)
@@ -93,18 +94,18 @@ function FullBlogView() {
           </div>
         </header>
 
-        <div className="flex justify-between sm:text-xl items-center border-inherit border-y px-3 py-3 w-full">
-          <div className="flex gap-4">
-            <Like className={""} post={postView} />
+        <div className="flex justify-between sm:text-xl font-thin items-center border-inherit border-y px-3 py-3 w-full">
+          <div className="flex gap-4 text-[#383838] ">
+            <Like className={"min-w-10"} post={postView} />
             <button
               onClick={() => setOpenComments(true)}
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 min-w-10"
             >
               <i className="bi bi-chat"></i>
               <span>100</span>
             </button>
           </div>
-          <div className="flex gap-7 justify-between">
+          <div className="flex gap-7 text-[#383838]  justify-between">
             <Bookmark post={postView} />
           </div>
         </div>
@@ -120,7 +121,6 @@ function FullBlogView() {
             <figcaption></figcaption>
           </figure>
         )}
-        {/* {console.log({ postDatabyId })} */}
         {postView?.postContent?.map((item) => (
           <section key={item.id} className="mb-6 w-full border-inherit ">
             {item.type === "image" && item.content && (

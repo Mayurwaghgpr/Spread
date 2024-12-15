@@ -166,15 +166,13 @@ export const usePostCreator = () => {
   );
   const handleKeyDown = useCallback(
     (event, id, index, tag) => {
-      console.log(event.target.innerText);
-
       const isEmpty =
         tag === "p"
           ? event.target.innerText.startsWith("\n") ||
             event.target.innerText.startsWith("<br/>") ||
             !event.target.innerText
           : !event.target.value;
-      console.log(isEmpty); // it checks if previos input have no content
+      // it checks if previos input have no content
       if (event.type === "click") {
         const newLength = removeElement(id);
         if (newLength < elements.length) {

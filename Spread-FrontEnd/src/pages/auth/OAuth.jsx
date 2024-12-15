@@ -3,7 +3,6 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function OAuth({ service, icon, className, ...props }) {
   // Ensure the service is correctly used
-  console.log(BASE_URL);
   if (!service) {
     console.error("OAuth service is undefined");
     return null;

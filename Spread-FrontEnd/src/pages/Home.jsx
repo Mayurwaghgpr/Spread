@@ -1,26 +1,25 @@
 import React, { useCallback, lazy } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import { useInfiniteQuery, useQuery } from "react-query";
 
 const PostPreview = lazy(() => import("../component/postsComp/PostPreview"));
 const SomthingWentWrong = lazy(() => import("./ErrorPages/somthingWentWrong"));
 const Spinner = lazy(() => import("../component/loaders/Spinner"));
-import useLastPostObserver from "../hooks/useLastPostObserver";
+import { useLastPostObserver } from "../hooks/useLastPostObserver";
+
 import usePublicApis from "../Apis/publicApis";
 import Aside from "../component/homeComp/Aside";
 import PostsApis from "../Apis/PostsApis";
-import SideBar from "../component/homeComp/SideBar";
-import LoaderScreen from "../component/loaders/loaderScreen";
+import LikesList from "../component/buttons/LikesList";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isLogin, user } = useSelector((state) => state.auth);
-  const { MenuOpen } = useSelector((state) => state.ui);
   const { userPrepsData } = usePublicApis();
   const { fetchDataAll } = PostsApis();
 
   const selectedTopic = searchParams.get("topic");
+
+  // Fetch user preferences
   const {
     isLoading: isLoadingPreps,
     isFetching: fetchingPreps,
@@ -30,28 +29,22 @@ function Home() {
     staleTime: 1000 * 60 * 10,
   });
 
+  // Fetch posts with infinite scrolling
   const {
     data: postsData,
     error: errorPosts,
-    isError: isPostError,
     isFetching,
     isFetchingNextPage,
-    isLoading: isLoadingPosts,
     fetchNextPage,
     hasNextPage,
-    refetch,
   } = useInfiniteQuery(
     ["Allposts", selectedTopic],
     ({ pageParam = 1 }) => fetchDataAll({ pageParam, topic: selectedTopic }),
-
     {
-      getNextPageParam: (lastPage, allPages) => {
-        console.log(lastPage.length, allPages);
-        lastPage?.length ? allPages.length + 1 : undefined;
-      },
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage?.length > 1 ? allPages.length + 1 : undefined,
     }
   );
-  console.log({ hasNextPage, isFetchingNextPage });
 
   const { lastpostRef } = useLastPostObserver(
     fetchNextPage,
@@ -60,10 +53,13 @@ function Home() {
     hasNextPage
   );
 
-  const handleTopicClick = useCallback((topic) => {
-    setSearchParams({ topic });
-  }, []);
+  // Handle topic change
+  const handleTopicClick = useCallback(
+    (topic) => setSearchParams({ topic }),
+    [setSearchParams]
+  );
 
+  // Handle errors
   if (errorPreps || (errorPosts && errorPosts?.status !== 404)) {
     return (
       <SomthingWentWrong
@@ -76,56 +72,57 @@ function Home() {
       />
     );
   }
-  console.log(postsData);
+
   const posts = postsData?.pages.flatMap((page) => page) || [];
 
   return (
     <main className=" flex flex-col sm:flex-row justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
-      <div
-        className={`relative flex  flex-col  ${!postsData && "h-screen"} border-inherit items-end border border-y-0  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full`}
-      >
-        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] ease-in-out z-[5] border rounded items-center justify-start gap-3 sticky top-16 ">
-          <ul className="flex h-full items-center *:transition-all *:duration-300 justify-between overflow-hidden bg-inherit w-full border-inherit">
-            <li className="capitalize bg-inherit flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
+      {/* Posts Section */}
+      <div className=" relative flex py-16 flex-col h-full items-end border-inherit  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full">
+        {/* Topics Section */}
+        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border rounded items-center justify-start gap-3 sticky top-16">
+          <ul className="flex h-full items-center justify-between w-full">
+            <li className="capitalize flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
               <button
                 className="t-btn"
                 onClick={() => handleTopicClick("All")}
-                aria-label="Select all topics"
+                aria-label="View all feeds"
               >
                 Feeds
               </button>
             </li>
-            <li className="capitalize  bg-inherit flex justify-center p-2 w-full hover:bg-gray-400  hover:bg-opacity-30">
-              <Link to="#" aria-label="Specialization">
-                specific
+            <li className="capitalize flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
+              <Link to="#" aria-label="View specific topics">
+                Specific
               </Link>
             </li>
           </ul>
         </div>
-        <div className="mt-16">
-          {posts?.map(
-            (post, idx, arr) => (
-              console.log(arr?.length === idx + 1),
-              (
-                <PostPreview
-                  className="border-inherit px-2"
-                  ref={arr?.length === idx + 1 ? lastpostRef : null}
-                  key={post?.id}
-                  post={post}
-                />
-              )
-            )
-          )}
-          {isFetchingNextPage && (
-            <div className="w-full flex justify-center items-center h-full p-5">
-              <Spinner />
-            </div>
-          )}
-        </div>
+
+        {/* Posts List */}
+        {posts.map((post, idx, arr) => (
+          <PostPreview
+            className="border-inherit px-2"
+            ref={arr.length % 3 === 0 ? lastpostRef : null}
+            key={post?.id}
+            post={post}
+          />
+        ))}
+
+        {/* Loading Spinner */}
+        {isFetchingNextPage && (
+          <div className="w-full flex justify-center items-center h-full p-5">
+            <Spinner />
+          </div>
+        )}
+
+        {/* No Posts */}
         {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
       </div>
+
+      {/* Aside Section */}
       <Aside
-        className="lg:flex hidden text-xs  border-inherit flex-col w-[20rem] lg:w-[23] xl:w-[26rem] mt-20  px-10  justify-start gap-5  "
+        className="lg:flex hidden text-xs border-inherit flex-col w-[20rem] lg:w-[23] xl:w-[26rem] mt-20 px-10 justify-start gap-5"
         FechingPreps={fetchingPreps}
         isLoadingPreps={isLoadingPreps}
         PrepsData={prepsData}

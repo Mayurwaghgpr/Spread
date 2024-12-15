@@ -40,7 +40,9 @@ function Bookmark({ className, post }) {
     (savedPost) => savedPost?.id === post?.id
   );
   return (
-    <div className={`${className} `}>
+    <div
+      className={`${isBookmarked && "dark:text-white text-inherit "} ${className} `}
+    >
       {" "}
       <i
         id="bookmark"
@@ -52,7 +54,7 @@ function Bookmark({ className, post }) {
             navigate("/auth/signin");
           }
         }}
-        className={` bi cursor-pointer transition-all duration-700 ${
+        className={` bi cursor-pointer transition-all duration-300 ${
           isBookmarked || bookmarkIcon === `bookmark-${post?.id}`
             ? "bi-bookmark-fill"
             : "bi-bookmark"

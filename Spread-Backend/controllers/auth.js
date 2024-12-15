@@ -126,7 +126,6 @@ export const SignIn = async (req, res,next) => {
 
 // Refresh access token using refresh token
 export const RefreshToken = async (req, res,next) => {
-       console.log("Request Cookies:", req.cookies);
     // Extract token from cookies or Authorization header
     const clientRefreshToken = req.cookies.RefreshToken || req.header("Authorization")?.replace("Bearer ", "");
 
@@ -138,8 +137,8 @@ export const RefreshToken = async (req, res,next) => {
         // Verify refresh token
         const decodedToken = jwt.verify(clientRefreshToken,  process.env.REFRESH_TOKEN_SECRET);
         const { dataValues: user } = await User.findByPk(decodedToken.id);
-        console.log(user)
-        console.log(decodedToken)
+        // console.log(user)
+        // console.log(decodedToken)
         if (!user) {
             return res.status(401).json({ message: 'Invalid refresh token' });
         }
@@ -194,7 +193,7 @@ export const forgotPass = async (req,res,next) => {
 try {
     
         const user = await User.findOne({ where: { email: email } });
-    console.log(user)
+    // console.log(user)
         if (!user) {
             res.status(404).json({ message: 'user not Found' });
             return;
@@ -225,7 +224,7 @@ try {
 export const resetPassword = async (req,res,next) => {
     const token = req.params.token;
     const newpassword = req.body.password
-console.log(token)
+// console.log(token)
   try {
       let decodeToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         if (decodeToken.exp * 1000 < Date.now()) {

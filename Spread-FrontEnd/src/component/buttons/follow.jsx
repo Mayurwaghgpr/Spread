@@ -23,9 +23,14 @@ function Follow({ className, People }) {
   );
 
   return (
-    <div className={className}>
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+      className={className}
+    >
       {followLoading ? (
-        <div className="w-full relative h-full flex justify-center  rounded-3xl bg-inherit items-center">
+        <div className="w-full z-50 relative h-full flex justify-center  rounded-3xl bg-inherit items-center">
           <div className="dotloader"></div>
         </div>
       ) : People?.id !== user?.id ? (

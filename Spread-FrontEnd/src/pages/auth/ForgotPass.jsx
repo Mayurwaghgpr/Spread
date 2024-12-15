@@ -27,7 +27,7 @@ function ForgotPass() {
     e.preventDefault();
     const formdata = new FormData(e.target);
     const obj = Object.fromEntries(formdata);
-    console.log(obj);
+    // console.log(obj);
     mutate(obj);
   };
   return (

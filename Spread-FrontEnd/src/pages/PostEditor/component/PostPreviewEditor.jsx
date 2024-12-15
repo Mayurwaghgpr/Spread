@@ -70,13 +70,10 @@ function PostPreviewEditor() {
       // const textElements = elements.filter((el) => el.type == "image");
       formData.append("blog", JSON.stringify(elements));
       formData.append("Topic", Topic);
-      console.log({ imageFiles });
       imageFiles.forEach((el, idx) => {
-        console.log(el);
         formData.append(`image-${el.index}`, el.file);
         formData.append(`description-${el.index}`, el.data);
       });
-      // console.log(elements);
       if (e === "fetch") {
         mutation.mutate(formData);
       }

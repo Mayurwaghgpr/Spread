@@ -37,7 +37,6 @@ app.use(express.json());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-console.log('this is it')
 app.use('/images', express.static(path.join(__dirname,'Spread-Backend', 'images')));
 // app.use();
 

@@ -17,7 +17,6 @@ function SearchBar({ className, isSearchBar, scrollDirection }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { fetchSearchData } = usePublicApis();
   const location = useLocation();
-  console.log(location);
   const { data, isFetching } = useQuery({
     queryKey: ["searchQuery", search],
     queryFn: () => search && fetchSearchData(search),
@@ -25,7 +24,6 @@ function SearchBar({ className, isSearchBar, scrollDirection }) {
     enabled: !!search,
   });
   const searchDebounce = debounce((value) => {
-    console.log(value);
     setSearch(value);
   }, 500);
 
@@ -36,7 +34,7 @@ function SearchBar({ className, isSearchBar, scrollDirection }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex flex-col justify-start h-1/2 items-center gap-3 w-1/3  p-6"
+        className="relative flex flex-col justify-start h-1/2 items-center gap-3 sm:w-1/3  p-6"
       >
         <div
           className={` bg-white  flex justify-center pr-3 text-black w-full  items-center gap-3 bg-inherit  rounded-full border overflow-hidden  `}

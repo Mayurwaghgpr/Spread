@@ -85,7 +85,7 @@ function usePublicApis() {
       );
       return result.data;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       throw error.respons;
     }
   };
@@ -103,12 +103,10 @@ function usePublicApis() {
     }
   };
   const removePostFromArchive = async (id) => {
-    console.log(id);
     try {
       const result = await axios.delete(`${BASE_URL}/public/archive?id=${id}`, {
         withCredentials: true,
       });
-      console.log({ result });
       return result.data;
     } catch (error) {
       throw error;

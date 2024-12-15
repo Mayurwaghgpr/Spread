@@ -14,7 +14,7 @@ function useProfileApi() {
     }
   };
   const fetchUserData = async (profileId, pageParam) => {
-    console.log(profileId, pageParam);
+    // console.log(profileId, pageParam);
     try {
       const response = await axios.get(`${BASE_URL}/user/posts/${profileId}`, {
         withCredentials: true,
@@ -29,7 +29,7 @@ function useProfileApi() {
         // localStorage.removeItem("userAccount");
         localStorage.removeItem("AccessToken");
       }
-      console.log(error.response);
+      // console.log(error.response);
       if (error.response && error.response.status === 404) {
         throw new Error(error.response.status);
       }

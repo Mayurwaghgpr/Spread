@@ -56,7 +56,6 @@ function ProfileEditor() {
 
   // Handle input changes
   const handleChange = debounce((event) => {
-    console.log(event.target.name);
     const { name, value, files } = event.target;
     if (name === "image" && files.length > 0) {
       const file = files[0];

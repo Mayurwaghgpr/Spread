@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const deletePostImage = async (imageUrls) => {
-    console.log("unlike")
+    // console.log("unlike")
     try {
         // Use map to create an array of Promises returned by unlink
      imageUrls.forEach(async(url) => {

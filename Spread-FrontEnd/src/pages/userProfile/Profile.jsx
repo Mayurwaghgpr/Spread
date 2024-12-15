@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import PostPreview from "../../component/postsComp/PostPreview";
 import { setuserProfile } from "../../redux/slices/profileSlice";
-import ScrollToTopButton from "../../component/UtilityComp/ScrollToTopButton";
 import ProfileHeader from "./component/ProfileHeader";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
-import useLastPostObserver from "../../hooks/useLastPostObserver";
+import { useLastPostObserver } from "../../hooks/useLastPostObserver";
 import useProfileApi from "../../Apis/ProfileApis";
 
 function Profile() {
@@ -34,7 +33,7 @@ function Profile() {
       mutate(profileId);
     }
     dispatch(setuserProfile(user));
-  }, [profileId]);
+  }, []);
 
   const {
     data: postsData,
@@ -48,17 +47,15 @@ function Profile() {
     ["Userposts", profileId],
     ({ pageParam = 1 }) => fetchUserData(profileId, pageParam),
     {
-      getNextPageParam: (lastPage, allPages) => {
-        if (!lastPage.data?.length) return undefined;
-        return pages.length + 1; // Return the next page number
-      },
-      retry: false,
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage?.length > 1 ? allPages.length + 1 : undefined,
     }
   );
 
   const { lastpostRef } = useLastPostObserver(
     fetchNextPage,
     isFetchingNextPage,
+    isFetching,
     hasNextPage
   );
 
@@ -67,7 +64,7 @@ function Profile() {
       return postsData.pages.map((page) =>
         page?.map((post, idx, arr) => (
           <PostPreview
-            ref={arr.length === idx + 1 ? lastpostRef : null}
+            ref={arr.length % 3 === 0 ? lastpostRef : null}
             key={post.id}
             post={post}
           />
@@ -77,7 +74,7 @@ function Profile() {
 
     if (profileId === user?.id) {
       return (
-        <div className="max-w-[600px] min-w-[200px] w-full flex flex-col justify-center items-center text-2xl border-dashed border-2 rounded-lg max-h-[300px] h-full min-h-[200px] border-inherit">
+        <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center text-2xl border-dashed border-2 rounded-lg max-h-[300px] h-full min-h-[200px] border-inherit">
           No posts yet{" "}
           {isLogin && (
             <Link to="/write" className="text-gray-500 font-thin ">
@@ -98,9 +95,8 @@ function Profile() {
   if (isError || (isPostError && postError?.message !== "404")) {
     return <h1>Error {postError?.message}. Please try again.</h1>;
   }
-  console.log(userProfile);
   return (
-    <div className="flex justify-center h-screen  dark:*:border-[#383838]">
+    <div className="flex justify-center dark:*:border-[#383838]">
       <div className=" md:w-[80%] mt-14  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />

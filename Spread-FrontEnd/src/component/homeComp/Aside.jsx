@@ -2,6 +2,7 @@ import React from "react";
 import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
 import PeoplesList from "../PeoplesList";
 import FollowPeopleLoader from "../loaders/FollowPeopleLoader";
+import { Link } from "react-router-dom";
 
 function Aside({
   FechingPreps,
@@ -36,8 +37,8 @@ function Aside({
           </ul>
         </div>
       </div>
-      <div className="sticky flex flex-col justify-start min-h-[23rem] top-16 border rounded-xl p-5 border-inherit">
-        <div className="h-full text-sm">
+      <div className="sticky top-20 gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
+        <div className="h-full text-sm  p-5 border rounded-xl border-inherit">
           <h1 className="font-normal text-start w-full sm:text-sm ">
             Follow People
           </h1>
@@ -62,6 +63,24 @@ function Aside({
             See More
           </button>
         </div>
+        <footer className=" text-[#383838]">
+          <Link className="mx-1" to="">
+            Terms of Service
+          </Link>
+          <Link className="mx-1" to="">
+            {" "}
+            Privacy Policy
+          </Link>{" "}
+          <Link className="mx-1" to="">
+            {" "}
+            Cookie Policy
+          </Link>{" "}
+          <Link className="mx-1" to={""}>
+            {" "}
+            Accessibility
+          </Link>{" "}
+          Ads info More... © 2024 Spread
+        </footer>
       </div>
     </aside>
   );

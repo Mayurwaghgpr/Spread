@@ -12,7 +12,7 @@ function PeoplesList({ people, index, className }) {
   const { userImageurl, IsuserFromOAth } = userImageSrc(people);
 
   const { styles, attributes } = usePopper(buttonRef.current, boxRef.current, {
-    placement: "left-start",
+    placement: "bottom-end",
     modifiers: [
       {
         name: "preventOverflow",

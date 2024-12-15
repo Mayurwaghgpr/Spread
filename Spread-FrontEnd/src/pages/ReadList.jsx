@@ -24,13 +24,10 @@ const ReadList = () => {
     ({ pageParam = 1 }) => getArchivedPosts({ pageParam }),
     {
       getNextPageParam: (lastPage, allPages) =>
-        lastPage?.length ? allPages.length + 1 : undefined,
+        lastPage?.length > 1 ? allPages.length + 1 : undefined,
       retry: false,
     }
   );
-  // console.log("saved", data);
-  const pages = data?.pages.flatMap((page) => page !== undefined && page) || [];
-  const hasPosts = pages?.length > 0;
   // console.log({ pages });
   const { lastpostRef } = useLastPostObserver(
     fetchNextPage,
@@ -38,12 +35,15 @@ const ReadList = () => {
     isFetching,
     hasNextPage
   );
+  // console.log("saved", data);
+  const pages = data?.pages.flatMap((page) => page) || [];
+  const hasPosts = pages?.length > 0;
 
   return (
     <main className="relative w-full flex justify-center h-screen  items-center flex-col bg-inherit dark:*:border-[#383838] dark:bg-black">
       <div className="h-full flex justify-start flex-col mt-[10rem] items-center  sm:w-fit w-full bg-inherit">
-        <div className="fixed top-16 z-10 p-5 flex  w-full justify-center items-center gap-4 border border-inherit rounded-b-lg bg-inherit">
-          <div className=" text-3xl  h-full bg-inherit">
+        <div className="fixed top-16 z-5 p-5 flex  w-full justify-center items-center gap-4 border border-inherit rounded-b-lg bg-inherit">
+          <div className=" text-3xl bg-[#f3efeb]  h-full bg-inherit">
             <h1>Read list </h1>
           </div>
         </div>

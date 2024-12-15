@@ -19,7 +19,7 @@ function Like({ post, className }) {
     mutationFn: (postId) => LikePost(postId),
     onSuccess: (data) => {
       post.Likes = data.updtLikes;
-      dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
+      // dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
     },
     onError: (error) => {
       dispatch(
@@ -35,11 +35,11 @@ function Like({ post, className }) {
 
   return (
     <div
-      // onMouseOver={() => setShowList(post?.id)}
-      // onMouseOut={() => setShowList("")}
+      onMouseOver={() => setShowList(post?.id)}
+      onMouseOut={() => setShowList("")}
       className={`relative flex ${isLiked && "dark:text-white text-inherit "} cursor-pointer items-end  ${className}`}
     >
-      {/* {showList === post?.id && <LikesList setShowList={setShowList} />} */}
+      {showList === post?.id && <LikesList setShowList={setShowList} />}
       <button
         onClick={() => {
           if (isLogin) {

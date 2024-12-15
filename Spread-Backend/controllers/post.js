@@ -174,47 +174,46 @@ export const EditPost = async (req, res,next) => {
         next(error)
     }
 };
-// Get archived posts for the current user
 export const getArchivedPosts = async (req, res, next) => {
-//   console.log("getArchivedPosts....")
   const userId = req.authUser.id;
- const limit = req.query.limit?.trim() || 3; // Default limit to 3, min 1
-  const page = req.query.page?.trim() || 1; // Default page to 1, min 1
+  const limit = parseInt(req.query.limit?.trim()) || 3; // Default limit to 3, min 1
+  const page = parseInt(req.query.page?.trim()) || 1; // Default page to 1, min 1
 
-// console.log({userId})
   try {
     const Posts = await User.findByPk(userId, {
       include: [{
         model: Post,
-        as:  'SavedPosts',
-        through: { attributes: [] },
+        as: 'SavedPosts',
+        through: { attributes: [] }, // Exclude the intermediate table attributes
+
         include: [
           {
-                    model: User,
-                    attributes: ['id', 'username', 'userImage']
-                }, {
-                    model: Likes,  // Include likes
-                    as:'Likes',
-                    required: false
-                }
+            model: User,
+            attributes: ['id', 'username', 'userImage'] // Include the post owner details
+          },
+          {
+            model: Likes, // Include likes
+            as: 'Likes',
+            required: false
+          }
         ],
- 
       }],
       limit,
       offset: (page - 1) * limit
     });
-    // console.log(Posts?.SavedPosts)
-    if (!Posts?.SavedPosts || Posts?.SavedPosts.length === 0) {
+
+    if (!Posts?.SavedPosts ) {
       return res.status(404).json({ message: 'No archived posts found' });
     }
-  const postData = formatPostData(Posts?.SavedPosts);
+      console.log(Posts)
+    const postData = formatPostData(Posts.SavedPosts);
     res.status(200).json(postData);
   } catch (error) {
     console.error('Error fetching archived posts:', error);
-    // res.status(500).json({ message: 'An error occurred while fetching archived posts' });
-    next(error)
+    next(error);
   }
 };
+
 // Delete a post by its ID and associated images
 export const DeletePost = async (req, res,next) => {
     const postId = req.params.postId;

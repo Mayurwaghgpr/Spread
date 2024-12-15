@@ -28,7 +28,7 @@ export const userPrepsData = async (req, res,next) => {
             attributes: ['id', 'username', 'userImage', 'bio'],
             order: [[sequelize.fn('RANDOM')]], // Random order
             
-            limit: 3
+            limit: 4
         });
 
         // Fetch distinct topics

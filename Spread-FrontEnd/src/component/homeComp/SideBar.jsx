@@ -107,9 +107,9 @@ function SideBar() {
         onClick={(e) => e.stopPropagation()}
         className="p-10 w-fit dark:bg-black animate-slide-in-left xl:animate-none   bg-[#f3efeb] h-full"
       >
-        <div className="flex flex-col min-h-[90%] text-gray-700 dark:text-white *:transition-all *:duration-300 sm:w-full justify-between  items-center ">
+        <div className="flex flex-col min-h-[90%] text-black text-lg dark:text-white *:transition-all *:duration-300 sm:w-full justify-between  items-center ">
           {/* Profile Link */}
-          <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-2">
             {LoginMenuLinks.map((link) => {
               return (
                 <NavLink
@@ -118,7 +118,7 @@ function SideBar() {
                     location.pathname.startsWith(link.stub)
                   }
                   className={({ isActive }) =>
-                    `flex ${isActive && "text-slate-500  dark:text-gray-600"} px-3  justify-start items-center   hover:text-slate-500 dark:hover:text-gray-600  dark:hover:bg-opacity-30 rounded-md  gap-5 w-full`
+                    `flex ${isActive && "font-extrabold text-xl "} px-3  justify-start items-center   hover:bg-gray-400  hover:bg-opacity-15 rounded-full  p-3 gap-5 w-full`
                   }
                   to={link.stub}
                 >

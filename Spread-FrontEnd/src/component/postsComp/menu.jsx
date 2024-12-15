@@ -70,13 +70,13 @@ function Menu({ post }) {
       icon: <i className="bi bi-share"></i>,
       itemMethod: () => {},
     },
-    {
+    post?.user?.id == user?.id && {
       id: uuidv4(),
       itemName: "Delete Post",
       icon: <i className="bi bi-trash2"></i>,
       itemMethod: () => confirmDeletePost(post?.id),
     },
-    {
+    post?.user?.id == user?.id && {
       id: uuidv4(),
       itemName: "Edite Post",
       icon: <i className="bi bi-vignette"></i>,
@@ -98,12 +98,12 @@ function Menu({ post }) {
       {menuId === post?.id && (
         <ul
           ref={menuRef}
-          className="absolute border-inherit  sm:top-5 mt-2 p-2 gap-2 hidden sm:flex flex-col w-36 z-10  bg-white dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t before:border-inherit rounded-lg"
+          className="absolute border-inherit  sm:top-5 mt-2 py-1 gap-2 px-1 hidden sm:flex flex-col w-36 z-10  bg-[#e8e4df] shadow-lg dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t before:border-inherit rounded-lg"
         >
           {menuItem.map((item, idx) => (
             <li
               key={item.id}
-              className="w-full flex gap-2 items-center cursor-pointer"
+              className="w-full flex gap-2 items-center px-1 hover:bg-gray-400 hover:bg-opacity-15 rounded-md cursor-pointer"
               onClick={item.itemMethod}
             >
               {item.icon}

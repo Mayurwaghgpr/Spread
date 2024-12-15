@@ -48,7 +48,7 @@ function Like({ post, className }) {
             navigate("/auth/signin");
           }
         }}
-        className=" flex items-end justify-center gap-1"
+        className=" flex items-end justify-center gap-2"
       >
         <i
           className={`bi ${

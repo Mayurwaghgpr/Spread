@@ -68,7 +68,7 @@ function MainNavBar() {
                 />
                 {/* Tooltip with user name */}
                 <span
-                  className=" shadow-2xl dark:shadow-slate-100 opacity-0 p-1 rounded-lg absolute -bottom-9 left-1/2 bg-black border border-inherit -translate-x-1/2 w-32 text-center
+                  className="  opacity-0 p-1 rounded-lg absolute -bottom-9 left-1/2 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit -translate-x-1/2 w-32 text-center
       group-hover:opacity-100"
                 >
                   {user.username}

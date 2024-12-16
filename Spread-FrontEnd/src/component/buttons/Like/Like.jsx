@@ -23,9 +23,10 @@ function Like({ post, className }) {
   const { mutate } = useMutation({
     mutationFn: (likeConfig) => LikePost(likeConfig),
     onSuccess: (data) => {
-      post.Likes = [...data.updtLikes];
+      post.Likes = data.updtLikes;
     },
     onError: (error) => {
+      setOptimistIcon("");
       dispatch(
         setToast({
           message: ` ${error.response.data.message} ✨`,
@@ -68,11 +69,13 @@ function Like({ post, className }) {
       <button
         name=""
         onClick={isLiked ? handleLike : null}
-        className="flex items-center justify-center gap-2 text-2xl"
+        className="flex *:font-thin items-center justify-center gap-2 text-xl "
       >
         {/* Icon rendering */}
         {likeIconObj[optimistIcon || (isLiked?.type ?? "default")]}
-        <span className="text-sm">{abbreviateNumber(post.Likes.length)}</span>
+        <span className="text-md mt-1">
+          {abbreviateNumber(post.Likes.length)}
+        </span>
       </button>
     </div>
   );

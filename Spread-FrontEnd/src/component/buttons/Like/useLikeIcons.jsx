@@ -20,13 +20,14 @@ import {
 } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { FaHandHoldingHeart } from "react-icons/fa6";
 function useLikeIcons() {
   return {
     like: <BsHandThumbsUpFill />,
     cheer: <PiHandsClappingFill />,
     celebration: <MdCelebration />,
     appreciate: <MdAutoAwesome />,
-    insigtfull: <IoInformation />,
+    helpfull: <FaHandHoldingHeart />,
     smile: <IoHappyOutline />,
     default: <BsHandThumbsUp />,
   };

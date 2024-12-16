@@ -2,9 +2,10 @@ import React, { useCallback, lazy } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "react-query";
 
-const PostPreview = lazy(() => import("../component/postsComp/PostPreview"));
 const SomthingWentWrong = lazy(() => import("./ErrorPages/somthingWentWrong"));
-const Spinner = lazy(() => import("../component/loaders/Spinner"));
+
+import PostPreview from "../component/postsComp/PostPreview";
+import Spinner from "../component/loaders/Spinner";
 import { useLastPostObserver } from "../hooks/useLastPostObserver";
 
 import usePublicApis from "../Apis/publicApis";

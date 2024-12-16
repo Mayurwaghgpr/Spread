@@ -62,7 +62,7 @@ function PeoplesList({ people, index, className }) {
       <Follow
         People={people}
         className={
-          " h-10 transition-all min-w-[5.5rem]   duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
+          " h-10 transition-all min-w-[5.5rem] px-5 duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
         }
       />
     </li>

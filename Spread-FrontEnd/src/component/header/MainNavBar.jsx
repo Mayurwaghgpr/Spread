@@ -57,15 +57,22 @@ function MainNavBar() {
             )}
 
             {isLogin ? (
-              <div className="relative flex text-left">
+              <div className="relative flex *:transition-all *:duration-300 text-left group border-inherit">
                 <ProfileButton
                   onClick={() => dispatch(setManuOpen())}
-                  className={` box-content size-10 ${
+                  className={`box-content size-10 ${
                     location.pathname.startsWith("/profile")
-                      ? "border-2 border-black "
+                      ? "border-2 border-black"
                       : ""
                   }`}
                 />
+                {/* Tooltip with user name */}
+                <span
+                  className=" shadow-2xl dark:shadow-slate-100 opacity-0 p-1 rounded-lg absolute -bottom-9 left-1/2 bg-black border border-inherit -translate-x-1/2 w-32 text-center
+      group-hover:opacity-100"
+                >
+                  {user.username}
+                </span>
               </div>
             ) : (
               <div className="flex gap-3 border-inherit justify-end w-full items-center sm:text-sm text-xs">

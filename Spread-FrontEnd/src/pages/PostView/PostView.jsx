@@ -8,7 +8,7 @@ import { useQuery } from "react-query";
 import { v4 as uuidv4 } from "uuid";
 import Bookmark from "../../component/buttons/Bookmark";
 import usePublicApis from "../../Apis/publicApis";
-import Like from "../../component/buttons/Like";
+import Like from "../../component/buttons/Like/Like";
 import Menu from "../../component/postsComp/menu";
 import Follow from "../../component/buttons/follow";
 

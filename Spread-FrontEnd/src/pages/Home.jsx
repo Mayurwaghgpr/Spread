@@ -10,7 +10,7 @@ import { useLastPostObserver } from "../hooks/useLastPostObserver";
 import usePublicApis from "../Apis/publicApis";
 import Aside from "../component/homeComp/Aside";
 import PostsApis from "../Apis/PostsApis";
-import LikesList from "../component/buttons/LikesList";
+import LikesList from "../component/buttons/Like/LikesList";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();

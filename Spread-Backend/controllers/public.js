@@ -90,20 +90,25 @@ export const searchData = async (req, res,next) => {
 
 
 export const LikePost = async (req, res, next) => {
-    const postId = req.body.likedPostId;
+  const postId = req.body.postId;
+  const type = req.body.liketype;
   // console.log({ postId })
   // console.log({likedBy: req.authUser.id,})
+  console.log(postId,type)
   
     try {
         const exist = await Likes.findOne({ where: { likedBy: req.authUser.id, postId: postId } });
         // console.log(exist)
-        if (exist) {
-          await exist.destroy();
-          const updtLikes = await Likes.findAll({ where: { postId }})
+      if (exist && !type) {
+        await exist.destroy();
+        const updtLikes = await Likes.findAll({ where: { postId } })
 
-          res.status(201).json({ message: 'removed like',updtLikes})
-        }else{
-          const result = await Likes.create({ likedBy: req.authUser.id, postId });
+        res.status(201).json({ message: 'removed like', updtLikes })
+      } else if (exist && type) {
+        const updtLikes = await Likes.update({ type: type }, { where: { likedBy: req.authUser.id, postId: postId } })
+        res.status(201).json({ message: 'added like',updtLikes})
+       } else{
+          const result = await Likes.create({ likedBy: req.authUser.id, postId,type });
           const updtLikes = await Likes.findAll({where:{postId}})
         // console.log('like',result)
           res.status(201).json({ message: 'added like',updtLikes})

@@ -18,7 +18,7 @@ import Spinner from "../loaders/Spinner"; // A spinner to show during lazy loadi
 
 // Dynamically load components to optimize performance
 import Bookmark from "../buttons/Bookmark";
-import Like from "../buttons/Like";
+import Like from "../buttons/Like/Like";
 import Menu from "./menu";
 import FormatedTime from "../UtilityComp/FormatedTime";
 
@@ -109,7 +109,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
         </Link>
         {post && (
           <div className="flex w-full h-full justify-between text-md  border-inherit p-3 items-center ">
-            <div className="flex   justify-start text-[#383838]  items-center gap-5">
+            <div className="flex   justify-start   items-center gap-5">
               <Like className={"min-w-10"} post={post} />
               <div className="flex min-w-10 cursor-pointer">
                 <button className="">

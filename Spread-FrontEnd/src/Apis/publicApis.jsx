@@ -61,11 +61,12 @@ function usePublicApis() {
     }
   };
 
-  const LikePost = async (likedPostId) => {
+  const LikePost = async ({ postId, liketype }) => {
+    console.log(postId, liketype);
     try {
       const result = await axios.put(
         `${BASE_URL}/public/like`,
-        { likedPostId },
+        { postId, liketype },
         {
           withCredentials: true,
         }

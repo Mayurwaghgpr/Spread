@@ -1,18 +1,18 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { usePopper } from "react-popper";
 import Follow from "./buttons/follow";
 import userImageSrc from "../utils/userImageSrc";
 import UserPopover from "./UtilityComp/UserPopover";
-function PeoplesList({ people, index, className }) {
+
+function PeoplesList({ people, className }) {
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef(null);
   const boxRef = useRef(null);
-  const [isUserhover, setuserHower] = useState(false);
-  const { userImageurl, IsuserFromOAth } = userImageSrc(people);
+  const { userImageurl } = userImageSrc(people);
 
   const { styles, attributes } = usePopper(buttonRef.current, boxRef.current, {
-    placement: "bottom-end",
+    placement: "left-start", // Set the popper to the left of the reference
     modifiers: [
       {
         name: "preventOverflow",
@@ -23,14 +23,15 @@ function PeoplesList({ people, index, className }) {
       {
         name: "offset",
         options: {
-          offset: [0, 8], // Adjusts the gap between the button and the menu
+          offset: [-20, 0], // Adjust the gap (negative X offset moves it closer to the left)
         },
       },
     ],
   });
+
   return (
     <li
-      className={`flex mt-2 justify-between px-2 w-full  gap-3 font-medium capitalize items-center   ${className} relative dark:border-[#383838]`}
+      className={`group flex mt-2 justify-between px-2 w-full gap-3 font-medium capitalize items-center ${className} relative dark:border-[#383838]`}
       key={people?.id}
       id={people?.id}
     >
@@ -43,27 +44,19 @@ function PeoplesList({ people, index, className }) {
           src={userImageurl}
           alt={`${people?.username}'s profile picture`}
         />
-        <div
-          onMouseOver={() => setuserHower(true)}
-          onMouseOut={() => setuserHower(false)}
-          className=" flex ms-3 gap-2  justify-center overflow-hidden flex-col items-start border-inherit "
-        >
-          <h1 className="">{people?.username}</h1>
-          {isUserhover && (
-            <UserPopover
-              people={people}
-              ref={boxRef}
-              attributes={attributes}
-              styles={styles}
-            />
-          )}
+        <div className="flex ms-3 gap-2 justify-center flex-col items-start border-inherit">
+          <h1>{people?.username}</h1>
         </div>
       </Link>
+      <UserPopover
+        people={people}
+        ref={boxRef}
+        // attributes={attributes}
+        // styles={styles}
+      />
       <Follow
         People={people}
-        className={
-          " h-10 transition-all min-w-[5.5rem] px-5 duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
-        }
+        className="border min-h-10  p-1 py-2 border-black transition-all min-w-[5.5rem] px-5 duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
       />
     </li>
   );

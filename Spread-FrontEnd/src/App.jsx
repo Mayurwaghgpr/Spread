@@ -92,7 +92,6 @@ function App() {
     <>
       <ToastContainer />
       <PersistentUser />
-
       {<ConfirmationBox />}
       <Suspense fallback={<LoaderScreen />}>
         <MainNavBar />

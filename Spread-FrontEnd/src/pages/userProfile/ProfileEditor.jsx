@@ -116,8 +116,8 @@ function ProfileEditor() {
   ];
 
   return (
-    <div className=" relative f sm:h-screen h-1/2    dark:*:border-[#0f0f0f] overflow-y-auto">
-      <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto    my-14 px-4  border-inherit  gap-6 py-5">
+    <div className=" relative f sm:h-screen h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
+      <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">
         <h1 className="w-full text-center text-2xl p-2  bg-inherit  ">
           User Information
         </h1>
@@ -125,12 +125,12 @@ function ProfileEditor() {
           className=" flex justify-start gap-3 w-full border-inherit "
           aria-label="Upload profile picture"
         >
-          <div className="relative flex   flex-col">
+          <div className="relative group flex size-[9rem] flex-col">
             <label
-              className="absolute h-full w-full cursor-pointer flex justify-center items-center  z-10 text-xs m-auto"
+              className="absolute transition-all duration-300 top-1/3  bg-gray-500 p-[.1rem] rounded-md bg-opacity-60 left-1/4 group-hover:opacity-100 opacity-0 cursor-pointer z-10 text-xs m-auto"
               htmlFor="fileInput"
             >
-              <span className="m-auto"> add image.. </span>{" "}
+              <span className=""> add image.. </span>{" "}
             </label>
             <input
               className="w-full p-3 bg-inherit hidden  border border-inherit"
@@ -142,7 +142,7 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className="size-32 cursor-pointer object-cover object-top rounded-full p-1"
+              className="cursor-pointer object-cover object-top rounded-full p-1"
               src={ProfileImage}
               alt="Profile"
             />
@@ -175,12 +175,12 @@ function ProfileEditor() {
             />
           </div>
         </div>
-        <div className="flex flex-col w-full items-end h-full   dark:*:border-[#383838]  px-2 ">
+        <div className="flex flex-col w-full items-end h-full bg-inherit   dark:*:border-black  px-2 ">
           {Inputcontant.map((input) => (
             <>
               {" "}
               <CommonInput
-                className="w-full flex flex-col gap-3 bg-inherit "
+                className="w-full border-inherit flex flex-col gap-3 bg-inherit "
                 type={input.type}
                 Iname={input.Iname}
                 labelname={input.labelname}

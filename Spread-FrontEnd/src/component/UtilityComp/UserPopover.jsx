@@ -1,17 +1,21 @@
 import React, { forwardRef } from "react";
 import Follow from "../buttons/follow";
+import { Link } from "react-router-dom";
 
 const UserPopover = forwardRef(({ people, styles, attributes }, ref) => {
   return (
     <div
       ref={ref}
-      className=" absolute animate-fedin.2s  z-30 px-4  sm:top-2 w-[20rem] flex flex-col gap-3 border bg-[#f3efeb]  border-inherit dark:bg-black font-normal text-[1rem] p-3 overflow-hidden overflow-ellipsis rounded-md "
-      style={styles.popper}
-      {...attributes.popper}
+      className=" absolute -left-20 top-10 animate-fedin.2s z-30 px-4 w-[20rem] hidden group-hover:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden overflow-ellipsis rounded-md "
+      // style={styles.popper}
+      // {...attributes.popper}
     >
       <div className=" flex flex-row justify-between items-center font-medium ">
         {" "}
-        <div className="flex gap-4 items-center">
+        <Link
+          className="flex gap-4 items-center"
+          to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
+        >
           <img
             className=" rounded-full size-[2.5rem] object-cover object-top"
             src={people?.userImage ? `${people?.userImage}` : profileIcon}
@@ -20,11 +24,11 @@ const UserPopover = forwardRef(({ people, styles, attributes }, ref) => {
           <h1 className="text-sm hover:underline underline-offset-4">
             {people?.username}
           </h1>
-        </div>
+        </Link>
         <Follow
           People={people}
           className={
-            " h-10 transition-all text-xs max-w-[5rem] w-full  duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
+            "border p-1 py-2 border-black transition-all text-xs max-w-[5rem] w-full  duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
           }
         />
       </div>

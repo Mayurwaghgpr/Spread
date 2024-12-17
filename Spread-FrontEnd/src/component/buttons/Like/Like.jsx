@@ -17,7 +17,6 @@ function Like({ post, className }) {
 
   // States
   const [optimistIcon, setOptimistIcon] = useState(""); // Optimistic UI update
-  const [showList, setShowList] = useState(false);
 
   // Mutation for liking the post
   const { mutate } = useMutation({
@@ -49,7 +48,6 @@ function Like({ post, className }) {
       const likeType = e.currentTarget.name || "";
       setOptimistIcon(likeType);
       mutate({ postId: post.id, liketype: likeType });
-      setShowList(false);
     } else {
       navigate("/auth/signin");
     }
@@ -57,14 +55,12 @@ function Like({ post, className }) {
 
   return (
     <div
-      onMouseOver={() => setShowList(true)}
-      onMouseOut={() => setShowList(false)}
-      className={`relative flex items-end cursor-pointer ${
+      className={`relative flex items-end cursor-pointer group ${
         isLiked ? "dark:text-white text-inherit" : ""
       } ${className}`}
     >
       {/* Likes list when hovered */}
-      {showList && <LikesList mutate={handleLike} post={post} />}
+      <LikesList mutate={handleLike} post={post} />
 
       <button
         name=""

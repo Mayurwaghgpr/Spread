@@ -105,8 +105,9 @@ export const LikePost = async (req, res, next) => {
 
         res.status(201).json({ message: 'removed like', updtLikes })
       } else if (exist && type) {
-        const updtLikes = await Likes.update({ type: type }, { where: { likedBy: req.authUser.id, postId: postId } })
-        res.status(201).json({ message: 'added like',updtLikes})
+           await Likes.update({ type: type }, { where: { likedBy: req.authUser.id, postId: postId } })
+           const updtLikes = await Likes.findAll({where:{postId}})
+        res.status(201).json({ message: 'like updated',updtLikes})
        } else{
           const result = await Likes.create({ likedBy: req.authUser.id, postId,type });
           const updtLikes = await Likes.findAll({where:{postId}})

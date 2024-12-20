@@ -10,13 +10,6 @@ export default defineConfig({
   },
   build: {
     outDir: "dist", // Configure the output directory
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "other-libraries"], // Example for vendor libraries
-        },
-      },
-    },
     chunkSizeWarningLimit: 1000,
   },
   plugins: [react()],

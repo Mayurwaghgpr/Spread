@@ -23,13 +23,11 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
-const whitelistOrigins = process.env.WHITELIST_ORIGINS.split(",").map(
-  (origin) => origin.trim()
-);
+
 // Middleware
 app.use(
   cors({
-    origin: [whitelistOrigins], // Ensure this is the exact frontend URL
+    origin: [process.env.WHITELIST_ORIGINS], // Ensure this is the exact frontend URL
     methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
     credentials: true, // Allow cookies
   })
@@ -132,7 +130,7 @@ app.use((error, req, res, next) => {
 Database.sync()
   .then(() => {
     app.listen(port, () => {
-      console.log(`API is running at http://localhost:${port}`);
+      console.log(`API is running at Port: ${port}`);
     });
   })
   .catch((err) => {

@@ -12,6 +12,8 @@ import postsRouter from "./routes/posts.js";
 import userRouter from "./routes/user.js";
 import publiRouter from "./routes/public.js";
 import { multerFileUpload } from "./middlewares/multer.middleware.js";
+import { v2 as cloudinary } from "cloudinary";
+
 import Post from "./models/posts.js";
 import User from "./models/user.js";
 import Follow from "./models/Follow.js";
@@ -23,13 +25,17 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
-const whitelistOrigins = process.env.WHITELIST_ORIGINS.split(",").map(
+const whitelistOrigins = process.env.WHITELIST_ORIGINS?.split(",").map(
   (origin) => origin.trim()
 );
 // Middleware
 app.use(
   cors({
-    origin: whitelistOrigins, // Ensure this is the exact frontend URL
+    origin: [
+      "https://spread-45xk.onrender.com",
+      "http://localhost:5173",
+      "http://localhost:5174",
+    ], // Ensure this is the exact frontend URL
     methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
     credentials: true, // Allow cookies
   })
@@ -62,6 +68,12 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// Configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINERY_CLOUD_NAME,
+  api_key: process.env.CLOUDINERY_API_KEY,
+  api_secret: process.env.CLOUDINERY_SECRETE_KEY, // Click 'View API Keys' above to copy your API secret
+});
 // Initialize Passport
 app.use(passport.initialize());
 
@@ -114,11 +126,11 @@ Archive.belongsTo(Post, {
   foreignKey: "PostId",
 });
 
-app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
-app.get("*", (req, res, next) => {
-  if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes
-  res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
-});
+// app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
+// app.get("*", (req, res, next) => {
+//   if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes
+//   res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
+// });
 
 // Error Handling Middleware
 app.use((error, req, res, next) => {

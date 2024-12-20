@@ -1,16 +1,22 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  server:{
-    proxy:{
-        '/api':'http://localhost:3000/',
-    }
-
+  server: {
+    proxy: {
+      "/api": "http://localhost:3000/",
+    },
   },
   build: {
-    outDir: 'public', // Configure the output directory
+    outDir: "dist", // Configure the output directory
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "other-libraries"], // Example for vendor libraries
+        },
+      },
+    },
   },
   plugins: [react()],
-})
+});

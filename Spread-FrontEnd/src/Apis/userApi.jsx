@@ -6,8 +6,9 @@ function userApi() {
 
   const getLogInUserData = async () => {
     try {
-      const result = await axios.get(`${BASE_URL}/user/details`, {
-        withCredentials: true,
+      const result = await fetch(`${BASE_URL}/user/details`, {
+        method: "GET",
+        credentials: "include",
       });
       return result.data;
     } catch (error) {

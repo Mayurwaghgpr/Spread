@@ -24,6 +24,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
+app.use(cookieParser());
 // Middleware
 app.use(
   cors({
@@ -33,7 +34,6 @@ app.use(
   })
 );
 
-app.use(cookieParser());
 app.use(express.json());
 
 app.use(bodyParser.json());

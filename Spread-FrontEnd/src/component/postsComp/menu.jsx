@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import useClickOutside from "../../hooks/useClickOutside";
 import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
@@ -6,13 +12,14 @@ import { v4 as uuidv4 } from "uuid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import PostsApis from "../../Apis/PostsApis";
+import audio from "../../assets/audio/paper-rip-fast-252617.mp3";
 function Menu({ post }) {
   const [postIdToDelete, setPostIdToDelete] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const menuRef = useRef();
-
+  const menuRef = useRef(null);
+  const tearpaper = useMemo(() => new Audio(audio), []);
   const { isConfirm } = useSelector((state) => state.ui);
   const { user } = useSelector((state) => state.auth);
 
@@ -37,6 +44,7 @@ function Menu({ post }) {
 
   const confirmDeletePost = useCallback(
     (id) => {
+      console.log(id);
       dispatch(
         setConfirmBox({
           message: "Do you really want to delete the post?",
@@ -50,8 +58,11 @@ function Menu({ post }) {
     [dispatch]
   );
   useEffect(() => {
+    console.log("isConfirm status:", isConfirm.status);
+    console.log("postIdToDelete:", postIdToDelete);
     if (isConfirm.status && postIdToDelete) {
       deleteMutation(postIdToDelete);
+      tearpaper.play();
     }
   }, [isConfirm.status, postIdToDelete]);
 
@@ -70,13 +81,13 @@ function Menu({ post }) {
       icon: <i className="bi bi-share"></i>,
       itemMethod: () => {},
     },
-    post?.user?.id == user?.id && {
+    {
       id: uuidv4(),
       itemName: "Delete Post",
       icon: <i className="bi bi-trash2"></i>,
       itemMethod: () => confirmDeletePost(post?.id),
     },
-    post?.user?.id == user?.id && {
+    {
       id: uuidv4(),
       itemName: "Edite Post",
       icon: <i className="bi bi-vignette"></i>,
@@ -93,12 +104,12 @@ function Menu({ post }) {
         onClick={() => setMenuId((prev) => (prev === "" ? post?.id : ""))}
         type="button"
       >
-        <i className="bi bi-three-dots-vertical  "></i>
+        <i className="bi bi-three-dots-vertical"></i>
       </span>
       {menuId === post?.id && (
         <ul
           ref={menuRef}
-          className="absolute border-inherit  sm:top-5 mt-2 py-1 gap-2 px-1 hidden sm:flex flex-col w-36 z-10  bg-[#e8e4df] shadow-lg dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t before:border-inherit rounded-lg"
+          className="absolute border-inherit sm:top-5 mt-2 py-1 gap-2 px-1 hidden sm:flex flex-col w-36 z-10  bg-[#e8e4df] shadow-lg dark:bg-[#0f0f0f]  border before:content-normal before:absolute before:-top-[0.3rem] before:right-[4rem] before:h-[10px] before:w-[10px] before:rotate-45 before:bg-inherit before:border-l before:border-t before:border-inherit rounded-lg"
         >
           {menuItem.map((item, idx) => (
             <li

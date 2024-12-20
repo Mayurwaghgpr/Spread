@@ -33,10 +33,7 @@ const UserPopover = forwardRef(({ people, styles, attributes }, ref) => {
         />
       </div>
       <div className=" relative flex text-ellipsis ">
-        <p className=" ">
-          {people?.bio} Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Totam dolorum sapiente omnis distinctio eos molestiae{" "}
-        </p>
+        <p className=" ">{people?.bio}</p>
       </div>
 
       <div className=" flex w-full  gap-5 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">

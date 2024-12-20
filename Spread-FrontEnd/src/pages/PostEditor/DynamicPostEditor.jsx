@@ -36,14 +36,14 @@ function DynamicPostEditor() {
 
   return (
     <>
-      <main className="relative flex flex-col justify-between   mt-16 mb-32 ">
+      <main className="relative flex flex-col justify-between mt-16 mb-32 ">
         <PostBtn
-          className={`fixed   xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
+          className={`fixed  xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
           content={<i className="bi bi-send-fill"></i>}
           disabled={elements.length > 3 ? false : true}
         />
         <div
-          className={`flex  justify-center items-center lg:ms-24  flex-col mt-4 gap-2`}
+          className={`flex  justify-center items-center lg:ms-24  flex-col mt-4 gap-2 `}
         >
           {elements.map((element, index) => (
             <div
@@ -66,7 +66,7 @@ function DynamicPostEditor() {
                 )}
               </div> */}
 
-              <div className="flex w-full  min-h-10">
+              <div className="flex w-full  min-h-10 ">
                 <ElementsProvider
                   element={element}
                   handleTextChange={handleTextChange}
@@ -86,7 +86,7 @@ function DynamicPostEditor() {
           imageInputRef={imageInputRef}
           addElement={addElement}
           handleFileChange={handleFileChange}
-          className={`dark:bg-gray-600 fixed bg-white sm:bottom-10 bottom-20 rounded-r-lg before:  sm:right-36 shadow-xl hover:scale-x-105 gap-3  border-[#383838] p-3  bg-opacity-35 backdrop-blur-md border sm:rounded-full  pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-light *:size-[2.5rem] *:border *:rounded-full *:border-inherit  `}
+          className={`dark:bg-black fixed bg-white sm:bottom-10 bottom-20 rounded-r-lg before:  sm:right-36 shadow-xl hover:scale-x-105 gap-3  border-[#383838] p-3  bg-opacity-35 backdrop-blur-md border sm:rounded-full  pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-light *:size-[2.5rem] *:border *:rounded-full *:border-inherit  `}
         />
       </main>
       <Outlet context={[imageFiles, setImageFiles, handleTextChange]} />

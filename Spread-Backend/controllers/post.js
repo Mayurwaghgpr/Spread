@@ -8,53 +8,67 @@ import Likes from "../models/Likes.js";
 import { stringify } from "uuid";
 
 
-// Fetch all posts with optional topic filtering, pagination, and user inclusion
-export const getPostPreview = async (req, res,next) => {
-    // Extract query parameters with defaults
+export const getPostPreview = async (req, res, next) => {
     const type = req.query.type?.toLowerCase().trim() || 'all';
-    const limit = parseInt(req.query.limit?.trim()) || 3;
-    const page = parseInt(req.query.page?.trim()) || 1;
-    // console.log(type, limit, page)
-    
-    // Create a filter for topics if not 'all'
-    const topicFilter = type !== 'all' ? { topic: { [Op.or]: [
-        { [Op.like]: `${type}%` },
-        { [Op.like]: `%${type}%` },
-        { [Op.like]: `${type}` }
-    ] } } : {};
+    const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
+    const page = Math.max(parseInt(req.query.page?.trim()) || 1, 1);
+
+    const topicFilter = type !== 'all' ? {
+        topic: {
+            [Op.or]: [
+                { [Op.like]: `${type}%` },
+                { [Op.like]: `%${type}%` },
+                { [Op.like]: `${type}` }
+            ]
+        }
+    } : {};
 
     try {
-
-        const {count:totalPosts,rows:posts} = await Post.findAndCountAll({
+        const { count: totalPosts, rows: posts } = await Post.findAndCountAll({
             where: topicFilter,
             include: [
                 {
                     model: User,
                     attributes: ['id', 'username', 'userImage']
-                }, {
-                    model: Likes,  // Include likes
-                    as:'Likes',
+                },
+                {
+                    model: Likes,
+                    as: 'Likes',
                     required: false
-                }],
+                }
+            ],
             limit,
-            offset: (page - 1) * limit
-        
+            offset: (page - 1) * limit,
+            order: [['createdAt', 'DESC']] // Optional: Order posts by creation date
         });
 
-        // const postLikes = await Likes.findAll({})
         if (posts.length > 0) {
-            const postData = formatPostData(posts);// Assuming formatPostData is a function you've defined elsewhere
-            res.status(200).json(postData); // Removed unnecessary spread operator
+            const postData = formatPostData(posts); // Format the post data
+            res.status(200).json({
+                posts: postData,
+                meta: {
+                    currentPage: page,
+                    totalPages: Math.ceil(totalPosts / limit),
+                    hasNextPage: page < Math.ceil(totalPosts / limit),
+                    totalPosts
+                }
+            });
         } else {
-            res.status(404).send('No posts found');
+            res.status(200).json({
+                posts: [],
+                meta: {
+                    currentPage: page,
+                    totalPages: 0,
+                    hasNextPage: false,
+                    totalPosts: 0
+                }
+            });
         }
     } catch (error) {
-        console.error('Server error:', error);
-        // res.status(500).send('Server error');
-        next(error)
+        console.error('Error fetching posts:', error.message);
+        next(error); // Pass the error to the error handling middleware
     }
-};
-
+}
 // Fetch a post by its ID along with associated content and images
 export const getPostView = async (req, res,next) => {
     const id = req.params.id;

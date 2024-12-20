@@ -8,9 +8,9 @@ function useClickOutside(MenuRef, searchRef) {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (MenuRef?.current && !MenuRef.current.contains(event.target)) {
+      // console.log(MenuRef.current.contain(event.target));
+      if (MenuRef?.current && !MenuRef?.current?.contains(event.target)) {
         setMenuId("");
-        setIsMenuOpen(false);
       }
     }
 

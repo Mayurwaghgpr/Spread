@@ -78,7 +78,7 @@ function InputTypeSelector({
         onClick={() => dispatch(setIsScale())}
         className=" sm:hidden border-none flex justify-center items-center  absolute -right-8"
       >
-        <i className="bi bi-chevron-double-right"></i>
+        <i className="bi bi-chevron-double-right animate-bounce"></i>
       </span>
     </div>
   );

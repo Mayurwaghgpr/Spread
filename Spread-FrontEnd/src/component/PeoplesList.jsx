@@ -36,7 +36,7 @@ function PeoplesList({ people, className }) {
       id={people?.id}
     >
       <Link
-        className="flex gap-2 justify-between border-inherit"
+        className="flex gap-2 justify-start border-inherit"
         to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
       >
         <img
@@ -44,8 +44,8 @@ function PeoplesList({ people, className }) {
           src={userImageurl}
           alt={`${people?.username}'s profile picture`}
         />
-        <div className="flex ms-3 gap-2 justify-center flex-col items-start border-inherit">
-          <h1>{people?.username}</h1>
+        <div className="flex ms-3 gap-2 justify-center flex-col items-start border-inherit  text-ellipsis">
+          <h1>{people?.username} </h1>
         </div>
       </Link>
       <UserPopover
@@ -56,7 +56,7 @@ function PeoplesList({ people, className }) {
       />
       <Follow
         People={people}
-        className="border min-h-10  p-1 py-2 border-black transition-all min-w-[5.5rem] px-5 duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
+        className="border min-h-10  p-1 flex justify-center items-center border-black transition-all min-w-[5.5rem] px-5 duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
       />
     </li>
   );

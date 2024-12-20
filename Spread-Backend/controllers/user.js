@@ -46,12 +46,12 @@ export const getUserProfile = async (req, res,next) => {
 
 // Get posts by user ID
 export const getUserPostsById = async (req, res,next) => {
-  const userId = req.params.userId;
-  const limit = parseInt(req.query.limit?.trim()) || 3; // Default limit to 3
-  const page = parseInt(req.query.page?.trim()) || 1; // Default page to 1
+    const userId = req.params.userId;
+    const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
+    const page = Math.max(parseInt(req.query.page?.trim()) || 1, 1);
 // console.log("getUserPostsById...")
   try {
-    const posts = await Post.findAll({
+    const {count: totalPosts, rows: posts } = await Post.findAndCountAll({
       where: { authorId: userId },
       include: [{
                     model: User,
@@ -60,14 +60,21 @@ export const getUserPostsById = async (req, res,next) => {
                     model: Likes,  // Include likes
                     as:'Likes',
                     required: false
-                }],
+        }],
       limit,
-      offset: (page - 1) * limit
+            offset: (page - 1) * limit,
+            order: [['createdAt', 'DESC']] // Optional: Order posts by creation date
     });
 
     if (posts.length > 0) {
       const postData = formatPostData(posts); // Format post data
-      res.status(200).json(postData);
+      res.status(200).json({ posts: postData,
+                meta: {
+                    currentPage: page,
+                    totalPages: Math.ceil(totalPosts / limit),
+                    hasNextPage: page < Math.ceil(totalPosts / limit),
+                    totalPosts
+                }});
     } else {
       res.status(404).send('No posts found');
     }

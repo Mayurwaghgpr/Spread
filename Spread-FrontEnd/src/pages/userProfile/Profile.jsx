@@ -48,7 +48,7 @@ function Profile() {
     ({ pageParam = 1 }) => fetchUserData(profileId, pageParam),
     {
       getNextPageParam: (lastPage, allPages) =>
-        lastPage?.length > 1 ? allPages.length + 1 : undefined,
+        lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
     }
   );
 
@@ -62,7 +62,7 @@ function Profile() {
   const RenderPosts = () => {
     if (postsData?.pages?.length > 0) {
       return postsData.pages.map((page) =>
-        page?.map((post, idx, arr) => (
+        page.posts?.map((post, idx, arr) => (
           <PostPreview
             ref={arr.length % 3 === 0 ? lastpostRef : null}
             key={post.id}

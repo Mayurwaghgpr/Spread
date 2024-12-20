@@ -43,7 +43,7 @@ function Home() {
     ({ pageParam = 1 }) => fetchDataAll({ pageParam, topic: selectedTopic }),
     {
       getNextPageParam: (lastPage, allPages) =>
-        lastPage?.length > 1 ? allPages.length + 1 : undefined,
+        lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
     }
   );
 
@@ -74,7 +74,8 @@ function Home() {
     );
   }
 
-  const posts = postsData?.pages.flatMap((page) => page) || [];
+  const posts = postsData?.pages.flatMap((page) => page.posts) || [];
+  console.log(postsData);
 
   return (
     <main className=" flex flex-col sm:flex-row justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">

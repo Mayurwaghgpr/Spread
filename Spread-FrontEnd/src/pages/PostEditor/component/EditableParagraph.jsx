@@ -33,7 +33,7 @@ const EditableParagraph = ({
     return (
       <div className="w-full h-full">
         <input
-          className={`border-l bg-white dark:bg-inherit border-gray-300 p-2 w-full min-h-10 z-10 outline-none cursor-text ${index === 0 ? "text-4xl" : "text-2xl"}`}
+          className={`border-l bg-inherit dark:bg-inherit border-gray-300 p-2 w-full min-h-10 z-10 outline-none cursor-text ${index === 0 ? "text-4xl" : "text-2xl"}`}
           ref={(el) => (inputRefs.current[index] = el)}
           onChange={(e) => handleTextChange(element.id, e.currentTarget.value)}
           placeholder={index === 0 ? "Title" : "Subtitle"}

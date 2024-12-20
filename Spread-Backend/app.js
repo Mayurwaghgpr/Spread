@@ -113,7 +113,7 @@ Archive.belongsTo(Post, {
   as: "Post",
   foreignKey: "PostId",
 });
-app.use(express.static(path.join(__dirname, "public")));
+
 app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
 app.get("*", (req, res, next) => {
   if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes

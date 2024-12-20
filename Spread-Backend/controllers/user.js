@@ -125,11 +125,11 @@ export const EditUserProfile = async (req, res, next) => {
   const image = req.files ? req.files : [];
   const data = req.body;
   let updatedData = { ...data };
-  console.log(image);
+
   try {
     // update new image path and delete the old image file from folder
     if (image.length > 0) {
-      updatedData.userImage = image[0].path; // Update user image path
+      updatedData.userImage = "images/userImages" + image[0].filename; // Update user image path
       if (data.userFromOAuth === false && data.userImage) {
         await deletePostImage([data.userImage]); // Delete old image
       }
@@ -137,6 +137,7 @@ export const EditUserProfile = async (req, res, next) => {
     // To only remove image
     if (data.removeImage && data.userImage && data.userImage !== " ") {
       updatedData.userImage = ""; // Remove user image
+      //If user is not loged in with OAuth i.e google/github etc. so he will have image stored in backend
       if (data.userFromOAuth === false) {
         await deletePostImage([data.userImage]);
       }

@@ -23,22 +23,27 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
-
-app.use(cookieParser());
+const whitelistOrigins = process.env.WHITELIST_ORIGINS.split(",").map(
+  (origin) => origin.trim()
+);
 // Middleware
 app.use(
   cors({
-    origin: [process.env.WHITELIST_ORIGINS], // Ensure this is the exact frontend URL
+    origin: whitelistOrigins, // Ensure this is the exact frontend URL
     methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
     credentials: true, // Allow cookies
   })
 );
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/images", express.static(path.join("images")));
+app.use(
+  "/images",
+  express.static(path.join(__dirname, "Spread-Backend", "images"))
+);
 // app.use();
 
 //Login with google/gitub
@@ -109,11 +114,11 @@ Archive.belongsTo(Post, {
   foreignKey: "PostId",
 });
 
-// app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
-// app.get("*", (req, res, next) => {
-//   if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes
-//   res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
-// });
+app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
+app.get("*", (req, res, next) => {
+  if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes
+  res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
+});
 
 // Error Handling Middleware
 app.use((error, req, res, next) => {
@@ -130,7 +135,7 @@ app.use((error, req, res, next) => {
 Database.sync()
   .then(() => {
     app.listen(port, () => {
-      console.log(`API is running at Port: ${port}`);
+      console.log(`API is running at http://localhost:${port}`);
     });
   })
   .catch((err) => {

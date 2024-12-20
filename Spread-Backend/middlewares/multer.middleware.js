@@ -6,17 +6,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // const imagesBasePath = path.resolve(__dirname, "../images");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // console.log(__filename)
     if (file.fieldname === "NewImageFile") {
-      cb(null, path.join("images/userImages"));
+      cb(null, path.join(__dirname, "../images/userImage"));
     } else {
-      cb(null, path.join("images/"));
+      cb(null, path.join(__dirname, "../images"));
     }
   },
   filename: (req, file, cb) => {
@@ -24,7 +24,6 @@ const storage = multer.diskStorage({
     const fileName = `${prefix}-${Date.now()}${path.extname(
       file.originalname
     )}`;
-
     // console.log(file)
     cb(null, fileName);
   },

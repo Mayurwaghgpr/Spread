@@ -142,7 +142,7 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className="cursor-pointer object-cover object-top rounded-full p-1"
+              className="cursor-pointer w-52 h-28 object-cover object-top rounded-full p-1"
               src={ProfileImage}
               alt="Profile"
             />

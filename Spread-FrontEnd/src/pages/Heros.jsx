@@ -1,9 +1,9 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../component/footer/Footer";
 import homelight from "../assets/images/HomeLight.png";
-import homedark from "../assets/images/HomeDark.png";
-import coverImg2 from "../assets/images/coverImage2.jpg";
+const homedark = lazy(() => import("../assets/images/HomeDark.png"));
+const coverImg2 = lazy(() => import("../assets/images/coverImage2.jpg"));
 
 function Heros() {
   window.scrollTo({

@@ -21,15 +21,15 @@ import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like/Like";
 import Menu from "./menu";
 import FormatedTime from "../UtilityComp/FormatedTime";
+import userImageSrc from "../../utils/userImageSrc";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   // const dispatch = useDispatch();
   // const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.auth);
-  const renderImage = useCallback(() => {
-    return post?.user?.userImage ? post.user.userImage : profileIcon;
-  }, [post?.user?.userImage]);
+
+  const userImage = userImageSrc(post?.user);
 
   return (
     <article
@@ -48,7 +48,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             <div className={`h-[2rem] w-[2rem] hover:opacity-75 rounded-full`}>
               <img
                 className="cursor-pointer object-cover object-top h-full w-full rounded-full"
-                src={renderImage()}
+                src={userImage.userImageurl}
                 loading="lazy"
                 alt={post?.user?.username}
               />

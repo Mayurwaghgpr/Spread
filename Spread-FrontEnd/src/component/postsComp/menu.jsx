@@ -64,7 +64,7 @@ function Menu({ post }) {
       deleteMutation(postIdToDelete);
       tearpaper.play();
     }
-  }, [isConfirm.status, postIdToDelete]);
+  }, [postIdToDelete]);
 
   const menuItem = [
     {

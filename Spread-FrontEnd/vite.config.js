@@ -10,7 +10,6 @@ export default defineConfig({
   },
   build: {
     outDir: "dist", // Configure the output directory
-    chunkSizeWarningLimit: 1000,
   },
   plugins: [react()],
 });

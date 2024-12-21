@@ -31,12 +31,12 @@ function PeoplesList({ people, className }) {
 
   return (
     <li
-      className={`group flex mt-2 justify-between px-2 w-full gap-3 font-medium capitalize items-center ${className} relative dark:border-[#383838]`}
+      className={` flex mt-2 justify-between px-2 w-full h-full gap-3 font-medium capitalize items-center ${className} relative dark:border-[#383838]`}
       key={people?.id}
       id={people?.id}
     >
       <Link
-        className="flex gap-2 justify-start border-inherit"
+        className="flex gap-2 justify-start border-inherit h-full"
         to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
       >
         <img
@@ -44,19 +44,20 @@ function PeoplesList({ people, className }) {
           src={userImageurl}
           alt={`${people?.username}'s profile picture`}
         />
-        <div className="flex ms-3 gap-2 justify-center flex-col items-start border-inherit  text-ellipsis">
+        <div className="relative  group flex ms-3 justify-center flex-col items-start border-inherit *:transition-all *:duration-200  text-ellipsis">
           <h1>{people?.username} </h1>
+          <UserPopover
+            people={people}
+            ref={boxRef}
+            // attributes={attributes}
+            // styles={styles}
+          />
         </div>
       </Link>
-      <UserPopover
-        people={people}
-        ref={boxRef}
-        // attributes={attributes}
-        // styles={styles}
-      />
+
       <Follow
         People={people}
-        className="border min-h-10  p-1 flex justify-center items-center border-black transition-all min-w-[5.5rem] px-5 duration-200 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full"
+        className=" min-h-8  p-1 flex justify-center items-center  transition-all  px-5 duration-200 "
       />
     </li>
   );

@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setThemeMode } from "../../redux/slices/uiSlice";
-
+import { IoSunny } from "react-icons/io5";
+import { BsMoonStarsFill } from "react-icons/bs";
 function ThemeBtn() {
   // State to track the current theme
   const dispatch = useDispatch();
@@ -11,12 +12,12 @@ function ThemeBtn() {
       {
         name: "Dark mode",
         value: "dark",
-        icon: <i className="bi bi-moon-stars-fill"></i>,
+        icon: <BsMoonStarsFill />,
       },
       {
         name: "Light mode",
         value: "light",
-        icon: <i className="bi bi-sun-fill"></i>,
+        icon: <IoSunny />,
       },
       // {
       //   name: "System",

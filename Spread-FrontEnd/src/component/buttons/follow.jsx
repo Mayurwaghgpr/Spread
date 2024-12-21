@@ -22,26 +22,37 @@ function Follow({ className, People }) {
     (followed) => followed?.id === People?.id
   );
 
-  return (
+  return followLoading ? (
+    <div
+      className={`${className} w-[6.7rem] bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full `}
+    >
+      <div className="dotloader"></div>
+    </div>
+  ) : (
     <div
       onClick={(e) => {
         e.stopPropagation();
       }}
-      className={className}
+      className={`group ${className} ${isFollowing && "hover:border-red-400 hover:bg-transparent"} bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full`}
     >
-      {followLoading ? (
-        <div className="w-full z-50 relative h-full flex justify-center  rounded-3xl bg-inherit items-center">
-          <div className="dotloader"></div>
-        </div>
-      ) : People?.id !== user?.id ? (
+      {People?.id !== user?.id ? (
         <button
           onClick={() =>
             mutate({ followerId: user?.id, followedId: People?.id })
           }
-          className="w-full h-full bg-inherit rounded-3xl "
+          className="w-full *:transition-all *:duration-200 h-full bg-inherit rounded-3xl "
           disabled={followLoading}
         >
-          {isFollowing ? "Following" : "Follow"}
+          {isFollowing ? (
+            <>
+              <span className="block group-hover:hidden ">Following</span>
+              <span className="hidden group-hover:block text-red-600 ">
+                Unfollow
+              </span>
+            </>
+          ) : (
+            "Follow"
+          )}
         </button>
       ) : (
         <span className="flex justify-center items-center w-full h-full bg-inherit rounded-full">

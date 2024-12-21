@@ -125,12 +125,15 @@ function ProfileEditor() {
           className=" flex justify-start gap-3 w-full border-inherit "
           aria-label="Upload profile picture"
         >
-          <div className="relative group flex size-[9rem] flex-col">
+          <div className="relative group flex  flex-col">
             <label
-              className="absolute transition-all duration-300 top-1/3  bg-gray-500 p-[.1rem] rounded-md bg-opacity-60 left-1/4 group-hover:opacity-100 opacity-0 cursor-pointer z-10 text-xs m-auto"
+              className="absolute h-full w-full cursor-pointer "
               htmlFor="fileInput"
             >
-              <span className=""> add image.. </span>{" "}
+              <span className="absolute transition-all duration-300 top-10  bg-gray-500 p-[.2rem] rounded-md bg-opacity-60 left-5 group-hover:opacity-100 opacity-0  z-10 text-xs m-auto">
+                {" "}
+                add image..{" "}
+              </span>{" "}
             </label>
             <input
               className="w-full p-3 bg-inherit hidden  border border-inherit"
@@ -142,7 +145,7 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className="cursor-pointer w-52 h-28 object-cover object-top rounded-full p-1"
+              className="cursor-pointer w-36 h-28 object-cover object-top rounded-full "
               src={ProfileImage}
               alt="Profile"
             />

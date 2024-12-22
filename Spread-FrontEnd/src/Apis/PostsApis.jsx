@@ -41,7 +41,21 @@ function PostsApis() {
       throw error;
     }
   };
-
+  const getComments = async ({ postId, pageParam }) => {
+    console.log("fetch", postId);
+    try {
+      const result = await axios.get(`${BASE_URL}/comment/top`, {
+        params: {
+          postId,
+          limit: 5,
+          page: pageParam,
+        },
+      });
+      return result.data; // Return the actual data
+    } catch (error) {
+      throw error;
+    }
+  };
   const DeletePostApi = async (id) => {
     try {
       const response = await axios.delete(
@@ -61,7 +75,7 @@ function PostsApis() {
     }
   };
 
-  return { DeletePostApi, AddNewPost, fetchDataAll };
+  return { DeletePostApi, AddNewPost, fetchDataAll, getComments };
 }
 
 export default PostsApis;

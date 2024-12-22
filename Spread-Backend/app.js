@@ -11,6 +11,7 @@ import authRouter from "./routes/auth.js";
 import postsRouter from "./routes/posts.js";
 import userRouter from "./routes/user.js";
 import publiRouter from "./routes/public.js";
+import commentRouter from "./routes/comments.js";
 import { multerFileUpload } from "./middlewares/multer.middleware.js";
 import { v2 as cloudinary } from "cloudinary";
 
@@ -19,6 +20,7 @@ import User from "./models/user.js";
 import Follow from "./models/Follow.js";
 import Archive from "./models/Archive.js";
 import { passportStrategies } from "./middlewares/passportStartegies.js";
+import Comments from "./models/Comments.js";
 
 dotenv.config();
 
@@ -82,6 +84,7 @@ app.use("/auth", authRouter);
 app.use("/public", publiRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
+app.use("/comment", commentRouter);
 
 // Associations
 User.hasMany(Post, { foreignKey: "authorId" });
@@ -125,12 +128,43 @@ Archive.belongsTo(Post, {
   as: "Post",
   foreignKey: "PostId",
 });
+// Self-referencing association for child comments
+Comments.hasMany(Comments, {
+  foreignKey: "topCommentId",
+  as: "reply",
+});
+Comments.belongsTo(Comments, {
+  foreignKey: "topCommentId",
+  as: "topComment",
+  onDelete: "CASCADE",
+});
 
-// app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
-// app.get("*", (req, res, next) => {
-//   if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes
-//   res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
-// });
+// Associations for User and Post (if applicable)
+Comments.belongsTo(User, {
+  foreignKey: "UserId",
+  as: "commenter",
+});
+User.hasMany(Comments, {
+  foreignKey: "UserId",
+  as: "comments",
+});
+
+// A Comment belongs to a Post
+Comments.belongsTo(Post, {
+  foreignKey: "postId",
+  as: "post",
+});
+// A Post can have many Comments
+Post.hasMany(Comments, {
+  foreignKey: "postId",
+  as: "comments",
+});
+
+app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
+app.get("*", (req, res, next) => {
+  if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes
+  res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
+});
 
 // Error Handling Middleware
 app.use((error, req, res, next) => {

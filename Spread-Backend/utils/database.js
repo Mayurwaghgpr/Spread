@@ -1,10 +1,10 @@
 import Sequelize from "sequelize";
-import dotenv from 'dotenv';
-import pg from 'pg';
+import dotenv from "dotenv";
+import pg from "pg";
 
 dotenv.config();
 // console.log(process.env.DATABASE_URL)
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 const Database = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   dialectOptions: isProduction
@@ -17,4 +17,4 @@ const Database = new Sequelize(process.env.DATABASE_URL, {
     : {},
 });
 
-export default Database
+export default Database;

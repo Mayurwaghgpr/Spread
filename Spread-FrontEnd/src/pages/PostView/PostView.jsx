@@ -13,7 +13,7 @@ import Menu from "../../component/postsComp/menu";
 import Follow from "../../component/buttons/follow";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
-const Comment = lazy(() => import("../../component/postsComp/comment"));
+const CommentSection = lazy(() => import("../CommentSection"));
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
@@ -148,6 +148,12 @@ function FullBlogView() {
           </section>
         ))}
       </article>
+      {openComments && (
+        <CommentSection
+          postId={postView?.id}
+          setOpenComments={setOpenComments}
+        />
+      )}
     </main>
   );
 }

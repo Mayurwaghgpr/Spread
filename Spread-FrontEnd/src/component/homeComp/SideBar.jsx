@@ -101,11 +101,11 @@ function SideBar() {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r z-40 sm:animate-none animate-fedin.2s ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] xl:block w-full xl:w-fit left-0 top-0 xl:top-[4.1rem] h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:xl:bg-black dark:border-[#383838]`}
+      className={`fixed border-r z-40 sm:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] xl:block w-full xl:w-fit left-0 top-0 xl:top-[4.1rem] h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:xl:bg-black dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="p-10 w-fit dark:bg-black animate-slide-in-left xl:animate-none   bg-[#f3efeb] h-full"
+        className="p-10 w-fit dark:bg-black animate-slide-in-left xl:animate-none bg-[#f3efeb] h-full"
       >
         <div className="flex flex-col min-h-[90%] text-black text-lg dark:text-white *:transition-all *:duration-300 sm:w-full justify-between  items-center ">
           {/* Profile Link */}

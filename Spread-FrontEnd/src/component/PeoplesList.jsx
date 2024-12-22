@@ -57,7 +57,7 @@ function PeoplesList({ people, className }) {
 
       <Follow
         People={people}
-        className=" min-h-8  p-1 flex justify-center items-center  transition-all  px-5 duration-200 "
+        className=" text-black min-h-8  min-w-[6.7rem]  p-1 flex justify-center items-center  *:transition-all  px-5 *:duration-100 bg-white hover:bg-gray-300   rounded-full  "
       />
     </li>
   );

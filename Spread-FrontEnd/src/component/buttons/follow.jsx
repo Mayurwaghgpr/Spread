@@ -23,30 +23,25 @@ function Follow({ className, People }) {
   );
 
   return followLoading ? (
-    <div
-      className={`${className} w-[6.7rem] bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full `}
-    >
+    <div className={`${className} `}>
       <div className="dotloader"></div>
     </div>
   ) : (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-      className={`group ${className} ${isFollowing && "hover:border-red-400 hover:bg-transparent"} bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full`}
-    >
+    <>
       {People?.id !== user?.id ? (
         <button
           onClick={() =>
             mutate({ followerId: user?.id, followedId: People?.id })
           }
-          className="w-full *:transition-all *:duration-200 h-full bg-inherit rounded-3xl "
+          className={`relative group ${className} ${isFollowing && "hover:border-red-400  hover:border hover:bg-transparent"}`}
           disabled={followLoading}
         >
           {isFollowing ? (
             <>
-              <span className="block group-hover:hidden ">Following</span>
-              <span className="hidden group-hover:block text-red-600 ">
+              <span className="opacity-100 group-hover:opacity-0 ">
+                Following
+              </span>
+              <span className="absolute left-0 right-0  opacity-0  bg-transparent group-hover:opacity-100 text-red-600 ">
                 Unfollow
               </span>
             </>
@@ -59,7 +54,7 @@ function Follow({ className, People }) {
           You
         </span>
       )}
-    </div>
+    </>
   );
 }
 

@@ -13,7 +13,7 @@ import userRouter from "./routes/user.js";
 import publiRouter from "./routes/public.js";
 import commentRouter from "./routes/comments.js";
 import { multerFileUpload } from "./middlewares/multer.middleware.js";
-import { v2 as cloudinary } from "cloudinary";
+// import { v2 as cloudinary } from "cloudinary";
 
 import Post from "./models/posts.js";
 import User from "./models/user.js";
@@ -71,11 +71,11 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUDINERY_CLOUD_NAME,
-  api_key: process.env.CLOUDINERY_API_KEY,
-  api_secret: process.env.CLOUDINERY_SECRETE_KEY, // Click 'View API Keys' above to copy your API secret
-});
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINERY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINERY_API_KEY,
+//   api_secret: process.env.CLOUDINERY_SECRETE_KEY, // Click 'View API Keys' above to copy your API secret
+// });
 // Initialize Passport
 app.use(passport.initialize());
 

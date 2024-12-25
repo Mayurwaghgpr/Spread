@@ -62,6 +62,7 @@ export const getUserPostsById = async (req, res, next) => {
           as: "Likes",
           required: false,
         },
+        
       ],
       limit,
       offset: (page - 1) * limit,

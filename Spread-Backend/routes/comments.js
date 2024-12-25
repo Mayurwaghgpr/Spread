@@ -6,17 +6,18 @@ import {
   getCommentReply,
   getTopComments,
   likeComment,
-  replyComment,
+  // replyComment,
 } from "../controllers/comments.js";
+import IsAuth from "../middlewares/isAuth.js";
 
 const router = express.Router();
 
 router.get("/top", getTopComments);
-router.post("/replys", getCommentReply);
-router.post("/new/:postId", createComment);
-router.post("/reply/:topCommentId", replyComment);
-router.post("/like/:commentId", likeComment);
-router.put("/edit/:commentId", editComment);
-router.delete("/delete/:commentId", deleteComment);
+router.get("/replys", getCommentReply);
+router.post("/new",IsAuth, createComment);
+// router.post("/reply/:topCommentId", IsAuth,replyComment);
+router.get("/like/:commentId",IsAuth, likeComment);
+router.put("/edit/:commentId",IsAuth, editComment);
+router.delete("/delete/:commentId",IsAuth, deleteComment);
 
 export default router;

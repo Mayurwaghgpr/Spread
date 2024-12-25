@@ -6,6 +6,7 @@ import PostContent from "../models/PostContent.js";
 import formatPostData from "../utils/dataFormater.js";
 import Likes from "../models/Likes.js";
 import { stringify } from "uuid";
+import Comments from "../models/Comments.js";
 
 // Add a new post with associated content and images
 export const AddNewPost = async (req, res, next) => {
@@ -122,8 +123,12 @@ export const getPostPreview = async (req, res, next) => {
         {
           model: Likes,
           as: "Likes",
-          required: false,
         },
+        {
+          model: Comments,
+          as: "comments",
+          where:{topCommentId:null},
+        }
       ],
       limit,
       offset: (page - 1) * limit,
@@ -179,6 +184,11 @@ export const getPostView = async (req, res, next) => {
           as: "postContent",
           required: false,
         },
+            {
+          model: Comments,
+          as: "comments",
+
+        }
       ],
     });
 

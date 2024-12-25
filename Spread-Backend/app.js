@@ -132,11 +132,11 @@ Archive.belongsTo(Post, {
 Comments.hasMany(Comments, {
   foreignKey: "topCommentId",
   as: "reply",
+ onDelete: "CASCADE", // Delete child comments when the topComment is deleted
 });
 Comments.belongsTo(Comments, {
   foreignKey: "topCommentId",
   as: "topComment",
-  onDelete: "CASCADE",
 });
 
 // Associations for User and Post (if applicable)
@@ -153,6 +153,8 @@ User.hasMany(Comments, {
 Comments.belongsTo(Post, {
   foreignKey: "postId",
   as: "post",
+  onDelete: "CASCADE", // Delete comments when the post is deleted
+  onUpdate: "CASCADE",
 });
 // A Post can have many Comments
 Post.hasMany(Comments, {

@@ -16,11 +16,11 @@ const Comments = Database.define("Comment", {
   postId: {
     type: DataTypes.UUID,
     allowNull: false,
+
   },
   topCommentId: {
     type: DataTypes.UUID,
     allowNull: true, // Null for top-level comments
-    onDelete: "SET NULL",
   },
   replyTo: {
     type: DataTypes.UUID,
@@ -34,6 +34,7 @@ const Comments = Database.define("Comment", {
     type: DataTypes.BOOLEAN,
     allowNull: true,
   },
+        
 });
 
 export default Comments;

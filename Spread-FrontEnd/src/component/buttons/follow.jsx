@@ -50,9 +50,7 @@ function Follow({ className, People }) {
           )}
         </button>
       ) : (
-        <span className="flex justify-center items-center w-full h-full bg-inherit rounded-full">
-          You
-        </span>
+        <button className={className}>You</button>
       )}
     </>
   );

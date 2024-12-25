@@ -49,6 +49,7 @@ function Profile() {
     {
       getNextPageParam: (lastPage, allPages) =>
         lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -58,35 +59,7 @@ function Profile() {
     isFetching,
     hasNextPage
   );
-
-  const RenderPosts = () => {
-    if (postsData?.pages?.length > 0) {
-      return postsData.pages.map((page) =>
-        page.posts?.map((post, idx, arr) => (
-          <PostPreview
-            ref={arr.length % 3 === 0 ? lastpostRef : null}
-            key={post.id}
-            post={post}
-          />
-        ))
-      );
-    }
-
-    if (profileId === user?.id) {
-      return (
-        <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center text-2xl border-dashed border-2 rounded-lg max-h-[300px] h-full min-h-[200px] border-inherit">
-          No posts yet{" "}
-          {isLogin && (
-            <Link to="/write" className="text-gray-500 font-thin ">
-              Add New Post +
-            </Link>
-          )}
-        </div>
-      );
-    }
-
-    return null;
-  };
+  const posts = postsData?.pages.flatMap((page) => page.posts) || [];
 
   if (isLoading) {
     return <h1>Loading profile data...</h1>;
@@ -95,6 +68,7 @@ function Profile() {
   if (isError || (isPostError && postError?.message !== "404")) {
     return <h1>Error {postError?.message}. Please try again.</h1>;
   }
+
   return (
     <div className="flex justify-center dark:*:border-[#383838]">
       <div className=" md:w-[80%] mt-14  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
@@ -111,10 +85,31 @@ function Profile() {
               !postsData?.pages?.length && "flex justify-center items-center "
             }`}
           >
-            <RenderPosts />
+            {/* <RenderPosts /> */}
+            {posts.length > 0
+              ? posts.map((post, idx, arr) => (
+                  <PostPreview
+                    ref={arr.length % 3 === 0 ? lastpostRef : null}
+                    key={post.id}
+                    post={post}
+                  />
+                ))
+              : profileId === user?.id && (
+                  <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center text-2xl border-dashed border-2 rounded-lg max-h-[300px] h-full min-h-[200px] border-inherit">
+                    No posts yet{" "}
+                    {isLogin && (
+                      <Link to="/write" className="text-gray-500 font-thin ">
+                        Add New Post +
+                      </Link>
+                    )}
+                  </div>
+                )}
+
             {isFetchingNextPage && (
               <div className="w-full flex justify-center items-center h-24">
-                <Spinner />
+                <Spinner
+                  className={"w-10 h-10 border-t-black dark:border-t-white"}
+                />
               </div>
             )}
           </div>

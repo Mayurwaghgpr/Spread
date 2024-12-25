@@ -41,8 +41,18 @@ function PostsApis() {
       throw error;
     }
   };
+  const Comments = async (comment) => {
+    try {
+      const result = await axios.post(`${BASE_URL}/comment/new`, comment, {
+        withCredentials: true,
+      });
+      return result.data;
+    } catch (error) {
+      throw error;
+    }
+  };
   const getComments = async ({ postId, pageParam }) => {
-    console.log("fetch", postId);
+    // console.log("fetch", postId);
     try {
       const result = await axios.get(`${BASE_URL}/comment/top`, {
         params: {
@@ -50,8 +60,52 @@ function PostsApis() {
           limit: 5,
           page: pageParam,
         },
+        withCredentials: true,
       });
       return result.data; // Return the actual data
+    } catch (error) {
+      throw error;
+    }
+  };
+  const hitLike = async (comtId) => {
+    console.log(comtId);
+    try {
+      const result = await axios.get(`${BASE_URL}/comment/like/${comtId}`, {
+        withCredentials: true,
+      });
+      console.log(result);
+      return result.data; // Return the actual data
+    } catch (error) {
+      throw error;
+    }
+  };
+  const getReplies = async ({ topCommentId, postId, pageParam }) => {
+    try {
+      const result = await axios.get(`${BASE_URL}/comment/replys`, {
+        withCredentials: true,
+        params: {
+          topCommentId,
+          postId,
+          page: pageParam,
+          limit: 3,
+        },
+      });
+      console.log(result.data);
+      return result.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    try {
+      const result = await axios.delete(
+        `${BASE_URL}/comment/delete/${commentId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return result.data;
     } catch (error) {
       throw error;
     }
@@ -64,6 +118,7 @@ function PostsApis() {
           withCredentials: true,
         }
       );
+
       // console.log("DeletePostApi response:", response);
       return response.data; // Return the actual data
     } catch (error) {
@@ -75,7 +130,16 @@ function PostsApis() {
     }
   };
 
-  return { DeletePostApi, AddNewPost, fetchDataAll, getComments };
+  return {
+    DeletePostApi,
+    AddNewPost,
+    fetchDataAll,
+    getComments,
+    Comments,
+    hitLike,
+    getReplies,
+    deleteComment,
+  };
 }
 
 export default PostsApis;

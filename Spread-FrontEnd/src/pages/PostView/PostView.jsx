@@ -1,7 +1,7 @@
 import React, { lazy, useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Link, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import "boxicons";
 import { useQuery } from "react-query";
@@ -11,9 +11,13 @@ import usePublicApis from "../../Apis/publicApis";
 import Like from "../../component/buttons/Like/Like";
 import Menu from "../../component/postsComp/menu";
 import Follow from "../../component/buttons/follow";
+import userImageSrc from "../../utils/userImageSrc";
+import { FaComment, FaCommentDots, FaRegComment } from "react-icons/fa6";
+import abbreviateNumber from "../../utils/numAbrivation";
+import { setCommentCred } from "../../redux/slices/postSlice";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
-const CommentSection = lazy(() => import("../CommentSection"));
+const CommentSection = lazy(() => import("../Comment/CommentSection"));
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
@@ -32,6 +36,7 @@ function FullBlogView() {
   } = useQuery({
     queryKey: ["fullpostData", id],
     queryFn: () => fetchDataById(id),
+    refetchOnWindowFocus: false,
   });
 
   if (isError || error) {
@@ -46,6 +51,13 @@ function FullBlogView() {
       </div>
     );
   }
+
+  const userImage = userImageSrc(postView?.User);
+
+  const Comments = postView?.comments?.filter(
+    (comment) => comment.topCommentId === null
+  );
+
   return (
     <main className="container  py-4 mt-16 dark:*:border-[#383838]">
       <article className="max-w-4xl 2xl:mx-auto xl:ml-auto xl:mr-16 px-6 rounded-lg flex flex-col justify-center items-center">
@@ -62,18 +74,22 @@ function FullBlogView() {
               {postView?.subtitelpagraph}
             </p>
           </section>
-          <div className="flex items-center my-4">
-            <img
-              alt={`${postView?.User?.username}'s profile`}
-              src={postView?.User?.userImage && `${postView?.User?.userImage}`}
-              className="w-12 h-12 rounded-full mr-4 object-cover object-top"
-              loading="lazy"
-            />
-            <div>
-              <div className="flex gap-2 items-center">
+          <div className=" relative  flex gap-5 items-center my-4">
+            <div className="w-10 h-10">
+              {" "}
+              <img
+                alt={`${postView?.User?.username}`}
+                src={userImage.userImageurl}
+                className="w-full h-full rounded-full mr-4 object-cover object-top"
+                loading="lazy"
+              />
+            </div>
+
+            <div className="">
+              <div className="flex gap-2 items-center w-full">
                 {" "}
                 <Link
-                  className=""
+                  className="w-full text-nowrap hover:underline underline-offset-4"
                   to={`/profile/@${postView?.User?.username
                     ?.split(" ")
                     .slice(0, -1)
@@ -83,26 +99,26 @@ function FullBlogView() {
                 </Link>
                 <Follow
                   People={postView?.User}
-                  className={` hover:underline underline-offset-4 `}
+                  className={`relative hover:underline underline-offset-4 text-blue-500 `}
                 />
               </div>
 
-              <p className="text-sm text-black dark:text-white text-opacity-50">
+              <span className="text-xs  text-black dark:text-white dark:text-opacity-50 text-opacity-50">
                 {format(new Date(postView?.createdAt), "LLL dd, yyyy")}
-              </p>
+              </span>
             </div>
           </div>
         </header>
 
-        <div className="flex justify-between sm:text-xl font-thin items-center border-inherit border-y px-3 py-3 w-full">
+        <div className="flex justify-between sm:text-lg font-thin items-center border-inherit border-y px-3 py-3 w-full">
           <div className="flex gap-4 text-[#383838] ">
             <Like className={"min-w-10"} post={postView} />
             <button
               onClick={() => setOpenComments(true)}
               className="flex items-center gap-1 min-w-10"
             >
-              <i className="bi bi-chat"></i>
-              <span>100</span>
+              <FaRegComment />
+              <span>{abbreviateNumber(Comments?.length)}</span>
             </button>
           </div>
           <div className="flex gap-7 text-[#383838]  justify-between">
@@ -111,7 +127,7 @@ function FullBlogView() {
         </div>
 
         {postView?.titleImage && (
-          <figure className="my-6 w-full">
+          <figure className="my-6 w-full px-4">
             <img
               className="w-full rounded-lg object-fill object-center "
               src={`${postView?.titleImage}`}
@@ -122,7 +138,7 @@ function FullBlogView() {
           </figure>
         )}
         {postView?.postContent?.map((item) => (
-          <section key={item.id} className="mb-6 w-full border-inherit ">
+          <section key={item.id} className="mb-6 w-full px-4 border-inherit ">
             {item.type === "image" && item.content && (
               <figure className="my-6 w-full h-auto">
                 <img
@@ -149,10 +165,7 @@ function FullBlogView() {
         ))}
       </article>
       {openComments && (
-        <CommentSection
-          postId={postView?.id}
-          setOpenComments={setOpenComments}
-        />
+        <CommentSection post={postView} setOpenComments={setOpenComments} />
       )}
     </main>
   );

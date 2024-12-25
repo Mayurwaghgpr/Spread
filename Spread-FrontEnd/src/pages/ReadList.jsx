@@ -26,6 +26,7 @@ const ReadList = () => {
       getNextPageParam: (lastPage, allPages) =>
         lastPage?.length > 1 ? allPages.length + 1 : undefined,
       retry: false,
+      refetchOnWindowFocus: false,
     }
   );
   // console.log({ pages });
@@ -60,7 +61,9 @@ const ReadList = () => {
         })}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
-            <Spinner />
+            <Spinner
+              className={"w-10 h-10 border-t-black dark:border-t-white"}
+            />
           </div>
         )}
         {!hasPosts && (

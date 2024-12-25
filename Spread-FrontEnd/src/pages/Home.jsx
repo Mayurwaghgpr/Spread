@@ -28,6 +28,7 @@ function Home() {
     data: prepsData,
   } = useQuery("userPreps", userPrepsData, {
     staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
   });
 
   // Fetch posts with infinite scrolling
@@ -44,6 +45,7 @@ function Home() {
     {
       getNextPageParam: (lastPage, allPages) =>
         lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -114,7 +116,7 @@ function Home() {
         {/* Loading Spinner */}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
-            <Spinner />
+            <Spinner className={"border-t-black dark:border-t-white"} />
           </div>
         )}
 

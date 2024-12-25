@@ -61,11 +61,10 @@ function Like({ post, className }) {
     >
       {/* Likes list when hovered */}
       <LikesList mutate={handleLike} post={post} />
-
       <button
         name=""
         onClick={isLiked ? handleLike : null}
-        className="flex *:font-thin items-center justify-center gap-2 text-xl "
+        className="flex items-center justify-center gap-2 text-inherit "
       >
         {/* Icon rendering */}
         {likeIconObj[optimistIcon || (isLiked?.type ?? "default")]}

@@ -9,7 +9,7 @@ const initialState = {
     elements:[
     {type: "text", data: "", id: uuidv4(), index: 0 },
     ],
-    
+    commentCred:{postId:null,topCommentId:null,content:'',replyTo:null},
 }
 
 
@@ -32,10 +32,13 @@ const PostSclic = createSlice({
         setBeforeSubmit: (state, action) => {
             state.beforsubmit = action.payload
         },
+        setCommentCred: (state, action) => {
+            state.commentCred = action.payload;
+        }
     }
 })
 
 
-export const { setSelectedPostId, setTopiclist, setSubmit ,setBeforeSubmit ,FilterData,setElements,pushNewData} = PostSclic.actions
+export const { setSelectedPostId, setTopiclist, setSubmit ,setBeforeSubmit ,FilterData,setElements,pushNewData,setCommentCred} = PostSclic.actions
 
 export default PostSclic.reducer

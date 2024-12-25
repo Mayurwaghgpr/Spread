@@ -1,4 +1,5 @@
 import React, {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -44,7 +45,6 @@ function Menu({ post }) {
 
   const confirmDeletePost = useCallback(
     (id) => {
-      console.log(id);
       dispatch(
         setConfirmBox({
           message: "Do you really want to delete the post?",
@@ -58,8 +58,6 @@ function Menu({ post }) {
     [dispatch]
   );
   useEffect(() => {
-    console.log("isConfirm status:", isConfirm.status);
-    console.log("postIdToDelete:", postIdToDelete);
     if (isConfirm.status && postIdToDelete) {
       deleteMutation(postIdToDelete);
       tearpaper.play();
@@ -148,4 +146,4 @@ function Menu({ post }) {
   );
 }
 
-export default Menu;
+export default memo(Menu);

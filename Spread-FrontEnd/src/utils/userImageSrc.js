@@ -4,7 +4,6 @@ const userImageSrc = (user) => {
   let IsuserFromOAth = false;
   if (user?.userImage) {
     if (user.userImage.startsWith("http")) {
-      console.log(true);
       userImageurl = user.userImage;
       IsuserFromOAth = true;
     } else {

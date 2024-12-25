@@ -122,7 +122,7 @@ function ProfileEditor() {
           User Information
         </h1>
         <div
-          className=" flex justify-start gap-3 w-full border-inherit "
+          className=" flex justify-start gap-5 w-full border-inherit "
           aria-label="Upload profile picture"
         >
           <div className="relative group flex  flex-col">
@@ -145,15 +145,15 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className="cursor-pointer w-36 h-28 object-cover object-top rounded-full "
+              className="cursor-pointer w-36 object-cover object-top rounded-full "
               src={ProfileImage}
               alt="Profile"
             />
           </div>
-          <div className="flex flex-col w-full ">
-            <div className="py-1">
+          <div className="flex flex-col justify-center items-start w-full ">
+            <div className="">
               <button
-                className="rounded-xl text-md  text-red-500 px-2 flex gap-2"
+                className="rounded-xl text-md  text-red-500 flex gap-2"
                 onClick={() =>
                   (newInfo?.userImage !== null || newInfo?.NewImageFile) &&
                   RemoveSelecteImage()
@@ -163,13 +163,13 @@ function ProfileEditor() {
                 Remove
               </button>
             </div>
-            <p className="text-start text-xs  break-words  ">
+            <p className="text-start text-xs  break-words text-black dark:text-white text-opacity-15 dark:text-opacity-30 ">
               Importent: Insert image in JPG,JPEG,PNG format and high quality
             </p>
             <Selector
               name={"pronouns"}
               className={
-                "w-fit outline-none self-start my-2 flex flex-col gap-3 bg-inherit"
+                "w-fit outline-none self-start my-2 text-xs flex flex-col gap-3 bg-inherit"
               }
               setOptions={handleChange}
               options={["he/him", "she/her"]}
@@ -178,28 +178,29 @@ function ProfileEditor() {
             />
           </div>
         </div>
-        <div className="flex flex-col w-full items-end h-full bg-inherit   dark:*:border-black  px-2 ">
-          {Inputcontant.map((input) => (
-            <>
-              {" "}
-              <CommonInput
-                className="w-full border-inherit flex flex-col gap-3 bg-inherit "
-                type={input.type}
-                Iname={input.Iname}
-                labelname={input.labelname}
-                disabled={isLoading}
-                maxLength={input.maxLength}
-                onChange={handleChange}
-                defaultValue={input.defaultValue}
-              />
-              <span className=" flex text-gray-400 justify-end">
-                {input.length}
-              </span>
-            </>
-          ))}
-
+        <div className="flex flex-col w-full items-end h-full bg-inherit gap-10   dark:*:border-black  px-2 ">
+          <div className="w-full h-full  flex flex-col  items-end bg-inherit gap-3 ">
+            {Inputcontant.map((input) => (
+              <>
+                {" "}
+                <CommonInput
+                  className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+                  type={input.type}
+                  Iname={input.Iname}
+                  labelname={input.labelname}
+                  disabled={isLoading}
+                  maxLength={input.maxLength}
+                  onChange={handleChange}
+                  defaultValue={input.defaultValue}
+                />
+                <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
+                  {input.length}
+                </span>
+              </>
+            ))}
+          </div>
           <button
-            className={`px-4 py-1 rounded-xl mt-2 border border-sky-300`}
+            className={`px-4 py-1 rounded-xl  border bg-sky-500`}
             onClick={() => mutate(newInfo)}
           >
             {isLoading ? "Updating..." : "Save"}

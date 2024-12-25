@@ -34,7 +34,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   return (
     <article
       ref={ref}
-      className={` border-x border-b  border-inherit flex w-full h-fit  flex-col ${className}`}
+      className={` border-inherit flex w-full h-fit  flex-col ${className}`}
     >
       <div className="p-3 flex leading-0 border-inherit flex-col  justify-center gap-4 w-full">
         <div className="flex border-inherit gap-2 text-sm justify-start items-center">

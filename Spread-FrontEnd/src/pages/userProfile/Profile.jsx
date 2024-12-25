@@ -81,7 +81,7 @@ function Profile() {
             </div>
           </div>
           <div
-            className={`lg:px-5 p-3 pt-5 h-full dark:*:border-[#383838] ${
+            className={`lg:px-5 py-20  border-inherit pt-5 h-full dark:*:border-[#383838] ${
               !postsData?.pages?.length && "flex justify-center items-center "
             }`}
           >

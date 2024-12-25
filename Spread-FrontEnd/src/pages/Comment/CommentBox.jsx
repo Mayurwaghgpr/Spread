@@ -31,7 +31,7 @@ function CommentBox({ comt, className, topCommentId }) {
       ({ pageParam = 1 }) =>
         getReplies({ postId: comt.postId, pageParam, topCommentId: comt?.id }),
       {
-        enabled: openReplies === comt?.id, // Only fetch when replies are open
+        // enabled: openReplies === comt?.id, // Only fetch when replies are open
         getNextPageParam: (lastPage) =>
           lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
         refetchOnWindowFocus: false,
@@ -71,55 +71,56 @@ function CommentBox({ comt, className, topCommentId }) {
   const Comments = data?.pages.flatMap((page) => page.comments) || [];
   return (
     <div className={`${className}`}>
-      <div className="w-fit h-fit p-3">
-        <img
-          className={`max-w-11 max-h-10 rounded-full ${
-            comt?.topCommentId && "size-8"
-          }`}
-          src={commenterImg.userImageurl}
-          alt={comt?.commenter?.username}
-        />
-      </div>
-
-      <article className="p-2 flex flex-col w-full justify-start gap-2">
-        <div className="flex justify-start items-center text-nowrap gap-3 text-sm">
-          <h1>{comt?.commenter?.username}</h1>
-          <span className="text-xs dark:text-opacity-20 dark:text-white">
-            {formatDate(new Date(comt?.createdAt), "d MMM yyy")}
-          </span>
+      <article className="p-2 flex select-none  w-full justify-start gap-2">
+        <div className="w-fit h-fit p-3">
+          <img
+            className={`max-w-11 max-h-10 rounded-full ${
+              comt?.topCommentId && "size-8"
+            }`}
+            src={commenterImg.userImageurl}
+            alt={comt?.commenter?.username}
+          />
         </div>
         <div>
-          <p>{comt.content}</p>
-        </div>
-        <div className="flex justify-start items-center gap-3 my-3">
-          <button
-            onClick={() => likeMutate(comt?.id)}
-            className="flex justify-start min-w-8 items-center gap-1"
-          >
-            {isLiked ? <BsHeartFill /> : <BsHeart />}
-            {abbreviateNumber(comt?.commentLikes?.length)}
-          </button>
-          <button
-            onClick={() =>
-              dispatch(
-                setCommentCred({
-                  ...commentCred,
-                  topCommentId, // Top most comment Id in post comment section
-                  replyTo: comt?.commenter.id, //Id or refrence of the comment user going to reply
-                  at: "@" + comt?.commenter?.username,
-                })
-              )
-            }
-          >
-            Reply
-          </button>
-          {comt?.commenter?.id === user.id && (
-            <button onClick={() => deletMutate(comt?.id)}>
-              <MdDelete />
+          <div className="flex justify-start items-center text-nowrap gap-3 text-sm">
+            <h1>{comt?.commenter?.username}</h1>
+            <span className="text-xs dark:text-opacity-20 dark:text-white">
+              {formatDate(new Date(comt?.createdAt), "d MMM yyy")}
+            </span>
+          </div>
+          <div>
+            <p>{comt.content}</p>
+          </div>
+          <div className="flex justify-start items-center gap-3 my-3">
+            <button
+              onClick={() => likeMutate(comt?.id)}
+              className="flex justify-start min-w-8 items-center gap-1"
+            >
+              {isLiked ? <BsHeartFill /> : <BsHeart />}
+              {abbreviateNumber(comt?.commentLikes?.length)}
             </button>
-          )}
+            <button
+              onClick={() =>
+                dispatch(
+                  setCommentCred({
+                    ...commentCred,
+                    topCommentId, // Top most comment Id in post comment section
+                    replyTo: comt?.commenter.id, //Id or refrence of the comment user going to reply
+                    at: "@" + comt?.commenter?.username,
+                  })
+                )
+              }
+            >
+              Reply
+            </button>
+            {comt?.commenter?.id === user.id && (
+              <button onClick={() => deletMutate(comt?.id)}>
+                <MdDelete />
+              </button>
+            )}
+          </div>
         </div>
-        {!comt?.topCommentId && (
+        {/* {!comt?.topCommentId && (
           <button
             onClick={handleRepliesClick}
             className="flex justify-start items-center gap-3 text-blue-400"
@@ -127,31 +128,34 @@ function CommentBox({ comt, className, topCommentId }) {
             {openReplies !== comt.id ? <IoIosArrowDown /> : <IoIosArrowUp />}{" "}
             Replies {abbreviateNumber(comt?.reply?.length)}
           </button>
-        )}
-        {openReplies === comt?.id && Comments?.length > 0 && (
-          <div>
-            {Comments.length > 0 &&
-              Comments.map((reply) => (
-                <CommentBox
-                  key={reply?.id}
-                  className="animate-fedin.2s flex p-3 justify-center items-start gap-2 text-xs"
-                  comt={reply}
-                  topCommentId={comt?.id} //this id should be always set to the top most commentId in post comment section
-                />
-              ))}
+        )} */}
+      </article>
+      {Comments?.length > 0 && (
+        <>
+          {Comments.length > 0 &&
+            Comments.map((reply) => (
+              <CommentBox
+                key={reply?.id}
+                className="animate-fedin.2s ml-3 flex p-3 justify-center items-start gap-2 text-xs  "
+                comt={reply}
+                topCommentId={comt?.id} //this id should be always set to the top most commentId in post comment section
+              />
+            ))}
+          {hasNextPage && (
             <button
+              className="px-10"
               onClick={() => fetchNextPage()}
               disabled={!hasNextPage || isFetchingNextPage}
             >
               {isFetchingNextPage
                 ? "Loading more..."
                 : hasNextPage
-                  ? "See more..."
+                  ? "View more..."
                   : " "}
             </button>
-          </div>
-        )}
-      </article>
+          )}
+        </>
+      )}
     </div>
   );
 }

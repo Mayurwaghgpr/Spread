@@ -29,7 +29,7 @@ function MainNavBar() {
   const dispatch = useDispatch();
   const searchRef = useRef();
 
-  const { confirmBox, ThemeMode } = useSelector((state) => state.ui);
+  const { confirmBox, ThemeMode, MenuOpen } = useSelector((state) => state.ui);
   const { isLogin, user } = useSelector((state) => state.auth);
 
   return (
@@ -67,12 +67,14 @@ function MainNavBar() {
                   }`}
                 />
                 {/* Tooltip with user name */}
-                <span
-                  className="pointer-events-none opacity-0 p-1 rounded-lg absolute -bottom-9 left-1/2 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit -translate-x-1/2 w-32 text-center
+                {!MenuOpen && (
+                  <span
+                    className="pointer-events-none  opacity-0 p-1 rounded-lg absolute -bottom-9 left-1/2 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit -translate-x-1/2 w-32 text-center
       group-hover:opacity-100"
-                >
-                  {user.username}
-                </span>
+                  >
+                    {user.username}
+                  </span>
+                )}
               </div>
             ) : (
               <div className="flex gap-3 border-inherit justify-end w-full items-center sm:text-sm text-xs">

@@ -50,7 +50,7 @@ function CommentSection({ setOpenComments, post }) {
   return (
     <section
       onClick={({ target }) => setOpenComments(false)}
-      className="flex justify-end items-end bg-black  w-full right-0 animate-fedin.2s bg-opacity-5 shadow h-full fixed top-0 z-40 "
+      className="flex justify-end items-end bg-black bg-opacity-30 backdrop-blur-[1px]  w-full right-0 animate-fedin.2s  shadow h-full fixed top-0 z-40 "
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -76,7 +76,7 @@ function CommentSection({ setOpenComments, post }) {
               return (
                 <CommentBox
                   className={
-                    "animate-slide-in-top flex justify-center w-full items-start gap-2"
+                    "animate-slide-in-top flex flex-col text-sm justify-center w-full items-start gap-2"
                   }
                   key={comt?.id}
                   comt={comt}

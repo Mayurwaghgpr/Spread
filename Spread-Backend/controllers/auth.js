@@ -56,7 +56,7 @@ export const SignUp = async (req, res, next) => {
       .status(201)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", newUser, { httpOnly: true })
+      .cookie("_userDetail", newUser, { httpOnly: true , secure: true})
       .json({ user: newUser.dataValues, AccessToken, RefreshToken });
   } catch (err) {
     next(err);
@@ -118,7 +118,7 @@ export const SignIn = async (req, res, next) => {
       .status(200)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", user, { httpOnly: true })
+      .cookie("_userDetail", user, { httpOnly: true ,secure: true})
       .json({ user: user.dataValues, AccessToken, RefreshToken });
   } catch (err) {
     console.error("Error during login:", err);
@@ -172,7 +172,7 @@ export const RefreshToken = async (req, res, next) => {
       .status(200)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", user, { httpOnly: true })
+      .cookie("_userDetail", user, { httpOnly: true, secure: true })
       .json({ user: user, AccessToken, RefreshToken });
   } catch (error) {
     console.error("Error during token refresh:", error);
@@ -186,7 +186,7 @@ export const Logout = async (req, res) => {
   res
     .clearCookie("AccessToken", CookieOptions)
     .clearCookie("RefreshToken", CookieOptions)
-    .clearCookie("_userDetail", { httpOnly: true });
+    .clearCookie("_userDetail", { httpOnly: true , secure: true});
   try {
     // Clear refresh token from user record
     await User.update(

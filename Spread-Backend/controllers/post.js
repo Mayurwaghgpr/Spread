@@ -279,6 +279,10 @@ export const DeletePost = async (req, res, next) => {
           attributes: ["content"],
           required: false,
         },
+          {
+          model: Comments,
+          as: "comments",  // Include associated comments
+        },
       ],
       nest: true,
     });
@@ -286,7 +290,9 @@ export const DeletePost = async (req, res, next) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-
+  // Delete associated comments
+    await Comments.destroy({ where: { postId } });
+    
     const imageUrls = [];
 
     // Add title image to the array

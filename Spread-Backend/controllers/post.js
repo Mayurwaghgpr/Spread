@@ -264,10 +264,10 @@ export const EditPost = async (req, res, next) => {
   }
 };
 
-// Delete a post by its ID and associated images
+/// Delete a post by its ID and associated images
 export const DeletePost = async (req, res, next) => {
   const postId = req.params.postId;
-  // console.log({postId})
+  
   try {
     const post = await Post.findOne({
       where: { id: postId },
@@ -300,19 +300,19 @@ export const DeletePost = async (req, res, next) => {
         imageUrls.push(content.split(process.env.BASE_URL)[1]);
       }
     });
-    console.log({imageUrls })
-    // Delete images if present
+    
+    // If there are images, delete them
     if (imageUrls.length > 0) {
-      const imagesDeleted =  deletePostImage(imageUrls);
-      console.log({ imagesDeleted })
-      // Delete the post itself
-      await post.destroy();
+      const imagesDeleted = await deletePostImage(imageUrls); // Await the image deletion
+      console.log({ imagesDeleted });
     }
+
+    // Delete the post itself
+    await post.destroy();
 
     res.status(200).json({ id: postId, message: "Post deleted successfully" });
   } catch (error) {
     console.error("Error deleting post:", error);
-    // res.status(500).json({ message: 'Server error' });
-    next(error);
+    next(error); // Pass the error to the next middleware for handling
   }
 };

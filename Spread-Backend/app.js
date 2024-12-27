@@ -158,6 +158,7 @@ Comments.belongsTo(Post, {
 Post.hasMany(Comments, {
   foreignKey: "postId",
   as: "comments",
+  onDelete: 'CASCADE',
 });
 
 app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));

@@ -1,20 +1,33 @@
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
-import { fileURLToPath } from "url";
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
+// Helper function to check if the file exists
+const fileExists = async (filePath) => {
+  try {
+    await fs.access(filePath);
+    return true; // File exists
+  } catch (err) {
+    return false; // File does not exist
+  }
+};
 
 export const deletePostImage = async (imageUrls) => {
-  // console.log("unlike")
   try {
-    // Use map to create an array of Promises returned by unlink
-    imageUrls.forEach(async (url) => {
-       fs.unlink(path.join('Spread-Backend',url));
+    const deletePromises = imageUrls.map(async (url) => {
+      const filePath = path.join("Spread-Backend", url);
+      
+      // Check if the file exists before attempting to delete
+      const exists = await fileExists(filePath);
+      if (exists) {
+        await fs.unlink(filePath); // Delete the file if it exists
+      }
     });
-    return "All image files deleted successfully";
+
+    // Wait for all promises to resolve
+    await Promise.all(deletePromises);
+
+    return "All image files processed (deleted if they existed)";
   } catch (err) {
-    return `Error deleting image files: ${err.message}`;
+    return `Error processing image files: ${err.message}`;
   }
 };

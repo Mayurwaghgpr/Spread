@@ -13,7 +13,7 @@ function Heros() {
 
   return (
     <>
-      <main className="relative h-[80vh] mt-[4rem] bg-[#f3efeb] dark:bg-inherit dark:*:border-[#383838]">
+      <main className="relative h-[80vh] mt-[4rem]  dark:bg-inherit dark:*:border-[#383838]">
         <section className=" bg-inherit h-full px-10 flex m-auto sm:flex-row flex-col-reverse gap-8 justify-center items-center   text-start border-inherit">
           <div className=" sm:w-[50%] z-[5] animate-fedin1s rounded-lg h-fit flex flex-col gap-4 border-inherit">
             <h1 className="xl:text-2xl lg:text-xl flex items-center text-lg mb-4">

@@ -1,15 +1,25 @@
-import React, { memo, useCallback, useState } from "react";
+import React, {
+  lazy,
+  memo,
+  Suspense,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
-import { BsSend, BsSendArrowDown } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
+import { MdOutlineTagFaces } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import DOMPurify from "dompurify";
-import { debounce } from "../../utils/debounce";
+
 import PostsApis from "../../Apis/PostsApis";
 import { setToast } from "../../redux/slices/uiSlice";
 import Spinner from "../../component/loaders/Spinner";
+import useClickOutside from "../../hooks/useClickOutside";
+
+const EmojiPicker = lazy(() => import("emoji-picker-react"));
 function CommentInput({ className }) {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred } = useSelector((state) => state.posts);
@@ -17,6 +27,7 @@ function CommentInput({ className }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const userImage = userImageSrc(user);
+  const pickerRef = useRef();
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
       Comments(commentCred);
@@ -46,6 +57,8 @@ function CommentInput({ className }) {
         })
       )[(dispatch, commentCred)]
   );
+  const { menuId: openEmojiPicker, setMenuId: setOpenEmojiPicker } =
+    useClickOutside(pickerRef);
   return (
     <div className={className}>
       <div className="flex  justify-start items-start text-sm">
@@ -57,7 +70,7 @@ function CommentInput({ className }) {
         />
         {/* <p>{user?.username}</p> */}
       </div>
-      <div className="w-full border-inherit">
+      <div className="relative w-full flex items-center border-inherit">
         {" "}
         <p
           contentEditable={true}
@@ -69,6 +82,23 @@ function CommentInput({ className }) {
           }}
           onInput={(e) => handelInput(e.currentTarget.innerText)}
         ></p>
+        <div className=" w-1 h-1 bg-none p-1 text-xl">
+          <MdOutlineTagFaces
+            onClick={() => setOpenEmojiPicker((prev) => !prev)}
+          />
+          <div
+            ref={pickerRef}
+            className="absolute -right-16 min-size-10 -top-[30rem]"
+          >
+            <Suspense fallback={<Spinner />}>
+              <EmojiPicker
+                lazyLoadEmojis={true}
+                open={openEmojiPicker}
+                onEmojiClick={(e) => console.log(e.emoji)}
+              />
+            </Suspense>
+          </div>
+        </div>
       </div>
       <div className=" flex justify-end *:transition-all *:duration-100 my-2 items-center gap-3">
         {/* <button className=" py-1 px-2 rounded-full">cancle</button> */}

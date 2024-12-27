@@ -59,7 +59,7 @@ function FullBlogView() {
   );
 
   return (
-    <main className="container  py-4 mt-16 dark:*:border-[#383838]">
+    <main className="container  py-4 my-16 dark:*:border-[#383838]">
       <article className="max-w-4xl 2xl:mx-auto xl:ml-auto xl:mr-16 px-6 rounded-lg flex flex-col justify-center items-center">
         <header className="mb-6 w-full px-3">
           <section className="flex flex-col gap-2">
@@ -99,7 +99,7 @@ function FullBlogView() {
                 </Link>
                 <Follow
                   People={postView?.User}
-                  className={`relative hover:underline underline-offset-4 text-blue-500 `}
+                  className={`relative hover:underline underline-offset-4 border-none  text-blue-500 `}
                 />
               </div>
 
@@ -138,7 +138,7 @@ function FullBlogView() {
           </figure>
         )}
         {postView?.postContent?.map((item) => (
-          <section key={item.id} className="mb-6 w-full px-4 border-inherit ">
+          <section key={item.id} className="mb-6 w-full px-2 border-inherit ">
             {item.type === "image" && item.content && (
               <figure className="my-6 w-full h-auto">
                 <img

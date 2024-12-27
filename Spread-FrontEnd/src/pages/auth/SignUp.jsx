@@ -78,7 +78,7 @@ function SignUp() {
   ];
 
   return (
-    <section className="sm:flex animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#f3efeb] dark:bg-[#222222]  dark:*:border-[#383838]">
+    <section className="sm:flex animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#fff9f3] dark:bg-[#222222]  dark:*:border-[#383838]">
       {(isError || validation) && (
         <div className="text-red-500 my-4 w-full flex justify-center bg-red-100 py-2">
           {error?.response?.data.message || validation}

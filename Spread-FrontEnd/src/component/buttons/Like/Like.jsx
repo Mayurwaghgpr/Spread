@@ -64,7 +64,7 @@ function Like({ post, className }) {
       <button
         name=""
         onClick={isLiked ? handleLike : null}
-        className="flex items-center justify-center gap-2 text-inherit "
+        className="flex items-center justify-center gap-1 text-inherit "
       >
         {/* Icon rendering */}
         {likeIconObj[optimistIcon || (isLiked?.type ?? "default")]}

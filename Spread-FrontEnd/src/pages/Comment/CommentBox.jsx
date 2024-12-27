@@ -65,14 +65,14 @@ function CommentBox({ comt, className, topCommentId }) {
     [comt?.commentLikes, user?.id]
   );
 
-  const handleRepliesClick = () => {
-    setOpenReplies((prev) => (prev === "" ? comt.id : ""));
-  };
+  // const handleRepliesClick = () => {
+  //   setOpenReplies((prev) => (prev === "" ? comt.id : ""));
+  // };
   const Comments = data?.pages.flatMap((page) => page.comments) || [];
   return (
     <div className={`${className}`}>
-      <article className="p-2 flex select-none  w-full justify-start gap-2">
-        <div className="w-fit h-fit p-3">
+      <article className="p-2 flex select-none w-full justify-start items-start gap-2">
+        <div className="w-fit h-fit px-3">
           <img
             className={`max-w-11 max-h-10 rounded-full ${
               comt?.topCommentId && "size-8"
@@ -136,7 +136,7 @@ function CommentBox({ comt, className, topCommentId }) {
             Comments.map((reply) => (
               <CommentBox
                 key={reply?.id}
-                className="animate-fedin.2s ml-3 flex p-3 justify-center items-start gap-2 text-xs  "
+                className="animate-fedin.2s ml-3 flex px-3 justify-center items-start gap-2 text-xs  "
                 comt={reply}
                 topCommentId={comt?.id} //this id should be always set to the top most commentId in post comment section
               />

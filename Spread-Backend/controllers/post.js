@@ -127,14 +127,13 @@ export const getPostPreview = async (req, res, next) => {
         {
           model: Comments,
           as: "comments",
-          where:{topCommentId:null},
         }
       ],
       limit,
       offset: (page - 1) * limit,
       order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
     });
-
+    console.log(posts)
     if (posts.length > 0) {
       const postData = formatPostData(posts); // Format the post data
       res.status(200).json({

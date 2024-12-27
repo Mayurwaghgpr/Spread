@@ -6,7 +6,7 @@ const UserPopover = forwardRef(({ people, styles, attributes }, ref) => {
   return (
     <div
       ref={ref}
-      className="absolute -left-24 top-8 animate-fedin.2s z-30 px-4 w-[20rem] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden overflow-ellipsis rounded-md "
+      className="absolute -left-20 -top-28 animate-fedin.2s z-30 px-4 w-[20rem] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden overflow-ellipsis rounded-md "
       // style={styles.popper}
       // {...attributes.popper}
     >
@@ -28,7 +28,7 @@ const UserPopover = forwardRef(({ people, styles, attributes }, ref) => {
         <Follow
           People={people}
           className={
-            "relative  p-1 py-2  transition-all text-xs max-w-[5rem] w-full  duration-200b g-white hover:bg-gray-100  dark:hover:bg-gray-700 rounded-full "
+            "relative  p-1 py-2 border transition-all text-xs max-w-[5rem] w-full  duration-200b g-white bg-white hover:bg-gray-100  dark:hover:bg-gray-700 rounded-full "
           }
         />
       </div>

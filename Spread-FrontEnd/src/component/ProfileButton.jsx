@@ -26,7 +26,7 @@ const ProfileButton = ({ className, ...props }) => {
       disabled={deviceSize > 1023 ? true : false}
     >
       <img
-        className="cursor-pointer object-cover object-top rounded-full w-full  h-full"
+        className="cursor-pointer object-cover object-top rounded-full "
         src={userImageurl}
         title={user?.name}
         alt={user?.name}

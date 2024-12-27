@@ -62,7 +62,7 @@ function SignIn() {
   if (!isLogin) {
     return (
       <section
-        className={`sm:flex relative animate-fedin.2s justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 bg-[#f3efeb] dark:bg-black   dark:*:border-[#383838] `}
+        className={`sm:flex relative animate-fedin.2s justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 bg-[#fff9f3] dark:bg-black   dark:*:border-[#383838] `}
       >
         {isError && (
           <div className="text-red-500 my-4 w-full flex justify-center  bg-red-100 py-2 ">

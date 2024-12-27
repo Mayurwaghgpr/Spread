@@ -22,6 +22,9 @@ import Like from "../buttons/Like/Like";
 import Menu from "./menu";
 import FormatedTime from "../UtilityComp/FormatedTime";
 import userImageSrc from "../../utils/userImageSrc";
+import { BsCommand } from "react-icons/bs";
+import { FaComment, FaRegComment } from "react-icons/fa6";
+import abbreviateNumber from "../../utils/numAbrivation";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   // const dispatch = useDispatch();
@@ -109,12 +112,13 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
         </Link>
         {post && (
           <div className="flex w-full h-full justify-between text-md  border-inherit p-3 items-center ">
-            <div className="flex   justify-start   items-center gap-5">
+            <div className="flex   justify-start   items-center gap-3">
               <Like className={"min-w-10"} post={post} />
-              <div className="flex min-w-10 cursor-pointer">
+              <div className="flex justify-center items-center gap-1 min-w-10 cursor-pointer">
                 <button className="">
-                  <i className="bi bi-chat"></i>
+                  <FaRegComment />
                 </button>
+                <span>{abbreviateNumber(post?.comments?.length)}</span>
               </div>
             </div>
             <div className="flex justify-end gap-5 items-center">

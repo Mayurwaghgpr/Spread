@@ -34,10 +34,10 @@ function MainNavBar() {
 
   return (
     <header
-      className={`fixed top-0  flex justify-center w-full transform-all duration-300 ease-in-out z-10`}
+      className={`fixed top-0   flex justify-center w-full transform-all duration-300 ease-in-out z-40`}
     >
       <nav
-        className={`relative  z-10 w-full py-3 px-7 sm:px-20 lg:px-28 bg-inherit dark:bg-black dark:border-[#383838] border-b  border-inherit dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg `}
+        className={`relative  w-full py-3 sm:px-20 px-10 bg-inherit dark:bg-black dark:border-[#383838] border-b  border-inherit dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg `}
       >
         <div className="flex border-inherit items-center justify-between w-full m-auto">
           <Link to="/" className="text-2xl font-bold ">
@@ -57,14 +57,14 @@ function MainNavBar() {
             )}
 
             {isLogin ? (
-              <div className="relative flex *:transition-all *:duration-300 text-left group border-inherit">
+              <div className="relative box-content flex *:transition-all *:duration-300 text-left group border-inherit">
                 <ProfileButton
                   onClick={() => dispatch(setManuOpen())}
-                  className={`box-content size-10 ${
+                  className={`box-content border-2  size-10 ${
                     location.pathname.startsWith("/profile")
-                      ? "border-2 border-black"
-                      : ""
-                  }`}
+                      ? " border-black"
+                      : "border-transparent"
+                  } `}
                 />
                 {/* Tooltip with user name */}
                 {!MenuOpen && (

@@ -33,7 +33,7 @@ function Profile() {
       mutate(profileId);
     }
     dispatch(setuserProfile(user));
-  }, []);
+  }, [profileId]);
 
   const {
     data: postsData,
@@ -71,13 +71,13 @@ function Profile() {
 
   return (
     <div className="flex justify-center dark:*:border-[#383838]">
-      <div className=" md:w-[80%] mt-14  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
+      <div className=" md:w-[80%] mt-20  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />
           <div className="w-full flex gap-5  p-2 px-4 border-inherit">
             <div className="w-full flex gap-5 underline-offset-[.5rem] transition-all duration-400 ">
-              <p className="hover:border-b pb-1 cursor-pointer">Home</p>
-              <p className="hover:border-b pb-1 cursor-pointer">About</p>
+              <p className="hover:underline pb-1 cursor-pointer">Home</p>
+              <p className="hover:underline pb-1 cursor-pointer">About</p>
             </div>
           </div>
           <div
@@ -115,7 +115,6 @@ function Profile() {
           </div>
         </div>
       </div>
-
       {FollowInfo.Info && <ProfileinfoCard className={``} />}
     </div>
   );

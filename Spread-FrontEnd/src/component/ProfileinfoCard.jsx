@@ -6,6 +6,8 @@ import { createPortal } from "react-dom";
 import { useQuery } from "react-query";
 import userApi from "../Apis/userApi";
 import FollowPeopleLoader from "./loaders/FollowPeopleLoader";
+import { PiFileXlsBold } from "react-icons/pi";
+import { IoClose, IoCloseSharp } from "react-icons/io5";
 
 function ProfileinfoCard({ className }) {
   const dispatch = useDispatch();
@@ -37,27 +39,20 @@ function ProfileinfoCard({ className }) {
   return createPortal(
     <div
       onClick={() => dispatch(setFollowInfo(""))}
-      className={`flex justify-end items-center bg-black z-50 bg-opacity-20 fixed top-0 sm:py-3 left-0  bottom-0 right-0 ${className}`}
+      className={`flex justify-end items-end bg-black z-50 bg-opacity-20 fixed top-0 left-0  bottom-0 right-0 ${className}`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`dark:bg-black border dark:border-[#383838] animate-slide-in-right bg-[#f3efeb] rounded-xl sm:mx-2 h-full sm:w-[500px] w-full overflow-hidden `}
+        className={`dark:bg-black border dark:border-[#383838] sm:animate-slide-in-right animate-slide-in-bottom bg-[#fff9f3] sm:rounded-xl  sm:h-full h-[80%] sm:w-1/3 w-full  px-6 overflow-hidden `}
       >
-        <div className="relative w-full h-16 p-6 text-center text-2xl">
-          <h1>{FollowInfo.Info}</h1>
-          <span
-            onClick={() => dispatch(setFollowInfo(""))}
-            className="absolute sm:hidden block top-0 right-0 p-4"
-          >
-            <i className="bi bi-x-lg"></i>
-          </span>
-        </div>
+        <h1 className="text-2xl p-2 py-8">{FollowInfo.Info}</h1>
         <div className="relative h-full p-5 drop-shadow-sm">
           {!isLoading ? (
             data?.length ? (
-              <ul className="flex w-full flex-col items-start px-2 gap-3 min-h-full">
+              <ul className="flex w-full flex-col items-start px-2 gap-4 min-h-full">
                 {data.map((followings, idx) => (
                   <PeoplesList
+                    className={"text-nowrap"}
                     key={`${followings.id}-${idx}`} // Ensure unique key
                     people={followings}
                     index={idx}

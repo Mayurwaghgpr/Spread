@@ -31,33 +31,36 @@ function PeoplesList({ people, className }) {
 
   return (
     <li
-      className={` flex mt-2 justify-between px-2 w-full h-full gap-3 font-medium capitalize items-center ${className} relative dark:border-[#383838]`}
+      className={`${className} flex  w-fit h-full gap-3 font-medium capitalize items-center relative dark:border-[#383838]`}
       key={people?.id}
       id={people?.id}
     >
-      <Link
-        className="flex gap-2 justify-start border-inherit h-full"
-        to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
-      >
-        <img
-          className="h-[30px] rounded-full w-[30px] object-cover object-top"
-          src={userImageurl}
-          alt={`${people?.username}'s profile picture`}
-        />
-        <div className="relative  group flex ms-3 justify-center flex-col items-start border-inherit *:transition-all *:duration-200  text-ellipsis">
-          <h1>{people?.username} </h1>
-          <UserPopover
-            people={people}
-            ref={boxRef}
-            // attributes={attributes}
-            // styles={styles}
+      <div className="relative group  border-inherit *:transition-all *:duration-200 cursor-pointer text-ellipsis">
+        <Link
+          className="flex items-center gap-3 border-inherit h-full"
+          to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
+        >
+          <img
+            className="max-w-10 max-h-10 rounded-full  object-cover object-top"
+            src={userImageurl}
+            alt={`${people?.username}'s profile picture`}
           />
-        </div>
-      </Link>
+          <h1 className="hover:underline touch-pan-up underline-offset-4">
+            {people?.username}
+          </h1>
+        </Link>
+
+        <UserPopover
+          people={people}
+          ref={boxRef}
+          // attributes={attributes}
+          // styles={styles}
+        />
+      </div>
 
       <Follow
         People={people}
-        className=" text-black min-h-8  min-w-[6.7rem]  p-1 flex justify-center items-center  *:transition-all  px-5 *:duration-100 bg-white hover:bg-gray-300   rounded-full  "
+        className=" text-black min-h-8  min-w-[6.7rem] border  p-1 flex justify-center items-center  *:transition-all  px-5 *:duration-100 bg-white hover:bg-gray-300   rounded-full  "
       />
     </li>
   );

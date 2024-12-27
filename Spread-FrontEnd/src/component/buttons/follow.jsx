@@ -41,7 +41,7 @@ function Follow({ className, People }) {
               <span className="opacity-100 group-hover:opacity-0 ">
                 Following
               </span>
-              <span className="absolute left-0 right-0  opacity-0  bg-transparent group-hover:opacity-100 text-red-600 ">
+              <span className="absolute left-0 right-0  opacity-0   bg-transparent group-hover:opacity-100 text-red-600 ">
                 Unfollow
               </span>
             </>

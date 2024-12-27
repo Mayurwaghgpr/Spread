@@ -6,7 +6,7 @@ function abbreviateNumber(num) {
     } else if (num >= 1e3) {
         return (num / 1e3).toFixed(1) + ' K'; // Thousand
     } else {
-        return num.toString(); // Less than a thousand
+        return num; // Less than a thousand
     }
 }
 export default abbreviateNumber;

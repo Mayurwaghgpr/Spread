@@ -153,13 +153,14 @@ User.hasMany(Comments, {
 Comments.belongsTo(Post, {
   foreignKey: "postId",
   as: "post",
-  onDelete: "CASCADE", // Delete comments when the post is deleted
-  onUpdate: "CASCADE",
+
 });
 // A Post can have many Comments
 Post.hasMany(Comments, {
   foreignKey: "postId",
   as: "comments",
+  onDelete: "CASCADE", // Delete comments when the post is deleted
+  onUpdate: "CASCADE",
 });
 
 app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));

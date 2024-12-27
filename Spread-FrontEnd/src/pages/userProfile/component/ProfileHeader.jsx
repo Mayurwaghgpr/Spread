@@ -19,12 +19,12 @@ const ProfileHeader = React.memo(({ profileId }) => {
       <div className="flex justify-start items-start  gap-9">
         <div className=" flex flex-col gap-5 ">
           <img
-            className=" sm:w-[9rem] min-siz-[5rem]  items-center  cursor-pointer rounded-full   object-cover object-top "
+            className=" sm:w-[7rem] max-h-28 w-20   items-center  cursor-pointer rounded-full   object-cover object-top "
             src={userImageurl}
             alt={userProfile?.username}
           />
           <div className=" w-full">
-            <h1 className="sm:text-4xl text-nowrap text-lg  font-medium">
+            <h1 className="sm:text-3xl sm:hidden text-nowrap text-lg  font-medium">
               {userProfile?.username}
             </h1>
             <span className="text-black text-xs dark:text-white text-opacity-70 dark:text-opacity-70 ">
@@ -33,18 +33,13 @@ const ProfileHeader = React.memo(({ profileId }) => {
           </div>
         </div>
 
-        <div className="flex sm:flex-row flex-col  justify-between w-full  gap-2   h-full sm:text-lg text-xs ">
-          <div className="flex flex-col gap-1 justify-start w-full ">
-            <div className="px-2">
-              <Link
-                to="/profileEditor"
-                className="  text-end text-xs w-fit   rounded-lg transition-colors duration-300 text-blue-600  "
-              >
-                Edite profile
-              </Link>
-            </div>
-            <div className="flex justify-start items-center">{}</div>
-            <div className=" flex sm:text-lg gap-4 justify-start ">
+        <div className="flex sm:flex-row flex-col  justify-between w-full  gap-2   h-full sm:text-lg  ">
+          <div className="flex flex-col gap-1 justify-start  p-4 w-full ">
+            {/* <div className="flex justify-start items-center">{}</div> */}
+            <h1 className="sm:text-3xl sm:block hidden text-nowrap text-lg  font-medium">
+              {userProfile?.username}
+            </h1>
+            <div className=" flex  gap-4 justify-start ">
               <button
                 onClick={() =>
                   dispatch(
@@ -77,7 +72,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
           </div>
         </div>
       </div>
-      <div className="flex   justify-start  items-center text-sm  w-full  ">
+      <div className="flex justify-start items-center text-sm  w-full  ">
         <p className=" h-full w-full break-words ">{userProfile?.userInfo}</p>
       </div>
       <div className="flex flex-col items-start gap-4 border-inherit text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
@@ -94,18 +89,27 @@ const ProfileHeader = React.memo(({ profileId }) => {
           date={user.createdAt}
         />
 
-        {profileId !== user.id && (
-          <div className="flex justify-start text-xs sm:text-sm items-center gap-4 w-full border-inherit">
+        {profileId !== user.id ? (
+          <div className="flex justify-start text-xs text-black sm:text-sm items-center gap-4 w-full border-inherit">
             <Follow
               People={userProfile}
-              className={`p-3 py-1 flex border border-inherit w-full  sm:min-w-32 sm:h-9 justify-center items-center rounded-xl bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700`}
+              className={`p-3 py-1 flex border border-inherit w-full  sm:min-w-32 sm:h-9 justify-center items-center rounded-xl bg-white  hover:bg-gray-200  dark:hover:bg-gray-300`}
             />
-            <button className="flex items-center justify-center gap-2 w-full sm:h-9 bg-gray-200 hover:bg-gray-300 dark:bg-gray-500 dark:hover:bg-gray-700 px-3 py-1   rounded-xl  ">
+            <button className="flex items-center justify-center gap-2 w-full sm:h-9 bg-white hover:bg-gray-200  dark:hover:bg-gray-300 px-3 py-1   rounded-xl  ">
               {/* <i className="bi bi-envelope"></i>
                */}
               <LuMessagesSquare />
               Message
             </button>
+          </div>
+        ) : (
+          <div className="px-2">
+            <Link
+              to="/profileEditor"
+              className="  text-end text-xs w-fit   rounded-lg transition-colors duration-300 text-blue-600  "
+            >
+              Edite profile
+            </Link>
           </div>
         )}
       </div>

@@ -10,7 +10,7 @@ function ConfirmationBox() {
   const queryClient = useQueryClient();
   const { DeletePostApi } = PostsApis();
   const { confirmBox } = useSelector((state) => state.ui);
-  const { mutate: deleteMutation } = useMutation(DeletePostApi, {
+  const { mutate: deleteMutation, isLoading } = useMutation(DeletePostApi, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["Allposts"]);
       dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
@@ -79,8 +79,9 @@ function ConfirmationBox() {
               onClick={handleConfirm}
               name="confirm"
               className="p-2 rounded-3xl bg-gray-200 dark:bg-gray-400"
+              disabled={isLoading}
             >
-              Confirm
+              {isLoading ? <Spinner /> : "Confirm"}
             </button>
           </div>
         </div>

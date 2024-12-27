@@ -31,7 +31,7 @@ function PeoplesList({ people, className }) {
 
   return (
     <li
-      className={`${className} flex  w-fit h-full gap-3 font-medium capitalize items-center relative dark:border-[#383838]`}
+      className={`${className} flex justify-between  w-full h-full gap-3 font-medium capitalize items-center relative dark:border-[#383838]`}
       key={people?.id}
       id={people?.id}
     >

@@ -1,24 +1,49 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setConfirmBox, setIsConfirm } from "../../redux/slices/uiSlice";
+import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
 import { createPortal } from "react-dom";
 import { useCallback } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import PostsApis from "../../Apis/PostsApis";
 
 function ConfirmationBox() {
   const dispatch = useDispatch();
-  const { confirmBox, isConfirm } = useSelector((state) => state.ui);
+  const queryClient = useQueryClient();
+  const { DeletePostApi } = PostsApis();
+  const { confirmBox } = useSelector((state) => state.ui);
+  const { mutate: deleteMutation } = useMutation(DeletePostApi, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["Allposts"]);
+      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
+    },
+    onError: () => {
+      dispatch(
+        setToast({
+          message: "Failed to delete post. Please try again.",
+          type: "error",
+        })
+      );
+    },
+    onSettled: () => {
+      dispatch(setConfirmBox({ message: "", status: false }));
+      if (location.pathname !== "/") {
+        navigate(-1);
+      }
+    },
+  });
 
   const handleConfirm = useCallback(() => {
+    if (confirmBox.type === "delete") {
+      deleteMutation(confirmBox.id);
+    }
     // Logic for confirming action
-    dispatch(setIsConfirm({ type: confirmBox.type, status: true }));
-    dispatch(setConfirmBox({ message: "", status: false }));
-  }, [confirmBox.status, isConfirm.status]);
+  }, [confirmBox.status]);
 
   const handleCancel = useCallback(() => {
     // Logic for cancelling action
-    dispatch(setIsConfirm(false));
     dispatch(setConfirmBox({ message: "", status: false }));
-  }, [confirmBox.status, isConfirm.status]);
+  }, [confirmBox.status]);
   // console.log(confirmBox);
+
   return (
     confirmBox.status &&
     createPortal(

@@ -82,7 +82,7 @@ function Home() {
   return (
     <main className=" flex flex-col sm:flex-row justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Posts Section */}
-      <div className=" relative flex py-16 flex-col h-full items-end border-inherit  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full">
+      <div className=" relative flex py-20 flex-col h-full items-end border-inherit  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full">
         {/* Topics Section */}
         <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border rounded items-center justify-start gap-3 sticky top-16">
           <ul className="flex h-full items-center justify-between w-full">

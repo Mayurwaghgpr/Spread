@@ -300,15 +300,11 @@ export const DeletePost = async (req, res, next) => {
         imageUrls.push(content.split(process.env.BASE_URL)[1]);
       }
     });
-
+    console.log({imageUrls })
     // Delete images if present
     if (imageUrls.length > 0) {
-      const imagesDeleted = await deletePostImage(imageUrls);
-      // console.log(imagesDeleted)
-      if (!imagesDeleted) {
-        return res.status(500).json({ message: "Error deleting images" });
-      }
-
+      const imagesDeleted =  deletePostImage(imageUrls);
+      console.log({ imagesDeleted })
       // Delete the post itself
       await post.destroy();
     }

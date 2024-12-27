@@ -1,25 +1,10 @@
-import React, {
-  useState,
-  useRef,
-  memo,
-  Suspense,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useRef, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import profileIcon from "/ProfOutlook.png";
-import useClickOutside from "../../hooks/useClickOutside";
+
 import ProfileButton from "../ProfileButton";
 // import useScrollDirection from "../../hooks/useScrollDirection"; // Import the custom hook
 
-const ConfirmationBox = React.lazy(
-  () => import("../UtilityComp/ConfirmationBox")
-);
-
-import SearchBar from "../homeComp/searchBar";
-import ThemeMenu from "../UtilityComp/ThemeMenu";
 import ThemeBtn from "../buttons/ThemeBtn";
 import { setManuOpen } from "../../redux/slices/uiSlice";
 
@@ -27,9 +12,8 @@ function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
   const location = useLocation();
   const dispatch = useDispatch();
-  const searchRef = useRef();
 
-  const { confirmBox, ThemeMode, MenuOpen } = useSelector((state) => state.ui);
+  const { MenuOpen } = useSelector((state) => state.ui);
   const { isLogin, user } = useSelector((state) => state.auth);
 
   return (
@@ -60,9 +44,9 @@ function MainNavBar() {
               <div className="relative box-content flex *:transition-all *:duration-300 text-left group border-inherit">
                 <ProfileButton
                   onClick={() => dispatch(setManuOpen())}
-                  className={`box-content border-2  size-10 ${
+                  className={`box-content border-2  size-9   ${
                     location.pathname.startsWith("/profile")
-                      ? " border-black"
+                      ? " border-black dark:border-white"
                       : "border-transparent"
                   } `}
                 />

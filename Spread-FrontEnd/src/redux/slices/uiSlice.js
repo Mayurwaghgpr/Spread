@@ -6,7 +6,9 @@ const initialState = {
 
   confirmBox: {
     message: "",
+    title:'',
     status: false,
+    id:'',
   },
   isConfirm: {
     status: false,

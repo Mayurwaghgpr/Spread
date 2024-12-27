@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-function useClickOutside(MenuRef, searchRef) {
-  const { isLogin, user } = useSelector((state) => state.auth);
+function useClickOutside(MenuRef) {
+  const { isLogin } = useSelector((state) => state.auth);
   const [isFixed, setFixed] = useState(false);
-  const [menuId, setMenuId] = useState();
+  const [menuId, setMenuId] = useState("");
 
   useEffect(() => {
     function handleClickOutside(event) {
-      // console.log(MenuRef.current.contain(event.target));
-      if (MenuRef?.current && !MenuRef?.current?.contains(event.target)) {
+      if (MenuRef?.current && !MenuRef.current.contains(event.target)) {
         setMenuId("");
       }
     }
@@ -18,23 +17,22 @@ function useClickOutside(MenuRef, searchRef) {
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      // document.removeEventListener("scroll", handleClickOutside);
     };
   }, [MenuRef]);
 
   useEffect(() => {
+    let scrollTimeout;
     const handleScroll = () => {
-      // Adjust scroll threshold based on your needs
-      if (window.scrollY > 10) {
-        setFixed(true);
-      } else {
-        setFixed(false);
-      }
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        setFixed(window.scrollY > 10);
+      }, 100); // Debounced delay
     };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);

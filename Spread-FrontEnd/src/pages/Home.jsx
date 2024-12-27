@@ -39,6 +39,7 @@ function Home() {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
+    isLoading,
   } = useInfiniteQuery(
     ["Allposts", selectedTopic],
     ({ pageParam = 1 }) => fetchDataAll({ pageParam, topic: selectedTopic }),
@@ -82,7 +83,7 @@ function Home() {
   return (
     <main className=" flex flex-col sm:flex-row justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Posts Section */}
-      <div className=" relative flex py-20 flex-col h-full items-end border-inherit  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full">
+      <div className=" relative flex py-[4.2rem] flex-col h-screen items-end border-inherit  xl:m-0 sm:w-[35rem] lg:w-[45rem] w-full">
         {/* Topics Section */}
         <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border rounded items-center justify-start gap-3 sticky top-16">
           <ul className="flex h-full items-center justify-between w-full">
@@ -102,26 +103,29 @@ function Home() {
             </li>
           </ul>
         </div>
-
         {/* Posts List */}
-        {posts.map((post, idx, arr) => (
-          <PostPreview
-            className="border-inherit px-2"
-            ref={arr.length % 3 === 0 ? lastpostRef : null}
-            key={post?.id}
-            post={post}
-          />
-        ))}
-
+        {!isLoading
+          ? posts.map((post, idx, arr) => (
+              <PostPreview
+                className="border-inherit px-2"
+                ref={arr.length % 3 === 0 ? lastpostRef : null}
+                key={post?.id}
+                post={post}
+              />
+            ))
+          : [...Array(3)].map(() => (
+              <PostPreview className="border-inherit px-2" />
+            ))}
         {/* Loading Spinner */}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
             <Spinner className={"border-t-black dark:border-t-white"} />
           </div>
         )}
-
-        {/* No Posts */}
-        {!postsData && <h2 className="m-auto text-xl">No posts</h2>}
+        {/* No Posts */}{" "}
+        {!posts.length > 0 && !isLoading && (
+          <h2 className="m-auto text-xl">No posts</h2>
+        )}
       </div>
 
       {/* Aside Section */}

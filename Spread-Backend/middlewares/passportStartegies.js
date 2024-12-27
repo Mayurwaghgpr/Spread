@@ -2,6 +2,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import User from "../models/user.js"; // Adjust the path as necessary
 import dotenv from "dotenv";
+import Post from "../models/posts.js";
 dotenv.config();
 
 export const passportStrategies = (passport) => {
@@ -30,6 +31,10 @@ export const passportStrategies = (passport) => {
                 as: "Following",
                 through: { attributes: { exclude: ["password"] } },
               },
+              {
+                model: Post,
+                attributes: ['id']
+              }
             ],
           });
           if (!user) {
@@ -76,6 +81,11 @@ export const passportStrategies = (passport) => {
                 as: "Following",
                 through: { attributes: { exclude: ["password"] } },
               },
+               {
+                model: Post,
+                // as: 'userPosts',
+                attributes: ['id']
+              }
             ],
           });
           if (!user) {

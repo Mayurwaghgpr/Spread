@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenerator.js";
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
+import Post from "../models/posts.js";
 
 dotenv.config();
 const saltRounds = 10;
@@ -89,6 +90,11 @@ export const SignIn = async (req, res, next) => {
           as: "Following",
           through: { attributes: { exclude: ["password"] } },
         },
+         {
+                model: Post,
+                as: 'Posts',
+                attributes: ['id']
+              }
       ],
     });
 

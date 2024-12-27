@@ -48,17 +48,21 @@ const ReadList = () => {
             <h1>Read list </h1>
           </div>
         </div>
-        {pages?.map((page, idx) => {
-          return (
-            <PostPreview
-              className={" "}
-              ref={pages?.length % 3 === 0 ? lastpostRef : null}
-              key={idx}
-              post={page}
-              Saved={true}
-            />
-          );
-        })}
+        {!isLoading
+          ? pages?.map((page, idx) => {
+              return (
+                <PostPreview
+                  className={" "}
+                  ref={pages?.length % 3 === 0 ? lastpostRef : null}
+                  key={idx}
+                  post={page}
+                  Saved={true}
+                />
+              );
+            })
+          : [...Array(3)].map(() => (
+              <PostPreview className="border-inherit px-2" />
+            ))}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
             <Spinner

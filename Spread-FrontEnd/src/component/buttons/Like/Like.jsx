@@ -69,7 +69,7 @@ function Like({ post, className }) {
         {/* Icon rendering */}
         {likeIconObj[optimistIcon || (isLiked?.type ?? "default")]}
         <span className="text-md mt-1">
-          {abbreviateNumber(post.Likes.length)}
+          {abbreviateNumber(post?.Likes?.length)}
         </span>
       </button>
     </div>

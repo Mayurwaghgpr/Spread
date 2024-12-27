@@ -48,20 +48,24 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               .join("")}/${post?.user?.id}`}
             className="flex gap-3"
           >
-            <div className={`h-[2rem] w-[2rem] hover:opacity-75 rounded-full`}>
-              <img
-                className="cursor-pointer object-cover object-top h-full w-full rounded-full"
-                src={userImage.userImageurl}
-                loading="lazy"
-                alt={post?.user?.username}
-              />
+            <div
+              className={`${!post && "animate-pulse bg-gray-200 dark:bg-gray-400"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
+            >
+              {post && (
+                <img
+                  className="cursor-pointer object-cover object-top h-full w-full rounded-full"
+                  src={userImage.userImageurl}
+                  loading="lazy"
+                  alt={post?.user?.username}
+                />
+              )}
             </div>
           </Link>
           <div className="text-sm rounded-lg flex">
             {post ? (
               <p className="capitalize">{post?.user?.username}</p>
             ) : (
-              <span className="w-20 h-3 bg-slate-300 animate-pulse dark:bg-slate-700 bg-inherit rounded-xl"></span>
+              <span className="w-20 h-3 bg-gray-200 animate-pulse dark:bg-gray-400 bg-inherit rounded-xl"></span>
             )}
           </div>
           <h1 className="text-opacity-30 text-black dark:text-white dark:text-opacity-30 rounded-lg">
@@ -93,13 +97,13 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-lg sm:w-[20rem] w-[6.2rem] h-3 sm:h-5 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
-                <div className="rounded-lg sm:w-[400px] w-[150px] h-5 sm:h-12 bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
+                <div className="rounded-lg sm:w-[20rem] w-[6.2rem] h-3 sm:h-5 bg-gray-200 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-lg sm:w-[400px] w-[150px] h-5 sm:h-12 bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
               </>
             )}
           </div>
 
-          <div className="rounded-lg sm:h-[10rem] border border-inherit z-0 sm:w-[15rem] h-[10rem] overflow-hidden w-full bg-slate-200 dark:bg-slate-700">
+          <div className="rounded-lg sm:h-[10rem] border border-inherit z-0 sm:w-[15rem] h-[10rem] overflow-hidden w-full bg-slate-200 dark:bg-gray-400">
             {post && (
               <img
                 className="object-fill object-center z-0 h-full w-full"

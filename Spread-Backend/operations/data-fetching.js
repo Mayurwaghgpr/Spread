@@ -26,10 +26,10 @@ export class DataFetching {
             through: { attributes: [] }, // Exclude through table attributes
             attributes: ['id'], // Fetch only necessary fields
           },
-          // {
-          //   model: Post,
-          //   as:'posts'
-          // },
+          {
+            model: Post,
+            as:'posts'
+          },
           {
             model: Post,
             as: 'SavedPosts',

@@ -68,7 +68,7 @@ function Profile() {
   if (isError || (isPostError && postError?.message !== "404")) {
     return <h1>Error {postError?.message}. Please try again.</h1>;
   }
-
+  console.log(userProfile);
   return (
     <div className="flex justify-center dark:*:border-[#383838]">
       <div className=" md:w-[80%] mt-20  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
@@ -86,14 +86,18 @@ function Profile() {
             }`}
           >
             {/* <RenderPosts /> */}
-            {posts.length > 0
-              ? posts.map((post, idx, arr) => (
-                  <PostPreview
-                    ref={arr.length % 3 === 0 ? lastpostRef : null}
-                    key={post.id}
-                    post={post}
-                  />
-                ))
+            {userProfile?.posts?.length > 0
+              ? !isLoading
+                ? posts.map((post, idx, arr) => (
+                    <PostPreview
+                      ref={arr.length % 3 === 0 ? lastpostRef : null}
+                      key={post.id}
+                      post={post}
+                    />
+                  ))
+                : [...Array(3)].map(() => (
+                    <PostPreview className="border-inherit px-2" />
+                  ))
               : profileId === user?.id && (
                   <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center text-2xl border-dashed border-2 rounded-lg max-h-[300px] h-full min-h-[200px] border-inherit">
                     No posts yet{" "}

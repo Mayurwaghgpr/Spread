@@ -1,4 +1,4 @@
-import fs from "fs/promises";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -11,7 +11,7 @@ export const deletePostImage = async (imageUrls) => {
   try {
     // Use map to create an array of Promises returned by unlink
     imageUrls.forEach(async (url) => {
-      await fs.unlink(path.join('Spread-Backend',url));
+       fs.unlink(path.join('Spread-Backend',url));
     });
     return "All image files deleted successfully";
   } catch (err) {

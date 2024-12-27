@@ -132,7 +132,6 @@ Archive.belongsTo(Post, {
 Comments.hasMany(Comments, {
   foreignKey: "topCommentId",
   as: "reply",
- onDelete: "CASCADE", // Delete child comments when the topComment is deleted
 });
 Comments.belongsTo(Comments, {
   foreignKey: "topCommentId",
@@ -159,8 +158,6 @@ Comments.belongsTo(Post, {
 Post.hasMany(Comments, {
   foreignKey: "postId",
   as: "comments",
-  onDelete: "CASCADE", // Delete comments when the post is deleted
-  onUpdate: "CASCADE",
 });
 
 app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));

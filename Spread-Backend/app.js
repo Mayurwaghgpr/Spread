@@ -148,17 +148,18 @@ User.hasMany(Comments, {
   as: "comments",
 });
 
-// A Comment belongs to a Post
-Comments.belongsTo(Post, {
-  foreignKey: "postId",
-  as: "post",
-
-});
 // A Post can have many Comments
 Post.hasMany(Comments, {
   foreignKey: "postId",
   as: "comments",
   onDelete: 'CASCADE',
+});
+
+// A Comment belongs to a Post
+Comments.belongsTo(Post, {
+  foreignKey: "postId",
+  as: "post",
+
 });
 
 app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));

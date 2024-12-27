@@ -15,6 +15,6 @@ export const deletePostImage = async (imageUrls) => {
     });
     return "All image files deleted successfully";
   } catch (err) {
-    throw new Error(`Error deleting image files: ${err.message}`);
+    return `Error deleting image files: ${err.message}`;
   }
 };

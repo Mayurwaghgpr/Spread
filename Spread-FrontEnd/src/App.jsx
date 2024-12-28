@@ -73,19 +73,11 @@ function App() {
 
   // Handle dark mode based on ThemeMode
   useMemo(() => {
-    if (ThemeMode === "dark") {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("ThemeMode", "dark");
-    } else if (ThemeMode === "light") {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("ThemeMode", "light");
-    } else if (ThemeMode === "system") {
-      if (systemTheme) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    }
+    const isDarkMode =
+      ThemeMode === "dark" || (ThemeMode === "system" && systemTheme);
+
+    document.documentElement.classList.toggle("dark", isDarkMode);
+    localStorage.setItem("ThemeMode", ThemeMode);
   }, [ThemeMode, systemTheme]);
 
   return (

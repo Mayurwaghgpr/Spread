@@ -12,7 +12,70 @@ import LoaderScreen from "../loaders/loaderScreen";
 import { setIsLogin, setUser } from "../../redux/slices/authSlice";
 import Theme from "../UtilityComp/ThemeMenu";
 import { createPortal } from "react-dom";
+import abbreviateNumber from "../../utils/numAbrivation";
+import {
+  IoHomeOutline,
+  IoHomeSharp,
+  IoLibrarySharp,
+  IoSadOutline,
+  IoSadSharp,
+  IoSearch,
+  IoSearchOutline,
+  IoSearchSharp,
+} from "react-icons/io5";
+import { BsFeather, BsGear, BsGearFill, BsSearch } from "react-icons/bs";
+import { FaFeather } from "react-icons/fa6";
+import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
+import { IoLibraryOutline } from "react-icons/io5";
+import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
+const LoginMenuLinks = [
+  {
+    id: uuidv4(),
+    icon1: <IoHomeOutline />,
+    icon2: <IoHomeSharp />,
+    stub: "/",
+    lkname: "Home",
+  },
 
+  {
+    id: uuidv4(),
+    icon1: <IoSearchOutline />,
+    icon2: <IoSearch />,
+    stub: "/explore",
+    lkname: "Explore",
+  },
+  {
+    id: uuidv4(),
+    icon1: <RiQuillPenLine />,
+    icon2: <RiQuillPenFill />,
+    stub: "/write",
+    className: "text-3xl",
+    lkname: "Write",
+  },
+  {
+    id: uuidv4(),
+    lkname: "Read",
+    icon1: <IoLibraryOutline />,
+    icon2: <IoLibrarySharp />,
+    stub: "/read",
+  },
+
+  {
+    id: uuidv4(),
+    lkname: "Messages",
+    icon1: <TbMessageCircle />,
+    icon2: <TbMessageCircleFilled />,
+    stub: "/Messages",
+  },
+
+  {
+    id: uuidv4(),
+    lkname: "Settings",
+    icon1: <BsGear />,
+    icon2: <BsGearFill />,
+    stub: "/setting",
+  },
+];
 function SideBar() {
   const { user, isLogin } = useSelector((state) => state.auth);
   const { MenuOpen } = useSelector((state) => state.ui);
@@ -39,63 +102,6 @@ function SideBar() {
   if (isLoading) {
     <LoaderScreen />;
   }
-
-  const LoginMenuLinks = [
-    {
-      id: uuidv4(),
-      lkname: user?.username,
-      icon: (
-        <img
-          className="size-8 rounded-full object-cover object-top"
-          src={userImageurl}
-          alt="User profile"
-        />
-      ),
-      stub: `/profile/@${user?.username?.replace(/\s+/g, "")}/${user?.id}`,
-      email: user.email,
-      className: "text-sm",
-    },
-    {
-      id: uuidv4(),
-      icon: <i className="bi bi-house"></i>,
-      stub: "/",
-      lkname: "Home",
-    },
-
-    {
-      id: uuidv4(),
-      icon: <i className="bi bi-search"></i>,
-      stub: "/explore",
-      lkname: "Explore",
-    },
-    {
-      id: uuidv4(),
-      icon: <i className="bi bi-feather"></i>,
-      stub: "/write",
-      className: "text-3xl",
-      lkname: "Write",
-    },
-    {
-      id: uuidv4(),
-      lkname: "Read",
-      icon: <i className="bi bi-book"></i>,
-      stub: "/read",
-    },
-
-    {
-      id: uuidv4(),
-      lkname: "Stories",
-      icon: <i className="bi bi-hourglass"></i>,
-      stub: "stories",
-    },
-
-    {
-      id: uuidv4(),
-      lkname: "Settings",
-      icon: <i className="bi bi-gear"></i>,
-      stub: "/setting",
-    },
-  ];
   return createPortal(
     <div
       onClick={(e) => {
@@ -105,24 +111,50 @@ function SideBar() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="p-10 w-fit dark:bg-black animate-slide-in-left xl:animate-none bg-[#fff9f3] h-full"
+        className="p-12 pe-0 w-fit dark:bg-black animate-slide-in-left xl:animate-none text-xl bg-[#fff9f3] h-full"
       >
-        <div className="flex flex-col min-h-[90%] text-black text-lg dark:text-white *:transition-all *:duration-300 sm:w-full justify-between  items-center ">
-          {/* Profile Link */}
-          <div className="flex flex-col gap-2">
+        <div className="sm:w-full flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300    ">
+          <div className="flex flex-col gap-7">
+            {/* Profile Link */}
+            <div className=" flex flex-col gap-2 h-fit ">
+              <Link
+                to={`/profile/@${user?.username?.replace(/\s+/g, "")}/${user?.id}`}
+                className="flex justify-start items-center gap-3  hover:bg-gray-400  hover:bg-opacity-15 rounded-full py-2"
+              >
+                <div>
+                  {" "}
+                  <img
+                    className="size-8 rounded-full object-cover object-top"
+                    src={userImageurl}
+                    alt="User profile"
+                  />
+                </div>{" "}
+                <h1>{user?.username}</h1>
+              </Link>
+              {/* <h2 className="text-xs px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-40">
+            
+                {user.email}
+              </h2> */}
+              <div className="flex justify-start items-center gap-3 text-sm  px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">
+                <h3>{abbreviateNumber(user?.Followers?.length)} Followers</h3>
+                <h4>{abbreviateNumber(user?.Following?.length)} Following</h4>
+              </div>
+            </div>
             {LoginMenuLinks.map((link) => {
               return (
                 <NavLink
                   key={link.id}
-                  isactive={(match, location) =>
+                  isActive={(match, location) =>
                     location.pathname.startsWith(link.stub)
                   }
                   className={({ isActive }) =>
-                    `flex ${isActive && "font-extrabold text-xl "} px-3  justify-start items-center   hover:bg-gray-400  hover:bg-opacity-15 rounded-full  p-3 gap-5 w-full`
+                    `flex ${isActive && "font-extrabold "}  justify-start items-center   hover:bg-gray-400  hover:bg-opacity-15 rounded-full  gap-5 w-full`
                   }
                   to={link.stub}
                 >
-                  {link.icon}
+                  {location.pathname.startsWith(link.stub)
+                    ? link.icon2
+                    : link.icon1}
                   <div className={`xl:block sm:hidden block flex-col `}>
                     {" "}
                     <span>{link.lkname}</span>{" "}
@@ -132,15 +164,18 @@ function SideBar() {
             })}
           </div>
           {/* Logout Button */}
-          <button
-            onClick={mutate}
-            type="button"
-            aria-label="Logout"
-            className="flex gap-5 items-center w-full hover:bg-opacity-5 px-3 py-1 rounded-md"
-          >
-            <LuLogOut className="" />
-            <span className=" xl:block sm:hidden block ">Sign out</span>
-          </button>
+          <div className=" ">
+            {" "}
+            <button
+              onClick={mutate}
+              type="button"
+              aria-label="Logout"
+              className="flex gap-5 items-center  hover:bg-opacity-5  rounded-md"
+            >
+              <LuLogOut className="" />
+              <span className=" xl:block sm:hidden block ">Sign out</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>,

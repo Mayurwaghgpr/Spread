@@ -23,6 +23,7 @@ const EmojiPicker = lazy(() => import("emoji-picker-react"));
 function CommentInput({ className }) {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred } = useSelector((state) => state.posts);
+  const { ThemeMode } = useSelector((state) => state.ui);
   const { Comments } = PostsApis();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -82,18 +83,19 @@ function CommentInput({ className }) {
           }}
           onInput={(e) => handelInput(e.currentTarget.innerText)}
         ></p>
-        <div className=" w-1 h-1 bg-none p-1 text-xl">
+        <div className=" w-1 h-1 bg-none p-1 text-xl border-inherit">
           <MdOutlineTagFaces
             onClick={() => setOpenEmojiPicker((prev) => !prev)}
           />
           <div
             ref={pickerRef}
-            className="absolute -right-16 min-size-10 -top-[30rem]"
+            className="absolute -right-16 min-size-10 -top-[30rem] border-inherit"
           >
             <Suspense fallback={<Spinner />}>
               <EmojiPicker
                 lazyLoadEmojis={true}
                 open={openEmojiPicker}
+                theme={ThemeMode}
                 onEmojiClick={(e) => console.log(e.emoji)}
               />
             </Suspense>

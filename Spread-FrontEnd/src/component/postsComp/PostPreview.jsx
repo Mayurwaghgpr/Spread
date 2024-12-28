@@ -83,7 +83,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             .split(" ")
             .slice(0, post?.user?.username.length - 1)
             .join("")}/${post?.id}`}
-          className="relative cursor-pointer h-full border-inherit flex sm:flex-row flex-col-reverse justify-between items-center gap-3"
+          className="relative cursor-pointer h-full border-inherit flex xl:flex-row flex-col-reverse justify-between items-center gap-3"
         >
           <div className="flex w-full flex-col gap-1">
             {post ? (
@@ -97,13 +97,16 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-lg sm:w-[20rem] w-[6.2rem] h-3 sm:h-5 bg-gray-200 dark:bg-gray-400 animate-pulse"></div>
-                <div className="rounded-lg sm:w-[400px] w-[150px] h-5 sm:h-12 bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[20rem] w-[6.2rem] h-6  bg-gray-200 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[150px] h-4  bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[150px] h-4  bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
               </>
             )}
           </div>
 
-          <div className="rounded-lg sm:h-[10rem] border border-inherit z-0 sm:w-[15rem] h-[10rem] overflow-hidden w-full bg-slate-200 dark:bg-gray-400">
+          <div
+            className={`rounded-lg ${!post && " animate-pulse"}  border border-inherit z-0 xl:w-72 xl:h-32  overflow-hidden w-full bg-slate-200 dark:bg-gray-400`}
+          >
             {post && (
               <img
                 className="object-fill object-center z-0 h-full w-full"
@@ -126,7 +129,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </div>
             </div>
             <div className="flex justify-end gap-5 items-center">
-              <Bookmark className={" text-[#383838]"} post={post || null} />
+              <Bookmark
+                className={"text-black dark:text-white "}
+                post={post || null}
+              />
               <Menu post={post} />
             </div>
           </div>

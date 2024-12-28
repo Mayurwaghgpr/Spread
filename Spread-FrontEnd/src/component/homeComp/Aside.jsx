@@ -14,7 +14,7 @@ function Aside({
   return (
     <aside className={`${className}`}>
       <div className="flex flex-col w-full p-6 items-center text-start gap-2 border rounded-xl border-inherit">
-        <h1 className="font-normal text-start w-full sm:text-sm lg:text-md xl:text-lg">
+        <h1 className=" text-start w-full text-xl font-bold">
           Suggested topics
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
@@ -22,7 +22,7 @@ function Aside({
             {PrepsData?.topics?.map(({ topic }, index) => (
               <li
                 key={index}
-                className=" font-normal rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
+                className=" rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
               >
                 <button
                   className="t-btn"
@@ -39,7 +39,7 @@ function Aside({
       </div>
       <div className="sticky top-20 gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
         <div className="h-full text-sm  p-5 border rounded-xl border-inherit">
-          <h1 className="font-normal text-start w-full sm:text-sm ">
+          <h1 className=" text-start w-full text-xl font-bold">
             Follow People
           </h1>
           {!FechingPreps ? (
@@ -71,15 +71,7 @@ function Aside({
             {" "}
             Privacy Policy
           </Link>{" "}
-          <Link className="mx-1" to="">
-            {" "}
-            Cookie Policy
-          </Link>{" "}
-          <Link className="mx-1" to={""}>
-            {" "}
-            Accessibility
-          </Link>{" "}
-          Ads info More... © 2024 Spread
+          © 2024 Spread
         </footer>
       </div>
     </aside>

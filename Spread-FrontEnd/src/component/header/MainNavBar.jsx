@@ -15,6 +15,7 @@ function MainNavBar() {
 
   const { MenuOpen } = useSelector((state) => state.ui);
   const { isLogin, user } = useSelector((state) => state.auth);
+  const { userProfile } = useSelector((state) => state.profile);
 
   return (
     <header
@@ -45,7 +46,8 @@ function MainNavBar() {
                 <ProfileButton
                   onClick={() => dispatch(setManuOpen())}
                   className={`box-content border-2  size-9   ${
-                    location.pathname.startsWith("/profile")
+                    location.pathname.startsWith("/profile") &&
+                    userProfile?.id === user?.id
                       ? " border-black dark:border-white"
                       : "border-transparent"
                   } `}

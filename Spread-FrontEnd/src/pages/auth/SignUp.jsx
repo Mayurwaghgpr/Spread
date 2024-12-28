@@ -93,7 +93,7 @@ function SignUp() {
         <i className="bi bi-x-lg"></i>
       </button>
 
-      <div className="flex flex-col justify-between gap-3 p-7 min-w-[300px] sm:w-[500px] h-full rounded-xl bg-white dark:bg-inherit *:border-inherit ">
+      <div className="flex flex-col justify-between gap-3 p-7 min-w-[300px] sm:w-[500px] h-full rounded-xl  dark:bg-inherit *:border-inherit ">
         <header className="text-2xl mt-2 text-center flex justify-center items-center">
           {"Spread"}
         </header>

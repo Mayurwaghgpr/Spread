@@ -41,8 +41,8 @@ export const SignUp = async (req, res, next) => {
     });
     // Generate access and refresh tokens
     const { AccessToken, RefreshToken } = AccessAndRefreshTokenGenerator({
-      id: newUser.id,
-      email: newUser.email,
+      id: newAddedUser.id,
+      email:email,
     });
 
     if (!AccessToken || !RefreshToken) {
@@ -92,9 +92,13 @@ export const SignIn = async (req, res, next) => {
         },
          {
                 model: Post,
-                as: 'Posts',
                 attributes: ['id']
-              }
+         },
+        {
+            model: Post,
+            as: 'SavedPosts',
+            through: { attributes: [] }, // Fetch only related posts
+          },
       ],
     });
 

@@ -40,7 +40,7 @@ function Bookmark({ className, post }) {
   );
   return (
     <div
-      className={`${isBookmarked && "dark:text-white text-inherit "} ${className} `}
+      className={`${isBookmarked ? "dark:text-opacity-100 text-opacity-100 text-black dark:text-white" : " dark:hover:text-opacity-100  hover:text-opacity-100 text-opacity-20 dark:text-opacity-20"} ${className} `}
     >
       {" "}
       <i

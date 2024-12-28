@@ -10,6 +10,16 @@ export default {
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
       },
+      fontFamily: {
+        nunito: ['"Nunito"', 'serif'], // Custom font-family
+      },
+      fontWeight: {
+        nunito: '400', // Custom font-weight
+      },
+      fontStyle: {
+        nunito: 'normal', // Custom font-style
+      },
+  
       keyframes: {
         fromRight: { // Corrected typo here
           '0%': { transform: 'translateX(100%)' },

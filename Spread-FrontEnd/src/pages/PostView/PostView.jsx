@@ -57,7 +57,7 @@ function FullBlogView() {
   const Comments = postView?.comments?.filter(
     (comment) => comment.topCommentId === null
   );
-
+  console.log(Comments);
   return (
     <main className="container  py-4 my-16 dark:*:border-[#383838]">
       <article className="max-w-4xl 2xl:mx-auto xl:ml-auto xl:mr-16 px-6 rounded-lg flex flex-col justify-center items-center">

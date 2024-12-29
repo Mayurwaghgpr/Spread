@@ -4,11 +4,13 @@ import { createPortal } from "react-dom";
 import { useCallback } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import PostsApis from "../../Apis/PostsApis";
-
+import { useNavigate } from "react-router-dom";
+import Spinner from "../../component/loaders/Spinner";
 function ConfirmationBox() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { DeletePostApi } = PostsApis();
+  const navigate = useNavigate();
   const { confirmBox } = useSelector((state) => state.ui);
   const { mutate: deleteMutation, isLoading } = useMutation(DeletePostApi, {
     onSuccess: (data) => {
@@ -25,7 +27,7 @@ function ConfirmationBox() {
     },
     onSettled: () => {
       dispatch(setConfirmBox({ message: "", status: false }));
-      if (location.pathname !== "/") {
+      if (location.pathname.startsWith("/view")) {
         navigate(-1);
       }
     },
@@ -80,7 +82,7 @@ function ConfirmationBox() {
               className="p-2 px-5 rounded-3xl  bg-white text-black"
               disabled={isLoading}
             >
-              {isLoading ? <Spinner /> : confirmBox.type}
+              {isLoading ? <Spinner className={"w-5 h-5"} /> : confirmBox?.type}
             </button>
           </div>
         </div>

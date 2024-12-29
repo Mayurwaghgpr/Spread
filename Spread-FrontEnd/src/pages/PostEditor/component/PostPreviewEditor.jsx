@@ -74,6 +74,7 @@ function PostPreviewEditor() {
         formData.append(`image-${el.index}`, el.file);
         formData.append(`description-${el.index}`, el.data);
       });
+      console.log(formData);
       if (e === "fetch") {
         mutation.mutate(formData);
       }

@@ -14,7 +14,7 @@ const fileExists = async (filePath) => {
 export const deletePostImage = async (imageUrls) => {
   try {
     const deletePromises = imageUrls.map(async (url) => {
-      const filePath = path.join("Spread-Backend", url);
+      const filePath = url
       
       // Check if the file exists before attempting to delete
       const exists = await fileExists(filePath);

@@ -175,7 +175,7 @@ app.use((error, req, res, next) => {
 });
 
 // Database Sync and Server Start
-Database.sync()
+Database.sync({force:true})
   .then(() => {
     app.listen(port, () => {
       console.log(`API is running at http://localhost:${port}`);

@@ -19,7 +19,7 @@ import { setToast } from "../../redux/slices/uiSlice";
 import Spinner from "../../component/loaders/Spinner";
 import useClickOutside from "../../hooks/useClickOutside";
 
-const EmojiPicker = lazy(() => import("emoji-picker-react"));
+// const EmojiPicker = lazy(() => import("emoji-picker-react"));
 function CommentInput({ className }) {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred } = useSelector((state) => state.posts);
@@ -62,10 +62,10 @@ function CommentInput({ className }) {
     useClickOutside(pickerRef);
   return (
     <div className={className}>
-      <div className="flex  justify-start items-start text-sm">
+      <div className=" w-20 h-14  text-sm">
         {" "}
         <img
-          className="max-w-10 max-h-10 object-cover object-top rounded-full"
+          className="w-full h-full object-cover object-top rounded-full"
           src={userImage.userImageurl}
           alt={user?.username}
         />
@@ -91,14 +91,14 @@ function CommentInput({ className }) {
             ref={pickerRef}
             className="absolute -right-16 min-size-10 -top-[30rem] border-inherit"
           >
-            <Suspense fallback={<Spinner />}>
+            {/* <Suspense fallback={<Spinner />}>
               <EmojiPicker
                 lazyLoadEmojis={true}
                 open={openEmojiPicker}
                 theme={ThemeMode}
                 onEmojiClick={(e) => console.log(e.emoji)}
               />
-            </Suspense>
+            </Suspense> */}
           </div>
         </div>
       </div>

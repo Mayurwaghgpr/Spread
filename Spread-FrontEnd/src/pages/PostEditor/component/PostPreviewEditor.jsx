@@ -19,7 +19,6 @@ function PostPreviewEditor() {
   const [Topic, setTopic] = useState();
   const { elements } = useSelector((state) => state.posts);
 
-  console.log(imageFiles);
   const { user } = useSelector((state) => state.auth);
   const { AddNewPost } = PostsApis();
   const queryClient = useQueryClient();
@@ -178,7 +177,7 @@ function PostPreviewEditor() {
               onClick={() => handeSubmit("fetch")}
               className={`flex gap-2 ${
                 mutation.isLoading && "bg-sky-100 "
-              } dark:bg-sky-500 bg-sky-300  px-4 py-2 rounded-lg`}
+              } dark:bg-sky-400 bg-sky-400  px-4 py-2 rounded-lg`}
               disabled={mutation.isLoading}
             >
               {mutation.isLoading && <Spinner className={" w-5 h-5"} />}

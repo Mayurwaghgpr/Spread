@@ -185,6 +185,7 @@ function ProfileEditor() {
               <>
                 {" "}
                 <CommonInput
+                  key={input.id}
                   className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
                   type={input.type}
                   Iname={input.Iname}
@@ -201,7 +202,7 @@ function ProfileEditor() {
             ))}
           </div>
           <button
-            className={`px-4 py-1 rounded-xl  border bg-sky-500`}
+            className={`px-4 py-1 text-white rounded-xl  border bg-sky-400`}
             onClick={() => mutate(newInfo)}
           >
             {isLoading ? "Updating..." : "Save"}

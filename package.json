@@ -5,9 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "build": "npm install && npm install --prefix Spread-FrontEnd && npm run build --prefix Spread-FrontEnd",
-    "dev": "nodemon Spread-Backend/app.js",
-    "start": "node Spread-Backend/app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +15,7 @@
     "axios": "^1.4.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "cloudinary": "^2.5.1",
     "connect-session-sequelize": "^7.1.7",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

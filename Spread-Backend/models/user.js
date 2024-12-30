@@ -19,6 +19,10 @@ const User = Database.define("User", {
     allowNull: false,
     unique: true,
   },
+  cloudinaryPubId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+  },
   pronouns: {
     type: DataTypes.STRING,
     defaultValue: "",

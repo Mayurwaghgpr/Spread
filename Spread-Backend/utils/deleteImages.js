@@ -11,15 +11,15 @@ const fileExists = async (filePath) => {
   }
 };
 
-export const deletePostImage = async (imageUrls) => {
+export const deletePostImage = async (imagePaths) => {
   try {
-    const deletePromises = imageUrls.map(async (url) => {
-      const filePath = url
+    const deletePromises = imagePaths.map(async (image) => {
+      const imagePath = image.path
       
       // Check if the file exists before attempting to delete
-      const exists = await fileExists(filePath);
+      const exists = await fileExists(imagePath);
       if (exists) {
-        await fs.unlink(filePath); // Delete the file if it exists
+        await fs.unlink(imagePath); // Delete the file if it exists
       }
     });
 

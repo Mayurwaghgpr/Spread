@@ -6,6 +6,8 @@ import formatPostData from "../utils/dataFormater.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import Likes from "../models/Likes.js";
 import { DataFetching } from "../operations/data-fetching.js";
+import cloudinary from "../config/cloudinary.js";
+import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 // import redisClient from "../utils/redisClient.js";
 
 const EXPIRATION = 3600;
@@ -38,7 +40,6 @@ export const getUserProfile = async (req, res, next) => {
     }
   } catch (error) {
     console.error("Error fetching user profile:", error);
-    // return res.status(500).json({ message: 'An error occurred while fetching user profile' });
     next(error);
   }
 };
@@ -126,21 +127,25 @@ export const EditUserProfile = async (req, res, next) => {
   const image = req.files ? req.files : [];
   const data = req.body;
   let updatedData = { ...data };
-
   try {
     // update new image path and delete the old image file from folder
     if (image.length > 0) {
-      updatedData.userImage = "images/userImages/" + image[0].filename; // Update user image path
-      if (data.userFromOAuth === false && data.userImage) {
-        await deletePostImage([data.userImage]); // Delete old image
+      const result= await cloudinary.uploader.upload(image[0].path);
+      updatedData.userImage = result.secure_url  // Update user image path
+      updatedData.cloudinaryPubId = result.public_id;
+
+      if (!data.userFromOAuth && data.cloudinaryPubId) {
+        // console.log("old_pubId",data.cloudinaryPubId)
+        await deleteCloudinaryImage(data.cloudinaryPubId); // Delete old image
+        await deletePostImage(image);
       }
     }
     // To only remove image
     if (data.removeImage && data.userImage && data.userImage !== " ") {
       updatedData.userImage = ""; // Remove user image
       //If user is not loged in with OAuth i.e google/github etc. so he will have image stored in backend
-      if (data.userFromOAuth === false) {
-        await deletePostImage([data.userImage]);
+      if (!data.userFromOAuth) {
+       await deleteCloudinaryImage(data.cloudinaryPubId);
       }
     }
 
@@ -162,7 +167,6 @@ export const EditUserProfile = async (req, res, next) => {
     }
   } catch (err) {
     console.error("Error updating profile:", err);
-    // res.status(500).json({ message: "Internal server error" });
     next(err);
   }
 };

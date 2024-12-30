@@ -34,7 +34,7 @@ const LoginMenuLinks = [
     icon1: <IoHomeOutline />,
     icon2: <IoHomeSharp />,
     stub: "/",
-    lkname: "Home",
+    lkname: "home",
   },
 
   {
@@ -42,7 +42,7 @@ const LoginMenuLinks = [
     icon1: <IoSearchOutline />,
     icon2: <IoSearch />,
     stub: "/explore",
-    lkname: "Explore",
+    lkname: "explore",
   },
   {
     id: uuidv4(),
@@ -50,11 +50,11 @@ const LoginMenuLinks = [
     icon2: <RiQuillPenFill />,
     stub: "/write",
     className: "text-3xl",
-    lkname: "Write",
+    lkname: "write",
   },
   {
     id: uuidv4(),
-    lkname: "Read",
+    lkname: "read",
     icon1: <IoLibraryOutline />,
     icon2: <IoLibrarySharp />,
     stub: "/read",
@@ -62,7 +62,7 @@ const LoginMenuLinks = [
 
   {
     id: uuidv4(),
-    lkname: "Messages",
+    lkname: "sessages",
     icon1: <TbMessageCircle />,
     icon2: <TbMessageCircleFilled />,
     stub: "/Messages",
@@ -70,7 +70,7 @@ const LoginMenuLinks = [
 
   {
     id: uuidv4(),
-    lkname: "Settings",
+    lkname: "settings",
     icon1: <BsGear />,
     icon2: <BsGearFill />,
     stub: "/setting",
@@ -114,12 +114,12 @@ function SideBar() {
         className="p-12 pe-0 w-fit dark:bg-black animate-slide-in-left xl:animate-none text-xl bg-[#fff9f3] h-full"
       >
         <div className="sm:w-full flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300    ">
-          <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-4">
             {/* Profile Link */}
             <div className=" flex flex-col gap-2 h-fit ">
               <Link
                 to={`/profile/@${user?.username?.replace(/\s+/g, "")}/${user?.id}`}
-                className="flex justify-start items-center gap-3  hover:bg-gray-400  hover:bg-opacity-15 rounded-full py-2"
+                className="flex justify-start items-center gap-3  hover:bg-gray-400  hover:bg-opacity-15 rounded-full p-3"
               >
                 <div>
                   {" "}
@@ -148,7 +148,7 @@ function SideBar() {
                     location.pathname.startsWith(link.stub)
                   }
                   className={({ isActive }) =>
-                    `flex ${isActive && "font-extrabold "}  justify-start items-center   hover:bg-gray-400  hover:bg-opacity-15 rounded-full  gap-5 w-full`
+                    `flex ${isActive && "font-bold "} capitalize  justify-start items-center p-3   hover:bg-gray-400  hover:bg-opacity-15 rounded-full  gap-5 w-full`
                   }
                   to={link.stub}
                 >

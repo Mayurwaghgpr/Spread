@@ -26,6 +26,10 @@ const Post = Database.define("post", {
     defaultValue: "general",
     allowNull: false,
   },
+  cloudinaryPubId: {
+      type: DataTypes.STRING,
+        allowNull: true
+  },
   authorId: {
     type: DataTypes.UUID,
     allowNull: false,

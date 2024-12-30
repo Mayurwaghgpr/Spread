@@ -37,37 +37,37 @@ function useProfileApi() {
     }
   };
 
-  const EditeUserProfile = async (newData) => {
+  const editUserProfile = async (newData) => {
     const formData = new FormData();
 
-    if (
-      newData.userImage &&
-      newData.userImage !== "null" &&
-      newData.NewImageFile
-    ) {
+    // Append Image Data
+    if (newData.NewImageFile || newData.removeImage) {
       formData.append("userImage", newData.userImage);
     }
     if (newData.NewImageFile) {
       formData.append("NewImageFile", newData.NewImageFile);
     }
-
     if (newData.removeImage) {
-      formData.append("userImage", newData.userImage);
       formData.append("removeImage", newData.removeImage);
     }
+
+    // Append Profile Details
     formData.append("username", newData.username);
     formData.append("email", newData.email);
     formData.append("pronouns", newData.pronouns);
     formData.append("bio", newData.bio);
+    formData.append("userFromOAth", Boolean(newData.userFromOAth));
+    formData.append("cloudinaryPubId", newData.cloudinaryPubId);
+
     try {
       const response = await axios.post(
         `${BASE_URL}/user/profile/edit`,
         formData,
         {
           headers: {
-            // Uncomment if you have a method to get the token
-            // Authorization: `Bearer ${getToken()}`,
             "Content-Type": "multipart/form-data",
+            // Uncomment the line below if token-based authentication is implemented
+            // ...(getToken() && { Authorization: `Bearer ${getToken()}` }),
           },
           withCredentials: true,
         }
@@ -81,6 +81,7 @@ function useProfileApi() {
       throw err;
     }
   };
-  return { fetchUserData, fetchUserProfile, EditeUserProfile };
+
+  return { fetchUserData, fetchUserProfile, editUserProfile };
 }
 export default useProfileApi;

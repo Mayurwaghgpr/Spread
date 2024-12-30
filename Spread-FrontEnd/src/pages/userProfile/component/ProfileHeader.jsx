@@ -19,7 +19,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
       <div className="flex justify-start items-start  gap-9">
         <div className=" flex flex-col gap-5 ">
           <img
-            className=" sm:w-[7rem] max-h-28 w-20   items-center  cursor-pointer rounded-full   object-cover object-top "
+            className=" sm:w-40 sm:h-32 w-20 h-20   items-center  cursor-pointer rounded-full   object-cover object-top "
             src={userImageurl}
             alt={userProfile?.username}
           />

@@ -17,15 +17,15 @@ function ProfileEditor() {
   const [newInfo, setNewInfo] = useState(user);
 
   const [ProfileImage, SetProfileImage] = useState();
-  const { EditeUserProfile } = useProfileApi();
+  const { editUserProfile } = useProfileApi();
 
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
-  const { userImageurl, IsuserFromOAth } = userImageSrc(newInfo);
+  const { userImageurl, IsUserFromOAth } = userImageSrc(newInfo);
 
   const { isLoading, isError, mutate } = useMutation(
-    (profileUpdated) => EditeUserProfile(profileUpdated),
+    (profileUpdated) => editUserProfile(profileUpdated),
     {
       onSuccess: (data) => {
         dispatch(
@@ -38,6 +38,7 @@ function ProfileEditor() {
       },
     }
   );
+
   useEffect(() => {
     setNewInfo(user);
   }, [user]);
@@ -62,7 +63,7 @@ function ProfileEditor() {
       setNewInfo((prev) => ({
         ...prev,
         NewImageFile: file,
-        userFromOAth: IsuserFromOAth,
+        userFromOAth: IsUserFromOAth,
       }));
       event.target.value = "";
     } else {
@@ -73,7 +74,7 @@ function ProfileEditor() {
     }
   }, 600);
 
-  console.log(newInfo);
+  // console.log(newInfo);
   const RemoveSelecteImage = () => {
     if (newInfo.userImage && newInfo.NewImageFile) {
       delete newInfo.NewImageFile;
@@ -84,7 +85,7 @@ function ProfileEditor() {
       setNewInfo((prev) => ({
         ...prev,
         removeImage: true,
-        userFromOAth: IsuserFromOAth,
+        userFromOAth: IsUserFromOAth,
       }));
     }
   };
@@ -136,7 +137,7 @@ function ProfileEditor() {
               </span>{" "}
             </label>
             <input
-              className="w-full p-3 bg-inherit hidden  border border-inherit"
+              className="w-full h-full p-3 bg-inherit hidden  border border-inherit"
               id="fileInput"
               type="file"
               name="image"
@@ -145,7 +146,7 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className="cursor-pointer w-36 object-cover object-top rounded-full "
+              className="cursor-pointer w-32 h-24  object-cover object-top rounded-full "
               src={ProfileImage}
               alt="Profile"
             />

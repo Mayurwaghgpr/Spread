@@ -20,6 +20,10 @@ const PostContent = Database.define('PostContent', {
         type: DataTypes.STRING,
         defaultValue: 'text content',
     },
+    cloudinaryPubId: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     index: {
         type: DataTypes.INTEGER,
         allowNull: false

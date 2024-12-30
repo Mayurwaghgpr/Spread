@@ -1,11 +1,11 @@
 {
   "name": "spread-backend",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "app.js",
   "type": "module",
   "scripts": {
-      "build": "npm install && npm install --prefix Spread-FrontEnd && npm run build --prefix Spread-FrontEnd",
+    "build": "npm install && npm install --prefix Spread-FrontEnd && npm run build --prefix Spread-FrontEnd",
     "dev": "nodemon Spread-Backend/app.js",
     "start": "node Spread-Backend/app.js"
   },

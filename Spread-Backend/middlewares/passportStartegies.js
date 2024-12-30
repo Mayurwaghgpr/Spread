@@ -14,6 +14,7 @@ export const passportStrategies = (passport) => {
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
+        console.log({profile})
         try {
           if (!profile) {
             return;

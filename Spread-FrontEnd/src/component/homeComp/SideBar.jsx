@@ -54,7 +54,7 @@ const LoginMenuLinks = [
   },
   {
     id: uuidv4(),
-    lkname: "read",
+    lkname: "read ",
     icon1: <IoLibraryOutline />,
     icon2: <IoLibrarySharp />,
     stub: "/read",
@@ -62,10 +62,10 @@ const LoginMenuLinks = [
 
   {
     id: uuidv4(),
-    lkname: "sessages",
+    lkname: "messages",
     icon1: <TbMessageCircle />,
     icon2: <TbMessageCircleFilled />,
-    stub: "/Messages",
+    stub: "/messages",
   },
 
   {
@@ -111,7 +111,7 @@ function SideBar() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="sm:p-10 p-5  w-fit dark:bg-black animate-slide-in-left xl:animate-none text-xl bg-[#fff9f3] h-full"
+        className="sm:p-10 p-8 w-fit dark:bg-black animate-slide-in-left xl:animate-none text-xl bg-[#fff9f3] h-full"
       >
         <div className="sm:w-full flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300    ">
           <div className="flex flex-col gap-4">

@@ -33,7 +33,9 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { user } = useSelector((state) => state.auth);
 
   const userImage = userImageSrc(post?.user);
-
+  const Comments = post?.comments.filter(
+    (comment) => comment.topCommentId === null
+  );
   return (
     <article
       ref={ref}
@@ -125,7 +127,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 <button className="">
                   <FaRegComment />
                 </button>
-                <span>{abbreviateNumber(post?.comments?.length)}</span>
+                <span>{abbreviateNumber(Comments?.length)}</span>
               </div>
             </div>
             <div className="flex justify-end gap-5 items-center">

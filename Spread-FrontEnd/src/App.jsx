@@ -16,6 +16,7 @@ import SearchBar from "./component/homeComp/searchBar";
 import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/homeComp/SideBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Messanger from "./pages/Messages/Messanger";
 
 // Lazy load components
 
@@ -151,11 +152,20 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="github/synch"
               element={<ProtectedRoute>{<div></div>}</ProtectedRoute>}
             />
           </Route>
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute>
+                <Messanger />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/view/:username/:id" element={<PostView />} />
           <Route
             path="/explore"

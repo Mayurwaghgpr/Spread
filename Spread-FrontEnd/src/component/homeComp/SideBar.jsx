@@ -111,7 +111,7 @@ function SideBar() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="p-12 pe-0 w-fit dark:bg-black animate-slide-in-left xl:animate-none text-xl bg-[#fff9f3] h-full"
+        className="sm:p-10 p-5  w-fit dark:bg-black animate-slide-in-left xl:animate-none text-xl bg-[#fff9f3] h-full"
       >
         <div className="sm:w-full flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300    ">
           <div className="flex flex-col gap-4">
@@ -120,6 +120,7 @@ function SideBar() {
               <Link
                 to={`/profile/@${user?.username?.replace(/\s+/g, "")}/${user?.id}`}
                 className="flex justify-start items-center gap-3  hover:bg-gray-400  hover:bg-opacity-15 rounded-full p-3"
+                onClick={() => dispatch(setManuOpen())}
               >
                 <div>
                   {" "}
@@ -136,8 +137,12 @@ function SideBar() {
                 {user.email}
               </h2> */}
               <div className="flex justify-start items-center gap-3 text-sm  px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">
-                <h3>{abbreviateNumber(user?.Followers?.length)} Followers</h3>
-                <h4>{abbreviateNumber(user?.Following?.length)} Following</h4>
+                <h3>
+                  {abbreviateNumber(user?.Followers?.length) || 0} Followers
+                </h3>
+                <h4>
+                  {abbreviateNumber(user?.Following?.length) || 0} Following
+                </h4>
               </div>
             </div>
             {LoginMenuLinks.map((link) => {
@@ -151,6 +156,7 @@ function SideBar() {
                     `flex ${isActive && "font-bold "} capitalize  justify-start items-center p-3   hover:bg-gray-400  hover:bg-opacity-15 rounded-full  gap-5 w-full`
                   }
                   to={link.stub}
+                  onClick={() => dispatch(setManuOpen())}
                 >
                   {location.pathname.startsWith(link.stub)
                     ? link.icon2

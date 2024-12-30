@@ -44,7 +44,7 @@ function PeoplesList({ people, className }) {
           to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
         >
           <img
-            className="max-w-10 max-h-10 rounded-full object-cover object-top"
+            className="w-10 h-10  rounded-full object-cover object-top"
             src={userImageurl}
             alt={`${people?.username || "User"}'s profile picture`}
           />

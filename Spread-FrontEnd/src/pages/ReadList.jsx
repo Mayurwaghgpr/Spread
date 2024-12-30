@@ -60,8 +60,8 @@ const ReadList = () => {
                 />
               );
             })
-          : [...Array(3)].map(() => (
-              <PostPreview className="border-inherit px-2" />
+          : [...Array(3)].map((_, idx) => (
+              <PostPreview key={idx} className="border-inherit px-2" />
             ))}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">

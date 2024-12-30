@@ -29,7 +29,7 @@ function MainNavBar() {
             Spread
           </Link>
 
-          <div className="flex gap-8 justify-end items-center border-inherit ">
+          <div className="flex w-fit gap-5 justify-end items-center border-inherit ">
             <ThemeBtn />
             {isLogin && (
               <div className="relative sm:text-xl">
@@ -63,7 +63,7 @@ function MainNavBar() {
                 )}
               </div>
             ) : (
-              <div className="flex gap-3 border-inherit justify-end w-full items-center sm:text-sm text-xs">
+              <div className="flex text-nowrap gap-3 border-inherit justify-end w-full items-center sm:text-sm text-xs">
                 <Link to="/auth/signin" className=" rounded-3xl sm:px-3 py-2">
                   SignIn
                 </Link>

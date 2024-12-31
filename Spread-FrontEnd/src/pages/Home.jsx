@@ -12,6 +12,7 @@ import usePublicApis from "../Apis/publicApis";
 import Aside from "../component/homeComp/Aside";
 import PostsApis from "../Apis/PostsApis";
 import LikesList from "../component/buttons/Like/LikesList";
+import SideBar from "../component/homeComp/SideBar";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -81,11 +82,11 @@ function Home() {
   console.log(postsData);
 
   return (
-    <main className=" flex flex-col sm:flex-row justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
+    <section className="relative flex flex-col sm:flex-row gap-5 lg:justify-end lg:px-10 justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Posts Section */}
-      <div className=" relative flex py-[4.2rem] flex-col h-full items-end border-inherit  xl:m-0  xl:w-[45rem] w-full">
+      <div className=" relative flex py-[4.2rem] flex-col h-full items-end border-inherit xl:w-[57%] lg:w-[55%] md:w-[75%]  w-full">
         {/* Topics Section */}
-        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border rounded items-center justify-start gap-3 sticky top-16">
+        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border rounded items-center justify-start gap-3 sticky top-[4.3rem]">
           <ul className="flex h-full items-center justify-between w-full">
             <li className="capitalize flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
               <button
@@ -107,14 +108,14 @@ function Home() {
         {!isLoading
           ? posts.map((post, idx, arr) => (
               <PostPreview
-                className="border-inherit px-2"
+                className="border-inherit"
                 ref={arr.length % 3 === 0 ? lastpostRef : null}
                 key={post?.id}
                 post={post}
               />
             ))
           : [...Array(3)].map((_, idx) => (
-              <PostPreview key={idx} className="border-inherit px-2" />
+              <PostPreview key={idx} className="border-inherit " />
             ))}
         {/* Loading Spinner */}
         {isFetchingNextPage && (
@@ -124,19 +125,22 @@ function Home() {
         )}
         {/* No Posts */}{" "}
         {!posts.length > 0 && !isLoading && (
-          <h2 className="m-auto text-xl">No posts</h2>
+          <div className="h-screen w-full flex justify-center items-center ">
+            {" "}
+            <h2 className="m-auto text-xl">No posts</h2>
+          </div>
         )}
       </div>
 
       {/* Aside Section */}
       <Aside
-        className="lg:flex hidden text-xs border-inherit flex-col max-w-[26rem] mt-20 px-10 justify-start gap-5"
+        className="lg:flex hidden text-xs border-inherit flex-col mt-20 justify-start gap-5"
         FechingPreps={fetchingPreps}
         isLoadingPreps={isLoadingPreps}
         PrepsData={prepsData}
         handleTopicClick={handleTopicClick}
       />
-    </main>
+    </section>
   );
 }
 

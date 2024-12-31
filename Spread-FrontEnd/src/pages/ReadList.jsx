@@ -41,10 +41,10 @@ const ReadList = () => {
   const hasPosts = pages?.length > 0;
 
   return (
-    <main className="relative w-full flex justify-center h-screen  items-center flex-col bg-inherit dark:*:border-[#383838] dark:bg-black">
-      <div className="h-full flex justify-start flex-col mt-[10rem] items-center  sm:w-fit w-full bg-inherit">
-        <div className="fixed top-16 z-5 p-5 flex  w-full justify-center items-center gap-4 border border-inherit rounded-b-lg bg-inherit">
-          <div className=" text-3xl bg-[#f3efeb]  h-full bg-inherit">
+    <main className=" w-full flex flex-col justify-center items-end xl:items-center  bg-inherit dark:*:border-[#383838] dark:bg-black">
+      <div className="relative h-full flex justify-start flex-col mt-36 pb-20 items-center md:w-fit w-full bg-inherit">
+        <div className="fixed top-16 z-10  flex right-0  w-full justify-end items-center gap-4 border-inherit ">
+          <div className=" text-3xl bg-[#f3efeb] p-5 md:w-[80%] xl:w-[78%]  w-full   dark:bg-black h-full border border-inherit rounded-b-lg">
             <h1>Read list </h1>
           </div>
         </div>
@@ -52,7 +52,7 @@ const ReadList = () => {
           ? pages?.map((page, idx) => {
               return (
                 <PostPreview
-                  className={" "}
+                  className={""}
                   ref={pages?.length % 3 === 0 ? lastpostRef : null}
                   key={idx}
                   post={page}
@@ -61,7 +61,7 @@ const ReadList = () => {
               );
             })
           : [...Array(3)].map((_, idx) => (
-              <PostPreview key={idx} className="border-inherit px-2" />
+              <PostPreview key={idx} className="border-inherit " />
             ))}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
@@ -70,11 +70,11 @@ const ReadList = () => {
             />
           </div>
         )}
-        {!hasPosts && (
+        {/* {!hasPosts && (
           <div className=" m-auto text-xl">
             <p>Nothing to Read</p>
           </div>
-        )}
+        )} */}
       </div>
     </main>
   );

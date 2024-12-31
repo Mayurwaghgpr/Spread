@@ -54,7 +54,7 @@ function App() {
   // const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { isLogin } = useSelector((state) => state.auth);
-  const { ThemeMode } = useSelector((state) => state.ui);
+  const { ThemeMode, MenuOpen } = useSelector((state) => state.ui);
   const [systemTheme, setSystemTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches
   );

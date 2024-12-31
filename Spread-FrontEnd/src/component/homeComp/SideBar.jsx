@@ -76,7 +76,7 @@ const LoginMenuLinks = [
     stub: "/setting",
   },
 ];
-function SideBar() {
+function SideBar({ className }) {
   const { user, isLogin } = useSelector((state) => state.auth);
   const { MenuOpen } = useSelector((state) => state.ui);
   const location = useLocation();
@@ -102,18 +102,18 @@ function SideBar() {
   if (isLoading) {
     <LoaderScreen />;
   }
-  return createPortal(
+  return (
     <div
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r sm:z-30 z-40 sm:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] xl:block w-full xl:w-fit left-0 top-0 xl:top-[4.1rem] h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:xl:bg-black dark:border-[#383838]`}
+      className={`fixed border-r md:z-30 z-40 sm:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] md:block w-full md:w-fit left-0 top-0  h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:md:bg-black dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="sm:p-10 p-8 w-fit dark:bg-black animate-slide-in-left xl:animate-none text-xl bg-[#fff9f3] h-full"
+        className="xl:p-10 sm:ps-16 sm:py-8 sm:pe-4 w-fit md:mt-16  p-8 dark:bg-black animate-slide-in-left sm:animate-none text-xl bg-[#fff9f3] h-full"
       >
-        <div className="sm:w-full flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300    ">
+        <div className="w-fit flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300 ">
           <div className="flex flex-col gap-4">
             {/* Profile Link */}
             <div className=" flex flex-col gap-2 h-fit ">
@@ -122,21 +122,23 @@ function SideBar() {
                 className="flex justify-start items-center gap-3  hover:bg-gray-400  hover:bg-opacity-15 rounded-full p-3"
                 onClick={() => dispatch(setManuOpen())}
               >
-                <div>
+                <div className="size-8">
                   {" "}
                   <img
-                    className="size-8 rounded-full object-cover object-top"
+                    className="h-full w-full rounded-full object-cover object-top"
                     src={userImageurl}
                     alt="User profile"
                   />
                 </div>{" "}
-                <h1>{user?.username}</h1>
+                <h1 className=" xl:block sm:hidden block text-nowrap">
+                  {user?.username}
+                </h1>
               </Link>
               {/* <h2 className="text-xs px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-40">
             
                 {user.email}
               </h2> */}
-              <div className="flex justify-start items-center gap-3 text-sm  px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">
+              <div className="xl:flex justify-start items-center sm:hidden flex gap-3 text-sm  px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">
                 <h3>
                   {abbreviateNumber(user?.Followers?.length) || 0} Followers
                 </h3>
@@ -176,7 +178,7 @@ function SideBar() {
               onClick={mutate}
               type="button"
               aria-label="Logout"
-              className="flex gap-5 items-center  hover:bg-opacity-5  rounded-md"
+              className="flex gap-5 items-center  hover:bg-opacity-5 px-3  rounded-md"
             >
               <LuLogOut className="" />
               <span className=" xl:block sm:hidden block ">Sign out</span>
@@ -184,9 +186,7 @@ function SideBar() {
           </div>
         </div>
       </div>
-    </div>,
-    document.getElementById("portal")
+    </div>
   );
 }
-
 export default SideBar;

@@ -70,8 +70,8 @@ function Profile() {
   }
   console.log(userProfile);
   return (
-    <div className="flex justify-center dark:*:border-[#383838]">
-      <div className=" md:w-[80%] mt-20  lg:w-[70%] xl:w-[60%]  w-full flex flex-col h-full">
+    <div className="flex lg:justify-center justify-end dark:*:border-[#383838]">
+      <div className=" md:w-[80%]  lg:w-[70%] xl:w-[60%]  w-full  mt-20 flex flex-col h-full">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />
           <div className="w-full flex gap-5  p-2 px-4 border-inherit">
@@ -81,8 +81,8 @@ function Profile() {
             </div>
           </div>
           <div
-            className={`lg:px-5 py-20  border-inherit pt-5 h-full dark:*:border-[#383838] ${
-              !postsData?.pages?.length && "flex justify-center items-center "
+            className={`lg:px-5 py-20   border-inherit pt-5 h-full dark:*:border-[#383838] ${
+              !posts?.length && "flex justify-center items-center "
             }`}
           >
             {/* <RenderPosts /> */}

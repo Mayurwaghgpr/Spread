@@ -86,7 +86,7 @@ function DynamicPostEditor() {
           imageInputRef={imageInputRef}
           addElement={addElement}
           handleFileChange={handleFileChange}
-          className={`dark:bg-black  text-lg border-inherit sm:rounded-full fixed bg-white sm:bottom-10 bottom-16 rounded-lg  sm:right-36  hover:scale-x-110 gap-3   p-3  bg-opacity-35 backdrop-blur-md border   pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-thin  *:size-[2rem] *:border *:rounded-full *:border-inherit`}
+          className={`dark:bg-black  text-sm border-inherit sm:rounded-full fixed bg-white sm:bottom-10 bottom-16 rounded-lg  sm:right-36  hover:scale-x-110 gap-3   p-3  bg-opacity-35 backdrop-blur-md border   pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-thin  *:size-[2rem] *:border *:rounded-full *:border-inherit`}
         />
       </main>
       <Outlet context={[imageFiles, setImageFiles, handleTextChange]} />

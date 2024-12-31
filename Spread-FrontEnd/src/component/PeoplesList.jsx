@@ -43,11 +43,14 @@ function PeoplesList({ people, className }) {
           className="flex items-center gap-3 border-inherit h-full"
           to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
         >
-          <img
-            className="w-10 h-10  rounded-full object-cover object-top"
-            src={userImageurl}
-            alt={`${people?.username || "User"}'s profile picture`}
-          />
+          <div className="w-10 h-10">
+            <img
+              className="w-full h-full  rounded-full object-cover object-top"
+              src={userImageurl}
+              alt={`${people?.username || "User"}'s profile picture`}
+            />
+          </div>
+
           <h1 className="hover:underline text-nowrap touch-pan-up underline-offset-4">
             {people?.username}
           </h1>
@@ -64,7 +67,7 @@ function PeoplesList({ people, className }) {
 
       <Follow
         People={people}
-        className="text-black min-h-8 min-w-[6.7rem] border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
+        className="text-black min-h-8 xl:min-w-[6.7rem] border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
       />
     </li>
   );

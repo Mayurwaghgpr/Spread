@@ -46,10 +46,10 @@ function InputTypeSelector({
           onMouseOver={() => setTooltip(conf.type)}
           onMouseOut={() => setTooltip("")}
           // className={getTransitionClass}
-          className={`group  flex justify-center items-center  hover:scale-115 shadow-inner hover:shadow-md hover:shadow-gray-300 dark:hover:shadow-md dark:hover:shadow-gray-600`}
+          className={`group flex justify-center items-center hover:scale-115 shadow-inner hover:shadow-md hover:shadow-gray-300 dark:hover:shadow-md dark:hover:shadow-gray-600`}
           onClick={() => addElement(conf.type)}
         >
-          <div className=" group-hover:flex hidden  justify-center gap-1 items-center flex-row  px-2 rounded-md  before:size-2 before:absolute before:border-b before:border-r before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black  dark:bg-white  absolute -top-10 border">
+          <div className="group-hover:flex hidden justify-center gap-1 items-center flex-row px-2 rounded-md before:size-2 before:absolute before:border-b before:border-r before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black  dark:bg-white  absolute -top-10 border">
             <span>add</span> {conf.type}
           </div>
           <span>{conf.icon}</span>
@@ -58,12 +58,12 @@ function InputTypeSelector({
       <label
         title="add an image"
         aria-label="Add an image"
-        className={`group items-center flex justify-center hover:scale-110  hover:shadow-md hover:shadow-gray-300 dark:hover:shadow-md dark:hover:shadow-gray-600`}
+        className={`group items-center flex justify-center hover:scale-110 hover:shadow-md hover:shadow-gray-300 dark:hover:shadow-md dark:hover:shadow-gray-600`}
         htmlFor="imgbtn"
         onMouseOver={() => setTooltip("image")}
         onMouseOut={() => setTooltip("")}
       >
-        <span className=" group-hover:block hidden w-fit px-2  rounded-md before:size-2 before:absolute before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black font-light dark:bg-white absolute -top-10 border">
+        <span className=" group-hover:block hidden w-fit px-2  rounded-md before:size-2 before:absolute before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white absolute -top-10 border">
           Image
         </span>
         <PiImageThin />

@@ -17,14 +17,14 @@ const ProfileHeader = React.memo(({ profileId }) => {
   return (
     <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">
       <div className="flex justify-start items-start  gap-9">
-        <div className=" flex flex-col gap-5 ">
+        <div className="sm:w-40 sm:h-32 w-20 h-20 flex  items-center flex-col gap-3 ">
           <img
-            className=" sm:w-40 sm:h-32 w-20 h-20   items-center  cursor-pointer rounded-full   object-cover object-top "
+            className="  items-center  cursor-pointer rounded-full   object-cover object-top "
             src={userImageurl}
             alt={userProfile?.username}
           />
           <div className=" w-full">
-            <h1 className="sm:text-3xl sm:hidden text-nowrap text-lg  font-medium">
+            <h1 className="sm:text-3xl sm:hidden text-nowrap text-sm  font-medium">
               {userProfile?.username}
             </h1>
             <span className="text-black text-xs dark:text-white text-opacity-70 dark:text-opacity-70 ">
@@ -103,7 +103,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
             </button>
           </div>
         ) : (
-          <div className="px-2">
+          <div className="">
             <Link
               to="/profileEditor"
               className="  text-end text-xs w-fit   rounded-lg transition-colors duration-300 text-blue-600  "

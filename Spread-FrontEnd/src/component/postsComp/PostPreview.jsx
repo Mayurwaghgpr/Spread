@@ -39,7 +39,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   return (
     <article
       ref={ref}
-      className={` border-inherit flex w-full h-fit  flex-col ${className}`}
+      className={` ${className} border-inherit flex w-full   flex-col`}
     >
       <div className="p-3 flex leading-0 border-inherit flex-col  justify-center gap-4 w-full">
         <div className="flex border-inherit gap-2 text-sm justify-start items-center">
@@ -85,7 +85,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             .split(" ")
             .slice(0, post?.user?.username.length - 1)
             .join("")}/${post?.id}`}
-          className="relative cursor-pointer h-full border-inherit flex xl:flex-row flex-col-reverse justify-between items-center gap-3"
+          className="relative cursor-pointer h-full border-inherit flex sm:flex-row sm:items-center flex-col-reverse  justify-between items-start gap-3"
         >
           <div className="flex w-full flex-col gap-1">
             {post ? (
@@ -99,15 +99,15 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-full sm:w-[20rem] w-[6.2rem] h-6  bg-gray-200 dark:bg-gray-400 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[150px] h-4  bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[150px] h-4  bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[20rem] w-[60%] h-6  bg-gray-200 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-slate-200 dark:bg-gray-400 animate-pulse"></div>
               </>
             )}
           </div>
 
           <div
-            className={`rounded-lg ${!post && " animate-pulse"}  border border-inherit z-0 xl:w-72 xl:h-32 min-h-40  overflow-hidden w-full bg-slate-200 dark:bg-gray-400`}
+            className={`rounded-lg ${!post && " animate-pulse"} border border-inherit z-0 sm:w-72 sm:h-32 h-40  overflow-hidden w-full bg-slate-200 dark:bg-gray-400`}
           >
             {post && (
               <img

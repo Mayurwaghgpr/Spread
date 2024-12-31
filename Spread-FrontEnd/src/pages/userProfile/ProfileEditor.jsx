@@ -126,7 +126,7 @@ function ProfileEditor() {
           className=" flex justify-start gap-5 w-full border-inherit "
           aria-label="Upload profile picture"
         >
-          <div className="relative group flex  flex-col">
+          <div className="relative sm:w-32 sm:h-24  group flex  flex-col">
             <label
               className="absolute h-full w-full cursor-pointer "
               htmlFor="fileInput"
@@ -146,7 +146,7 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className="cursor-pointer w-32 h-24  object-cover object-top rounded-full "
+              className="cursor-pointer  object-cover object-top rounded-full "
               src={ProfileImage}
               alt="Profile"
             />

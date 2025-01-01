@@ -8,6 +8,7 @@ import Likes from "../models/Likes.js";
 import { DataFetching } from "../operations/data-fetching.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
+import Comments from "../models/Comments.js";
 // import redisClient from "../utils/redisClient.js";
 
 const EXPIRATION = 3600;
@@ -63,7 +64,10 @@ export const getUserPostsById = async (req, res, next) => {
           as: "Likes",
           required: false,
         },
-        
+         {
+          model: Comments,
+          as: "comments",
+        }
       ],
       limit,
       offset: (page - 1) * limit,

@@ -68,12 +68,10 @@ function PostsApis() {
     }
   };
   const hitLike = async (comtId) => {
-    console.log(comtId);
     try {
       const result = await axios.get(`${BASE_URL}/comment/like/${comtId}`, {
         withCredentials: true,
       });
-      console.log(result);
       return result.data; // Return the actual data
     } catch (error) {
       throw error;
@@ -90,7 +88,6 @@ function PostsApis() {
           limit: 1,
         },
       });
-      console.log(result.data);
       return result.data;
     } catch (error) {
       throw error;

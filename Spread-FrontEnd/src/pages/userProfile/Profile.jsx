@@ -62,7 +62,11 @@ function Profile() {
   const posts = postsData?.pages.flatMap((page) => page.posts) || [];
 
   if (isLoading) {
-    return <h1>Loading profile data...</h1>;
+    return (
+      <div className="flex h-screen w-full  justify-center items-center dark:*:border-[#383838]">
+        <h1>Loading profile...</h1>
+      </div>
+    );
   }
 
   if (isError || (isPostError && postError?.message !== "404")) {

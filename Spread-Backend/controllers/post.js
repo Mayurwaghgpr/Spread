@@ -210,6 +210,10 @@ export const getArchivedPosts = async (req, res, next) => {
               as: "Likes",
               required: false,
             },
+             {
+          model: Comments,
+          as: "comments",
+        }
           ],
         },
       ],

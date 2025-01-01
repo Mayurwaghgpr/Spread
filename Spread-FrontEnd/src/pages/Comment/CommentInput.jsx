@@ -18,6 +18,7 @@ import PostsApis from "../../Apis/PostsApis";
 import { setToast } from "../../redux/slices/uiSlice";
 import Spinner from "../../component/loaders/Spinner";
 import useClickOutside from "../../hooks/useClickOutside";
+import ProtectedRoutes from "../../utils/ProtectedRoutes";
 
 // const EmojiPicker = lazy(() => import("emoji-picker-react"));
 function CommentInput({ className }) {
@@ -29,6 +30,7 @@ function CommentInput({ className }) {
   const queryClient = useQueryClient();
   const userImage = userImageSrc(user);
   const pickerRef = useRef();
+
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
       Comments(commentCred);
@@ -62,7 +64,7 @@ function CommentInput({ className }) {
     useClickOutside(pickerRef);
   return (
     <div className={className}>
-      <div className=" w-20 h-14  text-sm">
+      <div className=" sm:w-20 sm:h-14 w-16 h-10 text-sm">
         {" "}
         <img
           className="w-full h-full object-cover object-top rounded-full"
@@ -104,13 +106,15 @@ function CommentInput({ className }) {
       </div>
       <div className=" flex justify-end *:transition-all *:duration-100 my-2 items-center gap-3">
         {/* <button className=" py-1 px-2 rounded-full">cancle</button> */}
-        <button
-          onClick={mutate}
-          className=" hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full p-3 "
-          disabled={isLoading}
-        >
-          {isLoading ? <Spinner /> : <IoSend />}
-        </button>
+        {
+          <button
+            onClick={mutate}
+            className={`${!commentCred.content.trim() && "text-gray-300"} hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full p-3 `}
+            disabled={isLoading || !commentCred.content.trim()}
+          >
+            {isLoading ? <Spinner /> : <IoSend />}
+          </button>
+        }
       </div>
     </div>
   );

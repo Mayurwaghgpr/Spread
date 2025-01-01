@@ -82,6 +82,7 @@ function SideBar({ className }) {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const { userImageurl } = userImageSrc(user);
 
   const { mutate, isLoading } = useMutation({
@@ -107,7 +108,7 @@ function SideBar({ className }) {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed *:transition-all *:duration-200 border-r md:z-30 z-40 md:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] md:block w-full md:w-fit left-0 top-0  h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:md:bg-black dark:border-[#383838]`}
+      className={`fixed *:transition-all *:duration-200 border-r md:z-30 z-40 md:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"} ${pathname.startsWith("/view") && "md:hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] md:block w-full md:w-fit left-0 top-0  h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:md:bg-black dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}

@@ -1,6 +1,6 @@
-import React, { lazy, useEffect, useState } from "react";
+import React, { lazy, useCallback, useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
-import { Link, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import "boxicons";
@@ -22,10 +22,11 @@ const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
 
-function FullBlogView() {
-  const [openComments, setOpenComments] = useState(false);
+function PostView() {
+  const { commentCred } = useSelector((state) => state.posts);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { fetchDataById } = usePublicApis();
 
   const {
@@ -39,6 +40,18 @@ function FullBlogView() {
     refetchOnWindowFocus: false,
   });
 
+  //
+  const handelComment = useCallback(() => {
+    dispatch(
+      setCommentCred({
+        ...commentCred,
+        postId: postView?.id,
+        // replyTo: post?.User?.id,
+      })
+    ); //Setting data initialy
+    navigate("comments");
+  }, [commentCred, postView?.id]);
+
   if (isError || error) {
     console.error("Error fetching data:", error);
     return <SomthingWentWrong />;
@@ -51,13 +64,11 @@ function FullBlogView() {
       </div>
     );
   }
-
   const userImage = userImageSrc(postView?.User);
-
   const Comments = postView?.comments?.filter(
     (comment) => comment.topCommentId === null
   );
-  console.log(postView);
+
   return (
     <main className="container  py-4 my-16 dark:*:border-[#383838]">
       <article className="max-w-4xl 2xl:mx-auto xl:ml-auto xl:mr-16 px-6 rounded-lg flex flex-col justify-center items-center">
@@ -110,11 +121,11 @@ function FullBlogView() {
           </div>
         </header>
 
-        <div className="flex justify-between sm:text-lg font-thin items-center border-inherit border-y px-3 py-3 w-full">
+        <div className="flex justify-between sm:text-lg  items-center border-inherit border-y px-3 py-3 w-full">
           <div className="flex gap-4 text-[#383838] ">
             <Like className={"min-w-10"} post={postView} />
             <button
-              onClick={() => setOpenComments(true)}
+              onClick={handelComment}
               className="flex items-center gap-1 min-w-10"
             >
               <FaRegComment />
@@ -164,11 +175,9 @@ function FullBlogView() {
           </section>
         ))}
       </article>
-      {openComments && (
-        <CommentSection post={postView} setOpenComments={setOpenComments} />
-      )}
+      <Outlet />
     </main>
   );
 }
 
-export default FullBlogView;
+export default PostView;

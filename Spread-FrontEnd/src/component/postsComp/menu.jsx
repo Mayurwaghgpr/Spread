@@ -59,12 +59,12 @@ function Menu({ post }) {
         >
           <ul
             onClick={(e) => e.stopPropagation()}
-            className="sm:absolute z-40 sm:animate-none animate-slide-in-bottom flex flex-col gap-1 py-3 sm:h-fit h-1/3 sm:top-5 sm:w-36 w-full mt-2 p-1  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-t-lg shadow-md"
+            className="sm:absolute z-50 sm:animate-none animate-slide-in-bottom flex flex-col gap-1 pt-3 pb-6 sm:h-fit  sm:top-5 sm:w-36 w-full mt-2 p-1  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-t-lg shadow-md"
           >
             {MENU_ITEMS.map((item) => (
               <li
                 key={item.id}
-                className="flex gap-2 items-center sm:px-3 sm:py-1 p-3  hover:bg-gray-400 hover:bg-opacity-10 rounded-md cursor-pointer"
+                className="flex gap-2 text-nowrap items-center sm:px-3 sm:py-1 p-3  hover:bg-gray-400 hover:bg-opacity-10 rounded-md cursor-pointer"
                 onClick={() => handleMenuClick(item)}
               >
                 {item.icon}

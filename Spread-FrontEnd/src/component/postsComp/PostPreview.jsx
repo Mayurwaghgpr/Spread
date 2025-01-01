@@ -25,17 +25,35 @@ import userImageSrc from "../../utils/userImageSrc";
 import { BsCommand } from "react-icons/bs";
 import { FaComment, FaRegComment } from "react-icons/fa6";
 import abbreviateNumber from "../../utils/numAbrivation";
+import { setCommentCred } from "../../redux/slices/postSlice";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
 
   const userImage = userImageSrc(post?.user);
+
   const Comments = post?.comments?.filter(
     (comment) => comment.topCommentId === null
   );
+  const handelComment = useCallback(() => {
+    dispatch(
+      setCommentCred({
+        ...commentCred,
+        postId: post?.id,
+        // replyTo: post?.User?.id,
+      })
+    ); //Setting data initialy
+    navigate(
+      `/view/@${post?.user?.username
+        .split(" ")
+        .slice(0, post?.user?.username.length - 1)
+        .join("")}/${post?.id}/comments`
+    );
+  }, [commentCred, post?.id]);
+
   return (
     <article
       ref={ref}
@@ -124,7 +142,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             <div className="flex   justify-start   items-center gap-3">
               <Like className={"min-w-10"} post={post} />
               <div className="flex justify-center items-center gap-1 min-w-10 cursor-pointer">
-                <button className="">
+                <button onClick={handelComment} className="">
                   <FaRegComment />
                 </button>
                 <span>{abbreviateNumber(Comments?.length)}</span>

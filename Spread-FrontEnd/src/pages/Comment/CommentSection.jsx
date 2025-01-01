@@ -6,13 +6,15 @@ import { useLastPostObserver } from "../../hooks/useLastPostObserver";
 import Spinner from "../../component/loaders/Spinner";
 import CommentInput from "./CommentInput";
 import { setCommentCred } from "../../redux/slices/postSlice";
+import { useNavigate } from "react-router-dom";
 const CommentBox = lazy(() => import("./CommentBox"));
 
-function CommentSection({ setOpenComments, post }) {
+function CommentSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const { commentCred } = useSelector((state) => state.posts);
   const { getComments } = PostsApis();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     data: TopComments,
     error: errorPosts,
@@ -22,7 +24,8 @@ function CommentSection({ setOpenComments, post }) {
     hasNextPage,
   } = useInfiniteQuery(
     ["TopComments"],
-    ({ pageParam = 1 }) => getComments({ postId: post.id, pageParam }),
+    ({ pageParam = 1 }) =>
+      getComments({ postId: commentCred.postId, pageParam }),
     {
       getNextPageParam: (lastPage, allPages) =>
         lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
@@ -36,21 +39,12 @@ function CommentSection({ setOpenComments, post }) {
     isFetching,
     hasNextPage
   );
-  useEffect(() => {
-    const postId = post?.id;
-    dispatch(
-      setCommentCred({
-        ...commentCred,
-        postId,
-        // replyTo: post?.User?.id,
-      })
-    ); //Setting data initialy
-  }, []);
-  const Comments = TopComments?.pages.flatMap((page) => page.comments) || [];
+
+  const Comments = TopComments?.pages?.flatMap((page) => page.comments) || [];
   return (
     <section
-      onClick={({ target }) => {
-        setOpenComments(false);
+      onClick={() => {
+        navigate(-1, { replace: true });
         dispatch(
           setCommentCred({
             ...commentCred,
@@ -61,11 +55,11 @@ function CommentSection({ setOpenComments, post }) {
           })
         );
       }}
-      className="flex justify-end items-end bg-black bg-opacity-30 backdrop-blur-[1px]  w-full right-0 animate-fedin.2s  shadow h-full fixed top-0 z-40 "
+      className="flex justify-end items-end fixed top-0 right-0 left-0 bg-black bg-opacity-30 backdrop-blur-[1px]  w-full  animate-fedin.2s  shadow h-full z-40 "
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-[#f3efeb] dark:bg-black border-s border-inherit flex flex-col gap-2 py-5  sm:animate-slide-in-right  animate-slide-in-bottom w-[30rem] rounded-md  sm:h-full h-[80%] "
+        className="relative bg-[#f3efeb] dark:bg-black border-s border-inherit flex flex-col gap-2 py-5  sm:animate-slide-in-right  animate-slide-in-bottom lg:w-[30rem] w-full rounded-md  sm:h-full h-[80%] "
       >
         <h1 className="text-xl p-4">Comments</h1>
         <CommentInput
@@ -73,7 +67,7 @@ function CommentSection({ setOpenComments, post }) {
             "fixed bg-[#f3efeb] border-t border-[#1d1c1c22] dark:bg-black bottom-0 z-10 flex justify-start items-start gap-5  w-full animate-slide-in-top  p-5  dark:border-inherit"
           }
         />
-        <div className=" px-2 flex flex-col justify-start mb-32 items-center w-full overflow-y-auto ">
+        <div className=" px-2 flex flex-col justify-start pb-32 items-center w-full h-full overflow-y-auto ">
           <Suspense
             fallback={
               <Spinner

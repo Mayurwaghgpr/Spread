@@ -17,6 +17,7 @@ import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/homeComp/SideBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Messanger from "./pages/Messages/Messanger";
+import CommentSection from "./pages/Comment/CommentSection";
 
 // Lazy load components
 
@@ -88,7 +89,7 @@ function App() {
       {<ConfirmationBox />}
       <Suspense fallback={<LoaderScreen />}>
         <MainNavBar />
-        {isLogin && !pathname.startsWith("/view") && <SideBar />}
+        {isLogin && <SideBar />}
         <Routes>
           <Route
             path="/"
@@ -101,7 +102,10 @@ function App() {
                 <Navigate to="/heros" replace />
               )
             }
-          />
+          >
+            {" "}
+            {/* <Route path="comments" element={<CommentSection />} /> */}
+          </Route>
           <Route
             path="/heros"
             element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
@@ -166,7 +170,9 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/view/:username/:id" element={<PostView />} />
+          <Route path="/view/:username/:id" element={<PostView />}>
+            <Route path="comments" element={<CommentSection />} />
+          </Route>
           <Route
             path="/explore"
             element={
@@ -184,6 +190,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route path="/ForgotPass" element={<ForgotPass />} />
           <Route path="/Resetpassword/:token" element={<ResetPassword />} />
         </Routes>

@@ -107,11 +107,11 @@ function SideBar({ className }) {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`fixed border-r md:z-30 z-40 sm:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] md:block w-full md:w-fit left-0 top-0  h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:md:bg-black dark:border-[#383838]`}
+      className={`fixed *:transition-all *:duration-200 border-r md:z-30 z-40 md:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] md:block w-full md:w-fit left-0 top-0  h-screen  bg-[#f3efeb] bg-opacity-10 backdrop-blur-[.5px] xl:bg-[#f3efeb] dark:md:bg-black dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="xl:p-10 sm:ps-16 sm:py-8 sm:pe-4 w-fit md:mt-16  p-8 dark:bg-black animate-slide-in-left sm:animate-none text-xl bg-[#fff9f3] h-full"
+        className="xl:p-10 sm:ps-8 sm:py-8 sm:pe-4 w-fit sm:mt-16  p-8 sm:dark:bg-inherit sm:bg-inherit dark:bg-black bg-[#fff9f3] lg:dark:bg-black animate-slide-in-left md:animate-none text-xl lg:bg-[#fff9f3] h-full shadow-sm"
       >
         <div className="w-fit flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300 ">
           <div className="flex flex-col gap-4">

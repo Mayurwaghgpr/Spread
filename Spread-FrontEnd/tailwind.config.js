@@ -46,6 +46,12 @@ export default {
            '0%': { transform: 'translateY(100%)'},
            '100%': { transform: 'translateY(0%)' },
   
+        },
+          toBottom: {
+           '0%': { transform: 'translateY(0%)',},
+            '100%': { transform: 'translateY(200%)' },
+          
+  
          },
          toTop: {  // New keyframes for sliding up on remove
           '0%': { transform: 'translateY(0%)' },
@@ -54,6 +60,10 @@ export default {
           fedin: {
             '0%': { opacity: '0' },
             '100%': { opacity: '1' }, // Correct opacity range
+          },
+          fedOut: {
+            '0%': { opacity: '1' },
+            '100%': { opacity: '0' }, // Correct opacity range
           }
       },
       animation: {
@@ -64,10 +74,12 @@ export default {
         'slide-out-left': 'toLeft 1s ease-in-out forwards',
         'slide-out-right': 'toRight .5s ease-in-out forwards',
         'slide-in-bottom': 'fromBottom .5s ease-in-out forwards',
+        'slide-out-bottom': 'toBottom 1s ease-in-out forwards',
 
         'fedin2s':'fedin 2s  ease-in-out',
         'fedin1s':'fedin 1s  ease-in-out',
-        'fedin.2s':'fedin .2s  ease-in-out'
+        'fedin.2s': 'fedin .2s  ease-in-out',
+        'fed-out':'fedOut .3s ease-in-out'
       },
       
     },

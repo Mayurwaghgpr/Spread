@@ -19,7 +19,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
       <div className="flex justify-start items-start  gap-9">
         <div className="sm:w-40 sm:h-32 w-20 h-20 flex  items-center flex-col gap-3 ">
           <img
-            className="  items-center  cursor-pointer rounded-full   object-cover object-top "
+            className="h-full w-full items-center  cursor-pointer rounded-full   object-cover object-top "
             src={userImageurl}
             alt={userProfile?.username}
           />
@@ -36,7 +36,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
         <div className="flex sm:flex-row flex-col  justify-between w-full  gap-2   h-full sm:text-lg  ">
           <div className="flex flex-col gap-1 justify-start  p-4 w-full ">
             {/* <div className="flex justify-start items-center">{}</div> */}
-            <h1 className="sm:text-3xl sm:block hidden text-nowrap text-lg  font-medium">
+            <h1 className="sm:text-4xl sm:block hidden text-nowrap text-lg  font-medium">
               {userProfile?.username}
             </h1>
             <div className=" flex  gap-4 justify-start ">

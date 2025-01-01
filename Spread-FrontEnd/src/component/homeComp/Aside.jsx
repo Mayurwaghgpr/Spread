@@ -37,7 +37,7 @@ function Aside({
           </ul>
         </div>
       </div>
-      <div className="sticky top-20 gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
+      <div className="sticky top-[4.3rem] gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
         <div className="h-full text-sm  p-5 border rounded-xl border-inherit">
           <h1 className=" text-start w-full text-xl font-bold">
             Follow People

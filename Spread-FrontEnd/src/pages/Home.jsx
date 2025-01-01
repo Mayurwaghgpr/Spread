@@ -82,7 +82,7 @@ function Home() {
   console.log(postsData);
 
   return (
-    <section className="relative flex flex-col sm:flex-row gap-5 lg:justify-end lg:px-10 justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
+    <section className="relative flex flex-col sm:flex-row gap-3 lg:justify-end lg:px-10 justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Posts Section */}
       <div className=" relative flex py-[4.2rem] flex-col h-full items-end border-inherit xl:w-[57%] lg:w-[55%] md:w-[75%]  w-full">
         {/* Topics Section */}
@@ -134,7 +134,7 @@ function Home() {
 
       {/* Aside Section */}
       <Aside
-        className="lg:flex hidden text-xs border-inherit flex-col mt-20 justify-start gap-5"
+        className="lg:flex hidden text-xs border-inherit max-w-[20rem] w-full flex-col mt-[4.3rem] justify-start gap-5"
         FechingPreps={fetchingPreps}
         isLoadingPreps={isLoadingPreps}
         PrepsData={prepsData}

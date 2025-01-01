@@ -10,7 +10,7 @@ dotenv.config();
 // Route to initiate Google login
 router.get(
   '/login/google',
-  passport.authenticate('google', { scope: ['profile', 'email'], session: false ,prompt: 'select_account'})
+  passport.authenticate('google', { scope: ['profile', 'email'], session: false ,prompt: 'select_account',successRedirect:process.env.FRONT_END_URL})
 );
 
 // Route to handle Google OAuth callback

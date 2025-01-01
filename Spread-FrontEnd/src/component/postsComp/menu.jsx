@@ -6,33 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PostsApis from "../../Apis/PostsApis";
 import useClickOutside from "../../hooks/useClickOutside";
 import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
-
-const MENU_ITEMS = [
-  {
-    id: "copy-link",
-    itemName: "Copy Link",
-    icon: <i className="bi bi-link text-lg"></i>,
-    action: (post) => navigator.clipboard.writeText(window.location.href),
-  },
-  {
-    id: "share",
-    itemName: "Share",
-    icon: <i className="bi bi-share"></i>,
-    action: () => console.log("Share action triggered"),
-  },
-  {
-    id: "delete-post",
-    itemName: "Delete Post",
-    icon: <i className="bi bi-trash2"></i>,
-    action: (post, confirmDeletePost) => confirmDeletePost(post.id),
-  },
-  {
-    id: "edit-post",
-    itemName: "Edit Post",
-    icon: <i className="bi bi-pencil"></i>,
-    action: () => console.log("Edit action triggered"),
-  },
-];
+import menuCosntant from "./menuCosntant";
 
 function Menu({ post }) {
   const [postIdToDelete, setPostIdToDelete] = useState("");
@@ -43,7 +17,7 @@ function Menu({ post }) {
   const {} = useSelector((state) => state.ui);
   const queryClient = useQueryClient();
   const { DeletePostApi } = PostsApis();
-
+  const { MENU_ITEMS } = menuCosntant();
   const confirmDeletePost = useCallback(
     (id) => {
       dispatch(
@@ -63,35 +37,42 @@ function Menu({ post }) {
   const handleMenuClick = useCallback(
     (item) => {
       // Don't close the menu for actions requiring confirmation
-      if (item.id !== "delete-post") {
-        setMenuId(""); // Close menu for non-confirmation actions
-      }
+      // Close menu for non-confirmation actions
       item.action(post, confirmDeletePost);
     },
     [post, confirmDeletePost, setMenuId]
   );
 
   return (
-    <div ref={menuRef} className="relative flex justify-center items-center">
+    <div ref={menuRef} className="sm:relative flex justify-center items-center">
       <button
         aria-label="Menu"
         onClick={() => setMenuId((prev) => (prev === "" ? post?.id : ""))}
       >
         <i className="bi bi-three-dots-vertical"></i>
       </button>
+
       {menuId === post?.id && (
-        <ul className="absolute z-20 sm:top-5 mt-2 py-1 gap-2 px-1 flex flex-col w-36 bg-[#e8e4df] dark:bg-[#0f0f0f] rounded-lg shadow-md">
-          {MENU_ITEMS.map((item) => (
-            <li
-              key={item.id}
-              className="flex gap-2 items-center px-1 hover:bg-gray-400 rounded-md cursor-pointer"
-              onClick={() => handleMenuClick(item)}
-            >
-              {item.icon}
-              {item.itemName}
-            </li>
-          ))}
-        </ul>
+        <div
+          onClick={() => setMenuId("")}
+          className="fixed sm:absolute flex justify-center items-end sm:-left-10 left-0 right-0 top-0 bottom-0 z-40 sm:w-fit sm:h-fit h-screen bg-[#e8e4df] bg-opacity-10 backdrop-blur-[.5px]"
+        >
+          <ul
+            onClick={(e) => e.stopPropagation()}
+            className="sm:absolute z-40 sm:animate-none animate-slide-in-bottom flex flex-col gap-1 py-3 sm:h-fit h-1/3 sm:top-5 sm:w-36 w-full mt-2 p-1  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-t-lg shadow-md"
+          >
+            {MENU_ITEMS.map((item) => (
+              <li
+                key={item.id}
+                className="flex gap-2 items-center sm:px-3 sm:py-1 p-3  hover:bg-gray-400 hover:bg-opacity-10 rounded-md cursor-pointer"
+                onClick={() => handleMenuClick(item)}
+              >
+                {item.icon}
+                {item.itemName}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

@@ -34,8 +34,8 @@ function ToastItem({ ToastContent }) {
           : "bg-sky-300";
 
   return (
-    <span
-      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-left" : "animate-slide-in-left"} dark:text-black transition-all duration-300 ease-in-out pointer-events-auto ${status} flex flex-col rounded-lg w-fit`}
+    <div
+      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-bottom " : "animate-slide-in-bottom"} dark:text-black transition-all duration-300 ease-in-out pointer-events-auto ${status} flex flex-col rounded-lg w-fit`}
     >
       <div className="flex p-4">
         <div className="break-words flex">
@@ -52,7 +52,11 @@ function ToastItem({ ToastContent }) {
           <i className="bi bi-x-lg"></i>
         </button>
       </div>
-    </span>
+      {/* <div className="p-1 px-3 flex justify-end">
+        {" "}
+        <span className="">1of{}</span>
+      </div> */}
+    </div>
   );
 }
 

@@ -33,7 +33,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { user } = useSelector((state) => state.auth);
 
   const userImage = userImageSrc(post?.user);
-  const Comments = post?.comments.filter(
+  const Comments = post?.comments?.filter(
     (comment) => comment.topCommentId === null
   );
   return (

@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { forwardRef, memo, useMemo, useState } from "react";
 import userImageSrc from "../../utils/userImageSrc";
 import { formatDate } from "date-fns";
 import { BsArrowDown, BsArrowUp, BsHeart, BsHeartFill } from "react-icons/bs";
@@ -16,7 +16,7 @@ import { setCommentCred } from "../../redux/slices/postSlice";
 import { MdDelete } from "react-icons/md";
 import { setToast } from "../../redux/slices/uiSlice";
 
-function CommentBox({ comt, className, topCommentId }) {
+const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const [openReplies, setOpenReplies] = useState("");
   const [optLike, setOptLike] = useState("");
   const { hitLike, getReplies, deleteComment } = PostsApis();
@@ -74,14 +74,16 @@ function CommentBox({ comt, className, topCommentId }) {
   const Comments = data?.pages.flatMap((page) => page.comments) || [];
 
   return (
-    <div className={`${className}`}>
+    <div ref={ref} className={`${className}`}>
       <article className="p-2 flex flex-col  w-full justify-center items-start gap-2 select-none">
-        <div className=" flex  w-full justify-start items-start">
-          <div className="w-fit h-fit px-3">
+        <div className=" flex  w-full justify-start gap-5 items-start">
+          <div
+            className={`flex justify-center items-center rounded-full  ${
+              comt?.topCommentId ? "size-8 " : "w-10 h-10"
+            }`}
+          >
             <img
-              className={`max-w-11 max-h-10 rounded-full ${
-                comt?.topCommentId && "size-8"
-              }`}
+              className={"w-full h-full object-cover object-top rounded-full"}
               src={commenterImg.userImageurl}
               alt={comt?.commenter?.username}
             />
@@ -172,6 +174,6 @@ function CommentBox({ comt, className, topCommentId }) {
       )}
     </div>
   );
-}
+});
 
 export default memo(CommentBox);

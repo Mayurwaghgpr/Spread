@@ -8,10 +8,10 @@ function Selector({ name, setOptions, options, className, defaultValue }) {
       onChange={(e) => setOptions(e)}
       className={className}
     >
-      {options.map((option) => (
+      {options.map((option, idx) => (
         <option
           className="w-full bg-inherit bg-red-600 text-inherit"
-          key={option}
+          key={idx}
           value={option}
         >
           {option}

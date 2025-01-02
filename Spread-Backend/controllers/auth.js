@@ -93,7 +93,11 @@ export const SignIn = async (req, res, next) => {
          {
                 model: Post,
                 attributes: ['id']
-         },
+        },
+         {
+           model: Post,
+           attributes: ['id']
+          },
         {
             model: Post,
             as: 'SavedPosts',

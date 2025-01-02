@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setuserProfile } from "../../redux/slices/profileSlice";
 import profileIcon from "/ProfOutlook.png";
@@ -72,50 +72,17 @@ function ProfileEditor() {
         [name]: value,
       }));
     }
-  }, 600);
+  }, 500);
 
-  // console.log(newInfo);
   const RemoveSelecteImage = () => {
-    if (newInfo.userImage && newInfo.NewImageFile) {
-      delete newInfo.NewImageFile;
-      setNewInfo((prev) => ({
-        ...prev,
-      }));
-    } else {
-      setNewInfo((prev) => ({
-        ...prev,
-        removeImage: true,
-        userFromOAth: IsUserFromOAth,
-      }));
-    }
+    setNewInfo((prev) => ({
+      ...prev,
+      NewImageFile: undefined,
+      removeImage: true,
+      userFromOAth: IsUserFromOAth,
+    }));
   };
-  const Inputcontant = [
-    {
-      id: uuidv4(),
-      labelname: "User Name",
-      Iname: "username",
-      defaultValue: newInfo?.username,
-      maxLength: 20,
-      length: `${newInfo?.username?.length || 0} / 20`,
-    },
-    {
-      id: uuidv4(),
-      labelname: "Email",
-      Iname: "email",
-      defaultValue: newInfo?.email,
-      maxLength: 30,
-      length: `${newInfo?.email?.length || 0} / 30`,
-    },
-    {
-      id: uuidv4(),
-      labelname: "Bio",
-      Iname: "bio",
-      defaultValue: newInfo?.bio,
-      maxLength: 100,
-      length: `${newInfo?.bio?.length || 0} / 100`,
-    },
-  ];
-
+  console.log(newInfo);
   return (
     <div className=" relative f sm:h-screen h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
       <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">
@@ -146,7 +113,7 @@ function ProfileEditor() {
               style={{ display: "none" }}
             />
             <img
-              className="cursor-pointer  object-cover object-top rounded-full "
+              className="cursor-pointer h-full w-full object-cover object-top rounded-full "
               src={ProfileImage}
               alt="Profile"
             />
@@ -180,30 +147,51 @@ function ProfileEditor() {
           </div>
         </div>
         <div className="flex flex-col w-full items-end h-full bg-inherit gap-10   dark:*:border-black  px-2 ">
-          <div className="w-full h-full  flex flex-col  items-end bg-inherit gap-3 ">
-            {Inputcontant.map((input) => (
-              <>
-                {" "}
-                <CommonInput
-                  key={input.id}
-                  className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
-                  type={input.type}
-                  Iname={input.Iname}
-                  labelname={input.labelname}
-                  disabled={isLoading}
-                  maxLength={input.maxLength}
-                  onChange={handleChange}
-                  defaultValue={input.defaultValue}
-                />
-                <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
-                  {input.length}
-                </span>
-              </>
-            ))}
+          <div className="w-full h-full  flex flex-col capitalize  items-end bg-inherit gap-3 ">
+            {" "}
+            <CommonInput
+              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              type={"text"}
+              Iname={"username"}
+              labelname={"User Name"}
+              disabled={isLoading}
+              maxLength={20}
+              onChange={handleChange}
+              defaultValue={newInfo?.username}
+            />
+            <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
+              {`${newInfo?.username?.length || 0} / 20`}
+            </span>{" "}
+            <CommonInput
+              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              type={"email"}
+              Iname={"email"}
+              labelname={"email"}
+              disabled={isLoading}
+              maxLength={30}
+              onChange={handleChange}
+              defaultValue={newInfo?.email}
+            />
+            <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
+              {`${newInfo?.email?.length || 0} / 30`}
+            </span>{" "}
+            <CommonInput
+              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              type={"text"}
+              Iname={"bio"}
+              labelname={"Bio"}
+              disabled={isLoading}
+              maxLength={50}
+              onChange={handleChange}
+              defaultValue={newInfo?.bio}
+            />
+            <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
+              {`${newInfo?.bio?.length || 0} / 50`}
+            </span>
           </div>
           <button
             className={`px-4 py-1 text-white rounded-xl  border bg-sky-400`}
-            onClick={() => mutate(newInfo)}
+            onClick={useCallback(() => mutate(newInfo), [newInfo])}
           >
             {isLoading ? "Updating..." : "Save"}
           </button>
@@ -213,4 +201,4 @@ function ProfileEditor() {
   );
 }
 
-export default ProfileEditor;
+export default memo(ProfileEditor);

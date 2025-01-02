@@ -59,7 +59,10 @@ function Profile() {
     isFetching,
     hasNextPage
   );
-  const posts = postsData?.pages.flatMap((page) => page.posts) || [];
+  const posts = useMemo(
+    () => postsData?.pages.flatMap((page) => page.posts) || [],
+    [postsData]
+  );
 
   if (isLoading) {
     return (
@@ -86,7 +89,8 @@ function Profile() {
           </div>
           <div
             className={`lg:px-5 py-20   border-inherit pt-5 h-full dark:*:border-[#383838] ${
-              !posts?.length && "flex justify-center items-center "
+              !userProfile?.posts?.length > 0 &&
+              "flex justify-center items-center "
             }`}
           >
             {/* <RenderPosts /> */}

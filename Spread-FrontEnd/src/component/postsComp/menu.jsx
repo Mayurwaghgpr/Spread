@@ -59,7 +59,7 @@ function Menu({ post }) {
         >
           <ul
             onClick={(e) => e.stopPropagation()}
-            className="sm:absolute z-50 sm:animate-none animate-slide-in-bottom flex flex-col gap-1 pt-3 pb-6 sm:h-fit  sm:top-5 sm:w-36 w-full mt-2 p-1  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-t-lg shadow-md"
+            className="sm:absolute z-40 sm:animate-none animate-slide-in-bottom flex flex-col gap-1  sm:h-fit h-1/2  sm:top-5 sm:w-36 w-full mt-2 sm:p-2 p-6  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-t-lg shadow-md"
           >
             {MENU_ITEMS.map((item) => (
               <li

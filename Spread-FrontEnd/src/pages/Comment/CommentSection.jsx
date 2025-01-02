@@ -67,7 +67,7 @@ function CommentSection() {
             "fixed bg-[#f3efeb] border-t border-[#1d1c1c22] dark:bg-black bottom-0 z-10 flex justify-start items-start gap-5  w-full animate-slide-in-top  p-5  dark:border-inherit"
           }
         />
-        <div className=" px-2 flex flex-col justify-start pb-32 items-center w-full h-full overflow-y-auto ">
+        <div className=" px-4 flex flex-col justify-start pb-32 items-center w-full h-full overflow-y-auto ">
           <Suspense
             fallback={
               <Spinner
@@ -77,9 +77,10 @@ function CommentSection() {
               />
             }
           >
-            {Comments.map((comt) => {
+            {Comments.map((comt, idx, arr) => {
               return (
                 <CommentBox
+                  ref={arr.length % 5 === 0 ? lastpostRef : null}
                   className={
                     "animate-slide-in-top flex flex-col text-sm justify-center w-full items-start gap-2"
                   }
@@ -90,6 +91,13 @@ function CommentSection() {
               );
             })}
           </Suspense>
+          {isFetchingNextPage && (
+            <div className=" flex justify-center items-center py-2 h-20">
+              <Spinner
+                className={"w-5 h-5 m-auto border-t-black dark:border-t-white"}
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -30,22 +30,24 @@ function CommentInput({ className }) {
   const queryClient = useQueryClient();
   const userImage = userImageSrc(user);
   const pickerRef = useRef();
-
+  const inputRef = useRef();
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
       Comments(commentCred);
     },
     onSuccess: () => {
       dispatch(
-        setToast({ message: "Successfuly commented ", type: "success" })
-      );
-      dispatch(
         setCommentCred({
           ...commentCred,
           topCommentId: null,
           content: "",
+          at: "",
           replyTo: null,
         })
+      );
+      inputRef.current.innerText = "";
+      dispatch(
+        setToast({ message: "Successfuly commented ", type: "success" })
       );
       queryClient.invalidateQueries(["TopComments"]);
     },
@@ -60,8 +62,10 @@ function CommentInput({ className }) {
         })
       )[(dispatch, commentCred)]
   );
-  const { menuId: openEmojiPicker, setMenuId: setOpenEmojiPicker } =
-    useClickOutside(pickerRef);
+
+  // const { menuId: openEmojiPicker, setMenuId: setOpenEmojiPicker } =
+  //   useClickOutside(pickerRef);
+
   return (
     <div className={className}>
       <div className=" sm:w-20 sm:h-14 w-16 h-10 text-sm">
@@ -71,11 +75,11 @@ function CommentInput({ className }) {
           src={userImage.userImageurl}
           alt={user?.username}
         />
-        {/* <p>{user?.username}</p> */}
       </div>
       <div className="relative w-full flex items-center border-inherit">
         {" "}
         <p
+          ref={inputRef}
           contentEditable={true}
           suppressContentEditableWarning
           aria-label="Comment..."

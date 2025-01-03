@@ -59,7 +59,7 @@ function CommentSection() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-[#f3efeb] dark:bg-black border-s border-inherit flex flex-col gap-2 py-5  sm:animate-slide-in-right  animate-slide-in-bottom lg:w-[30rem] w-full rounded-md  sm:h-full h-[80%] "
+        className="relative bg-[#f3efeb] dark:bg-black sm:border-s border-inherit flex flex-col gap-2 py-5  sm:animate-slide-in-right  animate-slide-in-bottom lg:w-[30rem] w-full rounded-md  sm:h-full h-[80%] "
       >
         <h1 className="text-xl p-4">Comments</h1>
         <CommentInput

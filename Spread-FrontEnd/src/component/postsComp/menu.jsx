@@ -55,7 +55,7 @@ function Menu({ post }) {
       {menuId === post?.id && (
         <div
           onClick={() => setMenuId("")}
-          className="fixed sm:absolute flex justify-center items-end sm:-left-10 left-0 right-0 top-0 bottom-0 z-40 sm:w-fit sm:h-fit h-screen bg-[#e8e4df] bg-opacity-10 backdrop-blur-[.5px]"
+          className="fixed sm:absolute flex justify-center items-end sm:-left-10 left-0 right-0 top-0 bottom-0 z-40 sm:w-fit sm:h-fit h-screen "
         >
           <ul
             onClick={(e) => e.stopPropagation()}

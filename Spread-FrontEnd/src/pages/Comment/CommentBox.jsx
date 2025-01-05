@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import { MdDelete } from "react-icons/md";
 import { setToast } from "../../redux/slices/uiSlice";
+import { useOutletContext } from "react-router-dom";
 
 const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const [openReplies, setOpenReplies] = useState("");
@@ -25,7 +26,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred } = useSelector((state) => state.posts);
   const commenterImg = userImageSrc(comt?.commenter);
-
+  const postdata = useOutletContext();
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery(
       ["replies", comt?.id],
@@ -129,7 +130,8 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
               >
                 Reply
               </button>
-              {comt?.commenter?.id === user.id && (
+              {(comt?.commenter?.id === user.id ||
+                postdata.User.id === user.id) && (
                 <button onClick={() => deletMutate(comt?.id)}>
                   <MdDelete />
                 </button>

@@ -26,7 +26,7 @@ function Heros() {
             <p className=" text-gray-500">Read Write Code Share & Explore</p>
             <div className="w-full flex justify-center py-4 border-inherit">
               <Link
-                to="/write"
+                to="/auth/signin"
                 className="py-4 w-52 text-center hover:shadow-lg px-5 text-inherit text-sm rounded-full hover:bg-gray-500 hover:bg-opacity-20 border z-0 transition-all duration-300 border-inherit"
               >
                 Get Started

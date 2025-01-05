@@ -6,7 +6,8 @@ import { useLastPostObserver } from "../../hooks/useLastPostObserver";
 import Spinner from "../../component/loaders/Spinner";
 import CommentInput from "./CommentInput";
 import { setCommentCred } from "../../redux/slices/postSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { IoClose, IoCloseSharp } from "react-icons/io5";
 const CommentBox = lazy(() => import("./CommentBox"));
 
 function CommentSection() {
@@ -15,6 +16,7 @@ function CommentSection() {
   const { getComments } = PostsApis();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const postdata = useOutletContext();
   const {
     data: TopComments,
     error: errorPosts,
@@ -24,8 +26,7 @@ function CommentSection() {
     hasNextPage,
   } = useInfiniteQuery(
     ["TopComments"],
-    ({ pageParam = 1 }) =>
-      getComments({ postId: commentCred.postId, pageParam }),
+    ({ pageParam = 1 }) => getComments({ postId: postdata?.id, pageParam }),
     {
       getNextPageParam: (lastPage, allPages) =>
         lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
@@ -55,19 +56,33 @@ function CommentSection() {
           })
         );
       }}
-      className="flex justify-end items-end fixed top-0 right-0 left-0 bg-black bg-opacity-30 backdrop-blur-[1px]  w-full  animate-fedin.2s  shadow h-full z-40 "
+      className="flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0 lg:w-fit w-full  animate-fedin.2s   lg:h-[90vh] h-full sm:z-0 z-30  overflow-hidden "
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-[#f3efeb] dark:bg-black sm:border-s border-inherit flex flex-col gap-2 py-5  sm:animate-slide-in-right  animate-slide-in-bottom lg:w-[30rem] w-full rounded-md  sm:h-full h-[80%] "
+        className="relative bg-[#f3efeb] dark:bg-black sm:border border-inherit flex flex-col gap-2  sm:animate-none  animate-slide-in-bottom lg:w-[30rem] w-full rounded-md  lg:h-full h-[60%] overflow-hidden "
       >
-        <h1 className="text-xl p-4">Comments</h1>
-        <CommentInput
-          className={
-            "fixed bg-[#f3efeb] border-t border-[#1d1c1c22] dark:bg-black bottom-0 z-10 flex justify-start items-start gap-5  w-full animate-slide-in-top  p-5  dark:border-inherit"
-          }
-        />
-        <div className=" px-4 flex flex-col justify-start pb-32 items-center w-full h-full overflow-y-auto ">
+        <div className="flex p-4 justify-between items-center">
+          <h1 className="text-xl ">Comments</h1>
+          <button
+            onClick={() => {
+              navigate(-1, { replace: true });
+              dispatch(
+                setCommentCred({
+                  ...commentCred,
+                  topCommentId: null,
+                  at: "",
+                  content: "",
+                  replyTo: null,
+                })
+              );
+            }}
+          >
+            <IoCloseSharp />
+          </button>
+        </div>
+
+        <div className=" px-4 flex flex-col justify-start pb-32 items-center w-full h-[80%] overflow-y-auto ">
           <Suspense
             fallback={
               <Spinner
@@ -99,6 +114,11 @@ function CommentSection() {
             </div>
           )}
         </div>
+        <CommentInput
+          className={
+            " bg-[#f3efeb] border-t border-[#1d1c1c22] dark:bg-black  z-10 flex justify-start items-start gap-5  w-full h-[20%] animate-slide-in-top  p-5  dark:border-inherit"
+          }
+        />
       </div>
     </section>
   );

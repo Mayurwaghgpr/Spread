@@ -7,6 +7,7 @@ import { setFollowInfo } from "../../../redux/slices/profileSlice";
 import userImageSrc from "../../../utils/userImageSrc";
 import { LuMessageSquarePlus, LuMessagesSquare } from "react-icons/lu";
 import FormatedTime from "../../../component/UtilityComp/FormatedTime";
+import abbreviateNumber from "../../../utils/numAbrivation";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -51,7 +52,9 @@ const ProfileHeader = React.memo(({ profileId }) => {
                 }
                 className="flex   justify-start  items-start h-full gap-1 "
               >
-                <span>{userProfile?.Followers?.length}</span>
+                <span>
+                  {abbreviateNumber(userProfile?.Followers?.length) || 0}
+                </span>
                 <h1>Followers</h1>
               </button>
               <button
@@ -65,7 +68,9 @@ const ProfileHeader = React.memo(({ profileId }) => {
                 }
                 className="flex   justify-start  items-start h-full  gap-1   "
               >
-                <span>{userProfile?.Following?.length}</span>
+                <span>
+                  {abbreviateNumber(userProfile?.Following?.length) || 0}
+                </span>
                 <h1>Following</h1>
               </button>
             </div>

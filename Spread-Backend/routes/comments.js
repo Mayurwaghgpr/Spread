@@ -6,6 +6,7 @@ import {
   getCommentReply,
   getTopComments,
   likeComment,
+  pinComment,
   // replyComment,
 } from "../controllers/comments.js";
 import IsAuth from "../middlewares/isAuth.js";
@@ -17,7 +18,9 @@ router.get("/replys", getCommentReply);
 router.post("/new",IsAuth, createComment);
 // router.post("/reply/:topCommentId", IsAuth,replyComment);
 router.get("/like/:commentId",IsAuth, likeComment);
-router.put("/edit/:commentId",IsAuth, editComment);
-router.delete("/delete/:commentId",IsAuth, deleteComment);
+router.put("/edit/:commentId", IsAuth, editComment);
+router.put('/pin/:commentId',pinComment)
+router.delete("/delete/:commentId", IsAuth, deleteComment);
+
 
 export default router;

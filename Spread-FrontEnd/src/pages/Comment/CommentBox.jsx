@@ -10,10 +10,12 @@ import {
   useMutation,
   useQueryClient,
 } from "react-query";
+
 import PostsApis from "../../Apis/PostsApis";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import { MdDelete } from "react-icons/md";
+import { TiPin, TiPinOutline } from "react-icons/ti";
 import { setToast } from "../../redux/slices/uiSlice";
 import { useOutletContext } from "react-router-dom";
 
@@ -68,7 +70,10 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     () => comt?.commentLikes?.find((like) => like.likedBy === user?.id),
     [comt?.commentLikes, user?.id]
   );
-
+  const isPostOwnerLiked = useMemo(
+    () => comt?.commentLikes?.find((like) => like.likedBy === postdata.User.id),
+    [comt?.commentLikes, postdata.User.id]
+  );
   const handleRepliesClick = () => {
     setOpenReplies((prev) => (prev === "" ? comt.id : ""));
   };
@@ -92,9 +97,22 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
           <div>
             <div className="flex justify-start items-center text-nowrap gap-3 text-sm">
               <h1 className="font-semibold">{comt?.commenter?.username}</h1>
+              {comt?.pind && <TiPin />} {/*pind comment */}
               <span className="text-xs text-black text-opacity-30 dark:text-opacity-20 dark:text-white">
                 {formatDate(new Date(comt?.createdAt), "d MMM yyy")}
               </span>
+              {/* if Post owner liked this post show the image of owner*/}
+              {isPostOwnerLiked && (
+                <div className="flex items-center justify-center gap-1 animate-fedin.2s">
+                  <BsHeartFill className="text-red-500 text-[10px]" />{" "}
+                  <div className=" w-5 h-5">
+                    <img
+                      className="w-full h-full object-cover object-top  rounded-full"
+                      src={postdata.User.userImage}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <div>
               <p>{comt.content}</p>

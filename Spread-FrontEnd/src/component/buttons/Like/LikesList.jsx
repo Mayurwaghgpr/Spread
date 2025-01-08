@@ -9,7 +9,7 @@ function LikesList({ mutate, post }) {
         name="like"
         onMouseOut={(e) => e.stopPropagation()}
         onClick={mutate}
-        className=" before:hidden  hover:before:flex before:justify-center before:items-center before:h-4 before:text-[.6rem] before:px-1  before:content-['like'] before:bg-black dark:before:bg-white dark:before:text-black  before:text-white before:bg-opacity-50 before:absolute before:-top-7  before:rounded-lg  hover:-translate-y-5 cursor-pointer hover:scale-150 bg-white dark:bg-[#191818] rounded-full p-2"
+        className=" before:hidden hover:before:flex before:justify-center before:items-center before:h-4 before:text-[.6rem] before:px-1  before:content-['like'] before:bg-black dark:before:bg-white dark:before:text-black  before:text-white before:bg-opacity-50 before:absolute before:-top-7  before:rounded-lg  hover:-translate-y-5 cursor-pointer hover:scale-150 bg-white dark:bg-[#191818] rounded-full p-2"
       >
         {likeIconObj.like}
       </button>

@@ -74,6 +74,11 @@ export default {
         'slide-out-left': 'toLeft 1s ease-in-out forwards',
         'slide-out-right': 'toRight .5s ease-in-out forwards',
         'slide-in-bottom': 'fromBottom .5s ease-in-out forwards',
+        'slide-in-bottom.6s': 'fromBottom .6s ease-in-out forwards',
+        'slide-in-bottom.7s': 'fromBottom .7s ease-in-out forwards',
+        'slide-in-bottom.8s': 'fromBottom .8s ease-in-out forwards',
+        'slide-in-bottom.9s': 'fromBottom .9s ease-in-out forwards',
+        'slide-in-bottom1s': 'fromBottom 1s ease-in-out forwards',
         'slide-out-bottom': 'toBottom 1s ease-in-out forwards',
 
         'fedin2s':'fedin 2s  ease-in-out',

@@ -42,6 +42,7 @@ function CommentSection() {
   );
 
   const Comments = TopComments?.pages?.flatMap((page) => page.comments) || [];
+  console.log(Comments);
   return (
     <section
       onClick={() => {
@@ -56,7 +57,7 @@ function CommentSection() {
           })
         );
       }}
-      className="flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0 lg:w-fit w-full  animate-fedin.2s   lg:h-[90vh] h-full sm:z-0 z-30  overflow-hidden "
+      className=" flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0 lg:w-fit w-full  animate-fedin.2s   lg:h-[90vh] h-full sm:z-0 z-30  overflow-hidden "
     >
       <div
         onClick={(e) => e.stopPropagation()}

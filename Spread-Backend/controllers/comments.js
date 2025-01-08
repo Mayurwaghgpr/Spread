@@ -3,6 +3,7 @@ import Comments from "../models/Comments.js";
 import LikeComment from "../models/LikeComment.js";
 import User from "../models/user.js";
 import Database from "../utils/database.js";
+import sequelize from "sequelize";
 
 export const createComment = async (req, res, next) => {
   // console.log("new...");
@@ -38,46 +39,51 @@ export const createComment = async (req, res, next) => {
 
 export const getTopComments = async (req, res, next) => {
   try {
-    const postId = req.query.postId; // Ensure postId is a number
-    console.log(postId);
+    const postId = req.query.postId; // Ensure postId is provided
     const limit = Math.max(parseInt(req.query.limit?.trim()) || 5, 1);
     const page = Math.max(parseInt(req.query.page?.trim()) || 1, 1);
 
-    // Count total top-level comments for pagination
-    // Fetch paginated comments
-    const { count: totalPosts, rows:topComments} = await Comments.findAndCountAll({
+    const { count: totalPosts, rows: topComments } = await Comments.findAndCountAll({
       where: { postId, topCommentId: null },
       attributes: [
         "id",
-        "content", // Attributes from the Comments table
+        "content",
         "topCommentId",
         "postId",
+        "pind",
         "updatedAt",
         "createdAt",
-        // [
-        //   Database.fn("COUNT", Database.col("commentLikes.id")),
-        //   "likeCount", // Alias for the count column
-        // ],
       ],
       include: [
         {
           model: User,
           as: "commenter",
-          attributes: ["id", "username", "userImage",],
+          attributes: ["id", "username", "userImage"],
         },
         {
           model: LikeComment,
           as: "commentLikes",
-
         },
         {
           model: Comments,
           as: "reply",
-          attributes: ['id'],
-        }
+          attributes: ["id"],
+        },
       ],
-      //   group: ["Comment.id", "commenter.id"], // Use the correct alias
-      //   order: [[Database.literal("likeCount"), "DESC"]],
+      order: [
+        [
+          // Fully qualify the column "pind" with the table alias "Comment"
+          sequelize.literal(`
+            CASE
+              WHEN "Comment"."pind" = true THEN 1
+              WHEN "Comment"."pind" = false THEN 2
+              ELSE 3
+            END
+          `),
+          "ASC", // Ensures `true` (1) comes first, then `false` (2), then `null` (3)
+        ],
+        ["createdAt", "DESC"], // Optional: Sort by creation time within the same `pind` group
+      ],
       limit,
       offset: (page - 1) * limit,
     });
@@ -92,6 +98,7 @@ export const getTopComments = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error("Error fetching top comments:", error);
     next(error);
   }
 };
@@ -109,6 +116,7 @@ export const getCommentReply = async (req, res, next) => {
         "replyTo",
         "topCommentId",
         "postId",
+        "pind",
         "updatedAt",
         "createdAt",
         // [
@@ -129,6 +137,7 @@ export const getCommentReply = async (req, res, next) => {
       ],
       // group: ["Comments.id", "commenter.id"],
       // order: [[Database.literal("likeCount"), "DESC"]], // Order by like count in descending order
+      order:[[Database.literal("pind")]],
       limit,
       offset: (page - 1) * limit,
     });
@@ -214,3 +223,16 @@ export const deleteComment = async (req, res, next) => {
     next(error);
   }
 };
+
+export const pinComment = async (req, res) => {
+  const commentId = req.params.commentId;
+  const pin = req.body.pin;
+
+  try {
+    const result = await Comments.update({ pind: pin }, { where: { id: commentId }, });
+
+    res.status(202).json({ message: "comment pind successfully", result });
+  } catch (error) {
+    next(error);
+  }
+}

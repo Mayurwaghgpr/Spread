@@ -30,10 +30,12 @@ const Comments = Database.define("Comment", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  pind: {
-    type: DataTypes.BOOLEAN,
-    allowNull: true,
-  },
+ pind: {
+  type: DataTypes.BOOLEAN,
+  allowNull: true,
+  defaultValue: false,
+},
+
         
 });
 

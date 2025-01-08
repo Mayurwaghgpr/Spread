@@ -85,7 +85,7 @@ function PostsApis() {
           topCommentId,
           postId,
           page: pageParam,
-          limit: 1,
+          limit: 3,
         },
       });
       return result.data;

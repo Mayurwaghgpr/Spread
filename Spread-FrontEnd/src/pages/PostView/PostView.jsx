@@ -53,7 +53,6 @@ function PostView() {
   }, [commentCred, postView?.id]);
 
   if (isError || error) {
-    console.error("Error fetching data:", error);
     return <SomthingWentWrong />;
   }
 
@@ -71,7 +70,7 @@ function PostView() {
 
   return (
     <main className="flex justify-center  h-full transition-all duration-500 min-w-full py-4 my-16 dark:*:border-[#383838]">
-      <article className="max-w-4xl px-6 rounded-lg flex flex-col justify-center items-center">
+      <article className="max-w-4xl px-2 rounded-lg flex flex-col justify-center items-center">
         <header className="mb-6 w-full px-3">
           <section className="flex flex-col gap-2">
             <div className="w-full flex justify-end text-lg">

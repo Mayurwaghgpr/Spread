@@ -75,7 +75,6 @@ function Profile() {
   if (isError || (isPostError && postError?.message !== "404")) {
     return <h1>Error {postError?.message}. Please try again.</h1>;
   }
-  console.log(userProfile);
   return (
     <div className="flex lg:justify-center justify-end dark:*:border-[#383838]">
       <div className=" md:w-[80%]  lg:w-[70%] xl:w-[60%]  w-full  mt-20 flex flex-col h-full">

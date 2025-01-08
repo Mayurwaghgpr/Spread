@@ -178,17 +178,21 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
             />
           ))}
           {hasNextPage && (
-            <button
-              className="px-10"
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage || isFetchingNextPage}
-            >
-              {isFetchingNextPage
-                ? "Loading more..."
-                : hasNextPage
-                  ? "View more..."
-                  : " "}
-            </button>
+            <div className="w-full flex items-center gap-2 px-10">
+              {" "}
+              <hr className="bg-black h-0.5 w-1/12" />
+              <button
+                className=""
+                onClick={() => fetchNextPage()}
+                disabled={!hasNextPage || isFetchingNextPage}
+              >
+                {isFetchingNextPage
+                  ? "Loading more..."
+                  : hasNextPage
+                    ? "View more..."
+                    : " "}
+              </button>
+            </div>
           )}
         </>
       )}

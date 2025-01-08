@@ -42,7 +42,6 @@ function CommentSection() {
   );
 
   const Comments = TopComments?.pages?.flatMap((page) => page.comments) || [];
-  console.log(Comments);
   return (
     <section
       onClick={() => {

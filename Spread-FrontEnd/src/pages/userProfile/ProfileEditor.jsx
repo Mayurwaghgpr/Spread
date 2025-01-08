@@ -82,7 +82,6 @@ function ProfileEditor() {
       userFromOAth: IsUserFromOAth,
     }));
   };
-  console.log(newInfo);
   return (
     <div className=" relative f sm:h-screen h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
       <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">

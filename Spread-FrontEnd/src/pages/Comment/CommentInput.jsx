@@ -68,7 +68,7 @@ function CommentInput({ className }) {
 
   return (
     <div className={className}>
-      <div className=" sm:w-20 sm:h-14 w-16 h-10 text-sm">
+      <div className="w-16 h-10 text-sm">
         {" "}
         <img
           className="w-full h-full object-cover object-top rounded-full"

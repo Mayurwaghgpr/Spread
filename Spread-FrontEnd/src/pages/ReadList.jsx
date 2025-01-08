@@ -52,7 +52,7 @@ const ReadList = () => {
           ? pages?.map((page, idx) => {
               return (
                 <PostPreview
-                  className={""}
+                  className={"max-w-[45rem]"}
                   ref={pages?.length % 3 === 0 ? lastpostRef : null}
                   key={idx}
                   post={page}

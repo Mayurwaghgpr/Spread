@@ -1,4 +1,5 @@
 .DS_store
+Spread-Backend/config/config.json
 # Logs
 logs
 *.log

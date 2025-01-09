@@ -140,7 +140,10 @@ export const EditUserProfile = async (req, res, next) => {
 
       if (!data.userFromOAuth && data.cloudinaryPubId) {
         // console.log("old_pubId",data.cloudinaryPubId)
-        await deleteCloudinaryImage(data.cloudinaryPubId); // Delete old image
+      if (!data.userFromOAuth&&data.cloudinaryPubId!==process.env.USER_IMAGE_OUTLOOK) {// Delete old image
+
+       await deleteCloudinaryImage(data.cloudinaryPubId);
+      }
         await deletePostImage(image);
       }
     }
@@ -148,7 +151,7 @@ export const EditUserProfile = async (req, res, next) => {
     if (data.removeImage && data.userImage && data.userImage !== " ") {
       updatedData.userImage = ""; // Remove user image
       //If user is not loged in with OAuth i.e google/github etc. so he will have image stored in backend
-      if (!data.userFromOAuth) {
+      if (!data.userFromOAuth&&data.cloudinaryPubId!==process.env.USER_IMAGE_OUTLOOK) {
        await deleteCloudinaryImage(data.cloudinaryPubId);
       }
     }

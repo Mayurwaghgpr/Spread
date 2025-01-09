@@ -9,14 +9,18 @@ const User = Database.define("User", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
+  displayName:{
+    type: DataTypes.STRING,
+    allowNull: false, 
+  },
   userImage: {
     type: DataTypes.STRING,
-    defaultValue: "images/placeholderImages/ProfOutlook.png",
+    defaultValue: `https://res.cloudinary.com/dvjs0twtc/image/upload/zjhgm5fjuyz1rcp3ahqz`,
     allowNull: false,
   },
   username: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false, 
     unique: true,
   },
   cloudinaryPubId: {
@@ -24,7 +28,7 @@ const User = Database.define("User", {
         allowNull: true,
   },
   pronouns: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('he/him', 'she/her', 'they/them', ''),
     defaultValue: "",
   },
   email: {

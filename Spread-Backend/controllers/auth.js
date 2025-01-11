@@ -7,15 +7,15 @@ import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenera
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import Post from "../models/posts.js";
-
+import { generateFromEmail, generateUsername } from "unique-username-generator";
 dotenv.config();
 const saltRounds = 10;
 
 // Sign up a new user
 export const SignUp = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { displayName, email, password } = req.body;
   // Validate required fields
-  if (!username || !email || !password) {
+  if (!displayName || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -23,7 +23,7 @@ export const SignUp = async (req, res, next) => {
     // Check if user already exists
     const existingUser = await User.findOne({
       where: {
-        [Sequelize.Op.or]: [{ username }, { email }],
+        [Sequelize.Op.or]: [{ displayName }, { email }],
       },
     });
 
@@ -31,14 +31,17 @@ export const SignUp = async (req, res, next) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
+
     // Hash the password and create a new user
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+   const username =  generateFromEmail(email,Math.random(5))
     const newAddedUser = await User.create({
       username,
+      displayName,
       email,
       password: hashedPassword,
-      userImage: "images/placeholderImages/ProfOutlook.png",
     });
+
     // Generate access and refresh tokens
     const { AccessToken, RefreshToken } = AccessAndRefreshTokenGenerator({
       id: newAddedUser.id,

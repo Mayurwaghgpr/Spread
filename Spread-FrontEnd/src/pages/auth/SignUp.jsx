@@ -54,8 +54,8 @@ function SignUp() {
     {
       id: uuidv4(),
       type: "text",
-      Iname: "username",
-      labelname: "User Name",
+      Iname: "displayName",
+      labelname: "Name",
       className: "mb-3 w-full flex flex-col gap-2 border-inherit",
     },
     {

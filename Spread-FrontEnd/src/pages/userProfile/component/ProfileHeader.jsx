@@ -18,7 +18,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
   return (
     <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">
       <div className="flex justify-start items-start  gap-9">
-        <div className="sm:w-40 sm:h-32 w-20 h-20 flex  items-center flex-col gap-3 ">
+        <div className="sm:w-32 sm:h-32 w-20 h-20 flex  flex-col  items-center justify-center text-center gap-3 ">
           <img
             className="h-full w-full items-center  cursor-pointer rounded-full   object-cover object-top "
             src={userImageurl}
@@ -26,7 +26,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
           />
           <div className=" w-full">
             <h1 className="sm:text-3xl sm:hidden text-nowrap text-sm  font-medium">
-              {userProfile?.username}
+              {userProfile?.displayName}
             </h1>
             <span className="text-black text-xs dark:text-white text-opacity-70 dark:text-opacity-70 ">
               {userProfile.pronouns}
@@ -34,11 +34,11 @@ const ProfileHeader = React.memo(({ profileId }) => {
           </div>
         </div>
 
-        <div className="flex sm:flex-row flex-col  justify-between w-full  gap-2   h-full sm:text-lg  ">
+        <div className="flex sm:flex-row flex-col  justify-between  gap-2   h-full sm:text-lg  ">
           <div className="flex flex-col gap-1 justify-start  p-4 w-full ">
             {/* <div className="flex justify-start items-center">{}</div> */}
             <h1 className="sm:text-4xl sm:block hidden text-nowrap text-lg  font-medium">
-              {userProfile?.username}
+              {userProfile?.displayName}
             </h1>
             <div className=" flex  gap-4 justify-start ">
               <button
@@ -98,9 +98,9 @@ const ProfileHeader = React.memo(({ profileId }) => {
           <div className="flex justify-start text-xs text-black sm:text-sm items-center gap-4 w-full border-inherit">
             <Follow
               People={userProfile}
-              className={`p-3 py-1 flex border border-inherit w-full  sm:min-w-32 sm:h-9 justify-center items-center rounded-xl bg-white  hover:bg-gray-200  dark:hover:bg-gray-300`}
+              className={`p-3 py-1 flex border border-inherit w-full  sm:min-w-32 sm:h-9 h-6 justify-center items-center rounded-xl bg-white  hover:bg-gray-200  dark:hover:bg-gray-300`}
             />
-            <button className="flex items-center justify-center gap-2 w-full sm:h-9 bg-white hover:bg-gray-200  dark:hover:bg-gray-300 px-3 py-1   rounded-xl  ">
+            <button className="flex items-center border border-inherit justify-center gap-2 w-full sm:h-9 h-6  bg-white hover:bg-gray-200  dark:hover:bg-gray-300 px-3 py-1   rounded-xl  ">
               {/* <i className="bi bi-envelope"></i>
                */}
               <LuMessagesSquare />

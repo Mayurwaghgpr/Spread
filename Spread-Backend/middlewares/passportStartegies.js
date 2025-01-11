@@ -92,6 +92,7 @@ export const passportStrategies = (passport) => {
           if (!user) {
             user = await User.create({
               username: profile.username,
+              displayName:profile.displayName,
               email: profile.emails[0].value,
               userImage: profile._json.avatar_url,
               bio: profile._json.bio,

@@ -57,7 +57,7 @@ export const getUserPostsById = async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["id", "username", "userImage"],
+          attributes: ["id", "username", "userImage","displayName"],
         },
         {
           model: Likes, // Include likes

@@ -41,6 +41,7 @@
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2",
     "socket.io": "^4.7.5",
+    "unique-username-generator": "^1.4.0",
     "uuid": "^9.0.1"
   }
 }

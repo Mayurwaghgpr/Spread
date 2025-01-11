@@ -63,7 +63,6 @@ function Profile() {
     () => postsData?.pages.flatMap((page) => page.posts) || [],
     [postsData]
   );
-
   if (isLoading) {
     return (
       <div className="flex h-screen w-full  justify-center items-center dark:*:border-[#383838]">

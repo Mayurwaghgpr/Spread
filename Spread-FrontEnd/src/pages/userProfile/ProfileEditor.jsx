@@ -151,15 +151,15 @@ function ProfileEditor() {
             <CommonInput
               className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
               type={"text"}
-              Iname={"username"}
-              labelname={"User Name"}
+              Iname={"displayName"}
+              labelname={"Full Name"}
               disabled={isLoading}
               maxLength={20}
               onChange={handleChange}
-              defaultValue={newInfo?.username}
+              defaultValue={newInfo?.displayName}
             />
             <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
-              {`${newInfo?.username?.length || 0} / 20`}
+              {`${newInfo?.displayName?.length || 0} / 20`}
             </span>{" "}
             <CommonInput
               className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "

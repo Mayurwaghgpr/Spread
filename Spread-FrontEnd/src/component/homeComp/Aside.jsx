@@ -3,6 +3,7 @@ import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
 import PeoplesList from "../PeoplesList";
 import FollowPeopleLoader from "../loaders/FollowPeopleLoader";
 import { Link } from "react-router-dom";
+import WhoToFollow from "../../pages/home/WhoToFollow";
 
 function Aside({
   FechingPreps,
@@ -38,31 +39,11 @@ function Aside({
         </div>
       </div>
       <div className="sticky top-[4.3rem] gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
-        <div className="h-full text-sm  p-5 border rounded-xl border-inherit">
-          <h1 className=" text-start w-full text-xl font-bold">
-            Follow People
-          </h1>
-          {!FechingPreps ? (
-            <ul className="py-3 w-full flex flex-wrap gap-3">
-              {PrepsData?.AllSpreadUsers?.map((el, index) => (
-                <PeoplesList
-                  className={`w-full`}
-                  key={el.id}
-                  people={el}
-                  index={index}
-                />
-              ))}
-            </ul>
-          ) : (
-            <FollowPeopleLoader
-              items={4}
-              className={"flex h-8 w-full gap-2 my-4  "}
-            />
-          )}
-          <button className="w-full self-center p-1 transition-all ease-in-out duration-300">
-            See More
-          </button>
-        </div>
+        <WhoToFollow
+          PrepsData={PrepsData}
+          className={"h-full text-sm  p-5 border rounded-xl border-inherit"}
+          FechingPreps={FechingPreps}
+        />
         <footer className=" text-[#383838]">
           <Link className="mx-1" to="">
             Terms of Service

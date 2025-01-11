@@ -4,7 +4,7 @@ import pg from "pg";
 import sequelize from "sequelize";
 
 dotenv.config();
-// console.log(process.env.DATABASE_URL)
+console.log(process.env.DATABASE_URL)
 const isProduction = process.env.NODE_ENV === "production";
 const Database = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",

@@ -123,7 +123,7 @@ function SideBar({ className }) {
                 className="flex justify-start items-center gap-3  hover:bg-gray-400  hover:bg-opacity-15 rounded-full p-3"
                 onClick={() => dispatch(setManuOpen())}
               >
-                <div className="size-8">
+                <div className="size-10  ">
                   {" "}
                   <img
                     className="h-full w-full rounded-full object-cover object-top"
@@ -132,7 +132,7 @@ function SideBar({ className }) {
                   />
                 </div>{" "}
                 <h1 className=" xl:block sm:hidden block text-nowrap">
-                  {user?.username}
+                  {user?.displayName}
                 </h1>
               </Link>
               {/* <h2 className="text-xs px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-40">

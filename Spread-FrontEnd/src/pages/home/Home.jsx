@@ -1,38 +1,35 @@
-import React, { useCallback, lazy } from "react";
-import { Link, Outlet, useSearchParams } from "react-router-dom";
+import React, { useCallback, lazy, useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "react-query";
 
-const SomthingWentWrong = lazy(() => import("./ErrorPages/somthingWentWrong"));
-
-import PostPreview from "../component/postsComp/PostPreview";
-import Spinner from "../component/loaders/Spinner";
-import { useLastPostObserver } from "../hooks/useLastPostObserver";
-
-import usePublicApis from "../Apis/publicApis";
-import Aside from "../component/homeComp/Aside";
-import PostsApis from "../Apis/PostsApis";
-import LikesList from "../component/buttons/Like/LikesList";
-import SideBar from "../component/homeComp/SideBar";
+const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
+import PostPreview from "../../component/postsComp/PostPreview";
+import Spinner from "../../component/loaders/Spinner";
+import { useLastPostObserver } from "../../hooks/useLastPostObserver";
+import usePublicApis from "../../Apis/publicApis";
+import Aside from "../../component/homeComp/Aside";
+import PostsApis from "../../Apis/PostsApis";
+import WhoToFollow from "./WhoToFollow";
+import useDeviceSize from "../../hooks/useDeviceSize";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const isDeviceSize = useDeviceSize("1023");
   const { userPrepsData } = usePublicApis();
   const { fetchDataAll } = PostsApis();
 
-  const selectedTopic = searchParams.get("topic");
+  const selectedTopic = searchParams.get("topic") || "All";
 
-  // Fetch user preferences
   const {
     isLoading: isLoadingPreps,
     isFetching: fetchingPreps,
     error: errorPreps,
     data: prepsData,
   } = useQuery("userPreps", userPrepsData, {
-    staleTime: 1000 * 60 * 10,
+    staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
-  // Fetch posts with infinite scrolling
   const {
     data: postsData,
     error: errorPosts,
@@ -45,7 +42,7 @@ function Home() {
     ["Allposts", selectedTopic],
     ({ pageParam = 1 }) => fetchDataAll({ pageParam, topic: selectedTopic }),
     {
-      getNextPageParam: (lastPage, allPages) =>
+      getNextPageParam: (lastPage) =>
         lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
       refetchOnWindowFocus: false,
     }
@@ -58,13 +55,32 @@ function Home() {
     hasNextPage
   );
 
-  // Handle topic change
   const handleTopicClick = useCallback(
     (topic) => setSearchParams({ topic }),
     [setSearchParams]
   );
 
-  // Handle errors
+  const posts = useMemo(() => {
+    const basePosts = postsData?.pages.flatMap((page) => page.posts) || [];
+    // setting follow people list in post array on small so small device user can follow other people
+    if (isDeviceSize) {
+      return [
+        ...basePosts.slice(0, 3),
+        {
+          Flow: (
+            <WhoToFollow
+              PrepsData={prepsData}
+              className="w-full h-full text-sm mt-5 p-5 border-y  border-inherit"
+              FechingPreps={fetchingPreps}
+            />
+          ),
+        },
+        ...basePosts.slice(3),
+      ];
+    }
+    return basePosts;
+  }, [postsData, isDeviceSize, prepsData, fetchingPreps]);
+
   if (errorPreps || (errorPosts && errorPosts?.status !== 404)) {
     return (
       <SomthingWentWrong
@@ -78,12 +94,10 @@ function Home() {
     );
   }
 
-  const posts = postsData?.pages.flatMap((page) => page.posts) || [];
-
   return (
     <section className="relative flex flex-col sm:flex-row gap-3 lg:justify-end lg:px-10 justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Posts Section */}
-      <div className=" relative flex py-[4.2rem] flex-col h-full items-end border-inherit xl:w-[57%] lg:w-[55%] md:w-[75%]  w-full">
+      <div className="relative flex py-[4.2rem] flex-col h-full items-end border-inherit xl:w-[57%] lg:w-[55%] md:w-[75%] w-full">
         {/* Topics Section */}
         <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border rounded items-center justify-start gap-3 sticky top-[4.3rem]">
           <ul className="flex h-full items-center justify-between w-full">
@@ -103,35 +117,36 @@ function Home() {
             </li>
           </ul>
         </div>
+
         {/* Posts List */}
-        {!isLoading
-          ? posts.map((post, idx, arr) => (
-              <PostPreview
-                className="border-inherit"
-                ref={arr.length % 3 === 0 ? lastpostRef : null}
-                key={post?.id}
-                post={post}
-              />
+        {isLoading
+          ? Array.from({ length: 3 }, (_, idx) => (
+              <PostPreview key={idx} className="" />
             ))
-          : [...Array(3)].map((_, idx) => (
-              <PostPreview key={idx} className="border-inherit " />
-            ))}
-        {/* Loading Spinner */}
+          : posts.map((post, idx, arr) =>
+              post.Flow ? (
+                post.Flow
+              ) : (
+                <PostPreview
+                  className="border-inherit border-b"
+                  ref={arr.length % 3 === 0 ? lastpostRef : null}
+                  key={post?.id}
+                  post={post}
+                />
+              )
+            )}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">
-            <Spinner className={"border-t-black dark:border-t-white"} />
+            <Spinner className="border-t-black dark:border-t-white" />
           </div>
         )}
-        {/* No Posts */}{" "}
-        {!posts.length > 0 && !isLoading && (
-          <div className="h-screen w-full flex justify-center items-center ">
-            {" "}
-            <h2 className="m-auto text-xl">No posts</h2>
+        {!posts.length && !isLoading && (
+          <div className="w-full flex justify-center items-center">
+            <h2 className="text-xl">No posts</h2>
           </div>
         )}
       </div>
 
-      {/* Aside Section */}
       <Aside
         className="lg:flex hidden text-xs border-inherit max-w-[20rem] w-full flex-col mt-[4.3rem] justify-start gap-5"
         FechingPreps={fetchingPreps}

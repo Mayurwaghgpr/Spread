@@ -105,10 +105,13 @@ function Profile() {
                     <PostPreview className="border-inherit px-2" />
                   ))
               : profileId === user?.id && (
-                  <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center text-2xl border-dashed border-2 rounded-lg max-h-[300px] h-full min-h-[200px] border-inherit">
+                  <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center sm:text-3xl border-dashed border-2 rounded-lg max-h-[38rem] h-full min-h-[13rem] border-inherit mx-5">
                     No posts yet{" "}
                     {isLogin && (
-                      <Link to="/write" className="text-gray-500 font-thin ">
+                      <Link
+                        to="/write"
+                        className=" sm:text-lg text-xs text-gray-500 font-thin "
+                      >
                         Add New Post +
                       </Link>
                     )}

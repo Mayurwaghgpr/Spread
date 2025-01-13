@@ -1,4 +1,4 @@
-import React, { useCallback, lazy, useMemo } from "react";
+import React, { useCallback, lazy, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "react-query";
 
@@ -60,27 +60,6 @@ function Home() {
     [setSearchParams]
   );
 
-  const posts = useMemo(() => {
-    const basePosts = postsData?.pages.flatMap((page) => page.posts) || [];
-    // setting follow people list in post array on small so small device user can follow other people
-    if (isDeviceSize) {
-      return [
-        ...basePosts.slice(0, 3),
-        {
-          Flow: (
-            <WhoToFollow
-              PrepsData={prepsData}
-              className="w-full h-full text-sm mt-5 p-5 border-y  border-inherit"
-              FechingPreps={fetchingPreps}
-            />
-          ),
-        },
-        ...basePosts.slice(3),
-      ];
-    }
-    return basePosts;
-  }, [postsData, isDeviceSize, prepsData, fetchingPreps]);
-
   if (errorPreps || (errorPosts && errorPosts?.status !== 404)) {
     return (
       <SomthingWentWrong
@@ -93,13 +72,14 @@ function Home() {
       />
     );
   }
-
+  const posts = postsData?.pages.flatMap((page) => page.posts) || [];
+  console.log(postsData);
   return (
     <section className="relative flex flex-col sm:flex-row gap-3 lg:justify-end lg:px-10 justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Posts Section */}
-      <div className="relative flex py-[4.2rem] flex-col h-full items-end border-inherit xl:w-[57%] lg:w-[55%] md:w-[75%] w-full">
+      <div className="relative flex py-[4rem] flex-col h-full items-end border-inherit xl:w-[57%] lg:w-[55%] md:w-[75%] w-full">
         {/* Topics Section */}
-        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border rounded items-center justify-start gap-3 sticky top-[4.3rem]">
+        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border border-t-0 items-center justify-start gap-3 sticky top-[4rem]">
           <ul className="flex h-full items-center justify-between w-full">
             <li className="capitalize flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
               <button
@@ -123,23 +103,32 @@ function Home() {
           ? Array.from({ length: 3 }, (_, idx) => (
               <PostPreview key={idx} className="" />
             ))
-          : posts.map((post, idx, arr) =>
-              post.Flow ? (
-                post.Flow
+          : posts.map((post, idx, arr) => {
+              return idx === 3 && isDeviceSize ? (
+                <>
+                  {" "}
+                  <WhoToFollow
+                    PrepsData={prepsData}
+                    className="w-full h-full text-sm p-5 border-b  border-inherit"
+                    FechingPreps={fetchingPreps}
+                  />
+                  <PostPreview
+                    className="border-inherit border-b pt-2"
+                    ref={arr.length % 3 === 0 ? lastpostRef : null}
+                    key={post?.id}
+                    post={post}
+                  />
+                </>
               ) : (
                 <PostPreview
-                  className="border-inherit border-b"
+                  className="border-inherit border-b pt-2"
                   ref={arr.length % 3 === 0 ? lastpostRef : null}
                   key={post?.id}
                   post={post}
                 />
-              )
-            )}
-        {isFetchingNextPage && (
-          <div className="w-full flex justify-center items-center h-full p-5">
-            <Spinner className="border-t-black dark:border-t-white" />
-          </div>
-        )}
+              );
+            })}
+        {isFetchingNextPage && <PostPreview className="" />}
         {!posts.length && !isLoading && (
           <div className="w-full flex justify-center items-center">
             <h2 className="text-xl">No posts</h2>

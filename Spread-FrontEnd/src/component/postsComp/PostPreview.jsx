@@ -32,7 +32,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const navigate = useNavigate();
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
-
+  console.log(user);
   const userImage = userImageSrc(post?.user);
 
   const Comments = post?.comments?.filter(
@@ -46,12 +46,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
         // replyTo: post?.User?.id,
       })
     ); //Setting data initialy
-    navigate(
-      `/view/@${post?.user?.username
-        .split(" ")
-        .slice(0, post?.user?.username.length - 1)
-        .join("")}/${post?.id}/comments`
-    );
+    navigate(`/view/@${post?.user?.username}/${post?.id}/comments`);
   }, [commentCred, post?.id]);
 
   return (
@@ -62,10 +57,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
       <div className="p-3 flex leading-0 border-inherit flex-col  justify-center gap-4 w-full">
         <div className="flex border-inherit gap-2 text-sm justify-start items-center">
           <Link
-            to={`/profile/@${post?.user?.username
-              .split(" ")
-              .slice(0, post?.user?.username?.length - 1)
-              .join("")}/${post?.user?.id}`}
+            to={`/profile/@${post?.user?.username}/${post?.user?.id}`}
             className="flex gap-3"
           >
             <div
@@ -99,10 +91,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           />
         </div>
         <Link
-          to={`/view/@${post?.user?.username
-            .split(" ")
-            .slice(0, post?.user?.username.length - 1)
-            .join("")}/${post?.id}`}
+          to={`/view/@${post?.user?.username}/${post?.id}`}
           className="relative cursor-pointer h-full border-inherit flex sm:flex-row sm:items-center flex-col-reverse  justify-between items-start gap-3"
         >
           <div className="flex w-full flex-col gap-1">

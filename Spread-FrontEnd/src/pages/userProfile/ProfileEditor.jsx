@@ -151,6 +151,15 @@ function ProfileEditor() {
             <CommonInput
               className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
               type={"text"}
+              Iname={"username"}
+              labelname={"username"}
+              disabled={isLoading}
+              maxLength={20}
+              defaultValue={newInfo?.username}
+            />
+            <CommonInput
+              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              type={"text"}
               Iname={"displayName"}
               labelname={"Full Name"}
               disabled={isLoading}

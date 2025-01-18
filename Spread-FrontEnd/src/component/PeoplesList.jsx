@@ -31,35 +31,35 @@ function PeoplesList({ people, className }) {
 
   return (
     <li
-      className={`${className} flex justify-between w-full h-full gap-3 font-medium capitalize items-center relative dark:border-[#383838]`}
+      className={`${className} flex w-full h-full gap-1 font-medium capitalize items-center relative dark:border-[#383838]`}
       key={people?.id}
       id={people?.id}
     >
       <div
         ref={buttonRef}
-        className="relative group border-inherit cursor-pointer text-ellipsis"
+        className="relative group border-inherit cursor-pointer w-[60%]"
       >
         <Link
-          className="flex items-center gap-3 border-inherit h-full"
-          to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
+          className="flex items-center gap-3 border-inherit h-full w-full "
+          to={`/profile/@${people?.username}/${people?.id}`}
         >
-          <div className="w-10 h-10">
+          <div className=" w-10 h-10">
             <img
-              className="w-full h-full  rounded-full object-cover object-top"
+              className="w-full h-full rounded-full object-cover object-top"
               src={userImageurl}
               alt={`${people?.username || "User"}'s profile picture`}
             />
           </div>
 
-          <h1 className="hover:underline text-nowrap touch-pan-up underline-offset-4">
-            {people?.username}
-          </h1>
+          <p className="hover:underline w-1/2  underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
+            {people?.username}sasa
+          </p>
         </Link>
 
         <UserPopover
           ref={boxRef}
           people={people}
-          className="z-40 px-4 w-[20rem] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
+          className="z-40 px-4 w-[20rem]  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
           attributes={attributes}
           styles={styles}
         />
@@ -67,7 +67,7 @@ function PeoplesList({ people, className }) {
 
       <Follow
         People={people}
-        className="text-black min-h-8 xl:min-w-[6.7rem] border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
+        className="text-black min-h-8 min-w-[6.7rem] border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
       />
     </li>
   );

@@ -16,7 +16,7 @@ function ResetPassword() {
     {
       onSuccess: (data) => {
         dispatch(setToast({ message: data.success, type: "success" }));
-        navigate("/signin", { replace: true });
+        navigate("/auth/signin", { replace: true });
       },
     }
   );
@@ -30,7 +30,7 @@ function ResetPassword() {
   };
   return (
     <main
-      className={`sm:flex relative justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 text-black  bg-[#fff9f3] border-inherit`}
+      className={`sm:flex relative justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 bg-[#fff9f3] dark:bg-black   dark:*:border-[#383838]`}
     >
       {isError && (
         <div className="text-red-500 my-4 w-full flex justify-center  bg-red-100 py-2 ">
@@ -59,9 +59,8 @@ function ResetPassword() {
             <h1 className="text-2xl text-center font-medium my-4">
               Set new password
             </h1>
-
             <CommonInput
-              className={"mb-4 flex flex-col gap-2"}
+              className={"mb-4 flex flex-col gap-2  bg-inherit "}
               type={"password"}
               name={"password"}
               labelname={"Password"}
@@ -72,7 +71,7 @@ function ResetPassword() {
             <div className="mb-4">
               <button
                 type="submit"
-                className={`bg-slate-400 min-w-[200px] text-white p-3 w-full  rounded-lg ${
+                className={`bg-black text-white dark:bg-white dark:text-black p-3 w-full  rounded-lg ${
                   isLoading && "cursor-wait bg-blue-100"
                 }`}
                 disabled={isLoading}

@@ -7,7 +7,8 @@ import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenera
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import Post from "../models/posts.js";
-import { generateFromEmail, generateUsername } from "unique-username-generator";
+import genUniqueUserName from "../utils/UserNameGenerator.js";
+
 dotenv.config();
 const saltRounds = 10;
 
@@ -23,10 +24,9 @@ export const SignUp = async (req, res, next) => {
     // Check if user already exists
     const existingUser = await User.findOne({
       where: {
-        [Sequelize.Op.or]: [{ displayName }, { email }],
+        [Sequelize.Op.or]: [{ email }],
       },
     });
-
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
@@ -34,7 +34,7 @@ export const SignUp = async (req, res, next) => {
 
     // Hash the password and create a new user
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-   const username =  generateFromEmail(email,Math.random(5))
+    const username = await genUniqueUserName(email);
     const newAddedUser = await User.create({
       username,
       displayName,

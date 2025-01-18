@@ -41,7 +41,7 @@ function Aside({
       <div className="sticky top-[4.3rem] gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
         <WhoToFollow
           PrepsData={PrepsData}
-          className={"h-full text-sm  p-5 border rounded-xl border-inherit"}
+          className={" text-sm  p-5 border rounded-xl border-inherit"}
           FechingPreps={FechingPreps}
         />
         <footer className=" text-[#383838]">

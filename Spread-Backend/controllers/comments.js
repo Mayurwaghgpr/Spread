@@ -227,7 +227,7 @@ export const deleteComment = async (req, res, next) => {
 export const pinComment = async (req, res) => {
   const commentId = req.params.commentId;
   const pin = req.body.pin;
-
+  
   try {
     const result = await Comments.update({ pind: pin }, { where: { id: commentId }, });
 
@@ -235,4 +235,5 @@ export const pinComment = async (req, res) => {
   } catch (error) {
     next(error);
   }
+
 }

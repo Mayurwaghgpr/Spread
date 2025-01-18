@@ -70,7 +70,9 @@ function ForgotPass() {
             </div>
 
             <CommonInput
-              className={"mb-4 flex flex-col gap-2  text-sm"}
+              className={
+                "mb-4 flex flex-col gap-2  text-sm border rounded-lg p-1"
+              }
               type={"email"}
               name={"email"}
               labelname={"Email address "}
@@ -82,12 +84,12 @@ function ForgotPass() {
             <div className="mb-4">
               <button
                 type="submit"
-                className={`bg-gray-400 min-w-[200px] text-white p-3 w-full  rounded-lg ${
+                className={`bg-black text-white dark:bg-white dark:text-black border p-3 w-full  rounded-lg ${
                   isLoading && "cursor-wait bg-blue-100"
                 }`}
                 disabled={isLoading}
               >
-                {isLoading ? "submit." : "submit"}
+                {isLoading ? "submitting..." : "submit"}
               </button>
             </div>
           </form>

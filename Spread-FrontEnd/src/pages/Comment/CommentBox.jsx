@@ -78,7 +78,6 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     setOpenReplies((prev) => (prev === "" ? comt.id : ""));
   };
   const Comments = data?.pages.flatMap((page) => page.comments) || [];
-
   return (
     <div ref={ref} className={`${className}`}>
       <article className="p-2 flex flex-col  w-full justify-center items-start gap-2 select-none">

@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
-
 import Database from "../utils/database.js";
-import Comments from "./Comments.js";
 
 const User = Database.define("User", {
   id: {

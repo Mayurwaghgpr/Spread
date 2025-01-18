@@ -9,12 +9,7 @@ function WhoToFollow({ className, PrepsData, FechingPreps }) {
       {!FechingPreps ? (
         <ul className="py-3 w-full flex flex-wrap gap-3">
           {PrepsData?.AllSpreadUsers?.map((el, index) => (
-            <PeoplesList
-              className={`w-full`}
-              key={el.id}
-              people={el}
-              index={index}
-            />
+            <PeoplesList key={el.id} people={el} index={index} />
           ))}
         </ul>
       ) : (

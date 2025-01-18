@@ -1,28 +1,40 @@
 import React, { forwardRef, memo } from "react";
 
 const CommonInput = forwardRef(function CommonInput(
-  { className, type, Iname, labelname, disabled, comp, ...props },
+  {
+    className,
+    type,
+    Iname,
+    labelname,
+    placeholder,
+    IClassName = "outline-none",
+    disabled,
+    comp,
+    ...props
+  },
   ref
 ) {
   return (
-    <div ref={ref} className={className}>
+    <>
       <label htmlFor={Iname} className="w-full">
         {labelname}
       </label>
-      <div className="flex bg-inherit w-full border-inherit overflow-hidden border-b">
-        <input
-          ref={ref}
-          type={type}
-          id={Iname}
-          name={Iname}
-          className={`p-2 bg-inherit border-inherit  outline-none w-full `}
-          // placeholder={Iname}
-          disabled={disabled}
-          {...props}
-        />
-        {comp}
+      <div ref={ref} className={className}>
+        <div className="flex bg-inherit w-full border-inherit overflow-hidden ">
+          <input
+            ref={ref}
+            type={type}
+            id={Iname}
+            name={Iname}
+            className={`${IClassName} p-2 bg-inherit border-inherit w-full `}
+            placeholder={placeholder}
+            disabled={disabled}
+            {...props}
+          />
+          {comp}
+        </div>
       </div>
-    </div>
+    </>
   );
 });
 

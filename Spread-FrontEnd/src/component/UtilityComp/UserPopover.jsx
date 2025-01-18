@@ -11,18 +11,18 @@ const UserPopover = forwardRef(
         style={styles.popper}
         {...attributes.popper}
       >
-        <div className=" flex flex-row justify-between items-center font-medium ">
+        <div className=" flex flex-row  gap-3 justify-between items-center font-medium ">
           {" "}
           <Link
             className="flex gap-4 items-center"
-            to={`/profile/@${people?.username.split(" ").join("")}/${people?.id}`}
+            to={`/profile/@${people?.username}/${people?.id}`}
           >
             <img
               className=" rounded-full size-[2.5rem] object-cover object-top"
               src={people?.userImage ? `${people?.userImage}` : profileIcon}
               alt={`${people?.username}'s profile picture`}
             />
-            <h1 className="text-sm hover:underline underline-offset-4">
+            <h1 className="hover:underline underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
               {people?.username}
             </h1>
           </Link>

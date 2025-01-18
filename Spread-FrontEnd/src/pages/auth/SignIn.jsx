@@ -45,14 +45,14 @@ function SignIn() {
   }
 
   const emailimputCred = {
-    className: "mb-4 flex flex-col gap-2 ",
+    className: "mb-4 flex flex-col gap-2 border rounded-lg p-1 ",
     type: "email",
     name: "email",
     labelname: "Email address",
   };
 
   const passInputCred = {
-    className: "mb-4 flex flex-col gap-2 ",
+    className: "mb-4 flex flex-col gap-2 border rounded-lg p-1 ",
     type: "password",
     name: "password",
     labelname: "Password",
@@ -86,12 +86,12 @@ function SignIn() {
           <div className="flex w-full h-full  flex-col justify-center px-5  *:border-inherit">
             <form
               onSubmit={handleLogin}
-              className="flex flex-col  justify-center w-full  border-inheri text-sm  *:border-inherit"
+              className="flex flex-col  justify-center w-full gap-2  border-inheri text-sm  *:border-inherit"
             >
               <h1 className="text-2xl text-center font-medium my-4">Welcome</h1>
               <CommonInput
                 ref={userRef}
-                className={`${emailimputCred.className}`}
+                className={`${emailimputCred.className} `}
                 type={emailimputCred.type}
                 name={emailimputCred.name}
                 labelname={emailimputCred.labelname}
@@ -126,7 +126,7 @@ function SignIn() {
                 {passVisible && (
                   <button
                     type="submit"
-                    className={`bg-gray-800 min-w-[200px]  p-3 w-full  rounded-lg ${
+                    className={` bg-white text-black p-3 w-full  rounded-lg ${
                       isLoading && "cursor-wait "
                     }`}
                     disabled={isLoading}
@@ -142,8 +142,8 @@ function SignIn() {
                   setpassVisible(true);
                 }}
                 type="button"
-                className={`bg-gray-800 min-w-[200px] text-white p-3 w-full   rounded-lg ${
-                  isLoading && "cursor-wait bg-blue-100"
+                className={` bg-black text-white dark:bg-white dark:text-black p-3 w-full   rounded-lg ${
+                  isLoading && "cursor-wait bg-opacity-40"
                 }`}
                 disabled={userRef.current?.value}
               >
@@ -151,17 +151,21 @@ function SignIn() {
               </button>
             )}
 
-            <div className="mb-3 text-center grid grid-cols-3 my-4 items-center  *:border-inherit">
-              <hr /> <p>or</p> <hr />
+            <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
+              <hr className="flex-1" />
+              <p className="mx-2">or</p>
+              <hr className="flex-1" />
             </div>
             <div className="mb-4 w-full flex flex-col gap-3  *:border-inherit ">
               <OAuth
-                className={"border"}
+                className={
+                  "border bg-black text-white dark:bg-white dark:text-black"
+                }
                 service={"google"}
                 icon={<i className="bi bi-google"></i>}
               />
               <OAuth
-                className={"border"}
+                className={"bg-black text-white dark:bg-white dark:text-black"}
                 service={"github"}
                 icon={<i className="bi bi-github"></i>}
               />

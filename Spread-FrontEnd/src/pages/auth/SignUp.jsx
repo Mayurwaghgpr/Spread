@@ -63,7 +63,6 @@ function SignUp() {
       type: "email",
       Iname: "email",
       labelname: "Email",
-      className: "mb-3 w-full flex flex-col gap-2 border-inherit",
     },
     {
       id: uuidv4(),
@@ -78,7 +77,7 @@ function SignUp() {
   ];
 
   return (
-    <section className="sm:flex animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#fff9f3] dark:bg-[#222222]  dark:*:border-[#383838]">
+    <section className="sm:flex animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#fff9f3] dark:bg-black  dark:*:border-[#383838]">
       {(isError || validation) && (
         <div className="text-red-500 my-4 w-full flex justify-center bg-red-100 py-2">
           {error?.response?.data.message || validation}
@@ -104,12 +103,34 @@ function SignUp() {
           </h1>
           <form
             onSubmit={signUp}
-            className="flex flex-col py-2 w-full items-center justify-start text-sm *:border-inherit "
+            className="flex flex-col py-2 w-full gap-2 items-center justify-start text-sm *:border-inherit "
           >
+            <div className="mb-4 w-full flex flex-col gap-3  *:border-inherit ">
+              <OAuth
+                className={
+                  "border bg-black text-white dark:bg-white dark:text-black "
+                }
+                service={"google"}
+                icon={<i className="bi bi-google"></i>}
+              />
+              <OAuth
+                className={
+                  "border bg-black text-white dark:bg-white dark:text-black"
+                }
+                service={"github"}
+                icon={<i className="bi bi-github"></i>}
+                disabled={true}
+              />
+            </div>
+            <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
+              <hr className="flex-1" />
+              <p className="mx-2">or</p>
+              <hr className="flex-1" />
+            </div>
             {signUpInputs.map((input) => (
               <CommonInput
                 key={input.id}
-                className={input.className}
+                className="mb-3 w-full flex flex-col gap-2 border p-1 rounded-lg  border-inherit "
                 type={input.type}
                 labelname={input.labelname}
                 Iname={input.Iname}
@@ -130,30 +151,13 @@ function SignUp() {
             <div className="mb-4 w-full">
               <button
                 type="submit"
-                className="bg-gray-800 text-white p-3 w-full text-center rounded-lg"
+                className=" bg-black text-white dark:bg-white dark:text-black  p-3 w-full text-center rounded-lg"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing Up..." : "Sign Up"}
               </button>
             </div>
-            <div className="mb-3 w-full text-center flex items-center  *:border-inherit">
-              <hr className="flex-1" />
-              <p className="mx-2">or</p>
-              <hr className="flex-1" />
-            </div>
-            <div className="mb-4 w-full flex flex-col gap-3  *:border-inherit ">
-              <OAuth
-                className={"border "}
-                service={"google"}
-                icon={<i className="bi bi-google"></i>}
-              />
-              <OAuth
-                className={"border"}
-                service={"github"}
-                icon={<i className="bi bi-github"></i>}
-                disabled={true}
-              />
-            </div>
+
             <footer className="text-center">
               <small>
                 Already have an account?{" "}

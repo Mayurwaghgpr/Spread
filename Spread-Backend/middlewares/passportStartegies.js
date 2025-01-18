@@ -3,6 +3,8 @@ import { Strategy as GitHubStrategy } from "passport-github2";
 import User from "../models/user.js"; // Adjust the path as necessary
 import dotenv from "dotenv";
 import Post from "../models/posts.js";
+import genUniqueUserName from "../utils/UserNameGenerator.js";
+import Sequelize from "sequelize";
 dotenv.config();
 
 export const passportStrategies = (passport) => {
@@ -14,13 +16,13 @@ export const passportStrategies = (passport) => {
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log({profile})
+        // console.log({profile})
         try {
           if (!profile) {
             return;
           }
           let user = await User.findOne({
-            where: { username: profile.displayName },
+            where: { [Sequelize.Op.and]: [{ email: profile.email }, { signedWith: profile.provider }] },
             include: [
               {
                 model: User,
@@ -38,9 +40,12 @@ export const passportStrategies = (passport) => {
               }
             ],
           });
+
           if (!user) {
+            const username = await genUniqueUserName( profile.email);
             user = await User.create({
-              username: profile.displayName,
+              username: username,
+              displayName: profile.displayName,
               email: profile.email,
               userImage: profile.picture,
               password: profile.id,
@@ -63,14 +68,14 @@ export const passportStrategies = (passport) => {
         callbackURL: process.env.GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log(profile)
+        // console.log(profile)
 
         try {
           if (!profile) {
             return;
           }
           let user = await User.findOne({
-            where: { username: profile.username },
+            where: { [Sequelize.Op.and]: [{ username: profile.username } ,{signedWith: profile.provider}]},
             include: [
               {
                 model: User,

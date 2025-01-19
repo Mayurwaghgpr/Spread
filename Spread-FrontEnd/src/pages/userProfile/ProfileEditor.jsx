@@ -1,8 +1,13 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setuserProfile } from "../../redux/slices/profileSlice";
 import profileIcon from "/ProfOutlook.png";
-import ProfilImage from "../../component/ProfileButton";
 import { setUser } from "../../redux/slices/authSlice";
 import { useMutation, useQueryClient } from "react-query";
 import { setToast } from "../../redux/slices/uiSlice";
@@ -10,14 +15,13 @@ import { debounce } from "../../utils/debounce";
 import useProfileApi from "../../Apis/ProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
 import CommonInput from "../../component/UtilityComp/commonInput";
-import { v4 as uuidv4 } from "uuid";
 import Selector from "../../component/UtilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
 function ProfileEditor() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { editUserProfile, searchUsername } = useProfileApi();
-
+  const uNameRef = useRef();
   const [newInfo, setNewInfo] = useState(user);
   const [profileImage, setProfileImage] = useState(profileIcon);
 
@@ -31,7 +35,11 @@ function ProfileEditor() {
     error,
   } = useMutation((username) => searchUsername(username), {
     onSuccess: (data) => {
+      uNameRef.current.focus();
       setNewInfo((prev) => ({ ...prev, ...data }));
+    },
+    onError: () => {
+      uNameRef.current.focus();
     },
   });
 
@@ -160,7 +168,8 @@ function ProfileEditor() {
             {" "}
             <div className="w-full">
               <CommonInput
-                className={`${isError ? "border border-red-500" : ""} ${isSuccess ? "border border-green-500" : ""} rounded-md w-full border-inherit text-sm mt-3 flex flex-col gap-3 bg-inherit `}
+                ref={uNameRef}
+                className={` transition-all duration-500 ${isError ? "outline outline-red-500" : "outline-none"} ${isSuccess ? " outline outline-green-500" : " outline-none"} rounded-md w-full border-inherit text-sm mt-3 flex flex-col gap-3 bg-inherit `}
                 type={"text"}
                 Iname={"username"}
                 labelname={"username"}

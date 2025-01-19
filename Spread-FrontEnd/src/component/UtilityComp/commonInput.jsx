@@ -19,7 +19,7 @@ const CommonInput = forwardRef(function CommonInput(
       <label htmlFor={Iname} className="w-full">
         {labelname}
       </label>
-      <div ref={ref} className={className}>
+      <div className={className}>
         <div className="flex bg-inherit w-full border-inherit overflow-hidden ">
           <input
             ref={ref}

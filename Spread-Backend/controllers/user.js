@@ -179,12 +179,16 @@ export const EditUserProfile = async (req, res, next) => {
 };
 
 export const searchForUsername = async (req, res, next) => {
-try {
-  const exist = await User.findOne({ where: req.body });
-  if (exist) {
-    return res.status(409).json({message: 'Username is already taken',exist})
+  const username = req.body.username;
+  try {
+if (!username) {
+    return res.status(400).json({message:"cannot set empty username,you should proved username"})
   }
-  res.status(200).json({...req.body})
+  const exist = await User.findOne({ where: {username} });
+  if (exist) {
+    return res.status(409).json({message: 'username is already taken',exist})
+  }
+  res.status(200).json({username})
 } catch (error) {
     next(error);
 }

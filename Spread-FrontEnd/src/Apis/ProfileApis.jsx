@@ -81,7 +81,18 @@ function useProfileApi() {
       throw err;
     }
   };
+  const searchUsername = async (username) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/user/search/username`,
+        username
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response;
+    }
+  };
 
-  return { fetchUserData, fetchUserProfile, editUserProfile };
+  return { fetchUserData, fetchUserProfile, editUserProfile, searchUsername };
 }
 export default useProfileApi;

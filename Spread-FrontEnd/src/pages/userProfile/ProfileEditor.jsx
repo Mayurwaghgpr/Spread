@@ -12,76 +12,88 @@ import userImageSrc from "../../utils/userImageSrc";
 import CommonInput from "../../component/UtilityComp/commonInput";
 import { v4 as uuidv4 } from "uuid";
 import Selector from "../../component/UtilityComp/Selector";
+import Spinner from "../../component/loaders/Spinner";
 function ProfileEditor() {
-  const { user } = useSelector((state) => state.auth);
-  const [newInfo, setNewInfo] = useState(user);
-
-  const [ProfileImage, SetProfileImage] = useState();
-  const { editUserProfile } = useProfileApi();
-
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
+  const { user } = useSelector((state) => state.auth);
+  const { editUserProfile, searchUsername } = useProfileApi();
+
+  const [newInfo, setNewInfo] = useState(user);
+  const [profileImage, setProfileImage] = useState(profileIcon);
 
   const { userImageurl, IsUserFromOAth } = userImageSrc(newInfo);
 
-  const { isLoading, isError, mutate } = useMutation(
-    (profileUpdated) => editUserProfile(profileUpdated),
-    {
-      onSuccess: (data) => {
-        dispatch(
-          setToast({
-            message: "Profile updated successfully !",
-            type: "success",
-          })
-        );
-        dispatch(setUser(data));
-      },
-    }
+  const {
+    mutate: nameMutate,
+    isLoading: nameLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useMutation((username) => searchUsername(username), {
+    onSuccess: (data) => {
+      setNewInfo((prev) => ({ ...prev, ...data }));
+    },
+  });
+
+  const debouncedHandleChange = useCallback(
+    debounce((event) => {
+      const { name, value, files } = event.target;
+      if (name === "image" && files.length > 0) {
+        setNewInfo((prev) => ({
+          ...prev,
+          NewImageFile: files[0],
+          userFromOAth: IsUserFromOAth,
+        }));
+      } else {
+        setNewInfo((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
+    }, 500),
+    []
+  );
+
+  const debouncedHandleUsername = useCallback(
+    debounce((event) => {
+      nameMutate({ username: event.target.value });
+    }, 500),
+    []
   );
 
   useEffect(() => {
     setNewInfo(user);
   }, [user]);
 
-  useMemo(() => {
-    if (newInfo?.removeImage) {
-      SetProfileImage(profileIcon);
-    } else if (newInfo.NewImageFile) {
-      SetProfileImage(URL.createObjectURL(newInfo.NewImageFile));
-    } else if (newInfo?.userImage !== null) {
-      SetProfileImage(userImageurl);
-    } else {
-      SetProfileImage(profileIcon);
-    }
-  }, [newInfo?.removeImage, newInfo.NewImageFile, newInfo?.userImage]);
+  useEffect(() => {
+    if (newInfo?.removeImage) setProfileImage(profileIcon);
+    else if (newInfo?.NewImageFile)
+      setProfileImage(URL.createObjectURL(newInfo.NewImageFile));
+    else if (newInfo?.userImage) setProfileImage(userImageurl);
+    else setProfileImage(profileIcon);
+  }, [newInfo?.removeImage, newInfo?.NewImageFile, newInfo?.userImage]);
 
-  // Handle input changes
-  const handleChange = debounce((event) => {
-    const { name, value, files } = event.target;
-    if (name === "image" && files.length > 0) {
-      const file = files[0];
-      setNewInfo((prev) => ({
-        ...prev,
-        NewImageFile: file,
-        userFromOAth: IsUserFromOAth,
-      }));
-      event.target.value = "";
-    } else {
-      setNewInfo((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  }, 500);
-
-  const RemoveSelecteImage = () => {
+  const handleRemoveImage = useCallback(() => {
     setNewInfo((prev) => ({
       ...prev,
       NewImageFile: undefined,
       removeImage: true,
       userFromOAth: IsUserFromOAth,
     }));
-  };
+  }, [IsUserFromOAth]);
+
+  const { mutate, isLoading } = useMutation(editUserProfile, {
+    onSuccess: (data) => {
+      dispatch(setUser(data));
+      dispatch(
+        setToast({ message: "Profile updated successfully!", type: "success" })
+      );
+    },
+    onError: () => {
+      dispatch(setToast({ message: "Profile update failed.", type: "error" }));
+    },
+  });
+  console.log(error);
   return (
     <div className=" relative f sm:h-screen h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
       <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">
@@ -108,12 +120,12 @@ function ProfileEditor() {
               type="file"
               name="image"
               accept="image/*"
-              onChange={handleChange}
+              onChange={debouncedHandleChange}
               style={{ display: "none" }}
             />
             <img
               className="cursor-pointer h-full w-full object-cover object-top rounded-full "
-              src={ProfileImage}
+              src={profileImage}
               alt="Profile"
             />
           </div>
@@ -121,10 +133,8 @@ function ProfileEditor() {
             <div className="">
               <button
                 className="rounded-xl text-md  text-red-500 flex gap-2"
-                onClick={() =>
-                  (newInfo?.userImage !== null || newInfo?.NewImageFile) &&
-                  RemoveSelecteImage()
-                }
+                onClick={handleRemoveImage}
+                disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
               >
                 <i className="bi bi-trash3"></i>
                 Remove
@@ -138,7 +148,7 @@ function ProfileEditor() {
               className={
                 "w-fit outline-none self-start my-2 text-xs flex flex-col gap-3 bg-inherit"
               }
-              setOptions={handleChange}
+              setOptions={debouncedHandleChange}
               options={["he/him", "she/her"]}
               defaultValue={newInfo.pronouns}
               disabled={isLoading}
@@ -148,15 +158,24 @@ function ProfileEditor() {
         <div className="flex flex-col w-full items-end h-full bg-inherit gap-10   dark:*:border-black  px-2 ">
           <div className="w-full h-full  flex flex-col capitalize  items-end bg-inherit gap-3 ">
             {" "}
-            <CommonInput
-              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
-              type={"text"}
-              Iname={"username"}
-              labelname={"username"}
-              disabled={isLoading}
-              maxLength={20}
-              defaultValue={newInfo?.username}
-            />
+            <div className="w-full">
+              <CommonInput
+                className={`${isError ? "border border-red-500" : ""} ${isSuccess ? "border border-green-500" : ""} rounded-md w-full border-inherit text-sm mt-3 flex flex-col gap-3 bg-inherit `}
+                type={"text"}
+                Iname={"username"}
+                labelname={"username"}
+                disabled={isLoading}
+                onChange={debouncedHandleUsername}
+                maxLength={20}
+                comp={nameLoading && <Spinner className={"w-5 h-5"} />}
+                defaultValue={newInfo?.username}
+              />
+              {isError && (
+                <span className="text-red-500 text-xs w-full">
+                  {error.data.message}
+                </span>
+              )}
+            </div>
             <CommonInput
               className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
               type={"text"}
@@ -164,7 +183,7 @@ function ProfileEditor() {
               labelname={"Full Name"}
               disabled={isLoading}
               maxLength={20}
-              onChange={handleChange}
+              onChange={debouncedHandleChange}
               defaultValue={newInfo?.displayName}
             />
             <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
@@ -177,7 +196,7 @@ function ProfileEditor() {
               labelname={"email"}
               disabled={isLoading}
               maxLength={30}
-              onChange={handleChange}
+              onChange={debouncedHandleChange}
               defaultValue={newInfo?.email}
             />
             <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
@@ -190,7 +209,7 @@ function ProfileEditor() {
               labelname={"Bio"}
               disabled={isLoading}
               maxLength={50}
-              onChange={handleChange}
+              onChange={debouncedHandleChange}
               defaultValue={newInfo?.bio}
             />
             <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">

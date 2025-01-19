@@ -1,4 +1,4 @@
-import { Sequelize, Op } from "sequelize";
+import { Sequelize, Op, where } from "sequelize";
 // import Redis from "redis";
 import User from "../models/user.js";
 import Post from "../models/posts.js";
@@ -177,3 +177,15 @@ export const EditUserProfile = async (req, res, next) => {
     next(err);
   }
 };
+
+export const searchForUsername = async (req, res, next) => {
+try {
+  const exist = await User.findOne({ where: req.body });
+  if (exist) {
+    return res.status(409).json({message: 'Username is already taken',exist})
+  }
+  res.status(200).json({...req.body})
+} catch (error) {
+    next(error);
+}
+}

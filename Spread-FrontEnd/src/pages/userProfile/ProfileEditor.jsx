@@ -92,16 +92,18 @@ function ProfileEditor() {
 
   const { mutate, isLoading } = useMutation(editUserProfile, {
     onSuccess: (data) => {
+      uNameRef.current?.blur();
       dispatch(setUser(data));
       dispatch(
         setToast({ message: "Profile updated successfully!", type: "success" })
       );
     },
     onError: () => {
+      uNameRef.current?.blur();
       dispatch(setToast({ message: "Profile update failed.", type: "error" }));
     },
   });
-  console.log(error);
+
   return (
     <div className=" relative f sm:h-screen h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
       <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">
@@ -169,13 +171,13 @@ function ProfileEditor() {
             <div className="w-full">
               <CommonInput
                 ref={uNameRef}
-                className={` transition-all duration-500 ${isError ? "outline outline-red-500" : "outline-none"} ${isSuccess ? " outline outline-green-500" : " outline-none"} rounded-md w-full border-inherit text-sm mt-3 flex flex-col gap-3 bg-inherit `}
+                className={`border transition-all duration-500 ${isError ? "outline outline-red-500" : "outline-none"} ${isSuccess ? "  outline-green-500" : " outline-none"} rounded-md w-full border-inherit text-sm mt-3 flex flex-col gap-3 bg-inherit `}
                 type={"text"}
                 Iname={"username"}
                 labelname={"username"}
                 disabled={isLoading}
                 onChange={debouncedHandleUsername}
-                maxLength={20}
+                maxLength={10}
                 comp={nameLoading && <Spinner className={"w-5 h-5"} />}
                 defaultValue={newInfo?.username}
               />
@@ -186,7 +188,7 @@ function ProfileEditor() {
               )}
             </div>
             <CommonInput
-              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              className="w-full border  rounded-md border-inherit text-sm  flex flex-col gap-3 bg-inherit "
               type={"text"}
               Iname={"displayName"}
               labelname={"Full Name"}
@@ -199,7 +201,7 @@ function ProfileEditor() {
               {`${newInfo?.displayName?.length || 0} / 20`}
             </span>{" "}
             <CommonInput
-              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              className="w-full border  rounded-md border-inherit text-sm  flex flex-col gap-3 bg-inherit "
               type={"email"}
               Iname={"email"}
               labelname={"email"}
@@ -212,7 +214,7 @@ function ProfileEditor() {
               {`${newInfo?.email?.length || 0} / 30`}
             </span>{" "}
             <CommonInput
-              className="w-full border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              className="w-full border  rounded-md border-inherit text-sm  flex flex-col gap-3 bg-inherit "
               type={"text"}
               Iname={"bio"}
               labelname={"Bio"}

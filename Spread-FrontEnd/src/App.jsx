@@ -18,6 +18,7 @@ import SideBar from "./component/homeComp/SideBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Messanger from "./pages/Messages/Messanger";
 import CommentSection from "./pages/Comment/CommentSection";
+import SomthingWentWrong from "./pages/ErrorPages/somthingWentWrong";
 
 // Lazy load components
 
@@ -85,10 +86,11 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <PersistentUser />
+
       {<ConfirmationBox />}
       <Suspense fallback={<LoaderScreen />}>
         <MainNavBar />
+        <PersistentUser />
         {isLogin && <SideBar />}
         <Routes>
           <Route
@@ -193,6 +195,7 @@ function App() {
 
           <Route path="/ForgotPass" element={<ForgotPass />} />
           <Route path="/Resetpassword/:token" element={<ResetPassword />} />
+          <Route path="/error" element={<SomthingWentWrong />} />
         </Routes>
         {isLogin && <TaskBar />}
       </Suspense>

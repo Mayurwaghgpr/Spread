@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import userApi from "../Apis/userApi";
 import { setIsLogin, setUser } from "../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import SomthingWentWrong from "../pages/ErrorPages/somthingWentWrong";
 
 function PersistentUser() {
   const { getLogInUserData } = userApi();
+  const navigate = useNavigate();
   const { isLogin } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  useQuery({
+  const { error, isError } = useQuery({
     queryKey: ["loggedInUser"],
     queryFn: () => getLogInUserData(),
     onSuccess: (data) => {
@@ -21,14 +24,16 @@ function PersistentUser() {
     onError: (error) => {
       if (error.status === 404) {
         dispatch(setIsLogin(false));
-        localStorage.removeItem("AccessToken");
+        return localStorage.removeItem("AccessToken");
       }
 
       console.error("Error fetching logged-in user data:", error);
     },
     refetchOnWindowFocus: false,
   });
-
+  if (isError && !error.status) {
+    return <SomthingWentWrong />;
+  }
   return null;
 }
 

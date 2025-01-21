@@ -9,6 +9,7 @@ import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
 import { useLastPostObserver } from "../../hooks/useLastPostObserver";
 import useProfileApi from "../../Apis/ProfileApis";
+import SomthingWentWrong from "../ErrorPages/somthingWentWrong";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ function Profile() {
   const { userProfile, FollowInfo } = useSelector((state) => state.profile);
   const profileId = params.id || user?.id;
 
-  const { mutate, isError, isFetching, isLoading } = useMutation(
+  const { mutate, isError, error, isFetching, isLoading } = useMutation(
     ["userProfile"],
     async (id) => fetchUserProfile(id),
     {
@@ -71,6 +72,9 @@ function Profile() {
     );
   }
 
+  if (isError && !error.status) {
+    <SomthingWentWrong />;
+  }
   if (isError || (isPostError && postError?.message !== "404")) {
     return <h1>Error {postError?.message}. Please try again.</h1>;
   }

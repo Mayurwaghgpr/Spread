@@ -15,6 +15,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
   const { userProfile } = useSelector((state) => state.profile);
 
   const { userImageurl, IsuserFromOAth } = userImageSrc(userProfile);
+
   return (
     <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">
       <div className="flex justify-start items-start  gap-9">
@@ -29,7 +30,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
               {userProfile?.displayName}
             </h1>
             <span className="text-black text-xs dark:text-white text-opacity-70 dark:text-opacity-70 ">
-              {userProfile.pronouns}
+              {userProfile?.pronouns}
             </span>
           </div>
         </div>

@@ -19,7 +19,7 @@ router.post("/new",IsAuth, createComment);
 // router.post("/reply/:topCommentId", IsAuth,replyComment);
 router.get("/like/:commentId",IsAuth, likeComment);
 router.put("/edit/:commentId", IsAuth, editComment);
-router.put('/pin/:commentId',pinComment)
+router.put('/pin',pinComment)
 router.delete("/delete/:commentId", IsAuth, deleteComment);
 
 

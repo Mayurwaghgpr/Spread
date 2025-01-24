@@ -22,13 +22,14 @@ import { useOutletContext } from "react-router-dom";
 const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const [openReplies, setOpenReplies] = useState("");
   const [optLike, setOptLike] = useState("");
-  const { hitLike, getReplies, deleteComment } = PostsApis();
+  const { hitLike, getReplies, deleteComment, pinComment } = PostsApis();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred } = useSelector((state) => state.posts);
   const commenterImg = userImageSrc(comt?.commenter);
   const postdata = useOutletContext();
+
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery(
       ["replies", comt?.id],
@@ -46,6 +47,20 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     mutationFn: (comtId) => hitLike(comtId),
     onSuccess: ({ updtCommentLikes }) => {
       comt.commentLikes = updtCommentLikes || [];
+      setOptLike("");
+    },
+    onError: (error) => {
+      setOptLike("");
+      dispatch(
+        setToast({ message: "Error occured will adding like", type: "error" })
+      );
+    },
+  });
+  const { mutate: pinMutation } = useMutation({
+    mutationFn: (data) => pinComment(data),
+    onSuccess: (data) => {
+      console.log({ data });
+      comt.pind = data.pind;
       setOptLike("");
     },
     onError: (error) => {
@@ -74,9 +89,11 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     () => comt?.commentLikes?.find((like) => like.likedBy === postdata.User.id),
     [comt?.commentLikes, postdata.User.id]
   );
+
   const handleRepliesClick = () => {
     setOpenReplies((prev) => (prev === "" ? comt.id : ""));
   };
+
   const Comments = data?.pages.flatMap((page) => page.comments) || [];
   return (
     <div ref={ref} className={`${className}`}>
@@ -94,12 +111,21 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
             />
           </div>
           <div>
-            <div className="flex justify-start items-center text-nowrap gap-3 text-sm">
+            <div className="flex justify-start items-center text-nowrap gap-2 text-sm">
               <h1 className="font-semibold">{comt?.commenter?.username}</h1>
-              {comt?.pind && <TiPin />} {/*pind comment */}
+              {/*pind comment */}
+              {comt?.pind && (
+                <TiPin className="text-black text-opacity-30 dark:text-opacity-20 dark:text-white" />
+              )}
+
               <span className="text-xs text-black text-opacity-30 dark:text-opacity-20 dark:text-white">
                 {formatDate(new Date(comt?.createdAt), "d MMM yyy")}
               </span>
+              {comt?.commenter?.id === postdata?.User?.id && (
+                <small className=" text-black text-opacity-30 dark:text-opacity-20 dark:text-white">
+                  author
+                </small>
+              )}
               {/* if Post owner liked this post show the image of owner*/}
               {isPostOwnerLiked && (
                 <div className="flex items-center justify-center gap-1 animate-fedin.2s">
@@ -151,6 +177,16 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
                 postdata.User.id === user.id) && (
                 <button onClick={() => deletMutate(comt?.id)}>
                   <MdDelete />
+                </button>
+              )}
+              {postdata.User.id === user.id && (
+                <button
+                  onClick={() =>
+                    pinMutation({ pin: !comt.pind, commentId: comt.id })
+                  }
+                  className="text-black text-opacity-30 dark:text-opacity-20 dark:text-white"
+                >
+                  <TiPin />
                 </button>
               )}
             </div>

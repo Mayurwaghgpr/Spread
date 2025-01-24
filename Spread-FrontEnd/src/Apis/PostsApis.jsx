@@ -93,6 +93,16 @@ function PostsApis() {
       throw error;
     }
   };
+  const pinComment = async (data) => {
+    try {
+      const result = await axios.put(`${BASE_URL}/comment/pin`, data, {
+        withCredentials: true,
+      });
+      return result.data.result;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const deleteComment = async (commentId) => {
     try {
@@ -135,6 +145,7 @@ function PostsApis() {
     Comments,
     hitLike,
     getReplies,
+    pinComment,
     deleteComment,
   };
 }

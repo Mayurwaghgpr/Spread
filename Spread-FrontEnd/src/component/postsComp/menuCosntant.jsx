@@ -32,7 +32,7 @@ function menuCosntant() {
       id: "delete-post",
       itemName: "Delete Post",
       icon: <i className="bi bi-trash2"></i>,
-      action: (post, confirmDeletePost) => confirmDeletePost(post.id),
+      action: (post, confirmDelete) => confirmDelete(post.id),
     },
     {
       id: "edit-post",

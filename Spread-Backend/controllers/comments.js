@@ -225,15 +225,15 @@ export const deleteComment = async (req, res, next) => {
 };
 
 export const pinComment = async (req, res) => {
-  const commentId = req.params.commentId;
-  const pin = req.body.pin;
-  
+  const {pin,commentId} = req.body;
   try {
-    const result = await Comments.update({ pind: pin }, { where: { id: commentId }, });
-
+    const [_,result] = await Comments.update({ pind: pin }, {
+      where: { id: commentId },
+      returning: true,
+      plain: true
+    });
     res.status(202).json({ message: "comment pind successfully", result });
   } catch (error) {
     next(error);
   }
-
 }

@@ -79,7 +79,7 @@ function Home() {
       {/* Posts Section */}
       <div className="relative flex py-[4rem] flex-col h-full items-end border-inherit xl:w-[57%] lg:w-[55%] md:w-[75%] w-full">
         {/* Topics Section */}
-        <div className="flex w-full text-lg font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border border-t-0 items-center justify-start gap-3 sticky top-[4rem]">
+        <div className="flex w-full sm:text-xl font-medium bg-gray-700 bg-opacity-0 overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-[5] border border-t-0 items-center justify-start gap-3 sticky top-[4rem]">
           <ul className="flex h-full items-center justify-between w-full">
             <li className="capitalize flex justify-center p-2 w-full hover:bg-gray-400 hover:bg-opacity-30">
               <button

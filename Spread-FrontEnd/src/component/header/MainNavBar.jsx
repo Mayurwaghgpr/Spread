@@ -25,7 +25,7 @@ function MainNavBar() {
         className={`relative  w-full py-3 sm:px-20 px-5 bg-inherit dark:bg-black dark:border-[#383838] border-b  border-inherit dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg `}
       >
         <div className="flex border-inherit items-center justify-between w-full m-auto">
-          <Link to="/" className="text-2xl font-bold ">
+          <Link to="/" className="sm:text-2xl  font-bold ">
             Spread
           </Link>
 
@@ -45,7 +45,7 @@ function MainNavBar() {
               <div className="relative box-content flex *:transition-all *:duration-300 text-left group border-inherit">
                 <ProfileButton
                   onClick={() => dispatch(setManuOpen())}
-                  className={`box-content border-2  size-9   ${
+                  className={`box-content border-2  sm:size-9 size-7  ${
                     location.pathname.startsWith("/profile") &&
                     userProfile?.id === user?.id
                       ? " border-black dark:border-white"

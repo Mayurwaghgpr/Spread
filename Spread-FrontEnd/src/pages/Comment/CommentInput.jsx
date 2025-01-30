@@ -65,10 +65,10 @@ function CommentInput({ className }) {
 
   // const { menuId: openEmojiPicker, setMenuId: setOpenEmojiPicker } =
   //   useClickOutside(pickerRef);
-
+  console.log(commentCred);
   return (
     <div className={className}>
-      <div className="w-16 h-10 text-sm">
+      <div className="w-16 h-12 text-sm">
         {" "}
         <img
           className="w-full h-full object-cover object-top rounded-full"

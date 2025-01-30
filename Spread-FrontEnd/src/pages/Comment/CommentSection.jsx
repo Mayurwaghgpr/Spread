@@ -42,6 +42,8 @@ function CommentSection() {
   );
 
   const Comments = TopComments?.pages?.flatMap((page) => page.comments) || [];
+  const commentPins = Comments.filter((comment) => comment.pind);
+
   return (
     <section
       onClick={() => {
@@ -60,9 +62,9 @@ function CommentSection() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-[#f3efeb] dark:bg-black sm:border border-inherit flex flex-col gap-2  sm:animate-none  animate-slide-in-bottom lg:w-[30rem] w-full rounded-md  lg:h-full h-[60%] overflow-hidden "
+        className="relative bg-[#f3efeb] dark:bg-black sm:border border-inherit flex flex-col gap-2  sm:animate-none  animate-slide-in-bottom lg:w-[30rem] w-full sm:m-0 rounded-xl m-1 border  lg:h-full h-[60%] overflow-hidden "
       >
-        <div className="flex p-4 justify-between items-center">
+        <div className="flex p-4 justify-between border-b border-inherit items-center">
           <h1 className="text-xl ">Comments</h1>
           <button
             onClick={() => {
@@ -101,6 +103,7 @@ function CommentSection() {
                   }
                   key={comt?.id}
                   comt={comt}
+                  commentPins={commentPins}
                   topCommentId={comt?.id} // Here we maping top most post and setting top most to these comment of it self
                 />
               );

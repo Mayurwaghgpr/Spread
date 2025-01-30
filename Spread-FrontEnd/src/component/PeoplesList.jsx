@@ -43,7 +43,7 @@ function PeoplesList({ people, className }) {
           className="flex items-center gap-3 border-inherit h-full w-full "
           to={`/profile/@${people?.username}/${people?.id}`}
         >
-          <div className=" w-10 h-10">
+          <div className=" w-10 h-10 ">
             <img
               className="w-full h-full rounded-full object-cover object-top"
               src={userImageurl}
@@ -51,8 +51,8 @@ function PeoplesList({ people, className }) {
             />
           </div>
 
-          <p className="hover:underline w-1/2  underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
-            {people?.username}sasa
+          <p className="hover:underline underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
+            {people?.username}
           </p>
         </Link>
 

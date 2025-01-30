@@ -5,6 +5,7 @@ import React, {
   memo,
   lazy,
   Suspense,
+  useEffect,
 } from "react";
 import { format } from "date-fns";
 import { useNavigate, Link } from "react-router-dom";
@@ -38,16 +39,18 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const Comments = post?.comments?.filter(
     (comment) => comment.topCommentId === null
   );
-  const handelComment = useCallback(() => {
+  useEffect(() => {
     dispatch(
       setCommentCred({
         ...commentCred,
         postId: post?.id,
-        // replyTo: post?.User?.id,
       })
-    ); //Setting data initialy
+    );
+    //Setting data initialy
+  }, []);
+  const handelComment = useCallback(() => {
     navigate(`/view/@${post?.user?.username}/${post?.id}/comments`);
-  }, [commentCred, post?.id]);
+  }, []);
 
   return (
     <article

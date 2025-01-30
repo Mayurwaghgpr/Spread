@@ -17,7 +17,6 @@ import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
-const CommentSection = lazy(() => import("../Comment/CommentSection"));
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
@@ -40,17 +39,19 @@ function PostView() {
     refetchOnWindowFocus: false,
   });
 
-  //
-  const handelComment = useCallback(() => {
+  useEffect(() => {
     dispatch(
       setCommentCred({
         ...commentCred,
         postId: postView?.id,
-        // replyTo: post?.User?.id,
       })
-    ); //Setting data initialy
+    );
+  }, [postView?.id]);
+
+  const handelComment = useCallback(() => {
+    //Setting data initialy
     navigate("comments");
-  }, [commentCred, postView?.id]);
+  }, []);
 
   if (isError || error) {
     return <SomthingWentWrong />;
@@ -69,7 +70,7 @@ function PostView() {
   );
 
   return (
-    <main className="flex justify-center  h-full transition-all duration-500 min-w-full py-4 my-16 dark:*:border-[#383838]">
+    <main className="relative flex justify-center h-full transition-all duration-500 min-w-full py-4 my-16 dark:*:border-[#383838]">
       <article className="max-w-4xl px-2 rounded-lg flex flex-col justify-center items-center">
         <header className="mb-6 w-full px-3">
           <section className="flex flex-col gap-2">

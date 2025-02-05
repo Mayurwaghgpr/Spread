@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { getPostPreview, getPostView, AddNewPost, EditPost, DeletePost, getArchivedPosts} from '../controllers/post.js';
+import { getPostPreview, getPostView, AddNewPost, EditPost, DeletePost, getArchivedPosts} from '../controllers/post.controller.js';
 import IsAuth from '../middlewares/isAuth.js';
 import { multerFileUpload } from '../middlewares/multer.middleware.js';
 

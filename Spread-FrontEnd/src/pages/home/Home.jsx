@@ -73,7 +73,6 @@ function Home() {
     );
   }
   const posts = postsData?.pages.flatMap((page) => page.posts) || [];
-  console.log(postsData);
   return (
     <section className="relative flex flex-col sm:flex-row gap-3 lg:justify-end lg:px-10 justify-end w-full border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Posts Section */}

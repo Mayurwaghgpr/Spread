@@ -7,11 +7,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import Database from "./utils/database.js";
-import authRouter from "./routes/auth.js";
-import postsRouter from "./routes/posts.js";
-import userRouter from "./routes/user.js";
-import publiRouter from "./routes/public.js";
-import commentRouter from "./routes/comments.js";
+import authRouter from "./routes/auth.route.js";
+import postsRouter from "./routes/posts.route.js";
+import userRouter from "./routes/user.route.js";
+import publiRouter from "./routes/public.route.js";
+import commentRouter from "./routes/comments.route.js";
 import { multerFileUpload } from "./middlewares/multer.middleware.js";
 // import { v2 as cloudinary } from "cloudinary";
 

@@ -6,7 +6,7 @@ import {
   AddPostToArchive,
   removeFromArchive,
   LikePost,
-} from '../controllers/public.js';
+} from '../controllers/public.controller.js';
 import IsAuth from '../middlewares/isAuth.js'; // Import the authentication middleware
 
 const router = express.Router();

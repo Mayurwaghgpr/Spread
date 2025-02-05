@@ -8,7 +8,7 @@ function menuCosntant() {
     {
       id: "copy-link",
       itemName: "Copy Link",
-      icon: <i className="bi bi-link text-lg"></i>,
+      icon: <i className="bi bi-link "></i>,
       action: (post) => {
         navigator.clipboard
           .writeText(window.location.href)

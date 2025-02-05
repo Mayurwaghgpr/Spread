@@ -1,5 +1,6 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import TextTools from "./TextTools";
+import useClickOutside from "../../../hooks/useClickOutside";
 
 const EditableParagraph = ({
   element,
@@ -10,8 +11,9 @@ const EditableParagraph = ({
   focusedIndex,
   setFocusedIndex,
 }) => {
-  const [showToolbar, setShowToolbar] = useState(false);
-
+  const containerRef = useRef(null); // Ensure it's used properly
+  const { menuId: showToolbar, setMenuId: setShowToolbar } =
+    useClickOutside(containerRef);
   const applyStyle = useCallback((style, value = null) => {
     if (document.queryCommandSupported(style)) {
       document.execCommand(style, false, value);
@@ -19,11 +21,29 @@ const EditableParagraph = ({
   }, []);
 
   const handleSelectedText = useCallback(() => {
-    const selectedText = window.getSelection
-      ? window.getSelection().toString()
-      : "";
-    setShowToolbar(!!selectedText);
-  }, []);
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      setShowToolbar(null);
+      return;
+    }
+
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    if (rect.width === 0) {
+      setShowToolbar(null);
+      return;
+    }
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const x = Math.floor(rect.left + rect.width / 2 - containerRect.left) + 7;
+    const y = rect.top - containerRect.top;
+
+    setShowToolbar({ x, y });
+  }, [index, inputRefs]);
 
   const handleFocus = useCallback(() => {
     setFocusedIndex(index);
@@ -31,11 +51,16 @@ const EditableParagraph = ({
 
   if (index === 0 || index === 1) {
     return (
-      <div className="w-full h-full">
+      <div ref={containerRef} className="w-full h-full relative">
+        {showToolbar && (
+          <TextTools position={showToolbar} applyStyle={applyStyle} />
+        )}
         <input
           className={`border-l bg-inherit dark:bg-inherit border-gray-300 p-2 w-full min-h-10 z-10 outline-none cursor-text ${index === 0 ? "text-4xl" : "text-2xl"}`}
           ref={(el) => (inputRefs.current[index] = el)}
           onChange={(e) => handleTextChange(element.id, e.currentTarget.value)}
+          onMouseUp={handleSelectedText}
+          onKeyUp={handleSelectedText}
           placeholder={index === 0 ? "Title" : "Subtitle"}
           onKeyDown={(e) => {
             if (["Backspace", "Enter", "delete"].includes(e.key)) {
@@ -44,15 +69,16 @@ const EditableParagraph = ({
           }}
           onFocus={handleFocus}
           onSelect={handleSelectedText}
-          type="text"
         />
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full">
-      {showToolbar && <TextTools applyStyle={applyStyle} />}
+    <div ref={containerRef} className="w-full h-full relative">
+      {showToolbar && (
+        <TextTools position={showToolbar} applyStyle={applyStyle} />
+      )}
       <p
         ref={(el) => (inputRefs.current[index] = el)}
         contentEditable="true"

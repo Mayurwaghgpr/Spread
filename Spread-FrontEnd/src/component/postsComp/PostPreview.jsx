@@ -33,7 +33,6 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const navigate = useNavigate();
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
   const userImage = userImageSrc(post?.user);
 
   const Comments = post?.comments?.filter(
@@ -140,7 +139,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 <span>{abbreviateNumber(Comments?.length)}</span>
               </div>
             </div>
-            <div className="flex justify-end gap-5 items-center">
+            <div className="flex justify-end gap-5 items-center border-inherit">
               <Bookmark
                 className={"text-black dark:text-white "}
                 post={post || null}

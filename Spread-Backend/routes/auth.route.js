@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
-import { SignUp, SignIn, Logout, RefreshToken, forgotPass, resetPassword } from '../controllers/auth.js';
+import { SignUp, SignIn, Logout, RefreshToken, forgotPass, resetPassword } from '../controllers/auth.controller.js';
 import IsAuth from '../middlewares/isAuth.js';
 import passport from 'passport';
-import { gitHubAuth, googleAuth } from '../controllers/mediaAuth.js';
+import { gitHubAuth, googleAuth } from '../controllers/mediaAuth.controller.js';
 import dotenv from 'dotenv';
 dotenv.config();
 

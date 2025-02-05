@@ -28,6 +28,7 @@ import { FaFeather } from "react-icons/fa6";
 import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
 import { IoLibraryOutline } from "react-icons/io5";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
+import LogoutBtn from "../buttons/LogoutBtn";
 const LoginMenuLinks = [
   {
     id: uuidv4(),
@@ -175,15 +176,7 @@ function SideBar({ className }) {
           {/* Logout Button */}
           <div className=" ">
             {" "}
-            <button
-              onClick={mutate}
-              type="button"
-              aria-label="Logout"
-              className="flex gap-5 items-center  hover:bg-opacity-5 px-3  rounded-md"
-            >
-              <LuLogOut className="" />
-              <span className=" xl:block sm:hidden block ">Sign out</span>
-            </button>
+            <LogoutBtn className="flex gap-5 items-center  hover:bg-opacity-5 px-3  rounded-md" />
           </div>
         </div>
       </div>

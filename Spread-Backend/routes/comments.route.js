@@ -8,7 +8,7 @@ import {
   likeComment,
   pinComment,
   // replyComment,
-} from "../controllers/comments.js";
+} from "../controllers/comments.controller.js";
 import IsAuth from "../middlewares/isAuth.js";
 
 const router = express.Router();

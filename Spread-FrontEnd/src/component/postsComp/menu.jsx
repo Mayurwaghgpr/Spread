@@ -44,7 +44,10 @@ function Menu({ post }) {
   );
 
   return (
-    <div ref={menuRef} className="sm:relative flex justify-center items-center">
+    <div
+      ref={menuRef}
+      className="sm:relative flex justify-center items-center border-inherit"
+    >
       <button
         aria-label="Menu"
         onClick={() => setMenuId((prev) => (prev === "" ? post?.id : ""))}
@@ -55,11 +58,11 @@ function Menu({ post }) {
       {menuId === post?.id && (
         <div
           onClick={() => setMenuId("")}
-          className="fixed sm:absolute flex justify-center items-end sm:-left-10 left-0 right-0 top-0 bottom-0 z-40 sm:w-fit sm:h-fit h-screen "
+          className="fixed sm:absolute flex justify-center border-inherit items-end sm:-left-10 left-0 right-0 top-0 bottom-0 z-40 sm:w-fit sm:h-fit h-screen "
         >
           <ul
             onClick={(e) => e.stopPropagation()}
-            className="sm:absolute z-40 sm:animate-none animate-slide-in-bottom flex flex-col gap-1 sm:h-fit h-1/2 sm:top-5 sm:w-36 w-full mt-2 sm:p-2 p-6  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-xl m-1 border sm:shadow-md"
+            className="sm:absolute z-40 border-inherit text-sm sm:animate-none animate-slide-in-bottom flex flex-col gap-1 sm:h-fit h-1/2 sm:top-5 sm:w-36 w-full mt-2 sm:p-2 p-6  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-xl m-1 border sm:shadow-md"
           >
             {MENU_ITEMS.map((item) => (
               <li

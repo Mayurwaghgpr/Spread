@@ -12,9 +12,11 @@ import Like from "../../component/buttons/Like/Like";
 import Menu from "../../component/postsComp/menu";
 import Follow from "../../component/buttons/follow";
 import userImageSrc from "../../utils/userImageSrc";
-import { FaComment, FaCommentDots, FaRegComment } from "react-icons/fa6";
+import { FaRegComment } from "react-icons/fa6";
 import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
+import { WiStars } from "react-icons/wi";
+import AIResponse from "../../component/AIComp/AiResponse";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
 const CopyToClipboardInput = lazy(
@@ -176,6 +178,10 @@ function PostView() {
         ))}
       </article>
       <Outlet context={postView} />
+      <div className="z-50 before:transition-all text-xs flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60">
+        {" "}
+        <WiStars className=" text-4xl" />
+      </div>
     </main>
   );
 }

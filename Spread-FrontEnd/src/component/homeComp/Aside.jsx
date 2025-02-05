@@ -14,7 +14,7 @@ function Aside({
 }) {
   return (
     <aside className={`${className}`}>
-      <div className="flex flex-col w-full p-6 items-center text-start gap-2 border rounded-xl border-inherit">
+      <div className="flex flex-col w-full p-6 items-center text-start gap-2 border rounded-lg border-inherit">
         <h1 className=" text-start w-full text-xl font-bold">
           Suggested topics
         </h1>
@@ -41,7 +41,7 @@ function Aside({
       <div className="sticky top-[4.3rem] gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
         <WhoToFollow
           PrepsData={PrepsData}
-          className={" text-sm  p-5 border rounded-xl border-inherit"}
+          className={" text-sm  p-5 border rounded-lg border-inherit"}
           FechingPreps={FechingPreps}
         />
         <footer className=" text-[#383838]">

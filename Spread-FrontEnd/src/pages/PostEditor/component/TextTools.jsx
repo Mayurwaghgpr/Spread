@@ -1,13 +1,47 @@
 import React, { memo, useState } from "react";
 
-const TextTools = ({ applyStyle }) => {
-  const [url, seturl] = useState(null);
+const TextTools = ({ position, applyStyle }) => {
+  const [url, setUrl] = useState("");
   const [isInputVisible, setInputVisible] = useState(false);
+  const [savedRange, setSavedRange] = useState(null); // Store selection range
 
-  const handleCreatLink = (e) => {
-    if (e.key === "Enter" && url) {
-      applyStyle("CreateLink", url);
+  if (!position) return null;
+  const { x, y } = position;
+
+  // Store selection before opening input
+  const handleShowInput = () => {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      setSavedRange(selection.getRangeAt(0)); // Save selection
+      setInputVisible(true);
+    }
+  };
+
+  const handleCreateLink = (e) => {
+    if (e.key === "Enter" && url.trim() && savedRange) {
+      const anchor = document.createElement("a");
+      anchor.href = url.trim();
+      anchor.target = "_blank"; // Open in new tab
+      anchor.rel = "noopener noreferrer";
+      console.log(url);
+
+      // Prevent contentEditable from interfering
+      anchor.setAttribute("contenteditable", "false");
+      anchor.classList // Add multiple classes
+        .add(
+          "text-blue-800",
+          "underline",
+          "hover:text-blue-500",
+          "cursor-pointer"
+        );
+      anchor.textContent = savedRange.toString(); // Keep selected text
+
+      savedRange.deleteContents(); // Remove selected text
+      savedRange.insertNode(anchor); // Insert the link
+
       setInputVisible(false);
+      setUrl("");
+      setSavedRange(null); // Reset saved range
     }
   };
 
@@ -23,44 +57,53 @@ const TextTools = ({ applyStyle }) => {
       className: "flex justify-center items-center border-black w-full",
     },
     {
-      action: () => setInputVisible(true),
-      icon: <i className="bi bi-link "></i>,
-      value: url,
+      action: handleShowInput, // Show input field when clicking the link button
+      icon: <i className="bi bi-link"></i>,
       className: "flex justify-center items-center border-black w-full text-xl",
     },
     {
       action: () => applyStyle("Italic", null),
       icon: "I",
-      className: "flex justify-center items-center border-black w-full",
+      className: "flex justify-center items-center border-black w-full ",
     },
   ];
-  // console.log(url);
 
   return isInputVisible ? (
     <div
-      className={`flex justify-evenly items-center gap-2 border p-2 bg-white dark:bg-black rounded-md transition-transform duration-100 z-50 -top-8 after:absolute after:bg-inherit after:size-3 after:-z-10 after:rotate-45 after:top-10 after:right-[50%]  absolute`}
+      onClick={(e) => e.stopPropagation()}
+      className="flex justify-evenly items-center gap-2 border p-2 bg-white dark:bg-black rounded-md transition-transform duration-100 z-50 absolute"
+      style={{
+        left: x,
+        top: y,
+        transform: "translate(-50%, -120%)",
+        whiteSpace: "nowrap",
+      }}
     >
       <input
-        placeholder="Enter url "
-        className="w-full bg-inherit  placeholder:text-inherit outline-none p-1 rounded-sm"
+        placeholder="Enter URL"
+        className="w-full bg-inherit placeholder:text-inherit outline-none p-1 rounded-sm"
         type="text"
-        onChange={({ target: { value } }) => {
-          seturl(value);
-        }}
-        onKeyDown={handleCreatLink}
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        onKeyDown={handleCreateLink}
       />
-      <button className=" " onClick={() => setInputVisible(false)}>
-        {" "}
-        <i className="bi bi-x-lg"></i>{" "}
+      <button onClick={() => setInputVisible(false)}>
+        <i className="bi bi-x-lg"></i>
       </button>
     </div>
   ) : (
     <div
-      className={`bg-white dark:bg-black border justify-evenly items-center p-2 px-5 rounded-md transition-transform duration-100 z-40 -top-8 after:absolute after:border-r after:border-inherit dark:after:bg-black after:bg-white after:border-b  after:size-3 after:rotate-45 after:top-[2.4rem] after:right-[50%] absolute`}
+      className="bg-white dark:bg-black border justify-evenly items-center p-2 px-5 rounded-md transition-transform duration-100 z-40 absolute"
+      style={{
+        left: x,
+        top: y,
+        transform: "translate(-50%, -120%)",
+        whiteSpace: "nowrap",
+      }}
     >
       <div className="flex w-full items-center gap-3 justify-between">
         {options.map((option, idx) => (
-          <span key={idx} className={`${option.className}`}>
+          <span key={idx} className={option.className}>
             <button onClick={option.action}>{option.icon}</button>
           </span>
         ))}

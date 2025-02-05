@@ -1,5 +1,5 @@
-import React, { useRef, memo } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useRef, memo, useMemo } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ProfileButton from "../ProfileButton";
@@ -7,15 +7,44 @@ import ProfileButton from "../ProfileButton";
 
 import ThemeBtn from "../buttons/ThemeBtn";
 import { setManuOpen } from "../../redux/slices/uiSlice";
+import { BsMoonStarsFill } from "react-icons/bs";
+import { IoSunny } from "react-icons/io5";
+import { HiOutlineComputerDesktop } from "react-icons/hi2";
+import { setIsLogin, setUser } from "../../redux/slices/authSlice";
+import { useMutation } from "react-query";
+import { LuLogOut } from "react-icons/lu";
+import LogoutBtn from "../buttons/LogoutBtn";
 
 function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
   const location = useLocation();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { MenuOpen } = useSelector((state) => state.ui);
   const { isLogin, user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
+  const { ThemeMode } = useSelector((state) => state.ui);
+
+  const Modes = useMemo(
+    () => [
+      {
+        name: "Dark mode",
+        value: "dark",
+        icon: <BsMoonStarsFill />,
+      },
+      {
+        name: "Light mode",
+        value: "light",
+        icon: <IoSunny />,
+      },
+      {
+        name: "System",
+        value: "system",
+        icon: <HiOutlineComputerDesktop />,
+      },
+    ],
+    [ThemeMode]
+  );
 
   return (
     <header
@@ -30,7 +59,7 @@ function MainNavBar() {
           </Link>
 
           <div className="flex w-fit gap-5 justify-end items-center border-inherit ">
-            <ThemeBtn />
+            <ThemeBtn Modes={Modes} separate={false} className={"relative"} />
             {isLogin && (
               <div className="relative sm:text-xl">
                 <i className="bi bi-bell"></i>
@@ -42,7 +71,7 @@ function MainNavBar() {
             )}
 
             {isLogin ? (
-              <div className="relative box-content flex *:transition-all *:duration-300 text-left group border-inherit">
+              <div className="relative box-content flex  *:transition-all *:duration-300 text-left group border-inherit">
                 <ProfileButton
                   onClick={() => dispatch(setManuOpen())}
                   className={`box-content border-2  sm:size-9 size-7  ${
@@ -53,14 +82,18 @@ function MainNavBar() {
                   } `}
                 />
                 {/* Tooltip with user name */}
-                {!MenuOpen && (
-                  <span
-                    className="pointer-events-none  opacity-0 p-1 rounded-lg absolute -bottom-9 left-1/2 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit -translate-x-1/2 w-32 text-center
-      group-hover:opacity-100"
-                  >
-                    {user.displayName}
-                  </span>
-                )}
+                <div className="flex justify-start w-52 flex-col gap-5 pointer-events-none opacity-0 group-hover:pointer-events-auto  group-hover:opacity-100  p-3 rounded-lg absolute top-10 -left-40 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit  text-nowrap text-center">
+                  {" "}
+                  <span className="text-sm w-fit">{user.displayName}</span>{" "}
+                  <ThemeBtn
+                    Modes={Modes}
+                    separate={true}
+                    className={
+                      "relative  w-fit  flex justify-evenly items-center gap-2 bg-[#d4d4d4] dark:bg-[#4a4a4a] *:text-xs *:bg-[#ffffff] *:text-black *:p-1 *:py-0.5  *:flex *:justify-center *:items-center *:rounded-md rounded-md p-1.5"
+                    }
+                  />{" "}
+                  <LogoutBtn className="flex gap-2 items-center  hover:bg-opacity-5 text-sm   rounded-md" />
+                </div>
               </div>
             ) : (
               <div className="flex text-nowrap gap-3 border-inherit justify-end w-full items-center sm:text-sm text-xs">

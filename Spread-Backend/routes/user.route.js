@@ -7,7 +7,7 @@ import {
   getFollowing,
   getLoginUser,
   searchForUsername,
-} from "../controllers/user.js";
+} from "../controllers/user.controller.js";
 import IsAuth from "../middlewares/isAuth.js";
 import { multerFileUpload } from "../middlewares/multer.middleware.js";
 

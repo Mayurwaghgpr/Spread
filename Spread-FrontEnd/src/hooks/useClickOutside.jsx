@@ -4,12 +4,12 @@ import { useSelector } from "react-redux";
 function useClickOutside(MenuRef) {
   const { isLogin } = useSelector((state) => state.auth);
   const [isFixed, setFixed] = useState(false);
-  const [menuId, setMenuId] = useState("");
+  const [menuId, setMenuId] = useState(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (MenuRef?.current && !MenuRef.current.contains(event.target)) {
-        setMenuId("");
+        setMenuId(null);
       }
     }
 

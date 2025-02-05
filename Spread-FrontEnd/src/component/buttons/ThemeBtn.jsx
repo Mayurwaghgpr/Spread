@@ -1,32 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setThemeMode } from "../../redux/slices/uiSlice";
-import { IoSunny } from "react-icons/io5";
+import { IoDesktop, IoSunny } from "react-icons/io5";
+import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import { BsMoonStarsFill } from "react-icons/bs";
-function ThemeBtn() {
+function ThemeBtn({ Modes, className, separate }) {
   // State to track the current theme
   const dispatch = useDispatch();
   const { ThemeMode } = useSelector((state) => state.ui);
-  const Modes = useMemo(
-    () => [
-      {
-        name: "Dark mode",
-        value: "dark",
-        icon: <BsMoonStarsFill />,
-      },
-      {
-        name: "Light mode",
-        value: "light",
-        icon: <IoSunny />,
-      },
-      // {
-      //   name: "System",
-      //   value: "system",
-      //   icon: <i className="bi bi-circle-half"></i>,
-      // },
-    ],
-    [ThemeMode]
-  );
 
   const changeTheme = () => {
     // Cycle through the themes
@@ -57,14 +38,31 @@ function ThemeBtn() {
   const currentMode = Modes?.find((mode) => mode.value === ThemeMode);
 
   return (
-    <div className="relative">
-      <button
-        onClick={changeTheme}
-        aria-label="THEME"
-        className="p-2 transition-all duration-100 rounded-full flex items-center"
-      >
-        {currentMode?.icon}
-      </button>
+    <div className={className}>
+      {!separate ? (
+        <button
+          onClick={changeTheme}
+          aria-label="THEME"
+          className="p-2 transition-all duration-100 rounded-full flex items-center"
+        >
+          {currentMode?.icon}
+        </button>
+      ) : (
+        Modes.map((mode) => {
+          return (
+            <button
+              key={mode.value}
+              onClick={() => {
+                dispatch(setThemeMode(mode.value));
+              }}
+              aria-label="THEME"
+              className={`${mode.value === ThemeMode ? "shadow-md dark:shadow-[#c5c3c3] scale-110" : " shadow-none"} transition-all duration-100  flex items-center`}
+            >
+              {mode?.icon}
+            </button>
+          );
+        })
+      )}
     </div>
   );
 }

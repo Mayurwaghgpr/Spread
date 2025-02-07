@@ -46,7 +46,7 @@ function Menu({ post }) {
   return (
     <div
       ref={menuRef}
-      className="sm:relative flex justify-center items-center border-inherit"
+      className="sm:relative flex justify-center items-center border-inherit "
     >
       <button
         aria-label="Menu"

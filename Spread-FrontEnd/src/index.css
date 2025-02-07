@@ -132,3 +132,31 @@ body {
   animation: aiScan 3s infinite linear;
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: 100%;
+  }
+
+  100% {
+    background-position: -100%;
+  }
+}
+
+/* Light Mode */
+.shimmer-effect {
+  display: inline-block;
+  background: linear-gradient(to right, #171717 8%, #e0e0e0 18%, #959393 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Dark Mode */
+.dark .shimmer-effect-dark {
+  background: linear-gradient(to right, #a9a9a9 8%, #444 18%, #333 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  -webkit-background-clip: text;
+  color: transparent;
+}

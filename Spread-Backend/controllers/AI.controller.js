@@ -5,43 +5,60 @@ dotenv.config();
 // const openai = new OpenAI({apiKey:process.env.OPENAI_API_KEY,});
 const GEMINIAI_API_KEY =process.env.GEMINI_API_KEY
 
-const prompt = `Analyze the given post data and generate an explanation in a structured, point-by-point format. 
-                Each point should be a detailed paragraph providing insights, analysis, and additional relevant information about the post's topic.
-                Ensure the response follows these guidelines:
-                - Each point must be at least a paragraph long (3-5 sentences).
-                - The response must be a valid JSON array of strings where each string is a paragraph.
-                - There should be at least three points.
-                - Each time you must provide new information.
-                - Do not include any extra text, explanations, or formatting outside the JSON array.
-            `;
+const prompt = `Analyze the given post data and generate a structured, point-by-point explanation.  
 
+Ensure the response follows these rules:  
 
-export const generateAIAnalysis = async (req, res) => {
-    // console.log(req.body)
+**First Point:** Provide a **concise summary** explaining the main idea of the post.  
+**Next Points:** Include **additional relevant insights** related to the post's topic that are **not mentioned in the post**.  
+   - These insights should come from **trusted sources on the internet**.  
+   - Include **at least one external link per point** for more information.  
+   - Links should be properly styled: <a href="link" style="color:blue; text-decoration:underline;">source</a>.  
+**Response Format:**  
+   - Return a **valid JSON array** where each string is a short paragraph.  
+   - Each point must be **accurate, concise (2-3 sentences), and unique**.  
+   - Use **bold (<b>), strong (<strong>), and links (<a>)** for emphasis.  
+   - **No extra text, explanations, or formatting outside the JSON array.**  
+**Example Output:**  
+
+`;
+export const generateAIAnalysis = async (req, res, next) => {
     try {
         const genAI = new GoogleGenerativeAI(GEMINIAI_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         const result = await model.generateContent([
-            { text:prompt },
+            { text: prompt },
             { text: JSON.stringify(req.body) }
         ]);
 
-        const response = result.response;
-        console.log(response.text())
-           const responseText = response.text(); 
-    
-        const analysis = JSON.parse(responseText);
-        res.status(201).json(analysis)
+        let responseText = result.response.text();
+
+        // Clean the response (remove unwanted code block syntax or extra text)
+        responseText = responseText.replace(/```json|```/g, "").trim(); // Remove code block syntax
+
+        // Ensure the response is a valid JSON array before parsing
+        let analysis;
+        try {
+            analysis = JSON.parse(responseText);
+            if (!Array.isArray(analysis)) {
+                throw new Error("Invalid response format: Expected an array.");
+            }
+        } catch (err) {
+            throw new Error("Error parsing AI response: " + err.message);
+        }
+
+        // If everything looks good, send the result as JSON
+        res.status(201).json(analysis);
+
     } catch (error) {
         console.error("Error:", error.message);
+        next(error); // Forward error to error handling middleware
     }
 };
 
 
-
-
-export const generateTagsForPosts = async (req, res) => {
+export const generateTagsForPosts = async (req, res,next) => {
     try {
         const genAI = new GoogleGenerativeAI(GEMINIAI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
@@ -65,5 +82,6 @@ export const generateTagsForPosts = async (req, res) => {
         res.status(201).json(tags)
     } catch (error) {
         console.error("Error:", error.message);
+        next(error);
     }
 };

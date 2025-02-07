@@ -100,7 +100,7 @@ function PostsApis() {
       });
       return result.data.result;
     } catch (error) {
-      throw error;
+      throw error.response;
     }
   };
   const getAiGenAnalysis = async (data) => {
@@ -110,7 +110,7 @@ function PostsApis() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response;
     }
   };
   const getAiGenTags = async (data) => {
@@ -120,7 +120,7 @@ function PostsApis() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response;
     }
   };
   const deleteComment = async (commentId) => {

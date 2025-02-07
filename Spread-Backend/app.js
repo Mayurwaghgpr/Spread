@@ -170,10 +170,7 @@ app.use((error, req, res, next) => {
   console.error("Error:", error);
   const status = error.statusCode || 500;
   const message = error.message || "An error occurred";
-  res.status(status).json({
-    message,
-    ...(process.env.NODE_ENV === "development" && { stack: error.stack }),
-  });
+  res.status(status).json(message);
 });
 
 // Database Sync and Server Start

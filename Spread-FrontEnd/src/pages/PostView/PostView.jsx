@@ -48,6 +48,7 @@ function PostView() {
     mutate,
     data,
     isLoading: isAnalyzing,
+    error: aiError,
   } = useMutation({
     mutationFn: getAiGenAnalysis,
   });
@@ -65,7 +66,15 @@ function PostView() {
     //Setting data initialy
     navigate("comments");
   }, []);
-
+  const userImage = useMemo(
+    () => userImageSrc(postView?.User),
+    [postView?.User]
+  );
+  const Comments = useMemo(
+    () =>
+      postView?.comments?.filter((comment) => comment.topCommentId === null),
+    [postView?.comments]
+  );
   if (isError || error) {
     return <SomthingWentWrong />;
   }
@@ -77,21 +86,20 @@ function PostView() {
       </div>
     );
   }
-  const userImage = userImageSrc(postView?.User);
-  const Comments = postView?.comments?.filter(
-    (comment) => comment.topCommentId === null
-  );
 
+  console.log(aiError);
+  console.log(data);
   return (
     <main
-      className={`relative flex justify-center h-full transition-all duration-500 min-w-full py-4 my-16 dark:*:border-[#383838]`}
+      className={`relative flex justify-center h-full border-inherit transition-all duration-500 min-w-full py-4 my-16 dark:*:border-[#383838]`}
     >
       <article
         className={`relative max-w-4xl px-2 rounded-lg flex flex-col justify-center items-center 
+           border-inheri
     ${isAnalyzing ? "ai-scanning" : ""}
   `}
       >
-        <div className="z-50 before:transition-all text-xs flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60">
+        <div className="z-50 border-inherit before:transition-all text-xs flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60">
           {" "}
           <WiStars
             onClick={() => {
@@ -101,9 +109,9 @@ function PostView() {
             className=" text-4xl"
           />
         </div>
-        <header className="mb-6 w-full px-3">
-          <section className="flex flex-col gap-2">
-            <div className="w-full flex justify-end text-lg">
+        <header className="mb-6 w-full px-3  border-inherit">
+          <section className="flex flex-col gap-2  border-inherit">
+            <div className="w-full flex justify-end text-lg  border-inherit">
               {" "}
               <Menu post={postView} />
             </div>
@@ -207,25 +215,59 @@ function PostView() {
       <Outlet context={postView} />
 
       {show && (
-        <div className="fixed bottom-10 right-5 bg-white/10 backdrop-blur-xl shadow-2xl rounded-xl bordermin-w-[24rem] max-w-[24rem] overflow-hidden animate-slide-up neon-glow">
+        <div className="fixed bottom-10 right-5 bg-[#fff9f3] dark:bg-black shadow-2xl rounded-xl border min-w-[24rem] max-w-[24rem] overflow-hidden animate-slide-up neon-glow">
           {/* Header */}
-          <header className="bg-white/5 border-b  flex justify-between items-center p-4">
-            <h1 className="text-lg font-semibold  tracking-wide">
-              AI Explanation
-            </h1>
+          <header className="bg-white/5 border-b  border-inherit flex justify-between items-center p-4">
+            {isAnalyzing ? (
+              <h1 className="font-bold shimmer-effect dark:shimmer-effect-dark">
+                Analyzing post
+              </h1>
+            ) : (
+              <h1 className="text-lg font-semibold  tracking-wide">
+                AI Explanation
+              </h1>
+            )}
             <IoClose
               onClick={() => setshow(false)}
               className=" hover:text-red-500 transition duration-300 cursor-pointer text-xl"
             />
-          </header>
-
+          </header>{" "}
           {/* AI Explanation Points */}
           <ul className="flex flex-col justify-start items-start  gap-4 px-6 py-4 min-h-80 max-h-80 overflow-y-auto typewriter">
-            {data?.map((points, idx) => (
-              <li key={idx} className="list-disc text-sm leading-relaxed">
-                {points}
-              </li>
-            ))}
+            {!aiError ? (
+              data?.map((points, idx) => {
+                if (typeof points === "object") {
+                  return (
+                    <div>
+                      <Link
+                        component="a"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        to={points.resource}
+                      >
+                        {points.description}
+                      </Link>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <li
+                      key={idx}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(points),
+                      }}
+                      className="list-disc text-[15px] leading-relaxed"
+                    >
+                      {}
+                    </li>
+                  );
+                }
+              })
+            ) : (
+              <div className=" text-xs text-red-400 border border-red-500 p-3 rounded-full bg-opacity-5 backdrop-blur-sm bg-red-400">
+                <span>{aiError.data}</span>
+              </div>
+            )}
           </ul>
         </div>
       )}

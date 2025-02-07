@@ -3,7 +3,11 @@ import { createClient } from "redis";
 
 dotenv.config();
 
-const redisClient = createClient({ url: process.env.REDIS_URL });
+const redisOptions = process.env.NODE_ENV === "production"
+  ? { url: process.env.REDIS_URL }
+  : {};
+
+const redisClient = createClient(redisOptions);
 
 redisClient.on("error", (err) => console.error("Redis Client Error:", err));
 

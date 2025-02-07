@@ -9,6 +9,9 @@ import { stringify } from "uuid";
 import Comments from "../models/Comments.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
+import redisClient from "../utils/redisClient.js";
+
+const EXPIRATION = 3600;
 
 export const AddNewPost = async (req, res, next) => {
       // Parse and extract required data
@@ -121,7 +124,6 @@ export const getPostPreview = async (req, res, next) => {
       offset: (page - 1) * limit,
       order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
     });
-    console.log(posts)
     if (posts.length > 0) {
       const postData = formatPostData(posts); // Format the post data
       res.status(200).json({
@@ -152,8 +154,15 @@ export const getPostPreview = async (req, res, next) => {
 // Fetch a post by its ID along with associated content and images
 export const getPostView = async (req, res, next) => {
   const id = req.params.id;
+
   // console.log("first")
   try {
+    const cachedData = await redisClient.get(id);
+      if (cachedData !== null) {
+      console.log('cach hit')
+      return res.status(200).json(JSON.parse(cachedData));
+    }
+    console.log('cach miss')
     const post = await Post.findOne({
       where: { id },
       include: [
@@ -178,8 +187,13 @@ export const getPostView = async (req, res, next) => {
         }
       ],
     });
+    if (post) {
+      await redisClient.setEx(id, EXPIRATION, JSON.stringify(post));
+      res.status(200).json(post);
+    }else {
+      return res.status(404).json({ message: "post not found" });
+    }
 
-    res.status(200).json(post);
   } catch (error) {
     console.error("Error fetching post:", error);
     // res.status(500).send('Server error');
@@ -224,7 +238,6 @@ export const getArchivedPosts = async (req, res, next) => {
     if (!Posts?.SavedPosts) {
       return res.status(404).json({ message: "No archived posts found" });
     }
-    console.log(Posts);
     const postData = formatPostData(Posts.SavedPosts);
     res.status(200).json(postData);
   } catch (error) {
@@ -301,13 +314,11 @@ export const DeletePost = async (req, res, next) => {
     
     // If there are images, delete them
     const imagePromiesArry = imagePubIdArry.map(async (public_id) => {
-      console.log({public_id})
+  
       return deleteCloudinaryImage(public_id);
     })
 
   const deleteResult = await Promise.all(imagePromiesArry)
-
-    console.log(deleteResult)
 
     // Delete the post itself
     await post.destroy();

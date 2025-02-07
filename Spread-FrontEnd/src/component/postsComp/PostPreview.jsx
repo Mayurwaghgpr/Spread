@@ -6,16 +6,10 @@ import React, {
   lazy,
   Suspense,
   useEffect,
+  useMemo,
 } from "react";
-import { format } from "date-fns";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useQueryClient, useQuery } from "react-query";
-import { setToast } from "../../redux/slices/uiSlice";
-
-import profileIcon from "/ProfOutlook.png";
-import PostsApis from "../../Apis/PostsApis";
-import Spinner from "../loaders/Spinner"; // A spinner to show during lazy loading
 
 // Dynamically load components to optimize performance
 import Bookmark from "../buttons/Bookmark";
@@ -23,34 +17,42 @@ import Like from "../buttons/Like/Like";
 import Menu from "./menu";
 import FormatedTime from "../UtilityComp/FormatedTime";
 import userImageSrc from "../../utils/userImageSrc";
-import { BsCommand } from "react-icons/bs";
-import { FaComment, FaRegComment } from "react-icons/fa6";
+import { FaRegComment } from "react-icons/fa6";
 import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
+import { useMutation } from "react-query";
+import PostsApis from "../../Apis/PostsApis";
+import { FaHashtag } from "react-icons/fa";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { getAiGenTags } = PostsApis();
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
   const userImage = userImageSrc(post?.user);
 
-  const Comments = post?.comments?.filter(
-    (comment) => comment.topCommentId === null
-  );
-  useEffect(() => {
-    dispatch(
-      setCommentCred({
-        ...commentCred,
-        postId: post?.id,
-      })
-    );
-    //Setting data initialy
-  }, []);
-  const handelComment = useCallback(() => {
-    navigate(`/view/@${post?.user?.username}/${post?.id}/comments`);
-  }, []);
+  const Comments = useMemo(() => {
+    return post?.comments?.filter((comment) => comment.topCommentId === null);
+  }, [post?.comments]);
 
+  useEffect(() => {
+    dispatch(setCommentCred({ ...commentCred, postId: post?.id }));
+  }, [post?.id, dispatch]);
+
+  const handelComment = useCallback(() => {
+    if (post?.user?.username && post?.id) {
+      navigate(`/view/@${post?.user?.username}/${post?.id}/comments`);
+    }
+  }, [navigate, post?.user?.username, post?.id]);
+
+  const {
+    mutate,
+    data,
+    isLoading: tagLoading,
+  } = useMutation({
+    mutationFn: getAiGenTags,
+  });
   return (
     <article
       ref={ref}
@@ -91,6 +93,21 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               "rounded-lg font-light text-opacity-30 text-black dark:text-slate-400 dark:text-opacity-40"
             }
           />
+          {post && (
+            <div className=" relative flex justify-center items-center cursor-pointer before:hidden before:hover:block  before:text-xs text-lg before:p-1 before:absolute  before:w-fit before:top-5 text-nowrap before:bg-black before:bg-opacity-20 before:rounded-md  before:content-['Generate_tags_with_ai']">
+              <FaHashtag
+                className={`${tagLoading && "animate-pulse"} `}
+                onClick={() =>
+                  mutate({
+                    title: post?.title,
+                    subtitle: post?.subtitelpagraph,
+                    author: post?.user,
+                    titleImage: post?.titleImage,
+                  })
+                }
+              />
+            </div>
+          )}
         </div>
         <Link
           to={`/view/@${post?.user?.username}/${post?.id}`}
@@ -128,6 +145,18 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             )}
           </div>
         </Link>
+        <div className="sm:text-sm text-[.7rem] flex-wrap flex justify-start items-center text-nowrap gap-2">
+          {!tagLoading
+            ? data &&
+              data?.map((tag, idx) => (
+                <span className="bg-[#e0dbd7] p-1 px-3 rounded-full" key={idx}>
+                  {tag}
+                </span>
+              ))
+            : [...Array(5)].map(() => (
+                <span className="bg-[#e0dbd7] block animate-pulse  p-3 rounded-full w-20 "></span>
+              ))}
+        </div>
         {post && (
           <div className="flex w-full h-full justify-between text-md  border-inherit p-3 items-center ">
             <div className="flex   justify-start   items-center gap-3">

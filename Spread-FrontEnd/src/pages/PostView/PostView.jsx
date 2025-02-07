@@ -4,7 +4,7 @@ import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import "boxicons";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { v4 as uuidv4 } from "uuid";
 import Bookmark from "../../component/buttons/Bookmark";
 import usePublicApis from "../../Apis/publicApis";
@@ -17,6 +17,8 @@ import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import { WiStars } from "react-icons/wi";
 import AIResponse from "../../component/AIComp/AiResponse";
+import PostsApis from "../../Apis/PostsApis";
+import { IoClose } from "react-icons/io5";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
 const CopyToClipboardInput = lazy(
@@ -25,10 +27,12 @@ const CopyToClipboardInput = lazy(
 
 function PostView() {
   const { commentCred } = useSelector((state) => state.posts);
+  const [show, setshow] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { fetchDataById } = usePublicApis();
+  const { getAiGenAnalysis } = PostsApis();
 
   const {
     data: postView,
@@ -39,6 +43,13 @@ function PostView() {
     queryKey: ["fullpostData", id],
     queryFn: () => fetchDataById(id),
     refetchOnWindowFocus: false,
+  });
+  const {
+    mutate,
+    data,
+    isLoading: isAnalyzing,
+  } = useMutation({
+    mutationFn: getAiGenAnalysis,
   });
 
   useEffect(() => {
@@ -72,8 +83,24 @@ function PostView() {
   );
 
   return (
-    <main className="relative flex justify-center h-full transition-all duration-500 min-w-full py-4 my-16 dark:*:border-[#383838]">
-      <article className="max-w-4xl px-2 rounded-lg flex flex-col justify-center items-center">
+    <main
+      className={`relative flex justify-center h-full transition-all duration-500 min-w-full py-4 my-16 dark:*:border-[#383838]`}
+    >
+      <article
+        className={`relative max-w-4xl px-2 rounded-lg flex flex-col justify-center items-center 
+    ${isAnalyzing ? "ai-scanning" : ""}
+  `}
+      >
+        <div className="z-50 before:transition-all text-xs flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60">
+          {" "}
+          <WiStars
+            onClick={() => {
+              setshow(true);
+              !data && mutate(postView);
+            }}
+            className=" text-4xl"
+          />
+        </div>
         <header className="mb-6 w-full px-3">
           <section className="flex flex-col gap-2">
             <div className="w-full flex justify-end text-lg">
@@ -178,10 +205,30 @@ function PostView() {
         ))}
       </article>
       <Outlet context={postView} />
-      <div className="z-50 before:transition-all text-xs flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60">
-        {" "}
-        <WiStars className=" text-4xl" />
-      </div>
+
+      {show && (
+        <div className="fixed bottom-10 right-5 bg-white/10 backdrop-blur-xl shadow-2xl rounded-xl bordermin-w-[24rem] max-w-[24rem] overflow-hidden animate-slide-up neon-glow">
+          {/* Header */}
+          <header className="bg-white/5 border-b  flex justify-between items-center p-4">
+            <h1 className="text-lg font-semibold  tracking-wide">
+              AI Explanation
+            </h1>
+            <IoClose
+              onClick={() => setshow(false)}
+              className=" hover:text-red-500 transition duration-300 cursor-pointer text-xl"
+            />
+          </header>
+
+          {/* AI Explanation Points */}
+          <ul className="flex flex-col justify-start items-start  gap-4 px-6 py-4 min-h-80 max-h-80 overflow-y-auto typewriter">
+            {data?.map((points, idx) => (
+              <li key={idx} className="list-disc text-sm leading-relaxed">
+                {points}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </main>
   );
 }

@@ -19,7 +19,10 @@ export default {
       fontStyle: {
         nunito: 'normal', // Custom font-style
       },
-  
+      animation: {
+
+        },
+
       keyframes: {
         fromRight: { // Corrected typo here
           '0%': { transform: 'translateX(100%)' },
@@ -64,7 +67,15 @@ export default {
           fedOut: {
             '0%': { opacity: '1' },
             '100%': { opacity: '0' }, // Correct opacity range
-          }
+          },
+       slideUp: { 
+      "0%": { transform: "translateY(20px)", opacity: "0" },
+      "100%": { transform: "translateY(0)", opacity: "1" },
+    },
+    flip: {
+      "0%": { transform: "rotateY(0deg)" },
+      "100%": { transform: "rotateY(180deg)" },
+    },
       },
       animation: {
         'slide-in-left':'fromLeft .5s ease-in-out forwards',
@@ -80,7 +91,8 @@ export default {
         'slide-in-bottom.9s': 'fromBottom .9s ease-in-out forwards',
         'slide-in-bottom1s': 'fromBottom 1s ease-in-out forwards',
         'slide-out-bottom': 'toBottom 1s ease-in-out forwards',
-
+        "slide-up": "slideUp 0.5s ease-in-out",
+    "flip": "flip 0.6s ease-in-out forwards",
         'fedin2s':'fedin 2s  ease-in-out',
         'fedin1s':'fedin 1s  ease-in-out',
         'fedin.2s': 'fedin .2s  ease-in-out',

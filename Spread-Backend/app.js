@@ -12,6 +12,7 @@ import postsRouter from "./routes/posts.route.js";
 import userRouter from "./routes/user.route.js";
 import publiRouter from "./routes/public.route.js";
 import commentRouter from "./routes/comments.route.js";
+import aiRouter from "./routes/AI.route.js"
 import { multerFileUpload } from "./middlewares/multer.middleware.js";
 // import { v2 as cloudinary } from "cloudinary";
 
@@ -80,6 +81,7 @@ app.use("/public", publiRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
+app.use("/ai",aiRouter)
 
 // Associations
 User.hasMany(Post, { foreignKey: "authorId" });

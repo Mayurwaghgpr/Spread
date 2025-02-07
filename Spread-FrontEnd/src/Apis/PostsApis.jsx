@@ -103,7 +103,26 @@ function PostsApis() {
       throw error;
     }
   };
-
+  const getAiGenAnalysis = async (data) => {
+    try {
+      const result = await axios.post(`${BASE_URL}/ai/analysis`, data, {
+        withCredentials: true,
+      });
+      return result.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  const getAiGenTags = async (data) => {
+    try {
+      const result = await axios.post(`${BASE_URL}/ai/tags`, data, {
+        withCredentials: true,
+      });
+      return result.data;
+    } catch (error) {
+      throw error;
+    }
+  };
   const deleteComment = async (commentId) => {
     try {
       const result = await axios.delete(
@@ -117,6 +136,7 @@ function PostsApis() {
       throw error;
     }
   };
+
   const DeletePostApi = async (id) => {
     try {
       const response = await axios.delete(
@@ -147,6 +167,8 @@ function PostsApis() {
     getReplies,
     pinComment,
     deleteComment,
+    getAiGenTags,
+    getAiGenAnalysis,
   };
 }
 

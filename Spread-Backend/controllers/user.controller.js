@@ -1,5 +1,5 @@
 import { Sequelize, Op, where } from "sequelize";
-// import Redis from "redis";
+import Redis from "redis";
 import User from "../models/user.js";
 import Post from "../models/posts.js";
 import formatPostData from "../utils/dataFormater.js";
@@ -9,7 +9,7 @@ import { DataFetching } from "../operations/data-fetching.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import Comments from "../models/Comments.js";
-// import redisClient from "../utils/redisClient.js";
+import redisClient from "../utils/redisClient.js";
 
 const EXPIRATION = 3600;
 const dataFecter = new DataFetching();
@@ -23,18 +23,18 @@ export const getUserProfile = async (req, res, next) => {
   const id = req?.params?.id || req.authUser.id;
 
   try {
-    // const cachedUserData = await redisClient.get(id);
-    // if (cachedUserData !== null) {
-    //   console.log('cach hit')
-    //   return res.status(200).json(JSON.parse(cachedUserData));
-    // }
-    // console.log('cach miss')
+    const cachedUserData = await redisClient.get(id);
+    if (cachedUserData !== null) {
+      console.log('cach hit')
+      return res.status(200).json(JSON.parse(cachedUserData));
+    }
+    console.log('cach miss')
 
     const userInfo = await dataFecter.Profile(id);
     // console.log("dsds",userInfo)
 
     if (userInfo) {
-      // await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
+      await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
       return res.status(200).json(userInfo);
     } else {
       return res.status(404).json({ message: "User not found" });

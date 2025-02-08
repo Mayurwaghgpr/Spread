@@ -5,7 +5,7 @@ dotenv.config();
 
 const redisOptions = process.env.NODE_ENV === "production"
   ? { url: process.env.REDIS_URL }
-  : {};
+  :{};
 
 const redisClient = createClient(redisOptions);
 

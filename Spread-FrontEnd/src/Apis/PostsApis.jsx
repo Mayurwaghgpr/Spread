@@ -107,6 +107,7 @@ function PostsApis() {
     try {
       const result = await axios.post(`${BASE_URL}/ai/analysis`, data, {
         withCredentials: true,
+        headers: { "Content-Type": "application/json" },
       });
       return result.data;
     } catch (error) {

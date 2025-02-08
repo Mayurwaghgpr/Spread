@@ -179,6 +179,7 @@ Database.sync()
     app.listen(port, () => {
       console.log(`API is running at http://localhost:${port}`);
     });
+      console.log("Connected to postgres")
   })
   .catch((err) => {
     console.error(err);

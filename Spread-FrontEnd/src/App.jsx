@@ -91,7 +91,7 @@ function App() {
       <Suspense fallback={<LoaderScreen />}>
         <MainNavBar />
         <PersistentUser />
-        {isLogin && <SideBar />}
+        {isLogin && !pathname.startsWith("/write") && <SideBar />}
         <Routes>
           <Route
             path="/"

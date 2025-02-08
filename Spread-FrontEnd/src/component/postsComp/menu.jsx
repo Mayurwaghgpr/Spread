@@ -50,7 +50,7 @@ function Menu({ post }) {
     >
       <button
         aria-label="Menu"
-        onClick={() => setMenuId((prev) => (prev === "" ? post?.id : ""))}
+        onClick={() => setMenuId((prev) => (prev === null ? post?.id : null))}
       >
         <i className="bi bi-three-dots-vertical"></i>
       </button>

@@ -29,7 +29,7 @@ const UserPopover = forwardRef(
           <Follow
             People={people}
             className={
-              "relative text-black  p-1 py-2 border transition-all text-xs max-w-[5rem] w-full  duration-200b g-white bg-white hover:bg-gray-300 rounded-full "
+              "relative text-black flex justify-center items-center p-1 py-2 border transition-all text-xs max-w-[5rem] w-full  duration-200b g-white bg-white hover:bg-gray-300 rounded-full "
             }
           />
         </div>

@@ -97,17 +97,13 @@ function Profile() {
           >
             {/* <RenderPosts /> */}
             {userProfile?.posts?.length > 0
-              ? !isLoading
-                ? posts.map((post, idx, arr) => (
-                    <PostPreview
-                      ref={arr.length % 3 === 0 ? lastpostRef : null}
-                      key={post.id}
-                      post={post}
-                    />
-                  ))
-                : [...Array(3)].map(() => (
-                    <PostPreview className="border-inherit px-2" />
-                  ))
+              ? posts.map((post, idx, arr) => (
+                  <PostPreview
+                    ref={arr.length % 3 === 0 ? lastpostRef : null}
+                    key={post.id}
+                    post={post}
+                  />
+                ))
               : profileId === user?.id && (
                   <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center sm:text-3xl border-dashed border-2 rounded-lg max-h-[38rem] h-full min-h-[13rem] border-inherit mx-5">
                     No posts yet{" "}
@@ -121,7 +117,10 @@ function Profile() {
                     )}
                   </div>
                 )}
-
+            {postIsLoading &&
+              [...Array(3)].map((_, idx) => (
+                <PostPreview key={idx} className="border-inherit px-2" />
+              ))}
             {isFetchingNextPage && (
               <div className="w-full flex justify-center items-center h-24">
                 <Spinner

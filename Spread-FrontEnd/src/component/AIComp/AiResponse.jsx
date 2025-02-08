@@ -32,7 +32,12 @@ const AIResponse = ({
           </h1>
         )}
         <div className="flex items-center gap-6">
-          <TiArrowSync onClick={() => mutate({ id })} size={20} />
+          <TiArrowSync
+            title=""
+            className=" opacity-50 hover:opacity-100 cursor-pointer"
+            onClick={() => mutate({ id })}
+            size={20}
+          />
           <IoClose
             onClick={() => setshow(false)}
             className=" hover:text-red-500 transition duration-300 cursor-pointer text-xl"

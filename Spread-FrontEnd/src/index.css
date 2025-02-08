@@ -126,10 +126,10 @@ body {
   height: 100%;
   background: linear-gradient(110deg,
       rgba(255, 255, 255, 0) 20%,
-      rgba(255, 255, 255, 0.9) 50%,
+      rgba(255, 255, 255, 0.6) 50%,
       rgba(255, 255, 255, 0) 80%);
   background-size: 200% 100%;
-  animation: aiScan 3s infinite linear;
+  animation: aiScan 2s infinite linear;
 }
 
 @keyframes shimmer {

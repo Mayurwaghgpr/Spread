@@ -110,7 +110,7 @@ function PostView() {
     >
       {!show ? (
         <article
-          className={`relative animate-fedin1s max-w-4xl p-2 rounded-lg flex flex-col justify-center items-center 
+          className={`relative animate-fedin1s max-w-4xl p-2  flex flex-col justify-center items-center 
            border-inheri
     ${isAnalyzing ? "ai-scanning" : ""}
   `}

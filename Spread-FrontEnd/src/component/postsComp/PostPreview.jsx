@@ -65,7 +65,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             className="flex gap-3"
           >
             <div
-              className={`${!post && "animate-pulse bg-gray-100 dark:bg-gray-400"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
+              className={`${!post && "animate-pulse bg-gray-300 dark:bg-gray-400"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
             >
               {post && (
                 <img
@@ -81,7 +81,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             {post ? (
               <p className="capitalize">{post?.user?.username}</p>
             ) : (
-              <span className="w-20 h-3 bg-gray-100 animate-pulse dark:bg-gray-400 bg-inherit rounded-xl"></span>
+              <span className="w-20 h-3 bg-gray-300 animate-pulse dark:bg-gray-400 bg-inherit rounded-xl"></span>
             )}
           </div>
           <h1 className="text-opacity-30 text-black dark:text-white dark:text-opacity-30 rounded-lg">
@@ -125,9 +125,9 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-full sm:w-[20rem] w-[60%] h-6  bg-gray-100 dark:bg-gray-400 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-gray-100 dark:bg-gray-400 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-gray-100 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[20rem] w-[60%] h-6  bg-gray-300 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-gray-300 dark:bg-gray-400 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-gray-300 dark:bg-gray-400 animate-pulse"></div>
               </>
             )}
           </div>

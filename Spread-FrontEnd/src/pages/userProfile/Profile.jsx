@@ -79,8 +79,8 @@ function Profile() {
     return <h1>Error {postError?.message}. Please try again.</h1>;
   }
   return (
-    <div className="flex lg:justify-center justify-end dark:*:border-[#383838]">
-      <div className=" md:w-[80%]  lg:w-[70%] xl:w-[60%]  w-full  mt-20 flex flex-col h-full">
+    <section className="flex h-screen w-full lg:justify-start justify-end dark:*:border-[#383838] overflow-y-auto">
+      <div className="flex flex-col h-full md:w-[80%]  lg:w-[70%]  w-full  mt-20 ">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />
           <div className="w-full flex gap-5  p-2 px-4 border-inherit">
@@ -90,7 +90,7 @@ function Profile() {
             </div>
           </div>
           <div
-            className={`lg:px-5 py-20   border-inherit pt-5 h-full dark:*:border-[#383838] ${
+            className={` py-20 w-full  border-inherit pt-5 dark:*:border-[#383838] ${
               !userProfile?.posts?.length > 0 &&
               "flex justify-center items-center "
             }`}
@@ -99,12 +99,14 @@ function Profile() {
             {userProfile?.posts?.length > 0
               ? posts.map((post, idx, arr) => (
                   <PostPreview
+                    className="border-b w-full"
                     ref={arr.length % 3 === 0 ? lastpostRef : null}
                     key={post.id}
                     post={post}
                   />
                 ))
-              : profileId === user?.id && (
+              : profileId === user?.id &&
+                !postIsLoading && (
                   <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center sm:text-3xl border-dashed border-2 rounded-lg max-h-[38rem] h-full min-h-[13rem] border-inherit mx-5">
                     No posts yet{" "}
                     {isLogin && (
@@ -132,7 +134,7 @@ function Profile() {
         </div>
       </div>
       {FollowInfo.Info && <ProfileinfoCard className={``} />}
-    </div>
+    </section>
   );
 }
 

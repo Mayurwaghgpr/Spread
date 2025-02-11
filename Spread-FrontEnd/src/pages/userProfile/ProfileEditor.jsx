@@ -105,7 +105,7 @@ function ProfileEditor() {
   });
 
   return (
-    <div className=" relative f sm:h-screen h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
+    <section className=" relative f sm:h-screen h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
       <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">
         <h1 className="w-full text-center text-2xl p-2  bg-inherit  ">
           User Information
@@ -235,7 +235,7 @@ function ProfileEditor() {
           </button>
         </div>
       </article>
-    </div>
+    </section>
   );
 }
 

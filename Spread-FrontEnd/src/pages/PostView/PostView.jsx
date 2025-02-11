@@ -112,7 +112,7 @@ function PostView() {
         <article
           className={`relative animate-fedin1s max-w-4xl p-2  flex flex-col justify-center items-center 
            border-inheri
-    ${isAnalyzing ? "ai-scanning" : ""}
+    ${isAnalyzing ? "shimmer-effect dark:shimmer-effect-dark" : ""}
   `}
         >
           <div

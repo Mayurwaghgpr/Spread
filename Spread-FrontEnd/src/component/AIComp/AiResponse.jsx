@@ -86,7 +86,7 @@ const AIResponse = ({
         </div>
       </div>
       {/* AI Explanation Points */}
-      <ul className="flex flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter">
+      <ul className="flex animate-fedin1s flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter">
         {isAnalyzing && <div className="dotloader "></div>}
         {!aiError ? (
           data?.map((points, idx) => {

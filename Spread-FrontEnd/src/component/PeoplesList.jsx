@@ -51,7 +51,7 @@ function PeoplesList({ people, className }) {
             />
           </div>
 
-          <p className="hover:underline underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
+          <p className="hover:underline  underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
             {people?.username}
           </p>
         </Link>
@@ -59,7 +59,7 @@ function PeoplesList({ people, className }) {
         <UserPopover
           ref={boxRef}
           people={people}
-          className="z-40 px-4 w-[20rem]  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
+          className="z-40 px-4 w-[20rem] absolute top-11  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
           attributes={attributes}
           styles={styles}
         />

@@ -10,6 +10,7 @@ import { passwordRegex, emailRegex } from "../../utils/regex.js";
 import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";
 import EyeBtn from "../../component/buttons/EyeBtn.jsx";
+import { BsGoogle } from "react-icons/bs";
 function SignUp() {
   const [validation, setValidation] = useState("");
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ function SignUp() {
   ];
 
   return (
-    <section className="sm:flex animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#fff9f3] dark:bg-black  dark:*:border-[#383838]">
+    <section className="sm:flex w-full animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#fff9f3] dark:bg-black  dark:*:border-[#383838]">
       {(isError || validation) && (
         <div className="text-red-500 my-4 w-full flex justify-center bg-red-100 py-2">
           {error?.response?.data.message || validation}
@@ -105,13 +106,13 @@ function SignUp() {
             onSubmit={signUp}
             className="flex flex-col py-2 w-full gap-2 items-center justify-start text-sm *:border-inherit "
           >
-            <div className="mb-4 w-full flex flex-col gap-3  *:border-inherit ">
+            <div className="mb-4 w-full flex text-nowrap  gap-3  *:border-inherit ">
               <OAuth
                 className={
                   "border bg-black text-white dark:bg-white dark:text-black "
                 }
                 service={"google"}
-                icon={<i className="bi bi-google"></i>}
+                icon={<BsGoogle />}
               />
               <OAuth
                 className={

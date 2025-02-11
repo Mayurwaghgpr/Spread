@@ -56,7 +56,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   return (
     <article
       ref={ref}
-      className={` ${className} border-inherit flex w-full   flex-col`}
+      className={` ${className} border-inherit flex w-full flex-col`}
     >
       <div className="p-3 flex leading-0 border-inherit flex-col  justify-center gap-4 w-full">
         <div className="flex border-inherit gap-2 text-sm justify-start items-center">
@@ -149,7 +149,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           {!tagLoading
             ? data &&
               data?.map((tag, idx) => (
-                <span className="bg-[#e0dbd7] p-1 px-3 rounded-full" key={idx}>
+                <span
+                  className="dark:bg-gray-700 bg-[#e0dbd7] p-1 px-3 rounded-full"
+                  key={idx}
+                >
                   {tag}
                 </span>
               ))

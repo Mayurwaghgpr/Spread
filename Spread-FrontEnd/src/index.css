@@ -44,7 +44,7 @@ body {
   display: none;
 }
 
-.loader {
+/* .loader {
   size: inherit;
   border-radius: 50%;
   display: inline-block;
@@ -62,8 +62,26 @@ body {
   100% {
     transform: rotate(360deg);
   }
+} */
+
+.loader {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  --_m:
+    conic-gradient(#0000 10%, #000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: l3 .5s infinite linear;
 }
 
+@keyframes l3 {
+  to {
+    transform: rotate(1turn)
+  }
+}
 /* dot loader*/
 .dotloader {
   width: 5px;
@@ -129,7 +147,7 @@ body {
       rgba(255, 255, 255, 0.6) 50%,
       rgba(255, 255, 255, 0) 80%);
   background-size: 200% 100%;
-  animation: aiScan 2s infinite linear;
+  animation: aiScan 3s infinite linear;
 }
 
 @keyframes shimmer {
@@ -159,4 +177,17 @@ body {
   animation: shimmer 1.5s infinite linear;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

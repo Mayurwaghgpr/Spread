@@ -93,7 +93,7 @@ const TextTools = ({ position, applyStyle }) => {
     </div>
   ) : (
     <div
-      className="bg-white dark:bg-black border justify-evenly items-center p-2 px-5 rounded-md transition-transform duration-100 z-40 absolute"
+      className="bg-white  animate-fedin.2s  dark:bg-black border justify-evenly items-center p-2 px-5 rounded-md transition-transform duration-100 z-40 absolute"
       style={{
         left: x,
         top: y,

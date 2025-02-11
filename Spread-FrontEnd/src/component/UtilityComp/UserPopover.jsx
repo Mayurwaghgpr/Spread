@@ -8,8 +8,8 @@ const UserPopover = forwardRef(
       <div
         ref={ref}
         className={className}
-        style={styles.popper}
-        {...attributes.popper}
+        // style={styles.popper}
+        // {...attributes.popper}
       >
         <div className=" flex flex-row  gap-3 justify-between items-center font-medium ">
           {" "}

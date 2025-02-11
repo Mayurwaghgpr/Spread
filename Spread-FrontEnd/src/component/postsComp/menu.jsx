@@ -9,7 +9,7 @@ import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
 import menuCosntant from "./menuCosntant";
 
 function Menu({ post }) {
-  const [postIdToDelete, setPostIdToDelete] = useState("");
+  const [isIntersect, setIsIntersect] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,6 +18,7 @@ function Menu({ post }) {
   const queryClient = useQueryClient();
   const { DeletePostApi } = PostsApis();
   const { MENU_ITEMS } = menuCosntant();
+
   const confirmDeletePost = useCallback(
     (id) => {
       dispatch(
@@ -34,14 +35,18 @@ function Menu({ post }) {
   );
 
   const { menuId, setMenuId } = useClickOutside(menuRef);
-  const handleMenuClick = useCallback(
-    (item) => {
-      // Don't close the menu for actions requiring confirmation
-      // Close menu for non-confirmation actions
-      item.action(post, confirmDeletePost);
-    },
-    [post, confirmDeletePost, setMenuId]
-  );
+
+  useEffect(() => {
+    if (!menuRef.current || menuId !== post?.id) return;
+
+    const buttonRect = menuRef.current.getBoundingClientRect();
+    const menuHeight = menuRef.current.children[1]?.offsetHeight || 0;
+
+    // Check if menu overflows at the bottom
+    const willOverflow = buttonRect.bottom + menuHeight > window.innerHeight;
+
+    setIsIntersect(!willOverflow); // If it overflows, position it above
+  }, [post, menuId]);
 
   return (
     <div
@@ -58,7 +63,7 @@ function Menu({ post }) {
       {menuId === post?.id && (
         <div
           onClick={() => setMenuId("")}
-          className="fixed sm:absolute flex justify-center border-inherit items-end sm:-left-10 left-0 right-0 top-0 bottom-0 z-40 sm:w-fit sm:h-fit h-screen "
+          className={`fixed sm:absolute flex justify-center border-inherit items-end ${isIntersect ? "sm:-top-48" : ""} sm:-left-10 left-0 right-0 top-0 bottom-0 z-10 sm:w-fit sm:h-fit h-screen `}
         >
           <ul
             onClick={(e) => e.stopPropagation()}

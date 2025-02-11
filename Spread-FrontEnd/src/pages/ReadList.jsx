@@ -42,7 +42,7 @@ const ReadList = () => {
 
   return (
     <main className=" w-full flex flex-col justify-center items-end xl:items-center  bg-inherit dark:*:border-[#383838] dark:bg-black">
-      <div className="relative h-full flex justify-start flex-col mt-36 pb-20 items-center md:w-fit w-full bg-inherit">
+      <div className="relative h-full flex justify-start flex-col pb-20 items-center md:w-fit w-full bg-inherit">
         <div className="fixed top-16 z-10  flex right-0  w-full justify-end items-center gap-4 border-inherit ">
           <div className=" text-3xl bg-[#f3efeb] p-5 md:w-[80%] xl:w-[78%]  w-full   dark:bg-black h-full border border-inherit rounded-b-lg">
             <h1>Read list </h1>

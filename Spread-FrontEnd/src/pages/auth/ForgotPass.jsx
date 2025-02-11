@@ -32,7 +32,7 @@ function ForgotPass() {
   };
   return (
     <section
-      className={`sm:flex relative justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 text-black  bg-[#fff9f3] border-inherit`}
+      className={`sm:flex w-full relative justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 text-black  bg-[#fff9f3] border-inherit`}
     >
       {isError && (
         <div className="text-red-500 my-4 w-full flex justify-center  bg-red-100 py-2 ">

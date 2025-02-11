@@ -48,11 +48,9 @@ function MainNavBar() {
 
   return (
     <header
-      className={`fixed top-0   flex justify-center w-full transform-all duration-300 ease-in-out z-40`}
+      className={`fixed top-0 p-3  sm:px-20 flex justify-center w-full transform-all duration-300 ease-in-out z-40 dark:border-[#383838] border-b  border-inherit  bg-[#fff9f3] dark:bg-black dark:bg-opacity-30 dark:backdrop-blur-lg bg-opacity-10 backdrop-blur-lg`}
     >
-      <nav
-        className={`relative  w-full py-3 sm:px-20 px-5 bg-inherit dark:bg-black dark:border-[#383838] border-b  border-inherit dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg `}
-      >
+      <nav className={`relative  w-full    `}>
         <div className="flex border-inherit items-center justify-between w-full m-auto">
           <Link to="/" className="sm:text-2xl  font-bold ">
             Spread

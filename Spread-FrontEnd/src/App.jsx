@@ -85,122 +85,126 @@ function App() {
 
   return (
     <>
-      <ToastContainer />
-
-      {<ConfirmationBox />}
-      <Suspense fallback={<LoaderScreen />}>
-        <MainNavBar />
-        <PersistentUser />
-        {isLogin && !pathname.startsWith("/write") && <SideBar />}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              isLogin ? (
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              ) : (
-                <Navigate to="/heros" replace />
-              )
-            }
-          >
-            {" "}
-            {/* <Route path="comments" element={<CommentSection />} /> */}
-          </Route>
-          <Route
-            path="/heros"
-            element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
-          />
-          <Route path="/auth/signin" element={!isLogin && <SignIn />} />
-          <Route path="/auth/signup" element={!isLogin && <SignUp />} />
-          <Route path="/about" element={<About />} />
-
-          <Route
-            path="/profile/:username/:id"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profileEditor"
-            element={
-              <ProtectedRoute>
-                <ProfileEditor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/write"
-            element={
-              <ProtectedRoute>
-                <DynamicPostEditor />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/write/publish" element={<PostPreviewEditor />} />
-          </Route>
-          <Route
-            path="/setting"
-            element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            }
-          >
+      {" "}
+      <MainNavBar />
+      <main className="flex justify-between items-center  border-inherit ">
+        <ToastContainer />
+        {<ConfirmationBox />}
+        <Suspense fallback={<LoaderScreen />}>
+          <PersistentUser />
+          {isLogin &&
+            !pathname.startsWith("/write") &&
+            !pathname.startsWith("/messages") && <SideBar />}
+          <Routes>
             <Route
-              path=""
+              path="/"
+              element={
+                isLogin ? (
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                ) : (
+                  <Navigate to="/heros" replace />
+                )
+              }
+            >
+              {" "}
+              {/* <Route path="comments" element={<CommentSection />} /> */}
+            </Route>
+            <Route
+              path="/heros"
+              element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
+            />
+            <Route path="/auth/signin" element={!isLogin && <SignIn />} />
+            <Route path="/auth/signup" element={!isLogin && <SignUp />} />
+            <Route path="/about" element={<About />} />
+
+            <Route
+              path="/profile/:username/:id"
               element={
                 <ProtectedRoute>
-                  <General />
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profileEditor"
+              element={
+                <ProtectedRoute>
+                  <ProfileEditor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/write"
+              element={
+                <ProtectedRoute>
+                  <DynamicPostEditor />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/write/publish" element={<PostPreviewEditor />} />
+            </Route>
+            <Route
+              path="/setting"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            >
+              <Route
+                path=""
+                element={
+                  <ProtectedRoute>
+                    <General />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="github/synch"
+                element={<ProtectedRoute>{<div></div>}</ProtectedRoute>}
+              />
+            </Route>
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <Messanger />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/view/:username/:id" element={<PostView />}>
+              <Route path="comments" element={<CommentSection />} />
+            </Route>
+            <Route
+              path="/explore"
+              element={
+                <ProtectedRoute>
+                  <SearchBar />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<PageError />} />
+            <Route
+              path="/Read"
+              element={
+                <ProtectedRoute>
+                  <ReadList />
                 </ProtectedRoute>
               }
             />
 
-            <Route
-              path="github/synch"
-              element={<ProtectedRoute>{<div></div>}</ProtectedRoute>}
-            />
-          </Route>
-          <Route
-            path="/messages"
-            element={
-              <ProtectedRoute>
-                <Messanger />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/view/:username/:id" element={<PostView />}>
-            <Route path="comments" element={<CommentSection />} />
-          </Route>
-          <Route
-            path="/explore"
-            element={
-              <ProtectedRoute>
-                <SearchBar />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<PageError />} />
-          <Route
-            path="/Read"
-            element={
-              <ProtectedRoute>
-                <ReadList />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route path="/ForgotPass" element={<ForgotPass />} />
-          <Route path="/Resetpassword/:token" element={<ResetPassword />} />
-          <Route path="/error" element={<SomthingWentWrong />} />
-        </Routes>
-        {isLogin && <TaskBar />}
-      </Suspense>
-      <ConfirmationBox />
-      {/* <ScrollToTopButton /> */}
+            <Route path="/ForgotPass" element={<ForgotPass />} />
+            <Route path="/Resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/error" element={<SomthingWentWrong />} />
+          </Routes>
+          {isLogin && <TaskBar />}
+        </Suspense>
+        <ConfirmationBox />
+        {/* <ScrollToTopButton /> */}
+      </main>
     </>
   );
 }

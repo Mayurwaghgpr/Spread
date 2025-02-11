@@ -62,7 +62,7 @@ function SignIn() {
   if (!isLogin) {
     return (
       <section
-        className={`sm:flex relative animate-fedin.2s justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 bg-[#fff9f3] dark:bg-black   dark:*:border-[#383838] `}
+        className={`sm:flex w-full relative animate-fedin.2s justify-evenly z-50 items-center h-screen flex-col   top-0 left-0 bottom-0 right-0 bg-[#fff9f3] dark:bg-black   dark:*:border-[#383838] `}
       >
         {isError && (
           <div className="text-red-500 my-4 w-full flex justify-center  bg-red-100 py-2 ">
@@ -109,8 +109,8 @@ function SignIn() {
                   comp={passInputCred.comp}
                 />
               )}
-              <div className="mb-4 min-w-[200px] flex justify-between">
-                {passVisible && (
+              {passVisible && (
+                <div className="mb-4 min-w-[200px] flex justify-between">
                   <small>
                     <Link
                       to="/ForgotPass"
@@ -120,13 +120,13 @@ function SignIn() {
                       Forgot Password?
                     </Link>
                   </small>
-                )}
-              </div>
+                </div>
+              )}
               <div className="mb-4">
                 {passVisible && (
                   <button
                     type="submit"
-                    className={` bg-white text-black p-3 w-full  rounded-lg ${
+                    className={` bg-black text-white dark:bg-white dark:text-black p-3 w-full  rounded-lg ${
                       isLoading && "cursor-wait "
                     }`}
                     disabled={isLoading}
@@ -151,25 +151,32 @@ function SignIn() {
               </button>
             )}
 
-            <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
-              <hr className="flex-1" />
-              <p className="mx-2">or</p>
-              <hr className="flex-1" />
-            </div>
-            <div className="mb-4 w-full flex flex-col gap-3  *:border-inherit ">
-              <OAuth
-                className={
-                  "border bg-black text-white dark:bg-white dark:text-black"
-                }
-                service={"google"}
-                icon={<i className="bi bi-google"></i>}
-              />
-              <OAuth
-                className={"bg-black text-white dark:bg-white dark:text-black"}
-                service={"github"}
-                icon={<i className="bi bi-github"></i>}
-              />
-            </div>
+            {!passVisible && (
+              <>
+                {" "}
+                <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
+                  <hr className="flex-1" />
+                  <p className="mx-2">or</p>
+                  <hr className="flex-1" />
+                </div>
+                <div className="mb-4 w-full flex text-nowrap gap-3 text-sm  *:border-inherit ">
+                  <OAuth
+                    className={
+                      "border bg-black text-white dark:bg-white dark:text-black"
+                    }
+                    service={"google"}
+                    icon={<i className="bi bi-google"></i>}
+                  />
+                  <OAuth
+                    className={
+                      "bg-black text-white dark:bg-white dark:text-black"
+                    }
+                    service={"github"}
+                    icon={<i className="bi bi-github"></i>}
+                  />
+                </div>
+              </>
+            )}
             <footer className="text-center">
               <small>
                 Don't have an Account?{" "}

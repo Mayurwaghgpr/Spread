@@ -54,7 +54,7 @@ function PostsApis() {
   const getComments = async ({ postId, pageParam }) => {
     // console.log("fetch", postId);
     try {
-      const result = await axios.get(`${BASE_URL}/comment/top`, {
+      const result = await axios.get(`${BASE_URL}/comment/top/all`, {
         params: {
           postId,
           limit: 5,
@@ -79,7 +79,7 @@ function PostsApis() {
   };
   const getReplies = async ({ topCommentId, postId, pageParam }) => {
     try {
-      const result = await axios.get(`${BASE_URL}/comment/replys`, {
+      const result = await axios.get(`${BASE_URL}/comment/replys/all`, {
         withCredentials: true,
         params: {
           topCommentId,

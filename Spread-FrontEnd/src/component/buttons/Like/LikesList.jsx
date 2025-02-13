@@ -4,7 +4,7 @@ import useLikeIcons from "./useLikeIcons";
 function LikesList({ mutate, post }) {
   const likeIconObj = useLikeIcons();
   return (
-    <div className="absolute hidden *:transition-all *:duration-300  group-hover:flex justify-start *:text-3xl sm:text-xl items-center shadow-xl z-10 -top-16  -left-1/2 bg-[#e8e4df] dark:bg-[#191818] gap-2 p-3 rounded-full">
+    <div className="absolute hidden *:transition-all *:duration-300  group-hover:flex justify-start *:text-xl sm:text-xl items-center shadow-xl z-10 -top-12  -left-1/2 bg-[#e8e4df] dark:bg-[#191818] gap-2 p-2 rounded-full">
       <button
         name="like"
         onMouseOut={(e) => e.stopPropagation()}

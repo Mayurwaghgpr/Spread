@@ -5,6 +5,7 @@ import User from "../models/user.js";
 import Database from "../utils/database.js";
 import sequelize from "sequelize";
 
+//Create Comment
 export const createComment = async (req, res, next) => {
   // console.log("new...");
   // const postId = req.params.postId;

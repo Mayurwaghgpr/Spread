@@ -13,8 +13,8 @@ import IsAuth from "../middlewares/isAuth.js";
 
 const router = express.Router();
 
-router.get("/top", getTopComments);
-router.get("/replys", getCommentReply);
+router.get("/top/all", getTopComments);
+router.get("/replys/all", getCommentReply);
 router.post("/new",IsAuth, createComment);
 // router.post("/reply/:topCommentId", IsAuth,replyComment);
 router.get("/like/:commentId",IsAuth, likeComment);

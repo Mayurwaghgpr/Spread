@@ -90,10 +90,7 @@ function Profile() {
             </div>
           </div>
           <div
-            className={` py-20 w-full  border-inherit pt-5 dark:*:border-[#383838] ${
-              !userProfile?.posts?.length > 0 &&
-              "flex justify-center items-center "
-            }`}
+            className={` py-20 w-full flex  justify-center items-center flex-col border-inherit pt-5 dark:*:border-[#383838] `}
           >
             {/* <RenderPosts /> */}
             {userProfile?.posts?.length > 0

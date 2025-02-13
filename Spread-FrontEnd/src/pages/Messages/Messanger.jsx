@@ -3,14 +3,28 @@ import React from "react";
 import {
   BsArrow90DegLeft,
   BsArrowLeft,
+  BsCameraVideo,
+  BsCheck2,
+  BsCheck2All,
   BsPencilSquare,
   BsPlus,
   BsPlusSquare,
+  BsRecord,
   BsSearch,
+  BsSend,
 } from "react-icons/bs";
+import { AiOutlineSend } from "react-icons/ai";
 import FormatedTime from "../../component/UtilityComp/FormatedTime";
 import { TbWriting } from "react-icons/tb";
-import { IoPersonAddOutline } from "react-icons/io5";
+import {
+  IoAttach,
+  IoAttachOutline,
+  IoCallOutline,
+  IoPersonAddOutline,
+} from "react-icons/io5";
+import { MdCall, MdMic, MdMicNone } from "react-icons/md";
+import { PiPlus, PiPlusBold } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 const users = [
   {
     id: 1,
@@ -242,12 +256,16 @@ const messages = [
 ];
 
 function Messanger() {
+  const navigate = useNavigate();
   return (
     <section className="h-screen w-full border-inherit ">
       <div className=" fixed w-full flex  mt-[3.1rem] sm:mt-[4rem] h-full border-y border-inherit ">
         <aside className=" border-r sm:w-[40%] sm:min-w-fit w-full  h-full border-inherit">
           <div>
-            <button className=" border-inherit p-4 text-2xl font-bold">
+            <button
+              onClick={() => navigate(-1)}
+              className=" border-inherit p-4 text-2xl font-bold"
+            >
               <BsArrowLeft className="" />
             </button>
           </div>
@@ -304,21 +322,71 @@ function Messanger() {
             </div>
           </div>
         </aside>
-        <div className="relative w-full max-h-screen sm:flex flex-col justify-between hidden p-3 overflow-y-auto">
-          {messages.map((message) => {
-            return (
-              <div
-                className={`w-fit p-2 text-sm rounded-full my-3 ${
-                  message.senderId === 1
-                    ? "ml-auto bg-sky-400 text-white"
-                    : "mr-auto bg-gray-300 text-black"
-                }`}
-                key={message.id}
-              >
-                {message.message}
-              </div>
-            );
-          })}
+        <div className="relative w-full max-h-screen sm:flex flex-col justify-between hidden  ">
+          <div className=" flex justify-end w-full  py-3 px-7  shadow-md">
+            <div className="flex items-center justify-center gap-4  text-2xl">
+              {" "}
+              <button>
+                {" "}
+                <BsCameraVideo color="red" />
+              </button>
+              <button>
+                <IoCallOutline color="green" />
+              </button>
+            </div>
+          </div>
+          <div className=" sm:flex flex-col justify-between overflow-y-auto scroll-smooth  no-scrollbar  px-3 pt-5 pb-32">
+            {messages.map((message) => {
+              return (
+                <p
+                  className={` flex flex-col gap-1 w-fit p-2 text-sm rounded-2xl  my-3  shadow-md  ${
+                    message.senderId === 1
+                      ? "ml-auto bg-sky-400 text-white dark:shadow-sky-400 rounded-br-none "
+                      : "mr-auto bg-[#fffefe]  items-end text-black dark:shadow-white rounded-bl-none"
+                  }  `}
+                  key={message.id}
+                >
+                  <span>{message.message}</span>
+                  <span className={`   flex   items-center justify-between`}>
+                    {" "}
+                    {message.senderId === 1 && <BsCheck2All />}
+                    <small className="text-[.5rem] text-gray-500 text-opacity-60 ">
+                      {formatDate(message.timestamp, "dd/mm/yyy")}
+                    </small>
+                  </span>
+                </p>
+              );
+            })}
+          </div>
+          <div className=" sticky flex justify-center items-center gap-3 bottom-3 p-3 z-10   ">
+            <div className="text-2xl  ">
+              <button>
+                <PiPlus />
+              </button>
+            </div>
+            <div className="flex border rounded-full bg-white  overflow-hidden w-1/2 border-inherit">
+              <button className="text-2xl p-2">
+                <IoAttachOutline />
+              </button>
+              <input
+                className=" w-full h-full  p-3 outline-none bg-inherit"
+                type="text"
+                name=""
+                id=""
+                placeholder="start chat"
+              />
+            </div>
+            <div className="flex justify-center items-center gap-3">
+              <button className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black">
+                <MdMic />
+              </button>
+              <button className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black">
+                <div class="">
+                  <AiOutlineSend />
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

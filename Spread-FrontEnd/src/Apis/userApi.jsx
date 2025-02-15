@@ -1,9 +1,7 @@
 import axios from "axios";
 import React from "react";
-
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 function userApi() {
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-
   const getLogInUserData = async () => {
     try {
       const result = await axios.get(`${BASE_URL}/user/details`, {

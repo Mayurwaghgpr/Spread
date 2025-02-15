@@ -48,7 +48,7 @@ function Home() {
       getNextPageParam: (lastPage) => {
         if (lastPage.length === 0) return undefined; // Stop fetching if no more posts
         // console.log(lastPage[lastPage.length - 1]);
-        return lastPage[lastPage.length - 1].createdAt; // Use last post's timestamp as cursor
+        return lastPage[lastPage.length - 1]?.createdAt; // Use last post's timestamp as cursor
       },
     }
   );

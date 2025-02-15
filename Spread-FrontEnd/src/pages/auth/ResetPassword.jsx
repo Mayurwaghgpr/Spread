@@ -54,7 +54,7 @@ function ResetPassword() {
         <div className="flex w-full h-full  flex-col justify-center px-5">
           <form
             onSubmit={handlerResetPass}
-            className="flex flex-col  justify-center w-full  border-inheri text-sm"
+            className="flex flex-col  justify-center w-full  border-inheri text-sm sm:text-sm  text-xs "
           >
             <h1 className="text-2xl text-center font-medium my-4">
               Set new password

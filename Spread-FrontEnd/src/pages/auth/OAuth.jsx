@@ -20,7 +20,7 @@ function OAuth({ service, icon, className, ...props }) {
       {...props}
     >
       {icon}
-      <span>Continue with {service}</span>
+      <span>{service}</span>
     </button>
   );
 }

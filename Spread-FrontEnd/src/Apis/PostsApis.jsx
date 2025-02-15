@@ -9,7 +9,7 @@ function PostsApis() {
       const response = await axios.get(`${BASE_URL}/posts/all`, {
         params: {
           limit: 3,
-          page: pageParam,
+          lastTimestamp: pageParam,
           type: topic,
         },
         withCredentials: true,

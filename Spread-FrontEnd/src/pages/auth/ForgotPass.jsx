@@ -56,9 +56,9 @@ function ForgotPass() {
         <div className="flex w-full h-full  flex-col justify-center  px-5">
           <form
             onSubmit={handlerforgot}
-            className="flex flex-col  py-4 justify-evenly w-full  "
+            className="flex flex-col  py-4 justify-evenly w-full  sm:text-sm  text-xs "
           >
-            <div className="relative flex flex-col gap-3 my-4 break-words justify-center text-center px-10">
+            <div className="relative flex flex-col gap-3 my-4 break-words justify-center text-center px-10 ">
               {" "}
               <h1 className="text-2xl text-center font-medium  ">
                 Reset your password

@@ -42,11 +42,14 @@ function Home() {
     isLoading,
   } = useInfiniteQuery(
     ["Allposts", selectedTopic],
-    ({ pageParam = 1 }) => fetchDataAll({ pageParam, topic: selectedTopic }),
+    ({ pageParam = new Date().toISOString() }) =>
+      fetchDataAll({ pageParam, topic: selectedTopic }),
     {
-      getNextPageParam: (lastPage) =>
-        lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
-      refetchOnWindowFocus: false,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.length === 0) return undefined; // Stop fetching if no more posts
+        // console.log(lastPage[lastPage.length - 1]);
+        return lastPage[lastPage.length - 1].createdAt; // Use last post's timestamp as cursor
+      },
     }
   );
 
@@ -75,8 +78,7 @@ function Home() {
     );
   }
 
-  const posts = postsData?.pages.flatMap((page) => page.posts) || [];
-
+  const posts = postsData?.pages.flatMap((page) => page) || [];
   const renderPost = (post, idx, arr) => {
     if (idx === 3 && isDeviceSize) {
       return (

@@ -104,9 +104,9 @@ function SignUp() {
           </h1>
           <form
             onSubmit={signUp}
-            className="flex flex-col py-2 w-full gap-2 items-center justify-start text-sm *:border-inherit "
+            className="flex flex-col py-2 w-full gap-2 items-center justify-start  *:border-inherit  sm:text-sm  text-xs "
           >
-            <div className="mb-4 w-full flex text-nowrap  gap-3  *:border-inherit ">
+            <div className="mb-4 w-full flex text-nowrap text-xs  gap-3  *:border-inherit ">
               <OAuth
                 className={
                   "border bg-black text-white dark:bg-white dark:text-black "

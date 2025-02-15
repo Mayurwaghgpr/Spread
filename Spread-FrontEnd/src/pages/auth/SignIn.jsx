@@ -83,7 +83,7 @@ function SignIn() {
           <header className="text-2xl  text-center flex justify-center items-center">
             {"Spread"}
           </header>
-          <div className="flex w-full h-full  flex-col justify-center px-5  *:border-inherit">
+          <div className="flex w-full h-full  flex-col justify-center px-5  *:border-inherit sm:text-sm  text-xs ">
             <form
               onSubmit={handleLogin}
               className="flex flex-col  justify-center w-full gap-2  border-inheri text-sm  *:border-inherit"
@@ -159,7 +159,7 @@ function SignIn() {
                   <p className="mx-2">or</p>
                   <hr className="flex-1" />
                 </div>
-                <div className="mb-4 w-full flex text-nowrap gap-3 text-sm  *:border-inherit ">
+                <div className="mb-4 w-full flex justify-center items-center text-nowrap gap-3 sm:text-sm  text-xs  *:border-inherit ">
                   <OAuth
                     className={
                       "border bg-black text-white dark:bg-white dark:text-black"

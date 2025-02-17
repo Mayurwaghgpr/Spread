@@ -2,24 +2,23 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsArrowLeft, BsSearch } from "react-icons/bs";
 import { IoPersonAddOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ChatApi from "../../Apis/ChatApi";
+import { setConversations } from "../../redux/slices/chatSlice";
 
 function MessageLog() {
-  const [chats, setChats] = useState([]);
+  const { conversations } = useSelector((state) => state.chat);
   const navigate = useNavigate();
+  const { getconversations } = ChatApi();
+  const dispatch = useDispatch();
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/message/chats/all`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setChats((prev) => [...prev, res.data]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    getconversations().then((data) => {
+      console.log(data);
+      dispatch(setConversations(data));
+    });
   }, []);
-  console.log(chats);
+  // console.log(conversations);
   return (
     <aside className=" border-r sm:w-[40%] sm:min-w-fit w-full  h-full border-inherit">
       <div>
@@ -56,7 +55,7 @@ function MessageLog() {
           </div>
         </header>
         <div className="flex flex-col items-start max-h-screen  gap-7 py-6 px-4 overflow-y-auto no-scrollbar scroll-smooth ">
-          {/* {chats.map((user) => (
+          {conversations.map((user) => (
             <div key={user.id} className=" flex items-center gap-3  ">
               <div>
                 <div className="w-10 h-10">
@@ -74,12 +73,11 @@ function MessageLog() {
                   {" "}
                   <p className=" ">{user.lastMessage}</p>
                   <FormatedTime date={user.timestamp} />
-                  
                   <span>{user.timestamp}</span>
                 </div>
               </div>
             </div>
-          ))} */}
+          ))}
         </div>
       </div>
     </aside>

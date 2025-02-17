@@ -1,87 +1,89 @@
 import express from "express";
-import { fileURLToPath } from "url";
-import path from "path";
+import { createServer } from "node:http";
+import { Server } from "socket.io";
 import dotenv from "dotenv";
-import bodyParser from "body-parser";
+import path from "path";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import Database from "./utils/database.js";
+// Routes
 import authRouter from "./routes/auth.route.js";
 import postsRouter from "./routes/posts.route.js";
 import userRouter from "./routes/user.route.js";
-import publiRouter from "./routes/public.route.js";
+import publicRouter from "./routes/public.route.js";
 import commentRouter from "./routes/comments.route.js";
-import aiRouter from "./routes/AI.route.js"
-import { multerFileUpload } from "./middlewares/multer.middleware.js";
-// import { v2 as cloudinary } from "cloudinary";
-
-import Post from "./models/posts.js";
+import aiRouter from "./routes/AI.route.js";
+import conversationRouter from "./routes/Conversation.route.js"
+import messageRouter from "./routes/Messages.route.js";
+import { passportStrategies } from "./middlewares/passportStrategies.js";
 import User from "./models/user.js";
 import Follow from "./models/Follow.js";
 import Archive from "./models/Archive.js";
-import { passportStrategies } from "./middlewares/passportStartegies.js";
+import Post from "./models/posts.js";
 import Comments from "./models/Comments.js";
+import Message from "./models/Messanger/Messages.js";
+import Attachment from "./models/Messanger/Attachment.js";
+import ReadReceipt from "./models/Messanger/ReadReceipt.js";
+import Reaction from "./models/Messanger/Reaction.js";
+import Conversation from "./models/Messanger/Conversation.js";
+import Participant from "./models/Messanger/Participant.js";
+import socketHandlers from "./Sockets/SocketHandler.js";
 
+// Initialize dotenv
 dotenv.config();
 
 const app = express();
+const server = createServer(app);
+const Io = new Server(server, {
+  cors: {
+    origin: process.env.WHITLIST_ORIGINS?.split(","), // Support multiple origins
+    credentials: true,
+  },
+});
+
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
-const whitelistOrigins = process.env.WHITELIST_ORIGINS?.split(",").map(
-  (origin) => origin.trim()
-);
-// Middleware
+
+// CORS Configuration
+const whitelist = process.env.WHITLIST_ORIGINS?.split(",");
 app.use(
   cors({
-    origin: [
-      "https://spread-45xk.onrender.com",
-      "http://localhost:5173",
-      "http://localhost:5174",
-    ], // Ensure this is the exact frontend URL
-    methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
-    credentials: true, // Allow cookies
+    origin: (origin, callback) => {
+      if (!origin || whitelist.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
 
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  "/images",
-  express.static(path.join(__dirname, "Spread-Backend", "images"))
-);
-// app.use();
-
-//Login with google/gitub
-passportStrategies(passport);
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findByPk(id);
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
-});
+// Serve Static Files (Place before routes)
+app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
 
 
-// Initialize Passport
-app.use(passport.initialize());
 
-// Routes
 app.use("/auth", authRouter);
-app.use("/public", publiRouter);
+app.use("/public", publicRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
-app.use("/ai",aiRouter)
+app.use("/ai", aiRouter);
+app.use('/messages', messageRouter);
+app.use('/conversations', conversationRouter);
+
+// Passport Configuration
+passportStrategies(passport);
+app.use(passport.initialize());
+
+// Socket.IO Connection
+socketHandlers(Io)
+
 
 // Associations
 User.hasMany(Post, { foreignKey: "authorId" });
@@ -159,32 +161,65 @@ Comments.belongsTo(Post, {
 
 });
 
-app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist")));
+
+// Conversation and Participant many to many
+Conversation.hasMany(Participant, { foreignKey: 'conversationId', onDelete: 'CASCADE' });
+Participant.belongsTo(Conversation, { foreignKey: 'conversationId' });
+
+User.hasMany(Participant, { foreignKey: 'userId', onDelete: 'CASCADE' });
+Participant.belongsTo(User, { foreignKey: 'userId' });
+
+// Conversation and Messages one to many
+Conversation.hasMany(Message, { foreignKey: 'conversationId', onDelete: 'CASCADE' });
+Message.belongsTo(Conversation, { foreignKey: 'conversationId' });
+
+// User and Messages one to many
+Message.belongsTo(User, { foreignKey: 'senderId', as: 'sender' });
+Message.belongsTo(User, { foreignKey: 'receiverId', as: 'receiver' });
+
+User.hasMany(Message, { foreignKey: 'senderId', as: 'sentMessages', onDelete: 'CASCADE' });
+User.hasMany(Message, { foreignKey: 'receiverId', as: 'receivedMessages' });
+
+// Message and Attachments one to many
+Message.hasMany(Attachment, { foreignKey: 'messageId', onDelete: 'CASCADE' });
+Attachment.belongsTo(Message, { foreignKey: 'messageId' });
+
+// Message and ReadReceipts one to many
+Message.hasMany(ReadReceipt, { foreignKey: 'messageId', onDelete: 'CASCADE' });
+ReadReceipt.belongsTo(Message, { foreignKey: 'messageId' });
+
+User.hasMany(ReadReceipt, { foreignKey: 'userId', onDelete: 'CASCADE' });
+ReadReceipt.belongsTo(User, { foreignKey: 'userId' });
+
+// Message and Reactions one to many
+Message.hasMany(Reaction, { foreignKey: 'messageId', onDelete: 'CASCADE' });
+Reaction.belongsTo(Message, { foreignKey: 'messageId' });
+
+User.hasMany(Reaction, { foreignKey: 'userId', onDelete: 'CASCADE' });
+Reaction.belongsTo(User, { foreignKey: 'userId' });
+
+// Wildcard Route for Frontend
 app.get("*", (req, res, next) => {
-  if (req.originalUrl.startsWith("/api")) return next(); // Skip for API routes
+  if (req.originalUrl.startsWith("/api")) return next();
   res.sendFile(path.resolve("Spread-FrontEnd", "dist", "index.html"));
 });
 
 // Error Handling Middleware
 app.use((error, req, res, next) => {
   console.error("Error:", error);
-  const status = error.statusCode || 500;
-  const message = error.message || "An error occurred";
-  res.status(status).json(message);
+  res.status(error.statusCode || 500).json({ message: error.message || "An error occurred" });
 });
 
-// Database Sync and Server Start
+// Start Server
 Database.sync()
   .then(() => {
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`API is running at http://localhost:${port}`);
     });
-      console.log("Connected to postgres")
+    console.log("Connected to PostgreSQL");
   })
   .catch((err) => {
-    console.error(err);
-    if (process.env.NODE_ENV === "development") {
-      console.error(err.stack);
-    }
+    console.error("Database connection error:", err);
   });
+
 export default app;

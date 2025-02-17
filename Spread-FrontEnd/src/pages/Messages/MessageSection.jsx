@@ -4,8 +4,10 @@ import { AiOutlineSend } from "react-icons/ai";
 import { BsCameraVideo, BsCheck2All } from "react-icons/bs";
 import { IoAttachOutline, IoCallOutline } from "react-icons/io5";
 import { MdMic } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import { addMessage } from "../../redux/slices/chatSlice";
+import ChatApi from "../../Apis/ChatApi";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const socket = io(BASE_URL, { withCredentials: true });
 // const messages = [
@@ -117,33 +119,29 @@ const socket = io(BASE_URL, { withCredentials: true });
 // ];
 
 function MessageSection() {
-  const [newMessage, setNewMessage] = useState();
-  const [messages, setMessages] = useState([]);
   const { isLogin, user } = useSelector((state) => state.auth);
+  const { messages } = useSelector((state) => state.chat);
+  const [message, setMessage] = useState("");
+  const { sendMessage } = ChatApi();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const handleNewMsg = (newMsg) => {
-      setMessages((prev) => [...prev, newMsg]);
-    };
+    socket.on("newMessage", (msg) => {
+      dispatch(addMessage(msg));
+    });
 
-    socket.on("newMsg", handleNewMsg);
-  }, []);
+    return () => socket.off("newMessage");
+  }, [dispatch]);
 
-  const sendMessage = () => {
-    if (newMessage.trim()) {
-      const messageData = {
-        senderId: user.id,
-        chatId,
-        message: newMessage,
-        messageType: "text",
-      };
-      socket.emit("send_message", messageData);
-      setMessages((prev) => [...prev, messageData]);
-      setNewMessage("");
-    }
+  const handleSend = async () => {
+    const newMessage = { senderId: user.id, content: message };
+    const { data } = await sendMessage(newMessage);
+    socket.emit("sendMessage", newMessage);
+    dispatch(addMessage(data));
+    setMessage("");
   };
   console.log(user);
-  console.log(messages);
+  // console.log(messages);
   return (
     <div className="relative w-full max-h-screen sm:flex flex-col justify-between hidden  border-inherit  ">
       <div className=" flex justify-end w-full  py-3 px-7  shadow-md">
@@ -193,19 +191,19 @@ function MessageSection() {
             <IoAttachOutline />
           </button>
           <input
-            onChange={(e) => setSendMassage(e.target.value)}
+            onChange={(e) => setMessage(e.target.value)}
             className=" w-full h-full  p-3 outline-none bg-inherit placeholder:font-thin"
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
             type="text"
             name=""
-            value={newMessage}
+            value={message}
             id=""
             placeholder="start typing..."
           />
         </div>
         <div className="flex justify-center items-center gap-3">
           <button
-            onClick={sendMessage}
+            onClick={handleSend}
             className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black"
           >
             <div class="">

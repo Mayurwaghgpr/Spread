@@ -10,8 +10,10 @@ import Comments from "../models/Comments.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import redisClient from "../utils/redisClient.js";
+import Database from "../utils/database.js";
+import Follow from "../models/Follow.js";
+import { EXPIRATION } from "../config/constants.js";
 
-const EXPIRATION = 3600;
 
 export const AddNewPost = async (req, res, next) => {
       // Parse and extract required data
@@ -88,24 +90,34 @@ export const AddNewPost = async (req, res, next) => {
 export const getPostPreview = async (req, res, next) => {
   const type = req.query.type?.toLowerCase().trim() || "all";
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
-  const page = Math.max(parseInt(req.query.page?.trim()) || 1, 1);
+  const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
+  const currentUserId = req.authUser.id;
+
 
   const topicFilter =
     type !== "all"
       ? {
           topic: {
-            [Op.or]: [
-              { [Op.like]: `${type}%` },
-              { [Op.like]: `%${type}%` },
-              { [Op.like]: `${type}` },
-            ],
+            [Op.iLike]: `%${type}%`, // Optimized LIKE query
           },
         }
       : {};
 
+
   try {
-    const { count: totalPosts, rows: posts } = await Post.findAndCountAll({
-      where: topicFilter,
+
+    const cacheKey = `post_preview_${lastTimestamp}_${type}_${limit}`; // Unique cache key for this combination
+
+    // Checking Cache
+    const cachedPostData = await redisClient.get(cacheKey);
+    if (cachedPostData !== null) {
+      console.log('cach hit')
+      return res.status(200).json(JSON.parse(cachedPostData));// Send cached data
+    }
+    console.log('cach miss')
+
+     // Fetch posts from DB if not in redis cache
+    const posts = await Post.findAll({
       include: [
         {
           model: User,
@@ -118,39 +130,30 @@ export const getPostPreview = async (req, res, next) => {
         {
           model: Comments,
           as: "comments",
-        }
+        },
+      ],
+      where: {
+        createdAt: { [Op.lt]: lastTimestamp },
+        ...topicFilter,
+      },
+      order: [
+        ["createdAt", "DESC"],
       ],
       limit,
-      offset: (page - 1) * limit,
-      order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
     });
-    if (posts.length > 0) {
-      const postData = formatPostData(posts); // Format the post data
-      res.status(200).json({
-        posts: postData,
-        meta: {
-          currentPage: page,
-          totalPages: Math.ceil(totalPosts / limit),
-          hasNextPage: page < Math.ceil(totalPosts / limit),
-          totalPosts,
-        },
-      });
-    } else {
-      res.status(200).json({
-        posts: [],
-        meta: {
-          currentPage: page,
-          totalPages: 0,
-          hasNextPage: false,
-          totalPosts: 0,
-        },
-      });
-    }
+
+    const postData = formatPostData(posts); // Format the post data
+
+    // Caching the result to redis with expiration time
+    await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(postData))
+    res.status(200).json(postData);
   } catch (error) {
     console.error("Error fetching posts:", error.message);
     next(error); // Pass the error to the error handling middleware
   }
 };
+
+
 // Fetch a post by its ID along with associated content and images
 export const getPostView = async (req, res, next) => {
   const id = req.params.id;

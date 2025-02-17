@@ -10,8 +10,8 @@ import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import Comments from "../models/Comments.js";
 import redisClient from "../utils/redisClient.js";
+import { EXPIRATION } from "../config/constants.js";
 
-const EXPIRATION = 3600;
 const dataFecter = new DataFetching();
 
 export const getLoginUser = async (req, res, nex) => {

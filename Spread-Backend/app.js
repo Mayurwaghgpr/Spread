@@ -37,7 +37,7 @@ const app = express();
 const server = createServer(app);
 const Io = new Server(server, {
   cors: {
-    origin: process.env.WHITLIST_ORIGINS?.split(","), // Support multiple origins
+    origin: process.env.WHITLIST_ORIGINS, // Support multiple origins
     credentials: true,
   },
 });
@@ -45,20 +45,6 @@ const Io = new Server(server, {
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
-// CORS Configuration
-const whitelist = process.env.WHITLIST_ORIGINS?.split(",");
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || whitelist.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
 
 app.use(cookieParser());
 app.use(express.json());

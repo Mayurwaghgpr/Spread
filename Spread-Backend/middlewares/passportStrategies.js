@@ -37,8 +37,15 @@ export const passportStrategies = (passport) => {
               {
                 model: Post,
                 attributes: ['id']
-              }
+              },
+              {
+                model: Post,
+                as: 'savedPosts',
+                through: { attributes: [] }, // Fetch only related posts
+              },
             ],
+            
+            
           });
 
           if (!user) {
@@ -91,7 +98,12 @@ export const passportStrategies = (passport) => {
                 model: Post,
                 // as: 'userPosts',
                 attributes: ['id']
-              }
+               },
+                   {
+                model: Post,
+                as: 'savedPosts',
+                through: { attributes: [] }, // Fetch only related posts
+              },
             ],
           });
           if (!user) {

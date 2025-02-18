@@ -36,17 +36,17 @@ function Menu({ post }) {
 
   const { menuId, setMenuId } = useClickOutside(menuRef);
 
-  useEffect(() => {
-    if (!menuRef.current || menuId !== post?.id) return;
+  // useEffect(() => {
+  //   if (!menuRef.current || menuId !== post?.id) return;
 
-    const buttonRect = menuRef.current.getBoundingClientRect();
-    const menuHeight = menuRef.current.children[1]?.offsetHeight || 0;
+  //   const buttonRect = menuRef.current.getBoundingClientRect();
+  //   const menuHeight = menuRef.current.children[1]?.offsetHeight || 0;
 
-    // Check if menu overflows at the bottom
-    const willOverflow = buttonRect.bottom + menuHeight > window.innerHeight;
+  //   // Check if menu overflows at the bottom
+  //   const willOverflow = buttonRect.bottom + menuHeight > window.innerHeight;
 
-    setIsIntersect(!willOverflow); // If it overflows, position it above
-  }, [post, menuId]);
+  //   setIsIntersect(!willOverflow); // If it overflows, position it above
+  // }, [post, menuId]);
 
   return (
     <div
@@ -63,7 +63,7 @@ function Menu({ post }) {
       {menuId === post?.id && (
         <div
           onClick={() => setMenuId("")}
-          className={`fixed sm:absolute flex justify-center border-inherit items-end ${isIntersect ? "sm:-top-48" : ""} sm:-left-10 left-0 right-0 top-0 bottom-0 z-10 sm:w-fit sm:h-fit h-screen `}
+          className={`fixed sm:absolute flex justify-center border-inherit items-end  sm:-left-10 left-0 right-0 top-0 bottom-0 z-10 sm:w-fit sm:h-fit h-screen `}
         >
           <ul
             onClick={(e) => e.stopPropagation()}
@@ -73,7 +73,7 @@ function Menu({ post }) {
               <li
                 key={item.id}
                 className="flex gap-2 text-nowrap items-center sm:px-3 sm:py-1 p-3  hover:bg-gray-400 hover:bg-opacity-10 rounded-md cursor-pointer"
-                onClick={() => handleMenuClick(item)}
+                onClick={() => item.action(post, confirmDeletePost)}
               >
                 {item.icon}
                 {item.itemName}

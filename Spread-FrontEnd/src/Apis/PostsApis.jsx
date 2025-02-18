@@ -5,6 +5,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 function PostsApis() {
   // Fetch all posts with pagination and filtering by topic
   const fetchDataAll = async ({ pageParam, topic }) => {
+    console.log(pageParam);
     try {
       const response = await axios.get(`${BASE_URL}/posts/all`, {
         params: {

@@ -8,7 +8,7 @@ function WhoToFollow({ className, PrepsData, FechingPreps }) {
       <h1 className=" text-start w-full text-xl font-bold"> Follow people </h1>
       {!FechingPreps ? (
         <ul className="py-3 w-full flex flex-wrap gap-3">
-          {PrepsData?.AllSpreadUsers?.map((el, index) => (
+          {PrepsData?.userSuggetion?.map((el, index) => (
             <PeoplesList key={el.id} people={el} index={index} />
           ))}
         </ul>

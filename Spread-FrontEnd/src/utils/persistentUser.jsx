@@ -19,7 +19,7 @@ function PersistentUser() {
       localStorage.setItem("AccessToken", true);
       // console.log("user login data:", data);
       dispatch(setIsLogin(true));
-      dispatch(setUser(data));
+      dispatch(setUser(JSON.parse(data)));
     },
     onError: (error) => {
       if (error.status === 404) {

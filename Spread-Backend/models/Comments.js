@@ -8,7 +8,7 @@ const Comments = Database.define("Comment", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  UserId: {
+  userId: {
     type: DataTypes.UUID,
     allowNull: false,
   },

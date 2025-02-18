@@ -4,11 +4,11 @@ import Database from '../utils/database.js';
 
 
 const Archive = Database.define('Archive', {
-   PostId: {
+   postId: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-   UserId: {
+   userId: {
         type: DataTypes.UUID,
         allowNull:false
     }

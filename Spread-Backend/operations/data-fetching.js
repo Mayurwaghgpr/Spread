@@ -32,7 +32,7 @@ export class DataFetching {
           },
           {
             model: Post,
-            as: 'SavedPosts',
+            as: 'savedPosts',
             through: { attributes: [] }, // Fetch only related posts
           },
         ],

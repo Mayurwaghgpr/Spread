@@ -18,7 +18,7 @@ function userApi() {
       const result = await axios.get(`${BASE_URL}/posts/archived`, {
         withCredentials: true,
         params: {
-          page: pageParam,
+          lastTimestamp: pageParam,
           limit: 3,
         },
       });

@@ -110,22 +110,12 @@ function PostView() {
     >
       {!show ? (
         <article
+          style={{ backgroundColor: "" }}
           className={`relative animate-fedin1s max-w-4xl p-2  flex flex-col justify-center items-center 
            border-inheri
     ${isAnalyzing ? "shimmer-effect dark:shimmer-effect-dark" : ""}
   `}
         >
-          <div
-            onClick={() => {
-              data && setshow(true);
-              !data && mutate({ id });
-            }}
-            className="z-50 border-inherit before:transition-all before:text-xs text-xl flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60"
-          >
-            {" "}
-            <span>AI</span>
-            <WiStars className="text-2xl" />
-          </div>
           <header className="mb-6 w-full px-3  border-inherit">
             <section className="flex flex-col gap-2  border-inherit">
               <div className="w-full flex justify-end text-lg  border-inherit">
@@ -239,6 +229,17 @@ function PostView() {
           postData={postView}
         />
       )}
+      <div
+        onClick={() => {
+          data && setshow(true);
+          !data && mutate({ id });
+        }}
+        className="z-50 border-inherit before:transition-all before:text-xs text-xl flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60"
+      >
+        {" "}
+        <span>AI</span>
+        <WiStars className="text-2xl" />
+      </div>
       <Outlet context={postView} />
     </main>
   );

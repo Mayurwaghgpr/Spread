@@ -46,10 +46,14 @@ function Profile() {
     error: postError,
   } = useInfiniteQuery(
     ["Userposts", profileId],
-    ({ pageParam = 1 }) => fetchUserData(profileId, pageParam),
+    ({ pageParam = new Date().toISOString() }) =>
+      fetchUserData(profileId, pageParam),
     {
-      getNextPageParam: (lastPage, allPages) =>
-        lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
+      getNextPageParam: (lastPage) => {
+        return lastPage.length !== 0
+          ? lastPage[lastPage.length - 1].createdAt
+          : undefined; // Use last post's timestamp as cursor
+      },
       refetchOnWindowFocus: false,
     }
   );
@@ -61,7 +65,7 @@ function Profile() {
     hasNextPage
   );
   const posts = useMemo(
-    () => postsData?.pages.flatMap((page) => page.posts) || [],
+    () => postsData?.pages.flatMap((page) => page) || [],
     [postsData]
   );
   if (isLoading) {
@@ -74,9 +78,6 @@ function Profile() {
 
   if (isError && !error.status) {
     <SomthingWentWrong />;
-  }
-  if (isError || (isPostError && postError?.message !== "404")) {
-    return <h1>Error {postError?.message}. Please try again.</h1>;
   }
   return (
     <section className="flex h-screen w-full lg:justify-start justify-end dark:*:border-[#383838] overflow-y-auto">

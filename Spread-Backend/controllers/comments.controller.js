@@ -10,24 +10,24 @@ export const createComment = async (req, res, next) => {
   // console.log("new...");
   // const postId = req.params.postId;
   
-  const UserId = req.authUser.id;
+  const userId = req.authUser.id;
   // const { content } = req.body;
     const { postId, replyTo, content,topCommentId } = req.body;
   try {
-    const respons = await Comments.create({ postId, UserId, content,topCommentId,replyTo });
+    const respons = await Comments.create({ postId, userId, content,topCommentId,replyTo });
     res.status(200).json({ message: "commented successfuly "});
   } catch (error) {
     next(error);
   }
 };
 // export const replyComment = async (req, res, next) => {
-//   const UserId = req.authUser.id;
+//   const userId = req.authUser.id;
 //   const { topCommentId } = req.params;
 
 //   try {
 //     const respons = await Comments.create({
 //       postId,
-//       UserId,
+//       userId,
 //       content,
 //       topCommentId,
 //       replyTo: commentId||null,
@@ -192,6 +192,7 @@ export const likeComment = async (req, res, next) => {
     next(error);
   }
 };
+
 export const editComment = async (req, res, next) => {
   const commentId = req.params.commentId;
   const { content } = req.body;

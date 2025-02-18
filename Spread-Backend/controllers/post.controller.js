@@ -107,7 +107,6 @@ export const getPostPreview = async (req, res, next) => {
   try {
 
     const cacheKey = `post_preview_${lastTimestamp}_${type}_${limit}`; // Unique cache key for this combination
-
     // Checking Cache
     const cachedPostData = await redisClient.get(cacheKey);
     if (cachedPostData !== null) {
@@ -141,12 +140,12 @@ export const getPostPreview = async (req, res, next) => {
       ],
       limit,
     });
-
-    const postData = formatPostData(posts); // Format the post data
-
+   const postData = formatPostData(posts); // Format the post data
+  
     // Caching the result to redis with expiration time
     await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(postData))
-    res.status(200).json(postData);
+    res.status(200).json(postData)
+
   } catch (error) {
     console.error("Error fetching posts:", error.message);
     next(error); // Pass the error to the error handling middleware
@@ -206,15 +205,19 @@ export const getPostView = async (req, res, next) => {
 
 export const getArchivedPosts = async (req, res, next) => {
   const userId = req.authUser.id;
-  const limit = parseInt(req.query.limit?.trim()) || 3; // Default limit to 3, min 1
-  const page = parseInt(req.query.page?.trim()) || 1; // Default page to 1, min 1
+  const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
+  const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
 
   try {
-    const Posts = await User.findByPk(userId, {
+    const Posts = await User.findOne({
+      where: {
+        createdAt: { [Op.lt]: lastTimestamp },
+        id:userId
+      },
       include: [
         {
           model: Post,
-          as: "SavedPosts",
+          as: "savedPosts",
           through: { attributes: [] }, // Exclude the intermediate table attributes
 
           include: [
@@ -234,14 +237,14 @@ export const getArchivedPosts = async (req, res, next) => {
           ],
         },
       ],
+      order: [
+        ["createdAt", "DESC"],
+      ],
       limit,
-      offset: (page - 1) * limit,
     });
+    console.log(Posts)
 
-    if (!Posts?.SavedPosts) {
-      return res.status(404).json({ message: "No archived posts found" });
-    }
-    const postData = formatPostData(Posts.SavedPosts);
+    const postData = formatPostData(Posts.savedPosts);
     res.status(200).json(postData);
   } catch (error) {
     console.error("Error fetching archived posts:", error);

@@ -11,7 +11,7 @@ function Page404(prop) {
           {prop.msg || "404"}
         </h1>
       </article>
-      <span className=" bg-slate-300 px-3 py-2 rounded-lg">
+      <span className=" bg-white text-black px-3 py-2 rounded-lg">
         <Link to={-1}>GO Back</Link>
       </span>
     </div>

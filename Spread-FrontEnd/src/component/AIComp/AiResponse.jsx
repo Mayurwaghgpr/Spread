@@ -1,9 +1,10 @@
 import DOMPurify from "dompurify";
 import React, { useMemo } from "react";
-import { IoClose } from "react-icons/io5";
 import { TiArrowSync } from "react-icons/ti";
 import { Link, useParams } from "react-router-dom";
 import userImageSrc from "../../utils/userImageSrc";
+
+import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 
 const AIResponse = ({
   data,
@@ -31,17 +32,25 @@ const AIResponse = ({
             AI Explanation
           </h1>
         )}
-        <div className="flex items-center gap-6">
-          <TiArrowSync
-            title=""
-            className=" opacity-50 hover:opacity-100 cursor-pointer"
+        <div className="flex items-center gap-6 text-2xl ">
+          <button
             onClick={() => mutate({ id })}
-            size={20}
-          />
-          <IoClose
+            className="flex justify-center items-center   w-10 h-10 "
+          >
+            <TiArrowSync
+              title=""
+              className={` m-auto opacity-30 hover:opacity-100 cursor-pointer`}
+            />
+          </button>
+          <button
             onClick={() => setshow(false)}
-            className=" hover:text-red-500 transition duration-300 cursor-pointer text-xl"
-          />
+            className="flex justify-center items-center "
+          >
+            <MdKeyboardDoubleArrowLeft
+              className="opacity-30 hover:opacity-100
+            transition duration-300 cursor-pointer "
+            />
+          </button>
         </div>
       </header>{" "}
       <div className="flex  items-start gap-5  p-3 border-inherit">
@@ -57,25 +66,26 @@ const AIResponse = ({
         <div
           className={` border p-3 rounded-lg  border-inherit    ${isAnalyzing ? "ai-scanning" : ""}`}
         >
-          <div className="flex -space-x-4">
+          <div className="flex -space-x-4 border-[#fff9f3] dark:border-black">
             <img
-              className="w-10 h-10 z-10 rounded-full object-fill object-center "
+              className="w-10 h-10 z-10 rounded-full object-fill object-center border-2 border-inherit "
               src={`${postData?.titleImage}`}
               alt="Title Image"
               loading="lazy"
             />
-            {postData.postContent?.map(
-              (item) =>
-                item.type === "image" && (
-                  <img
-                    key={item.id}
-                    src={`${item?.content}`}
-                    alt="Content"
-                    className="w-10 h-10 rounded-full object-cover object-center"
-                    loading="lazy"
-                  />
-                )
-            )}
+            {postData.postContent?.map((item, idx) => {
+              if (item.type !== "image") return null;
+              return (
+                <img
+                  key={item.id || idx}
+                  src={item?.content}
+                  alt="Content"
+                  style={{ zIndex: Math.max(0, 8 - idx) }}
+                  className="w-10 h-10 rounded-full object-cover object-center border-2 border-inherit"
+                  loading="lazy"
+                />
+              );
+            })}
           </div>
           <div className="p-3 text-sm">
             <h1>{postData?.title}</h1>

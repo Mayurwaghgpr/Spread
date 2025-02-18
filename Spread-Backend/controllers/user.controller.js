@@ -48,12 +48,13 @@ export const getUserProfile = async (req, res, next) => {
 // Get posts by user ID
 export const getUserPostsById = async (req, res, next) => {
   const userId = req.params.userId;
-  const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
-  const page = Math.max(parseInt(req.query.page?.trim()) || 1, 1);
+ const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
+  const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
+
   // console.log("getUserPostsById...")
   try {
     const { count: totalPosts, rows: posts } = await Post.findAndCountAll({
-      where: { authorId: userId },
+      where: { authorId: userId , createdAt: { [Op.lt]: lastTimestamp }},
       include: [
         {
           model: User,
@@ -70,21 +71,12 @@ export const getUserPostsById = async (req, res, next) => {
         }
       ],
       limit,
-      offset: (page - 1) * limit,
       order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
     });
 
     if (posts.length > 0) {
       const postData = formatPostData(posts); // Format post data
-      res.status(200).json({
-        posts: postData,
-        meta: {
-          currentPage: page,
-          totalPages: Math.ceil(totalPosts / limit),
-          hasNextPage: page < Math.ceil(totalPosts / limit),
-          totalPosts,
-        },
-      });
+      res.status(200).json(postData);
     } else {
       res.status(404).send("No posts found");
     }

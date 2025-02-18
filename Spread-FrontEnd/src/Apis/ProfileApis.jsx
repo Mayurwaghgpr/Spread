@@ -20,7 +20,7 @@ function useProfileApi() {
         withCredentials: true,
         params: {
           limit: 3,
-          page: pageParam,
+          lastTimestamp: pageParam,
         },
       });
       return response.data;

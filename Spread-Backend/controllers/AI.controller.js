@@ -17,7 +17,7 @@ const prompt = `Analyze the given post data and generate a structured, point-by-
 ✅ **Next Points:** Include **additional insights** related to the post’s topic that are **not explicitly mentioned** in the post.  
    - These insights should be **factual, informative, and come from trusted sources on the internet**.  
    - Include **at least one external link per point** to provide more information.  
-   - Format links properly using: <a href="URL" style="color:blue; text-decoration:underline;" target="_blank" rel="noopener noreferrer">Source</a>.  
+   - Format links properly using: <a href="URL"  style="color:skyblue; text-decoration:underline; backgroundColor:  " target="_blank" rel="noopener noreferrer">Source</a>.  
 ✅ **Response Format:**  
    - Return a **valid JSON array** where each string is a short, informative paragraph.  
    - Each point should be **concise (4-6 sentences), clear, and unique**.  

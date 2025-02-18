@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import usePublicApis from "../../Apis/publicApis";
 import { useNavigate } from "react-router-dom";
+import { setUser } from "../../redux/slices/authSlice";
 
 function Bookmark({ className, post }) {
   const [bookmarkIcon, setIcon] = useState("");
@@ -15,16 +16,20 @@ function Bookmark({ className, post }) {
 
   const ArchiveMutation = useMutation((id) => ArchivePost(id), {
     onSuccess: (data) => {
-      // queryClient.invalidateQueries(["loggedInUser"]);
+      queryClient.invalidateQueries(["loggedInUser"]);
       dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
     },
     onError: (error) => {
+      console.log(error);
       dispatch(
         setToast({
           message: error.response?.error,
           type: "error",
         })
       );
+    },
+    onSettled: () => {
+      setIcon("");
     },
   });
 
@@ -35,7 +40,7 @@ function Bookmark({ className, post }) {
     },
     [ArchiveMutation]
   );
-  const isBookmarked = user?.SavedPosts?.some(
+  const isBookmarked = user?.savedPosts?.some(
     (savedPost) => savedPost?.id === post?.id
   );
   return (

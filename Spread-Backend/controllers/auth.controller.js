@@ -60,7 +60,7 @@ export const SignUp = async (req, res, next) => {
       .status(201)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", newUser, { httpOnly: true , secure: true})
+      .cookie("_userDetail", newUser, { httpOnly: true, secure: true, sameSite: "Strict" })
       .json({ user: newUser.dataValues, AccessToken, RefreshToken });
   } catch (err) {
     next(err);
@@ -135,7 +135,7 @@ export const SignIn = async (req, res, next) => {
       .status(200)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", user, { httpOnly: true ,secure: true})
+      .cookie("_userDetail", user, { httpOnly: true, secure: true, sameSite: "Strict" })
       .json({ user: user.dataValues, AccessToken, RefreshToken });
   } catch (err) {
     console.error("Error during login:", err);

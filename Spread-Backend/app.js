@@ -47,22 +47,19 @@ app.use(cors({
 app.use(cookieParser(process.env.ACCESS_TOKEN_SECRET,CookieOptions));
 app.use(express.json());
 
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        "default-src": ["'self'"],
-        "img-src": [
-          "'self'",  
-          "data:",  
-          "https://res.cloudinary.com",  
-          "https://lh3.googleusercontent.com",  
-        ],
-      },
-    },
-  })
-);
-
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      "img-src": [
+        "'self'", 
+        "data:", 
+        "https://res.cloudinary.com", 
+        "https://lh3.googleusercontent.com",
+        "https://avatars.githubusercontent.com"
+      ]
+    }
+  }
+}));
 
 app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

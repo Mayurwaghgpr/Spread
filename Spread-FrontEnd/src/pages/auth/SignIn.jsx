@@ -80,10 +80,10 @@ function SignIn() {
         <div
           className={`flex flex-col justify-between items-center p-8 h-full  min-w-[300px] sm:w-[500px]  transition-all duration-300 delay-150  *:border-inherit `}
         >
-          <header className="text-2xl  text-center flex justify-center items-center">
+          <header className="text-4xl  text-center flex justify-center items-center">
             {"Spread"}
           </header>
-          <div className="flex w-full h-full  flex-col justify-center px-5  *:border-inherit sm:text-sm  text-xs ">
+          <div className="flex w-full h-full  flex-col justify-center gap-3 px-5  *:border-inherit sm:text-sm  text-xs ">
             <form
               onSubmit={handleLogin}
               className="flex flex-col  justify-center w-full gap-2  border-inheri text-sm  *:border-inherit"
@@ -154,7 +154,7 @@ function SignIn() {
             {!passVisible && (
               <>
                 {" "}
-                <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
+                <div className=" w-full text-center text-xl flex items-center  *:border-inherit">
                   <hr className="flex-1" />
                   <p className="mx-2">or</p>
                   <hr className="flex-1" />

@@ -29,6 +29,7 @@ import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
 import { IoLibraryOutline } from "react-icons/io5";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import LogoutBtn from "../buttons/LogoutBtn";
+import { PopupBox } from "../UtilityComp/PopupBox";
 const LoginMenuLinks = [
   {
     id: uuidv4(),
@@ -85,25 +86,6 @@ function SideBar({ className }) {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { userImageurl } = userImageSrc(user);
-
-  const { mutate, isLoading } = useMutation({
-    mutationFn: Logout,
-    onSuccess: () => {
-      localStorage.removeItem("AccessToken"); //if it is stored in localStorage
-      localStorage.removeItem("userAccount"); //if it is stored in localStorage
-      dispatch(setIsLogin(false));
-      dispatch(setUser(null));
-
-      navigate("/");
-    },
-    onError: () => {
-      <SomthingWentWrong />;
-    },
-  });
-
-  if (isLoading) {
-    <LoaderScreen />;
-  }
   return (
     <aside
       onClick={(e) => {

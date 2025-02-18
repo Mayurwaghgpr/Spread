@@ -10,9 +10,6 @@ import { setManuOpen } from "../../redux/slices/uiSlice";
 import { BsMoonStarsFill } from "react-icons/bs";
 import { IoSunny } from "react-icons/io5";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
-import { setIsLogin, setUser } from "../../redux/slices/authSlice";
-import { useMutation } from "react-query";
-import { LuLogOut } from "react-icons/lu";
 import LogoutBtn from "../buttons/LogoutBtn";
 
 function MainNavBar() {

@@ -1,11 +1,13 @@
 import React from "react";
 import { LuLogOut } from "react-icons/lu";
 import { useMutation } from "react-query";
-import { setIsLogin, setUser } from "../../redux/slices/authSlice";
+import { setIsLogin, setloginPop, setUser } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
 import { Logout } from "../../Apis/authapi";
 import { useDispatch } from "react-redux";
+import { PopupBox } from "../UtilityComp/PopupBox";
+import LoaderScreen from "../loaders/loaderScreen";
 
 function LogoutBtn({ className }) {
   const navigate = useNavigate();
@@ -17,13 +19,17 @@ function LogoutBtn({ className }) {
       localStorage.removeItem("userAccount"); //if it is stored in localStorage
       dispatch(setIsLogin(false));
       dispatch(setUser(null));
-
+      dispatch(setloginPop(true));
       navigate("/");
     },
     onError: () => {
       <SomthingWentWrong />;
     },
   });
+
+  if (isLoading) {
+    return <LoaderScreen />;
+  }
   return (
     <button
       onClick={mutate}

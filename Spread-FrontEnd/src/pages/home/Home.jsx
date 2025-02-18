@@ -160,7 +160,6 @@ function Home() {
         PrepsData={prepsData}
         handleTopicClick={handleTopicClick}
       />
-      {/* <PopupBox /> */}
     </section>
   );
 }

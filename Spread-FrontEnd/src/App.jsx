@@ -19,6 +19,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Messanger from "./pages/Messages/Messanger";
 import CommentSection from "./pages/Comment/CommentSection";
 import SomthingWentWrong from "./pages/ErrorPages/somthingWentWrong";
+import { PopupBox } from "./component/UtilityComp/PopupBox";
+import Ibutton from "./component/buttons/Ibutton";
+import { setloginPop } from "./redux/slices/authSlice";
 
 // Lazy load components
 
@@ -52,10 +55,10 @@ const ToastContainer = lazy(
   () => import("./component/UtilityComp/ToastContainer")
 );
 function App() {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { isLogin } = useSelector((state) => state.auth);
+  const { isLogin, loginPop } = useSelector((state) => state.auth);
   const { ThemeMode, MenuOpen } = useSelector((state) => state.ui);
   const [systemTheme, setSystemTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -201,8 +204,44 @@ function App() {
             <Route path="/error" element={<SomthingWentWrong />} />
           </Routes>
           {isLogin && <TaskBar />}
+          {loginPop && (
+            <PopupBox
+              className={
+                "flex flex-col justify-center gap-4 text-center sm:text-lg text-sm items-center p-10 border-inherit max-w-[25rem] min-h-[50%]"
+              }
+              heading={"Hey there!"}
+              subText={
+                "Let start exploring and sharing,Sign In or Sign Up,learn,analyze and more"
+              }
+              children={
+                <>
+                  <Ibutton
+                    className={
+                      "bg-white text-black   py-2 text-center border border-inherit  w-full "
+                    }
+                    innerText={"LogIn"}
+                    action={() => {
+                      navigate("/auth/signIn", { replace: true });
+                      dispatch(setloginPop(false));
+                    }}
+                  />
+                  <Ibutton
+                    className={
+                      "bg-white text-black text-center py-2 border border-inherit  w-full"
+                    }
+                    innerText={"SignUp"}
+                    action={() => {
+                      navigate("/auth/signUp", { replace: true });
+                      dispatch(setloginPop(false));
+                    }}
+                  />
+                </>
+              }
+            />
+          )}
         </Suspense>
         <ConfirmationBox />
+
         {/* <ScrollToTopButton /> */}
       </main>
     </>

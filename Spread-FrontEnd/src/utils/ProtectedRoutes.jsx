@@ -10,8 +10,6 @@ const ProtectedRoute = ({ children }) => {
 
   if (isLogin && user) {
     return children;
-  } else {
-    navigate("/auth/signin");
   }
 };
 

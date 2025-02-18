@@ -50,8 +50,8 @@ function ForgotPass() {
       <div
         className={`flex flex-col justify-between items-center p-8   min-w-[300px] sm:w-[500px] h-full  transition-all duration-300 delay-150`}
       >
-        <header className="text-2xl  text-center flex justify-center items-center">
-          {"{...Spread}"}
+        <header className="text-4xl  text-center flex justify-center items-center">
+          {"{Spread}"}
         </header>
         <div className="flex w-full h-full  flex-col justify-center  px-5">
           <form

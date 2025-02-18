@@ -48,8 +48,8 @@ function ResetPassword() {
       <div
         className={`flex flex-col justify-between items-center p-8 h-full   min-w-[300px] sm:w-[500px]  transition-all duration-300 delay-150 `}
       >
-        <header className="text-2xl  text-center flex justify-center items-center">
-          {"{...Spread}"}
+        <header className="text42xl  text-center flex justify-center items-center">
+          {"{Spread}"}
         </header>
         <div className="flex w-full h-full  flex-col justify-center px-5">
           <form

@@ -38,14 +38,20 @@ const Io = new Server(server, {
 
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
-app.use(helmet());
+
 app.use(cors({
   origin: allowedOrigins, // Support multiple origins
     methods:["GET","POST","PUT","PATCH","DELETE"],
     credentials: true,}))
 app.use(cookieParser());
 app.use(express.json());
-
+app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "img-src": ["'self'", "data:", "https://res.cloudinary.com"]
+      }
+    }
+  }));
 
 app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

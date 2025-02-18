@@ -45,13 +45,23 @@ app.use(cors({
     credentials: true,}))
 app.use(cookieParser());
 app.use(express.json());
-app.use(helmet({
+
+app.use(
+  helmet({
     contentSecurityPolicy: {
       directives: {
-        "img-src": ["'self'", "data:", "https://res.cloudinary.com"]
-      }
-    }
-  }));
+        "default-src": ["'self'"],
+        "img-src": [
+          "'self'",  
+          "data:",  
+          "https://res.cloudinary.com/*",  
+          "https://lh3.googleusercontent.com/*",  
+        ],
+      },
+    },
+  })
+);
+
 
 app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

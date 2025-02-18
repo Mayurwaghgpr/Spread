@@ -22,6 +22,7 @@ import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import redisClient from "./utils/redisClient.js";
 import { dataBaseAssociations } from "./utils/DataBaseAssociations.js";
+import { CookieOptions } from "./utils/cookie-options.js";
 
 // Initialize dotenv
 dotenv.config();
@@ -43,7 +44,7 @@ app.use(cors({
   origin: allowedOrigins, // Support multiple origins
     methods:["GET","POST","PUT","PATCH","DELETE"],
     credentials: true,}))
-app.use(cookieParser());
+app.use(cookieParser(process.env.ACCESS_TOKEN_SECRET,CookieOptions));
 app.use(express.json());
 
 app.use(
@@ -54,8 +55,8 @@ app.use(
         "img-src": [
           "'self'",  
           "data:",  
-          "https://res.cloudinary.com/*",  
-          "https://lh3.googleusercontent.com/*",  
+          "https://res.cloudinary.com",  
+          "https://lh3.googleusercontent.com",  
         ],
       },
     },

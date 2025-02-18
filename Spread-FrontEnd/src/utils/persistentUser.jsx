@@ -17,7 +17,7 @@ function PersistentUser() {
     queryFn: () => getLogInUserData(),
     onSuccess: (data) => {
       localStorage.setItem("AccessToken", true);
-      // console.log("user login data:", data);
+      console.log("user login data:", data);
       dispatch(setIsLogin(true));
       dispatch(setUser(JSON.parse(data)));
     },

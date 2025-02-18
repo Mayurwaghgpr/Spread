@@ -1,4 +1,5 @@
 export const CookieOptions = {
-  httpOnly: true, // Prevents JavaScript access
-  secure: true, // Only for HTTPS
+ httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Strict",
 };

@@ -5,6 +5,7 @@ import Follow from "../models/Follow.js";
 import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
 import { DataFetching } from "../operations/data-fetching.js";
+import { CookieOptions } from "../utils/cookie-options.js";
 const dataFetcher = new DataFetching();
 // Fetch all users except the current user and distinct topics
 export const userPrepsData = async (req, res, next) => {
@@ -147,7 +148,7 @@ export const FollowUser = async (req, res, next) => {
 
       res
         .status(200)
-        .cookie("_userDetail",  JSON.stringify(userInfo), { httpOnly: true }) // Serialize object before storing
+        .cookie("_userDetail",  JSON.stringify(userInfo), CookieOptions) // Serialize object before storing
         .json({ message: "Unfollowed successfully" });
     } else {
       // Follow user
@@ -160,7 +161,7 @@ export const FollowUser = async (req, res, next) => {
 
       res
         .status(201)
-        .cookie("_userDetail",  JSON.stringify(userInfo), { httpOnly: true }) // Serialize object before storing
+        .cookie("_userDetail",  JSON.stringify(userInfo),CookieOptions) // Serialize object before storing
         .json({ status: "success", message: "Followed successfully" });
     }
   } catch (error) {
@@ -193,7 +194,7 @@ export const AddPostToArchive = async (req, res, next) => {
       console.log(newSavedPosts)
       userInfo={...userInfo,savedPosts: newSavedPosts}
       await archived.destroy();
-      return res.status(200).cookie("_userDetail", JSON.stringify(userInfo), { httpOnly: true, secure: true, sameSite: "Strict" }).json({removed:true, message: "Removed from archive", archived: {postId,userId} });
+      return res.status(200).cookie("_userDetail", JSON.stringify(userInfo), CookieOptions).json({removed:true, message: "Removed from archive", archived: {postId,userId} });
     }
 
     // Use transaction for safety and performance
@@ -205,7 +206,7 @@ export const AddPostToArchive = async (req, res, next) => {
 
     res
       .status(200)
-      .cookie("_userDetail", JSON.stringify(userInfo), { httpOnly: true, secure: true, sameSite: "Strict" })
+      .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
       .json({ message: "Post archived successfully", archived: result });
   } catch (error) {
     console.error("Error archiving post:", error);

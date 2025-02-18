@@ -11,6 +11,7 @@ import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import Comments from "../models/Comments.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
+import { CookieOptions } from "../utils/cookie-options.js";
 
 const dataFecter = new DataFetching();
 
@@ -159,7 +160,7 @@ export const EditUserProfile = async (req, res, next) => {
     if (updatedUser) {
       res
         .status(200)
-        .cookie("_userDetail", updatedUser, { httpOnly: true })
+        .cookie("_userDetail", updatedUser, CookieOptions)
         .json(updatedUser); // Return updated user info
     } else {
       res.status(400).json({ message: "User not found" });

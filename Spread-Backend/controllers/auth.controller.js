@@ -60,7 +60,7 @@ export const SignUp = async (req, res, next) => {
       .status(201)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", newUser, { httpOnly: true, secure: true, sameSite: "Strict" })
+      .cookie("_userDetail", newUser, CookieOptions)
       .json({ user: newUser.dataValues, AccessToken, RefreshToken });
   } catch (err) {
     next(err);
@@ -135,7 +135,7 @@ export const SignIn = async (req, res, next) => {
       .status(200)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", user, { httpOnly: true, secure: true, sameSite: "Strict" })
+      .cookie("_userDetail", user,CookieOptions)
       .json({ user: user.dataValues, AccessToken, RefreshToken });
   } catch (err) {
     console.error("Error during login:", err);
@@ -189,7 +189,7 @@ export const RefreshToken = async (req, res, next) => {
       .status(200)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", user, { httpOnly: true, secure: true })
+      .cookie("_userDetail", user,CookieOptions)
       .json({ user: user, AccessToken, RefreshToken });
   } catch (error) {
     console.error("Error during token refresh:", error);
@@ -203,7 +203,7 @@ export const Logout = async (req, res) => {
   res
     .clearCookie("AccessToken", CookieOptions)
     .clearCookie("RefreshToken", CookieOptions)
-    .clearCookie("_userDetail", { httpOnly: true , secure: true});
+    .clearCookie("_userDetail", CookieOptions);
   try {
     // Clear refresh token from user record
     await User.update(
@@ -233,7 +233,7 @@ export const forgotPass = async (req, res, next) => {
     const mail = await mailTransporter.sendMail({
       to: email,
 
-      subject: "Reset password for ...Spread",
+      subject: "Reset password for Spread",
       html: `<p>Click the link below to reset your password:</p>
         <a href="${process.env.FRONT_END_URL}Resetpassword/${AccessToken}" style="color: #1a73e8; text-decoration: none;">
             Reset Password

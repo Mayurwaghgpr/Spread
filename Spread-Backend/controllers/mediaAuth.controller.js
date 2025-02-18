@@ -15,7 +15,7 @@ export const googleAuth = async (req, res, next) => {
     res
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail",JSON.stringify(user) ,{ httpOnly: true, secure: true, sameSite: "Strict" })
+      .cookie("_userDetail",JSON.stringify(user) ,CookieOptions)
       .redirect(process.env.FRONT_END_URL);
   } catch (error) {
     next(error);
@@ -33,7 +33,7 @@ export const gitHubAuth = async (req, res, next) => {
     res
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", JSON.stringify(user), { httpOnly: true, secure: true, sameSite: "Strict" })
+      .cookie("_userDetail", JSON.stringify(user), CookieOptions)
       .redirect(process.env.FRONT_END_URL);
   } catch (error) {
     next(error);

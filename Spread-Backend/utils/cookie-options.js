@@ -1,7 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
 export const CookieOptions = {
-    decode: decodeURIComponent,
- httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-  sameSite: "Strict",
-       maxAge: 86400 * 1000,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production" || false,
 };

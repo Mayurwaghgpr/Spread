@@ -6,6 +6,8 @@ import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
 import { DataFetching } from "../operations/data-fetching.js";
 import { CookieOptions } from "../utils/cookie-options.js";
+import redisClient from "../utils/redisClient.js";
+import { EXPIRATION } from "../config/constants.js";
 const dataFetcher = new DataFetching();
 // Fetch all users except the current user and distinct topics
 export const userPrepsData = async (req, res, next) => {
@@ -52,6 +54,11 @@ export const searchData = async (req, res, next) => {
   const searchQuery = req.query.q;
 
   try {
+       const cachedSearchData = await redisClient.get(searchQuery);
+    if (cachedSearchData !== null) {
+      console.log('cach hit')
+      return res.status(200).json({key:searchQuery,data:JSON.parse(cachedSearchData)});// Send cached data
+    }
     const searchResult = await Post.findAll({
       where: {
         [Op.or]: [
@@ -78,7 +85,8 @@ export const searchData = async (req, res, next) => {
       // attributes: [],
       limit: 10,
     });
-    res.status(200).json(searchResult);
+    if(searchResult.length>0){await redisClient.setEx(searchQuery,EXPIRATION,JSON.stringify(searchResult))}
+    res.status(200).json({key:searchQuery,data:searchResult});
   } catch (error) {
     console.error("Error searching data:", error);
     next(error);
@@ -148,7 +156,7 @@ export const FollowUser = async (req, res, next) => {
 
       res
         .status(200)
-        .cookie("_userDetail",  JSON.stringify(userInfo), CookieOptions) // Serialize object before storing
+        .cookie("_userDetail", userInfo, CookieOptions) // Serialize object before storing
         .json({ message: "Unfollowed successfully" });
     } else {
       // Follow user
@@ -161,7 +169,7 @@ export const FollowUser = async (req, res, next) => {
 
       res
         .status(201)
-        .cookie("_userDetail",  JSON.stringify(userInfo),CookieOptions) // Serialize object before storing
+        .cookie("_userDetail",  userInfo,CookieOptions) // Serialize object before storing
         .json({ status: "success", message: "Followed successfully" });
     }
   } catch (error) {
@@ -187,14 +195,13 @@ export const AddPostToArchive = async (req, res, next) => {
   try {
 
     const archived = await Archive.findOne({ where: { postId, userId } });
-// console.log(userInfo)
+    // console.log(userInfo)
     if (archived) {
-      console.log(userInfo)
       const newSavedPosts = userInfo.savedPosts.filter((post) => { post.id !== postId });
       console.log(newSavedPosts)
       userInfo={...userInfo,savedPosts: newSavedPosts}
       await archived.destroy();
-      return res.status(200).cookie("_userDetail", JSON.stringify(userInfo), CookieOptions).json({removed:true, message: "Removed from archive", archived: {postId,userId} });
+      return res.status(200).cookie("_userDetail", userInfo, CookieOptions).json({removed:true, message: "Removed from archive", archived: {postId,userId} });
     }
 
     // Use transaction for safety and performance
@@ -206,7 +213,7 @@ export const AddPostToArchive = async (req, res, next) => {
 
     res
       .status(200)
-      .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
+      .cookie("_userDetail", userInfo, CookieOptions)
       .json({ message: "Post archived successfully", archived: result });
   } catch (error) {
     console.error("Error archiving post:", error);

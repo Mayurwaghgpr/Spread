@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenerator.js";
 import { CookieOptions } from "../utils/cookie-options.js";
+import redisClient from "../utils/redisClient.js";
+import { EXPIRATION } from "../config/constants.js";
 
 dotenv.config();
 
@@ -11,11 +13,16 @@ export const googleAuth = async (req, res, next) => {
       id: user.id,
       email: user.email,
     });
-
+console.log("Setting cookies:", {
+  _userDetail: user,
+  AccessToken: AccessToken,
+  RefreshToken: RefreshToken,
+});
+    await redisClient.set("_userDetail",JSON.stringify(user))
     res
+      .cookie("_userDetail",JSON.stringify(user),{  httpOnly: true,  secure: true})
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail",JSON.stringify(user) ,CookieOptions)
       .redirect(process.env.FRONT_END_URL);
   } catch (error) {
     next(error);

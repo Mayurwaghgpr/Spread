@@ -16,7 +16,7 @@ import { CookieOptions } from "../utils/cookie-options.js";
 const dataFecter = new DataFetching();
 
 export const getLoginUser = async (req, res, nex) => {
-  const userInfo = req.cookies._userDetail;
+  const userInfo = req.cookies._userDetail ||   await redisClient.get("_userDetail");
   res.status(200).json(userInfo);
 };
 // Get user profile

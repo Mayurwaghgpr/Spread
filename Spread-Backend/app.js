@@ -40,12 +40,15 @@ const Io = new Server(server, {
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
+
+app.use(express.json());
+app.use(cookieParser());
+
 app.use(cors({
   origin: allowedOrigins, // Support multiple origins
     methods:["GET","POST","PUT","PATCH","DELETE"],
-    credentials: true,}))
-app.use(cookieParser(process.env.ACCESS_TOKEN_SECRET,CookieOptions));
-app.use(express.json());
+  credentials: true,
+}))
 
 app.use(helmet({
   contentSecurityPolicy: {
@@ -69,7 +72,7 @@ app.use("/api", rateLimit({
 })); 
 
 // Serve Static Files (Place before routes)
-app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist"),{maxAge:"1d"}));
+app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist"), { maxAge: '1d' }));
 
 app.use("/auth", authRouter);
 app.use("/public", publicRouter);
@@ -94,11 +97,11 @@ dataBaseAssociations()
 // Wildcard Route for Frontend
 app.use("/api", (req, res) => res.status(404).json({ message: "API route not found" })); 
 
-// Error Handling Middleware
 app.use((error, req, res, next) => {
   console.error("Error:", error);
   res.status(error.statusCode || 500).json({ message: error.message || "An error occurred" });
 });
+
 
 
 // Graceful Shutdown Handling
@@ -125,7 +128,7 @@ process.on("uncaughtException", (error) => {
 // Start Server
 Database.sync()
   .then(() => {
-    server.listen(port, async() => {
+    server.listen(port, async () => {
       await redisClient.connect();
       console.log("Connected to Redis");
       console.log(`API is running at http://localhost:${port}`);
@@ -134,4 +137,5 @@ Database.sync()
   })
   .catch((err) => {
     console.error("Database connection error:", err);
+    process.exit(1); // Exiting the process on DB error
   });

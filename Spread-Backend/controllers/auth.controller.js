@@ -8,6 +8,7 @@ import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import Post from "../models/posts.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
+import redisClient from "../utils/redisClient.js";
 
 dotenv.config();
 const saltRounds = 10;
@@ -205,11 +206,13 @@ export const Logout = async (req, res) => {
     .clearCookie("RefreshToken", CookieOptions)
     .clearCookie("_userDetail", CookieOptions);
   try {
+   
     // Clear refresh token from user record
     await User.update(
       { refreshToken: null },
       { where: { id: req.authUser.id } }
     );
+     await redisClient.del("_userDetail")
     res.json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error during logout:", error);

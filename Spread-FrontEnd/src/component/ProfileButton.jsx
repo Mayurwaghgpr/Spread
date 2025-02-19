@@ -20,6 +20,7 @@ const ProfileButton = ({ className, ...props }) => {
   return (
     <button
       {...props}
+      name="profileBtn"
       type="button"
       className={` ${className} flex justify-center items-center  text-sm font-semibold text-gray-900 rounded-full`}
       id="menu-button"
@@ -30,6 +31,7 @@ const ProfileButton = ({ className, ...props }) => {
         src={userImageurl}
         title={user?.name}
         alt={user?.name}
+        loading="lazy"
       />
     </button>
   );

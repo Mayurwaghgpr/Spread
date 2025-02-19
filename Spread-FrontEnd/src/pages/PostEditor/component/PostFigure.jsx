@@ -18,6 +18,7 @@ const PostFigure = ({ element, imageInputRef, index }) => {
           id="inputimage"
           contentEditable
           onKeyDown={(e) => handleKeyDown(e, element.id, index)}
+          loading="lazy"
         />
         <figcaption>
           <span

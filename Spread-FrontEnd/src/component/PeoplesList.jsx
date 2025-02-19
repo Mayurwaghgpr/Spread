@@ -48,6 +48,7 @@ function PeoplesList({ people, className }) {
               className="w-full h-full rounded-full object-cover object-top"
               src={userImageurl}
               alt={`${people?.username || "User"}'s profile picture`}
+              loading="lazy"
             />
           </div>
 

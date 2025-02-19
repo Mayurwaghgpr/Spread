@@ -161,15 +161,16 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               ))}
         </div>
         {post && (
-          <div className="flex w-full h-full justify-between text-md  border-inherit p-3 items-center ">
-            <div className="flex   justify-start   items-center gap-3">
+          <div className="flex w-full h-full justify-between text-md border-inherit p-3 items-center ">
+            <div className="flex justify-start items-center gap-3">
               <Like className={"min-w-10"} post={post} />
-              <div className="flex justify-center items-center gap-1 min-w-10 cursor-pointer">
-                <button onClick={handelComment} className="">
-                  <FaRegComment />
-                </button>
+              <button
+                onClick={handelComment}
+                className="flex justify-center items-center gap-1 min-w-10 cursor-pointer"
+              >
+                <FaRegComment />
                 <span>{abbreviateNumber(Comments?.length)}</span>
-              </div>
+              </button>
             </div>
             <div className="flex justify-end gap-5 items-center border-inherit">
               <Bookmark

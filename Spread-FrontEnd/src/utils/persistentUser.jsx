@@ -31,9 +31,6 @@ function PersistentUser() {
     },
     refetchOnWindowFocus: false,
   });
-  if (isError && !error.status) {
-    return <SomthingWentWrong />;
-  }
   return null;
 }
 

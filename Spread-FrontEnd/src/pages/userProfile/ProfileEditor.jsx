@@ -137,6 +137,7 @@ function ProfileEditor() {
               className="cursor-pointer h-full w-full object-cover object-top rounded-full "
               src={profileImage}
               alt="Profile"
+              loading="lazy"
             />
           </div>
           <div className="flex flex-col justify-center items-start w-full ">

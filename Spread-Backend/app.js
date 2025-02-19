@@ -64,7 +64,7 @@ app.use(helmet({
   }
 }));
 
-app.use("/api", rateLimit({
+app.use("/", rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   message: { message: "Too many requests, please try again later." },
@@ -72,7 +72,10 @@ app.use("/api", rateLimit({
 })); 
 
 // Serve Static Files (Place before routes)
-app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist"), { maxAge: '1d' }));
+// Serve Static Files
+app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist"), { maxAge: "1d" }));
+
+
 
 app.use("/auth", authRouter);
 app.use("/public", publicRouter);
@@ -93,6 +96,11 @@ socketHandlers(Io)
 
 // Associations
 dataBaseAssociations()
+
+// Handle React Routes (After API Routes)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/Spread-FrontEnd/dist", "index.html"));
+});
 
 // Wildcard Route for Frontend
 app.use("/api", (req, res) => res.status(404).json({ message: "API route not found" })); 

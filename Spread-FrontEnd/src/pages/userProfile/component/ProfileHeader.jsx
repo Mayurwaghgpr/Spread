@@ -24,6 +24,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
             className="h-full w-full items-center  cursor-pointer rounded-full   object-cover object-top "
             src={userImageurl}
             alt={userProfile?.username}
+            loading="lazy"
           />
           <div className=" w-full">
             <h1 className="sm:text-3xl sm:hidden text-nowrap text-sm  font-medium">

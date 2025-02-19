@@ -70,11 +70,13 @@ function Heros() {
                   className="sm:object-cover dark:hidden flex object-center w-full rounded-xl"
                   src={homelight}
                   alt="Light theme view"
+                       loading="lazy"
                 />
                 <img
                   className="sm:object-cover dark:flex hidden object-center w-full rounded-xl"
                   src={homedark}
                   alt="Dark theme view"
+                       loading="lazy"
                 />
               </div>
             </div>

@@ -74,6 +74,7 @@ function CommentInput({ className }) {
           className="w-full h-full object-cover object-top rounded-full"
           src={userImage.userImageurl}
           alt={user?.username}
+          loading="lazy"
         />
       </div>
       <div className="relative w-full flex items-center border-inherit">

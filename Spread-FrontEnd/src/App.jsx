@@ -199,45 +199,43 @@ function App() {
               }
             />
 
-            <Route path="/ForgotPass" element={<ForgotPass />} />
-            <Route path="/Resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/forgot/pass" element={<ForgotPass />} />
+            <Route path="/reset/pass/:token" element={<ResetPassword />} />
             <Route path="/error" element={<SomthingWentWrong />} />
           </Routes>
           {isLogin && <TaskBar />}
           {loginPop && (
             <PopupBox
               className={
-                "flex flex-col justify-center gap-4 text-center sm:text-lg text-sm items-center p-10 border-inherit max-w-[25rem] min-h-[50%]"
+                "flex flex-col justify-center gap-4 text-center  items-center p-10 border-inherit max-w-[25rem] min-h-[50%] shadow-lg"
               }
               heading={"Hey there!"}
               subText={
                 "Let start exploring and sharing,Sign In or Sign Up,learn,analyze and more"
               }
-              children={
-                <>
-                  <Ibutton
-                    className={
-                      "bg-white text-black   py-2 text-center border border-inherit  w-full "
-                    }
-                    innerText={"LogIn"}
-                    action={() => {
-                      navigate("/auth/signIn", { replace: true });
-                      dispatch(setloginPop(false));
-                    }}
-                  />
-                  <Ibutton
-                    className={
-                      "bg-white text-black text-center py-2 border border-inherit  w-full"
-                    }
-                    innerText={"SignUp"}
-                    action={() => {
-                      navigate("/auth/signUp", { replace: true });
-                      dispatch(setloginPop(false));
-                    }}
-                  />
-                </>
-              }
-            />
+            >
+              {" "}
+              <Ibutton
+                className={
+                  "bg-white text-black py-2 text-center border border-inherit  w-full "
+                }
+                innerText={"Sign In"}
+                action={() => {
+                  navigate("/auth/signIn", { replace: true });
+                  dispatch(setloginPop(false));
+                }}
+              />
+              <Ibutton
+                className={
+                  "bg-white text-black text-center py-2 border border-inherit  w-full"
+                }
+                innerText={"Sign Up"}
+                action={() => {
+                  navigate("/auth/signUp", { replace: true });
+                  dispatch(setloginPop(false));
+                }}
+              />
+            </PopupBox>
           )}
         </Suspense>
         <ConfirmationBox />

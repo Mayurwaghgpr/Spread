@@ -111,6 +111,7 @@ function PostPreviewEditor() {
                   className=" object-fill object-top "
                   src={imageElements[0]?.file}
                   alt="title image"
+                  loading="lazy"
                 />
               ) : null}
             </label>

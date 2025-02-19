@@ -57,6 +57,7 @@ const ElementsProvider = ({
           alt="Preview"
           id="inputimage"
           contentEditable
+          loading="lazy"
         />
         <figcaption>
           <span

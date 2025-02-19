@@ -116,6 +116,7 @@ const CommentBox = forwardRef(
                 className={"w-full h-full object-cover object-top rounded-full"}
                 src={commenterImg.userImageurl}
                 alt={comt?.commenter?.username}
+                loading="lazy"
               />
             </div>
             <div>
@@ -142,6 +143,7 @@ const CommentBox = forwardRef(
                       <img
                         className="w-full h-full object-cover object-top  rounded-full"
                         src={postdata.User.userImage}
+                        loading="lazy"
                       />
                     </div>
                   </div>

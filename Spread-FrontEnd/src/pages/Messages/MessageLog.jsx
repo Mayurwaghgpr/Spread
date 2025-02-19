@@ -64,6 +64,7 @@ function MessageLog() {
                     className=" w-full h-full object-cover object-center rounded-full"
                     src={user.profileImage}
                     alt={user.name}
+                    loading="lazy"
                   />
                 </div>
               </div>

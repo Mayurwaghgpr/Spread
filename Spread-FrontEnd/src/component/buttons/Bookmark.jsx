@@ -48,9 +48,8 @@ function Bookmark({ className, post }) {
       className={`${isBookmarked ? "dark:text-opacity-100 text-opacity-100 text-black dark:text-white" : " dark:hover:text-opacity-100  hover:text-opacity-100 text-opacity-20 dark:text-opacity-20"} ${className} `}
     >
       {" "}
-      <i
+      <button
         id="bookmark"
-        disabled={post?.user?.id === user?.id}
         onClick={(e) => {
           if (isLogin) {
             handleSavePost(post?.id, e.target);
@@ -58,12 +57,16 @@ function Bookmark({ className, post }) {
             navigate("/auth/signin");
           }
         }}
-        className={` bi cursor-pointer transition-all duration-300 ${
-          isBookmarked || bookmarkIcon === `bookmark-${post?.id}`
-            ? "bi-bookmark-fill"
-            : "bi-bookmark"
-        }`}
-      ></i>
+        disabled={post?.user?.id === user?.id}
+      >
+        <i
+          className={` bi cursor-pointer transition-all duration-300 ${
+            isBookmarked || bookmarkIcon === `bookmark-${post?.id}`
+              ? "bi-bookmark-fill"
+              : "bi-bookmark"
+          }`}
+        ></i>
+      </button>
     </div>
   );
 }

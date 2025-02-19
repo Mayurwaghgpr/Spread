@@ -21,6 +21,7 @@ const UserPopover = forwardRef(
               className=" rounded-full size-[2.5rem] object-cover object-top"
               src={people?.userImage ? `${people?.userImage}` : profileIcon}
               alt={`${people?.username}'s profile picture`}
+              loading="lazy"
             />
             <h1 className="hover:underline underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
               {people?.username}

@@ -200,7 +200,7 @@ export const RefreshToken = async (req, res, next) => {
 };
 
 // Log out the user by clearing cookies and updating user record
-export const Logout = async (req, res) => {
+export const Logout = async (req, res,next) => {
   res
     .clearCookie("AccessToken", CookieOptions)
     .clearCookie("RefreshToken", CookieOptions)
@@ -238,7 +238,7 @@ export const forgotPass = async (req, res, next) => {
 
       subject: "Reset password for Spread",
       html: `<p>Click the link below to reset your password:</p>
-        <a href="${process.env.FRONT_END_URL}Resetpassword/${AccessToken}" style="color: #1a73e8; text-decoration: none;">
+        <a href="${process.env.FRONT_END_URL}/reset/pass/${AccessToken}" style="color: #1a73e8; text-decoration: none;">
             Reset Password
         </a>
         <p>If you did not request this, please ignore this email.</p>`,

@@ -11,6 +11,7 @@ import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";
 import EyeBtn from "../../component/buttons/EyeBtn.jsx";
 import { BsGoogle } from "react-icons/bs";
+import AuthFormWrapper from "./AuthFormWrapper.jsx";
 function SignUp() {
   const [validation, setValidation] = useState("");
   const dispatch = useDispatch();
@@ -78,103 +79,65 @@ function SignUp() {
   ];
 
   return (
-    <section className="sm:flex w-full animate-fedin.2s relative justify-start z-50 h-screen   items-center flex-col top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#fff9f3] dark:bg-black  dark:*:border-[#383838]">
-      {(isError || validation) && (
-        <div className="text-red-500 my-4 w-full flex justify-center bg-red-100 py-2">
-          {error?.response?.data.message || validation}
-        </div>
-      )}
-
-      <button
-        onClick={() => navigate(-1)}
-        className=" text-3xl absolute top-0 p-4 right-3"
-        aria-label="Close"
-      >
-        <i className="bi bi-x-lg"></i>
-      </button>
-
-      <div className="flex flex-col justify-between gap-3 p-7 min-w-[300px] sm:w-[500px] h-full rounded-xl  dark:bg-inherit *:border-inherit ">
-        <header className="text-4xl mt-2 text-center flex justify-center items-center">
-          {"Spread"}
-        </header>
-
-        <div className="flex flex-col justify- w-full px-5 *:border-inherit">
-          <h1 className="text-2xl py-5 text-center font-medium">
-            Create an account
-          </h1>
-          <form
-            onSubmit={signUp}
-            className="flex flex-col py-2 w-full gap-2 items-center justify-start  *:border-inherit  sm:text-sm  text-xs "
-          >
-            <div className="mb-4 w-full flex text-nowrap text-xs  gap-3  *:border-inherit ">
-              <OAuth
-                className={
-                  "border bg-black text-white dark:bg-white dark:text-black "
-                }
-                service={"google"}
-                icon={<BsGoogle />}
-              />
-              <OAuth
-                className={
-                  "border bg-black text-white dark:bg-white dark:text-black"
-                }
-                service={"github"}
-                icon={<i className="bi bi-github"></i>}
-                disabled={true}
-              />
-            </div>
-            <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
-              <hr className="flex-1" />
-              <p className="mx-2">or</p>
-              <hr className="flex-1" />
-            </div>
-            {signUpInputs.map((input) => (
-              <CommonInput
-                key={input.id}
-                className="mb-3 w-full flex flex-col gap-2 border p-1 rounded-lg  border-inherit "
-                type={input.type}
-                labelname={input.labelname}
-                Iname={input.Iname}
-                disabled={isLoading}
-                comp={input.comp}
-              />
-            ))}
-            <div className="flex justify-start w-full">
-              <CommonInput
-                className={
-                  "mb-4 flex flex-row-reverse justify-start  items-center gap-2 text-sm"
-                }
-                type={"checkbox"}
-                labelname={"RemberMe"}
-                label={"RemberMe"}
-              />
-            </div>
-            <div className="mb-4 w-full">
-              <button
-                type="submit"
-                className=" bg-black text-white dark:bg-white dark:text-black  p-3 w-full text-center rounded-lg"
-                disabled={isLoading}
-              >
-                {isLoading ? "Signing Up..." : "Sign Up"}
-              </button>
-            </div>
-
-            <footer className="text-center">
-              <small>
-                Already have an account?{" "}
-                <Link
-                  to="/auth/signin"
-                  replace={true}
-                  className="text-blue-500"
-                >
-                  Sign In
-                </Link>
-              </small>
-            </footer>
-          </form>
-        </div>
+    <AuthFormWrapper
+      onSubmit={signUp}
+      isError={isError}
+      validation={validation}
+      error={error}
+      formType={"signup"}
+      heading={"Create Account"}
+    >
+      <div className="mb-4 w-full flex text-nowrap text-xs  gap-3  *:border-inherit ">
+        <OAuth
+          className={
+            "border bg-black text-white dark:bg-white dark:text-black "
+          }
+          service={"google"}
+          icon={<BsGoogle />}
+        />
+        <OAuth
+          className={"border bg-black text-white dark:bg-white dark:text-black"}
+          service={"github"}
+          icon={<i className="bi bi-github"></i>}
+          disabled={true}
+        />
       </div>
-    </section>
+      <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
+        <hr className="flex-1" />
+        <p className="mx-2">or</p>
+        <hr className="flex-1" />
+      </div>
+      {signUpInputs.map((input) => (
+        <CommonInput
+          key={input.id}
+          className="mb-3 w-full flex flex-col gap-2 border p-1 rounded-lg  border-inherit "
+          type={input.type}
+          labelname={input.labelname}
+          Iname={input.Iname}
+          disabled={isLoading}
+          comp={input.comp}
+        />
+      ))}
+      <div className="flex justify-start w-full">
+        <CommonInput
+          className={
+            "mb-4 flex flex-row-reverse justify-start  items-center gap-2 text-sm"
+          }
+          type={"checkbox"}
+          labelname={"RemberMe"}
+          label={"RemberMe"}
+        />
+      </div>
+      <div className="mb-4 w-full">
+        <button
+          type="submit"
+          className=" bg-black text-white dark:bg-white dark:text-black  p-3 w-full text-center rounded-lg"
+          disabled={isLoading}
+        >
+          {isLoading ? "Signing Up..." : "Sign Up"}
+        </button>
+      </div>
+    </AuthFormWrapper>
   );
 }
 

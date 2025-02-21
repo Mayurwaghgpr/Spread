@@ -20,7 +20,7 @@ export const googleAuth = async (req, res, next) => {
 // });
     await redisClient.set("_userDetail", JSON.stringify(user))
     res
-      .cookie("_userDetail",JSON.stringify(user),{  httpOnly: true,  secure: true})
+      .cookie("_userDetail",JSON.stringify(user),CookieOptions)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
       .redirect(process.env.FRONT_END_URL);

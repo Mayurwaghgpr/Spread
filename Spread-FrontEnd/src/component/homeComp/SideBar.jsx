@@ -1,35 +1,25 @@
-import React, { Fragment, memo, useCallback, useMemo } from "react";
+import React from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
 import { v4 as uuidv4 } from "uuid";
-import { LuLogOut } from "react-icons/lu";
+
 import { setManuOpen } from "../../redux/slices/uiSlice";
-import { useMutation } from "react-query";
-import { Logout } from "../../Apis/authapi";
-import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
-import LoaderScreen from "../loaders/loaderScreen";
-import { setIsLogin, setUser } from "../../redux/slices/authSlice";
-import Theme from "../UtilityComp/ThemeMenu";
-import { createPortal } from "react-dom";
+
 import abbreviateNumber from "../../utils/numAbrivation";
 import {
   IoHomeOutline,
   IoHomeSharp,
   IoLibrarySharp,
-  IoSadOutline,
-  IoSadSharp,
   IoSearch,
   IoSearchOutline,
-  IoSearchSharp,
 } from "react-icons/io5";
-import { BsFeather, BsGear, BsGearFill, BsSearch } from "react-icons/bs";
-import { FaFeather } from "react-icons/fa6";
+import { BsGear, BsGearFill } from "react-icons/bs";
+
 import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
 import { IoLibraryOutline } from "react-icons/io5";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import LogoutBtn from "../buttons/LogoutBtn";
-import { PopupBox } from "../UtilityComp/PopupBox";
 const LoginMenuLinks = [
   {
     id: uuidv4(),

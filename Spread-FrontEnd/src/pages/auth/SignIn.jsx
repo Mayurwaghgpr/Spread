@@ -3,33 +3,32 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsLogin, setUser } from "../../redux/slices/authSlice";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { LoginUser } from "../../Apis/authapi";
+import authApi from "../../Apis/authApi";
 import CommonInput from "../../component/UtilityComp/commonInput";
 import OAuth from "./OAuth";
 import EyeBtn from "../../component/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 
 function SignIn() {
+  const [passVisible, setpassVisible] = useState(false);
+  const { isLogin } = useSelector((state) => state.auth);
+  const userRef = useRef();
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [passVisible, setpassVisible] = useState(false);
-  const userRef = useRef();
-
-  const { isLogin } = useSelector((state) => state.auth);
+  const { loginUser } = authApi();
 
   const { isLoading, isSuccess, isError, mutate, error } = useMutation(
-    (loginInfo) => LoginUser(loginInfo),
+    (loginInfo) => loginUser(loginInfo),
     {
       onSuccess: (response) => {
         const { AccessToken, user } = response;
         if (AccessToken) {
           dispatch(setIsLogin(true));
+          localStorage.setItem("AccessToken", true);
           queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
           // dispatch(setUser(user));
-
-          localStorage.setItem("AccessToken", true);
           // localStorage.setItem("userAccount", JSON.stringify(user));
           navigate("/", { replace: true });
         }

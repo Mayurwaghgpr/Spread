@@ -14,7 +14,7 @@ dotenv.config();
 const saltRounds = 10;
 
 // Sign up a new user
-export const SignUp = async (req, res, next) => {
+export const signUp = async (req, res, next) => {
   const { displayName, email, password } = req.body;
   // Validate required fields
   if (!displayName || !email || !password) {
@@ -71,7 +71,7 @@ export const SignUp = async (req, res, next) => {
 };
 
 // Log in an existing user
-export const SignIn = async (req, res, next) => {
+export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
 
   // Validate required fields
@@ -146,7 +146,7 @@ export const SignIn = async (req, res, next) => {
 };
 
 // Refresh access token using refresh token
-export const RefreshToken = async (req, res, next) => {
+export const refreshToken = async (req, res, next) => {
   // Extract token from cookies or Authorization header
   const clientRefreshToken =
     req.cookies.RefreshToken ||
@@ -170,7 +170,7 @@ export const RefreshToken = async (req, res, next) => {
     }
 
     // Check if the refresh token matches the one stored in the database
-    if (clientRefreshToken !== user.refreshToken) {
+    if (decodedToken.exp < new Date.now()) {
       return res
         .status(401)
         .json({ message: "Refresh token is expired or used" });
@@ -200,7 +200,7 @@ export const RefreshToken = async (req, res, next) => {
 };
 
 // Log out the user by clearing cookies and updating user record
-export const Logout = async (req, res,next) => {
+export const logout = async (req, res,next) => {
   res
     .clearCookie("AccessToken", CookieOptions)
     .clearCookie("RefreshToken", CookieOptions)

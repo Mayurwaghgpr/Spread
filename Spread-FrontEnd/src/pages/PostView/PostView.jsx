@@ -60,9 +60,7 @@ function PostView() {
     error: aiError,
   } = useMutation({
     mutationFn: getAiGenAnalysis,
-    onSuccess: () => {
-      setshow(true);
-    },
+    onSuccess: () => {},
     onError: ({ data }) => {
       setToast({ message: data, type: "success" });
     },
@@ -231,7 +229,7 @@ function PostView() {
       )}
       <div
         onClick={() => {
-          data && setshow(true);
+          setshow(true);
           !data && mutate({ id });
         }}
         className="z-50 border-inherit before:transition-all before:text-xs text-xl flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:-left before:rounded-lg cursor-pointer fixed top-4 sm:right-60"

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsLogin } from "../../redux/slices/authSlice.js";
 import { setToast } from "../../redux/slices/uiSlice.js";
 import { useMutation, useQueryClient } from "react-query";
-import { RegisterUser } from "../../Apis/authapi.jsx";
+import authApi from "../../Apis/authApi.jsx";
 import CommonInput from "../../component/UtilityComp/commonInput.jsx";
 import { passwordRegex, emailRegex } from "../../utils/regex.js";
 import OAuth from "./OAuth.jsx";
@@ -18,7 +18,8 @@ function SignUp() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { isLoading, isError, error, mutate } = useMutation(RegisterUser, {
+  const { registerUser } = authApi();
+  const { isLoading, isError, error, mutate } = useMutation(registerUser, {
     onSuccess: (response) => {
       const { AccessToken } = response;
       dispatch(setIsLogin(true));

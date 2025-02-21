@@ -1,16 +1,18 @@
 import React from "react";
 import { useMutation } from "react-query";
-import { forgotPassword } from "../../Apis/authapi";
+import authApi from "../../Apis/authApi";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
 import CommonInput from "../../component/UtilityComp/commonInput";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import AuthFormWrapper from "./AuthFormWrapper";
+
 function ForgotPass() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { forgotPassword } = authApi();
 
   const { data, mutate, isError, error, isLoading } = useMutation(
     (email) => forgotPassword(email),

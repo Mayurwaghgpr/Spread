@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ResetPasswordApi } from "../../Apis/authapi";
+import authApi from "../../Apis/authApi";
 import { useMutation } from "react-query";
 import CommonInput from "../../component/UtilityComp/commonInput";
 import { useDispatch } from "react-redux";
@@ -11,9 +11,10 @@ function ResetPassword() {
   const param = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { resetPasswordApi } = authApi();
   console.log("param" + param.token);
   const { data, mutate, isError, error, isLoading } = useMutation(
-    (newPassword) => ResetPasswordApi(newPassword, param.token),
+    (newPassword) => resetPasswordApi(newPassword, param.token),
     {
       onSuccess: (data) => {
         dispatch(setToast({ message: data.success, type: "success" }));

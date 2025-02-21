@@ -17,13 +17,7 @@ function PostsApis() {
       });
       return response.data;
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        // localStorage.removeItem("userAccount");
-        // dispatch(setToast({ message: error.response.data, type: "error" }));
-        localStorage.removeItem("AccessToken");
-      } else {
-        throw error.response;
-      }
+      throw error.response;
     }
   };
   const AddNewPost = async (newPost, signal) => {
@@ -34,11 +28,6 @@ function PostsApis() {
       });
       return result.data; // Return the actual data
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        // localStorage.removeItem("userAccount");
-        localStorage.removeItem("AccessToken");
-      }
-      console.error("AddNewPost error:", error);
       throw error;
     }
   };

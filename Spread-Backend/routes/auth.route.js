@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { SignUp, SignIn, Logout, RefreshToken, forgotPass, resetPassword } from '../controllers/auth.controller.js';
+import {  forgotPass, resetPassword, refreshToken, signUp, signIn, logout } from '../controllers/auth.controller.js';
 import IsAuth from '../middlewares/isAuth.js';
 import passport from 'passport';
 import { gitHubAuth, googleAuth } from '../controllers/mediaAuth.controller.js';
@@ -31,16 +31,16 @@ router.get('/github/callback',
 );
 
 // Route to handle token refresh
-router.get('/refresh-token', RefreshToken);
+router.get('/refresh-token', refreshToken);
 
 // Route to handle user sign up
-router.post('/signup', SignUp);
+router.post('/signup', signUp);
 
 // Route to handle user login
-router.post('/signin', SignIn);
+router.post('/signin', signIn);
 
 // Route to handle user logout, requires authentication
-router.delete('/logout', IsAuth, Logout);
+router.delete('/logout', IsAuth, logout);
 
 router.post('/forgotpassword',forgotPass)
 

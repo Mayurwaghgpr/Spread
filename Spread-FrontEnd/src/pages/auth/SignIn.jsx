@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsLogin, setUser } from "../../redux/slices/authSlice";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import authApi from "../../Apis/authapi";
+import useAuth from "../../Apis/useAuth";
 import CommonInput from "../../component/UtilityComp/commonInput";
 import OAuth from "./OAuth";
 import EyeBtn from "../../component/buttons/EyeBtn";
@@ -18,7 +18,7 @@ function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { loginUser } = authApi();
+  const { loginUser } = useAuth();
 
   const { isLoading, isSuccess, isError, mutate, error } = useMutation(
     (loginInfo) => loginUser(loginInfo),

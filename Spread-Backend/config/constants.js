@@ -1,1 +1,1 @@
-export const EXPIRATION = 600;
+export const EXPIRATION = 3600;

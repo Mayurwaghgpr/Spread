@@ -92,8 +92,6 @@ export const getPostPreview = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   const currentUserId = req.authUser.id;
-
-
   const topicFilter =
     type !== "all"
       ? {
@@ -106,7 +104,8 @@ export const getPostPreview = async (req, res, next) => {
 
   try {
 
-    const cacheKey = `post_preview_${lastTimestamp}_${type}_${limit}`; // Unique cache key for this combination
+    const cacheKey = `post_preview_${lastTimestamp}_${type}_${limit}`;
+    // Unique cache key for this combination
     // Checking Cache
     const cachedPostData = await redisClient.get(cacheKey);
     if (cachedPostData !== null) {

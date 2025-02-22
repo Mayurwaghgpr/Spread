@@ -1,6 +1,6 @@
 import React from "react";
 import { useMutation } from "react-query";
-import useAuth from "../../Apis/useAuth";
+import useAuthApi from "../../Apis/useAuthApi";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
 import CommonInput from "../../component/UtilityComp/commonInput";
@@ -13,7 +13,7 @@ function ForgotPass() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { forgotPassword } = useAuth();
+  const { forgotPassword } = useAuthApi();
 
   const { data, mutate, isError, error, isLoading } = useMutation(
     (email) => forgotPassword(email),

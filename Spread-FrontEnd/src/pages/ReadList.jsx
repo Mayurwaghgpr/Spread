@@ -1,14 +1,14 @@
 import React, { useMemo } from "react";
 import { useInfiniteQuery } from "react-query";
-import userApi from "../Apis/userApi";
+import useAuthApi from "../Apis/useAuthApi";
 import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
 import { useLastPostObserver } from "../hooks/useLastPostObserver";
 import { useSelector } from "react-redux";
-import ProfileButton from "../component/ProfileButton";
+import useProfileApi from "../Apis/ProfileApis";
 
 const ReadList = () => {
-  const { getArchivedPosts } = userApi();
+  const { getArchivedPosts } = useProfileApi();
   const { user, isLogin } = useSelector((state) => state.auth);
   const {
     data,
@@ -46,8 +46,8 @@ const ReadList = () => {
   );
 
   return (
-    <section className=" w-full flex flex-col justify-center items-end xl:items-center mt-20 bg-inherit dark:*:border-[#383838] dark:bg-black max-h-screen overflow-y-auto">
-      <div className="relative h-full flex justify-start flex-col items-center md:w-fit w-full bg-inherit ">
+    <section className="flex flex-col justify-start items-start w-full h-screen xl:items-center  bg-inherit dark:*:border-[#383838] dark:bg-black  overflow-y-auto">
+      <div className="relative flex flex-col justify-start items-center  md:w-fit w-full my-36 bg-inherit ">
         <div className="fixed top-16 z-10 flex right-0 w-full justify-end items-center gap-4 border-inherit ">
           <div className=" text-3xl bg-[#f3efeb] p-5 md:w-[80%] xl:w-[78%] w-full dark:bg-black h-full border border-inherit rounded-b-lg">
             <h1>Read list </h1>

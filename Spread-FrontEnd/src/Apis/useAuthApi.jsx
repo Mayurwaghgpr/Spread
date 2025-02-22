@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-function useAuth() {
+function useAuthApi() {
   const loginUser = async (signinConfig) => {
     try {
       const result = await axios.post(`${BASE_URL}/auth/signin`, signinConfig, {
@@ -87,4 +87,4 @@ function useAuth() {
   };
 }
 
-export default useAuth;
+export default useAuthApi;

@@ -8,9 +8,7 @@ const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  if (isLogin && user) {
-    return children;
-  }
+  return isLogin && children;
 };
 
 export default memo(ProtectedRoute);

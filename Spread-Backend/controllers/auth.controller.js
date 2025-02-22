@@ -204,11 +204,16 @@ export const refreshToken = async (req, res, next) => {
 };
 
 // Log out the user by clearing cookies and updating user record
-export const logout = async (req, res,next) => {
+export const logout = async (req, res, next) => {
+  const option = {
+    httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+   sameSite: process.env.NODE_ENV === "production" ? 'none' : 'strict',
+ }
   res
-    .clearCookie("AccessToken", CookieOptions)
-    .clearCookie("RefreshToken", CookieOptions)
-    .clearCookie("_userDetail", CookieOptions);
+    .clearCookie("AccessToken", option)
+    .clearCookie("RefreshToken", option)
+    .clearCookie("_userDetail", option);
   try {
    
     // Clear refresh token from user record

@@ -111,11 +111,11 @@ function Home() {
   };
 
   return (
-    <section className="relative flex flex-col sm:flex-row  lg:justify-start  w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
+    <section className="flex flex-col sm:flex-row  lg:justify-start  w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
       {/* Posts Section */}
-      <div className="relative  flex flex-col items-end border-inherit py-16 sm:w-[35rem] lg:w-full mx-auto">
+      <div className="relative  flex flex-col items-end border-inherit py-24 sm:w-[35rem] lg:w-full mx-auto">
         {/* Sticky Navigation */}
-        <div className="flex xl:w-[48rem] lg:w-[40rem] sm:w-[35rem] mx-auto w-full  text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0  overflow-x-auto sm:overflow-hidden backdrop-blur-[20px] dark:border-[#383838] z-10 border  items-center justify-start fixed top-[3.1rem] sm:top-[3.6rem] ">
+        <div className="flex xl:w-[48rem] lg:w-[40rem] sm:w-[35rem] mx-auto w-full  text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0   backdrop-blur-[20px] dark:border-[#383838] z-10 border  items-center justify-start fixed top-[3.1rem] sm:top-[3.6rem] ">
           <ul className="flex  items-center justify-between w-full   ">
             <li className="capitalize flex justify-center w-full h-full  p-4 hover:bg-gray-400 hover:bg-opacity-30">
               <button

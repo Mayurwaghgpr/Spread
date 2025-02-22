@@ -4,14 +4,14 @@ import { useMutation } from "react-query";
 import { setIsLogin, setloginPop, setUser } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
-import useAuth from "../../Apis/useAuth";
+import useAuthApi from "../../Apis/useAuthApi";
 import { useDispatch } from "react-redux";
 import LoaderScreen from "../loaders/loaderScreen";
 
 function LogoutBtn({ className }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { logout } = useAuth();
+  const { logout } = useAuthApi();
   const { mutate, isLoading } = useMutation({
     mutationFn: logout,
     onSuccess: () => {

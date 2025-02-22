@@ -97,7 +97,11 @@ const AIResponse = ({
       </div>
       {/* AI Explanation Points */}
       <ul className="flex animate-fedin1s flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter">
-        {isAnalyzing && <div className="dotloader "></div>}
+        {isAnalyzing && (
+          <div className=" flex justify-center bg-white p-2 w-[3rem] shadow-sm rounded rounded-tl-none">
+            <div className="dotloader "></div>
+          </div>
+        )}
         {!aiError ? (
           data?.map((points, idx) => {
             if (typeof points === "object") {

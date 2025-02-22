@@ -33,29 +33,31 @@ function SearchBar({ className, scrollDirection }) {
     <div className="fixed top-0 left-0 right-0 bottom-0 flex z-[100] bg-black bg-opacity-15 flex-col  w-full items-center h-screen border-inherit">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex flex-col justify-start  items-center gap-3 sm:w-1/3 p-6 border-inherit mt-20 m-auto"
+        className="relative flex flex-col justify-start  items-center gap-3 sm:w-1/3 p-6 border-inherit mt-20 m-auto "
       >
-        <div className="flex justify-between w-full text-2xl p-2">
-          <span>Search</span>
-          <button onClick={() => navigate(-1)} className="">
-            <IoCloseOutline />
-          </button>
-        </div>
-        <div className="bg-white flex justify-center pr-3 text-black w-full items-center gap-3 rounded-full border overflow-hidden border-inherit">
-          <input
-            className="p-2 pl-3 w-full outline-none"
-            placeholder="Search"
-            type="search"
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            onChange={({ target: { value } }) => searchDebounce(value.trim())}
-          />
-          <button
-            onClick={() => navigate(`/?topic=${searchParams.get("topic")}`)}
-            className=""
-          >
-            <i className="bi bi-search"></i>
-          </button>
+        <div className="w-full bg-white rounded-xl rounded-b-3xl">
+          <div className="flex justify-between w-full text-2xl p-2">
+            <span>Search</span>
+            <button onClick={() => navigate(-1)} className="">
+              <IoCloseOutline />
+            </button>
+          </div>
+          <div className=" flex justify-center pr-3 text-black w-full items-center gap-3 rounded-full border overflow-hidden border-inherit">
+            <input
+              className="p-2 pl-3 w-full outline-none"
+              placeholder="Search"
+              type="search"
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onChange={({ target: { value } }) => searchDebounce(value.trim())}
+            />
+            <button
+              onClick={() => navigate(`/?topic=${searchParams.get("topic")}`)}
+              className=""
+            >
+              <i className="bi bi-search"></i>
+            </button>
+          </div>
         </div>
         {isFocused && (
           <div

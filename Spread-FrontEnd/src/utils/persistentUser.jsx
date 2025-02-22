@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 import { setIsLogin, setUser } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import authApi from "../Apis/useAuth";
+import useAuthApi from "../Apis/useAuthApi";
 
-function PersistentUser() {
+function PersistentUser({ children }) {
   // const navigate = useNavigate();
   // const { isLogin } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { refreshToken, getLogInUserData } = authApi();
+  const { refreshToken, getLogInUserData } = useAuthApi();
   const { error, isError } = useQuery({
     queryKey: ["loggedInUser"],
     queryFn: () => getLogInUserData(),
@@ -28,7 +28,7 @@ function PersistentUser() {
     },
     refetchOnWindowFocus: false,
   });
-  return null;
+  return children;
 }
 
 export default memo(PersistentUser);

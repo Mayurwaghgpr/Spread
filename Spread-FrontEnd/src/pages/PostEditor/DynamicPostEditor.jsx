@@ -36,19 +36,19 @@ function DynamicPostEditor() {
 
   return (
     <>
-      <main className="relative flex flex-col justify-between mt-16 mb-32 border-inherit ">
+      <section className="relative flex flex-col justify-between  mt-20 mb-32 w-full border-inherit ">
         <PostBtn
           className={`fixed  xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
           content={<i className="bi bi-send-fill"></i>}
           disabled={elements.length > 3 ? false : true}
         />
         <div
-          className={`flex  justify-center items-center lg:ms-24  flex-col mt-4 gap-2 `}
+          className={`flex justify-center items-center flex-col mx-auto gap-2 `}
         >
           {elements.map((element, index) => (
             <div
               key={element.id}
-              className="flex relative justify-start items-center gap-2  xl:w-[60rem]   w-full px-2 "
+              className="flex relative justify-start items-center gap-2  xl:w-[50rem]   w-full px-2 "
             >
               {/* <div
                 className={`flex w-[2.5rem] justify-between  items-center  transition-transform duration-100 sm:overflow-hidden`}
@@ -88,7 +88,7 @@ function DynamicPostEditor() {
           handleFileChange={handleFileChange}
           className={`dark:bg-black  text-sm border-inherit sm:rounded-full fixed bg-white sm:bottom-10 bottom-16 rounded-lg  sm:right-36  hover:scale-x-110 gap-3   p-3  bg-opacity-35 backdrop-blur-md border   pointer-events-none flex  justify-center items-end transition-all duration-300 *:transition-all *:duration-200 *:pointer-events-auto ease-in-out font-thin  *:size-[2rem] *:border *:rounded-full *:border-inherit`}
         />
-      </main>
+      </section>
       <Outlet context={[imageFiles, setImageFiles, handleTextChange]} />
     </>
   );

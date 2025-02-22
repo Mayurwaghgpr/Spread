@@ -7,15 +7,15 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 function usePublicApis() {
   const dispatch = useDispatch();
   // Fetch user preferences data
-  const userPrepsData = async () => {
+  const fetchHomeContent = async () => {
     try {
-      const result = await axios.get(`${BASE_URL}/public/prepsdata`, {
+      const result = await axios.get(`${BASE_URL}/public/h/content`, {
         withCredentials: true,
       });
       return result.data;
     } catch (error) {
       console.error("Error fetching user preferences data:", error);
-      throw error;
+      throw error.response || error;
     }
   };
 
@@ -28,12 +28,7 @@ function usePublicApis() {
       return response.data;
     } catch (error) {
       console.error("Error fetching post by ID:", error);
-
-      if (error.response && error.response.status === 401) {
-        // localStorage.removeItem("userAccount");
-        localStorage.removeItem("AccessToken");
-      }
-      throw error;
+      throw error.response || error;
     }
   };
 
@@ -57,7 +52,7 @@ function usePublicApis() {
       );
       return result.data;
     } catch (error) {
-      throw error.respons;
+      throw error.response || error;
     }
   };
 
@@ -73,7 +68,7 @@ function usePublicApis() {
       );
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
 
@@ -86,8 +81,7 @@ function usePublicApis() {
       );
       return result.data;
     } catch (error) {
-      // console.log(error);
-      throw error.respons;
+      throw error.response || error;
     }
   };
 
@@ -100,7 +94,7 @@ function usePublicApis() {
       );
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   const removePostFromArchive = async (id) => {
@@ -110,12 +104,12 @@ function usePublicApis() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
 
   return {
-    userPrepsData,
+    fetchHomeContent,
     fetchDataById,
     fetchSearchData,
     LikePost,

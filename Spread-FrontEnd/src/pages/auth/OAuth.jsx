@@ -10,6 +10,7 @@ function OAuth({ service, icon, className, ...props }) {
 
   const handleOAuth = () => {
     window.location.href = `${BASE_URL}/auth/login/${service}`;
+    console.log(window.location);
   };
 
   return (

@@ -29,7 +29,7 @@ function LogoutBtn({ className }) {
   });
 
   if (isLoading) {
-    return <LoaderScreen />;
+    return <LoaderScreen message={"logging out..."} />;
   }
   return (
     <button

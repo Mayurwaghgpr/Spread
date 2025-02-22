@@ -11,15 +11,8 @@ import FormatedTime from "../../component/UtilityComp/FormatedTime";
 function MessageLog() {
   const { conversations } = useSelector((state) => state.chat);
   const navigate = useNavigate();
-  const { getconversations } = ChatApi();
   const dispatch = useDispatch();
-  useEffect(() => {
-    getconversations().then((data) => {
-      console.log(data);
-      dispatch(setConversations(data));
-    });
-  }, []);
-  // console.log(conversations);
+
   return (
     <aside className=" border-r sm:w-[40%] sm:min-w-fit w-full  h-full border-inherit">
       <div>

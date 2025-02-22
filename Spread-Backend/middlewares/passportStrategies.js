@@ -3,10 +3,11 @@ import { Strategy as GitHubStrategy } from "passport-github2";
 import User from "../models/user.js"; // Adjust the path as necessary
 import dotenv from "dotenv";
 import Post from "../models/posts.js";
-import genUniqueUserName from "../utils/UserNameGenerator.js";
+import genUniqueUserName from "../utils/userNameGenerator.js";
 import Sequelize from "sequelize";
+import { DataFetching } from "../operations/data-fetching.js";
 dotenv.config();
-
+const fetchUser=new DataFetching()
 export const passportStrategies = (passport) => {
   passport.use(
     new GoogleStrategy(
@@ -21,33 +22,9 @@ export const passportStrategies = (passport) => {
           if (!profile) {
             return;
           }
-          let user = await User.findOne({
-            where: { [Sequelize.Op.and]: [{ email: profile.email }, { signedWith: profile.provider }] },
-            include: [
-              {
-                model: User,
-                as: "Followers",
-                through: { attributes: { exclude: ["password"] } },
-              },
-              {
-                model: User,
-                as: "Following",
-                through: { attributes: { exclude: ["password"] } },
-              },
-              {
-                model: Post,
-                attributes: ['id']
-              },
-              {
-                model: Post,
-                as: 'savedPosts',
-                through: { attributes: [] }, // Fetch only related posts
-              },
-            ],
-            
-            
-          });
-
+          const {email,provider}=profile
+          let user = await fetchUser.Profile({ email, signedWith:provider })
+          console.log(user)
           if (!user) {
             const username = await genUniqueUserName( profile.email);
             user = await User.create({

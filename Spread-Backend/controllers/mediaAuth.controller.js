@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenerator.js";
+import AccessAndRefreshTokenGenerator from "../utils/accessAndRefreshTokenGenerator.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
@@ -23,7 +23,7 @@ export const googleAuth = async (req, res, next) => {
       .cookie("_userDetail",JSON.stringify(user),CookieOptions)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .redirect(process.env.FRONT_END_URL);
+      .redirect(process.env.FRONT_END_URL+"/");
   } catch (error) {
     next(error);
   }

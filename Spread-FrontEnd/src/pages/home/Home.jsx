@@ -14,21 +14,23 @@ import PostsApis from "../../Apis/PostsApis";
 import WhoToFollow from "./WhoToFollow";
 import useDeviceSize from "../../hooks/useDeviceSize";
 import { PopupBox } from "../../component/UtilityComp/PopupBox";
+import ErrorPage from "../ErrorPages/ErrorPage";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isDeviceSize = useDeviceSize("1023");
-  const { userPrepsData } = usePublicApis();
+  const { fetchHomeContent } = usePublicApis();
   const { fetchDataAll } = PostsApis();
 
   const selectedTopic = searchParams.get("topic") || "All";
 
   const {
-    isLoading: isLoadingPreps,
-    isFetching: fetchingPreps,
-    error: errorPreps,
-    data: prepsData,
-  } = useQuery("userPreps", userPrepsData, {
+    isLoading: isLoadingHome,
+    isFetching: fetchingHome,
+    error: errorHome,
+    isError: isHomeError,
+    data: homeData,
+  } = useQuery("homeContent", fetchHomeContent, {
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
@@ -36,6 +38,7 @@ function Home() {
   const {
     data: postsData,
     error: errorPosts,
+    isError: isPostError,
     isFetching,
     isFetchingNextPage,
     fetchNextPage,
@@ -67,15 +70,13 @@ function Home() {
     [setSearchParams]
   );
 
-  if (errorPreps || (errorPosts && errorPosts?.status !== 404)) {
-    const errorMessage =
-      errorPreps?.data ||
-      errorPosts?.data ||
-      "An error occurred while loading content. Please try again later.";
+  if (isHomeError || isPostError) {
+    const errorMessage = errorHome?.data.message || errorPosts?.data.message;
+    const statusCode = errorHome?.status || errorPosts?.status;
     return (
-      <SomethingWentWrong
-        cause={errorPosts?.status || errorPreps?.status}
-        message={errorMessage}
+      <ErrorPage
+        message={errorMessage || errorHome?.message}
+        statusCode={statusCode}
       />
     );
   }
@@ -88,7 +89,7 @@ function Home() {
           <WhoToFollow
             PrepsData={prepsData}
             className="w-full  text-sm p-5 border-b border-inherit"
-            FechingPreps={fetchingPreps}
+            FechingPreps={fetchingHome}
           />
           <PostPreview
             className="border-inherit border-b pt-2"
@@ -155,9 +156,9 @@ function Home() {
 
       <Aside
         className="lg:flex hidden text-xs border-inherit max-w-[25rem] w-full h-screen flex-col border-x   justify-start gap-5 sticky top-14"
-        FechingPreps={fetchingPreps}
-        isLoadingPreps={isLoadingPreps}
-        PrepsData={prepsData}
+        FechingPreps={fetchingHome}
+        isLoadingHome={isLoadingHome}
+        homeData={homeData}
         handleTopicClick={handleTopicClick}
       />
     </section>

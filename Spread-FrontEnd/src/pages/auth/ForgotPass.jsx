@@ -7,6 +7,7 @@ import CommonInput from "../../component/UtilityComp/commonInput";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import AuthFormWrapper from "./AuthFormWrapper";
+import LoaderScreen from "../../component/loaders/loaderScreen";
 
 function ForgotPass() {
   const location = useLocation();
@@ -33,6 +34,9 @@ function ForgotPass() {
     // console.log(obj);
     mutate(obj);
   };
+  if (isLoading) {
+    return <LoaderScreen message={"Authenticating please wait"} />;
+  }
   return (
     <AuthFormWrapper onSubmit={handlerforgot} isError={isError} error={error}>
       <div className="relative flex flex-col gap-3 my-4 break-words justify-center text-center px-10 ">

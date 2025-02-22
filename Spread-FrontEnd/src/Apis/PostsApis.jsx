@@ -17,7 +17,7 @@ function PostsApis() {
       });
       return response.data;
     } catch (error) {
-      throw error.response;
+      throw error.response || error;
     }
   };
   const AddNewPost = async (newPost, signal) => {
@@ -28,7 +28,7 @@ function PostsApis() {
       });
       return result.data; // Return the actual data
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   const Comments = async (comment) => {
@@ -38,7 +38,7 @@ function PostsApis() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   const getComments = async ({ postId, pageParam }) => {
@@ -54,7 +54,7 @@ function PostsApis() {
       });
       return result.data; // Return the actual data
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   const hitLike = async (comtId) => {
@@ -64,7 +64,7 @@ function PostsApis() {
       });
       return result.data; // Return the actual data
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   const getReplies = async ({ topCommentId, postId, pageParam }) => {
@@ -80,7 +80,7 @@ function PostsApis() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   const pinComment = async (data) => {
@@ -90,7 +90,7 @@ function PostsApis() {
       });
       return result.data.result;
     } catch (error) {
-      throw error.response;
+      throw error.response || error;
     }
   };
   const getAiGenAnalysis = async (data) => {
@@ -101,7 +101,7 @@ function PostsApis() {
       });
       return result.data;
     } catch (error) {
-      throw error.response;
+      throw error.response || error;
     }
   };
   const getAiGenTags = async (data) => {
@@ -111,7 +111,7 @@ function PostsApis() {
       });
       return result.data;
     } catch (error) {
-      throw error.response;
+      throw error.response || error;
     }
   };
   const deleteComment = async (commentId) => {
@@ -124,7 +124,7 @@ function PostsApis() {
       );
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
 
@@ -144,7 +144,7 @@ function PostsApis() {
         // localStorage.removeItem("userAccount");
         localStorage.removeItem("AccessToken");
       }
-      throw error;
+      throw error.response || error;
     }
   };
 

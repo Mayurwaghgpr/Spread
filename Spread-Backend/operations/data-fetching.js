@@ -1,17 +1,19 @@
 import User from '../models/user.js'
 import Post from "../models/posts.js"; // Ensure Post is imported
+import { Op } from 'sequelize';
 
 export class DataFetching {
 
-  async Profile(id) {
-      console.log("first...")
+  async Profile(...args) {
+    console.log("first...")
+          console.log(args)
     try {
       // Validate the input
-      if (!id) throw new Error("User ID is required");
+      if (!args) throw new Error("User ID is required");
 
       // Fetch user profile information
       const userInfo = await User.findOne({
-        where: { id },
+        where: {[Op.and]:[...args]},
         attributes: { exclude: ['password'] },
         include: [
           {

@@ -61,27 +61,10 @@ export const generateAIAnalysis = async (req, res, next) => {
         responseText = responseText.replace(/```json|```/g, "").trim();
 
         let analysis;
-        try {
             analysis = JSON.parse(responseText);
             if (!Array.isArray(analysis)) {
                 throw new Error("Expected an array in AI response.");
             }
-        } catch (err) {
-            throw new Error("Error parsing AI response: " + err.message);
-        }
-
-        // // Stream the response
-        // const readable = new Readable({
-        //     objectMode: true,
-        //     read() {
-        //         while (analysis.length) {
-        //             this.push(analysis.shift()); // Push data chunks
-        //         }
-        //         this.push(null); // End the stream
-        //     }
-        // });
-
-        // readable.pipe(res);
 
         res.status(201).json(analysis);
 

@@ -1,5 +1,4 @@
-import { Sequelize, Op, where } from "sequelize";
-import Redis from "redis";
+import {Op } from "sequelize"
 import User from "../models/user.js";
 import Post from "../models/posts.js";
 import formatPostData from "../utils/dataFormater.js";
@@ -15,10 +14,7 @@ import { CookieOptions } from "../utils/cookie-options.js";
 
 const dataFecter = new DataFetching();
 
-export const getLoginUser = async (req, res, nex) => {
-  const userInfo = req.cookies._userDetail ||   await redisClient.get("_userDetail");
-  res.status(200).json(userInfo);
-};
+
 // Get user profile
 export const getUserProfile = async (req, res, next) => {
   const id = req?.params?.id || req.authUser.id;

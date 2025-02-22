@@ -31,7 +31,7 @@ const ForgotPass = lazy(() => import("./pages/auth/ForgotPass"));
 const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 const Home = lazy(() => import("./pages/home/Home"));
 const Heros = lazy(() => import("./pages/Heros"));
-const PageError = lazy(() => import("./pages/ErrorPages/Page404"));
+const PageError = lazy(() => import("./pages/ErrorPages/ErrorPage"));
 const Profile = lazy(() => import("./pages/userProfile/Profile"));
 const DynamicPostEditor = lazy(
   () => import("./pages/PostEditor/DynamicPostEditor")

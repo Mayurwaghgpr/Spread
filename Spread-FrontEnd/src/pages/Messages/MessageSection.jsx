@@ -133,14 +133,14 @@ function MessageSection() {
     return () => socket.off("newMessage");
   }, [dispatch]);
 
-  const handleSend = async () => {
-    const newMessage = { senderId: user.id, content: message };
-    const { data } = await sendMessage(newMessage);
-    socket.emit("sendMessage", newMessage);
-    dispatch(addMessage(data));
-    setMessage("");
-  };
-  console.log(user);
+  // const handleSend = async () => {
+  //   const newMessage = { senderId: user.id, content: message };
+  //   const { data } = await sendMessage(newMessage);
+  //   socket.emit("sendMessage", newMessage);
+  //   dispatch(addMessage(data));
+  //   setMessage("");
+  // };
+  // console.log(user);
   // console.log(messages);
   return (
     <div className="relative w-full max-h-screen sm:flex flex-col justify-between hidden  border-inherit  ">

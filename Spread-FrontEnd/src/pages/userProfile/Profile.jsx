@@ -10,6 +10,7 @@ import ProfileinfoCard from "../../component/ProfileinfoCard";
 import { useLastPostObserver } from "../../hooks/useLastPostObserver";
 import useProfileApi from "../../Apis/ProfileApis";
 import SomthingWentWrong from "../ErrorPages/somthingWentWrong";
+import ErrorPage from "../ErrorPages/ErrorPage";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -20,15 +21,17 @@ function Profile() {
   const { userProfile, FollowInfo } = useSelector((state) => state.profile);
   const profileId = params.id || user?.id;
 
-  const { mutate, isError, error, isFetching, isLoading } = useMutation(
-    ["userProfile"],
-    async (id) => fetchUserProfile(id),
-    {
-      onSuccess: (data) => {
-        dispatch(setuserProfile(data));
-      },
-    }
-  );
+  const {
+    mutate,
+    isError: isProfileError,
+    error: profileError,
+    isFetching,
+    isLoading,
+  } = useMutation(["userProfile"], async (id) => fetchUserProfile(id), {
+    onSuccess: (data) => {
+      dispatch(setuserProfile(data));
+    },
+  });
   useEffect(() => {
     if (profileId !== user.id) {
       mutate(profileId);
@@ -68,6 +71,12 @@ function Profile() {
     () => postsData?.pages.flatMap((page) => page) || [],
     [postsData]
   );
+  if (isProfileError || isPostError) {
+    console.log(profileError);
+    const errorMessage = profileError?.data.message || postError?.data.message;
+    const statusCode = profileError?.status || postError?.status;
+    return <ErrorPage message={errorMessage} statusCode={statusCode} />;
+  }
   if (isLoading) {
     return (
       <div className="flex h-screen w-full  justify-center items-center dark:*:border-[#383838]">
@@ -76,9 +85,6 @@ function Profile() {
     );
   }
 
-  if (isError && !error.status) {
-    <SomthingWentWrong />;
-  }
   return (
     <section className="flex h-screen w-full lg:justify-start justify-end dark:*:border-[#383838] overflow-y-auto">
       <div className="flex flex-col h-full md:w-[80%]  lg:w-[70%]  w-full  mt-20 ">

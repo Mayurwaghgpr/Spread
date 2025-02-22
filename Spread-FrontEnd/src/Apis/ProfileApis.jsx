@@ -10,7 +10,7 @@ function useProfileApi() {
       });
       return response.data;
     } catch (error) {
-      return error.response;
+      throw error.response || error;
     }
   };
   const fetchUserData = async (profileId, pageParam) => {
@@ -25,15 +25,36 @@ function useProfileApi() {
       });
       return response.data;
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        // localStorage.removeItem("userAccount");
-        localStorage.removeItem("AccessToken");
-      }
-      // console.log(error.response);
-      if (error.response && error.response.status === 404) {
-        throw new Error(error.response.status);
-      }
-      throw new Error(error.response);
+      throw error.response || error;
+    }
+  };
+
+  const getArchivedPosts = async ({ pageParam }) => {
+    try {
+      const result = await axios.get(`${BASE_URL}/posts/archived`, {
+        withCredentials: true,
+        params: {
+          lastTimestamp: pageParam,
+          limit: 3,
+        },
+      });
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
+  const fetchFollowInfo = async ({ FollowInfo, profileId }) => {
+    try {
+      const result = await axios.get(
+        `${BASE_URL}/user/${FollowInfo}/${profileId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
     }
   };
 
@@ -73,12 +94,12 @@ function useProfileApi() {
         }
       );
       return response.data;
-    } catch (err) {
+    } catch (error) {
       console.error(
         "Error updating profile:",
-        err.response ? err.response.data : err.message
+        error.response ? error.response.data : error.message
       );
-      throw err;
+      throw error.response || error;
     }
   };
   const searchUsername = async (username) => {
@@ -89,10 +110,17 @@ function useProfileApi() {
       );
       return response.data;
     } catch (error) {
-      throw error.response;
+      throw error.response || error;
     }
   };
 
-  return { fetchUserData, fetchUserProfile, editUserProfile, searchUsername };
+  return {
+    fetchUserData,
+    fetchUserProfile,
+    editUserProfile,
+    searchUsername,
+    getArchivedPosts,
+    fetchFollowInfo,
+  };
 }
 export default useProfileApi;

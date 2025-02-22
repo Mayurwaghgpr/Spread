@@ -1,18 +1,18 @@
 import express from 'express';
-import { 
-  userPrepsData, 
+import {  
   searchData, 
   FollowUser,
   AddPostToArchive,
   removeFromArchive,
   LikePost,
+  getHomeContent,
 } from '../controllers/public.controller.js';
 import IsAuth from '../middlewares/isAuth.js'; // Import the authentication middleware
 
 const router = express.Router();
 
 // Route to get preparation data for posts (authenticated users only)
-router.get('/prepsdata', IsAuth, userPrepsData);
+router.get('/h/content', IsAuth, getHomeContent);
 
 
 // Route to search for posts based on query parameters (authenticated users only)

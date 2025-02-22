@@ -12,6 +12,16 @@ function authApi() {
       throw error;
     }
   };
+  const getLogInUserData = async () => {
+    try {
+      const result = await axios.get(`${BASE_URL}/auth/details`, {
+        withCredentials: true,
+      });
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
 
   const registerUser = async (signUpcofig) => {
     try {
@@ -20,7 +30,7 @@ function authApi() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
 
@@ -31,7 +41,7 @@ function authApi() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
 
@@ -68,6 +78,7 @@ function authApi() {
   };
   return {
     loginUser,
+    getLogInUserData,
     registerUser,
     refreshToken,
     forgotPassword,

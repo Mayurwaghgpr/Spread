@@ -2,13 +2,13 @@ import React from "react";
 import FollowPeopleLoader from "../../component/loaders/FollowPeopleLoader";
 import PeoplesList from "../../component/PeoplesList";
 
-function WhoToFollow({ className, PrepsData, FechingPreps }) {
+function WhoToFollow({ className, homeData, FechingPreps }) {
   return (
     <div className={className}>
       <h1 className=" text-start w-full text-xl font-bold"> Follow people </h1>
       {!FechingPreps ? (
         <ul className="py-3 w-full flex flex-wrap gap-3">
-          {PrepsData?.userSuggetion?.map((el, index) => (
+          {homeData?.userSuggetion?.map((el, index) => (
             <PeoplesList key={el.id} people={el} index={index} />
           ))}
         </ul>

@@ -226,7 +226,7 @@ export const deleteComment = async (req, res, next) => {
   }
 };
 
-export const pinComment = async (req, res) => {
+export const pinComment = async (req, res,next) => {
   const {pin,commentId} = req.body;
   try {
     const [_,result] = await Comments.update({ pind: pin }, {

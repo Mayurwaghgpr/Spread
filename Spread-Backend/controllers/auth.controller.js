@@ -3,11 +3,11 @@ import Sequelize, { where } from "sequelize";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenerator.js";
+import AccessAndRefreshTokenGenerator from "../utils/accessAndRefreshTokenGenerator.js";
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import Post from "../models/posts.js";
-import genUniqueUserName from "../utils/UserNameGenerator.js";
+import genUniqueUserName from "../utils/userNameGenerator.js";
 import redisClient from "../utils/redisClient.js";
 
 dotenv.config();
@@ -98,10 +98,7 @@ export const signIn = async (req, res, next) => {
                 model: Post,
                 attributes: ['id']
         },
-         {
-           model: Post,
-           attributes: ['id']
-          },
+
         {
             model: Post,
             as: 'SavedPosts',
@@ -143,6 +140,13 @@ export const signIn = async (req, res, next) => {
     next(err);
     // res.status(500).json({ message: err.message });
   }
+};
+
+
+//Fetch login user details
+export const getLoginUser = async (req, res, nex) => {
+  const userInfo = req.cookies._userDetail ||   await redisClient.get("_userDetail");
+  res.status(200).json(userInfo);
 };
 
 // Refresh access token using refresh token

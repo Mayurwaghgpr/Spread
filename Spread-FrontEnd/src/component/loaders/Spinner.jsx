@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 
-function Spiner({ className }) {
+function Spinner({ className }) {
   return (
     <div className={`loader ${className}`}>
       <div></div>
@@ -11,4 +11,4 @@ function Spiner({ className }) {
   );
 }
 
-export default memo(Spiner);
+export default memo(Spinner);

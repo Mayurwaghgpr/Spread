@@ -8,7 +8,7 @@ import WhoToFollow from "../../pages/home/WhoToFollow";
 function Aside({
   FechingPreps,
   isLoadingPreps,
-  PrepsData,
+  homeData,
   className,
   handleTopicClick,
 }) {
@@ -20,7 +20,7 @@ function Aside({
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
           <ul className="flex justify-start flex-wrap gap-2">
-            {PrepsData?.topics?.map(({ topic }, index) => (
+            {homeData?.topics?.map(({ topic }, index) => (
               <li
                 key={index}
                 className=" rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
@@ -40,7 +40,7 @@ function Aside({
       </div>
       <div className="sticky top-[4.3rem] gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
         <WhoToFollow
-          PrepsData={PrepsData}
+          homeData={homeData}
           className={" text-sm  p-5  border-inherit"}
           FechingPreps={FechingPreps}
         />

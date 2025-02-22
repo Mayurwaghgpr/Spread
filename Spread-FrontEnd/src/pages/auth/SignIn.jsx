@@ -8,6 +8,7 @@ import CommonInput from "../../component/UtilityComp/commonInput";
 import OAuth from "./OAuth";
 import EyeBtn from "../../component/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
+import LoaderScreen from "../../component/loaders/loaderScreen";
 
 function SignIn() {
   const [passVisible, setpassVisible] = useState(false);
@@ -41,6 +42,9 @@ function SignIn() {
     const fromData = new FormData(e.target);
     const obj = Object.fromEntries(fromData);
     mutate(obj);
+  }
+  if (isLoading) {
+    return <LoaderScreen message={"Authenticating please wait"} />;
   }
   if (!isLogin) {
     return (

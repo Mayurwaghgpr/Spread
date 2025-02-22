@@ -9,7 +9,7 @@ function ChatApi() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   const getconversations = async () => {
@@ -19,7 +19,7 @@ function ChatApi() {
       });
       return result.data;
     } catch (error) {
-      throw error;
+      throw error.response || error;
     }
   };
   return { sendMessage, getconversations };

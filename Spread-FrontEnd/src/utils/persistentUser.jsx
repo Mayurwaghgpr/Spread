@@ -1,17 +1,15 @@
 import React, { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
-import userApi from "../Apis/userApi";
 import { setIsLogin, setUser } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import authApi from "../Apis/authApi";
 
 function PersistentUser() {
-  const { getLogInUserData } = userApi();
   // const navigate = useNavigate();
   // const { isLogin } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { refreshToken } = authApi();
+  const { refreshToken, getLogInUserData } = authApi();
   const { error, isError } = useQuery({
     queryKey: ["loggedInUser"],
     queryFn: () => getLogInUserData(),

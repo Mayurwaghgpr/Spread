@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFollowInfo } from "../redux/slices/profileSlice";
 import { createPortal } from "react-dom";
 import { useQuery } from "react-query";
-import userApi from "../Apis/userApi";
 import FollowPeopleLoader from "./loaders/FollowPeopleLoader";
 import { PiFileXlsBold } from "react-icons/pi";
 import { IoClose, IoCloseSharp } from "react-icons/io5";
+import useProfileApi from "../Apis/ProfileApis";
 
 function ProfileinfoCard({ className }) {
   const dispatch = useDispatch();
-  const { fetchFollowInfo } = userApi();
+  const { fetchFollowInfo } = useProfileApi();
   const { userProfile, FollowInfo } = useSelector((state) => state.profile);
 
   const { data, isLoading } = useQuery({

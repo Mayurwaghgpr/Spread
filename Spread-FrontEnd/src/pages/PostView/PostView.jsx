@@ -28,6 +28,7 @@ import PostsApis from "../../Apis/PostsApis";
 import { IoClose, IoReloadCircle } from "react-icons/io5";
 import { TiArrowSync } from "react-icons/ti";
 import { setToast } from "../../redux/slices/uiSlice";
+import ErrorPage from "../ErrorPages/ErrorPage";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
 const CopyToClipboardInput = lazy(
@@ -42,7 +43,7 @@ function PostView() {
   const navigate = useNavigate();
   const { fetchDataById } = usePublicApis();
   const { getAiGenAnalysis } = PostsApis();
-
+  //Fetch Post Full View
   const {
     data: postView,
     isLoading,
@@ -51,8 +52,18 @@ function PostView() {
   } = useQuery({
     queryKey: ["fullpostData", id],
     queryFn: () => fetchDataById(id),
+    onSuccess: (data) => {
+      dispatch(
+        setCommentCred({
+          ...commentCred,
+          postId: data?.id,
+        })
+      );
+    },
     refetchOnWindowFocus: false,
   });
+
+  // Fetches  Ai generated analysis on post
   const {
     mutate,
     data,
@@ -62,34 +73,36 @@ function PostView() {
     mutationFn: getAiGenAnalysis,
     onSuccess: () => {},
     onError: ({ data }) => {
-      setToast({ message: data, type: "success" });
+      setToast({ message: data.message, type: "success" });
     },
   });
 
-  useEffect(() => {
-    dispatch(
-      setCommentCred({
-        ...commentCred,
-        postId: postView?.id,
-      })
-    );
-  }, [postView?.id]);
-
+  //To Open Comments of post
   const handelComment = useCallback(() => {
     //Setting data initialy
     navigate("comments");
   }, []);
-  const userImage = useMemo(
+
+  // Returns the image url by cheking the original path
+  const { userImageurl } = useMemo(
     () => userImageSrc(postView?.User),
     [postView?.User]
   );
+
+  // Memoies the filltered topComment data by comments which don't have topCommentId
   const Comments = useMemo(
     () =>
       postView?.comments?.filter((comment) => comment.topCommentId === null),
     [postView?.comments]
   );
-  if (isError || error) {
-    return <SomthingWentWrong />;
+
+  if (isError) {
+    return (
+      <ErrorPage
+        message={error?.data?.message}
+        statusCode={error?.data?.status}
+      />
+    );
   }
 
   if (isLoading) {
@@ -100,8 +113,6 @@ function PostView() {
     );
   }
 
-  console.log(aiError);
-  console.log(data);
   return (
     <main
       className={`relative flex justify-center h-full border-inherit transition-all duration-500 min-w-full  my-16 dark:*:border-[#383838]`}
@@ -132,7 +143,7 @@ function PostView() {
                 {" "}
                 <img
                   alt={`${postView?.User?.username}`}
-                  src={userImage.userImageurl}
+                  src={userImageurl}
                   className="w-full h-full rounded-full mr-4 object-cover object-top"
                   loading="lazy"
                 />

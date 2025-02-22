@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useMemo } from "react";
-import userApi from "../../Apis/userApi";
 import { useMutation, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import usePublicApis from "../../Apis/publicApis";

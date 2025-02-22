@@ -9,8 +9,9 @@ import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 const dataFetcher = new DataFetching();
+
 // Fetch all users except the current user and distinct topics
-export const userPrepsData = async (req, res, next) => {
+export const getHomeContent = async (req, res, next) => {
   try {
     // Fetch users excluding the current user
     const userSuggetion = await User.findAll({
@@ -174,14 +175,6 @@ export const FollowUser = async (req, res, next) => {
     }
   } catch (error) {
     console.error("Error in FollowUser:", error);
-
-    // General error handling
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "An error occurred. Please try again later.",
-      });
     next(error);
   }
 };

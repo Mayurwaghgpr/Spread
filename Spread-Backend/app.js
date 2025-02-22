@@ -16,13 +16,10 @@ import userRouter from "./routes/user.route.js";
 import publicRouter from "./routes/public.route.js";
 import commentRouter from "./routes/comments.route.js";
 import aiRouter from "./routes/AI.route.js";
-import conversationRouter from "./routes/Conversation.route.js"
-import messageRouter from "./routes/Messages.route.js";
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import redisClient from "./utils/redisClient.js";
-import { dataBaseAssociations } from "./utils/DataBaseAssociations.js";
-import { CookieOptions } from "./utils/cookie-options.js";
+import { dataBaseAssociations } from "./utils/dataBaseAssociations.js";
 
 // Initialize dotenv
 dotenv.config();
@@ -40,16 +37,13 @@ const Io = new Server(server, {
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
-
-app.use(express.json());
-app.use(cookieParser());
-
 app.use(cors({
   origin: allowedOrigins, // Support multiple origins
     methods:["GET","POST","PUT","PATCH","DELETE"],
   credentials: true,
 }))
-
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -63,13 +57,14 @@ app.use(helmet({
     }
   }
 }));
-
+// Reate limmiter 
 app.use("/", rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   message: { message: "Too many requests, please try again later." },
   headers: true,
 })); 
+app.use(cookieParser());
 
 // Serve Static Files (Place before routes)
 // Serve Static Files
@@ -83,8 +78,7 @@ app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
 app.use("/ai", aiRouter);
-app.use('/messages', messageRouter);
-app.use('/conversations', conversationRouter);
+
 
 
 // Passport Configuration
@@ -104,10 +98,10 @@ app.get("*", (req, res) => {
 
 // Wildcard Route for Frontend
 app.use("/api", (req, res) => res.status(404).json({ message: "API route not found" })); 
-
 app.use((error, req, res, next) => {
   console.error("Error:", error);
-  res.status(error.statusCode || 500).json({ message: error.message || "An error occurred" });
+  console.log(error.statusCode)
+  res.status(error.statusCode || 500).json({ message: error.statusCode!==500 ?error.message :"Server Error" });
 });
 
 

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsLogin, setUser } from "../../redux/slices/authSlice";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import authApi from "../../Apis/authApi";
+import authApi from "../../Apis/authapi";
 import CommonInput from "../../component/UtilityComp/commonInput";
 import OAuth from "./OAuth";
 import EyeBtn from "../../component/buttons/EyeBtn";

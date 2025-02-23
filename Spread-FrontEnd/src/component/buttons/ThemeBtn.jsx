@@ -39,6 +39,7 @@ function ThemeBtn({ Modes, className, separate }) {
 
   return (
     <div className={className}>
+      {/* It used when theme buttons to be displayed separetly */}
       {!separate ? (
         <button
           onClick={changeTheme}
@@ -48,6 +49,7 @@ function ThemeBtn({ Modes, className, separate }) {
           {currentMode?.icon}
         </button>
       ) : (
+        //It used to diplay toggle buttons
         Modes.map((mode) => {
           return (
             <button

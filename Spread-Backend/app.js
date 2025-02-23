@@ -19,7 +19,7 @@ import aiRouter from "./routes/AI.route.js";
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import redisClient from "./utils/redisClient.js";
-import { dataBaseAssociations } from "./utils/dataBaseAssociations.js";
+import dataBaseAssociations from "./utils/dataBaseAssociations.js";
 
 // Initialize dotenv
 dotenv.config();

@@ -4,7 +4,7 @@ import Follow from "../models/Follow.js";
 import Post from "../models/posts.js";
 import User from "../models/user.js";
 
-export const dataBaseAssociations = () => {
+const dataBaseAssociations = () => {
     
 // Associations
 User.hasMany(Post, { foreignKey: "authorId" });
@@ -82,4 +82,6 @@ Comments.belongsTo(Post, {
 
 });
 
-}
+ }
+
+ export default dataBaseAssociations

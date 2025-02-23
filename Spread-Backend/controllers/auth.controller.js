@@ -3,7 +3,7 @@ import Sequelize, { where } from "sequelize";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import AccessAndRefreshTokenGenerator from "../utils/accessAndRefreshTokenGenerator.js";
+import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenerator.js";
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import Post from "../models/posts.js";

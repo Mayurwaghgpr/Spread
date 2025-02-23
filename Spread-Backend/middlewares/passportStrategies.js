@@ -3,7 +3,7 @@ import { Strategy as GitHubStrategy } from "passport-github2";
 import User from "../models/user.js"; // Adjust the path as necessary
 import dotenv from "dotenv";
 import Post from "../models/posts.js";
-import genUniqueUserName from "../utils/userNameGenerator.js";
+import genUniqueUserName from "../utils/UserNameGenerator.js";
 import Sequelize from "sequelize";
 import { DataFetching } from "../operations/data-fetching.js";
 dotenv.config();

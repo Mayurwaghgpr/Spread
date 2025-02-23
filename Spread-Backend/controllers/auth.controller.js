@@ -7,7 +7,7 @@ import AccessAndRefreshTokenGenerator from "../utils/accessAndRefreshTokenGenera
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import Post from "../models/posts.js";
-import genUniqueUserName from "../utils/userNameGenerator.js";
+import genUniqueUserName from "../utils/UserNameGenerator.js";
 import redisClient from "../utils/redisClient.js";
 
 dotenv.config();

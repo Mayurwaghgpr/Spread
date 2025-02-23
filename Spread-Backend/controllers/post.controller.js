@@ -1,17 +1,15 @@
 import Post from "../models/posts.js";
-import sequelize, { Model, Op, Sequelize, where } from "sequelize";
+import{Op } from "sequelize";
 import User from "../models/user.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import PostContent from "../models/PostContent.js";
 import formatPostData from "../utils/dataFormater.js";
 import Likes from "../models/Likes.js";
-import { stringify } from "uuid";
 import Comments from "../models/Comments.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import redisClient from "../utils/redisClient.js";
-import Database from "../utils/database.js";
-import Follow from "../models/Follow.js";
+
 import { EXPIRATION } from "../config/constants.js";
 
 

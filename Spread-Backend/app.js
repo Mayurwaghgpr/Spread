@@ -19,6 +19,7 @@ import aiRouter from "./routes/AI.route.js";
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import redisClient from "./utils/redisClient.js";
+import DataBaseAssociations from "./utils/dataBaseAssociations.js";
 
 
 // Initialize dotenv
@@ -89,7 +90,7 @@ app.use(passport.initialize());
 socketHandlers(Io)
 
 // Associations
-DataBase
+DataBaseAssociations()
 
 // Handle React Routes (After API Routes)
 app.get("*", (req, res) => {

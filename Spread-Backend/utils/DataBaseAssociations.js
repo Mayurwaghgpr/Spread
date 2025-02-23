@@ -4,7 +4,7 @@ import Follow from "../models/Follow.js";
 import Post from "../models/posts.js";
 import User from "../models/user.js";
 
-const dataBaseAssociations = () => {
+const DataBaseAssociations = () => {
     
 // Associations
 User.hasMany(Post, { foreignKey: "authorId" });
@@ -48,6 +48,8 @@ Archive.belongsTo(Post, {
   as: "post",
   foreignKey: "postId",
 });
+  
+  
 // Self-referencing association for child comments
 Comments.hasMany(Comments, {
   foreignKey: "topCommentId",
@@ -84,4 +86,4 @@ Comments.belongsTo(Post, {
 
  }
 
- export default dataBaseAssociations
+ export default DataBaseAssociations

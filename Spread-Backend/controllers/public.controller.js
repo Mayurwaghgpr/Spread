@@ -95,38 +95,33 @@ export const searchData = async (req, res, next) => {
 };
 
 export const LikePost = async (req, res, next) => {
-  const postId = req.body.postId;
-  const type = req.body.liketype;
-  // console.log({ postId })
-  // console.log({likedBy: req.authUser.id,})
+  const { postId, liketype: type } = req.body;
+  const { id: likedBy } = req.authUser;
 
   try {
-    const exist = await Likes.findOne({
-      where: { likedBy: req.authUser.id, postId: postId },
-    });
-    // console.log(exist)
-    if (exist && !type) {
-      await exist.destroy();
-      const updtLikes = await Likes.findAll({ where: { postId } });
+    // Check if the like already exists
+    const existingLike = await Likes.findOne({ where: { likedBy, postId } });
 
-      res.status(201).json({ message: "removed like", updtLikes });
-    } else if (exist && type) {
-      await Likes.update(
-        { type: type },
-        { where: { likedBy: req.authUser.id, postId: postId } }
-      );
-      const updtLikes = await Likes.findAll({ where: { postId } });
-      res.status(201).json({ message: "like updated", updtLikes });
+    if (existingLike) {
+      !type ?
+        // If type is not provided, remove the like
+        await existingLike.destroy() :
+        // If type is provided, update the like type
+        await existingLike.update({ type });
+
     } else {
-      const result = await Likes.create({
-        likedBy: req.authUser.id,
-        postId,
-        type,
-      });
-      const updtLikes = await Likes.findAll({ where: { postId } });
-      // console.log('like',result)
-      res.status(201).json({ message: "added like", updtLikes });
+      // If the like doesn't exist, create a new one
+      await Likes.create({ likedBy, postId, type });
     }
+
+    // Fetch updated likes for the post
+    const updatedLikes = await Likes.findAll({ where: { postId } });
+
+    // Send response
+    res.status(201).json({
+      message: existingLike ? (type ? "like updated" : "removed like") : "added like",
+      updatedLikes,
+    });
   } catch (error) {
     next(error);
   }
@@ -136,43 +131,37 @@ export const LikePost = async (req, res, next) => {
 export const FollowUser = async (req, res, next) => {
   const { followerId, followedId } = req.body;
 
-  // Prevent users from following themselves
+
+  try {
+    let userInfo = JSON.parse(req.cookies._userDetail);
+      // Prevent users from following themselves
   if (followerId === followedId) {
     return res
       .status(400)
       .json({ status: "error", message: "You cannot follow yourself" });
   }
 
-  try {
+
     // Check if the follow relationship already exists
     const existingFollow = await Follow.findOne({
       where: { followerId, followedId },
     });
 
     if (existingFollow) {
+        userInfo.Following = userInfo.Following.filter((follow) => follow.id !== followedId && follow);
       // Unfollow user
       await existingFollow.destroy();
-      const userInfo = await dataFetcher.Profile(req.authUser.id);
       // console.log(userInfo);
-
-      res
-        .status(200)
-        .cookie("_userDetail", userInfo, CookieOptions) // Serialize object before storing
-        .json({ message: "Unfollowed successfully" });
     } else {
       // Follow user
       await Follow.create({ followerId, followedId });
-      const userInfo = await dataFetcher.Profile(req.authUser.id);
       // console.log(userInfo);
-
-      // Optionally clear Redis cache if implemented
-      // await redisClient.del(followerId);
-
+       userInfo.Following.push({id:followedId})
+    }
       res
         .status(201)
-        .cookie("_userDetail",  userInfo,CookieOptions) // Serialize object before storing
-        .json({ status: "success", message: "Followed successfully" });
-    }
+        .cookie("_userDetail",  JSON.stringify(userInfo),CookieOptions) // Serialize object before storing
+        .json({ status: "success", message: existingFollow ?"Unfollowed successfully": "Followed successfully" });
   } catch (error) {
     console.error("Error in FollowUser:", error);
     next(error);
@@ -183,36 +172,39 @@ export const FollowUser = async (req, res, next) => {
 export const AddPostToArchive = async (req, res, next) => {
   const { postId } = req.body;
   const userId = req.authUser.id;
-  let userInfo = JSON.parse(req.cookies._userDetail);
   
   try {
 
+    // Parsing userInfo from cookies to further make modification rather than refetching from user database 
+    let userInfo = JSON.parse(req.cookies._userDetail);
+
+    // Check if the post is already archived
     const archived = await Archive.findOne({ where: { postId, userId } });
-    // console.log(userInfo)
+
     if (archived) {
-      const newSavedPosts = userInfo.savedPosts.filter((post) => { post.id !== postId });
-      console.log(newSavedPosts)
-      userInfo={...userInfo,savedPosts: newSavedPosts}
       await archived.destroy();
-      return res.status(200).cookie("_userDetail", userInfo, CookieOptions).json({removed:true, message: "Removed from archive", archived: {postId,userId} });
+      userInfo.savedPosts = userInfo.savedPosts.filter((post) => post.id !== postId && post);
+
+      return res
+        .status(200)
+        .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
+        .json({ removed: true, message: "Removed from archive", archived: { postId, userId } });
     }
 
-    // Use transaction for safety and performance
-    const result = await Archive.create({ postId, userId });
-    console.log({ result })
-    let strResult = JSON.stringify(result)
-    userInfo.savedPosts.push(JSON.parse(strResult))
-    console.log("saved posts",userInfo.savedPosts)
+    // Create archive entry & fetch post details in one go
+    const archiveWithPost = await Archive.create({ postId, userId });
+      userInfo.savedPosts.push({id:postId});
 
     res
       .status(200)
-      .cookie("_userDetail", userInfo, CookieOptions)
-      .json({ message: "Post archived successfully", archived: result });
+      .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
+      .json({ message: "Post archived successfully", archived: archiveWithPost });
   } catch (error) {
     console.error("Error archiving post:", error);
     next(error);
   }
 };
+
 // Remove archived post for current user
 export const removeFromArchive = async (req, res, next) => {
   const userId = req.authUser.id;

@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  return isLogin && children;
+  return isLogin ? children : navigate("/auth/signin");
 };
 
 export default memo(ProtectedRoute);

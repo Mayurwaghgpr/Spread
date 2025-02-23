@@ -1,21 +1,28 @@
 import React, { memo, useCallback, useMemo } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import usePublicApis from "../../Apis/publicApis";
+import { setToast } from "../../redux/slices/uiSlice";
 
 function Follow({ className, People }) {
   const { user } = useSelector((state) => state.auth);
   const { followUser, unfollowUser } = usePublicApis();
   const queryClient = useQueryClient();
-
+  const dispatch = useDispatch();
   const invalidateQueries = () => {
     queryClient.invalidateQueries(["userProfile"]);
     queryClient.invalidateQueries(["loggedInUser"]);
   };
 
   const { mutate, isLoading: followLoading } = useMutation(followUser, {
-    onSuccess: invalidateQueries,
-    onError: () => console.error("Error following user"),
+    onSuccess: (data) => {
+      dispatch(setToast({ message: data.message, type: "success" }));
+      invalidateQueries();
+    },
+    onError: (data) => {
+      console.log(data);
+      dispatch(setToast({ message: data.data.message, type: "success" }));
+    },
   });
   const isFollowing = user?.Following?.some(
     (followed) => followed?.id === People?.id

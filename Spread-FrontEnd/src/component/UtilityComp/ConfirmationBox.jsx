@@ -2,19 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
 import { createPortal } from "react-dom";
 import { useCallback } from "react";
-import { useMutation, useQueryClient } from "react-query";
-import PostsApis from "../../Apis/PostsApis";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../component/loaders/Spinner";
+import PostsApis from "../../Apis/PostsApis";
 function ConfirmationBox() {
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-  const { DeletePostApi } = PostsApis();
+  const { DeletePostApi, deleteComtApi } = PostsApis();
   const navigate = useNavigate();
   const { confirmBox } = useSelector((state) => state.ui);
-  const { mutate: deleteMutation, isLoading } = useMutation(DeletePostApi, {
+
+  // Comment deleting mutation
+  const { mutate: delComment, isCommentDeleting } = useMutation(deleteComtApi, {
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["Allposts"]);
       dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
     },
     onError: () => {
@@ -33,10 +33,31 @@ function ConfirmationBox() {
     },
   });
 
+  //post deleting mutation
+  const { mutate: delPost, isPostDeleting } = useMutation(DeletePostApi, {
+    onSuccess: (data) => {
+      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
+    },
+    onError: () => {
+      dispatch(
+        setToast({
+          message: "Failed to delete post. Please try again.",
+          type: "error",
+        })
+      );
+    },
+    onSettled: () => {
+      dispatch(setConfirmBox({ message: "", status: false }));
+      if (location.pathname.startsWith("/view")) {
+        navigate(-1);
+      }
+    },
+  });
+
+  // handles confirmation
   const handleConfirm = useCallback(() => {
-    if (confirmBox.type === "delete") {
-      deleteMutation(confirmBox.id);
-    }
+    confirmBox.content === "comment" && delComment(confirmBox.id);
+    confirmBox.content === "post" && delPost(confirmBox.id);
     // Logic for confirming action
   }, [confirmBox.status]);
 
@@ -80,9 +101,13 @@ function ConfirmationBox() {
               onClick={handleConfirm}
               name={confirmBox.type}
               className="p-2 px-5 rounded-3xl  bg-white text-black"
-              disabled={isLoading}
+              disabled={isPostDeleting || isCommentDeleting}
             >
-              {isLoading ? <Spinner className={"w-5 h-5"} /> : confirmBox?.type}
+              {isPostDeleting || isCommentDeleting ? (
+                <Spinner className={"w-5 h-5"} />
+              ) : (
+                confirmBox?.type
+              )}
             </button>
           </div>
         </div>

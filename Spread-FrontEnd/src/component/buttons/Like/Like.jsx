@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { memo, useMemo, useState, useCallback } from "react";
 import usePublicApis from "../../../Apis/publicApis";
 import { useMutation } from "react-query";
 import { setToast } from "../../../redux/slices/uiSlice";
@@ -15,43 +15,60 @@ function Like({ post, className }) {
   const navigate = useNavigate();
   const { isLogin, user } = useSelector((state) => state.auth);
 
-  // States
-  const [optimistIcon, setOptimistIcon] = useState(""); // Optimistic UI update
+  // State for optimistic UI updates
+  const [optimistIcon, setOptimistIcon] = useState("");
+
+  // Memoized check if the post is liked by the user
+  const isLiked = useMemo(() => {
+    const like = post?.Likes?.find((like) => like.likedBy === user?.id);
+    setOptimistIcon(like?.type || "");
+    return like;
+  }, [post?.Likes, user?.id]);
 
   // Mutation for liking the post
   const { mutate } = useMutation({
     mutationFn: (likeConfig) => LikePost(likeConfig),
     onSuccess: (data) => {
-      post.Likes = data.updtLikes;
+      post.Likes = data.updatedLikes;
     },
     onError: (error) => {
-      setOptimistIcon("");
+      setOptimistIcon(""); // Revert optimistic update on error
       dispatch(
         setToast({
-          message: ` ${error.response.data.message} ✨`,
+          message: `${error.response?.data?.message || "An error occurred"} ✨`,
           type: "error",
         })
       );
     },
   });
 
-  // Memoized check if the post is liked by the user
-  const isLiked = useMemo(
-    () => post?.Likes?.find((like) => like.likedBy === user?.id),
-    [post?.Likes, user?.id]
+  // Handle like button click
+  const handleLike = useCallback(
+    (e) => {
+      e.stopPropagation();
+
+      if (!isLogin) {
+        navigate("/auth/signin");
+        return;
+      }
+
+      const likeType = e.currentTarget.name || "";
+      setOptimistIcon(likeType); // Optimistic UI update
+      mutate({ postId: post.id, liketype: likeType });
+    },
+    [isLogin, navigate, mutate, post.id]
   );
 
-  const handleLike = (e) => {
-    e.stopPropagation();
-
-    if (isLogin) {
-      const likeType = e.currentTarget.name || "";
-      setOptimistIcon(likeType);
-      mutate({ postId: post.id, liketype: likeType });
-    } else {
-      navigate("/auth/signin");
+  // Memoized like count calculation
+  const likeCount = useMemo(() => {
+    const baseCount = post?.Likes?.length || 0;
+    if (!isLiked && optimistIcon) {
+      return abbreviateNumber(baseCount + 1);
+    } else if (isLiked && !optimistIcon) {
+      return abbreviateNumber(baseCount - 1);
     }
-  };
+    return abbreviateNumber(baseCount);
+  }, [optimistIcon, post?.Likes, isLiked]);
 
   return (
     <div
@@ -61,16 +78,16 @@ function Like({ post, className }) {
     >
       {/* Likes list when hovered */}
       <LikesList mutate={handleLike} post={post} />
+
+      {/* Like button */}
       <button
         name=""
         onClick={isLiked ? handleLike : null}
-        className="flex items-center justify-center gap-1 text-inherit "
+        className="flex items-center justify-center gap-1 text-inherit"
       >
         {/* Icon rendering */}
-        {likeIconObj[optimistIcon || (isLiked?.type ?? "default")]}
-        <span className="text-md mt-1">
-          {abbreviateNumber(post?.Likes?.length)}
-        </span>
+        {likeIconObj[optimistIcon || "default"]}
+        <span className="text-md mt-1">{likeCount}</span>
       </button>
     </div>
   );

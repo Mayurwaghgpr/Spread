@@ -114,7 +114,7 @@ function PostsApis() {
       throw error.response || error;
     }
   };
-  const deleteComment = async (commentId) => {
+  const deleteComtApi = async (commentId) => {
     try {
       const result = await axios.delete(
         `${BASE_URL}/comment/delete/${commentId}`,
@@ -157,7 +157,7 @@ function PostsApis() {
     hitLike,
     getReplies,
     pinComment,
-    deleteComment,
+    deleteComtApi,
     getAiGenTags,
     getAiGenAnalysis,
   };

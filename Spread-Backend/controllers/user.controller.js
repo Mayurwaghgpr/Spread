@@ -27,7 +27,7 @@ export const getUserProfile = async (req, res, next) => {
     }
     console.log('cach miss')
 
-    const userInfo = await dataFecter.Profile(id);
+    const userInfo = await dataFecter.Profile({id});
     // console.log("dsds",userInfo)
 
     if (userInfo) {

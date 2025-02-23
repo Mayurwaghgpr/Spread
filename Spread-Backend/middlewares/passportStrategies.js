@@ -22,8 +22,8 @@ export const passportStrategies = (passport) => {
           if (!profile) {
             return;
           }
-          const {email,provider}=profile
-          let user = await fetchUser.Profile({ email, signedWith:provider })
+          const {email,provider} = profile
+          let user = await fetchUser.Profile({ email, signedWith: provider })
           console.log(user)
           if (!user) {
             const username = await genUniqueUserName( profile.email);

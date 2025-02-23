@@ -118,10 +118,6 @@ function App() {
                 path="/heros"
                 element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
               />
-              <Route path="/auth/signin" element={!isLogin && <SignIn />} />
-              <Route path="/auth/signup" element={!isLogin && <SignUp />} />
-              <Route path="/about" element={<About />} />
-
               <Route
                 path="/profile/:username/:id"
                 element={
@@ -197,8 +193,16 @@ function App() {
                     <ReadList />
                   </ProtectedRoute>
                 }
+              />{" "}
+              <Route
+                path="/auth/signin"
+                element={!isLogin ? <SignIn /> : <Navigate to={"/"} />}
               />
-
+              <Route
+                path="/auth/signup"
+                element={!isLogin ? <SignUp /> : <Navigate to={"/"} />}
+              />
+              <Route path="/about" element={<About />} />
               <Route path="/forgot/pass" element={<ForgotPass />} />
               <Route path="/reset/pass/:token" element={<ResetPassword />} />
               <Route path="/error" element={<SomthingWentWrong />} />
@@ -217,7 +221,7 @@ function App() {
                 {" "}
                 <Ibutton
                   className={
-                    "text-white bg-black py-2 text-center border-4 hover:opacity-60 border-inherit  w-full "
+                    "text-white bg-black dark:bg-white dark:text-black py-2 text-center border-4 hover:opacity-60 border-inherit  w-full "
                   }
                   innerText={"Sign In"}
                   action={() => {
@@ -226,9 +230,7 @@ function App() {
                   }}
                 />
                 <Ibutton
-                  className={
-                    " text-black text-center py-2 border border-inherit  w-full"
-                  }
+                  className={"  text-center py-2 border border-inherit  w-full"}
                   innerText={"Sign Up"}
                   action={() => {
                     navigate("/auth/signUp", { replace: true });

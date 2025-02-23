@@ -18,12 +18,14 @@ import { MdDelete } from "react-icons/md";
 import { TiPin, TiPinOutline } from "react-icons/ti";
 import { setToast } from "../../redux/slices/uiSlice";
 import { useOutletContext } from "react-router-dom";
+import FormatedTime from "../../component/UtilityComp/FormatedTime";
+import Menu from "../../component/postsComp/menu";
 
 const CommentBox = forwardRef(
   ({ comt, className, topCommentId, commentPins = [] }, ref) => {
     const [openReplies, setOpenReplies] = useState("");
     const [optLike, setOptLike] = useState("");
-    const { hitLike, getReplies, deleteComment, pinComment } = PostsApis();
+    const { hitLike, getReplies, deleteComtApi, pinComment } = PostsApis();
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
     const { isLogin, user } = useSelector((state) => state.auth);
@@ -78,16 +80,6 @@ const CommentBox = forwardRef(
       },
     });
 
-    const { mutate: deletMutate } = useMutation({
-      mutationFn: (comtId) => deleteComment(comtId),
-      onSuccess: (data) => {
-        dispatch(setToast({ message: data.message, type: "success" }));
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-    });
-
     const isLiked = useMemo(
       () => comt?.commentLikes?.find((like) => like.likedBy === user?.id),
       [comt?.commentLikes, user?.id]
@@ -126,10 +118,10 @@ const CommentBox = forwardRef(
                 {comt?.pind && (
                   <TiPin className="text-black text-opacity-30 dark:text-opacity-20 dark:text-white" />
                 )}
-
-                <span className="text-xs text-black text-opacity-30 dark:text-opacity-20 dark:text-white">
-                  {formatDate(new Date(comt?.createdAt), "d MMM yyy")}
-                </span>
+                <FormatedTime
+                  date={comt?.createdAt}
+                  className={`${comt.topCommentId === null ? "text-sm" : "text-xs"}`}
+                />
                 {comt?.commenter?.id === postdata?.User?.id && (
                   <small className=" text-black text-opacity-30 dark:text-opacity-20 dark:text-white">
                     author
@@ -148,6 +140,7 @@ const CommentBox = forwardRef(
                     </div>
                   </div>
                 )}
+                <Menu />
               </div>
               <div>
                 <p>{comt.content}</p>

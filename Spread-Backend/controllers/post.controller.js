@@ -275,10 +275,10 @@ export const EditPost = async (req, res, next) => {
 /// Delete a post by its ID and associated images
 export const DeletePost = async (req, res, next) => {
   const postId = req.params.postId;
-  
+    const userId = req.authUser.id;
   try {
     const post = await Post.findOne({
-      where: { id: postId },
+      where: { id: postId , authorId:userId},
       include: [
         {
           model: PostContent,
@@ -296,7 +296,7 @@ export const DeletePost = async (req, res, next) => {
     });
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ message: "Post not found or you are not an author" });
     }
   // Delete associated comments
     await Comments.destroy({ where: { postId } });

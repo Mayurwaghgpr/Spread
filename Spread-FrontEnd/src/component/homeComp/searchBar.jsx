@@ -35,14 +35,14 @@ function SearchBar({ className, scrollDirection }) {
         onClick={(e) => e.stopPropagation()}
         className="relative flex flex-col justify-start  items-center gap-3 sm:w-1/3 p-6 border-inherit mt-20 m-auto "
       >
-        <div className="w-full bg-white rounded-xl rounded-b-3xl">
+        <div className="w-full bg-white dark:bg-black rounded-xl rounded-b-3xl">
           <div className="flex justify-between w-full text-2xl p-2">
             <span>Search</span>
             <button onClick={() => navigate(-1)} className="">
               <IoCloseOutline />
             </button>
           </div>
-          <div className=" flex justify-center pr-3 text-black w-full items-center gap-3 rounded-full border overflow-hidden border-inherit">
+          <div className=" flex justify-center pr-3  w-full items-center gap-3 rounded-full border overflow-hidden border-inherit">
             <input
               className="p-2 pl-3 w-full outline-none"
               placeholder="Search"

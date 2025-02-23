@@ -1,12 +1,11 @@
 import User from '../models/user.js'
 import Post from "../models/posts.js"; // Ensure Post is imported
 import { Op } from 'sequelize';
+import Likes from '../models/Likes.js';
 
 export class DataFetching {
 
   async Profile(...args) {
-    console.log("first...")
-          console.log(args)
     try {
       // Validate the input
       if (!args) throw new Error("User ID is required");
@@ -30,12 +29,14 @@ export class DataFetching {
           },
           {
             model: Post,
-            as:'posts'
+            as: 'posts',
+            attributes: ['id'],
           },
           {
             model: Post,
             as: 'savedPosts',
             through: { attributes: [] }, // Fetch only related posts
+            attributes: ['id']
           },
         ],
       });

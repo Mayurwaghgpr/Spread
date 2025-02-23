@@ -23,6 +23,7 @@ import { setCommentCred } from "../../redux/slices/postSlice";
 import { useMutation } from "react-query";
 import PostsApis from "../../Apis/PostsApis";
 import { FaHashtag } from "react-icons/fa";
+import menuCosntant from "./menuCosntant";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
   const userImage = userImageSrc(post?.user);
+  const { MENU_ITEMS } = menuCosntant();
 
   const Comments = useMemo(() => {
     return post?.comments?.filter((comment) => comment.topCommentId === null);
@@ -59,10 +61,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
       className={` ${className} border-inherit flex w-full flex-col`}
     >
       <div className="p-3 flex leading-0 border-inherit flex-col  justify-center gap-4 w-full">
-        <div className="flex border-inherit gap-2 text-sm justify-start items-center">
+        <div className="flex justify-start items-center border-inherit gap-2 text-sm ">
           <Link
             to={`/profile/@${post?.user?.username}/${post?.user?.id}`}
-            className="flex gap-3"
+            className="flex items-center justify-center gap-3"
           >
             <div
               className={`${!post && "animate-pulse bg-gray-300 dark:bg-gray-400"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
@@ -76,23 +78,21 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 />
               )}
             </div>
+            <div className="text-sm rounded-lg flex">
+              {post ? (
+                <p className="capitalize underline-offset-4 hover:underline">
+                  {post?.user?.username}
+                </p>
+              ) : (
+                <span className="w-20 h-3 bg-gray-300 animate-pulse dark:bg-gray-400 bg-inherit rounded-xl"></span>
+              )}
+            </div>
           </Link>
-          <div className="text-sm rounded-lg flex">
-            {post ? (
-              <p className="capitalize">{post?.user?.username}</p>
-            ) : (
-              <span className="w-20 h-3 bg-gray-300 animate-pulse dark:bg-gray-400 bg-inherit rounded-xl"></span>
-            )}
-          </div>
+
           <h1 className="text-opacity-30 text-black dark:text-white dark:text-opacity-30 rounded-lg">
             {post?.topic}
           </h1>
-          <FormatedTime
-            date={post?.createdAt}
-            className={
-              "rounded-lg font-light text-opacity-30 text-black dark:text-slate-400 dark:text-opacity-40"
-            }
-          />
+
           {post && (
             <div className=" relative flex justify-center items-center cursor-pointer before:hidden before:hover:block  before:text-xs text-lg before:p-1 before:absolute  before:w-fit before:top-5 text-nowrap before:bg-black before:bg-opacity-20 before:rounded-md  before:content-['Generate_tags_with_ai']">
               <FaHashtag
@@ -177,7 +177,15 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 className={"text-black dark:text-white "}
                 post={post || null}
               />
-              <Menu post={post} />
+              <Menu
+                MENU_ITEMS={[
+                  MENU_ITEMS["copylike"],
+                  MENU_ITEMS["share"],
+                  post.authorId === user.id && MENU_ITEMS["deletePost"],
+                  post.authorId === user.id && MENU_ITEMS["editPost"],
+                ]}
+                content={post}
+              />
             </div>
           </div>
         )}

@@ -25,10 +25,10 @@ import { setCommentCred } from "../../redux/slices/postSlice";
 import { WiStars } from "react-icons/wi";
 import AIResponse from "../../component/AIComp/AiResponse";
 import PostsApis from "../../Apis/PostsApis";
-import { IoClose, IoReloadCircle } from "react-icons/io5";
-import { TiArrowSync } from "react-icons/ti";
+
 import { setToast } from "../../redux/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
+import menuCosntant from "../../component/postsComp/menuCosntant";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
 const CopyToClipboardInput = lazy(
@@ -36,13 +36,15 @@ const CopyToClipboardInput = lazy(
 );
 
 function PostView() {
-  const { commentCred } = useSelector((state) => state.posts);
   const [show, setshow] = useState(false);
+  const { commentCred } = useSelector((state) => state.posts);
+  const { user } = useSelector((state) => state.auth);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { fetchDataById } = usePublicApis();
   const { getAiGenAnalysis } = PostsApis();
+  const { MENU_ITEMS } = menuCosntant();
   //Fetch Post Full View
   const {
     data: postView,
@@ -114,8 +116,8 @@ function PostView() {
   }
 
   return (
-    <main
-      className={`relative flex justify-center h-full border-inherit transition-all duration-500 min-w-full  my-16 dark:*:border-[#383838]`}
+    <section
+      className={`relative  flex justify-center h-full border-inherit transition-all duration-500 w-full  my-16 dark:*:border-[#383838] `}
     >
       {!show ? (
         <article
@@ -129,7 +131,15 @@ function PostView() {
             <section className="flex flex-col gap-2  border-inherit">
               <div className="w-full flex justify-end text-lg  border-inherit">
                 {" "}
-                <Menu post={postView} />
+                <Menu
+                  MENU_ITEMS={[
+                    MENU_ITEMS["copylike"],
+                    MENU_ITEMS["share"],
+                    postView.authorId === user.id && MENU_ITEMS["deletePost"],
+                    postView.authorId === user.id && MENU_ITEMS["editPost"],
+                  ]}
+                  content={postView}
+                />
               </div>
               <h1 className="text-xl break-words lg:text-5xl w-full font-semibold mb-2">
                 {postView?.title}
@@ -201,6 +211,7 @@ function PostView() {
               <figcaption></figcaption>
             </figure>
           )}
+
           {postView?.postContent?.map((item) => (
             <section key={item.id} className="mb-6 w-full px-2 border-inherit ">
               {item.type === "image" && item.content && (
@@ -229,6 +240,7 @@ function PostView() {
           ))}
         </article>
       ) : (
+        // To show ai response after post analysis
         <AIResponse
           setshow={setshow}
           mutate={mutate}
@@ -250,7 +262,7 @@ function PostView() {
         <WiStars className="text-2xl" />
       </div>
       <Outlet context={postView} />
-    </main>
+    </section>
   );
 }
 

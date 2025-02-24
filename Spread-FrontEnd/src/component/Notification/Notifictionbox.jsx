@@ -1,9 +1,10 @@
 import React, { lazy, Suspense, useCallback } from "react";
 const NotifictionItem = lazy(() => import("./NotifictionItem"));
-import { BsBellFill } from "react-icons/bs";
 import Spinner from "../loaders/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenNotification } from "../../redux/slices/uiSlice";
+import useIcons from "../../hooks/useIcons";
+
 const notifications = [
   {
     id: 1,
@@ -95,6 +96,7 @@ const notifications = [
 
 function Notifictionbox() {
   const { openNotification } = useSelector((state) => state.ui);
+  const Icon = useIcons();
   const dispatch = useDispatch();
   const handeClick = useCallback((e) => {
     e.stopPropagation();
@@ -103,23 +105,29 @@ function Notifictionbox() {
   return (
     <div
       onClick={handeClick}
-      className={` ${openNotification ? " pointer-events-auto " : "pointer-events-none"} absolute w-full  h-full z-40  bg-opacity-0`}
+      className={` ${openNotification ? " pointer-events-auto " : "pointer-events-none"} absolute w-full  h-full z-40  bg-opacity-0 border-inherit`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={` transition-all duration-150 ${openNotification ? " scale-100 opacity-100 pointer-events-auto " : "scale-95 opacity-0 pointer-events-none"} flex flex-col justify-start items-start gap-5 sm:w-fit sm:h-1/2  w-full h-full p-5 pt-0 bg-[#fff9f3] dark:bg-black border rounded-lg absolute sm:right-40 right-0 sm:top-[4.3rem]  overflow-y-auto`}
+        className={` transition-all duration-150 border-inherit ${openNotification ? " scale-100 opacity-100 pointer-events-auto " : "scale-95 opacity-0 pointer-events-none"} flex flex-col justify-start items-start gap-5 sm:w-[20rem] sm:h-1/2  w-full h-full p-5 pt-0 bg-[#fff9f3] dark:bg-black border sm:rounded-lg absolute sm:right-40 right-0 sm:top-[4.3rem] top-0  overflow-y-auto`}
       >
-        <div className="flex justify-start items-center gap-3 w-full p-2 bg-inherit sticky top-0 ">
-          <BsBellFill />
-          <h1>notification</h1>
+        <div className="flex justify-between items-center gap-3 w-full p-2 bg-inherit sticky top-0 ">
+          <div className="flex justify-start items-center gap-3 ">
+            {Icon.bell}
+            <h1>notification</h1>
+          </div>
+          <button className="text-xl sm:hidden" onClick={handeClick}>
+            {Icon.close}
+          </button>
         </div>
-        <Suspense
+        <h1>will implement soon</h1>
+        {/* <Suspense
           fallback={<Spinner className={"w-5 h-5 bg-black dark:bg-white"} />}
         >
           {notifications.map((noitify) => (
             <NotifictionItem data={noitify} />
           ))}
-        </Suspense>
+        </Suspense> */}
       </div>
     </div>
   );

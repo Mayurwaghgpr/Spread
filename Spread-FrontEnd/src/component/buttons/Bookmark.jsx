@@ -16,14 +16,15 @@ function Bookmark({ className, post }) {
 
   const ArchiveMutation = useMutation((id) => ArchivePost(id), {
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["loggedInUser"]);
+      console.log(data);
       dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
+      queryClient.invalidateQueries(["loggedInUser"]);
     },
     onError: (error) => {
       console.log(error);
       dispatch(
         setToast({
-          message: error.response?.error,
+          message: error.message,
           type: "error",
         })
       );

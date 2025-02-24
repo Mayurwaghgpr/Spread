@@ -9,7 +9,7 @@ function ToastContainer() {
 
   return createPortal(
     <div
-      className={`fixed   bg-none  pointer-events-none z-50 bottom-10 left-0 transition-all duration-300 ease-linear flex flex-col gap-3 px-3 min-w-[50px]   `}
+      className={`fixed   bg-none  pointer-events-none z-50 bottom-10 sm:left-20 transition-all duration-300 ease-linear flex flex-col gap-3 px-3 min-w-[50px]   `}
     >
       {ToastState?.map((content, idx) => {
         return <TostItem key={idx} ToastContent={content} />;

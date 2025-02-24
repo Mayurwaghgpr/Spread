@@ -20,6 +20,7 @@ import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import redisClient from "./utils/redisClient.js";
 import DataBaseAssociations from "./utils/DataBaseAssociations.js";
+import Archive from "./models/Archive.js";
 
 
 // Initialize dotenv
@@ -127,7 +128,6 @@ process.on("uncaughtException", (error) => {
   console.error("Uncaught Exception:", error);
   process.exit(1);
 });
-
 // Start Server
 Database.sync()
   .then(() => {

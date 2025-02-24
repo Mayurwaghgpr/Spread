@@ -22,6 +22,9 @@ import SomthingWentWrong from "./pages/ErrorPages/somthingWentWrong";
 import { PopupBox } from "./component/UtilityComp/PopupBox";
 import Ibutton from "./component/buttons/Ibutton";
 import { setloginPop } from "./redux/slices/authSlice";
+const Notifictionbox = lazy(
+  () => import("./component/Notification/Notifictionbox")
+);
 
 // Lazy load components
 
@@ -91,7 +94,7 @@ function App() {
       {" "}
       <MainNavBar />
       <main className="flex justify-between items-center  border-inherit ">
-        <ToastContainer />
+        <Notifictionbox />
         {<ConfirmationBox />}
         <Suspense fallback={<LoaderScreen />}>
           <PersistentUser>
@@ -239,6 +242,7 @@ function App() {
                 />
               </PopupBox>
             )}
+            <ToastContainer />
           </PersistentUser>
         </Suspense>
         <ConfirmationBox />

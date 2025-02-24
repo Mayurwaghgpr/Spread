@@ -35,7 +35,7 @@ function ToastItem({ ToastContent }) {
 
   return (
     <div
-      className={`${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-bottom " : "animate-slide-in-bottom"} dark:text-black transition-all duration-300 ease-in-out pointer-events-auto ${status} flex flex-col rounded-lg w-fit`}
+      className={` shadow-lg ${rmToastId?.includes(ToastContent.id) ? "animate-slide-out-bottom " : "animate-slide-in-bottom"} dark:text-black transition-all duration-300 ease-in-out pointer-events-auto ${status} flex flex-col rounded-lg w-fit`}
     >
       <div className="flex p-4">
         <div className="break-words flex">

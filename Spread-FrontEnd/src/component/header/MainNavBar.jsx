@@ -11,6 +11,8 @@ import { BsMoonStarsFill } from "react-icons/bs";
 import { IoSunny } from "react-icons/io5";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import LogoutBtn from "../buttons/LogoutBtn";
+import NotifictionBell from "../Notification/NotifictionBell";
+import Notifictionbox from "../Notification/Notifictionbox";
 
 function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
@@ -45,7 +47,7 @@ function MainNavBar() {
 
   return (
     <header
-      className={`fixed top-0 p-3  sm:px-20 flex justify-center w-full transform-all duration-300 ease-in-out z-40 dark:border-[#383838] border-b  border-inherit  bg-[#fff9f3] dark:bg-black dark:bg-opacity-30 dark:backdrop-blur-lg bg-opacity-10 backdrop-blur-lg`}
+      className={`fixed top-0 p-3  sm:px-24 flex justify-center w-full transform-all duration-300 ease-in-out z-40 dark:border-[#383838] border-b  border-inherit  bg-[#fff9f3] dark:bg-black dark:bg-opacity-30 dark:backdrop-blur-lg bg-opacity-10 backdrop-blur-lg`}
     >
       <nav className={`relative  w-full    `}>
         <div className="flex border-inherit items-center justify-between w-full m-auto">
@@ -53,18 +55,14 @@ function MainNavBar() {
             Spread
           </Link>
 
-          <div className="flex w-fit gap-5 justify-end items-center border-inherit ">
+          <div className="flex w-fit gap-5 justify-end items-center border-inherit pr-5  text-xl">
+            {/* Toggle Theme button */}
             <ThemeBtn Modes={Modes} separate={false} className={"relative"} />
             {isLogin && (
-              <div className="relative sm:text-xl">
-                <i className="bi bi-bell"></i>
-                <span className="absolute top-0 flex h-3 w-3 -right-1">
-                  <span className="animate-ping absolute inline-flex h-[6px] w-[6px] rounded-full bg-slate-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-[6px] w-[6px] bg-slate-500"></span>
-                </span>
-              </div>
+              <>
+                <NotifictionBell />
+              </>
             )}
-
             {isLogin ? (
               <div className="relative box-content flex  *:transition-all *:duration-300 text-left group border-inherit">
                 <ProfileButton

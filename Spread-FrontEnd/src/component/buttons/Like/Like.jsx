@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import abbreviateNumber from "../../../utils/numAbrivation";
 import { useNavigate } from "react-router-dom";
 import LikesList from "./LikesList";
-import useLikeIcons from "./useLikeIcons";
+import useLikeIcons from "../../../hooks/useIcons";
 
 function Like({ post, className }) {
   const likeIconObj = useLikeIcons();

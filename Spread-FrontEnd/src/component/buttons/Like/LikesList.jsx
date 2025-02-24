@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 
-import useLikeIcons from "./useLikeIcons";
+import useIcons from "../../../hooks/useIcons";
 function LikesList({ mutate, post }) {
-  const likeIconObj = useLikeIcons();
+  const likeIconObj = useIcons();
   return (
     <div className="absolute hidden *:transition-all *:duration-300  group-hover:flex justify-start *:text-xl sm:text-xl items-center shadow-xl z-10 -top-12  -left-1/2 bg-[#e8e4df] dark:bg-[#191818] gap-2 p-2 rounded-full">
       <button

@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import useAuthApi from "../../Apis/useAuthApi";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
-import CommonInput from "../../component/UtilityComp/commonInput";
+import CommonInput from "../../component/utilityComp/CommonInput";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import AuthFormWrapper from "./AuthFormWrapper";

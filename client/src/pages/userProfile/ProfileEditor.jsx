@@ -14,7 +14,7 @@ import { setToast } from "../../redux/slices/uiSlice";
 import { debounce } from "../../utils/debounce";
 import useProfileApi from "../../Apis/ProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
-import CommonInput from "../../component/UtilityComp/commonInput";
+import CommonInput from "../../component/utilityComp/CommonInput";
 import Selector from "../../component/UtilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
 function ProfileEditor() {

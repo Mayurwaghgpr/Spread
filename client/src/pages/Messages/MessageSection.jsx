@@ -193,7 +193,7 @@ function MessageSection() {
           <input
             onChange={(e) => setMessage(e.target.value)}
             className=" w-full h-full  p-3 outline-none bg-inherit placeholder:font-thin"
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            // onKeyDown={(e) => e.key === "Enter" && handleSend()}
             type="text"
             name=""
             value={message}
@@ -203,7 +203,7 @@ function MessageSection() {
         </div>
         <div className="flex justify-center items-center gap-3">
           <button
-            onClick={handleSend}
+            // onClick={handleSend}
             className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black"
           >
             <div class="">

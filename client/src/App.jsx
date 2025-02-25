@@ -181,7 +181,7 @@ function App() {
                 <Route path="comments" element={<CommentSection />} />
               </Route>
               <Route
-                path="/explore"
+                path="/search"
                 element={
                   <ProtectedRoute>
                     <SearchBar />

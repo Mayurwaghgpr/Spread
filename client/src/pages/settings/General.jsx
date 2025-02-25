@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import ThemeMenu from "../../component/UtilityComp/ThemeMenu";
 
 function General() {
   return (

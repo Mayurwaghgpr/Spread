@@ -9,7 +9,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import MainNavBar from "./component/header/MainNavBar";
 import ProtectedRoute from "./utils/ProtectedRoutes";
-import PersistentUser from "./utils/PersistentUser";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
 import SearchBar from "./component/homeComp/searchBar";
@@ -22,6 +21,8 @@ import SomthingWentWrong from "./pages/ErrorPages/somthingWentWrong";
 import { PopupBox } from "./component/UtilityComp/PopupBox";
 import Ibutton from "./component/buttons/Ibutton";
 import { setloginPop } from "./redux/slices/authSlice";
+import PersistantUser from "./utils/PersistentUser";
+
 const Notifictionbox = lazy(
   () => import("./component/notification/Notifictionbox")
 );
@@ -97,7 +98,7 @@ function App() {
         <Notifictionbox />
         {<ConfirmationBox />}
         <Suspense fallback={<LoaderScreen />}>
-          <PersistentUser>
+          <PersistantUser>
             {isLogin &&
               !pathname.startsWith("/write") &&
               !pathname.startsWith("/messages") && <SideBar />}
@@ -243,7 +244,7 @@ function App() {
               </PopupBox>
             )}
             <ToastContainer />
-          </PersistentUser>
+          </PersistantUser>
         </Suspense>
         <ConfirmationBox />
 

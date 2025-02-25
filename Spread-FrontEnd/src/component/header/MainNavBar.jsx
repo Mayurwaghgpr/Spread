@@ -13,6 +13,7 @@ import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import LogoutBtn from "../buttons/LogoutBtn";
 import NotifictionBell from "../Notification/NotifictionBell";
 import Notifictionbox from "../Notification/Notifictionbox";
+import { PiSignIn, PiSignInBold, PiSignInDuotone } from "react-icons/pi";
 
 function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();
@@ -55,12 +56,12 @@ function MainNavBar() {
             Spread
           </Link>
 
-          <div className="flex w-fit gap-5 justify-end items-center border-inherit pr-5  text-xl">
+          <div className="flex w-fit gap-5 justify-end items-center border-inherit pr-5  ">
             {/* Toggle Theme button */}
             <ThemeBtn Modes={Modes} separate={false} className={"relative"} />
             {isLogin && (
               <>
-                <NotifictionBell />
+                <NotifictionBell className={""} />
               </>
             )}
             {isLogin ? (
@@ -90,14 +91,12 @@ function MainNavBar() {
               </div>
             ) : (
               <div className="flex text-nowrap gap-3 border-inherit justify-end w-full items-center sm:text-sm text-xs">
-                <Link to="/auth/signin" className=" rounded-3xl sm:px-3 py-2">
-                  SignIn
-                </Link>
                 <Link
-                  to="/auth/signup"
-                  className="border border-inherit rounded-full px-3 py-1"
+                  to="/auth/signin"
+                  className="flex justify-center items-center gap-2 rounded-3xl text-lg sm:px-3 py-2"
                 >
-                  Get started
+                  <PiSignInDuotone />{" "}
+                  <span className="sm:block hidden">SignIn</span>
                 </Link>
               </div>
             )}

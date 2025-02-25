@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Lustria&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Lustria&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"); */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,7 +10,7 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
-.nunito {
+/* .nunito {
   font-family: "Nunito", serif;
   font-optical-sizing: auto;
   font-weight: 400;
@@ -20,7 +20,7 @@
   font-family: "Lustria", serif;
   font-weight: 400;
   font-style: normal;
-}
+} */
 body {
   background-color: #fff9f3;
   color: black;
@@ -167,6 +167,7 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
   -webkit-background-clip: text;
+
   color: transparent;
 }
 
@@ -176,6 +177,7 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite linear;
   -webkit-background-clip: text;
+
   color: transparent;
 }
 

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 function ErrorPage({ message, statusCode, action }) {
   const navigate = useNavigate();
   return (
-    <div className=" flex justify-center items-center flex-col gap-5 h-screen  w-full">
+    <div className=" flex justify-start items-center flex-col gap-5 h-screen  w-full">
       <article className="flex flex-col justify-center items-center  w-full ">
         <img src="" alt="" />
 

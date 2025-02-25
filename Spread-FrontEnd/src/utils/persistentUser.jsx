@@ -14,6 +14,7 @@ function PersistentUser({ children }) {
     queryKey: ["loggedInUser"],
     queryFn: () => getLogInUserData(),
     onSuccess: (data) => {
+      dispatch(setIsLogin(true));
       localStorage.setItem("AccessToken", true);
       console.log(JSON.parse(data));
       dispatch(setUser(JSON.parse(data)));

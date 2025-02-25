@@ -148,7 +148,7 @@ export const FollowUser = async (req, res, next) => {
     });
 
     if (existingFollow) {
-        userInfo.Following = userInfo.Following.filter((follow) => follow.id !== followedId && follow);
+        userInfo.Following = userInfo.Following.filter((follow) => follow.id !== followedId);
       // Unfollow user
       await existingFollow.destroy();
       // console.log(userInfo);
@@ -178,15 +178,11 @@ export const AddPostToArchive = async (req, res, next) => {
     // Parsing userInfo from cookies to further make modification rather than refetching from user database 
     let userInfo = JSON.parse(req.cookies._userDetail);
     console.log(userInfo)
-    // Check if the post is already archived
-    const archived = await Archive.findOne({ where: { postId, userId } });
-
-    if (archived) {
+    // delete if the post is already archived
+    const deleted = await Archive.destroy({ where: { postId, userId } });
+    if (deleted) {
       console.log("exist")
-      userInfo.savedPosts = userInfo.savedPosts.filter((post) => post.id !== postId && post);
-
-      await archived.destroy();
-
+      userInfo.savedPosts = userInfo.savedPosts.filter((post) => post.id !== postId);
       return res
         .status(200)
         .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
@@ -194,7 +190,7 @@ export const AddPostToArchive = async (req, res, next) => {
     }
     console.log('new')
     // Create archive entry & fetch post details in one go
-    const archiveWithPost = await Archive.create({ postId, userId });
+    const archiveWithPost = await Archive.upsert({ postId, userId });
       userInfo.savedPosts.push({id:postId});
 
     res

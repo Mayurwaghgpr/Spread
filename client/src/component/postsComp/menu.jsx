@@ -6,7 +6,6 @@ import useClickOutside from "../../hooks/useClickOutside";
 import { setConfirmBox } from "../../redux/slices/uiSlice";
 
 function Menu({ content, items }) {
-  // const [isIntersect, setIsIntersect] = useState(false);
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   // const location = useLocation();
@@ -16,17 +15,6 @@ function Menu({ content, items }) {
 
   const { menuId, setMenuId } = useClickOutside(menuRef);
 
-  // useEffect(() => {
-  //   if (!menuRef.current || menuId !== content?.id) return;
-
-  //   const buttonRect = menuRef.current.getBoundingClientRect();
-  //   const menuHeight = menuRef.current.children[1]?.offsetHeight || 0;
-
-  //   // Check if menu overflows at the bottom
-  //   const willOverflow = buttonRect.bottom + menuHeight > window.innerHeight;
-
-  //   setIsIntersect(!willOverflow); // If it overflows, position it above
-  // }, [content, menuId]);
   return (
     <div
       ref={menuRef}

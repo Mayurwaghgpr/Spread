@@ -22,20 +22,20 @@ const AIResponse = ({
   return (
     <div className=" right-5 animate-fedin1s bg-[#fff9f3] dark:bg-black w-full max-w-4xl h-full overflow-hidden border-inherit">
       {/* Header */}
-      <header className=" border-b  border-inherit flex justify-between items-center p-4">
+      <header className="border-b border-inherit flex justify-between items-center p-4">
         {isAnalyzing ? (
           <h1 className="font-bold shimmer-effect dark:shimmer-effect-dark">
             Analyzing post
           </h1>
         ) : (
-          <h1 className="text-lg font-semibold  tracking-wide">
+          <h1 className="text-lg font-semibold tracking-wide">
             AI Explanation
           </h1>
         )}
         <div className="flex items-center gap-6 text-2xl ">
           <button
             onClick={() => mutate({ id })}
-            className="flex justify-center items-center   w-10 h-10 "
+            className="flex justify-center items-center w-10 h-10 "
           >
             <TiArrowSync
               title=""
@@ -98,7 +98,7 @@ const AIResponse = ({
       {/* AI Explanation Points */}
       <ul className="flex animate-fedin1s flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter">
         {isAnalyzing && (
-          <div className=" flex justify-center bg-white p-2 w-[3rem] shadow-sm rounded rounded-tl-none">
+          <div className=" flex justify-center bg-white p-2 w-[3rem] shadow-sm rounded-lg rounded-tl-sm">
             <div className="dotloader "></div>
           </div>
         )}

@@ -13,7 +13,7 @@ export const PopupBox = ({ children, className, heading, subText }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`${className} bg-[#fff9f3]  dark:bg-[#191818]  border border-inherit rounded-lg `}
+        className={`${className} bg-[#fff9f3]  dark:bg-[#191818]  border border-inherit rounded-lg shadow-lg `}
       >
         <h1 className="text-3xl font-semibold">{heading}</h1>
         <p className="opacity-50 font-light">{subText}</p>

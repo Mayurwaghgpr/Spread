@@ -120,7 +120,11 @@ function Notifictionbox() {
             {Icon.close}
           </button>
         </div>
-        <h1>will implement soon</h1>
+        <div className="flex justify-center items-center h-full w-full">
+          {" "}
+          <h1>will implement soon</h1>
+        </div>
+
         {/* <Suspense
           fallback={<Spinner className={"w-5 h-5 bg-black dark:bg-white"} />}
         >

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like/Like";
 import Menu from "./Menu";
-import FormatedTime from "../UtilityComp/FormatedTime";
+import FormatedTime from "../utilityComp/FormatedTime";
 import userImageSrc from "../../utils/userImageSrc";
 import { FaRegComment } from "react-icons/fa6";
 import abbreviateNumber from "../../utils/numAbrivation";

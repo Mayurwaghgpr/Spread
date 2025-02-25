@@ -13,25 +13,28 @@ function ConfirmationBox() {
   const { confirmBox } = useSelector((state) => state.ui);
 
   // Comment deleting mutation
-  const { mutate: delComment, isCommentDeleting } = useMutation(deleteComtApi, {
-    onSuccess: (data) => {
-      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
-    },
-    onError: () => {
-      dispatch(
-        setToast({
-          message: "Failed to delete post. Please try again.",
-          type: "error",
-        })
-      );
-    },
-    onSettled: () => {
-      dispatch(setConfirmBox({ message: "", status: false }));
-      if (location.pathname.startsWith("/view")) {
-        navigate(-1);
-      }
-    },
-  });
+  const { mutate: delComment, isLoading: isCommentDeleting } = useMutation(
+    deleteComtApi,
+    {
+      onSuccess: (data) => {
+        dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
+      },
+      onError: () => {
+        dispatch(
+          setToast({
+            message: "Failed to delete post. Please try again.",
+            type: "error",
+          })
+        );
+      },
+      onSettled: () => {
+        dispatch(setConfirmBox({ message: "", status: false }));
+        if (location.pathname.startsWith("/view")) {
+          navigate(-1);
+        }
+      },
+    }
+  );
 
   //post deleting mutation
   const { mutate: delPost, isPostDeleting } = useMutation(DeletePostApi, {
@@ -104,7 +107,7 @@ function ConfirmationBox() {
               disabled={isPostDeleting || isCommentDeleting}
             >
               {isPostDeleting || isCommentDeleting ? (
-                <Spinner className={"w-5 h-5"} />
+                <Spinner className={"w-5 h-5 bg-black dark:bg-white"} />
               ) : (
                 confirmBox?.type
               )}

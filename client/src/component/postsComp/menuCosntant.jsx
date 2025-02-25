@@ -71,6 +71,12 @@ function menuCosntant() {
         );
       },
     },
+    editComment: {
+      id: "edit-comment",
+      itemName: "Edit comment",
+      icon: <i className="bi bi-pencil"></i>,
+      action: () => console.log("Edit action triggered"),
+    },
   };
   return { MENU_ITEMS };
 }

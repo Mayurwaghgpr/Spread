@@ -1,11 +1,4 @@
-import React, {
-  lazy,
-  memo,
-  Suspense,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import React, { memo, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
 import { IoSend } from "react-icons/io5";
@@ -17,8 +10,6 @@ import DOMPurify from "dompurify";
 import PostsApis from "../../Apis/PostsApis";
 import { setToast } from "../../redux/slices/uiSlice";
 import Spinner from "../../component/loaders/Spinner";
-import useClickOutside from "../../hooks/useClickOutside";
-import ProtectedRoutes from "../../utils/ProtectedRoutes";
 
 // const EmojiPicker = lazy(() => import("emoji-picker-react"));
 function CommentInput({ className }) {

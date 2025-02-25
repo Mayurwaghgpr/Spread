@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useClickOutside from "../../hooks/useClickOutside";
 import { setConfirmBox } from "../../redux/slices/uiSlice";
 
-function Menu({ content, items }) {
+function Menu({ content, items, className }) {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   // const location = useLocation();
@@ -35,7 +35,7 @@ function Menu({ content, items }) {
       >
         <ul
           onClick={(e) => e.stopPropagation()}
-          className={` transition-all duration-200 ${menuId === content?.id ? "sm:animate-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto animate-slide-in-bottom" : "sm:-translate-y-5 sm:opacity-0 sm:pointer-events-none animate-slide-out-bottom  "} sm:absolute z-10 border-inherit text-sm   flex flex-col gap-1 sm:h-fit h-1/2 sm:top-5 sm:w-36 w-full mt-2 sm:p-2 p-6  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-xl m-1 border sm:shadow-md`}
+          className={`${className} transition-all duration-200 ${menuId === content?.id ? "sm:animate-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto animate-slide-in-bottom" : "sm:-translate-y-5 sm:opacity-0 sm:pointer-events-none animate-slide-out-bottom  "}  z-10 border-inherit text-sm   flex flex-col gap-1   bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-xl m-1 border sm:shadow-md`}
         >
           {items
             ?.filter((itm) => itm)

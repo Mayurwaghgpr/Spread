@@ -27,7 +27,6 @@ function Menu({ content, items }) {
 
   //   setIsIntersect(!willOverflow); // If it overflows, position it above
   // }, [content, menuId]);
-  console.log(items);
   return (
     <div
       ref={menuRef}

@@ -114,7 +114,6 @@ function PostView() {
       </div>
     );
   }
-  console.log(MENU_ITEMS);
 
   return (
     <section

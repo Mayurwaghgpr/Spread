@@ -9,7 +9,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import MainNavBar from "./component/header/MainNavBar";
 import ProtectedRoute from "./utils/ProtectedRoutes";
-import PersistentUser from "./utils/persistentUser";
+import PersistentUser from "./utils/PersistentUser";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
 import SearchBar from "./component/homeComp/searchBar";

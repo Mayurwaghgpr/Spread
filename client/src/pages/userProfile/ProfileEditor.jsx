@@ -15,7 +15,7 @@ import { debounce } from "../../utils/debounce";
 import useProfileApi from "../../Apis/ProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
 import CommonInput from "../../component/utilityComp/CommonInput";
-import Selector from "../../component/UtilityComp/Selector";
+import Selector from "../../component/utilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
 function ProfileEditor() {
   const dispatch = useDispatch();

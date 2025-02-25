@@ -49,13 +49,13 @@ const ReadList = lazy(() => import("./pages/ReadList"));
 const Settings = lazy(() => import("./pages/settings/settings"));
 const General = lazy(() => import("./pages/settings/General"));
 const ConfirmationBox = lazy(
-  () => import("./component/UtilityComp/ConfirmationBox")
+  () => import("./component/utilityComp/ConfirmationBox")
 );
 const ScrollToTopButton = lazy(
-  () => import("./component/UtilityComp/ScrollToTopButton")
+  () => import("./component/utilityComp/ScrollToTopButton")
 );
 const ToastContainer = lazy(
-  () => import("./component/UtilityComp/ToastContainer")
+  () => import("./component/utilityComp/ToastContainer")
 );
 function App() {
   const navigate = useNavigate();

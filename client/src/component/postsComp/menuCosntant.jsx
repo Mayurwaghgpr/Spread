@@ -1,14 +1,11 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
-import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
-import PostsApis from "../../Apis/PostsApis";
 
 function menuCosntant() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { DeletePostApi, deleteComtApi } = PostsApis();
 
   const MENU_ITEMS = {
     copylike: {

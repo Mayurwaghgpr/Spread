@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import useClickOutside from "../../hooks/useClickOutside";
 import { setConfirmBox } from "../../redux/slices/uiSlice";
 
-function Menu({ content, MENU_ITEMS }) {
+function Menu({ content, items }) {
   // const [isIntersect, setIsIntersect] = useState(false);
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   // const location = useLocation();
   const menuRef = useRef(null);
-  const {} = useSelector((state) => state.ui);
   // const queryClient = useQueryClient();
   // const { DeletecontentApi } = contentsApis();
 
@@ -28,7 +27,7 @@ function Menu({ content, MENU_ITEMS }) {
 
   //   setIsIntersect(!willOverflow); // If it overflows, position it above
   // }, [content, menuId]);
-
+  console.log(items);
   return (
     <div
       ref={menuRef}
@@ -51,16 +50,18 @@ function Menu({ content, MENU_ITEMS }) {
           onClick={(e) => e.stopPropagation()}
           className={` transition-all duration-200 ${menuId === content?.id ? "sm:animate-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto animate-slide-in-bottom" : "sm:-translate-y-5 sm:opacity-0 sm:pointer-events-none animate-slide-out-bottom  "} sm:absolute z-10 border-inherit text-sm   flex flex-col gap-1 sm:h-fit h-1/2 sm:top-5 sm:w-36 w-full mt-2 sm:p-2 p-6  bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-xl m-1 border sm:shadow-md`}
         >
-          {MENU_ITEMS.filter((itm) => itm).map((item) => (
-            <li
-              key={item.id}
-              className="flex gap-2 text-nowrap items-center sm:px-3 sm:py-1 p-3  hover:bg-gray-400 hover:bg-opacity-10 rounded-md cursor-pointer"
-              onClick={() => item.action(content.id)}
-            >
-              {item.icon}
-              {item.itemName}
-            </li>
-          ))}
+          {items
+            ?.filter((itm) => itm)
+            .map((item) => (
+              <li
+                key={item.id}
+                className="flex gap-2 text-nowrap items-center sm:px-3 sm:py-1 p-3  hover:bg-gray-400 hover:bg-opacity-10 rounded-md cursor-pointer"
+                onClick={() => item.action(content.id)}
+              >
+                {item.icon}
+                {item.itemName}
+              </li>
+            ))}
         </ul>
       </div>
     </div>

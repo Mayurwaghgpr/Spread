@@ -16,7 +16,6 @@ import { v4 as uuidv4 } from "uuid";
 import Bookmark from "../../component/buttons/Bookmark";
 import usePublicApis from "../../Apis/publicApis";
 import Like from "../../component/buttons/Like/Like";
-import Menu from "../../component/postsComp/menu";
 import Follow from "../../component/buttons/follow";
 import userImageSrc from "../../utils/userImageSrc";
 import { FaRegComment } from "react-icons/fa6";
@@ -29,6 +28,7 @@ import PostsApis from "../../Apis/PostsApis";
 import { setToast } from "../../redux/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import menuCosntant from "../../component/postsComp/menuCosntant";
+import Menu from "../../component/postsComp/Menu";
 
 const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
 const CopyToClipboardInput = lazy(
@@ -114,6 +114,7 @@ function PostView() {
       </div>
     );
   }
+  console.log(MENU_ITEMS);
 
   return (
     <section
@@ -132,11 +133,11 @@ function PostView() {
               <div className="w-full flex justify-end text-lg  border-inherit">
                 {" "}
                 <Menu
-                  MENU_ITEMS={[
+                  items={[
                     MENU_ITEMS["copylike"],
                     MENU_ITEMS["share"],
-                    postView.authorId === user.id && MENU_ITEMS["deletePost"],
-                    postView.authorId === user.id && MENU_ITEMS["editPost"],
+                    postView?.authorId === user?.id && MENU_ITEMS["deletePost"],
+                    postView?.authorId === user?.id && MENU_ITEMS["editPost"],
                   ]}
                   content={postView}
                 />

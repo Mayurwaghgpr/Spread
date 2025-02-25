@@ -87,7 +87,7 @@ function CommentSection() {
         <div className=" px-4 flex flex-col justify-start pb-32 items-center w-full h-[80%] overflow-y-auto ">
           <Suspense
             fallback={
-              <Spinner className={"w-10 h-10 m-auto bg-black dark:bg-white"} />
+              <Spinner className={"w-10 h-10  bg-black dark:bg-white"} />
             }
           >
             {Comments.map((comt, idx, arr) => {
@@ -107,9 +107,7 @@ function CommentSection() {
           </Suspense>
           {isFetchingNextPage && (
             <div className=" flex justify-center items-center py-2 h-20">
-              <Spinner
-                className={"w-5 h-5 m-auto border-t-black dark:border-t-white"}
-              />
+              <Spinner className={"w-5 h-5  bg-black dark:bg-white"} />
             </div>
           )}
         </div>

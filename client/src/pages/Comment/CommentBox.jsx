@@ -19,7 +19,7 @@ import { TiPin, TiPinOutline } from "react-icons/ti";
 import { setToast } from "../../redux/slices/uiSlice";
 import { useOutletContext } from "react-router-dom";
 import FormatedTime from "../../component/UtilityComp/FormatedTime";
-import Menu from "../../component/postsComp/menu";
+import Menu from "../../component/postsComp/Menu";
 
 const CommentBox = forwardRef(
   ({ comt, className, topCommentId, commentPins = [] }, ref) => {

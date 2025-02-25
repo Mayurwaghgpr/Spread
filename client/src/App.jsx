@@ -23,7 +23,7 @@ import { PopupBox } from "./component/UtilityComp/PopupBox";
 import Ibutton from "./component/buttons/Ibutton";
 import { setloginPop } from "./redux/slices/authSlice";
 const Notifictionbox = lazy(
-  () => import("./component/Notification/Notifictionbox")
+  () => import("./component/notification/Notifictionbox")
 );
 
 // Lazy load components

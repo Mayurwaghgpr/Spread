@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 // Dynamically load components to optimize performance
 import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like/Like";
-import Menu from "./menu";
+import Menu from "./Menu";
 import FormatedTime from "../UtilityComp/FormatedTime";
 import userImageSrc from "../../utils/userImageSrc";
 import { FaRegComment } from "react-icons/fa6";
@@ -178,7 +178,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 post={post || null}
               />
               <Menu
-                MENU_ITEMS={[
+                items={[
                   MENU_ITEMS["copylike"],
                   MENU_ITEMS["share"],
                   post.authorId === user.id && MENU_ITEMS["deletePost"],

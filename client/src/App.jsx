@@ -115,7 +115,7 @@ function App() {
                 }
               >
                 {" "}
-                {/* <Route path="comments" element={<CommentSection />} /> */}
+                {/* <Route path="comments" element={<CommentSection />}  */}
               </Route>
               <Route
                 path="/heros"

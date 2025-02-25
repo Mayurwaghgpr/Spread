@@ -1,5 +1,5 @@
 import React from "react";
-import FormatedTime from "../UtilityComp/FormatedTime";
+import FormatedTime from "../utilityComp/FormatedTime";
 import { AiFillLike } from "react-icons/ai";
 import { HiHeart } from "react-icons/hi2";
 import useIcons from "../../hooks/useIcons";

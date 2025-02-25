@@ -22,7 +22,7 @@ import { FaRegComment } from "react-icons/fa6";
 import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import { WiStars } from "react-icons/wi";
-import AIResponse from "../../component/AIComp/AiResponse";
+import AIResponse from "../../component/aiComp/AiResponse";
 import PostsApis from "../../Apis/PostsApis";
 
 import { setToast } from "../../redux/slices/uiSlice";

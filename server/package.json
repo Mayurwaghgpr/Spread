@@ -5,9 +5,9 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "build": "npm install && npm install --prefix Spread-FrontEnd && npm run build --prefix Spread-FrontEnd",
-    "dev": "nodemon Spread-Backend/app.js",
-    "start": "node Spread-Backend/app.js"
+    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "dev": "nodemon server/app.js",
+    "start": "node server/app.js"
   },
   "keywords": [],
   "author": "",

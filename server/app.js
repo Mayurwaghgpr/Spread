@@ -70,7 +70,7 @@ app.use(cookieParser());
 
 // Serve Static Files (Place before routes)
 // Serve Static Files
-app.use(express.static(path.join(__dirname, "/Spread-FrontEnd/dist"), { maxAge: "1d" }));
+app.use(express.static(path.join(__dirname, "/client/dist"), { maxAge: "1d" }));
 
 
 
@@ -95,7 +95,7 @@ DataBaseAssociations()
 
 // Handle React Routes (After API Routes)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/Spread-FrontEnd/dist", "index.html"));
+  res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
 });
 
 // Wildcard Route for Frontend

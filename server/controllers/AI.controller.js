@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import OpenAI from "openai";
+import OpenAI from "openai/index.mjs";
 import redisClient from "../utils/redisClient.js";
 import fs from "fs";
 import { Readable } from "stream";

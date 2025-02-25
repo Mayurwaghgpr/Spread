@@ -33,8 +33,8 @@ const LoginMenuLinks = [
     id: uuidv4(),
     icon1: <IoSearchOutline />,
     icon2: <IoSearch />,
-    stub: "/explore",
-    lkname: "explore",
+    stub: "/search",
+    lkname: "search",
   },
   {
     id: uuidv4(),

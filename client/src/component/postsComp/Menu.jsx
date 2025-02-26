@@ -1,6 +1,5 @@
-import { useCallback } from "react";
 import { memo, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 // import { useLocation, useNavigate } from "react-router-dom";
 import useClickOutside from "../../hooks/useClickOutside";
 import { setConfirmBox } from "../../redux/slices/uiSlice";

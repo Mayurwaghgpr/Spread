@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, useCallback } from "react";
 const NotifictionItem = lazy(() => import("./NotifictionItem"));
-import Spinner from "../loaders/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenNotification } from "../../redux/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";

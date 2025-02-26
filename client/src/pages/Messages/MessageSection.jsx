@@ -124,19 +124,23 @@ function MessageSection() {
   const { sendMessage } = ChatApi();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    socket.on("newMessage", (msg) => {
-      dispatch(addMessage(msg));
-    });
+  // useEffect(() => {
+  //   socket.emit("register", user?.id);
+  //   socket.on("newMessage", (msg) => {
+  //     dispatch(addMessage(msg));
+  //   });
 
-    return () => socket.off("newMessage");
-  }, [dispatch]);
+  //   return () => socket.off("newMessage");
+  // }, [user]);
 
   // const handleSend = async () => {
-  //   const newMessage = { senderId: user.id, content: message };
-  //   const { data } = await sendMessage(newMessage);
+  //   const newMessage = {
+  //     to: "4764f8c1-aa8a-4634-a2e4-f7504143fd8c",
+  //     message: message,
+  //   };
+  //   // const { data } = await sendMessage(newMessage);
   //   socket.emit("sendMessage", newMessage);
-  //   dispatch(addMessage(data));
+  //   // dispatch(addMessage(data));
   //   setMessage("");
   // };
   // console.log(user);
@@ -177,10 +181,10 @@ function MessageSection() {
               </span>
             </p>
           );
-        })}
-        <div className="m-auto flex flex-col w-20">
+        })} */}
+        {/* <div className="m-auto flex flex-col w-20">
           {messages.map((data, idx) => {
-            return <p key={idx}>{data}</p>;
+            return <p key={idx}>{data.message}</p>;
           })}
         </div> */}
       </div>
@@ -190,7 +194,7 @@ function MessageSection() {
             <IoAttachOutline />
           </button>
           <input
-            onChange={(e) => setMessage(e.target.value)}
+            // onChange={(e) => setMessage(e.target.value)}
             className=" w-full h-full  p-3 outline-none bg-inherit placeholder:font-thin"
             // onKeyDown={(e) => e.key === "Enter" && handleSend()}
             type="text"
@@ -202,7 +206,7 @@ function MessageSection() {
         </div>
         <div className="flex justify-center items-center gap-3">
           <button
-            // onClick={handleSend}
+            onClick={handleSend}
             className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black"
           >
             <div class="">

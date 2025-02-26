@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../utils/userImageSrc";
-import { setManuOpen } from "../redux/slices/uiSlice";
 
 const ProfileButton = ({ className, ...props }) => {
   const { isLogin, user } = useSelector((state) => state.auth);

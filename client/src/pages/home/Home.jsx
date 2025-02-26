@@ -70,12 +70,12 @@ function Home() {
   );
 
   if (isHomeError || isPostError) {
-    const errorMessage = errorHome?.data.message || errorPosts?.data.message;
+    const errorMessage = errorHome?.data?.message || errorPosts?.data?.message;
     const statusCode = errorHome?.status || errorPosts?.status;
     return (
       <ErrorPage
         message={errorMessage || errorHome?.message}
-        statusCode={statusCode}
+        statusCode={statusCode || 500}
       />
     );
   }

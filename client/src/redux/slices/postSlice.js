@@ -10,7 +10,7 @@ const initialState = {
     {type: "text", data: "", id: uuidv4(), index: 0 },
     ],
     commentCred: { postId: null, topCommentId: null, content: '', replyTo: null },
-    selectedPost:{}
+    selectedPost: {},
 }
 
 
@@ -36,7 +36,7 @@ const PostSclic = createSlice({
         setCommentCred: (state, action) => {
             state.commentCred = action.payload;
         },
-           setSelectedPost: (state, action) => {
+        setSelectedPost: (state, action) => {
             state.selectedPost = action.payload;
         }
     }

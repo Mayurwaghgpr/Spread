@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setToast } from "../redux/slices/uiSlice";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 

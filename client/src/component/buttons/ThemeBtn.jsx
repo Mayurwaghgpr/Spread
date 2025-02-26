@@ -1,9 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setThemeMode } from "../../redux/slices/uiSlice";
-import { IoDesktop, IoSunny } from "react-icons/io5";
-import { HiOutlineComputerDesktop } from "react-icons/hi2";
-import { BsMoonStarsFill } from "react-icons/bs";
+
 function ThemeBtn({ Modes, className, separate }) {
   // State to track the current theme
   const dispatch = useDispatch();

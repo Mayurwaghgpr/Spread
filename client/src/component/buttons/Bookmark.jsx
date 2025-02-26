@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import usePublicApis from "../../Apis/publicApis";
 import { useNavigate } from "react-router-dom";
-import { setUser } from "../../redux/slices/authSlice";
 
 function Bookmark({ className, post }) {
   const [bookmarkIcon, setIcon] = useState("");

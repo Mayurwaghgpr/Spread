@@ -1,16 +1,14 @@
 import React from "react";
-import { BsPeople } from "react-icons/bs";
 import { IoIosPeople } from "react-icons/io";
 import {
   IoHomeOutline,
   IoHomeSharp,
   IoLibraryOutline,
   IoLibrarySharp,
-  IoPeople,
   IoSearch,
   IoSearchOutline,
 } from "react-icons/io5";
-import { PiPerson } from "react-icons/pi";
+
 import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
 import { Link, NavLink, useLocation } from "react-router-dom";

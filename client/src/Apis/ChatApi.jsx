@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 function ChatApi() {
   const sendMessage = async (message) => {

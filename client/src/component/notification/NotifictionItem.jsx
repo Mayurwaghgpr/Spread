@@ -1,7 +1,5 @@
 import React from "react";
 import FormatedTime from "../utilityComp/FormatedTime";
-import { AiFillLike } from "react-icons/ai";
-import { HiHeart } from "react-icons/hi2";
 import useIcons from "../../hooks/useIcons";
 
 function NotifictionItem({ className, data }) {

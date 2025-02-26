@@ -1,5 +1,5 @@
-import React, { memo, useState, useEffect } from "react";
-import { useMutation, useQuery } from "react-query";
+import React, { memo, useState } from "react";
+import { useMutation } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { debounce } from "../../utils/debounce";
 import usePublicApis from "../../Apis/publicApis";
@@ -8,7 +8,7 @@ import { IoCloseOutline } from "react-icons/io5";
 function SearchBar({ className, scrollDirection }) {
   const [isFocused, setIsFocused] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const cache = new Map();
   const navigate = useNavigate();
   const { fetchSearchData } = usePublicApis();

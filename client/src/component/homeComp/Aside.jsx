@@ -1,7 +1,5 @@
 import React from "react";
 import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
-import PeoplesList from "../PeoplesList";
-import FollowPeopleLoader from "../loaders/FollowPeopleLoader";
 import { Link } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
 

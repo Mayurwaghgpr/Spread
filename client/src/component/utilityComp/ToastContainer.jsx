@@ -1,5 +1,5 @@
-import React, { memo, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { memo } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import TostItem from "./TostItem";
 import { createPortal } from "react-dom";

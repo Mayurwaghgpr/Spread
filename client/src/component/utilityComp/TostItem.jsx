@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeToast, removeAllToast } from "../../redux/slices/uiSlice";
+import { removeToast } from "../../redux/slices/uiSlice";
 
 function ToastItem({ ToastContent }) {
   const dispatch = useDispatch();

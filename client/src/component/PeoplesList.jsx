@@ -4,7 +4,7 @@ import { usePopper } from "react-popper";
 import PropTypes from "prop-types";
 import Follow from "./buttons/follow";
 import userImageSrc from "../utils/userImageSrc";
-import UserPopover from "./UtilityComp/UserPopover";
+import UserPopover from "./utilityComp/UserPopover";
 
 function PeoplesList({ people, className }) {
   const buttonRef = useRef(null);

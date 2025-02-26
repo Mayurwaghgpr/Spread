@@ -29,6 +29,7 @@ const app = express();
 const server = createServer(app);
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(","); 
 const Io = new Server(server, {
+  connectionStateRecovery:{},
   cors: {
     origin: allowedOrigins, // Support multiple origins
     methods:["GET","POST","PUT","PATCH","DELETE"],
@@ -60,12 +61,12 @@ app.use(helmet({
   }
 }));
 // Reate limmiter 
-app.use("/", rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: { message: "Too many requests, please try again later." },
-  headers: true,
-})); 
+// app.use("/", rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100, // Limit each IP to 100 requests per windowMs
+//   message: { message: "Too many requests, please try again later." },
+//   headers: true,
+// })); 
 app.use(cookieParser());
 
 // Serve Static Files (Place before routes)

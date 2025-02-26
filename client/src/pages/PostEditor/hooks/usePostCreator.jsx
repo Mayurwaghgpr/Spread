@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { setElements } from "../../../redux/slices/postSlice";
 import { debounce } from "../../../utils/debounce";
-import { setIsScale } from "../../../redux/slices/uiSlice";
 
 export const usePostCreator = () => {
   const { elements } = useSelector((state) => state.posts);

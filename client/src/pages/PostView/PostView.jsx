@@ -1,18 +1,10 @@
-import React, {
-  lazy,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { lazy, memo, useCallback, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DOMPurify from "dompurify";
 import "boxicons";
 import { useMutation, useQuery } from "react-query";
-import { v4 as uuidv4 } from "uuid";
 import Bookmark from "../../component/buttons/Bookmark";
 import usePublicApis from "../../Apis/publicApis";
 import Like from "../../component/buttons/Like/Like";
@@ -29,8 +21,6 @@ import { setToast } from "../../redux/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import menuCosntant from "../../component/postsComp/menuCosntant";
 import Menu from "../../component/postsComp/Menu";
-
-const SomthingWentWrong = lazy(() => import("../ErrorPages/somthingWentWrong"));
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );

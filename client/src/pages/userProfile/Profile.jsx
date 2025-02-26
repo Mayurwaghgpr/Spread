@@ -1,15 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import PostPreview from "../../component/postsComp/PostPreview";
 import { setuserProfile } from "../../redux/slices/profileSlice";
 import ProfileHeader from "./component/ProfileHeader";
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
 import { useLastPostObserver } from "../../hooks/useLastPostObserver";
 import useProfileApi from "../../Apis/ProfileApis";
-import SomthingWentWrong from "../ErrorPages/somthingWentWrong";
 import ErrorPage from "../ErrorPages/ErrorPage";
 
 function Profile() {

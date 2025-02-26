@@ -1,11 +1,9 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BsArrowLeft, BsSearch } from "react-icons/bs";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import ChatApi from "../../Apis/ChatApi";
-import { setConversations } from "../../redux/slices/chatSlice";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 
 function MessageLog() {

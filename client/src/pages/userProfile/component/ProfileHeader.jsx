@@ -5,8 +5,8 @@ import Follow from "../../../component/buttons/follow";
 import { useDispatch, useSelector } from "react-redux";
 import { setFollowInfo } from "../../../redux/slices/profileSlice";
 import userImageSrc from "../../../utils/userImageSrc";
-import { LuMessageSquarePlus, LuMessagesSquare } from "react-icons/lu";
-import FormatedTime from "../../../component/UtilityComp/FormatedTime";
+import { LuMessagesSquare } from "react-icons/lu";
+import FormatedTime from "../../../component/utilityComp/FormatedTime";
 import abbreviateNumber from "../../../utils/numAbrivation";
 
 const ProfileHeader = React.memo(({ profileId }) => {
@@ -14,7 +14,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
   const { user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
 
-  const { userImageurl, IsuserFromOAth } = userImageSrc(userProfile);
+  const { userImageurl } = userImageSrc(userProfile);
 
   return (
     <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">

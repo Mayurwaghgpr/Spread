@@ -12,8 +12,7 @@ import { IoSunny } from "react-icons/io5";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import LogoutBtn from "../buttons/LogoutBtn";
 import NotifictionBell from "../notification/NotifictionBell";
-import Notifictionbox from "../notification/Notifictionbox";
-import { PiSignIn, PiSignInBold, PiSignInDuotone } from "react-icons/pi";
+import { PiSignInDuotone } from "react-icons/pi";
 
 function MainNavBar() {
   // const { NavetransformY } = useScrollDirection();

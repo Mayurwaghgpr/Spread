@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { memo } from "react";
+import { useDispatch } from "react-redux";
 import { useQuery } from "react-query";
 import { setIsLogin, setUser } from "../redux/slices/authSlice";
 import useAuthApi from "../Apis/useAuthApi";

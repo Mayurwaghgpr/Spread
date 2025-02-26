@@ -1,10 +1,9 @@
-import React, { lazy, Suspense, useCallback, useEffect, useMemo } from "react";
+import React from "react";
 
 import ElementsProvider from "./component/ElementsProvider";
 
 import { usePostCreator } from "./hooks/usePostCreator";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsScale } from "../../redux/slices/uiSlice";
 import { Outlet } from "react-router-dom";
 
 import InputTypeSelector from "./component/InputTypeSelector";

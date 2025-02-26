@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { usePostCreator } from "../hooks/usePostCreator";
 import { setFocusedIndex } from "../../../redux/slices/uiSlice";
 

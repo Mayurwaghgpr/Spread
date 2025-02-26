@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useInfiniteQuery } from "react-query";
-import useAuthApi from "../Apis/useAuthApi";
+
 import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
 import { useLastPostObserver } from "../hooks/useLastPostObserver";
@@ -12,8 +12,6 @@ const ReadList = () => {
   const { user, isLogin } = useSelector((state) => state.auth);
   const {
     data,
-    error,
-    isError,
     isFetching,
     fetchNextPage,
     isFetchingNextPage,

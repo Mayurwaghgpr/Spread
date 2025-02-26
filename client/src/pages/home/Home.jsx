@@ -13,7 +13,6 @@ import Aside from "../../component/homeComp/Aside";
 import PostsApis from "../../Apis/PostsApis";
 import WhoToFollow from "./WhoToFollow";
 import useDeviceSize from "../../hooks/useDeviceSize";
-import { PopupBox } from "../../component/utilityComp/PopupBox";
 import ErrorPage from "../ErrorPages/ErrorPage";
 
 function Home() {

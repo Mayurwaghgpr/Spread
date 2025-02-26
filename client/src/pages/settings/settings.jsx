@@ -1,6 +1,6 @@
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo } from "react";
 
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { LuGithub } from "react-icons/lu";
 
 function Settings() {

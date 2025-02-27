@@ -145,9 +145,10 @@ function MessageSection() {
   // };
   // console.log(user);
   // console.log(messages);
+
   return (
-    <div className="relative w-full max-h-screen sm:flex flex-col justify-between hidden  border-inherit  ">
-      <div className=" flex justify-end w-full  py-3 px-7  shadow-md">
+    <>
+      <div className=" flex justify-end w-full  py-5 px-7  shadow-md">
         <div className="flex items-center font-thin justify-center gap-4  text-2xl">
           {" "}
           <button>
@@ -199,17 +200,17 @@ function MessageSection() {
             // onKeyDown={(e) => e.key === "Enter" && handleSend()}
             type="text"
             name=""
-            value={message}
+            // value={message}
             id=""
             placeholder="start typing..."
           />
         </div>
         <div className="flex justify-center items-center gap-3">
           <button
-            onClick={handleSend}
+            // onClick={handleSend}
             className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black"
           >
-            <div class="">
+            <div className="">
               <AiOutlineSend />
             </div>
           </button>
@@ -218,7 +219,7 @@ function MessageSection() {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

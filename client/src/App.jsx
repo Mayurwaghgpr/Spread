@@ -21,6 +21,7 @@ import { PopupBox } from "./component/utilityComp/PopupBox";
 import Ibutton from "./component/buttons/Ibutton";
 import { setloginPop } from "./redux/slices/authSlice";
 import PersistantUser from "./utils/PersistentUser";
+import MessageSection from "./pages/Messages/MessageSection";
 
 const Notifictionbox = lazy(
   () => import("./component/notification/Notifictionbox")
@@ -92,8 +93,8 @@ function App() {
   return (
     <>
       {" "}
-      <MainNavBar />
-      <main className="flex justify-between items-center  border-inherit ">
+      {!pathname.startsWith("/messages") && <MainNavBar />}
+      <main className="flex justify-between items-center border-inherit ">
         <Notifictionbox />
         {<ConfirmationBox />}
         <Suspense fallback={<LoaderScreen />}>
@@ -176,7 +177,9 @@ function App() {
                     <Messanger />
                   </ProtectedRoute>
                 }
-              />
+              >
+                <Route path="c/messages" element={<MessageSection />} />
+              </Route>
               <Route path="/view/:username/:id" element={<PostView />}>
                 <Route path="comments" element={<CommentSection />} />
               </Route>

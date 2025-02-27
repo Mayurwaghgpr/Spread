@@ -26,8 +26,8 @@ const   User = Database.define("User", {
         allowNull: true,
   },
   pronouns: {
-    type: DataTypes.ENUM('he/him', 'she/her', 'they/them', ''),
-    defaultValue: "",
+    type: DataTypes.ENUM(['he/him', 'she/her']),
+    defaultValue: "he/him",
   },
   email: {
     type: DataTypes.STRING,

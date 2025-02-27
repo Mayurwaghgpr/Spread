@@ -1,6 +1,11 @@
 import Archive from "../models/Archive.js";
 import Comments from "../models/Comments.js";
 import Follow from "../models/Follow.js";
+import Attachments from "../models/messaging/Attachments.js";
+import Conversation from "../models/messaging/Conversation.js";
+import Members from "../models/messaging/members.js";
+import Messages from "../models/messaging/Messages.js";
+import ReadReceipt from "../models/messaging/ReadReceipt.js";
 import Post from "../models/posts.js";
 import User from "../models/user.js";
 
@@ -83,7 +88,30 @@ Comments.belongsTo(Post, {
   as: "post",
 
 });
+  
+Conversation.belongsToMany(User, { through: Members, as: 'members', foreignKey: 'conversationId' });
+  User.belongsToMany(Conversation, { through: Members, as: 'conversations', foreignKey: 'memberId' });
+  
+Conversation.hasMany(Members, { foreignKey: 'conversationId'});
+// Members.hasMany(Conversation, { foreignKey: 'conversationId'});
+  
+Members.belongsTo(User, { foreignKey: 'memberId' });
+Members.belongsTo(Conversation, { foreignKey: 'conversationId' });
 
+User.hasMany(Messages, { foreignKey: 'senderId', as: 'messages' });
+Conversation.hasMany(Messages, { foreignKey: 'conversationId', as: 'messages' });
+
+Messages.belongsTo(User, { foreignKey: 'senderId', as: 'sender' });
+Messages.belongsTo(Conversation, { foreignKey: 'conversationId', as: 'conversation', onDelete: 'CASCADE' });
+
+Attachments.belongsTo(Messages, { foreignKey: 'messageId', as: 'message', onDelete: 'CASCADE' });
+Messages.hasOne(Attachments, { foreignKey: 'messageId', as: 'attachment', onDelete: 'CASCADE' });
+
+ReadReceipt.belongsTo(Messages, { foreignKey: 'messageId', as: 'readReceipt', onDelete: 'CASCADE' });
+Messages.hasMany(ReadReceipt, { foreignKey: 'messageId', as: 'readReceipts', onDelete: 'CASCADE' });
+
+
+  
  }
 
  export default DataBaseAssociations

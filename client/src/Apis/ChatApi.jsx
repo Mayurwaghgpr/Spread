@@ -11,9 +11,9 @@ function ChatApi() {
       throw error.response || error;
     }
   };
-  const getconversations = async () => {
+  const getConversations = async () => {
     try {
-      const result = await axios.get(`${BASE_URL}/conversations`, {
+      const result = await axios.get(`${BASE_URL}/messaging/c/all`, {
         withCredentials: true,
       });
       return result.data;
@@ -21,7 +21,7 @@ function ChatApi() {
       throw error.response || error;
     }
   };
-  return { sendMessage, getconversations };
+  return { sendMessage, getConversations };
 }
 
 export default ChatApi;

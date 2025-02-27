@@ -1,18 +1,25 @@
 import axios from "axios";
-import React from "react";
+import React, { memo } from "react";
 import { BsArrowLeft, BsSearch } from "react-icons/bs";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
-
+import { useQuery } from "react-query";
+import ChatApi from "../../Apis/ChatApi";
 function MessageLog() {
-  const { conversations } = useSelector((state) => state.chat);
+  const { user } = useSelector((state) => state.auth);
+  const { getConversations } = ChatApi();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { data } = useQuery({
+    queryKey: ["convesations"],
+    queryFn: () => getConversations(),
+  });
+  // // console.log(user);
+  console.log(data);
 
   return (
-    <aside className=" border-r sm:w-[40%] sm:min-w-fit w-full  h-full border-inherit">
+    <aside className=" border-r sm:max-w-[30%] sm:min-w-fit w-full  h-full border-inherit ">
       <div>
         <button
           onClick={() => navigate(-1)}
@@ -46,30 +53,48 @@ function MessageLog() {
             />
           </div>
         </header>
-        <div className="flex flex-col items-start max-h-screen  gap-7 py-6 px-4 overflow-y-auto no-scrollbar scroll-smooth ">
-          {conversations.map((user) => (
-            <div key={user.id} className=" flex items-center gap-3  ">
+        <div className="flex flex-col items-start max-h-screen w-full  gap-7 py-6 px-4 overflow-y-auto no-scrollbar scroll-smooth ">
+          {data?.map((conv) => (
+            <Link
+              to={`c/messages?Id=${conv.id}`}
+              replace
+              key={conv.id}
+              className=" flex items-center gap-3 w-full  "
+            >
               <div>
                 <div className="w-10 h-10">
                   <img
                     className=" w-full h-full object-cover object-center rounded-full"
-                    src={user.profileImage}
-                    alt={user.name}
+                    src={
+                      conv.convesationType !== "group"
+                        ? conv?.members?.find((m) => m.id != user.id).userImage
+                        : conv?.image
+                    }
+                    alt={
+                      conv.convesationType !== "group"
+                        ? conv?.members?.find((m) => m.id != user.id)
+                            ?.displayName
+                        : conv.groupName
+                    }
                     loading="lazy"
                   />
                 </div>
               </div>
               <div>
                 {" "}
-                <h2>{user.name}</h2>
+                <h2>
+                  {conv.convesationType !== "group"
+                    ? conv?.members?.find((m) => m.id != user.id)?.displayName
+                    : conv?.groupName}
+                </h2>
                 <div className="flex  items-center text-xs text-black dark:text-opacity-40 dark:text-white text-opacity-40 gap-2">
                   {" "}
-                  <p className=" ">{user.lastMessage}</p>
-                  <FormatedTime date={user.timestamp} />
-                  <span>{user.timestamp}</span>
+                  <p className=" ">{conv?.lastMessage}</p>
+                  <FormatedTime date={conv?.createdAt} />
+                  {/* <span>{user.timestamp}</span> */}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -77,4 +102,4 @@ function MessageLog() {
   );
 }
 
-export default MessageLog;
+export default memo(MessageLog);

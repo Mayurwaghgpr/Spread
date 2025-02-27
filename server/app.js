@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import Database from "./utils/database.js";
 import helmet from "helmet";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 // Routes
 import authRouter from "./routes/auth.route.js";
 import postsRouter from "./routes/posts.route.js";
@@ -16,11 +16,12 @@ import userRouter from "./routes/user.route.js";
 import publicRouter from "./routes/public.route.js";
 import commentRouter from "./routes/comments.route.js";
 import aiRouter from "./routes/AI.route.js";
+import messagingRouter from './routes/messaging/messaging.route.js'
+
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import redisClient from "./utils/redisClient.js";
 import DataBaseAssociations from "./utils/DataBaseAssociations.js";
-import Archive from "./models/Archive.js";
 
 
 // Initialize dotenv
@@ -28,7 +29,7 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(","); 
-const Io = new Server(server, {
+export const Io = new Server(server, {
   connectionStateRecovery:{},
   cors: {
     origin: allowedOrigins, // Support multiple origins
@@ -39,13 +40,13 @@ const Io = new Server(server, {
 
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
-
+app.use(express.json());
 app.use(cors({
   origin: allowedOrigins, // Support multiple origins
     methods:["GET","POST","PUT","PATCH","DELETE"],
   credentials: true,
 }))
-app.use(express.json());
+
 app.use(express.urlencoded({extended:true}))
 app.use(helmet({
   contentSecurityPolicy: {
@@ -73,7 +74,8 @@ app.use(cookieParser());
 // Serve Static Files
 app.use(express.static(path.join(__dirname, "/client/dist"), { maxAge: "1d" }));
 
-
+// Associations
+DataBaseAssociations()
 
 app.use("/auth", authRouter);
 app.use("/public", publicRouter);
@@ -81,6 +83,7 @@ app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
 app.use("/ai", aiRouter);
+app.use('/messaging',messagingRouter)
 
 
 
@@ -91,8 +94,7 @@ app.use(passport.initialize());
 // Socket.IO Connection
 socketHandlers(Io)
 
-// Associations
-DataBaseAssociations()
+
 
 // Handle React Routes (After API Routes)
 app.get("*", (req, res) => {

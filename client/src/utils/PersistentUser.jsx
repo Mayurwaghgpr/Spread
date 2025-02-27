@@ -27,6 +27,7 @@ function PersistentUser({ children }) {
       }
       console.error("Error fetching logged-in user data:", error);
     },
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
   return children;

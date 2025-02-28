@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import React from "react";
+import React, { memo } from "react";
 
 function FormatedTime({ date, className, content }) {
   return (
@@ -11,4 +11,4 @@ function FormatedTime({ date, className, content }) {
   );
 }
 
-export default FormatedTime;
+export default memo(FormatedTime);

@@ -1,19 +1,25 @@
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 function ChatApi() {
-  const sendMessage = async (message) => {
+  const getMessage = async ({ conversationId }) => {
     try {
-      const result = await axios.post(`${BASE_URL}/message`, message, {
+      const result = await axios.get(`${BASE_URL}/messaging/c/messages`, {
         withCredentials: true,
+        params: {
+          conversationId,
+        },
       });
       return result.data;
     } catch (error) {
       throw error.response || error;
     }
   };
-  const getConversations = async () => {
+  const getConversations = async ({ pageParam }) => {
     try {
       const result = await axios.get(`${BASE_URL}/messaging/c/all`, {
+        params: {
+          lastTimestamp: pageParam,
+        },
         withCredentials: true,
       });
       return result.data;
@@ -21,7 +27,7 @@ function ChatApi() {
       throw error.response || error;
     }
   };
-  return { sendMessage, getConversations };
+  return { getMessage, getConversations };
 }
 
 export default ChatApi;

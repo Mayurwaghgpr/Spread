@@ -7,11 +7,13 @@ import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
 import useAuthApi from "../../Apis/useAuthApi";
 import { useDispatch } from "react-redux";
 import LoaderScreen from "../loaders/loaderScreen";
+import useSocket from "../../hooks/useSocket";
 
 function LogoutBtn({ className }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { logout } = useAuthApi();
+  const { socket, disconnectSocket } = useSocket();
   const { mutate, isLoading } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
@@ -21,6 +23,7 @@ function LogoutBtn({ className }) {
       dispatch(setUser(null));
       dispatch(setloginPop(true));
       navigate("/");
+      disconnectSocket();
     },
     onError: () => {
       <SomthingWentWrong />;

@@ -1,5 +1,5 @@
 import Conversation from "../../models/messaging/Conversation.js"
-import Members from "../../models/messaging/members.js";
+import Members from "../../models/messaging/Members.js";
 import { getPrivateConversation } from "../../utils/getPrivateConversation.js";
 
 

@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer } from "node:http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
 import path from "path";
@@ -22,28 +21,33 @@ import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import redisClient from "./utils/redisClient.js";
 import DataBaseAssociations from "./utils/DataBaseAssociations.js";
+import { createServer } from "http";
+import sockIo from "./socket.js";
 
 
 // Initialize dotenv
 dotenv.config();
 const app = express();
 const server = createServer(app);
+const io = sockIo.init(server);
+
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(","); 
-export const Io = new Server(server, {
-  connectionStateRecovery:{},
-  cors: {
-    origin: allowedOrigins, // Support multiple origins
-    methods:["GET","POST","PUT","PATCH","DELETE"],
-    credentials: true,
-  },
-}); 
+
+// export const Io = new Server(server, {
+//   connectionStateRecovery:{},
+//   cors: {
+//     origin: allowedOrigins, // Support multiple origins
+//     methods:["GET","POST","PUT","PATCH","DELETE"],
+//     credentials: true,
+//   },
+// }); 
 
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 app.use(express.json());
 app.use(cors({
   origin: allowedOrigins, // Support multiple origins
-    methods:["GET","POST","PUT","PATCH","DELETE"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
 }))
 
@@ -85,14 +89,11 @@ app.use("/comment", commentRouter);
 app.use("/ai", aiRouter);
 app.use('/messaging',messagingRouter)
 
-
+socketHandlers(io)
 
 // Passport Configuration
 passportStrategies(passport);
 app.use(passport.initialize());
-
-// Socket.IO Connection
-socketHandlers(Io)
 
 
 

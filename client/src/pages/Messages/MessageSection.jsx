@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
-import { BsCameraVideo } from "react-icons/bs";
+import { BsCameraVideo, BsCheck2All } from "react-icons/bs";
 import { IoAttachOutline, IoCallOutline } from "react-icons/io5";
 import { MdMic } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { io } from "socket.io-client";
-import { addMessage } from "../../redux/slices/chatSlice";
+import {
+  addMessage,
+  popMessage,
+  pushMessage,
+} from "../../redux/slices/chatSlice";
 import ChatApi from "../../Apis/ChatApi";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const socket = io(BASE_URL, { withCredentials: true });
+import { useParams, useSearchParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import FormatedTime from "../../component/utilityComp/FormatedTime";
+import useSocket from "../../hooks/useSocket";
+import { v4 as uuidv4 } from "uuid";
+import MessageBubble from "./components/MessageBubble";
+
 // const messages = [
 //   {
 //     id: 1,
@@ -120,35 +128,64 @@ const socket = io(BASE_URL, { withCredentials: true });
 function MessageSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { messages } = useSelector((state) => state.chat);
-  const [message, setMessage] = useState("");
-  const { sendMessage } = ChatApi();
+  const [isUserTyping, setUseTyping] = useState({});
+  const [message, setMessage] = useState();
+  const { getMessage } = ChatApi();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  const conversationId = searchParams.get("Id");
+  const { socket } = useSocket();
 
-  // useEffect(() => {
-  //   socket.emit("register", user?.id);
-  //   socket.on("newMessage", (msg) => {
-  //     dispatch(addMessage(msg));
-  //   });
+  useQuery(["messages", conversationId], {
+    queryFn: () => getMessage({ conversationId }),
+    onSuccess: (data) => {
+      // console.log(data);
+      dispatch(addMessage(data));
+    },
+  });
 
-  //   return () => socket.off("newMessage");
-  // }, [user]);
+  useEffect(() => {
+    if (isLogin && user?.id) {
+      socket?.emit("joinConversation", conversationId);
+      socket?.on("newMessage", (data) => {
+        console.log(data);
+        dispatch(pushMessage(data));
+      });
+      // socket.on("userIsTyping", ({ senderId }) => {
+      //   console.log(senderId);
+      //   setUseTyping({ senderId });
+      // });
+      socket?.on("ErrorSendMessage", () => {
+        dispatch(popMessage());
+      });
+    }
+  }, []);
 
-  // const handleSend = async () => {
-  //   const newMessage = {
-  //     to: "4764f8c1-aa8a-4634-a2e4-f7504143fd8c",
-  //     message: message,
-  //   };
-  //   // const { data } = await sendMessage(newMessage);
-  //   socket.emit("sendMessage", newMessage);
-  //   // dispatch(addMessage(data));
-  //   setMessage("");
-  // };
+  const handleSend = useCallback(async () => {
+    const messageObj = {
+      id: uuidv4(),
+      content: message,
+      senderId: user?.id,
+      conversationId,
+      createdAt: new Date().toString(),
+    };
+    dispatch(pushMessage(messageObj));
+    socket?.emit("sendMessage", messageObj);
+    setMessage("");
+  }, [message]);
+
   // console.log(user);
   // console.log(messages);
-
+  const handleInput = useCallback(
+    function (e) {
+      // socket.emit("IamTyping", { conversationId, senderId: user?.id });
+      setMessage(e.target.value);
+    },
+    [message]
+  );
   return (
-    <>
-      <div className=" flex justify-end w-full  py-5 px-7  shadow-md">
+    <div className="relative w-full sm:flex flex-col justify-between hidden border-inherit overflow-y-auto">
+      <div className="sticky top-0 bg-[#fff9f3] dark:bg-black z-20 flex justify-end w-full  py-5 px-7  shadow-md">
         <div className="flex items-center font-thin justify-center gap-4  text-2xl">
           {" "}
           <button>
@@ -161,28 +198,23 @@ function MessageSection() {
         </div>
       </div>
 
-      <div className=" sm:flex flex-col justify-between overflow-y-auto scroll-smooth no-scrollbar px-3 pt-5 pb-32 drop-shadow-xl">
-        {/* {messages.map((message) => {
+      <div className=" sm:flex flex-col justify-end scroll-smooth no-scroll px-3 pt-5 pb-20 drop-shadow-xl ">
+        {messages?.map((message) => {
           return (
-            <p
-              className={` flex flex-col gap-1 w-fit p-2 text-sm rounded-2xl  my-3  ${
-                message.senderId === 1
-                  ? "ml-auto bg-sky-400 text-white dark:shadow-sky-400 rounded-br-none "
-                  : "mr-auto bg-[#fffefe]  items-end text-black dark:shadow-white rounded-bl-none"
-              }  `}
+            <MessageBubble
               key={message.id}
-            >
-              <span>{message.message}</span>
-              <span className={`   flex   items-center justify-between`}>
-                {" "}
-                {message.senderId === 1 && <BsCheck2All />}
-                <small className="text-[.5rem] text-gray-500 text-opacity-60 ">
-                  {formatDate(message.timestamp, "dd/mm/yyy")}
-                </small>
-              </span>
-            </p>
+              message={message}
+              userId={user.id}
+            />
           );
-        })} */}
+        })}
+        {isUserTyping?.senderId && isUserTyping?.senderId !== user.id && (
+          <p
+            className={` flex flex-col gap-1 w-fit p-2 text-sm rounded-2xl  my-3 mr-auto bg-[#fffefe] items-end text-black dark:shadow-white rounded-bl-none`}
+          >
+            <span className="dotloader"></span>
+          </p>
+        )}
         {/* <div className="m-auto flex flex-col w-20">
           {messages.map((data, idx) => {
             return <p key={idx}>{data.message}</p>;
@@ -195,19 +227,19 @@ function MessageSection() {
             <IoAttachOutline />
           </button>
           <input
-            // onChange={(e) => setMessage(e.target.value)}
+            onChange={handleInput}
             className=" w-full h-full  p-3 outline-none bg-inherit placeholder:font-thin"
-            // onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
             type="text"
             name=""
-            // value={message}
+            value={message}
             id=""
             placeholder="start typing..."
           />
         </div>
         <div className="flex justify-center items-center gap-3">
           <button
-            // onClick={handleSend}
+            onClick={handleSend}
             className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black"
           >
             <div className="">
@@ -219,8 +251,8 @@ function MessageSection() {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-export default MessageSection;
+export default memo(MessageSection);

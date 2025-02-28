@@ -3,7 +3,7 @@ import Comments from "../models/Comments.js";
 import Follow from "../models/Follow.js";
 import Attachments from "../models/messaging/Attachments.js";
 import Conversation from "../models/messaging/Conversation.js";
-import Members from "../models/messaging/members.js";
+import Members from "../models/messaging/Members.js";
 import Messages from "../models/messaging/Messages.js";
 import ReadReceipt from "../models/messaging/ReadReceipt.js";
 import Post from "../models/posts.js";

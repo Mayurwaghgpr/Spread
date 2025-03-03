@@ -1,7 +1,21 @@
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 function ChatApi() {
-  const getMessage = async ({ conversationId }) => {
+  const startPrivateChate = async (chatUserId) => {
+    try {
+      const result = await axios.post(
+        `${BASE_URL}/messaging/p/create`,
+        { chatUserId },
+        {
+          withCredentials: true,
+        }
+      );
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+  const getMessage = async (conversationId) => {
     try {
       const result = await axios.get(`${BASE_URL}/messaging/c/messages`, {
         withCredentials: true,
@@ -27,7 +41,7 @@ function ChatApi() {
       throw error.response || error;
     }
   };
-  return { getMessage, getConversations };
+  return { getMessage, getConversations, startPrivateChate };
 }
 
 export default ChatApi;

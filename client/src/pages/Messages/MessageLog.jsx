@@ -7,11 +7,13 @@ import { Link, useNavigate } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { useInfiniteQuery, useQuery } from "react-query";
 import ChatApi from "../../Apis/ChatApi";
-import { useLastPostObserver } from "../../hooks/useLastPostObserver";
+import { useLastItemObserver } from "../../hooks/useLastItemObserver";
+import { setOpenNewConverstionBox } from "../../redux/slices/uiSlice";
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
   const { getConversations } = ChatApi();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     data,
@@ -33,13 +35,14 @@ function MessageLog() {
       refetchOnWindowFocus: false,
     }
   );
-  const { lastpostRef } = useLastPostObserver(
+  const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
     hasNextPage
   );
   const conversations = data?.pages?.flatMap((page) => page);
+  console.log(conversations);
   return (
     <aside className=" border-r sm:max-w-[30%] sm:min-w-fit w-full  h-full border-inherit ">
       <div>
@@ -55,7 +58,10 @@ function MessageLog() {
           <div className="flex text-lg font-bold justify-between border-inherit">
             {" "}
             <h1>Messages</h1>
-            <button className="">
+            <button
+              onClick={() => dispatch(setOpenNewConverstionBox())}
+              className=""
+            >
               {" "}
               <IoPersonAddOutline />
             </button>
@@ -76,10 +82,10 @@ function MessageLog() {
           </div>
         </header>
         <div className="flex flex-col items-start max-h-screen w-full  gap-7 py-6 px-4 overflow-y-auto no-scrollbar scroll-smooth ">
-          {conversations?.map((conv, arr) => (
+          {conversations?.map((conv, idx, arr) => (
             <Link
-              ref={arr.length % 10 === 0 ? lastpostRef : null}
-              to={`c/messages?Id=${conv.id}`}
+              ref={arr.length % 10 === 0 ? lastItemRef : null}
+              to={`c?Id=${conv.id}`}
               replace
               key={conv.id}
               className=" flex items-center gap-3 w-full  "
@@ -89,12 +95,12 @@ function MessageLog() {
                   <img
                     className=" w-full h-full object-cover object-center rounded-full"
                     src={
-                      conv.convesationType !== "group"
+                      conv.conversationType !== "group"
                         ? conv?.members?.find((m) => m.id != user.id).userImage
                         : conv?.image
                     }
                     alt={
-                      conv.convesationType !== "group"
+                      conv.conversationType !== "group"
                         ? conv?.members?.find((m) => m.id != user.id)
                             ?.displayName
                         : conv.groupName
@@ -106,7 +112,7 @@ function MessageLog() {
               <div>
                 {" "}
                 <h2>
-                  {conv.convesationType !== "group"
+                  {conv.conversationType !== "group"
                     ? conv?.members?.find((m) => m.id != user.id)?.displayName
                     : conv?.groupName}
                 </h2>

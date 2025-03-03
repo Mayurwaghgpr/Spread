@@ -3,9 +3,10 @@ import { useMutation } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { debounce } from "../../utils/debounce";
 import usePublicApis from "../../Apis/publicApis";
-import Spinner from "../loaders/Spinner";
+import Spinner from "../../component/loaders/Spinner";
 import { IoCloseOutline } from "react-icons/io5";
-function SearchBar({ className, scrollDirection }) {
+import SearchBar from "../../component/inputComponents/SearchBar";
+function SearchBox({ className, scrollDirection }) {
   const [isFocused, setIsFocused] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const [searchParams] = useSearchParams();
@@ -42,22 +43,13 @@ function SearchBar({ className, scrollDirection }) {
               <IoCloseOutline />
             </button>
           </div>
-          <div className=" flex justify-center pr-3  w-full items-center gap-3 rounded-full border overflow-hidden border-inherit">
-            <input
-              className="p-2 pl-3 w-full outline-none"
-              placeholder="Search"
-              type="search"
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              onChange={({ target: { value } }) => searchDebounce(value.trim())}
-            />
-            <button
-              onClick={() => navigate(`/?topic=${searchParams.get("topic")}`)}
-              className=""
-            >
-              <i className="bi bi-search"></i>
-            </button>
-          </div>
+          <SearchBar
+            className=" flex justify-center pr-3  w-full items-center gap-3 rounded-full border overflow-hidden border-inherit"
+            inputAction={({ target: { value } }) =>
+              searchDebounce(value.trim())
+            }
+            btnAction={() => navigate(`/?topic=${searchParams.get("topic")}`)}
+          />
         </div>
         {isFocused && (
           <div
@@ -97,4 +89,4 @@ function SearchBar({ className, scrollDirection }) {
   );
 }
 
-export default memo(SearchBar);
+export default memo(SearchBox);

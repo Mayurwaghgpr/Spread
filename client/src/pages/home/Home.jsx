@@ -7,7 +7,7 @@ const SomethingWentWrong = lazy(
 );
 import PostPreview from "../../component/postsComp/PostPreview";
 import Spinner from "../../component/loaders/Spinner";
-import { useLastPostObserver } from "../../hooks/useLastPostObserver";
+import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import usePublicApis from "../../Apis/publicApis";
 import Aside from "../../component/homeComp/Aside";
 import PostsApis from "../../Apis/PostsApis";
@@ -57,7 +57,7 @@ function Home() {
     }
   );
 
-  const { lastpostRef } = useLastPostObserver(
+  const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
@@ -92,7 +92,7 @@ function Home() {
           />
           <PostPreview
             className="border-inherit border-b pt-2"
-            ref={arr.length % 3 === 0 ? lastpostRef : null}
+            ref={arr.length % 3 === 0 ? lastItemRef : null}
             key={post?.id}
             post={post}
           />
@@ -102,7 +102,7 @@ function Home() {
     return (
       <PostPreview
         className="border-inherit border-b pt-2"
-        ref={arr.length % 3 === 0 ? lastpostRef : null}
+        ref={arr.length % 3 === 0 ? lastItemRef : null}
         key={post?.id}
         post={post}
       />

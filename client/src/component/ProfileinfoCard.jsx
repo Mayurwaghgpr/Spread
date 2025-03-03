@@ -6,12 +6,14 @@ import { createPortal } from "react-dom";
 import { useQuery } from "react-query";
 import FollowPeopleLoader from "./loaders/FollowPeopleLoader";
 import useProfileApi from "../Apis/ProfileApis";
+import Follow from "./buttons/follow";
+import { useNavigate } from "react-router-dom";
 
 function ProfileinfoCard({ className }) {
   const dispatch = useDispatch();
   const { fetchFollowInfo } = useProfileApi();
   const { userProfile, FollowInfo } = useSelector((state) => state.profile);
-
+  const navigate = useNavigate();
   const { data, isLoading } = useQuery({
     queryFn: () =>
       fetchFollowInfo({
@@ -52,9 +54,19 @@ function ProfileinfoCard({ className }) {
                   <PeoplesList
                     className={"text-nowrap"}
                     key={`${followings.id}-${idx}`} // Ensure unique key
-                    people={followings}
                     index={idx}
-                  />
+                    action={() =>
+                      navigate(
+                        `/profile/@${followings?.username}/${followings?.id}`
+                      )
+                    }
+                  >
+                    {" "}
+                    <Follow
+                      People={followings}
+                      className="text-black min-h-8 min-w-[6.7rem] border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
+                    />
+                  </PeoplesList>
                 ))}
               </ul>
             ) : (

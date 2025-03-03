@@ -10,10 +10,10 @@ const Members = Database.define('Members', {
     },
 
     memberType: {
-        type: DataTypes.ENUM(['admin', 'user']),
+        type: DataTypes.ENUM('admin', 'user'),
         default:'user'
     },
-        memberId: {
+    memberId: {
         type: DataTypes.UUID,
         allowNull:false,
     },

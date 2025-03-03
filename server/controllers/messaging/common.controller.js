@@ -12,7 +12,7 @@ export const getConversationsByUserId = async (req, res, next) => {
     const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
     console.log(lastTimestamp)
     try {
-    const cacheKey = `post_preview_${lastTimestamp}_${userId}_${limit}`;
+    const cacheKey = `Conversation_Log_${lastTimestamp}_${userId}_${limit}`;
     const cachedConvData = await redisClient.get(cacheKey);
     if (cachedConvData !== null) {
       console.log('cach hit')
@@ -51,10 +51,10 @@ export const getConversationsByUserId = async (req, res, next) => {
 
 export const getMessagesByConversationId = async(req, res, next) => {
     const { conversationId } = req.query;
-
+    console.log(conversationId)
     try {
         const messages = await Messages.findAll({
-            where: { conversationId },
+            where: { conversationId:conversationId },
             include: [{
                 model: User,
                 as: "sender",
@@ -62,7 +62,7 @@ export const getMessagesByConversationId = async(req, res, next) => {
             }]
         })
         if (!messages) {
-            res.status(404).json({message: 'No private messages found for this conversation.'})
+            res.status(204).json({message: 'No private messages found for this conversation.'})
         }
         res.status(200).json(messages);
     } catch (error) {

@@ -11,7 +11,7 @@ router.get('/c/messages',IsAuth,getMessagesByConversationId)
 // router.post('/c/message/add')
 
 //Private Messageing routes (one to one)
-router.post('/p/create', createPrivateConversation);
+router.post('/p/create',IsAuth, createPrivateConversation);
 
 //Group Messageing routes (many to many)
 router.get('/g/create', IsAuth,)

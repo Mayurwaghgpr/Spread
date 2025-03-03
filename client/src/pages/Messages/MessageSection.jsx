@@ -137,7 +137,7 @@ function MessageSection() {
   const { socket } = useSocket();
 
   useQuery(["messages", conversationId], {
-    queryFn: () => getMessage({ conversationId }),
+    queryFn: () => getMessage(conversationId),
     onSuccess: (data) => {
       // console.log(data);
       dispatch(addMessage(data));

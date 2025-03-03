@@ -7,8 +7,8 @@ const Conversation = Database.define('Conversation', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
-    convesationType: {
-        type: DataTypes.ENUM(['private', 'group']),
+    conversationType: {
+        type: DataTypes.ENUM('private', 'group'),
         default:"private"
     },
     lastMessage: {

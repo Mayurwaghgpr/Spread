@@ -11,17 +11,13 @@ import MainNavBar from "./component/header/MainNavBar";
 import ProtectedRoute from "./utils/ProtectedRoutes";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
-import SearchBar from "./component/homeComp/searchBar";
 import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/homeComp/SideBar";
-import Messanger from "./pages/Messages/Messanger";
-import CommentSection from "./pages/Comment/CommentSection";
 import SomthingWentWrong from "./pages/ErrorPages/somthingWentWrong";
 import { PopupBox } from "./component/utilityComp/PopupBox";
 import Ibutton from "./component/buttons/Ibutton";
 import { setloginPop } from "./redux/slices/authSlice";
 import PersistantUser from "./utils/PersistentUser";
-import MessageSection from "./pages/Messages/MessageSection";
 
 const Notifictionbox = lazy(
   () => import("./component/notification/Notifictionbox")
@@ -55,6 +51,10 @@ const ConfirmationBox = lazy(
 const ScrollToTopButton = lazy(
   () => import("./component/utilityComp/ScrollToTopButton")
 );
+const Messanger = lazy(() => import("./pages/Messages/Messanger"));
+const MessageSection = lazy(() => import("./pages/Messages/MessageSection"));
+const SearchBox = lazy(() => import("./pages/Seach&Explorer/SearchBox"));
+const CommentSection = lazy(() => import("./pages/Comment/CommentSection"));
 const ToastContainer = lazy(
   () => import("./component/utilityComp/ToastContainer")
 );
@@ -178,7 +178,7 @@ function App() {
                   </ProtectedRoute>
                 }
               >
-                <Route path="c/messages" element={<MessageSection />} />
+                <Route path="c" element={<MessageSection />} />
               </Route>
               <Route path="/view/:username/:id" element={<PostView />}>
                 <Route path="comments" element={<CommentSection />} />
@@ -187,7 +187,7 @@ function App() {
                 path="/search"
                 element={
                   <ProtectedRoute>
-                    <SearchBar />
+                    <SearchBox />
                   </ProtectedRoute>
                 }
               />
@@ -216,15 +216,16 @@ function App() {
             {isLogin && <TaskBar />}
             {loginPop && (
               <PopupBox
+                action={() => dispatch(setloginPop(false))}
                 className={
                   "flex flex-col justify-center gap-4 text-center  items-center p-10 border-inherit max-w-[25rem] min-h-[50%] shadow-lg"
                 }
-                heading={"Hey there!"}
-                subText={
-                  "Let start exploring and sharing,Sign In or Sign Up,learn,analyze and more"
-                }
               >
-                {" "}
+                <h1 className="text-3xl font-semibold">Hey there!</h1>
+                <p className="opacity-50 font-light">
+                  Let start exploring and sharing,Sign In or Sign
+                  Up,learn,analyze and more
+                </p>{" "}
                 <Ibutton
                   className={
                     "text-white bg-black dark:bg-white dark:text-black py-2 text-center border-4 hover:opacity-60 border-inherit  w-full "

@@ -6,6 +6,7 @@ import {
   removeFromArchive,
   LikePost,
   getHomeContent,
+  getAllUser,
 } from '../controllers/public.controller.js';
 import IsAuth from '../middlewares/isAuth.js'; // Import the authentication middleware
 
@@ -14,10 +15,11 @@ const router = express.Router();
 // Route to get preparation data for posts (authenticated users only)
 router.get('/h/content', IsAuth, getHomeContent);
 
+// Route to get all platform users
+router.get('/users/all',IsAuth,getAllUser)
 
 // Route to search for posts based on query parameters (authenticated users only)
 router.get("/search", IsAuth, searchData);
-
 
 // Put Routes
 router.put('/like/',IsAuth,LikePost)

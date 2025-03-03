@@ -19,7 +19,7 @@ const UserPopover = forwardRef(
           >
             <img
               className=" rounded-full size-[2.5rem] object-cover object-top"
-              src={people?.userImage ? `${people?.userImage}` : profileIcon}
+              src={people?.userImage && `${people?.userImage}`}
               alt={`${people?.username}'s profile picture`}
               loading="lazy"
             />

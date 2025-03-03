@@ -2,7 +2,7 @@ import React, { memo, useEffect, lazy, Suspense } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import PostsApis from "../../Apis/PostsApis";
-import { useLastPostObserver } from "../../hooks/useLastPostObserver";
+import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import Spinner from "../../component/loaders/Spinner";
 import CommentInput from "./CommentInput";
 import { setCommentCred } from "../../redux/slices/postSlice";
@@ -34,7 +34,7 @@ function CommentSection() {
     }
   );
 
-  const { lastpostRef } = useLastPostObserver(
+  const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
@@ -93,7 +93,7 @@ function CommentSection() {
             {Comments.map((comt, idx, arr) => {
               return (
                 <CommentBox
-                  ref={arr.length % 5 === 0 ? lastpostRef : null}
+                  ref={arr.length % 5 === 0 ? lastItemRef : null}
                   className={
                     "animate-slide-in-top flex flex-col text-sm justify-center w-full items-start gap-2"
                   }

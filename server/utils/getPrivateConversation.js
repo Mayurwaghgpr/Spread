@@ -1,47 +1,37 @@
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import Conversation from '../models/messaging/Conversation.js';
 import User from '../models/user.js';
+import Members from '../models/messaging/Members.js';
+import Database from './database.js';
+import redisClient from './redisClient.js';
 
 export const getPrivateConversation = async (userId1, userId2) => {
-    console.log(userId1,userId2)
-    try {
-      //Find the private conversation where both users are members
-        const conversation = await Conversation.findOne({
-            where: { convesationType: 'group' }, 
-            include:[ {
-               model: User,
-                    as: 'members', 
-                    through: { attributes: [] }, // Hide join table fields
-                    where: {
-                        id: { [Op.in]: [userId1, userId2] } // Find users in conversation
-                    }
 
+
+    try {
+    const cacheKey = `PrivateConv_${userId1}_${userId2}`
+    const cachedData = await redisClient.get(cacheKey)
+    if (cachedData) {
+        console.log('cache hit')
+        return cachedData;
+    }
+        console.log('cache miss')
+        const memberCounts = await Members.findAll({
+            attributes: ['conversationId'],
+            where: {
+                memberId: { [Op.in]: [userId1, userId2] }
             },
-                // {
-                // model: Messages,
-                // as:'messages',
-                // attributes: ['id', 'content', 'senderId', 'replyedTo'],
-                // order: [['createdAt', 'ASC']], 
-                // include:[{
-                //     model: Attachments,
-                //     as:'attachments',
-                //     attributes: ['id', 'AttachmentType', 'attachmentUrl']
-                    
-                // }, {
-                //     model: ReadReceipt,
-                //     as:'readReceipt',
-                //     attributes:['id','status','messageId','userId']
-                // }]
-                // }
-            ],
-            group: ['Conversation.id'], 
+            group: ['conversationId'],
+            having: Sequelize.literal('COUNT(DISTINCT "memberId") = 2') // Ensure exactly two users in the conversation
         });
 
-        if (!conversation) {
-            return ;
-        }
+        if (!memberCounts.length) return false;
+        console.log(memberCounts)
+        const conversation = await Conversation.findOne({
+            where: { id: memberCounts[0].conversationId, conversationType: 'private' }
+        });
 
-        return conversation;
+        return conversation || false;
     } catch (error) {
         console.error('Error fetching private conversation:', error);
         throw error;

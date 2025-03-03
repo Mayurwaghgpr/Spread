@@ -4,9 +4,11 @@ import MessageLog from "./MessageLog";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../../redux/slices/chatSlice";
 import useSocket from "../../hooks/useSocket";
+import NewConversation from "./NewConversation";
 
 function Messanger() {
   const { isLogin, user } = useSelector((state) => state.auth);
+  const { openNewConverstionBox } = useSelector((state) => state.ui);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { socket } = useSocket();
@@ -28,8 +30,8 @@ function Messanger() {
   return (
     <section className="h-screen w-full border-inherit">
       <div className="fixed w-full flex h-full border-y border-inherit">
+        {openNewConverstionBox && <NewConversation />}
         <MessageLog />
-
         <Outlet />
       </div>
     </section>

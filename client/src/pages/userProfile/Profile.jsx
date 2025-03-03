@@ -7,7 +7,7 @@ import ProfileHeader from "./component/ProfileHeader";
 import { useInfiniteQuery, useMutation } from "react-query";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
-import { useLastPostObserver } from "../../hooks/useLastPostObserver";
+import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import useProfileApi from "../../Apis/ProfileApis";
 import ErrorPage from "../ErrorPages/ErrorPage";
 
@@ -60,7 +60,7 @@ function Profile() {
     }
   );
 
-  const { lastpostRef } = useLastPostObserver(
+  const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
@@ -103,7 +103,7 @@ function Profile() {
               ? posts.map((post, idx, arr) => (
                   <PostPreview
                     className="border-b w-full"
-                    ref={arr.length % 3 === 0 ? lastpostRef : null}
+                    ref={arr.length % 3 === 0 ? lastItemRef : null}
                     key={post.id}
                     post={post}
                   />

@@ -94,6 +94,40 @@ export const searchData = async (req, res, next) => {
   }
 };
 
+export const getAllUser = async (req,res,next) => {
+  const limit = Math.max(parseInt(req.query.limit?.trim()) || 5, 1);
+  const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
+  const currentUserId = req.authUser.id;
+  console.log(limit)
+  try {
+    const cacheKey = `Users_Data_${lastTimestamp}__${limit}`;
+    // Unique cache key for this combination
+    // Checking Cache
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData !== null) {
+      console.log('cach hit')
+      return res.status(200).json(JSON.parse(cachedData));// Send cached data
+    }
+    const users = await User.findAll({
+      where: {
+        id: { [Op.ne]: currentUserId },
+        createdAt: { [Op.lt]: lastTimestamp }
+      },
+      attributes: ['id', 'displayName', 'username', 'userImage'],
+      order: [
+        ["createdAt", "ASC"],
+      ],
+      limit, 
+    })
+    await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(users))
+    res.status(200).json(users)
+  } catch (error) {
+    console.error("Error fetching users data:", error);
+    next(error);
+  }
+  
+}
+
 export const LikePost = async (req, res, next) => {
   const { postId, liketype: type } = req.body;
   const { id: likedBy } = req.authUser;

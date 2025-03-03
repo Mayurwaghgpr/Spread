@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-export function useLastPostObserver(
+export function useLastItemObserver(
   fetchNextPage,
   isFetchingNextPage,
   isFetching,
@@ -9,7 +9,7 @@ export function useLastPostObserver(
 ) {
   const intObserver = useRef(null);
 
-  const lastpostRef = useCallback(
+  const lastItemRef = useCallback(
     (post) => {
       if (isFetchingNextPage || isFetching || !hasNextPage) return;
 
@@ -38,5 +38,5 @@ export function useLastPostObserver(
     };
   }, []);
 
-  return { lastpostRef };
+  return { lastItemRef };
 }

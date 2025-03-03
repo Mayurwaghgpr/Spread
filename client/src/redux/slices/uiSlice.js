@@ -21,7 +21,8 @@ const initialState = {
   // focusedIndex: 0,
   MenuOpen: false,
   
-  openNotification:false
+  openNotification: false,
+  openNewConverstionBox:false
 };
 
 const uiSlice = createSlice({
@@ -54,6 +55,9 @@ const uiSlice = createSlice({
     },
     setOpenNotification: (state) => {
       state.openNotification = !state.openNotification
+    },
+    setOpenNewConverstionBox: (state) => {
+      state.openNewConverstionBox= !state.openNewConverstionBox
     }
     // setFocusedIndex: (state,action) => {
     //   state.focusedIndex= action.payload
@@ -62,6 +66,18 @@ const uiSlice = createSlice({
   },
 });
 
-export const { setConfirmBox, setIsConfirm, setToast, removeToast,setThemeMode ,setIsScale,removeAllToast,setManuOpen,setOpenNotification} = uiSlice.actions;
+export const {
+  setConfirmBox,
+  setIsConfirm,
+  setToast,
+  removeToast,
+  setThemeMode,
+  setIsScale,
+  removeAllToast,
+  setManuOpen,
+  setOpenNotification,
+  setOpenNewConverstionBox
+  
+} = uiSlice.actions;
 
 export default uiSlice.reducer;

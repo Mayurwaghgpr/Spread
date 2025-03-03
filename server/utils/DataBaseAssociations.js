@@ -89,14 +89,16 @@ Comments.belongsTo(Post, {
 
 });
   
-Conversation.belongsToMany(User, { through: Members, as: 'members', foreignKey: 'conversationId' });
-  User.belongsToMany(Conversation, { through: Members, as: 'conversations', foreignKey: 'memberId' });
+  Conversation.belongsToMany(User, { through: Members, as: 'members', foreignKey: 'conversationId',onDelete: 'CASCADE' });
+  User.belongsToMany(Conversation, { through: Members, as: 'conversations', foreignKey: 'memberId', onDelete: 'CASCADE'  }); 
+
+  Conversation.hasMany(Members, { foreignKey: 'conversationId'});
+
+  Members.belongsTo(User, { foreignKey: 'memberId',onDelete: 'CASCADE' });
+  Members.belongsTo(Conversation, { foreignKey: 'conversationId' });
+
   
-Conversation.hasMany(Members, { foreignKey: 'conversationId'});
-// Members.hasMany(Conversation, { foreignKey: 'conversationId'});
-  
-Members.belongsTo(User, { foreignKey: 'memberId' });
-Members.belongsTo(Conversation, { foreignKey: 'conversationId' });
+
 
 User.hasMany(Messages, { foreignKey: 'senderId', as: 'messages' });
 Conversation.hasMany(Messages, { foreignKey: 'conversationId', as: 'messages' });

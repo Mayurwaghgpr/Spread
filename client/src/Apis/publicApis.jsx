@@ -45,10 +45,24 @@ function usePublicApis() {
   const followUser = async ({ followerId, followedId }) => {
     try {
       const result = await axios.put(
-        `${BASE_URL}/public/follow/`,
+        `${BASE_URL}/public/follow`,
         { followerId, followedId },
         { withCredentials: true }
       );
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+  const fetchAllUsers = async (pageParam) => {
+    try {
+      const result = await axios.get(`${BASE_URL}/public/users/all`, {
+        withCredentials: true,
+        params: {
+          limit: 5,
+          lastTimestamp: pageParam,
+        },
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -116,6 +130,7 @@ function usePublicApis() {
     unfollowUser,
     ArchivePost,
     followUser,
+    fetchAllUsers,
   };
 }
 

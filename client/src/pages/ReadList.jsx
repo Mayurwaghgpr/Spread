@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "react-query";
 
 import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
-import { useLastPostObserver } from "../hooks/useLastPostObserver";
+import { useLastItemObserver } from "../hooks/useLastItemObserver";
 import { useSelector } from "react-redux";
 import useProfileApi from "../Apis/ProfileApis";
 
@@ -31,7 +31,7 @@ const ReadList = () => {
     }
   );
   // console.log({ pages });
-  const { lastpostRef } = useLastPostObserver(
+  const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
@@ -56,7 +56,7 @@ const ReadList = () => {
               return (
                 <PostPreview
                   className={"max-w-[45rem]"}
-                  ref={pages?.length % 3 === 0 ? lastpostRef : null}
+                  ref={pages?.length % 3 === 0 ? lastItemRef : null}
                   key={idx}
                   post={page}
                   Saved={true}

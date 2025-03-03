@@ -95,13 +95,12 @@ export const signIn = async (req, res, next) => {
           through: { attributes: { exclude: ["password"] } },
         },
          {
-                model: Post,
-                attributes: ['id']
+            model: Post,
+            attributes: ['id']
         },
-
         {
             model: Post,
-            as: 'SavedPosts',
+            as: 'savedPosts',
             through: { attributes: [] }, // Fetch only related posts
           },
       ],

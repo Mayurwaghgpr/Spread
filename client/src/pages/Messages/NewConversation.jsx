@@ -66,7 +66,9 @@ const NewConversation = () => {
       action={() => dispatch(setOpenNewConverstionBox())}
     >
       <h1 className=" font-bold text-lg">New Conversation</h1>
-      <SearchBar className={"flex w-full p-1 px-2 border rounded-lg"} />
+      <SearchBar
+        className={"flex w-full p-1 px-2 border rounded-lg border-inherit"}
+      />
       <Ibutton className={"w-full text"} innerText={" + New group"} />
       <div
         ref={containerRef}

@@ -4,6 +4,7 @@ import User from '../models/user.js';
 import Members from '../models/messaging/Members.js';
 import Database from './database.js';
 import redisClient from './redisClient.js';
+import { EXPIRATION } from '../config/constants.js';
 
 export const getPrivateConversation = async (userId1, userId2) => {
 
@@ -13,7 +14,7 @@ export const getPrivateConversation = async (userId1, userId2) => {
     const cachedData = await redisClient.get(cacheKey)
     if (cachedData) {
         console.log('cache hit')
-        return cachedData;
+        return JSON.parse(cachedData);
     }
         console.log('cache miss')
         const memberCounts = await Members.findAll({
@@ -27,6 +28,7 @@ export const getPrivateConversation = async (userId1, userId2) => {
 
         if (!memberCounts.length) return false;
         console.log(memberCounts)
+    await redisClient.setEx(cacheKey,300,JSON.stringify(memberCounts))
         const conversation = await Conversation.findOne({
             where: { id: memberCounts[0].conversationId, conversationType: 'private' }
         });

@@ -185,7 +185,7 @@ function MessageSection() {
   );
   return (
     <div className="relative w-full sm:flex flex-col justify-between hidden border-inherit overflow-y-auto">
-      <div className="sticky top-0 bg-[#fff9f3] dark:bg-black z-20 flex justify-end w-full  py-5 px-7  shadow-md">
+      <div className="sticky top-0 bg-[#fff9f3] dark:bg-black z-20 flex justify-end w-full  py-5 px-7 border-b border-inherit  shadow-md">
         <div className="flex items-center font-thin justify-center gap-4  text-2xl">
           {" "}
           <button>

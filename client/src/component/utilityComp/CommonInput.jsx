@@ -16,9 +16,11 @@ const CommonInput = forwardRef(function CommonInput(
 ) {
   return (
     <>
-      <label htmlFor={Iname} className="w-full">
-        {labelname}
-      </label>
+      {labelname && (
+        <label htmlFor={Iname} className="w-fit cursor-pointer">
+          {labelname}
+        </label>
+      )}
       <div className={className}>
         <div className="flex bg-inherit w-full border-inherit overflow-hidden ">
           <input

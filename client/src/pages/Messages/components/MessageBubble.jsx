@@ -17,7 +17,10 @@ const MessageBubble = ({ message, userId, readReceipt }) => {
       <span className={`flex items-center justify-between`}>
         {" "}
         {message.senderId === userId && <BsCheck2All />}
-        <FormatedTime className="text-[.5rem]" date={message.createdAt} />
+        <FormatedTime
+          className="text-[.5rem] text-black"
+          date={message.createdAt}
+        />
       </span>
     </p>
   );

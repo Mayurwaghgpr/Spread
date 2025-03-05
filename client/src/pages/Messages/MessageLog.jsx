@@ -5,10 +5,11 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import ChatApi from "../../Apis/ChatApi";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import { setOpenNewConverstionBox } from "../../redux/slices/uiSlice";
+import Spinner from "../../component/loaders/Spinner";
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
   const { getConversations } = ChatApi();
@@ -42,7 +43,7 @@ function MessageLog() {
     hasNextPage
   );
   const conversations = data?.pages?.flatMap((page) => page);
-  console.log(conversations);
+  // console.log(conversations);
   return (
     <aside className=" border-r sm:max-w-[30%] sm:min-w-fit w-full  h-full border-inherit ">
       <div>
@@ -119,12 +120,20 @@ function MessageLog() {
                 <div className="flex  items-center text-xs text-black dark:text-opacity-40 dark:text-white text-opacity-40 gap-2">
                   {" "}
                   <p className=" ">{conv?.lastMessage}</p>
-                  <FormatedTime date={conv?.createdAt} />
+                  <FormatedTime
+                    className={"text-black dark:text-white"}
+                    date={conv?.createdAt}
+                  />
                   {/* <span>{user.timestamp}</span> */}
                 </div>
               </div>
             </Link>
           ))}
+          {isLoading && (
+            <div className="flex justify-center items-center w-full h-full ">
+              <Spinner className={"w-10 h-10 bg-black p-1 dark:bg-white"} />
+            </div>
+          )}
         </div>
       </div>
     </aside>

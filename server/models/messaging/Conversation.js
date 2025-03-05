@@ -17,7 +17,6 @@ const Conversation = Database.define('Conversation', {
     },
     groupName: {
         type: DataTypes.TEXT,
-        
     },
     image: {
         type: DataTypes.STRING,

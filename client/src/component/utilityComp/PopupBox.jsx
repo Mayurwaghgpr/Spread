@@ -9,7 +9,7 @@ export const PopupBox = ({ children, className, heading, subText, action }) => {
   return (
     <div
       onClick={action}
-      className="fixed left-0 right-0 bottom-0 top-0 flex justify-center items-center p-4 bg-black bg-opacity-20 backdrop-blur-[1px] z-50 border-inherit"
+      className="fixed left-0 right-0 bottom-0 top-0  flex justify-center items-center  bg-black bg-opacity-20 backdrop-blur-[1px] z-50 border-inherit"
     >
       <div
         onClick={(e) => e.stopPropagation()}

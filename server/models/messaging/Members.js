@@ -8,7 +8,6 @@ const Members = Database.define('Members', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
-
     memberType: {
         type: DataTypes.ENUM('admin', 'user'),
         default:'user'

@@ -23,7 +23,7 @@ export const createPrivateConversation = async (req, res,next) => {
             memberType: 'user', // Default role, can be 'admin' if needed
         }]
        await Members.bulkCreate(members);
-       res.status(200).json({message:'Conversation created successfully',conversation})
+       res.status(201).json({message:'Conversation created successfully',conversation})
    } catch (error) {
     next(error)
    }

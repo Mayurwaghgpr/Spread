@@ -3,10 +3,10 @@ import { IoClose } from "react-icons/io5";
 
 const SelectedGroupMemberList = ({ users, handleGroupConfig, hashMap }) => {
   return (
-    <div className="text-start w-full">
+    <div className="text-start w-full border-inherit h-full">
       {" "}
       <small className="text-xs"> Members</small>
-      <div className="flex justify-start border border-inherit p-5 transition-all duration-200 rounded-lg items-center drop-shadow-lg gap-3 w-full h-fit px-5 overflow-auto scroll-smooth">
+      <div className="flex justify-start border border-inherit p-5  transition-all duration-200 rounded-lg items-center drop-shadow-lg gap-3 w-full h-fit px-5 overflow-auto scroll-smooth">
         {users?.map((user) => {
           return (
             hashMap[user.id] && (

@@ -15,6 +15,21 @@ function ChatApi() {
       throw error.response || error;
     }
   };
+  //Create Group
+  const createGroup = async ({ groupName, membersArr }) => {
+    try {
+      const result = await axios.post(
+        `${BASE_URL}/messaging/g/create`,
+        { groupName, membersArr },
+        {
+          withCredentials: true,
+        }
+      );
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
   const getMessage = async (conversationId) => {
     try {
       const result = await axios.get(`${BASE_URL}/messaging/c/messages`, {
@@ -41,7 +56,8 @@ function ChatApi() {
       throw error.response || error;
     }
   };
-  return { getMessage, getConversations, startPrivateChate };
+
+  return { getMessage, getConversations, startPrivateChate, createGroup };
 }
 
 export default ChatApi;

@@ -15,7 +15,7 @@ router.get('/c/messages',IsAuth,getMessagesByConversationId)
 router.post('/p/create',IsAuth, createPrivateConversation);
 
 //Group Messageing routes (many to many)
-router.get('/g/create', IsAuth, createGroupConversation)
+router.post('/g/create', IsAuth, createGroupConversation)
 router.get('/g/make/admin',IsAuth,addAsGroupAdmin)
 
 export default router

@@ -1,15 +1,14 @@
 import React from "react";
 
-const SearchBar = ({ className, inputAction, btnAction }) => {
+const SearchBar = ({ className, inputAction, btnAction, ...props }) => {
   return (
     <div className={className}>
       <input
         className="p-2 w-full outline-none bg-inherit"
         placeholder="Search"
         type="search"
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         onChange={inputAction}
+        {...props}
       />
       <button onClick={btnAction} className="">
         <i className="bi bi-search"></i>

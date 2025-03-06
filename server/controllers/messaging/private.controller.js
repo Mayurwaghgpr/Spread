@@ -6,7 +6,6 @@ import { getPrivateConversation } from "../../utils/getPrivateConversation.js";
 export const createPrivateConversation = async (req, res,next) => {
   const { chatUserId } = req.body;
   const currentUserId = req.authUser.id;
-  console.log(chatUserId,currentUserId)
    try {
      const exist = await getPrivateConversation(currentUserId, chatUserId);
      if (exist) {

@@ -20,13 +20,13 @@ const NewConversation = () => {
   const [isCreatingGroup, setCreatingGroup] = useState(false);
   const [next, setNext] = useState(false);
   const [hashMap, setHashMap] = useState({
-    [user.id]: { userId: user.id, memberType: "admin" },
+    [user.id]: { memberId: user.id, memberType: "admin" },
   });
 
   const { fetchAllUsers } = usePublicApis();
   const { startPrivateChate } = ChatApi();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   const containerRef = useRef(null);
 
   const { mutate: PrivateMutaion, isLoading: isPrivateLoading } = useMutation({
@@ -75,7 +75,7 @@ const NewConversation = () => {
         if (newMap[id]) {
           delete newMap[id];
         } else {
-          newMap[id] = { userId: id };
+          newMap[id] = { memberId: id };
         }
         return newMap;
       });
@@ -83,13 +83,16 @@ const NewConversation = () => {
     [isCreatingGroup]
   );
   const handelCancelGroup = useCallback(() => {
+    if (Object.entries(hashMap).length < 1) {
+      setNext(false);
+    }
     setHashMap({ [user.id]: { ...hashMap[user.id] } });
     setCreatingGroup(false);
-  }, [isCreatingGroup]);
+  }, [hashMap, isCreatingGroup]);
   return (
     <PopupBox
       className={
-        "flex flex-col justify-start items-center gap-5 text-center p-4 border-inherit max-w-[30rem] w-full sm:max-h-[60%] h-full min-h-[60%] shadow-sm"
+        "flex flex-col justify-start items-center gap-5 text-center p-4 border-inherit max-w-[30rem] w-full sm:max-h-[60%] h-full min-h-[60%] shadow-sm overflow-auto"
       }
       action={() => dispatch(setOpenNewConverstionBox())}
     >
@@ -157,7 +160,7 @@ const NewConversation = () => {
               >
                 {isCreatingGroup && (
                   <input
-                    className="block shadow-inner rounded-full animate-fedin.2s "
+                    className="block shadow-inner rounded-full animate-fedin.2s cursor-pointer"
                     onChange={() => handleGroupConfig(Usr.id, Usr.userImage)}
                     type="checkbox"
                     checked={!!hashMap[Usr.id]}

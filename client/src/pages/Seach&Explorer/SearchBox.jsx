@@ -44,6 +44,8 @@ function SearchBox({ className, scrollDirection }) {
             </button>
           </div>
           <SearchBar
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             className=" flex justify-center pr-3  w-full items-center gap-3 rounded-full border overflow-hidden border-inherit"
             inputAction={({ target: { value } }) =>
               searchDebounce(value.trim())

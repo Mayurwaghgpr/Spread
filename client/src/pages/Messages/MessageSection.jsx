@@ -55,7 +55,7 @@ function MessageSection() {
 
   const handleNewMessage = useCallback(
     (msg) => {
-      if (msg.senderId !== user.id) {
+      if (msg.senderId !== user?.id) {
         //Only push incomming message because current user message in already pushed optemisticaly
         dispatch(pushMessage(msg));
         setUseTyping({});
@@ -107,8 +107,8 @@ function MessageSection() {
 
   // Setting apposit member name and userImage as groupName and image if conversation is private (one-to-one)
   const conversationData = useMemo(() => {
-    if (selectedConversation.conversationType === "private") {
-      const appositeMember = selectedConversation.members.find(
+    if (selectedConversation?.conversationType === "private") {
+      const appositeMember = selectedConversation?.members.find(
         (member) => member.id != user.id
       );
       return {
@@ -128,9 +128,9 @@ function MessageSection() {
           />
           <div className="flex flex-col items-start justify-center gap-1  overflow-hidden  overflow-ellipsis text-nowrap ">
             <h1>{conversationData?.groupName}</h1>
-            {selectedConversation.conversationType === "group" && (
+            {selectedConversation?.conversationType === "group" && (
               <ul className="flex items-center gap-1 text-xs  text-black text-opacity-50 dark:bg-white dark:text-opacity-50">
-                {selectedConversation.members.map((member) => (
+                {selectedConversation?.members.map((member) => (
                   <li className="text-ellipsis" key={member.id}>
                     {member.username},
                   </li>

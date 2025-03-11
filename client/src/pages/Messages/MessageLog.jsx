@@ -105,7 +105,7 @@ function MessageLog() {
                     className=" w-full h-full object-cover object-center rounded-full"
                     src={
                       conv.conversationType !== "group"
-                        ? conv?.members?.find((m) => m.id != user.id).userImage
+                        ? conv?.members?.find((m) => m.id != user.id)?.userImage
                         : conv?.image
                     }
                     alt={

@@ -49,10 +49,17 @@ export const getConversationsByUserId = async (req, res, next) => {
 
 export const getMessagesByConversationId = async(req, res, next) => {
     const { conversationId } = req.query;
+    // const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
+    // const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
     try {
 
         const messages = await Messages.findAll({
-            where: { conversationId:conversationId },
+            where: {
+                // createdAt: { [Op.lt]: lastTimestamp },
+                conversationId: conversationId
+            },
+            // order: [["createdAt", "ASC"]],
+            // limit
         })
         if (!messages) {
             res.status(204).json({message: 'No private messages found for this conversation.'})

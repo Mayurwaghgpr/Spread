@@ -36,9 +36,16 @@ function MessageSection() {
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
   const { socket } = useSocket();
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const { isLoading } = useQuery(["messages", conversationId], {
-    queryFn: () => getMessage(conversationId),
+    queryFn: () => getMessage({ conversationId }),
     onSuccess: (data) => {
       // console.log(data);
       dispatch(addMessage(data));
@@ -56,7 +63,7 @@ function MessageSection() {
   const handleNewMessage = useCallback(
     (msg) => {
       if (msg.senderId !== user?.id) {
-        //Only push incomming message because current user message in already pushed optemisticaly
+        //Only push incomming message because current user message in already pushed optimisticaly
         dispatch(pushMessage(msg));
         setUseTyping({});
       }
@@ -70,8 +77,6 @@ function MessageSection() {
       socket?.emit("joinConversation", conversationId);
 
       socket?.on("userIsTyping", handleUserTyping);
-      // const handleNewMessage = (msg) => dispatch(addMessage(msg));
-      // const handleError = () => dispatch(popMessage());
       socket?.on("newMessage", handleNewMessage);
       socket?.on("ErrorSendMessage", handleError);
     }
@@ -92,7 +97,7 @@ function MessageSection() {
       conversationId,
       createdAt: new Date().toISOString(),
     };
-    dispatch(pushMessage(messageObj));
+    dispatch(pushMessage(messageObj)); //Optimisticaly pushing message
     socket?.emit("sendMessage", messageObj);
     setMessage("");
   }, [message, socket, user?.id, conversationId]);
@@ -112,14 +117,18 @@ function MessageSection() {
         (member) => member.id != user.id
       );
       return {
-        image: appositeMember.userImage,
-        groupName: appositeMember.displayName,
+        image: appositeMember?.userImage,
+        groupName: appositeMember?.displayName,
       };
     }
     return selectedConversation; //Here returnning the converstion as it is group conversation
   }, [selectedConversation]);
+
   return (
-    <div className="relative w-full sm:flex flex-col justify-between hidden border-inherit overflow-y-auto">
+    <div
+      ref={containerRef}
+      className="relative w-full sm:flex flex-col justify-between hidden border-inherit overflow-y-auto"
+    >
       <div className="sticky top-0 bg-[#fff9f3] dark:bg-black z-20 flex justify-between w-full  py-5 px-7 border-b border-inherit  shadow-md">
         <div className="flex justify-start items-center gap-3 w-[80%]">
           <ProfileImage
@@ -162,11 +171,11 @@ function MessageSection() {
           );
         })}
         {isUserTyping?.senderId && isUserTyping?.senderId !== user.id && (
-          <p
-            className={` flex flex-col gap-1 w-fit p-2 text-sm rounded-2xl  my-3 mr-auto bg-[#fffefe] items-end text-black dark:shadow-white rounded-bl-none`}
+          <div
+            className={` flex items-center justify-center py-3 px-2 h-fit  text-sm rounded-2xl  my-3 mr-auto bg-[#fffefe]  text-black dark:shadow-white rounded-bl-none`}
           >
-            <span className="dotloader"></span>
-          </p>
+            <span className="typingLoader"></span>
+          </div>
         )}
         {isLoading && (
           <div className="flex justify-center items-center w-full h-full ">

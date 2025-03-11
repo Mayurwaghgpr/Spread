@@ -10,12 +10,6 @@ export const getPrivateConversation = async (userId1, userId2) => {
 
 
     try {
-    const cacheKey = `PrivateConv_${userId1}_${userId2}`
-    const cachedData = await redisClient.get(cacheKey)
-    if (cachedData) {
-        console.log('cache hit')
-        return JSON.parse(cachedData);
-    }
         console.log('cache miss')
         const memberCounts = await Members.findAll({
             attributes: ['conversationId'],
@@ -28,7 +22,6 @@ export const getPrivateConversation = async (userId1, userId2) => {
 
         if (!memberCounts.length) return false;
         console.log(memberCounts)
-    await redisClient.setEx(cacheKey,300,JSON.stringify(memberCounts))
         const conversation = await Conversation.findOne({
             where: { id: memberCounts[0].conversationId, conversationType: 'private' }
         });

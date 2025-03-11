@@ -1,6 +1,7 @@
 import React from "react";
 import { BsCheck2All } from "react-icons/bs";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";
+import { formatISO, formatters } from "date-fns";
 
 const MessageBubble = ({ message, userId, readReceipt }) => {
   return (
@@ -20,6 +21,7 @@ const MessageBubble = ({ message, userId, readReceipt }) => {
         <FormatedTime
           className="text-[.5rem] text-black"
           date={message.createdAt}
+          formate={"hb:dd/MMM/YYY"}
         />
       </span>
     </p>

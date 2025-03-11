@@ -30,12 +30,13 @@ function ChatApi() {
       throw error.response || error;
     }
   };
-  const getMessage = async (conversationId) => {
+  const getMessage = async ({ pageParam, conversationId }) => {
     try {
       const result = await axios.get(`${BASE_URL}/messaging/c/messages`, {
         withCredentials: true,
         params: {
           conversationId,
+          lastTimestamp: pageParam,
         },
       });
       return result.data;

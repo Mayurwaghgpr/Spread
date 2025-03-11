@@ -70,7 +70,7 @@ function Profile() {
     () => postsData?.pages.flatMap((page) => page) || [],
     [postsData]
   );
-  if (isProfileError || isPostError) {
+  if (isProfileError || (isPostError && postError?.status !== 404)) {
     console.log(profileError);
     const errorMessage = profileError?.data.message || postError?.data.message;
     const statusCode = profileError?.status || postError?.status;

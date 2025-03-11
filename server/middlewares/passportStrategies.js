@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 import Post from "../models/posts.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
 import Sequelize from "sequelize";
-import { DataFetching } from "../operations/data-fetching.js";
+import { fetchProfile } from "../operations/data-fetching.js";
 dotenv.config();
-const fetchUser=new DataFetching()
+
 export const passportStrategies = (passport) => {
   passport.use(
     new GoogleStrategy(
@@ -23,8 +23,7 @@ export const passportStrategies = (passport) => {
             return;
           }
           const {email,provider} = profile
-          let user = await fetchUser.Profile({ email, signedWith: provider })
-          console.log(user)
+          let user = await fetchProfile({ email, signedWith: provider })
           if (!user) {
             const username = await genUniqueUserName( profile.email);
             user = await User.create({

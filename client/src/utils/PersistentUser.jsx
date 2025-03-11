@@ -13,15 +13,14 @@ function PersistentUser({ children }) {
     queryKey: ["loggedInUser"],
     queryFn: () => getLogInUserData(),
     onSuccess: (data) => {
-      console.log(JSON.parse(data));
       localStorage.setItem("AccessToken", true);
       dispatch(setIsLogin(true));
       dispatch(setUser(JSON.parse(data)));
     },
     onError: (error) => {
       if (error.status === 401) {
-        const respons = refreshToken();
-        console.log(respons);
+        // const respons = refreshToken();
+        // console.log(respons);
         dispatch(setIsLogin(false));
         return localStorage.removeItem("AccessToken");
       }

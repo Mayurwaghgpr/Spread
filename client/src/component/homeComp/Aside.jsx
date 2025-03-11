@@ -1,15 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
 
-function Aside({
-  FechingPreps,
-  isLoadingPreps,
-  homeData,
-  className,
-  handleTopicClick,
-}) {
+function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
   return (
     <aside className={`${className}`}>
       <div className="flex flex-col w-full p-6 items-center text-start gap-2  border-inherit">
@@ -32,7 +26,7 @@ function Aside({
                 </button>
               </li>
             ))}
-            {FechingPreps && <TopicsSkeletonLoader />}
+            {isLoadingHome && <TopicsSkeletonLoader />}
           </ul>
         </div>
       </div>
@@ -40,7 +34,7 @@ function Aside({
         <WhoToFollow
           homeData={homeData}
           className={" text-sm  p-5  border-inherit"}
-          FechingPreps={FechingPreps}
+          isLoadingHome={isLoadingHome}
         />
         <footer className=" text-[#383838] px-6">
           <Link className="" to="">

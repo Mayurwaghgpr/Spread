@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { BsArrowLeft, BsSearch } from "react-icons/bs";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,10 @@ import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { useInfiniteQuery } from "react-query";
 import ChatApi from "../../Apis/ChatApi";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import { setOpenNewConverstionBox } from "../../redux/slices/uiSlice";
+import {
+  selectConversation,
+  setOpenNewConverstionBox,
+} from "../../redux/slices/messangerSlice";
 import Spinner from "../../component/loaders/Spinner";
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
@@ -42,6 +45,11 @@ function MessageLog() {
     isFetching,
     hasNextPage
   );
+  const haldelSelectConversation = useCallback((conv) => {
+    dispatch(selectConversation(conv));
+    localStorage.setItem("conversationMeta", JSON.stringify(conv));
+  }, []);
+
   const conversations = data?.pages?.flatMap((page) => page);
   // console.log(conversations);
   return (
@@ -85,9 +93,9 @@ function MessageLog() {
         <div className="flex flex-col items-start max-h-screen w-full  gap-7 py-6 px-4 overflow-y-auto no-scrollbar scroll-smooth ">
           {conversations?.map((conv, idx, arr) => (
             <Link
+              onClick={() => haldelSelectConversation(conv)}
               ref={arr.length % 10 === 0 ? lastItemRef : null}
               to={`c?Id=${conv.id}`}
-              replace
               key={conv.id}
               className=" flex items-center gap-3 w-full  "
             >

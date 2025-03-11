@@ -1,9 +1,6 @@
-import React, { useRef, memo, useMemo } from "react";
+import React, { useRef, memo, useMemo, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import ProfileButton from "../ProfileButton";
-// import useScrollDirection from "../../hooks/useScrollDirection"; // Import the custom hook
 
 import ThemeBtn from "../buttons/ThemeBtn";
 import { setManuOpen } from "../../redux/slices/uiSlice";
@@ -13,16 +10,18 @@ import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import LogoutBtn from "../buttons/LogoutBtn";
 import NotifictionBell from "../notification/NotifictionBell";
 import { PiSignInDuotone } from "react-icons/pi";
+import ProfileImage from "../ProfileImage";
 
 function MainNavBar() {
-  // const { NavetransformY } = useScrollDirection();
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [deviceSize, setDeviceSize] = useState();
   const { MenuOpen } = useSelector((state) => state.ui);
   const { isLogin, user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
   const { ThemeMode } = useSelector((state) => state.ui);
+
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const Modes = useMemo(
     () => [
@@ -45,17 +44,26 @@ function MainNavBar() {
     [ThemeMode]
   );
 
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceSize(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <header
       className={`fixed top-0 p-3  sm:px-24 flex justify-center w-full transform-all duration-300 ease-in-out z-40 dark:border-[#383838] border-b  border-inherit  bg-[#fff9f3] dark:bg-black dark:bg-opacity-30 dark:backdrop-blur-lg bg-opacity-10 backdrop-blur-lg`}
     >
       <nav className={`relative  w-full    `}>
-        <div className="flex border-inherit items-center justify-between w-full m-auto">
+        <div className="flex  items-center justify-between w-full border-inherit m-auto">
           <Link to="/" className="sm:text-2xl  font-bold ">
             Spread
           </Link>
 
-          <div className="flex w-fit gap-5 justify-end items-center border-inherit pr-5  ">
+          <div className="flex justify-end items-center  gap-5  w-fit border-inherit pr-5  ">
             {/* Toggle Theme button */}
             <ThemeBtn Modes={Modes} separate={false} className={"relative"} />
             {isLogin && (
@@ -64,20 +72,24 @@ function MainNavBar() {
               </>
             )}
             {isLogin ? (
-              <div className="relative box-content flex  *:transition-all *:duration-300 text-left group border-inherit">
-                <ProfileButton
+              <div className="relative flex  box-content  *:transition-all *:duration-300 text-left group border-inherit">
+                <ProfileImage
                   onClick={() => dispatch(setManuOpen())}
-                  className={`box-content border-2  sm:size-9 size-7  ${
+                  className={`box-content border-2  sm:size-9 size-7 text-sm font-semibold text-gray-900 rounded-full  ${
                     location.pathname.startsWith("/profile") &&
                     userProfile?.id === user?.id
                       ? " border-black dark:border-white"
                       : "border-transparent"
                   } `}
+                  userData={user}
+                  disabled={deviceSize > 639 ? true : false}
                 />
                 {/* Tooltip with user name */}
-                <div className="flex justify-start w-52 flex-col gap-5 pointer-events-none opacity-0 group-hover:pointer-events-auto  group-hover:opacity-100  p-3 rounded-lg absolute top-10 -left-40 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit  text-nowrap text-center">
+                <div className="flex flex-col  gap-5 justify-start w-52  pointer-events-none opacity-0 group-hover:pointer-events-auto  group-hover:opacity-100  p-3 rounded-lg absolute top-10 -left-40 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit  text-nowrap text-center">
                   {" "}
-                  <span className="text-sm w-fit">{user.displayName}</span>{" "}
+                  <span className="text-sm w-fit">
+                    {user?.displayName}
+                  </span>{" "}
                   <ThemeBtn
                     Modes={Modes}
                     separate={true}

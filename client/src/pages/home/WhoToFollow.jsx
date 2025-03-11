@@ -4,12 +4,12 @@ import PeoplesList from "../../component/PeoplesList";
 import Follow from "../../component/buttons/follow";
 import { useNavigate } from "react-router-dom";
 
-function WhoToFollow({ className, homeData, FechingPreps }) {
+function WhoToFollow({ className, homeData, isLoadingHome }) {
   const navigate = useNavigate();
   return (
     <div className={className}>
       <h1 className=" text-start w-full text-xl font-bold"> Follow people </h1>
-      {!FechingPreps ? (
+      {!isLoadingHome ? (
         <ul className="py-3 w-full flex flex-wrap gap-3">
           {homeData?.userSuggetion?.map((el, index) => (
             <PeoplesList

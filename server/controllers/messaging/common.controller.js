@@ -8,9 +8,8 @@ import redisClient from "../../utils/redisClient.js";
 
 export const getConversationsByUserId = async (req, res, next) => {
     const userId = req.authUser.id;
-      const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
+    const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
     const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
-    console.log(lastTimestamp)
     try {
     const cacheKey = `Conversation_Log_${lastTimestamp}_${userId}_${limit}`;
     const cachedConvData = await redisClient.get(cacheKey);
@@ -31,7 +30,6 @@ export const getConversationsByUserId = async (req, res, next) => {
                     as: 'members', 
                     through: { attributes: [] },
                     attributes: ['id', 'displayName', 'username', 'userImage', 'email', 'createdAt', 'updatedAt'],
-                
                 }
             ],
             where: { createdAt: { [Op.lt]: lastTimestamp } },
@@ -51,15 +49,10 @@ export const getConversationsByUserId = async (req, res, next) => {
 
 export const getMessagesByConversationId = async(req, res, next) => {
     const { conversationId } = req.query;
-    console.log(conversationId)
     try {
+
         const messages = await Messages.findAll({
             where: { conversationId:conversationId },
-            include: [{
-                model: User,
-                as: "sender",
-                attributes: ['id', 'displayName', 'username', 'userImage', 'email', 'createdAt', 'updatedAt'],
-            }]
         })
         if (!messages) {
             res.status(204).json({message: 'No private messages found for this conversation.'})

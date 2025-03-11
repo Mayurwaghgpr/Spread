@@ -74,7 +74,6 @@ app.use(helmet({
 // })); 
 app.use(cookieParser());
 
-// Serve Static Files (Place before routes)
 // Serve Static Files
 app.use(express.static(path.join(__dirname, "/client/dist"), { maxAge: "1d" }));
 

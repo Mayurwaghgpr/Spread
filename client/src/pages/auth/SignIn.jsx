@@ -49,6 +49,7 @@ function SignIn() {
   if (!isLogin) {
     return (
       <AuthFormWrapper
+        className
         onSubmit={handleLogin}
         heading={"Welcome"}
         error={error}
@@ -57,7 +58,7 @@ function SignIn() {
       >
         <CommonInput
           ref={userRef}
-          className={`${"flex  flex-col gap-2 w-full mb-4  border rounded-lg p-1 "} `}
+          className={`${"flex flex-col justify-start gap-2 w-full mb-4  border rounded-lg p-1 "} `}
           type={"email"}
           name={"email"}
           labelname={"Email address"}
@@ -113,7 +114,7 @@ function SignIn() {
             className={` bg-black text-white dark:bg-white dark:text-black p-3 w-full   rounded-lg ${
               isLoading && "cursor-wait bg-opacity-40"
             }`}
-            disabled={userRef.current?.value}
+            disabled={userRef?.current?.value}
           >
             Continue
           </button>

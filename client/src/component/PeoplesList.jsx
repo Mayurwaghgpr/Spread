@@ -1,10 +1,8 @@
 import React, { forwardRef, memo, useRef } from "react";
-import { Link } from "react-router-dom";
 import { usePopper } from "react-popper";
-import PropTypes from "prop-types";
-import Follow from "./buttons/follow";
 import userImageSrc from "../utils/userImageSrc";
 import UserPopover from "./utilityComp/UserPopover";
+import ProfileImage from "./ProfileImage";
 
 const PeoplesList = forwardRef(
   ({ people, className, children, action, popover = true }, ref) => {
@@ -49,14 +47,7 @@ const PeoplesList = forwardRef(
             className="flex items-center gap-3 border-inherit h-full w-full "
             onClick={action}
           >
-            <div className=" w-10 h-10 ">
-              <img
-                className="w-full h-full rounded-full object-cover object-top"
-                src={userImageurl}
-                alt={`${people?.username || "User"}'s profile picture`}
-                loading="lazy"
-              />
-            </div>
+            <ProfileImage className=" w-10 h-10 " image={userImageurl} />
 
             <p className="hover:underline  underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
               {people?.username}

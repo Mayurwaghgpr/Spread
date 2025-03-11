@@ -1,14 +1,13 @@
 import React, { useCallback, lazy, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "react-query";
-
+import usePublicApis from "../../Apis/publicApis";
 const SomethingWentWrong = lazy(
   () => import("../ErrorPages/somthingWentWrong")
 );
 import PostPreview from "../../component/postsComp/PostPreview";
 import Spinner from "../../component/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import usePublicApis from "../../Apis/publicApis";
 import Aside from "../../component/homeComp/Aside";
 import PostsApis from "../../Apis/PostsApis";
 import WhoToFollow from "./WhoToFollow";
@@ -18,14 +17,12 @@ import ErrorPage from "../ErrorPages/ErrorPage";
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isDeviceSize = useDeviceSize("1023");
-  const { fetchHomeContent } = usePublicApis();
   const { fetchDataAll } = PostsApis();
-
   const selectedTopic = searchParams.get("topic") || "All";
+  const { fetchHomeContent } = usePublicApis();
 
   const {
     isLoading: isLoadingHome,
-    isFetching: fetchingHome,
     error: errorHome,
     isError: isHomeError,
     data: homeData,
@@ -33,6 +30,11 @@ function Home() {
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
+
+  const handleTopicClick = useCallback(
+    (topic) => setSearchParams({ topic }),
+    [setSearchParams]
+  );
 
   const {
     data: postsData,
@@ -64,20 +66,10 @@ function Home() {
     hasNextPage
   );
 
-  const handleTopicClick = useCallback(
-    (topic) => setSearchParams({ topic }),
-    [setSearchParams]
-  );
-
-  if (isHomeError || isPostError) {
-    const errorMessage = errorHome?.data?.message || errorPosts?.data?.message;
-    const statusCode = errorHome?.status || errorPosts?.status;
-    return (
-      <ErrorPage
-        message={errorMessage || errorHome?.message}
-        statusCode={statusCode || 500}
-      />
-    );
+  if (isPostError) {
+    const errorMessage = errorPosts?.data?.message;
+    const statusCode = errorPosts?.status;
+    return <ErrorPage message={errorMessage} statusCode={statusCode || 500} />;
   }
 
   const posts = postsData?.pages.flatMap((page) => page) || [];
@@ -88,10 +80,10 @@ function Home() {
           <WhoToFollow
             homeData={homeData}
             className="w-full  text-sm p-5 border-b border-inherit"
-            FechingPreps={fetchingHome}
+            isLoadingHome={isLoadingHome}
           />
           <PostPreview
-            className="border-inherit border-b pt-2"
+            className=" w-full border-inherit border-b pt-2"
             ref={arr.length % 3 === 0 ? lastItemRef : null}
             key={post?.id}
             post={post}
@@ -101,7 +93,7 @@ function Home() {
     }
     return (
       <PostPreview
-        className="border-inherit border-b pt-2"
+        className="w-full border-inherit border-b pt-2"
         ref={arr.length % 3 === 0 ? lastItemRef : null}
         key={post?.id}
         post={post}
@@ -110,9 +102,9 @@ function Home() {
   };
 
   return (
-    <section className="flex flex-col sm:flex-row  lg:justify-start  w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
+    <section className="flex flex-col sm:flex-row lg:justify-start  w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
       {/* Posts Section */}
-      <div className="relative  flex flex-col items-end border-inherit py-24 sm:w-[35rem] lg:w-full mx-auto">
+      <div className="relative flex flex-col items-end border-inherit py-24 sm:w-[35rem] lg:w-full w-full  mx-auto">
         {/* Sticky Navigation */}
         <div className="flex xl:w-[48rem] lg:w-[40rem] sm:w-[35rem] mx-auto w-full  text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0   backdrop-blur-[20px] dark:border-[#383838] z-20 border  items-center justify-start fixed top-[3.1rem] sm:top-[3.6rem] ">
           <ul className="flex items-center justify-between w-full ">
@@ -152,13 +144,11 @@ function Home() {
           )}
         </div>
       </div>
-
       <Aside
-        className="lg:flex hidden text-xs border-inherit max-w-[25rem] w-full h-screen flex-col border-x   justify-start gap-5 sticky top-14"
-        FechingPreps={fetchingHome}
         isLoadingHome={isLoadingHome}
         homeData={homeData}
         handleTopicClick={handleTopicClick}
+        className="lg:flex hidden text-xs border-inherit max-w-[25rem] w-full h-screen flex-col border-x   justify-start gap-5 sticky top-16"
       />
     </section>
   );

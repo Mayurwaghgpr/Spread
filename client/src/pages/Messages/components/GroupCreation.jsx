@@ -6,10 +6,8 @@ import Ibutton from "../../../component/buttons/Ibutton.jsx";
 import { useMutation } from "react-query";
 import ChatApi from "../../../Apis/ChatApi.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setOpenNewConverstionBox,
-  setToast,
-} from "../../../redux/slices/uiSlice.js";
+import { setToast } from "../../../redux/slices/uiSlice.js";
+import { setOpenNewConverstionBox } from "../../../redux/slices/messangerSlice.js";
 import { useNavigate } from "react-router-dom";
 function GroupCreation({ handleGroupConfig, hashMap, users }) {
   const { isLogin, user } = useSelector((state) => state.auth);

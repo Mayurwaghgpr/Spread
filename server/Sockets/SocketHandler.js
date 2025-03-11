@@ -1,6 +1,5 @@
 import Messages from '../models/messaging/Messages.js';
-import sockIo from '../socket.js';
-
+import redisClient from '../utils/redisClient.js';
 const users = new Map();
 
 export default function socketHandlers(io) {
@@ -8,8 +7,8 @@ export default function socketHandlers(io) {
     console.log('User connected:', socket.id);
 
     // Register user with socket ID
-    socket.on('register', (userId) => {
-      users.set(userId, socket.id);
+    socket.on('register', async(userId) => {
+      await redisClient.set(userId, socket.id);
       console.log(`User ${userId} registered with socket ID ${socket.id}`);
     });
 
@@ -24,10 +23,10 @@ export default function socketHandlers(io) {
       socket.leave(conversationId);
       console.log(`User left conversation: ${conversationId}`);
     });
-    // socket.on('IamTyping', ({ conversationId, senderId }) => {
-    //   console.log('userIsTyping', { conversationId, senderId })
-    //   io.to(conversationId).emit('userIsTyping', { senderId })
-    // })
+    socket.on('IamTyping', ({ conversationId, senderId }) => {
+      // console.log('userIsTyping', { conversationId, senderId })
+      io.to(conversationId).emit('userIsTyping', { senderId })
+    })
     // Send message and broadcast to conversation
     socket.on('sendMessage', async ({ conversationId, senderId, content,replyedTo,createdAt }) => {
       try {
@@ -43,7 +42,7 @@ export default function socketHandlers(io) {
     // Mark message as read
     socket.on('markAsRead', async ({ messageId, userId }) => {
       try {
-        // await ReadReceipt.create({ messageId, userId }); // Uncomment if using read receipts
+        // await ReadReceipt.create({ messageId, userId }); 
         io.emit('messageRead', { messageId, userId });
       } catch (error) {
         console.error('Error marking message as read:', error);

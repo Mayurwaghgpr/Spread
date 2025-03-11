@@ -20,6 +20,7 @@ import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
 import { IoLibraryOutline } from "react-icons/io5";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import LogoutBtn from "../buttons/LogoutBtn";
+import ProfileImage from "../ProfileImage";
 const LoginMenuLinks = [
   {
     id: uuidv4(),
@@ -72,10 +73,10 @@ function SideBar({ className }) {
   const { user, isLogin } = useSelector((state) => state.auth);
   const { MenuOpen } = useSelector((state) => state.ui);
   const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { userImageurl } = userImageSrc(user);
+
   return (
     <aside
       onClick={(e) => {
@@ -85,10 +86,10 @@ function SideBar({ className }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="xl:p-10 sm:ps-8 sm:py-8 sm:pe-4 w-fit sm:mt-16 p-8 sm:dark:bg-transparent  dark:bg-black bg-[#fff9f3] lg:dark:bg-black animate-slide-in-left sm:animate-none xl:text-xl text-md lg:bg-[#fff9f3] h-full shadow-sm"
+        className="xl:p-10 sm:ps-4 sm:py-8 w-fit sm:mt-16 p-8  h-full sm:dark:bg-transparent  dark:bg-black bg-[#fff9f3] lg:dark:bg-black animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg text-sm lg:bg-[#fff9f3] shadow-sm"
       >
-        <div className="w-fit flex flex-col items-start justify-between  px-3 gap-7 min-h-[90%] text-black dark:text-white *:transition-all *:duration-300 ">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-start justify-between px-3  w-full min-h-[90%] text-black dark:text-white *:transition-all *:duration-300 ">
+          <div className="flex flex-col  gap-4">
             {/* Profile Link */}
             <div className=" flex flex-col gap-2 h-fit ">
               <Link
@@ -96,14 +97,13 @@ function SideBar({ className }) {
                 className="flex justify-start items-center gap-3  hover:bg-gray-400  hover:bg-opacity-15 rounded-full p-3"
                 onClick={() => dispatch(setManuOpen())}
               >
-                <div className="size-10  ">
-                  {" "}
-                  <img
-                    className="h-full w-full rounded-full object-cover object-top"
-                    src={userImageurl}
-                    alt="User profile"
-                  />
-                </div>{" "}
+                <ProfileImage
+                  className={"w-10 h-10"}
+                  image={userImageurl}
+                  alt={user?.username}
+                  title={"user profile"}
+                  disabled
+                />
                 <h1 className=" xl:block sm:hidden block text-nowrap">
                   {user?.displayName}
                 </h1>
@@ -112,7 +112,7 @@ function SideBar({ className }) {
             
                 {user.email}
               </h2> */}
-              <div className="xl:flex justify-start items-center sm:hidden flex gap-3 text-sm  px-3 dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">
+              <div className="xl:flex justify-start items-center sm:hidden flex gap-3 text-sm  dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">
                 <h3>
                   {abbreviateNumber(user?.Followers?.length) || 0} Followers
                 </h3>
@@ -134,7 +134,7 @@ function SideBar({ className }) {
                   to={link.stub}
                   onClick={() => dispatch(setManuOpen())}
                 >
-                  {location.pathname.startsWith(link.stub)
+                  {location?.pathname?.startsWith(link.stub)
                     ? link.icon2
                     : link.icon1}
                   <div className={`xl:block sm:hidden block flex-col `}>
@@ -146,9 +146,9 @@ function SideBar({ className }) {
             })}
           </div>
           {/* Logout Button */}
-          <div className=" ">
+          <div className="w-fit">
             {" "}
-            <LogoutBtn className="flex gap-5 items-center  hover:bg-opacity-5 px-3  rounded-md" />
+            <LogoutBtn className="flex  justify-start  items-center gap-5 p-3 hover:bg-gray-400  hover:bg-opacity-5 rounded-full " />
           </div>
         </div>
       </div>

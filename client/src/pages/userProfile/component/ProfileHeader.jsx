@@ -8,6 +8,7 @@ import userImageSrc from "../../../utils/userImageSrc";
 import { LuMessagesSquare } from "react-icons/lu";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";
 import abbreviateNumber from "../../../utils/numAbrivation";
+import ProfileImage from "../../../component/ProfileImage";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -19,12 +20,12 @@ const ProfileHeader = React.memo(({ profileId }) => {
   return (
     <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">
       <div className="flex justify-start items-start  gap-9">
-        <div className="sm:w-32 sm:h-32 w-20 h-20 flex  flex-col  items-center justify-center text-center gap-3 ">
-          <img
-            className="h-full w-full items-center  cursor-pointer rounded-full   object-cover object-top "
-            src={userImageurl}
+        <div className=" flex  flex-col  items-center justify-center text-center gap-3 ">
+          <ProfileImage
+            className={"sm:w-32 sm:h-32 w-20 h-20"}
+            image={userImageurl}
             alt={userProfile?.username}
-            loading="lazy"
+            title={"user profile"}
           />
           <div className=" w-full">
             <h1 className="sm:text-3xl sm:hidden text-nowrap text-sm  font-medium">

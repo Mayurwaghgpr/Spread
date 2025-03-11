@@ -4,6 +4,7 @@ import uiReducer from './slices/uiSlice';
 import postReducer from './slices/postSlice';
 import profileReducer from './slices/profileSlice'; // fixed typo in import
 import chatSlice from './slices/chatSlice';
+import messangerSlice from './slices/messangerSlice';
 // import { postsApi } from './slices/postsApi'; // Import the API slice
 // import { profileApi } from './slices/porfileApi';
 // import { authApi } from './slices/authApi';
@@ -14,7 +15,8 @@ const store = configureStore({
     ui: uiReducer,
     posts: postReducer,
     profile: profileReducer,
-    chat:chatSlice,
+    chat: chatSlice,
+    messanger: messangerSlice,
     // [postsApi.reducerPath]: postsApi.reducer, // Add the API reducer
     // [profileApi.reducerPath]: profileApi.reducer,
     // [authApi.reducerPath]:authApi.reducer

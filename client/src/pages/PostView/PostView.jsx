@@ -16,11 +16,12 @@ import { setCommentCred } from "../../redux/slices/postSlice";
 import { WiStars } from "react-icons/wi";
 import AIResponse from "../../component/aiComp/AiResponse";
 import PostsApis from "../../Apis/PostsApis";
-
+import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { setToast } from "../../redux/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import menuCosntant from "../../component/postsComp/menuCosntant";
 import Menu from "../../component/postsComp/Menu";
+import ProfileImage from "../../component/ProfileImage";
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
@@ -35,6 +36,7 @@ function PostView() {
   const { fetchDataById } = usePublicApis();
   const { getAiGenAnalysis } = PostsApis();
   const { MENU_ITEMS } = menuCosntant();
+
   //Fetch Post Full View
   const {
     data: postView,
@@ -112,70 +114,60 @@ function PostView() {
       {!show ? (
         <article
           style={{ backgroundColor: "" }}
-          className={`relative animate-fedin1s max-w-4xl p-2  flex flex-col justify-center items-center 
-           border-inheri
-    ${isAnalyzing ? "shimmer-effect dark:shimmer-effect-dark" : ""}
-  `}
+          className={`relative animate-fedin1s max-w-4xl px-4  flex flex-col justify-center items-center 
+           border-inheri ${isAnalyzing ? "shimmer-effect dark:shimmer-effect-dark" : " "} `}
         >
-          <header className="mb-6 w-full px-3  border-inherit">
+          <header className="mb-6 w-full border-inherit">
             <section className="flex flex-col gap-2  border-inherit">
-              <div className="w-full flex justify-end text-lg  border-inherit">
-                {" "}
-                <Menu
-                  items={[
-                    MENU_ITEMS["copylike"],
-                    MENU_ITEMS["share"],
-                    postView?.authorId === user?.id && MENU_ITEMS["deletePost"],
-                    postView?.authorId === user?.id && MENU_ITEMS["editPost"],
-                  ]}
-                  content={postView}
-                />
-              </div>
-              <h1 className="text-xl break-words lg:text-5xl w-full font-semibold mb-2">
-                {postView?.title}
-              </h1>
-              <p className="text-md text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-2xl leading-relaxed">
-                {postView?.subtitelpagraph}
-              </p>
-            </section>
-            <div className=" relative  flex gap-5 items-center my-4">
-              <div className="w-10 h-10">
-                {" "}
-                <img
-                  alt={`${postView?.User?.username}`}
-                  src={userImageurl}
-                  className="w-full h-full rounded-full mr-4 object-cover object-top"
-                  loading="lazy"
-                />
-              </div>
-
-              <div className="">
-                <div className="flex gap-2 items-center w-full">
-                  {" "}
-                  <Link
-                    className="w-full text-nowrap hover:underline underline-offset-4"
-                    to={`/profile/@${postView?.User?.username
-                      ?.split(" ")
-                      .slice(0, -1)
-                      .join("")}/${postView?.User?.id}`}
-                  >
-                    {postView?.User?.username}
-                  </Link>
-                  <Follow
-                    People={postView?.User}
-                    className={`relative hover:underline underline-offset-4 border-none  text-blue-500 `}
+              <div className=" relative flex items-center sm:text-base text-xs justify-between gap-5 my-4 ">
+                <div className="flex items-center gap-5 ">
+                  <ProfileImage
+                    className="sm:w-10 sm:h-10 w-8 h-8"
+                    image={userImageurl}
+                    alt={postView?.User?.username}
+                    title={"author profile"}
                   />
-                </div>
 
-                <span className="text-xs  text-black dark:text-white dark:text-opacity-50 text-opacity-50">
-                  {format(new Date(postView?.createdAt), "LLL dd, yyyy")}
-                </span>
+                  <div className="">
+                    <div className="flex gap-2 items-center w-full">
+                      {" "}
+                      <Link
+                        className="w-full text-nowrap hover:underline underline-offset-4"
+                        to={`/profile/@${postView?.User?.username
+                          ?.split(" ")
+                          .slice(0, -1)
+                          .join("")}/${postView?.User?.id}`}
+                      >
+                        {postView?.User?.username}
+                      </Link>
+                      <Follow
+                        People={postView?.User}
+                        className={`relative hover:underline underline-offset-4 border-none  text-blue-500 `}
+                      />
+                    </div>
+
+                    <FormatedTime
+                      className={
+                        "text-black dark:text-white sm:text-xs text-[.7em]"
+                      }
+                      date={postView.createdAt}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
+              <div className="w-full flex flex-wrap justify-start ">
+                <h1 className="text-xl break-words lg:text-4xl w-full font-semibold mb-2">
+                  {postView?.title}
+                </h1>
+                <p className="text-sm text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-xl leading-relaxed">
+                  {postView?.subtitelpagraph}
+                </p>
+              </div>
+            </section>
           </header>
 
-          <div className="flex justify-between sm:text-lg  items-center border-inherit border-y px-3 py-3 w-full">
-            <div className="flex gap-4 text-[#383838] ">
+          <div className="flex justify-between items-center sm:text-base text-xs py-3 w-full">
+            <div className="flex items-center gap-4  text-[#383838] ">
               <Like className={"min-w-10"} post={postView} />
               <button
                 onClick={handelComment}
@@ -184,16 +176,26 @@ function PostView() {
                 <FaRegComment />
                 <span>{abbreviateNumber(Comments?.length)}</span>
               </button>
+              <Bookmark post={postView} />
             </div>
             <div className="flex gap-7 text-[#383838]  justify-between">
-              <Bookmark post={postView} />
+              <Menu
+                items={[
+                  MENU_ITEMS["copylike"],
+                  MENU_ITEMS["share"],
+                  postView?.authorId === user?.id && MENU_ITEMS["deletePost"],
+                  postView?.authorId === user?.id && MENU_ITEMS["editPost"],
+                ]}
+                className={"w-full max-h-1/2"}
+                content={postView}
+              />
             </div>
           </div>
 
           {postView?.titleImage && (
-            <figure className="my-6 w-full px-4">
+            <figure className="my-6 w-full ">
               <img
-                className="w-full rounded-lg object-fill object-center "
+                className="w-full object-fill object-center "
                 src={`${postView?.titleImage}`}
                 alt="Title Image"
                 loading="lazy"
@@ -203,13 +205,16 @@ function PostView() {
           )}
 
           {postView?.postContent?.map((item) => (
-            <section key={item.id} className="mb-6 w-full px-2 border-inherit ">
+            <section
+              key={item.id}
+              className="mb-6 w-full border-inherit sm:text-lg text-sm "
+            >
               {item.type === "image" && item.content && (
                 <figure className="my-6 w-full h-auto">
                   <img
                     src={`${item.content}`}
                     alt="Content"
-                    className="w-full rounded-lg object-cover object-center"
+                    className="w-full object-cover object-center"
                     loading="lazy"
                   />
                   <figcaption className="text-center">{item.title}</figcaption>
@@ -220,7 +225,7 @@ function PostView() {
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(item.content),
                   }}
-                  className="text-lg w-full "
+                  className="w-full "
                 ></p>
               ) : (
                 item?.type !== "text" &&
@@ -245,11 +250,11 @@ function PostView() {
           setshow(true);
           !data && mutate({ id });
         }}
-        className="z-50 border-inherit before:transition-all before:text-xs text-xl flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
+        className="z-50 border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
       >
         {" "}
         <span>AI</span>
-        <WiStars className="text-2xl" />
+        <WiStars className="" />
       </div>
       <Outlet context={postView} />
     </section>

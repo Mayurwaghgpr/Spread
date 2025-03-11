@@ -128,12 +128,13 @@ export const signIn = async (req, res, next) => {
     }
 
     // Set tokens as cookies and respond
-    res
-      .status(200)
+       res
+      .cookie("_userDetail", JSON.stringify(user),CookieOptions)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", JSON.stringify(user),CookieOptions)
-      .json({ user: user.dataValues, AccessToken, RefreshToken });
+      .status(200)
+      .json({ user: user.dataValues, AccessToken, RefreshToken })
+   
   } catch (err) {
     console.error("Error during login:", err);
     next(err);
@@ -144,7 +145,7 @@ export const signIn = async (req, res, next) => {
 
 //Fetch login user details
 export const getLoginUser = async (req, res, nex) => {
-  const userInfo = req.cookies._userDetail ||   await redisClient.get("_userDetail");
+  const userInfo = req.cookies._userDetail
   res.status(200).json(userInfo);
 };
 
@@ -220,6 +221,7 @@ export const logout = async (req, res, next) => {
       { refreshToken: null },
       { where: { id: req.authUser.id } }
     );
+    await redisClient.del(req.authUser.id)
      await redisClient.del("_userDetail")
     res.json({ message: "Logged out successfully" });
   } catch (error) {

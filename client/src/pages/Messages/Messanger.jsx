@@ -8,7 +8,7 @@ import NewConversation from "./NewConversation";
 
 function Messanger() {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const { openNewConverstionBox } = useSelector((state) => state.ui);
+  const { openNewConverstionBox } = useSelector((state) => state.messanger);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { socket } = useSocket();

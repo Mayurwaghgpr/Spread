@@ -3,8 +3,6 @@ import React, {
   useState,
   forwardRef,
   memo,
-  lazy,
-  Suspense,
   useEffect,
   useMemo,
 } from "react";
@@ -15,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like/Like";
 import Menu from "./Menu";
-import userImageSrc from "../../utils/userImageSrc";
 import { FaRegComment } from "react-icons/fa6";
 import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
@@ -23,6 +20,8 @@ import { useMutation } from "react-query";
 import PostsApis from "../../Apis/PostsApis";
 import { FaHashtag } from "react-icons/fa";
 import menuCosntant from "./menuCosntant";
+import ProfileImage from "../ProfileImage";
+import userImageSrc from "../../utils/userImageSrc";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const dispatch = useDispatch();
@@ -30,8 +29,8 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { getAiGenTags } = PostsApis();
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
-  const userImage = userImageSrc(post?.user);
   const { MENU_ITEMS } = menuCosntant();
+  const { userImageurl } = userImageSrc(post?.user);
 
   const Comments = useMemo(() => {
     return post?.comments?.filter((comment) => comment.topCommentId === null);
@@ -65,18 +64,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             to={`/profile/@${post?.user?.username}/${post?.user?.id}`}
             className="flex items-center justify-center gap-3"
           >
-            <div
+            <ProfileImage
               className={`${!post && "animate-pulse bg-gray-300 dark:bg-gray-400"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
-            >
-              {post && (
-                <img
-                  className="cursor-pointer object-cover object-top h-full w-full rounded-full"
-                  src={userImage.userImageurl}
-                  loading="lazy"
-                  alt={post?.user?.username}
-                />
-              )}
-            </div>
+              image={userImageurl}
+            />
             <div className="text-sm rounded-lg flex">
               {post ? (
                 <p className="capitalize underline-offset-4 hover:underline">
@@ -180,10 +171,11 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 items={[
                   MENU_ITEMS["copylike"],
                   MENU_ITEMS["share"],
-                  post.authorId === user.id && MENU_ITEMS["deletePost"],
-                  post.authorId === user.id && MENU_ITEMS["editPost"],
+                  post.authorId === user?.id && MENU_ITEMS["deletePost"],
+                  post.authorId === user?.id && MENU_ITEMS["editPost"],
                 ]}
                 content={post}
+                className={"w-full"}
               />
             </div>
           </div>

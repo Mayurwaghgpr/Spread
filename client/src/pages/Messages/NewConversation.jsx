@@ -9,12 +9,14 @@ import usePublicApis from "../../Apis/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import ChatApi from "../../Apis/ChatApi";
 import { useNavigate } from "react-router-dom";
-import { setOpenNewConverstionBox, setToast } from "../../redux/slices/uiSlice";
+import { setOpenNewConverstionBox } from "../../redux/slices/messangerSlice";
+import { setToast } from "../../redux/slices/uiSlice";
 import LoaderScreen from "../../component/loaders/loaderScreen";
-import { BsArrowLeft, BsPlus } from "react-icons/bs";
-import { IoClose } from "react-icons/io5";
+import { BsPlus } from "react-icons/bs";
 import GroupCreation from "./components/GroupCreation";
 import SelectedGroupMemberList from "./components/SelectedGroupMemberList";
+import Spinner from "../../component/loaders/Spinner";
+
 const NewConversation = () => {
   const { isLogin, user } = useSelector((state) => state.auth);
   const [isCreatingGroup, setCreatingGroup] = useState(false);
@@ -22,12 +24,14 @@ const NewConversation = () => {
   const [hashMap, setHashMap] = useState({
     [user.id]: { memberId: user.id, memberType: "admin" },
   });
+  const containerRef = useRef(null);
 
+  //Api functions providers
   const { fetchAllUsers } = usePublicApis();
   const { startPrivateChate } = ChatApi();
-  const navigate = useNavigate();
 
-  const containerRef = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { mutate: PrivateMutaion, isLoading: isPrivateLoading } = useMutation({
     mutationFn: (chatUserId) => startPrivateChate(chatUserId),
@@ -42,19 +46,25 @@ const NewConversation = () => {
     },
   });
 
-  const { data, fetchNextPage, isFetchingNextPage, isFetching, hasNextPage } =
-    useInfiniteQuery(
-      ["UsersList"],
-      ({ pageParam = new Date().toISOString() }) => fetchAllUsers(pageParam),
-      {
-        getNextPageParam: (lastPage) => {
-          return lastPage.length !== 0
-            ? lastPage[lastPage.length - 1].createdAt
-            : undefined; // Use last item timestamp as cursor
-        },
-        refetchOnWindowFocus: false,
-      }
-    );
+  const {
+    data,
+    fetchNextPage,
+    isFetchingNextPage,
+    isFetching,
+    hasNextPage,
+    isLoading,
+  } = useInfiniteQuery(
+    ["UsersList"],
+    ({ pageParam = new Date().toISOString() }) => fetchAllUsers(pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        return lastPage.length !== 0
+          ? lastPage[lastPage.length - 1].createdAt
+          : undefined; // Use last item timestamp as cursor
+      },
+      refetchOnWindowFocus: false,
+    }
+  );
   // console.log(data);
   const users = data?.pages?.flatMap((page) => page);
   const { lastItemRef } = useLastItemObserver(
@@ -170,6 +180,11 @@ const NewConversation = () => {
                 )}
               </PeoplesList>
             ))}
+            {isLoading && (
+              <Spinner
+                className={"w-10 h-10 p-1 dark:bg-white bg-black m-auto"}
+              />
+            )}
           </div>
         </>
       ) : (

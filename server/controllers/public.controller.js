@@ -4,11 +4,10 @@ import Post from "../models/posts.js";
 import Follow from "../models/Follow.js";
 import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
-import { DataFetching } from "../operations/data-fetching.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
-const dataFetcher = new DataFetching();
+
 
 // Fetch all users except the current user and distinct topics
 export const getHomeContent = async (req, res, next) => {

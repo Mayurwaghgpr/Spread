@@ -167,7 +167,7 @@ function ProfileEditor() {
           </div>
         </div>
         <div className="flex flex-col w-full items-end h-full bg-inherit gap-10   dark:*:border-black  px-2 ">
-          <div className="w-full h-full  flex flex-col capitalize  items-end bg-inherit gap-3 ">
+          <div className="flex flex-col items-start w-full h-full   capitalize bg-inherit gap-3 ">
             {" "}
             <div className="w-full">
               <CommonInput
@@ -189,7 +189,7 @@ function ProfileEditor() {
               )}
             </div>
             <CommonInput
-              className="w-full border  rounded-md border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              className="flex flex-col items-start w-full border rounded-md border-inherit text-sm   gap-3 bg-inherit "
               type={"text"}
               Iname={"displayName"}
               labelname={"Full Name"}

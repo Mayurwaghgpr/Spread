@@ -55,7 +55,11 @@ export default {
             '100%': { transform: 'translateY(200%)' },
           
   
-         },
+        },
+           pop: {
+          "0%": { transform: "translateX(-20px)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
          toTop: {  // New keyframes for sliding up on remove
           '0%': { transform: 'translateY(0%)' },
           '100%': { transform: 'translateY(-100%)' },
@@ -96,7 +100,9 @@ export default {
         'fedin2s':'fedin 2s  ease-in-out',
         'fedin1s':'fedin 1s  ease-in-out',
         'fedin.2s': 'fedin .2s  ease-in-out',
-        'fed-out':'fedOut .3s ease-in-out'
+        'fed-out': 'fedOut .3s ease-in-out',
+                'pop': "pop 0.3s ease-out",
+
       },
       
     },

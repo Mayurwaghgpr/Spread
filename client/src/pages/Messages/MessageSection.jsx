@@ -29,20 +29,15 @@ function MessageSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { messages } = useSelector((state) => state.chat);
   const { selectedConversation } = useSelector((state) => state.messanger);
-  const [isUserTyping, setUseTyping] = useState({});
-  const [message, setMessage] = useState();
+  const [typingUsers, setTypingUsers] = useState([]);
+  const [message, setMessage] = useState("");
   const { getMessage } = ChatApi();
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
   const { socket } = useSocket();
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  }, [messages]);
+  const typingTimeoutRef = useRef(null);
 
   const { isLoading } = useQuery(["messages", conversationId], {
     queryFn: () => getMessage({ conversationId }),
@@ -54,8 +49,11 @@ function MessageSection() {
 
   //Set both function so they can be accesible inside cleanUp function in useEffect
   const handleUserTyping = useCallback(
-    ({ senderId }) => {
-      setUseTyping({ senderId });
+    ({ senderId, image, typing }) => {
+      setTypingUsers([
+        ...typingUsers.filter((evn) => evn.senderId !== senderId),
+        { senderId, image, typing },
+      ]);
     },
     [dispatch]
   );
@@ -65,7 +63,9 @@ function MessageSection() {
       if (msg.senderId !== user?.id) {
         //Only push incomming message because current user message in already pushed optimisticaly
         dispatch(pushMessage(msg));
-        setUseTyping({});
+        setTypingUsers([
+          ...typingUsers.filter((evn) => evn.senderId !== msg.senderId),
+        ]);
       }
     },
     [dispatch]
@@ -103,18 +103,39 @@ function MessageSection() {
   }, [message, socket, user?.id, conversationId]);
 
   const handleInput = useCallback(
-    function (e) {
-      socket?.emit("IamTyping", { conversationId, senderId: user?.id });
+    (e) => {
       setMessage(e.target.value);
+      socket?.emit("IamTyping", {
+        conversationId,
+        senderId: user?.id,
+        image: user?.userImage,
+        typing: true,
+      });
+
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+      typingTimeoutRef.current = setTimeout(() => {
+        socket?.emit("IamTyping", {
+          conversationId,
+          senderId: user?.id,
+          typing: false,
+        });
+      }, 2000);
     },
-    [message]
+    [conversationId, socket, user?.id]
   );
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   // Setting apposit member name and userImage as groupName and image if conversation is private (one-to-one)
   const conversationData = useMemo(() => {
     if (selectedConversation?.conversationType === "private") {
       const appositeMember = selectedConversation?.members.find(
-        (member) => member.id != user.id
+        (member) => member.id !== user?.id
       );
       return {
         image: appositeMember?.userImage,
@@ -122,8 +143,12 @@ function MessageSection() {
       };
     }
     return selectedConversation; //Here returnning the converstion as it is group conversation
-  }, [selectedConversation]);
+  }, [selectedConversation, user?.id]);
 
+  const isUsersTyping = useMemo(
+    () => typingUsers.some((env) => env.senderId !== user.id && env.typing),
+    [typingUsers]
+  );
   return (
     <div
       ref={containerRef}
@@ -170,11 +195,26 @@ function MessageSection() {
             />
           );
         })}
-        {isUserTyping?.senderId && isUserTyping?.senderId !== user.id && (
-          <div
-            className={` flex items-center justify-center py-3 px-2 h-fit  text-sm rounded-2xl  my-3 mr-auto bg-[#fffefe]  text-black dark:shadow-white rounded-bl-none`}
-          >
-            <span className="typingLoader"></span>
+        {isUsersTyping && (
+          <div className="w-fit flex gap-1  justify-start items-start  my-3 ">
+            <div className="flex justify-start items-center -space-x-3">
+              {typingUsers.map(
+                (usr, idx) =>
+                  usr.senderId !== user.id && (
+                    <ProfileImage
+                      style={{ zIndex: 10 - idx }}
+                      key={usr.senderId}
+                      className={"w-5 h-5 z-50"}
+                      image={usr?.image}
+                    />
+                  )
+              )}
+            </div>
+            <div
+              className={` flex items-center justify-center py-2 px-2 h-fit animate-pop text-sm rounded-2xl  mr-auto bg-[#fffefe]  text-black dark:shadow-white rounded-tl-none`}
+            >
+              <span className="typingLoader"></span>
+            </div>
           </div>
         )}
         {isLoading && (

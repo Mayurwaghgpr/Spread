@@ -6,7 +6,6 @@ import { formatISO, formatters } from "date-fns";
 const MessageBubble = ({ message, userId, readReceipt }) => {
   return (
     <p
-      onCapt
       className={` flex flex-col gap-1 w-fit p-1 px-3 text-sm rounded-2xl  my-3  ${
         message.senderId === userId
           ? "ml-auto bg-sky-400 text-white dark:shadow-sky-400 rounded-br-none "

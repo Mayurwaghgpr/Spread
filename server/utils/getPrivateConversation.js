@@ -21,7 +21,6 @@ export const getPrivateConversation = async (userId1, userId2) => {
         });
 
         if (!memberCounts.length) return false;
-        console.log(memberCounts)
         const conversation = await Conversation.findOne({
             where: { id: memberCounts[0].conversationId, conversationType: 'private' }
         });

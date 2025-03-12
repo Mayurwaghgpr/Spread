@@ -23,9 +23,9 @@ export default function socketHandlers(io) {
       socket.leave(conversationId);
       console.log(`User left conversation: ${conversationId}`);
     });
-    socket.on('IamTyping', ({ conversationId, senderId }) => {
+    socket.on('IamTyping', ({ conversationId, senderId ,image,typing}) => {
       // console.log('userIsTyping', { conversationId, senderId })
-      io.to(conversationId).emit('userIsTyping', { senderId })
+      io.to(conversationId).emit('userIsTyping', { senderId ,image,typing})
     })
     // Send message and broadcast to conversation
     socket.on('sendMessage', async ({ conversationId, senderId, content,replyedTo,createdAt }) => {

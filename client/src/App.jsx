@@ -1,4 +1,11 @@
-import React, { useEffect, Suspense, lazy, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  Suspense,
+  lazy,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
 import {
   Routes,
   Route,
@@ -63,7 +70,7 @@ function App() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { isLogin, loginPop } = useSelector((state) => state.auth);
-  const { ThemeMode, MenuOpen } = useSelector((state) => state.ui);
+  const { ThemeMode } = useSelector((state) => state.ui);
   const [systemTheme, setSystemTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches
   );
@@ -82,13 +89,12 @@ function App() {
   }, []);
 
   // Handle dark mode based on ThemeMode
-  useMemo(() => {
+  useCallback(() => {
     const isDarkMode =
       ThemeMode === "dark" || (ThemeMode === "system" && systemTheme);
-
     document.documentElement.classList.toggle("dark", isDarkMode);
     localStorage.setItem("ThemeMode", ThemeMode);
-  }, [ThemeMode, systemTheme]);
+  }, [ThemeMode, systemTheme, dispatch]);
 
   return (
     <>

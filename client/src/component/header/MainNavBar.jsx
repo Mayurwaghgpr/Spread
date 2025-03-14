@@ -11,6 +11,7 @@ import LogoutBtn from "../buttons/LogoutBtn";
 import NotifictionBell from "../notification/NotifictionBell";
 import { PiSignInDuotone } from "react-icons/pi";
 import ProfileImage from "../ProfileImage";
+import userImageSrc from "../../utils/userImageSrc";
 
 function MainNavBar() {
   const [deviceSize, setDeviceSize] = useState();
@@ -22,6 +23,8 @@ function MainNavBar() {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { userImageurl } = userImageSrc(user);
 
   const Modes = useMemo(
     () => [
@@ -57,7 +60,7 @@ function MainNavBar() {
     <header
       className={`fixed top-0 p-3  sm:px-24 flex justify-center w-full transform-all duration-300 ease-in-out z-40 dark:border-[#383838] border-b  border-inherit  bg-[#fff9f3] dark:bg-black dark:bg-opacity-30 dark:backdrop-blur-lg bg-opacity-10 backdrop-blur-lg`}
     >
-      <nav className={`relative  w-full    `}>
+      <nav className={`relative  w-full border-inherit    `}>
         <div className="flex  items-center justify-between w-full border-inherit m-auto">
           <Link to="/" className="sm:text-2xl  font-bold ">
             Spread
@@ -81,7 +84,7 @@ function MainNavBar() {
                       ? " border-black dark:border-white"
                       : "border-transparent"
                   } `}
-                  userData={user}
+                  image={userImageurl}
                   disabled={deviceSize > 639 ? true : false}
                 />
                 {/* Tooltip with user name */}
@@ -94,7 +97,7 @@ function MainNavBar() {
                     Modes={Modes}
                     separate={true}
                     className={
-                      "relative  w-fit  flex justify-evenly items-center gap-2 bg-[#d4d4d4] dark:bg-[#4a4a4a] *:text-xs *:bg-[#ffffff] *:text-black *:p-1 *:py-0.5  *:flex *:justify-center *:items-center *:rounded-md rounded-md p-1.5"
+                      "relative  w-fit  flex justify-evenly items-center gap-2 bg-[#d4d4d4] bg-opacity-20  *:text-xs *:bg-[#ffffff] *:text-black *:p-1 *:py-0.5  *:flex *:justify-center *:items-center *:rounded-md rounded-md p-2"
                     }
                   />{" "}
                   <LogoutBtn className="flex gap-2 items-center  hover:bg-opacity-5 text-sm   rounded-md" />

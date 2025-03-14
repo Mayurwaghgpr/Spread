@@ -14,7 +14,6 @@ const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
-
   const { userImageurl } = userImageSrc(userProfile);
 
   return (

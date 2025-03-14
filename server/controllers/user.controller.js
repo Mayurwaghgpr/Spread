@@ -16,11 +16,13 @@ import { CookieOptions } from "../utils/cookie-options.js";
 
 // Get user profile
 export const getUserProfile = async (req, res, next) => {
-  const id = req?.params?.id || req.authUser.id;
+  const id = req?.params?.id;
   try {
+    console.log(id)
     const cachedUserData = await redisClient.get(id);
     if (cachedUserData !== null) {
       console.log('cach hit')
+      console.log(cachedUserData)
       return res.status(200).json(JSON.parse(cachedUserData));
     }
 
@@ -155,7 +157,7 @@ export const EditUserProfile = async (req, res, next) => {
     if (updatedUser) {
       res
         .status(200)
-        .cookie("_userDetail", updatedUser, CookieOptions)
+        .cookie("_userDetail", JSON.stringify(updatedUser), CookieOptions)
         .json(updatedUser); // Return updated user info
     } else {
       res.status(400).json({ message: "User not found" });

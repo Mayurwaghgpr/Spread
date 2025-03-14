@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import PostPreview from "../../component/postsComp/PostPreview";
 import { setuserProfile } from "../../redux/slices/profileSlice";
 import ProfileHeader from "./component/ProfileHeader";
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
@@ -21,22 +21,16 @@ function Profile() {
   const profileId = params.id || user?.id;
 
   const {
-    mutate,
     isError: isProfileError,
     error: profileError,
     isFetching,
     isLoading,
-  } = useMutation(["userProfile"], async (id) => fetchUserProfile(id), {
+  } = useQuery(["userProfile"], async () => fetchUserProfile(profileId), {
     onSuccess: (data) => {
       dispatch(setuserProfile(data));
     },
+    refetchOnWindowFocus: false,
   });
-  useEffect(() => {
-    if (profileId !== user.id) {
-      mutate(profileId);
-    }
-    dispatch(setuserProfile(user));
-  }, [profileId]);
 
   const {
     data: postsData,

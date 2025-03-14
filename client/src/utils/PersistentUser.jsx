@@ -15,7 +15,8 @@ function PersistentUser({ children }) {
     onSuccess: (data) => {
       localStorage.setItem("AccessToken", true);
       dispatch(setIsLogin(true));
-      dispatch(setUser(JSON.parse(data)));
+
+      dispatch(setUser(JSON.parse(data) || data));
     },
     onError: (error) => {
       if (error.status === 401) {

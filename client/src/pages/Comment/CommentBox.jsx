@@ -14,6 +14,7 @@ import { useOutletContext } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import Menu from "../../component/postsComp/Menu";
 import menuCosntant from "../../component/postsComp/menuCosntant";
+import ProfileImage from "../../component/ProfileImage";
 
 const CommentBox = forwardRef(
   ({ comt, className, topCommentId, commentPins = [] }, ref) => {
@@ -99,33 +100,33 @@ const CommentBox = forwardRef(
     };
 
     const Comments = data?.pages.flatMap((page) => page.comments) || [];
+    const isTopComment = useMemo(() => comt?.topCommentId === null, [comt]);
+
     return (
       <div ref={ref} className={`${className}`}>
-        <article className="p-2 flex flex-col  w-full justify-center items-start gap-2 select-none">
-          <div className=" flex  w-full justify-start gap-5 items-start">
-            <div
-              className={`flex justify-center items-center rounded-full  ${
-                !comt?.topCommentId ? "size-8  " : " size-6"
-              }`}
-            >
-              <img
-                className={"w-full h-full object-cover object-top rounded-full"}
-                src={commenterImg.userImageurl}
-                alt={comt?.commenter?.username}
-                loading="lazy"
-              />
-            </div>
-            <div className="w-full">
-              <div className="flex justify-between w-full items-center text-nowrap gap-2 text-sm px-2">
-                <div className="flex justify-start items-center text-nowrap gap-2 text-sm">
+        <article className="p-2 flex flex-col  w-full justify-center items-start gap-2 select-none border-inherit">
+          <div className=" flex  w-full justify-start gap-5 items-start border-inherit">
+            <ProfileImage
+              className={`flex min-w-fit min-h-fit  justify-center items-center rounded-full  ${
+                isTopComment ? " w-10 h-10" : " w-6 h-6 "
+              } `}
+              image={commenterImg.userImageurl}
+              alt={comt?.commenter?.username}
+            />
+
+            <div className="flex  flex-col justify-center items-start gap-2 w-full border-inherit">
+              <div className="flex justify-between w-full items-center text-nowrap  text-sm border-inherit ">
+                <div className="flex justify-start items-center text-nowrap gap-2 text-sm border-inherit">
                   <h1 className="font-semibold">{comt?.commenter?.username}</h1>
                   {/*pind comment */}
                   {comt?.pind && (
                     <TiPin className="text-black text-opacity-30 dark:text-opacity-20 dark:text-white" />
                   )}
+                  {console.log(comt.topCommentId)}
                   <FormatedTime
                     date={comt?.createdAt}
-                    className={`${comt.topCommentId === null ? "text-sm" : "text-xs"}`}
+                    className={` text-white ${comt.topCommentId === null ? "text-xs" : "text-[.6rem]"}`}
+                    formate={"dd/MMM/yyyy"}
                   />
                   {comt?.commenter?.id === postdata?.User?.id && (
                     <small className=" text-black text-opacity-30 dark:text-opacity-20 dark:text-white">
@@ -148,13 +149,13 @@ const CommentBox = forwardRef(
                 </div>
                 <Menu
                   className={
-                    " sm:absolute sm:top-5  sm:w-40 w-full sm:h-fit h-1/2   mt-2 sm:p-1 p-6"
+                    " sm:absolute sm:top-5 sm:w-40 w-full sm:h-fit h-1/2  mt-2 sm:p-1 p-6 "
                   }
                   items={[
                     (comt.commenter.id === user.id ||
                       postdata.authorId === user.id) &&
                       MENU_ITEMS.deleteComment,
-                    MENU_ITEMS.editComment,
+                    comt.commenter.id === user.id && MENU_ITEMS.editComment,
                   ]}
                   content={comt}
                 />
@@ -226,7 +227,7 @@ const CommentBox = forwardRef(
             {Comments.map((reply) => (
               <CommentBox
                 key={reply?.id}
-                className="animate-fedin.2s ml-3 flex px-3 justify-center items-start gap-2 text-xs  "
+                className="animate-fedin.2s ml-3 flex px-3 justify-center items-start gap-2 text-xs w-[90%]  "
                 comt={reply}
                 topCommentId={comt?.id} //this id should be always set to the top most commentId in post comment section
               />

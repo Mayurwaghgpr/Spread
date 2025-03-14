@@ -1,15 +1,13 @@
 import React, { useMemo } from "react";
 import { useInfiniteQuery } from "react-query";
-
 import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
 import { useLastItemObserver } from "../hooks/useLastItemObserver";
-import { useSelector } from "react-redux";
 import useProfileApi from "../Apis/ProfileApis";
 
 const ReadList = () => {
   const { getArchivedPosts } = useProfileApi();
-  const { user, isLogin } = useSelector((state) => state.auth);
+  // const { user, isLogin } = useSelector((state) => state.auth);
   const {
     data,
     isFetching,
@@ -44,18 +42,18 @@ const ReadList = () => {
   );
 
   return (
-    <section className="flex flex-col justify-start items-start w-full h-screen xl:items-center  bg-inherit dark:*:border-[#383838] dark:bg-black  overflow-y-auto">
-      <div className="relative flex flex-col justify-start items-center  md:w-fit w-full my-36 bg-inherit ">
-        <div className="fixed top-16 z-10 flex right-0 w-full justify-end items-center gap-4 border-inherit ">
-          <div className=" text-3xl bg-[#f3efeb] p-5 md:w-[80%] xl:w-[78%] w-full dark:bg-black h-full border border-inherit rounded-b-lg">
-            <h1>Read list </h1>
-          </div>
+    <section className="relative flex flex-col justify-start items-start w-full h-screen xl:items-center  bg-inherit dark:*:border-[#383838] dark:bg-black  overflow-y-auto">
+      <div className=" sticky top-[3.5rem] flex  justify-end items-center gap-4 w-full z-10  border-inherit  ">
+        <div className="w-full h-full p-7 bg-[#f3efeb] dark:bg-black text-3xl  border-b border-inherit">
+          <h1>Read list </h1>
         </div>
+      </div>
+      <div className=" flex flex-col justify-start items-center max-w-[45rem] h-full my-20 bg-inherit ">
         {!isLoading
           ? pages?.map((page, idx) => {
               return (
                 <PostPreview
-                  className={"max-w-[45rem]"}
+                  className={""}
                   ref={pages?.length % 3 === 0 ? lastItemRef : null}
                   key={idx}
                   post={page}

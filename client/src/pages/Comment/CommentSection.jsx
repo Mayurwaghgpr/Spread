@@ -84,7 +84,7 @@ function CommentSection() {
           </button>
         </div>
 
-        <div className=" px-4 flex flex-col justify-start pb-32 items-center w-full h-[80%] overflow-y-auto ">
+        <div className=" px-4 flex flex-col justify-start pb-32 items-center w-full h-[80%] overflow-y-auto border-inherit ">
           <Suspense
             fallback={
               <Spinner className={"w-10 h-10  bg-black dark:bg-white"} />
@@ -95,7 +95,7 @@ function CommentSection() {
                 <CommentBox
                   ref={arr.length % 5 === 0 ? lastItemRef : null}
                   className={
-                    "animate-slide-in-top flex flex-col text-sm justify-center w-full items-start gap-2"
+                    "animate-slide-in-top flex flex-col text-sm justify-center w-full items-start gap-2 border-inherit"
                   }
                   key={comt?.id}
                   comt={comt}

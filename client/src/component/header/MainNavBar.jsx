@@ -75,7 +75,7 @@ function MainNavBar() {
               </>
             )}
             {isLogin ? (
-              <div className="relative flex  box-content  *:transition-all *:duration-300 text-left group border-inherit">
+              <div className="relative flex items-center justify-center gap-5  box-content  *:transition-all *:duration-300 text-left group border-inherit">
                 <ProfileImage
                   onClick={() => dispatch(setManuOpen())}
                   className={`box-content border-2  sm:size-9 size-7 text-sm font-semibold text-gray-900 rounded-full  ${
@@ -88,7 +88,7 @@ function MainNavBar() {
                   disabled={deviceSize > 639 ? true : false}
                 />
                 {/* Tooltip with user name */}
-                <div className="flex flex-col  gap-5 justify-start w-52  pointer-events-none opacity-0 group-hover:pointer-events-auto  group-hover:opacity-100  p-3 rounded-lg absolute top-10 -left-40 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit  text-nowrap text-center">
+                <div className="flex flex-col  gap-5 justify-center items-center  pointer-events-none opacity-0 lg:group-hover:pointer-events-auto  lg:group-hover:opacity-100  p-3 rounded-lg absolute top-14 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit  text-nowrap text-center">
                   {" "}
                   <span className="text-sm w-fit">
                     {user?.displayName}
@@ -97,7 +97,7 @@ function MainNavBar() {
                     Modes={Modes}
                     separate={true}
                     className={
-                      "relative  w-fit  flex justify-evenly items-center gap-2 bg-[#d4d4d4] bg-opacity-20  *:text-xs *:bg-[#ffffff] *:text-black *:p-1 *:py-0.5  *:flex *:justify-center *:items-center *:rounded-md rounded-md p-2"
+                      "relative  w-fit  flex justify-evenly items-center gap-2 bg-[#d4d4d4] bg-opacity-40 dark:bg-opacity-20  *:text-xs *:bg-[#ffffff] *:text-black *:p-1 *:py-0.5  *:flex *:justify-center *:items-center *:rounded-md rounded-md p-3 py-2"
                     }
                   />{" "}
                   <LogoutBtn className="flex gap-2 items-center  hover:bg-opacity-5 text-sm   rounded-md" />

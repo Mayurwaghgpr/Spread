@@ -1,8 +1,9 @@
-import React, { lazy, Suspense, useCallback } from "react";
+import React, { lazy, Suspense, useCallback, useEffect } from "react";
 const NotifictionItem = lazy(() => import("./NotifictionItem"));
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenNotification } from "../../redux/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
+import useSocket from "../../hooks/useSocket";
 
 const notifications = [
   {
@@ -95,12 +96,24 @@ const notifications = [
 
 function Notifictionbox() {
   const { openNotification } = useSelector((state) => state.ui);
+  const { socket } = useSocket();
   const Icon = useIcons();
   const dispatch = useDispatch();
+  const handleNotification = useCallback((notify) => {
+    console.log({ notify });
+  }, []);
+  useEffect(() => {
+    socket?.on("notification", handleNotification);
+    return () => {
+      socket?.off("notification", handleNotification);
+    };
+  }, [socket, handleNotification]);
+
   const handeClick = useCallback((e) => {
     e.stopPropagation();
     dispatch(setOpenNotification());
   }, []);
+
   return (
     <div
       onClick={handeClick}

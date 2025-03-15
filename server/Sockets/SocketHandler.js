@@ -7,8 +7,10 @@ export default function socketHandlers(io) {
     console.log('User connected:', socket.id);
 
     // Register user with socket ID
-    socket.on('register', async(userId) => {
-      await redisClient.set(userId, socket.id);
+    socket.on('register', async (userId) => {
+      const cacheKey = `socket_${userId}`
+      console.log('thissssss',cacheKey)
+      await redisClient.set(cacheKey,socket.id);
       console.log(`User ${userId} registered with socket ID ${socket.id}`);
     });
 

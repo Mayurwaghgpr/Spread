@@ -29,7 +29,7 @@ import sockIo from "./socket.js";
 dotenv.config();
 const app = express();
 const server = createServer(app);
-const io = sockIo.init(server);
+export const io = sockIo.init(server);
 
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(","); 
 

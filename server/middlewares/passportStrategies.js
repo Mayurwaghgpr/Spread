@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import Post from "../models/posts.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
 import Sequelize from "sequelize";
-import { fetchProfile } from "../operations/data-fetching.js";
+import { fetchProfile } from "../utils/data-fetching.js";
 dotenv.config();
 
 export const passportStrategies = (passport) => {

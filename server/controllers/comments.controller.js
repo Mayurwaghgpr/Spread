@@ -159,8 +159,6 @@ export const getCommentReply = async (req, res, next) => {
 
 export const likeComment = async (req, res, next) => {
   const { commentId } = req.params;
-  console.log(commentId)
-  console.log(req.authUser?.id)
   try {
     const exist = await LikeComment.findOne({
       where: { likedBy: req.authUser.id, commentId },

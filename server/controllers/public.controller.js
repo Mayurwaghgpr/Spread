@@ -7,6 +7,7 @@ import Likes from "../models/Likes.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
+import { io } from "../app.js";
 
 
 // Fetch all users except the current user and distinct topics
@@ -164,16 +165,20 @@ export const LikePost = async (req, res, next) => {
 export const FollowUser = async (req, res, next) => {
   const { followerId, followedId } = req.body;
 
-
   try {
-    let userInfo = JSON.parse(req.cookies._userDetail);
-      // Prevent users from following themselves
-  if (followerId === followedId) {
-    return res
-      .status(400)
-      .json({ status: "error", message: "You cannot follow yourself" });
-  }
+    // Prevent users from following themselves
+    if (followerId === followedId) {
+      return res
+        .status(400)
+        .json({ status: "error", message: "You cannot follow yourself" });
+    }
 
+    let userInfo;
+    try {
+      userInfo = JSON.parse(req.cookies._userDetail) || { Following: [] };
+    } catch {
+      userInfo = { Following: [] }; // Fallback if cookie parsing fails
+    }
 
     // Check if the follow relationship already exists
     const existingFollow = await Follow.findOne({
@@ -181,20 +186,27 @@ export const FollowUser = async (req, res, next) => {
     });
 
     if (existingFollow) {
-        userInfo.Following = userInfo.Following.filter((follow) => follow.id !== followedId);
       // Unfollow user
       await existingFollow.destroy();
-      // console.log(userInfo);
+      userInfo.Following = userInfo.Following.filter((follow) => follow.id !== followedId);
     } else {
       // Follow user
       await Follow.create({ followerId, followedId });
-      // console.log(userInfo);
-       userInfo.Following.push({id:followedId})
+      userInfo.Following = [...userInfo.Following, { id: followedId }];
+
+      // Notify the user being followed if they are online
+      const cacheKey = `socket_${followedId}`;
+      const userSocketId = await redisClient.get(cacheKey);
+      
+      if (userSocketId) {
+        io.to(userSocketId).emit("notification", `${followerId} started following you`);
+      }
     }
-      res
-        .status(201)
-        .cookie("_userDetail",  JSON.stringify(userInfo),CookieOptions) // Serialize object before storing
-        .json({ status: "success", message: existingFollow ?"Unfollowed successfully": "Followed successfully" });
+
+    res
+      .status(201)
+      .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
+      .json({ status: "success", message: existingFollow ? "Unfollowed successfully" : "Followed successfully" });
   } catch (error) {
     console.error("Error in FollowUser:", error);
     next(error);

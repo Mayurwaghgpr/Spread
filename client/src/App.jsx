@@ -1,11 +1,4 @@
-import React, {
-  useEffect,
-  Suspense,
-  lazy,
-  useMemo,
-  useState,
-  useCallback,
-} from "react";
+import React, { useEffect, Suspense, lazy, useState, useCallback } from "react";
 import {
   Routes,
   Route,
@@ -25,6 +18,7 @@ import { PopupBox } from "./component/utilityComp/PopupBox";
 import Ibutton from "./component/buttons/Ibutton";
 import { setloginPop } from "./redux/slices/authSlice";
 import PersistantUser from "./utils/PersistentUser";
+import useSocket from "./hooks/useSocket";
 
 const Notifictionbox = lazy(
   () => import("./component/notification/Notifictionbox")
@@ -55,9 +49,6 @@ const General = lazy(() => import("./pages/settings/General"));
 const ConfirmationBox = lazy(
   () => import("./component/utilityComp/ConfirmationBox")
 );
-const ScrollToTopButton = lazy(
-  () => import("./component/utilityComp/ScrollToTopButton")
-);
 const Messanger = lazy(() => import("./pages/Messages/Messanger"));
 const MessageSection = lazy(() => import("./pages/Messages/MessageSection"));
 const SearchBox = lazy(() => import("./pages/Seach&Explorer/SearchBox"));
@@ -69,8 +60,10 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { isLogin, loginPop } = useSelector((state) => state.auth);
+  const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
+  const { socket } = useSocket();
+
   const [systemTheme, setSystemTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches
   );

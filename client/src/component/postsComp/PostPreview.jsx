@@ -65,7 +65,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             className="flex items-center justify-center gap-3"
           >
             <ProfileImage
-              className={`${!post && "animate-pulse bg-white bg-opacity-40 dark:bg-opacity-20"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
+              className={`${!post && "animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
               image={post && userImageurl}
             />
             <div className="text-sm rounded-lg flex">
@@ -74,7 +74,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                   {post?.user?.username}
                 </p>
               ) : (
-                <span className="w-20 h-3 animate-pulse bg-white bg-opacity-40 dark:bg-opacity-20 bg-inherit rounded-xl"></span>
+                <span className="w-20 h-3 animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 bg-inherit rounded-xl"></span>
               )}
             </div>
           </Link>
@@ -115,15 +115,15 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-full sm:w-[20rem] w-[60%] h-6  bg-white bg-opacity-40 dark:bg-opacity-20 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-white bg-opacity-40 dark:bg-opacity-20 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  bg-white bg-opacity-40 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full sm:w-[20rem] w-[60%] h-6  dark:bg-white bg-black  bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
               </>
             )}
           </div>
 
           <div
-            className={`rounded-lg ${!post && " animate-pulse"} border border-inherit z-0 sm:w-72 sm:h-32 h-40  overflow-hidden w-full  bg-white bg-opacity-40 dark:bg-opacity-20`}
+            className={`rounded-lg ${!post && " animate-pulse"} border border-inherit z-0 sm:w-72 sm:h-32 h-40  overflow-hidden w-full  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
           >
             {post && (
               <img

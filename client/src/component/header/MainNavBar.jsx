@@ -88,7 +88,7 @@ function MainNavBar() {
                   disabled={deviceSize > 639 ? true : false}
                 />
                 {/* Tooltip with user name */}
-                <div className="flex flex-col  gap-5 justify-center items-center  pointer-events-none opacity-0 lg:group-hover:pointer-events-auto  lg:group-hover:opacity-100  p-3 rounded-lg absolute top-14 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit  text-nowrap text-center">
+                <div className="flex flex-col  gap-5 justify-center items-center  pointer-events-none opacity-0 lg:group-hover:pointer-events-auto  lg:group-hover:opacity-100  p-3 rounded-lg absolute top-10 bg-[#e8e4df] shadow-xl dark:bg-black border border-inherit  text-nowrap text-center">
                   {" "}
                   <span className="text-sm w-fit">
                     {user?.displayName}

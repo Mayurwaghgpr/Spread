@@ -4,7 +4,7 @@ import Post from "../models/posts.js";
 import formatPostData from "../utils/dataFormater.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import Likes from "../models/Likes.js";
-import { fetchProfile } from "../operations/data-fetching.js";
+import { fetchProfile } from "../utils/data-fetching.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import Comments from "../models/Comments.js";
@@ -12,24 +12,19 @@ import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 
-
-
 // Get user profile
 export const getUserProfile = async (req, res, next) => {
   const id = req?.params?.id;
   try {
-    console.log(id)
     const cachedUserData = await redisClient.get(id);
     if (cachedUserData !== null) {
-      console.log('cach hit')
-      console.log(cachedUserData)
       return res.status(200).json(JSON.parse(cachedUserData));
     }
 
     console.log('cach miss')
 
     const userInfo = await fetchProfile({id});
-    console.log("dsds",userInfo)
+    // console.log("dsds",userInfo)
 
     if (userInfo) {
       await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));

@@ -2,7 +2,6 @@ import { memo, useRef } from "react";
 import { useDispatch } from "react-redux";
 // import { useLocation, useNavigate } from "react-router-dom";
 import useClickOutside from "../../hooks/useClickOutside";
-import { setConfirmBox } from "../../redux/slices/uiSlice";
 
 function Menu({ content, items, className }) {
   const dispatch = useDispatch();

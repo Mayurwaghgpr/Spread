@@ -120,7 +120,7 @@ function MessageSection() {
           senderId: user?.id,
           typing: false,
         });
-      }, 2000);
+      }, 1500);
     },
     [conversationId, socket, user?.id]
   );
@@ -163,10 +163,10 @@ function MessageSection() {
           <div className="flex flex-col items-start justify-center gap-1  overflow-hidden  overflow-ellipsis text-nowrap ">
             <h1>{conversationData?.groupName}</h1>
             {selectedConversation?.conversationType === "group" && (
-              <ul className="flex items-center gap-1 text-xs  text-black text-opacity-50 dark:bg-white dark:text-opacity-50">
+              <ul className="flex items-center gap-1 text-xs  text-black text-opacity-50 dark:text-white dark:text-opacity-50">
                 {selectedConversation?.members.map((member) => (
                   <li className="text-ellipsis" key={member.id}>
-                    {member.username},
+                    {member.username}
                   </li>
                 ))}
               </ul>
@@ -195,28 +195,30 @@ function MessageSection() {
             />
           );
         })}
-        {isUsersTyping && (
-          <div className="w-fit flex gap-1  justify-start items-start  my-3 ">
-            <div className="flex justify-start items-center -space-x-3">
-              {typingUsers.map(
-                (usr, idx) =>
-                  usr.senderId !== user.id && (
-                    <ProfileImage
-                      style={{ zIndex: 10 - idx }}
-                      key={usr.senderId}
-                      className={"w-5 h-5 z-50"}
-                      image={usr?.image}
-                    />
-                  )
-              )}
-            </div>
-            <div
-              className={` flex items-center justify-center py-2 px-2 h-fit animate-pop text-sm rounded-2xl  mr-auto bg-[#fffefe]  text-black dark:shadow-white rounded-tl-none`}
-            >
-              <span className="typingLoader"></span>
-            </div>
+
+        <div
+          className={` transition-all duration-700 ${isUsersTyping ? "animate-pop" : "-translate-x-10 opacity-0 pointer-events-none"} w-fit flex gap-1  justify-start items-start  my-4 `}
+        >
+          <div className="flex justify-start items-center -space-x-3">
+            {typingUsers.map(
+              (usr, idx) =>
+                usr.senderId !== user.id && (
+                  <ProfileImage
+                    style={{ zIndex: -(idx + 1) }}
+                    key={usr.senderId}
+                    className={"w-6 h-6 z-50"}
+                    image={usr?.image}
+                  />
+                )
+            )}
           </div>
-        )}
+          <div
+            className={`flex items-center justify-center py-2 px-2 h-fit mt-3  text-sm rounded-2xl  mr-auto bg-[#fffefe]  text-black dark:shadow-white rounded-tl-none`}
+          >
+            <span className="typingLoader"></span>
+          </div>
+        </div>
+
         {isLoading && (
           <div className="flex justify-center items-center w-full h-full ">
             <Spinner className={"w-10 h-10 bg-black p-1 dark:bg-white"} />

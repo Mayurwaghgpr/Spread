@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOpenNotification } from "../../redux/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
 import useSocket from "../../hooks/useSocket";
+import Spinner from "../loaders/Spinner";
 
 const notifications = [
   {
@@ -132,10 +133,10 @@ function Notifictionbox() {
             {Icon.close}
           </button>
         </div>
-        <div className="flex justify-center items-center h-full w-full">
+        {/* <div className="flex justify-center items-center h-full w-full">
           {" "}
           <h1>will implement soon</h1>
-        </div>
+        </div> */}
 
         {/* <Suspense
           fallback={<Spinner className={"w-5 h-5 bg-black dark:bg-white"} />}

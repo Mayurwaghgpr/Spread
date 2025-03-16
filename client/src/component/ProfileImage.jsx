@@ -5,7 +5,6 @@ const ProfileImage = ({ className, image, children, alt, title, ...props }) => {
     <button
       {...props}
       name="profileBtn"
-      type="button"
       className={` ${className} cursor-pointer flex justify-center items-center `}
     >
       <img

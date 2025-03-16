@@ -18,7 +18,7 @@ import SelectedGroupMemberList from "./components/SelectedGroupMemberList";
 import Spinner from "../../component/loaders/Spinner";
 
 const NewConversation = () => {
-  const { isLogin, user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const [isCreatingGroup, setCreatingGroup] = useState(false);
   const [next, setNext] = useState(false);
   const [hashMap, setHashMap] = useState({

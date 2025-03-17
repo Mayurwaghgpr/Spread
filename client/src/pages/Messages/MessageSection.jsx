@@ -15,7 +15,7 @@ import {
   addMessage,
   popMessage,
   pushMessage,
-} from "../../redux/slices/chatSlice";
+} from "../../redux/slices/messangerSlice";
 import ChatApi from "../../Apis/ChatApi";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -27,8 +27,9 @@ import ProfileImage from "../../component/ProfileImage";
 
 function MessageSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const { messages } = useSelector((state) => state.chat);
-  const { selectedConversation } = useSelector((state) => state.messanger);
+  const { messages, selectedConversation } = useSelector(
+    (state) => state.messanger
+  );
   const [typingUsers, setTypingUsers] = useState([]);
   const [message, setMessage] = useState("");
   const { getMessage } = ChatApi();

@@ -17,6 +17,7 @@ const initialState = {
   ThemeMode:Theme,
   isScale: false,
   MenuOpen: false,
+  
   openNotification: false,
 
 };

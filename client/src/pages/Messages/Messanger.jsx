@@ -2,7 +2,7 @@ import React, { memo, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import MessageLog from "./MessageLog";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage } from "../../redux/slices/chatSlice";
+import { addMessage } from "../../redux/slices/messangerSlice";
 import useSocket from "../../hooks/useSocket";
 import NewConversation from "./NewConversation";
 

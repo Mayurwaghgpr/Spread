@@ -20,9 +20,7 @@ import { setloginPop } from "./redux/slices/authSlice";
 import PersistantUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 
-const Notifictionbox = lazy(
-  () => import("./component/notification/Notifictionbox")
-);
+import Notifictionbox from "./component/notification/Notifictionbox";
 
 // Lazy load components
 
@@ -62,11 +60,11 @@ function App() {
   const { pathname } = useLocation();
   const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
-  const { socket } = useSocket();
 
   const [systemTheme, setSystemTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches
   );
+
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -93,7 +91,7 @@ function App() {
     <>
       {" "}
       {!pathname.startsWith("/messages") && <MainNavBar />}
-      <main className="flex justify-between items-center border-inherit ">
+      <main className=" relative flex justify-between items-center border-inherit ">
         <Notifictionbox />
         {<ConfirmationBox />}
         <Suspense fallback={<LoaderScreen />}>

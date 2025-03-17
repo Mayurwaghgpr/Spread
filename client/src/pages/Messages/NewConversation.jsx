@@ -99,6 +99,7 @@ const NewConversation = () => {
     setHashMap({ [user.id]: { ...hashMap[user.id] } });
     setCreatingGroup(false);
   }, [hashMap, isCreatingGroup]);
+
   return (
     <PopupBox
       className={

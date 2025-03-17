@@ -102,29 +102,28 @@ function Home() {
   };
 
   return (
-    <section className="flex flex-col sm:flex-row lg:justify-start  w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
+    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
+      {/* Sticky Navigation */}
+      <div className="sticky top-[3.1rem] sm:top-[3.6rem] row-span-1 lg:col-span-6 col-span-full w-full flex  items-center justify-start border-b text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0   backdrop-blur-[20px] dark:border-[#383838] z-20  ">
+        <ul className="flex items-center justify-between w-full h-full ">
+          <li className="capitalize flex justify-center items-center w-full h-full hover:bg-gray-400 hover:bg-opacity-30">
+            <button
+              className="t-btn"
+              onClick={() => handleTopicClick("All")}
+              aria-label="View all feeds"
+            >
+              Feeds
+            </button>
+          </li>
+          <li className="capitalize flex justify-center items-center  w-full  h-full hover:bg-gray-400 hover:bg-opacity-30">
+            <Link to="#" aria-label="View specific topics">
+              Specific
+            </Link>
+          </li>
+        </ul>
+      </div>
       {/* Posts Section */}
-      <div className="relative flex flex-col items-end border-inherit py-24 sm:w-[35rem] lg:w-full w-full  mx-auto">
-        {/* Sticky Navigation */}
-        <div className="flex xl:w-[48rem] lg:w-[40rem] sm:w-[35rem] mx-auto w-full  text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0   backdrop-blur-[20px] dark:border-[#383838] z-20 border  items-center justify-start fixed top-[3.1rem] sm:top-[3.6rem] ">
-          <ul className="flex items-center justify-between w-full ">
-            <li className="capitalize flex justify-center w-full h-full  p-4 hover:bg-gray-400 hover:bg-opacity-30">
-              <button
-                className="t-btn"
-                onClick={() => handleTopicClick("All")}
-                aria-label="View all feeds"
-              >
-                Feeds
-              </button>
-            </li>
-            <li className="capitalize flex justify-center  p-4  w-full hover:bg-gray-400 hover:bg-opacity-30">
-              <Link to="#" aria-label="View specific topics">
-                Specific
-              </Link>
-            </li>
-          </ul>
-        </div>
-
+      <div className="relative flex flex-col items-end lg:col-span-6 col-start-2 col-span-8   row-start-2 row-span-10  border-inherit py-10  mx-auto">
         {/* Posts Content */}
         <div className="w-full pt-4 border-inherit">
           {isLoading
@@ -148,7 +147,7 @@ function Home() {
         isLoadingHome={isLoadingHome}
         homeData={homeData}
         handleTopicClick={handleTopicClick}
-        className="lg:flex hidden text-xs border-inherit max-w-[25rem] w-full h-screen flex-col border-x   justify-start gap-5 sticky top-16"
+        className="sticky top-16 lg:flex flex-col justify-start gap-5  col-start-7 col-span-4 row-start-2  row-span-full border-x  w-full  border-inherit   hidden text-xs "
       />
     </section>
   );

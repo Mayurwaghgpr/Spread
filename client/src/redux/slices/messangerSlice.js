@@ -1,21 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-const converstaioMeta=JSON.parse(localStorage.getItem("conversationMeta"));
+const converstaioMeta = JSON.parse(localStorage.getItem("conversationMeta"));
+
 const initialState = {
-      conversations: [],
+    conversations: [],
     messages: [],
     openNewConverstionBox: false,
     selectedConversation:converstaioMeta
 }
 
-const messangerSlice=createSlice({
-    name: 'messanger',
+const messangerSlice = createSlice({
+  name: 'messanger',
   initialState,
-  reducers: {
-       setConversations: (state, action) => {
+    reducers: {
+    setConversations: (state, action) => {
       state.conversations = action.payload;
-    },
-    setMessages: (state, action) => {
-      state.messages = action.payload;
     },
     addMessage: (state, action) => {
       state.messages=action.payload;
@@ -31,11 +29,10 @@ const messangerSlice=createSlice({
         },
         selectConversation: (state, action) => {
             state.selectedConversation = action.payload;
-      }  
-        
+      }   
     }
 })
 
-export const { setConversations, setMessages, addMessage ,pushMessage,popMessage,setOpenNewConverstionBox,selectConversation } = messangerSlice.actions;
+export const { setConversations,setOpenNewConverstionBox,selectConversation,pushMessage,addMessage,popMessage } = messangerSlice.actions;
 
 export default messangerSlice.reducer;

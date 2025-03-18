@@ -3,7 +3,7 @@ import React, { memo, useCallback } from "react";
 import { BsArrowLeft, BsSearch } from "react-icons/bs";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { useInfiniteQuery } from "react-query";
 import ChatApi from "../../Apis/ChatApi";
@@ -16,6 +16,8 @@ import Spinner from "../../component/loaders/Spinner";
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
   const { getConversations } = ChatApi();
+  const [searchParams] = useSearchParams();
+  const conversationId = searchParams.get("Id");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -53,7 +55,9 @@ function MessageLog() {
   const conversations = data?.pages?.flatMap((page) => page);
   // console.log(conversations);
   return (
-    <aside className=" border-r sm:max-w-[30%] sm:min-w-fit w-full  h-full border-inherit ">
+    <aside
+      className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[30%] sm:min-w-fit w-full  h-full border-inherit `}
+    >
       <div>
         <button
           onClick={() => navigate(-1)}

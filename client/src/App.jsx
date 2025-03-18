@@ -210,7 +210,7 @@ function App() {
               <Route path="/reset/pass/:token" element={<ResetPassword />} />
               <Route path="/error" element={<SomthingWentWrong />} />
             </Routes>
-            {isLogin && <TaskBar />}
+
             {loginPop && (
               <PopupBox
                 action={() => dispatch(setloginPop(false))}
@@ -250,6 +250,7 @@ function App() {
 
         {/* <ScrollToTopButton /> */}
       </main>
+      {isLogin && !pathname.startsWith("/messages") && <TaskBar />}
     </>
   );
 }

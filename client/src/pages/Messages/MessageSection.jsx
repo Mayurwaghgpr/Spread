@@ -7,15 +7,10 @@ import React, {
   useState,
 } from "react";
 import { AiOutlineSend } from "react-icons/ai";
-import { BsCameraVideo, BsCheck2All } from "react-icons/bs";
+import { BsCameraVideo } from "react-icons/bs";
 import { IoAttachOutline, IoCallOutline } from "react-icons/io5";
 import { MdMic } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addMessage,
-  popMessage,
-  pushMessage,
-} from "../../redux/slices/messangerSlice";
 import ChatApi from "../../Apis/ChatApi";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -24,6 +19,13 @@ import { v4 as uuidv4 } from "uuid";
 import MessageBubble from "./components/MessageBubble";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileImage from "../../component/ProfileImage";
+import {
+  addMessage,
+  popMessage,
+  pushMessage,
+} from "../../redux/slices/messangerSlice";
+
+let prevMessagesCount = 0;
 
 function MessageSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -43,21 +45,17 @@ function MessageSection() {
   const { isLoading } = useQuery(["messages", conversationId], {
     queryFn: () => getMessage({ conversationId }),
     onSuccess: (data) => {
-      // console.log(data);
       dispatch(addMessage(data));
     },
   });
 
   //Set both function so they can be accesible inside cleanUp function in useEffect
-  const handleUserTyping = useCallback(
-    ({ senderId, image, typing }) => {
-      setTypingUsers([
-        ...typingUsers.filter((evn) => evn.senderId !== senderId),
-        { senderId, image, typing },
-      ]);
-    },
-    [dispatch]
-  );
+  const handleUserTyping = useCallback(({ senderId, image, typing }) => {
+    setTypingUsers([
+      ...typingUsers.filter((evn) => evn.senderId !== senderId),
+      { senderId, image, typing },
+    ]);
+  }, []);
 
   const handleNewMessage = useCallback(
     (msg) => {
@@ -69,12 +67,12 @@ function MessageSection() {
         ]);
       }
     },
-    [dispatch]
+    [user?.id]
   );
-  const handleError = useCallback(() => dispatch(popMessage()), [dispatch]);
+  const handleError = useCallback(() => dispatch(popMessage()), []);
 
   useEffect(() => {
-    if (isLogin && user?.id) {
+    if (isLogin && user?.id && conversationId) {
       socket?.emit("joinConversation", conversationId);
 
       socket?.on("userIsTyping", handleUserTyping);
@@ -123,15 +121,15 @@ function MessageSection() {
         });
       }, 1500);
     },
-    [conversationId, socket, user?.id]
+    [conversationId, socket, user?.id, user?.userImage]
   );
 
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    if (prevMessagesCount !== messages.length) {
+      containerRef.current?.scrollTo(0, containerRef.current.scrollHeight);
+      prevMessagesCount = messages.length;
     }
-  }, [messages]);
-
+  }, [messages?.length]);
   // Setting apposit member name and userImage as groupName and image if conversation is private (one-to-one)
   const conversationData = useMemo(() => {
     if (selectedConversation?.conversationType === "private") {
@@ -148,17 +146,17 @@ function MessageSection() {
 
   const isUsersTyping = useMemo(
     () => typingUsers.some((env) => env.senderId !== user.id && env.typing),
-    [typingUsers]
+    [typingUsers, user?.id]
   );
   return (
     <div
       ref={containerRef}
-      className="relative w-full sm:flex flex-col justify-between hidden border-inherit overflow-y-auto"
+      className={`${conversationId ? "sm:visible" : " hidden"} relative w-full sm:flex flex-col justify-between  border-inherit overflow-y-auto`}
     >
-      <div className="sticky top-0 bg-[#fff9f3] dark:bg-black z-20 flex justify-between w-full  py-5 px-7 border-b border-inherit  shadow-md">
+      <div className="sticky top-0 bg-[#fff9f3] dark:bg-black z-20 flex justify-between w-full  py-2 px-7 border-b border-inherit  shadow-md">
         <div className="flex justify-start items-center gap-3 w-[80%]">
           <ProfileImage
-            className={"w-10 h-10 min-w-fit"}
+            className={"max-w-10 max-h-10 w-full h-full  min-w-fit"}
             image={conversationData?.image}
           />
           <div className="flex flex-col items-start justify-center gap-1  overflow-hidden  overflow-ellipsis text-nowrap ">
@@ -214,7 +212,7 @@ function MessageSection() {
             )}
           </div>
           <div
-            className={`flex items-center justify-center py-2 px-2 h-fit mt-3  text-sm rounded-2xl  mr-auto bg-[#fffefe]  text-black dark:shadow-white rounded-tl-none`}
+            className={`flex items-center justify-center py-2 px-2 h-fit   text-sm rounded-xl  mr-auto bg-[#fffefe]  text-black dark:shadow-white rounded-tl-none`}
           >
             <span className="typingLoader"></span>
           </div>
@@ -226,7 +224,7 @@ function MessageSection() {
           </div>
         )}
       </div>
-      <div className=" sticky flex justify-center items-center gap-3 bottom-3 p-3 z-10 border-inherit  ">
+      <div className=" sticky sm:bottom-3 bottom-0 mx-auto flex justify-center items-center gap-3 lg:w-1/2 w-full  py-3 z-10 border-inherit  ">
         <div className="flex border rounded-full bg-white dark:bg-black  overflow-hidden w-1/2 border-inherit">
           <button className="text-2xl p-2">
             <IoAttachOutline />
@@ -236,23 +234,20 @@ function MessageSection() {
             className=" w-full h-full  p-3 outline-none bg-inherit placeholder:font-thin"
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             type="text"
-            name=""
+            name="messageInput"
             value={message}
-            id=""
             placeholder="start typing..."
           />
         </div>
-        <div className="flex justify-center items-center gap-3">
+        <div className="flex justify-center items-center gap-2">
+          <button className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black">
+            <MdMic />
+          </button>
           <button
             onClick={handleSend}
             className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black"
           >
-            <div className="">
-              <AiOutlineSend />
-            </div>
-          </button>
-          <button className="text-2xl font-light bg-[#fff9f3] p-2 rounded-full dark:bg-black">
-            <MdMic />
+            <AiOutlineSend />
           </button>
         </div>
       </div>

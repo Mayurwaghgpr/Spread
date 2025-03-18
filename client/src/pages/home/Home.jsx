@@ -117,13 +117,13 @@ function Home() {
           </li>
           <li className="capitalize flex justify-center items-center  w-full  h-full hover:bg-gray-400 hover:bg-opacity-30">
             <Link to="#" aria-label="View specific topics">
-              Specific
+              for you
             </Link>
           </li>
         </ul>
       </div>
       {/* Posts Section */}
-      <div className="relative flex flex-col items-end lg:col-span-6 col-start-2 col-span-8   row-start-2 row-span-10  border-inherit py-10  mx-auto">
+      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full  row-start-2 row-span-10  border-inherit py-10 ">
         {/* Posts Content */}
         <div className="w-full pt-4 border-inherit">
           {isLoading

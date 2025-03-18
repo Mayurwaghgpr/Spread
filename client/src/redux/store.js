@@ -3,7 +3,7 @@ import authReducer from './slices/authSlice';
 import uiReducer from './slices/uiSlice';
 import postReducer from './slices/postSlice';
 import profileReducer from './slices/profileSlice';
-import messangerSlice from './slices/messangerSlice';
+import messangerReducer from './slices/messangerSlice' 
 
 const store = configureStore({
   reducer: {
@@ -11,7 +11,7 @@ const store = configureStore({
     ui: uiReducer,
     posts: postReducer,
     profile: profileReducer,
-    messanger: messangerSlice,
+    messanger:messangerReducer,
   },
 });
 

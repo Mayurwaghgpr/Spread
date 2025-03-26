@@ -36,7 +36,9 @@ const NewConversation = () => {
   const { mutate: PrivateMutaion, isLoading: isPrivateLoading } = useMutation({
     mutationFn: (chatUserId) => startPrivateChate(chatUserId),
     onSuccess: (data) => {
+      console.log(data);
       dispatch(setOpenNewConverstionBox());
+      // localStorage.setItem("conversationMeta", JSON.stringify(conv));
       navigate(`c?Id=${data.conversation.id}`, { replace: true });
     },
     onError: () => {
@@ -154,7 +156,7 @@ const NewConversation = () => {
 
           <div
             ref={containerRef}
-            className="flex flex-col h-full justify-start items-start gap-3 w-full overflow-y-auto listbox no-scrollbar"
+            className="flex flex-col justify-start items-start h-full gap-3 w-full overflow-y-auto  no-scrollbar"
           >
             {users?.map((Usr, idx, arr) => (
               <PeoplesList

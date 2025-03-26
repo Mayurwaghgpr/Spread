@@ -6,7 +6,7 @@ import WhoToFollow from "../../pages/home/WhoToFollow";
 function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
   return (
     <aside className={`${className}`}>
-      <div className="flex flex-col w-full p-6 items-center text-start gap-2  border-inherit">
+      <div className="flex flex-col w-full items-center text-start gap-2  border-inherit">
         <h1 className=" text-start w-full text-xl font-bold">
           Suggested topics
         </h1>
@@ -30,23 +30,24 @@ function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
           </ul>
         </div>
       </div>
-      <div className="sticky top-[4.3rem] gap-5 flex flex-col justify-start min-h-[23rem]   border-inherit">
-        <WhoToFollow
-          homeData={homeData}
-          className={" text-sm  p-5  border-inherit"}
-          isLoadingHome={isLoadingHome}
-        />
-        <footer className=" text-[#383838] px-6">
-          <Link className="" to="">
-            Terms of Service
-          </Link>
-          <Link className="" to="">
-            {" "}
-            Privacy Policy
-          </Link>{" "}
-          © 2024 Spread
-        </footer>
-      </div>
+
+      <WhoToFollow
+        homeData={homeData}
+        className={
+          " flex flex-col justify-start items-start gap-5 text-sm border-inherit"
+        }
+        isLoadingHome={isLoadingHome}
+      />
+      <small className=" text-[#383838]">
+        <Link className="" to="">
+          Terms of Service
+        </Link>
+        <Link className="" to="">
+          {" "}
+          Privacy Policy
+        </Link>{" "}
+        © 2024 Spread
+      </small>
     </aside>
   );
 }

@@ -46,36 +46,52 @@ export const AddNewPost = async (req, res, next) => {
       authorId: req.authUser.id,
     });
 
+
+    // Filter additional images (skipping the first one, which is the title image)
+    const imageFiles = imageFileArray.slice(1);
+
     // Map additional images
-    const imageHasMap = new Map();
-    const cloudinaryPublicId= new Map()
-    const imagefilterArray=imageFileArray.filter((p,idx)=>idx>0&&p)
-      for(const img of imagefilterArray) {
+    const imageMap = new Map();
+    const publicIdMap = new Map()
+    
+    // Upload additional images in parallel
+    const imageUploads = imageFiles.map(async (img) => {
       const key = Number(img?.fieldname.split("-")[1]);
       if (!isNaN(key)) {
-        const result = await cloudinary.uploader.upload(img.path);
-        imageHasMap.set(key, result.secure_url);
-        cloudinaryPublicId.set(key,result.public_id)
+        const { secure_url, public_id } = await cloudinary.uploader.upload(img.path);
+        return { index: key, imageUrl: secure_url, cloudinaryPubId: public_id };
       }
-    };
+    });
 
+    const uploadedImages = (await Promise.all(imageUploads)).filter(Boolean); // Remove undefined values
+    for (const img of uploadedImages) { 
+      imageMap.set(img.index, img.imageUrl);
+      publicIdMap.set(img.index, img.cloudinaryPubId);
+
+    }
+    
     // Arrange post content
-    const PostData = parsedBlogData
+    const postData = parsedBlogData
       .filter((p) => p.index > 1) // Skip title and subtitle
       .map((p) => ({
         type: p.type,
-        content: p.type === "image" ? imageHasMap.get(p.index) || null : p.data,
+        content: p.type === "image" ? imageMap.get(p.index) || null : p.data,
         otherInfo: p.type === "image" ? p.data : "",
-        cloudinaryPubId:p.type === "image"?cloudinaryPublicId.get(p.index):'',
+        cloudinaryPubId:p.type === "image"?publicIdMap.get(p.index):'',
         index: p.index,
         postId: newPost.id,
       }))
       .filter((p) => p.content); // Exclude items without content
+    
+    // Bulk insert all post content in one go
+    if (postData.length) {
+      await PostContent.bulkCreate(postData);
+    }
 
-    await PostContent.bulkCreate(PostData);
-
-     await deletePostImage(imageFileArray)
-
+    // Delete temp uploaded images if any
+    if (imageFileArray.length) {
+      await deletePostImage(imageFileArray);
+    }
     // Send success response
     return res.status(201).json({ newPost, message: "Post created successfully" });
   } catch (error) {
@@ -274,22 +290,26 @@ export const EditPost = async (req, res, next) => {
 
 /// Delete a post by its ID and associated images
 export const DeletePost = async (req, res, next) => {
-  const postId = req.params.postId;
-    const userId = req.authUser.id;
   try {
+    const { postId } = req.params;
+    const userId = req.authUser.id;
+
+    // Fetch post along with images & comments
     const post = await Post.findOne({
-      where: { id: postId , authorId:userId},
+      where: { id: postId, authorId: userId },
       include: [
         {
           model: PostContent,
           as: "postContent",
           where: { type: "image" },
-          attributes: ["content","cloudinaryPubId"],
+          attributes: ["cloudinaryPubId"],
           required: false,
         },
-          {
+        {
           model: Comments,
-          as: "comments",  // Include associated comments
+          as: "comments", // Include associated comments
+          attributes: ["id"],
+          required: false,
         },
       ],
       nest: true,
@@ -298,37 +318,27 @@ export const DeletePost = async (req, res, next) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found or you are not an author" });
     }
-  // Delete associated comments
-    await Comments.destroy({ where: { postId } });
-    
-    const imagePubIdArry = [];
 
-    // Add title image to the array
-    if (post.cloudinaryPubId) {
-      imagePubIdArry.push(post.cloudinaryPubId);
+    // Extract Cloudinary image IDs title image and content images
+    const imagePubIdArry = [
+      post.cloudinaryPubId,
+      ...post.postContent.flatMap(({ cloudinaryPubId }) => cloudinaryPubId || []),
+    ].filter(Boolean);
+
+    // Delete images in parallel if there are any
+    if (imagePubIdArry.length) {
+      await Promise.all(imagePubIdArry.map(deleteCloudinaryImage));
     }
 
-    // Add post content images to the array
-    post.postContent.forEach(({ cloudinaryPubId }) => {
-      if (cloudinaryPubId) {
-        imagePubIdArry.push(cloudinaryPubId);
-      }
-    });
-    
-    // If there are images, delete them
-    const imagePromiesArry = imagePubIdArry.map(async (public_id) => {
-  
-      return deleteCloudinaryImage(public_id);
-    })
+    // Delete comments & post in parallel
+    await Promise.all([
+      Comments.destroy({ where: { postId } }),
+      post.destroy(),
+    ]);
 
-  const deleteResult = await Promise.all(imagePromiesArry)
-
-    // Delete the post itself
-    await post.destroy();
-
-    res.status(200).json({ id: postId, message: "Post deleted successfully" });
+    return res.status(200).json({ id: postId, message: "Post deleted successfully" });
   } catch (error) {
     console.error("Error deleting post:", error);
-    next(error); // Pass the error to the next middleware for handling
+    next(error);
   }
 };

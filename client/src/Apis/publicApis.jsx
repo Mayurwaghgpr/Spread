@@ -5,6 +5,21 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function usePublicApis() {
   const dispatch = useDispatch();
+  const fetchPeopels = async ({ pageParam }) => {
+    try {
+      const result = await axios.get(`${BASE_URL}/public/h/peoples`, {
+        withCredentials: true,
+        params: {
+          lastTimestamp: pageParam,
+        },
+      });
+      console.log(result.data.peoples);
+      return result.data.peoples;
+    } catch (error) {
+      console.error("Error fetching user preferences data:", error);
+      throw error.response || error;
+    }
+  };
   // Fetch user preferences data
   const fetchHomeContent = async () => {
     try {
@@ -131,6 +146,7 @@ function usePublicApis() {
     ArchivePost,
     followUser,
     fetchAllUsers,
+    fetchPeopels,
   };
 }
 

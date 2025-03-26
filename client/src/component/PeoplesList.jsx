@@ -35,16 +35,16 @@ const PeoplesList = forwardRef(
     return (
       <li
         ref={ref}
-        className={` flex ${className} w-full h-full gap-1 font-medium capitalize items-center relative dark:border-[#383838]`}
+        className={`${className} font-medium capitalize  relative dark:border-[#383838]`}
         key={people?.id}
         id={people?.id}
       >
         <div
           ref={buttonRef}
-          className="relative group border-inherit cursor-pointer w-[60%]"
+          className="relative group border-inherit cursor-pointer "
         >
           <button
-            className="flex items-center gap-3 border-inherit h-full w-full "
+            className="flex items-center gap-3 border-inherit h-full "
             onClick={action}
           >
             <ProfileImage className=" w-10 h-10 " image={userImageurl} />
@@ -57,7 +57,7 @@ const PeoplesList = forwardRef(
             <UserPopover
               ref={boxRef}
               people={people}
-              className="z-40 px-4 w-[20rem] absolute top-11  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
+              className="z-40 px-4 w-[20rem] absolute transition-all duration-500 top-11  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
               attributes={attributes}
               styles={styles}
             />

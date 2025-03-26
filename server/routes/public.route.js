@@ -7,6 +7,7 @@ import {
   LikePost,
   getHomeContent,
   getAllUser,
+  getPeoples
 } from '../controllers/public.controller.js';
 import IsAuth from '../middlewares/isAuth.js'; // Import the authentication middleware
 
@@ -14,6 +15,8 @@ const router = express.Router();
 
 // Route to get preparation data for posts (authenticated users only)
 router.get('/h/content', IsAuth, getHomeContent);
+
+router.get('/h/peoples', IsAuth, getPeoples);
 
 // Route to get all platform users
 router.get('/users/all',IsAuth,getAllUser)

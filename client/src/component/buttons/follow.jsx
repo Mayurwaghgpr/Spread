@@ -27,7 +27,6 @@ function Follow({ className, People }) {
   const isFollowing = user?.Following?.some(
     (followed) => followed?.id === People?.id
   );
-
   return followLoading ? (
     <div className={`${className} `}>
       <div className="dotloader"></div>

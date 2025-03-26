@@ -60,7 +60,7 @@ function MessageLog() {
     >
       <div>
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(-1, { replace: true })}
           className=" border-inherit p-4 text-2xl font-bold"
         >
           <BsArrowLeft className="" />
@@ -101,6 +101,7 @@ function MessageLog() {
               ref={arr.length % 10 === 0 ? lastItemRef : null}
               to={`c?Id=${conv.id}`}
               key={conv.id}
+              replace={true}
               className=" flex items-center gap-3 w-full  "
             >
               <div>

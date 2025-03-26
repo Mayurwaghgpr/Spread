@@ -45,11 +45,56 @@ export const getHomeContent = async (req, res, next) => {
 
     res.status(200).json({ topics, userSuggetion });
   } catch (error) {
-    console.error("Error fetching utility data:", error);
+    console.error("Error fetching home data:", error);
     next(error);
   }
 };
+export const getPeoples = async (req, res, next) => {
+  const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
+  const cursor = req.query.cursor || req.authUser.id;
+  const currentUserId = req.authUser.id;
+  try {
+     const cacheKey = `find_peoples_${cursor}_${limit}`;
+    // Unique cache key for this combination
+    // Checking Cache
+    const cachedPostData = await redisClient.get(cacheKey);
+    if (cachedPostData !== null) {
+      console.log('cach hit')
+      return res.status(200).json({peoples:JSON.parse(cachedPostData)}); // Send cached data
+    }
+    console.log('cach miss')
 
+     const peoples = await User.findAll({
+        where: { id: { [Op.gt]: cursor } },
+        include: [
+          {
+            model: User,
+            as: "Followers",
+            through: { attributes: [] }, // Exclude through table attributes
+            attributes: ["id"], // Fetch only necessary fields
+          },
+          {
+            model: User,
+            as: "Following",
+            through: { attributes: [] }, // Exclude through table attributes
+            attributes: ["id"], // Fetch only necessary fields
+          },
+        ],
+        attributes: ["id", "username", "userImage", "bio"],
+       order: [
+        ["id", "DESC"],
+       ],
+       limit,
+     });
+      await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(peoples))
+   res.status(200).json({peoples});
+  } catch (error) {
+    console.error("Error fetching peoples data:", error);
+    next(error);
+  }
+  
+  
+}
 // Search for posts based on a query string
 export const searchData = async (req, res, next) => {
   const searchQuery = req.query.q;

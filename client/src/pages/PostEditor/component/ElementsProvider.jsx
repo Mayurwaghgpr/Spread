@@ -52,7 +52,7 @@ const ElementsProvider = ({
           <i className="bi bi-x"></i>{" "}
         </button>
         <img
-          className="h-[100%] min-w-full p-2"
+          className="h-[100%] min-w-full "
           src={element.file}
           alt="Preview"
           id="inputimage"

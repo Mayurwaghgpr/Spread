@@ -1,8 +1,8 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import MessageLog from "./MessageLog";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage } from "../../redux/slices/messangerSlice";
+import { addMessage, pushMessage } from "../../redux/slices/messangerSlice";
 import useSocket from "../../hooks/useSocket";
 import NewConversation from "./NewConversation";
 
@@ -11,12 +11,18 @@ function Messanger() {
   const { openNewConverstionBox } = useSelector((state) => state.messanger);
   const dispatch = useDispatch();
   const { socket } = useSocket();
-
+  const handleNewMessage = useCallback(
+    (msg) => {
+      if (msg.senderId !== user?.id) {
+        dispatch(pushMessage(msg));
+      }
+    },
+    [dispatch, user?.id]
+  );
   useEffect(() => {
     if (isLogin && user?.id && socket) {
       socket?.emit("register", user.id);
       // Listen for new messages
-      const handleNewMessage = (msg) => dispatch(addMessage(msg));
       socket.on("newMessage", handleNewMessage);
 
       // Cleanup when unmounting or user logs out

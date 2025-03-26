@@ -21,6 +21,7 @@ import PersistantUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 
 import Notifictionbox from "./component/notification/Notifictionbox";
+import FindMoreUsers from "./pages/home/FindMoreUsers";
 
 // Lazy load components
 
@@ -188,6 +189,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/find_peoples" element={<FindMoreUsers />} />
               <Route path="*" element={<PageError />} />
               <Route
                 path="/Read"

@@ -147,7 +147,7 @@ function Home() {
         isLoadingHome={isLoadingHome}
         homeData={homeData}
         handleTopicClick={handleTopicClick}
-        className="sticky top-16 lg:flex flex-col justify-start gap-5  col-start-7 col-span-4 row-start-2  row-span-full border-x  w-full  border-inherit   hidden text-xs "
+        className="sticky top-16 lg:flex flex-col justify-start gap-5  col-start-7 col-span-4  row-start-2  row-span-full border-x  w-full p-6  border-inherit   hidden text-xs "
       />
     </section>
   );

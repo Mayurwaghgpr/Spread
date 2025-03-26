@@ -1,5 +1,6 @@
 .DS_store
 Spread-Backend/config/config.json
+# Spread-Backend/images/userImages/*
 # Logs
 logs
 *.log

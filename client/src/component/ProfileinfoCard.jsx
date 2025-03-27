@@ -43,17 +43,20 @@ function ProfileinfoCard({ className }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`dark:bg-black border dark:border-[#383838] sm:animate-slide-in-right animate-slide-in-bottom bg-[#fff9f3] sm:rounded-xl  sm:h-full h-[80%] sm:w-1/3 w-full  px-6 overflow-hidden `}
+        className={`flex flex-col justify-start gap-10 sm:w-1/3 w-full sm:h-full h-[80%] p-8 dark:bg-black border dark:border-[#383838] sm:animate-slide-in-right animate-slide-in-bottom bg-[#fff9f3] sm:rounded-xl  overflow-hidden `}
       >
-        <h1 className="text-2xl p-2 py-8">{FollowInfo.Info}</h1>
-        <div className="relative h-full p-5 drop-shadow-sm">
+        <h1 className="text-2xl ">{FollowInfo.Info}</h1>
+        <div className="relative h-full drop-shadow-sm">
           {!isLoading ? (
             data?.length ? (
-              <ul className="flex w-full flex-col items-start px-2 gap-4 min-h-full">
+              <ul className="flex flex-col items-start w-full   gap-4 min-h-full">
                 {data.map((followings, idx) => (
                   <PeoplesList
-                    className={"text-nowrap"}
+                    className={
+                      " flex justify-between items-center w-full text-nowrap"
+                    }
                     key={`${followings.id}-${idx}`} // Ensure unique key
+                    people={followings}
                     index={idx}
                     action={() =>
                       navigate(

@@ -25,12 +25,16 @@ function Profile() {
     error: profileError,
     isFetching,
     isLoading,
-  } = useQuery(["userProfile"], async () => fetchUserProfile(profileId), {
-    onSuccess: (data) => {
-      dispatch(setuserProfile(data));
-    },
-    refetchOnWindowFocus: false,
-  });
+  } = useQuery(
+    ["userProfile", profileId],
+    async () => fetchUserProfile(profileId),
+    {
+      onSuccess: (data) => {
+        dispatch(setuserProfile(data));
+      },
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const {
     data: postsData,

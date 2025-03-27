@@ -26,7 +26,7 @@ function CodeEditor({
 
   return (
     <div
-      className="p-5 border flex flex-col gap-5 overflow-scroll h-[30rem] w-full focus:border-green-200 outline-none"
+      className="p-5 border flex flex-col gap-5 overflow-scroll h-[30rem] w-full border-inherit outline-none"
       onFocus={() => setFocusedIndex(index)}
       contentEditable
       suppressContentEditableWarning
@@ -38,11 +38,12 @@ function CodeEditor({
       ref={(editor) => (inputRefs.current[index] = editor)} // Assign ref to the editor container
     >
       <Selector
-        className="p-2 border z-10 outline-none rounded max-w-[10rem] text-xs"
+        className="p-2 border z-10 outline-none bg-inherit border-inherit rounded max-w-[10rem] text-xs"
         options={languages}
         setOptions={setLanguage}
       />
       <Editor
+        className="bg-inherit"
         height="500px"
         language={language}
         value={element.data}

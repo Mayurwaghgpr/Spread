@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 import EditableParagraph from "./EditableParagraph";
 const CodeEditor = lazy(
-  () => import("../../../component/WriterTools/codeEditor")
+  () => import("../../../component/writerTools/codeEditor")
 );
 
 const ElementsProvider = ({

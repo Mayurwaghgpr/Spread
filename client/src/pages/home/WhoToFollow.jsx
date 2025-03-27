@@ -22,7 +22,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
               {" "}
               <Follow
                 People={el}
-                className="text-black min-h-4 text-sm border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
+                className="text-black min-h-4 text-sm border p-1 px-3 flex justify-center items-center transition-all  duration-100 bg-white hover:bg-gray-300 rounded-full"
               />
             </PeoplesList>
           ))}
@@ -35,7 +35,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
       )}
       <Link
         to={"/find_peoples"}
-        className="w-full self-center p-1 transition-all ease-in-out duration-300"
+        className="w-full text-blue-500 self-center p-1 transition-all ease-in-out duration-300"
       >
         See More
       </Link>

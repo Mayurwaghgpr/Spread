@@ -1,27 +1,52 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { memo, useState } from "react";
+import React from "react";
 import {
+  BsArrowLeft,
   BsBellFill,
+  BsCameraVideo,
+  BsGear,
+  BsGearFill,
   BsHandThumbsUp,
   BsHandThumbsUpFill,
-  BsLightbulb,
+  BsLink,
+  BsMoonStarsFill,
+  BsSearch,
 } from "react-icons/bs";
 import { MdCelebration, MdMessage } from "react-icons/md";
-import { IoHappyOutline } from "react-icons/io5";
+import {
+  IoCallOutline,
+  IoHappyOutline,
+  IoHomeOutline,
+  IoHomeSharp,
+  IoLibraryOutline,
+  IoLibrarySharp,
+  IoPersonAddOutline,
+  IoSearch,
+  IoSearchOutline,
+  IoSunny,
+} from "react-icons/io5";
 import { PiHandsClappingFill } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
 import { FaComment, FaHandHoldingHeart } from "react-icons/fa6";
-import { RiUserFollowLine } from "react-icons/ri";
+import {
+  RiQuillPenFill,
+  RiQuillPenLine,
+  RiUserFollowLine,
+} from "react-icons/ri";
 import { VscMention } from "react-icons/vsc";
 import { FaUserTag } from "react-icons/fa6";
 import { PiAlarm } from "react-icons/pi";
-import { BiRepost } from "react-icons/bi";
+import { BiRepost, BiSearch } from "react-icons/bi";
 import { GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
+import { AiOutlineSend } from "react-icons/ai";
+import { LuLink, LuLogOut } from "react-icons/lu";
+import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
+import { HiOutlineComputerDesktop } from "react-icons/hi2";
 function useIcons() {
   return {
     like: <BsHandThumbsUpFill />,
+    logout: <LuLogOut />,
     cheer: <PiHandsClappingFill />,
     celebration: <MdCelebration />,
     appreciate: <MdAutoAwesome />,
@@ -29,7 +54,8 @@ function useIcons() {
     smile: <IoHappyOutline />,
     comment: <FaComment />,
     follow: <RiUserFollowLine />,
-    message: <MdMessage />,
+    message: <TbMessageCircle />,
+    messageFi: <TbMessageCircleFilled />,
     mention: <VscMention />,
     tag: <FaUserTag />,
     reminder: <PiAlarm />,
@@ -37,6 +63,25 @@ function useIcons() {
     repost: <BiRepost />,
     close: <IoCloseOutline />,
     bell: <BsBellFill />,
+    search: <IoSearch />,
+    searchO: <IoSearchOutline />,
+    vCamera: <BsCameraVideo />,
+    arrowL: <BsArrowLeft />,
+    callO: <IoCallOutline />,
+    sendO: <AiOutlineSend />,
+    link: <BsLink />,
+    homeO: <IoHomeOutline />,
+    homeFi: <IoHomeSharp />,
+    penO: <RiQuillPenLine />,
+    penFi: <RiQuillPenFill />,
+    libraryFi: <IoLibrarySharp />,
+    libraryO: <IoLibraryOutline />,
+    addPersonO: <IoPersonAddOutline />,
+    gearO: <BsGear />,
+    gearFi: <BsGearFill />,
+    moonFi: <BsMoonStarsFill />,
+    sun: <IoSunny />,
+    desktopO: <HiOutlineComputerDesktop />,
     default: <BsHandThumbsUp />,
   };
 }

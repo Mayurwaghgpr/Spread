@@ -42,12 +42,12 @@ function DynamicPostEditor() {
           disabled={elements.length > 3 ? false : true}
         />
         <div
-          className={`flex justify-center items-center flex-col mx-auto gap-2 `}
+          className={`flex flex-col justify-center items-center border-inherit mx-auto gap-2`}
         >
           {elements.map((element, index) => (
             <div
               key={element.id}
-              className="flex relative justify-start items-center gap-2  xl:w-[50rem]   w-full px-2 "
+              className="flex relative justify-start items-center gap-2 xl:w-[50rem] w-full px-2 border-inherit "
             >
               {/* <div
                 className={`flex w-[2.5rem] justify-between  items-center  transition-transform duration-100 sm:overflow-hidden`}
@@ -65,7 +65,7 @@ function DynamicPostEditor() {
                 )}
               </div> */}
 
-              <div className="flex w-full  min-h-10 ">
+              <div className="flex w-full min-h-10 border-inherit">
                 <ElementsProvider
                   element={element}
                   handleTextChange={handleTextChange}

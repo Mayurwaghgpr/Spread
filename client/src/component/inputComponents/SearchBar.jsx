@@ -1,6 +1,8 @@
 import React from "react";
-
+import Ibutton from "../buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 const SearchBar = ({ className, inputAction, btnAction, ...props }) => {
+  const icons = useIcons();
   return (
     <div className={className}>
       <input
@@ -10,9 +12,7 @@ const SearchBar = ({ className, inputAction, btnAction, ...props }) => {
         onChange={inputAction}
         {...props}
       />
-      <button onClick={btnAction} className="">
-        <i className="bi bi-search"></i>
-      </button>
+      <Ibutton action={inputAction} innerText={icons["search"]} />
     </div>
   );
 };

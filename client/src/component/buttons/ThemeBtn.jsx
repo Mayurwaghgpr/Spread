@@ -1,11 +1,13 @@
 import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setThemeMode } from "../../redux/slices/uiSlice";
+import useIcons from "../../hooks/useIcons";
 
 function ThemeBtn({ Modes, className, separate }) {
   // State to track the current theme
   const dispatch = useDispatch();
   const { ThemeMode } = useSelector((state) => state.ui);
+  const icons = useIcons();
 
   const changeTheme = () => {
     // Cycle through the themes
@@ -44,7 +46,7 @@ function ThemeBtn({ Modes, className, separate }) {
           aria-label="THEME"
           className="p-2 transition-all duration-100 rounded-full flex items-center"
         >
-          {currentMode?.icon}
+          {icons[currentMode?.icon]}
         </button>
       ) : (
         //It used to diplay toggle buttons
@@ -58,7 +60,7 @@ function ThemeBtn({ Modes, className, separate }) {
               aria-label="THEME"
               className={`${mode.value === ThemeMode ? "shadow-md dark:shadow-[#c5c3c3] scale-110" : " shadow-none"} transition-all duration-100  flex items-center`}
             >
-              {mode?.icon}
+              {icons[mode?.icon]}
             </button>
           );
         })

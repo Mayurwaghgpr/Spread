@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
 import Follow from "../../../component/buttons/follow";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +8,7 @@ import { LuMessagesSquare } from "react-icons/lu";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";
 import abbreviateNumber from "../../../utils/numAbrivation";
 import ProfileImage from "../../../component/ProfileImage";
+import Ibutton from "../../../component/buttons/Ibutton";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -91,23 +91,26 @@ const ProfileHeader = React.memo(({ profileId }) => {
             </div>
           }
           className={
-            "relative text-xs w-fit flex justify-center items-center gap-1  self-start"
+            "relative text-xs w-fit text-white flex justify-center items-center gap-1  self-start"
           }
           date={user.createdAt}
         />
 
         {profileId !== user.id ? (
-          <div className="flex justify-start text-xs text-black sm:text-sm items-center gap-4 w-full border-inherit">
+          <div className="flex justify-start items-center gap-4 w-full sm:text-sm text-xs text-black border-inherit">
             <Follow
               People={userProfile}
-              className={`p-3 py-1 flex border border-inherit w-full  sm:min-w-32 sm:h-9 h-6 justify-center items-center rounded-xl bg-white  hover:bg-gray-200  dark:hover:bg-gray-300`}
+              className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-1 border border-inherit  rounded-xl bg-white hover:bg-gray-200  dark:hover:bg-gray-300`}
             />
-            <button className="flex items-center border border-inherit justify-center gap-2 w-full sm:h-9 h-6  bg-white hover:bg-gray-200  dark:hover:bg-gray-300 px-3 py-1   rounded-xl  ">
-              {/* <i className="bi bi-envelope"></i>
-               */}
-              <LuMessagesSquare />
-              Message
-            </button>
+            <Ibutton
+              className="flex items-center border border-inherit justify-center gap-2 w-full sm:h-9 h-6 bg-white hover:bg-gray-200 dark:hover:bg-gray-300 px-3 py-1 rounded-xl  "
+              innerText={
+                <>
+                  <LuMessagesSquare />
+                  "Message"
+                </>
+              }
+            />
           </div>
         ) : (
           <div className="">

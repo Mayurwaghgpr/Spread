@@ -1,46 +1,34 @@
 import React from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { setManuOpen } from "../../redux/slices/uiSlice";
+import abbreviateNumber from "../../utils/numAbrivation";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
-import { v4 as uuidv4 } from "uuid";
-
-import { setManuOpen } from "../../redux/slices/uiSlice";
-
-import abbreviateNumber from "../../utils/numAbrivation";
-import {
-  IoHomeOutline,
-  IoHomeSharp,
-  IoLibrarySharp,
-  IoSearch,
-  IoSearchOutline,
-} from "react-icons/io5";
-import { BsGear, BsGearFill } from "react-icons/bs";
-
-import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
-import { IoLibraryOutline } from "react-icons/io5";
-import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
+import useIcons from "../../hooks/useIcons";
 import LogoutBtn from "../buttons/LogoutBtn";
 import ProfileImage from "../ProfileImage";
+import { v4 as uuidv4 } from "uuid";
+
 const LoginMenuLinks = [
   {
     id: uuidv4(),
-    icon1: <IoHomeOutline />,
-    icon2: <IoHomeSharp />,
+    icon1: "homeO",
+    icon2: "homeFi",
     stub: "/",
     lkname: "home",
   },
 
   {
     id: uuidv4(),
-    icon1: <IoSearchOutline />,
-    icon2: <IoSearch />,
+    icon1: "searchO",
+    icon2: "search",
     stub: "/search",
     lkname: "search",
   },
   {
     id: uuidv4(),
-    icon1: <RiQuillPenLine />,
-    icon2: <RiQuillPenFill />,
+    icon1: "penO",
+    icon2: "penFi",
     stub: "/write",
     className: "text-3xl",
     lkname: "write",
@@ -48,34 +36,35 @@ const LoginMenuLinks = [
   {
     id: uuidv4(),
     lkname: "read ",
-    icon1: <IoLibraryOutline />,
-    icon2: <IoLibrarySharp />,
+    icon1: "libraryO",
+    icon2: "libraryFi",
     stub: "/read",
   },
 
   {
     id: uuidv4(),
     lkname: "messages",
-    icon1: <TbMessageCircle />,
-    icon2: <TbMessageCircleFilled />,
+    icon1: "message",
+    icon2: "messageFi",
     stub: "/messages",
   },
 
   {
     id: uuidv4(),
     lkname: "settings",
-    icon1: <BsGear />,
-    icon2: <BsGearFill />,
+    icon1: "gearO",
+    icon2: "gearFi",
     stub: "/setting",
   },
 ];
-function SideBar({ className }) {
-  const { user, isLogin } = useSelector((state) => state.auth);
+function SideBar() {
+  const { user } = useSelector((state) => state.auth);
   const { MenuOpen } = useSelector((state) => state.ui);
   const location = useLocation();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { userImageurl } = userImageSrc(user);
+  const icons = useIcons();
 
   return (
     <aside
@@ -86,14 +75,14 @@ function SideBar({ className }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between h-full sm:min-w-full w-fit  me-10  p-10  sm:dark:bg-transparent  dark:bg-black bg-[#fff9f3] xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg  shadow-sm"
+        className="flex flex-col justify-between h-full sm:min-w-full w-fit  me-16  p-10  sm:dark:bg-transparent  dark:bg-black bg-[#fff9f3] xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg  shadow-sm"
       >
         <div className="flex flex-col justify-center items-center gap-4 w-fit sm:mt-16">
           {/* Profile Link */}
           <div className=" flex flex-col gap-4 h-fit w-full ">
             <Link
               to={`/profile/@${user?.username?.replace(/\s+/g, "")}/${user?.id}`}
-              className="flex justify-center items-center gap-2 p-1 w-full  hover:bg-gray-400  hover:bg-opacity-15 rounded-full "
+              className="flex justify-center items-center gap-2 w-full  hover:bg-gray-400  hover:bg-opacity-15 rounded-full "
               onClick={() => dispatch(setManuOpen())}
             >
               <ProfileImage
@@ -133,9 +122,13 @@ function SideBar({ className }) {
                 to={link.stub}
                 onClick={() => dispatch(setManuOpen())}
               >
-                {location?.pathname?.startsWith(link.stub)
-                  ? link.icon2
-                  : link.icon1}
+                {
+                  icons[
+                    location?.pathname?.startsWith(link.stub)
+                      ? link.icon2
+                      : link.icon1
+                  ]
+                }
                 <div className={`xl:block sm:hidden block flex-col `}>
                   {" "}
                   <span>{link.lkname}</span>{" "}

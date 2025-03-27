@@ -1,7 +1,4 @@
-import axios from "axios";
 import React, { memo, useCallback } from "react";
-import { BsArrowLeft, BsSearch } from "react-icons/bs";
-import { IoPersonAddOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
@@ -13,6 +10,10 @@ import {
   setOpenNewConverstionBox,
 } from "../../redux/slices/messangerSlice";
 import Spinner from "../../component/loaders/Spinner";
+import SearchBar from "../../component/inputComponents/SearchBar";
+import Ibutton from "../../component/buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
+
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
   const { getConversations } = ChatApi();
@@ -20,6 +21,7 @@ function MessageLog() {
   const conversationId = searchParams.get("Id");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const icons = useIcons();
 
   const {
     data,
@@ -56,45 +58,30 @@ function MessageLog() {
   // console.log(conversations);
   return (
     <aside
-      className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[30%] sm:min-w-fit w-full  h-full border-inherit `}
+      className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[25%] sm:min-w-fit w-full p-5  h-full border-inherit `}
     >
-      <div>
-        <button
-          onClick={() => navigate(-1, { replace: true })}
-          className=" border-inherit p-4 text-2xl font-bold"
-        >
-          <BsArrowLeft className="" />
-        </button>
-      </div>
-      <div className="px-5 border-inherit">
-        <header className=" flex flex-col gap-7 border-inherit">
-          <div className="flex text-lg font-bold justify-between border-inherit">
-            {" "}
-            <h1>Messages</h1>
-            <button
-              onClick={() => dispatch(setOpenNewConverstionBox())}
-              className=""
-            >
-              {" "}
-              <IoPersonAddOutline />
-            </button>
-          </div>
-          <div className=" flex gap-3 items-center border p-1  rounded-lg border-inherit">
-            <div className="p-2">
-              {" "}
-              <BsSearch className="text-[#383838]" />
-            </div>
-
-            <input
-              className="  p-1 w-full outline-none  placeholder:text-[#383838] bg-inherit border-inherit "
-              type="search"
-              placeholder="Search"
-              name=""
-              id=""
-            />
-          </div>
-        </header>
-        <div className="flex flex-col items-start max-h-screen w-full  gap-7 py-6 px-4 overflow-y-auto no-scrollbar scroll-smooth ">
+      <header className="flex flex-col gap-7 border-inherit">
+        <div className="flex justify-start items-center w-full">
+          <Ibutton
+            className=" border-inherit text-2xl font-bold"
+            action={() => navigate(-1, { replace: true })}
+            innerText={icons["arrowL"]}
+          />
+        </div>
+        <div className="flex text-lg font-bold justify-between border-inherit">
+          {" "}
+          <h1>Messages</h1>
+          <Ibutton
+            action={() => dispatch(setOpenNewConverstionBox())}
+            innerText={icons["addPersonO"]}
+          />
+        </div>
+        <SearchBar
+          className={"flex justify-center items-center border rounded-lg p-1"}
+        />
+      </header>
+      <section className="border-inherit">
+        <div className="flex flex-col items-start max-h-screen w-full  gap-7 py-6  overflow-y-auto no-scrollbar scroll-smooth ">
           {conversations?.map((conv, idx, arr) => (
             <Link
               onClick={() => haldelSelectConversation(conv)}
@@ -148,7 +135,7 @@ function MessageLog() {
             </div>
           )}
         </div>
-      </div>
+      </section>
     </aside>
   );
 }

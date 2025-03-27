@@ -8,12 +8,15 @@ import useAuthApi from "../../Apis/useAuthApi";
 import { useDispatch } from "react-redux";
 import LoaderScreen from "../loaders/loaderScreen";
 import useSocket from "../../hooks/useSocket";
+import useIcons from "../../hooks/useIcons";
 
 function LogoutBtn({ className }) {
+  const { socket, disconnectSocket } = useSocket();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { logout } = useAuthApi();
-  const { socket, disconnectSocket } = useSocket();
+  const icons = useIcons();
+
   const { mutate, isLoading } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
@@ -40,7 +43,8 @@ function LogoutBtn({ className }) {
       aria-label="Logout"
       className={className}
     >
-      <LuLogOut className="" />
+      {icons["logout"]}
+
       <span className=" xl:block sm:hidden block ">Sign out</span>
     </button>
   );

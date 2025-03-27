@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
+import React from "react";
 import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
 
 function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {

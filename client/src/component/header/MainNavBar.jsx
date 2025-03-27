@@ -12,40 +12,35 @@ import NotifictionBell from "../notification/NotifictionBell";
 import { PiSignInDuotone } from "react-icons/pi";
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
+import useIcons from "../../hooks/useIcons";
 
+const Modes = [
+  {
+    name: "Dark mode",
+    value: "dark",
+    icon: "moonFi",
+  },
+  {
+    name: "Light mode",
+    value: "light",
+    icon: "sun",
+  },
+  {
+    name: "System",
+    value: "system",
+    icon: "desktopO",
+  },
+];
 function MainNavBar() {
   const [deviceSize, setDeviceSize] = useState();
   const { MenuOpen } = useSelector((state) => state.ui);
   const { isLogin, user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
   const { ThemeMode } = useSelector((state) => state.ui);
-
+  const { userImageurl } = userImageSrc(user);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { userImageurl } = userImageSrc(user);
-
-  const Modes = useMemo(
-    () => [
-      {
-        name: "Dark mode",
-        value: "dark",
-        icon: <BsMoonStarsFill />,
-      },
-      {
-        name: "Light mode",
-        value: "light",
-        icon: <IoSunny />,
-      },
-      {
-        name: "System",
-        value: "system",
-        icon: <HiOutlineComputerDesktop />,
-      },
-    ],
-    [ThemeMode]
-  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -100,7 +95,7 @@ function MainNavBar() {
                       "relative  w-fit  flex justify-evenly items-center gap-2 bg-[#d4d4d4] bg-opacity-40 dark:bg-opacity-20  *:text-xs *:bg-[#ffffff] *:text-black *:p-1 *:py-0.5  *:flex *:justify-center *:items-center *:rounded-md rounded-md p-3 py-2"
                     }
                   />{" "}
-                  <LogoutBtn className="flex gap-2 items-center  hover:bg-opacity-5 text-sm   rounded-md" />
+                  <LogoutBtn className="flex gap-2 items-center  hover:bg-opacity-5 text-sm rounded-md" />
                 </div>
               </div>
             ) : (

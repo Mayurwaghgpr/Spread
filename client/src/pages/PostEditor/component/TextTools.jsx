@@ -1,7 +1,10 @@
 import React, { memo, useState } from "react";
+import Ibutton from "../../../component/buttons/Ibutton";
+import useIcons from "../../../hooks/useIcons";
 
 const TextTools = ({ position, applyStyle }) => {
   const [url, setUrl] = useState("");
+  const icons = useIcons();
   const [isInputVisible, setInputVisible] = useState(false);
   const [savedRange, setSavedRange] = useState(null); // Store selection range
 
@@ -58,7 +61,7 @@ const TextTools = ({ position, applyStyle }) => {
     },
     {
       action: handleShowInput, // Show input field when clicking the link button
-      icon: <i className="bi bi-link"></i>,
+      icon: icons["link"],
       className: "flex justify-center items-center border-black w-full text-xl",
     },
     {
@@ -104,7 +107,7 @@ const TextTools = ({ position, applyStyle }) => {
       <div className="flex w-full items-center gap-3 justify-between">
         {options.map((option, idx) => (
           <span key={idx} className={option.className}>
-            <button onClick={option.action}>{option.icon}</button>
+            <Ibutton action={option.action} innerText={option.icon} />
           </span>
         ))}
       </div>

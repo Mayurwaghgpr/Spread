@@ -6,9 +6,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { AiOutlineSend } from "react-icons/ai";
-import { BsCameraVideo } from "react-icons/bs";
-import { IoCallOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import ChatApi from "../../Apis/ChatApi";
 import { useSearchParams } from "react-router-dom";
@@ -23,6 +20,8 @@ import {
   popMessage,
   pushMessage,
 } from "../../redux/slices/messangerSlice";
+import Ibutton from "../../component/buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 
 function MessageSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -39,6 +38,7 @@ function MessageSection() {
   const containerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
   const prevMessagesCount = useRef(0);
+  const icons = useIcons();
 
   const { isLoading } = useQuery(["messages", conversationId], {
     queryFn: () => getMessage({ conversationId }),
@@ -157,9 +157,9 @@ function MessageSection() {
   return (
     <div
       ref={containerRef}
-      className={`${conversationId ? "sm:visible" : "hidden"} relative w-full sm:flex flex-col justify-between border-inherit overflow-y-auto`}
+      className={`${conversationId ? "sm:visible" : "hidden"} relative grid grid-cols-10 row-span-10 w-full h-screen   border-inherit overflow-y-auto`}
     >
-      <div className="sticky top-0 bg-[#fff9f3] dark:bg-black z-20 flex justify-between w-full py-2 px-7 border-b border-inherit shadow-md">
+      <div className="sticky top-0 flex justify-between col-span-10 bg-[#fff9f3] dark:bg-black z-20 w-full py-2 px-7 border-b border-inherit shadow-md">
         <div className="flex justify-start items-center gap-3 w-[80%]">
           <ProfileImage
             className="max-w-10 max-h-10 w-full h-full min-w-fit"
@@ -170,16 +170,12 @@ function MessageSection() {
           </div>
         </div>
         <div className="flex items-center justify-center gap-4 text-2xl">
-          <button>
-            <BsCameraVideo />
-          </button>
-          <button>
-            <IoCallOutline />
-          </button>
+          <Ibutton innerText={icons["vCamera"]} />
+          <Ibutton innerText={icons["callO"]} />
         </div>
       </div>
 
-      <div className="sm:flex flex-col justify-end h-full scroll-smooth no-scroll px-3 pt-5 pb-20 drop-shadow-xl">
+      <div className="sm:flex flex-col justify-end h-full col-span-full scroll-smooth no-scroll px-3 pt-5 pb-20 drop-shadow-xl">
         {messages?.map((message) => (
           <MessageBubble key={message.id} message={message} userId={user.id} />
         ))}
@@ -205,17 +201,19 @@ function MessageSection() {
         )}
       </div>
 
-      <div className="sticky sm:bottom-3 bottom-0 mx-auto flex justify-center items-center gap-3 lg:w-1/2 w-full py-3 z-10 border-inherit">
+      <div className="sticky bottom-0 flex justify-center items-center gap-3 col-span-full mx-auto w-full py-3 z-10 border-inherit">
         <input
           onChange={handleInput}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           value={message}
-          className="w-full p-2 px-4 outline-none bg-inherit border rounded-full border-inherit"
+          className="sm:w-1/2 bg-inherit p-2 px-4 outline-none border rounded-full border-inherit"
           placeholder="Start typing..."
         />
-        <button className="p-4 " onClick={handleSend}>
-          <AiOutlineSend size={25} />
-        </button>
+        <Ibutton
+          className="p-4 text-2xl "
+          action={handleSend}
+          innerText={icons["sendO"]}
+        />
       </div>
     </div>
   );

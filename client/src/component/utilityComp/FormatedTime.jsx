@@ -5,7 +5,7 @@ function FormatedTime({ date, className, content, formate }) {
   return (
     <span className={`${className}  text-opacity-30  dark:text-opacity-40 `}>
       {content}{" "}
-      {date ? format(new Date(date), formate || "yyyy-MM-dd") + "" : ""}
+      {date ? format(new Date(date), formate || "dd-MM-yyyy") + "" : ""}
     </span>
   );
 }

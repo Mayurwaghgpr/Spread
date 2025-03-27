@@ -51,12 +51,12 @@ const EditableParagraph = ({
 
   if (index === 0 || index === 1) {
     return (
-      <div ref={containerRef} className="w-full h-full relative">
+      <div ref={containerRef} className="w-full h-full relative border-inherit">
         {showToolbar && (
           <TextTools position={showToolbar} applyStyle={applyStyle} />
         )}
         <input
-          className={`border-l bg-inherit dark:bg-inherit border-gray-300 p-2 w-full min-h-10 z-10 dark:placeholder:text-white placeholder:text-black placeholder:opacity-50 outline-none cursor-text ${index === 0 ? "text-4xl" : "text-2xl"}`}
+          className={`border-l border-inherit bg-inherit dark:bg-inherit border-gray-300 p-2 w-full min-h-10 z-10 dark:placeholder:text-white placeholder:text-black placeholder:opacity-50 outline-none cursor-text ${index === 0 ? "text-4xl" : "text-2xl"}`}
           ref={(el) => (inputRefs.current[index] = el)}
           onChange={(e) => handleTextChange(element.id, e.currentTarget.value)}
           onMouseUp={handleSelectedText}
@@ -75,7 +75,7 @@ const EditableParagraph = ({
   }
 
   return (
-    <div ref={containerRef} className="w-full h-full relative">
+    <div ref={containerRef} className="relative w-full h-full border-inherit">
       {showToolbar && (
         <TextTools position={showToolbar} applyStyle={applyStyle} />
       )}
@@ -92,7 +92,7 @@ const EditableParagraph = ({
         onFocus={handleFocus}
         onMouseUp={handleSelectedText}
         onKeyUp={handleSelectedText}
-        className="border-l border-gray-300 p-2 w-full min-h-10 z-10 outline-none cursor-text"
+        className="border-l border-inherit border-gray-300 p-2 w-full min-h-10 z-10 outline-none cursor-text"
         role="textbox"
         aria-placeholder="Editable paragraph"
       ></p>

@@ -1,6 +1,8 @@
 .DS_store
 Spread-Backend/config/config.json
 Spread-Backend/images/userImages/*
+Spread-Backend/images/*.{jpg,png}
+ dump.rdb
 # Logs
 logs
 *.log

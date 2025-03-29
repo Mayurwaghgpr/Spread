@@ -105,7 +105,7 @@ const NewConversation = () => {
   return (
     <PopupBox
       className={
-        "flex flex-col justify-start items-center gap-5 text-center p-4 border-inherit max-w-[30rem] w-full sm:max-h-[60%] h-full min-h-[60%] shadow-sm overflow-auto"
+        "flex flex-col justify-start items-center gap-5 animate-fedin.2s text-center p-4 border-inherit max-w-[30rem] w-full sm:max-h-[60%] h-full min-h-[60%] shadow-sm overflow-auto"
       }
       action={() => dispatch(setOpenNewConverstionBox())}
     >

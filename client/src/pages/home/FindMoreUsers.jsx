@@ -45,6 +45,7 @@ function FindMoreUsers() {
       <ul className="flex flex-col justify-start items-start gap-5  mt-20 h-full max-w-[50%] mx-auto ">
         {peoples.map((pers, idx, arr) => (
           <PeoplesList
+            key={pers.id}
             ref={idx === arr.length ? lastItemRef : null}
             people={pers}
             className=" flex justify-between items-center  w-full "

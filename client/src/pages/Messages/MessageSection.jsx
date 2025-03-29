@@ -54,17 +54,17 @@ function MessageSection() {
     ]);
   }, []);
 
-  const handleNewMessage = useCallback(
-    (msg) => {
-      if (msg.senderId !== user?.id) {
-        dispatch(pushMessage(msg));
-        setTypingUsers((prev) =>
-          prev.filter((evn) => evn.senderId !== msg.senderId)
-        );
-      }
-    },
-    [dispatch, user?.id]
-  );
+  // const handleNewMessage = useCallback(
+  //   (msg) => {
+  //     if (msg.senderId !== user?.id) {
+  //       dispatch(pushMessage(msg));
+  //       setTypingUsers((prev) =>
+  //         prev.filter((evn) => evn.senderId !== msg.senderId)
+  //       );
+  //     }
+  //   },
+  //   [dispatch, user?.id]
+  // );
 
   const handleError = useCallback(() => dispatch(popMessage()), [dispatch]);
 
@@ -73,13 +73,13 @@ function MessageSection() {
       socket?.emit("joinConversation", conversationId);
 
       socket?.on("userIsTyping", handleUserTyping);
-      socket?.on("newMessage", handleNewMessage);
+      // socket?.on("newMessage", handleNewMessage);
       socket?.on("ErrorSendMessage", handleError);
     }
 
     return () => {
       socket?.off("userIsTyping", handleUserTyping);
-      socket?.off("newMessage", handleNewMessage);
+      // socket?.off("newMessage", handleNewMessage);
       socket?.off("ErrorSendMessage", handleError);
     };
   }, [
@@ -88,7 +88,7 @@ function MessageSection() {
     socket,
     conversationId,
     handleUserTyping,
-    handleNewMessage,
+    // handleNewMessage,
     handleError,
   ]);
 
@@ -157,9 +157,9 @@ function MessageSection() {
   return (
     <div
       ref={containerRef}
-      className={`${conversationId ? "sm:visible" : "hidden"} relative grid grid-cols-10 row-span-10 w-full h-screen   border-inherit overflow-y-auto`}
+      className={`relative ${conversationId ? "sm:visible" : "hidden"}  grid grid-cols-10 row-span-10 w-full h-screen   border-inherit overflow-y-auto`}
     >
-      <div className="sticky top-0 flex justify-between col-span-10 bg-[#fff9f3] dark:bg-black z-20 w-full py-2 px-7 border-b border-inherit shadow-md">
+      <div className="sticky top-0 flex justify-between col-span-10 bg-[#fff9f3] dark:bg-black z-20 w-full h-fit py-2 px-7 border-b border-inherit shadow-md">
         <div className="flex justify-start items-center gap-3 w-[80%]">
           <ProfileImage
             className="max-w-10 max-h-10 w-full h-full min-w-fit"
@@ -200,20 +200,21 @@ function MessageSection() {
           <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white" />
         )}
       </div>
-
-      <div className="sticky bottom-0 flex justify-center items-center gap-3 col-span-full mx-auto w-full py-3 z-10 border-inherit">
-        <input
-          onChange={handleInput}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          value={message}
-          className="sm:w-1/2 bg-inherit p-2 px-4 outline-none border rounded-full border-inherit"
-          placeholder="Start typing..."
-        />
-        <Ibutton
-          className="p-4 text-2xl "
-          action={handleSend}
-          innerText={icons["sendO"]}
-        />
+      <div className="fixed bottom-0 flex justify-start col-span-full w-full px-10  py-3 z-10 border-inherit">
+        <div className="flex justify-center items-center sm:w-1/2 w-full ">
+          <input
+            onChange={handleInput}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            value={message}
+            className="col-span-10 bg-inherit p-2 w-full outline-none border rounded-full border-inherit"
+            placeholder="Start typing..."
+          />
+          <Ibutton
+            className="col-span-2 p-4 text-2xl min-w-fit"
+            action={handleSend}
+            innerText={icons["sendO"]}
+          />
+        </div>
       </div>
     </div>
   );

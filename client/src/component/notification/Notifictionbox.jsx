@@ -147,7 +147,7 @@ function Notifictionbox() {
           fallback={<Spinner className={"w-5 h-5 bg-black dark:bg-white"} />}
         >
           {notifications.map((noitify) => (
-            <NotifictionItem data={noitify} />
+            <NotifictionItem key={noitify.id} data={noitify} />
           ))}
         </Suspense>
       </div>

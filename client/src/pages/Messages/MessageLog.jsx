@@ -32,7 +32,7 @@ function MessageLog() {
     hasNextPage,
     isLoading,
   } = useInfiniteQuery(
-    ["convesations"],
+    ["convesationsLog"],
     ({ pageParam = new Date().toISOString() }) =>
       getConversations({ pageParam }),
     {
@@ -50,6 +50,7 @@ function MessageLog() {
     isFetching,
     hasNextPage
   );
+
   const haldelSelectConversation = useCallback((conv) => {
     dispatch(selectConversation(conv));
     localStorage.setItem("conversationMeta", JSON.stringify(conv));
@@ -57,6 +58,7 @@ function MessageLog() {
 
   const conversations = data?.pages?.flatMap((page) => page);
   // console.log(conversations);
+
   return (
     <aside
       className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[25%] sm:min-w-fit w-full p-5  h-full border-inherit `}

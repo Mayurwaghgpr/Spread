@@ -32,9 +32,18 @@ const uiSlice = createSlice({
     setIsConfirm: (state, action) => {
       state.isConfirm = action.payload;
     },
+
     setToast: (state, action) => {
-      state.ToastState.push({ id: uuidv4(), ...action.payload});
+      const existingToast = state.ToastState.find(toast => toast.type === action.payload.type);
+      
+      if (existingToast) {
+        existingToast.count = (existingToast.count || 1) + 1; // Increase count if already present
+         existingToast.message=action.payload.message
+      } else {
+    state.ToastState = [...state.ToastState, { id: uuidv4(), count:1,...action.payload }].slice(-3);
+      }
     },
+
     removeToast: (state, action) => {
       state.ToastState = state.ToastState.filter(el => el.id !== action.payload);
     },

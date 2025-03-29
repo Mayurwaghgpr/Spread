@@ -11,7 +11,12 @@ import {
   BsMoonStarsFill,
   BsSearch,
 } from "react-icons/bs";
-import { MdCelebration, MdMessage } from "react-icons/md";
+import {
+  MdCelebration,
+  MdDone,
+  MdErrorOutline,
+  MdMessage,
+} from "react-icons/md";
 import {
   IoCallOutline,
   IoHappyOutline,
@@ -43,6 +48,7 @@ import { AiOutlineSend } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
+import { CiWarning } from "react-icons/ci";
 function useIcons() {
   return {
     like: <BsHandThumbsUpFill />,
@@ -81,6 +87,9 @@ function useIcons() {
     gearFi: <BsGearFill />,
     moonFi: <BsMoonStarsFill />,
     sun: <IoSunny />,
+    error: <MdErrorOutline color="red" />,
+    success: <MdDone color="green" />,
+    warning: <CiWarning color="yellow" />,
     desktopO: <HiOutlineComputerDesktop />,
     calender: <BiCalendarAlt />,
     default: <BsHandThumbsUp />,

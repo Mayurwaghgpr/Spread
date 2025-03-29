@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import MessageLog from "./MessageLog";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage, pushMessage } from "../../redux/slices/messangerSlice";
@@ -11,8 +11,12 @@ function Messanger() {
   const { openNewConverstionBox } = useSelector((state) => state.messanger);
   const dispatch = useDispatch();
   const { socket } = useSocket();
+  const [searchParams] = useSearchParams();
+  const conversationId = searchParams.get("Id");
   const handleNewMessage = useCallback(
     (msg) => {
+      if (msg.conversationId !== conversationId) {
+      }
       if (msg.senderId !== user?.id) {
         dispatch(pushMessage(msg));
       }

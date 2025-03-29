@@ -1,8 +1,9 @@
 import React, { lazy } from "react";
 import EditableParagraph from "./EditableParagraph";
-const CodeEditor = lazy(
-  () => import("../../../component/writerTools/codeEditor")
-);
+import Ibutton from "../../../component/buttons/Ibutton";
+import useIcons from "../../../hooks/useIcons";
+
+const CodeEditor = lazy(() => import("./codeEditor"));
 
 const ElementsProvider = ({
   element,
@@ -14,6 +15,7 @@ const ElementsProvider = ({
   focusedIndex,
   setFocusedIndex,
 }) => {
+  const icons = useIcons();
   const inputObj = {
     text: (
       <EditableParagraph
@@ -45,12 +47,11 @@ const ElementsProvider = ({
         className="p-4 w-full"
         onKeyDown={(e) => handleKeyDown(e, element.id, index)}
       >
-        <button
-          onClick={(e) => handleKeyDown(e, element.id, index)}
-          className=" bg-gray-200 bg-opacity-20 hover:bg-opacity-100 absolute top-2 rounded-full right-4 text-lg size-5 sm:hidden flex justify-center items-center "
-        >
-          <i className="bi bi-x"></i>{" "}
-        </button>
+        <Ibutton
+          className="absolute top-2 right-4  flex justify-center items-center bg-gray-200 bg-opacity-20 hover:bg-opacity-100  rounded-full text-lg size-5 sm:hidden  "
+          action={(e) => handleKeyDown(e, element.id, index)}
+          innerText={icons["close"]}
+        />
         <img
           className="h-[100%] min-w-full "
           src={element.file}

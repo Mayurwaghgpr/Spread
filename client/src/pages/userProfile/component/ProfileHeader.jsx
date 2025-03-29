@@ -9,12 +9,14 @@ import FormatedTime from "../../../component/utilityComp/FormatedTime";
 import abbreviateNumber from "../../../utils/numAbrivation";
 import ProfileImage from "../../../component/ProfileImage";
 import Ibutton from "../../../component/buttons/Ibutton";
+import useIcons from "../../../hooks/useIcons";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
   const { userImageurl } = userImageSrc(userProfile);
+  const icons = useIcons();
 
   return (
     <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">
@@ -85,13 +87,13 @@ const ProfileHeader = React.memo(({ profileId }) => {
       <div className="flex flex-col items-start gap-4 border-inherit text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
         <FormatedTime
           content={
-            <div className="">
-              <i className="bi bi-calendar text-[.7rem] "></i>{" "}
+            <div className="flex justify-start items-center gap-2 text-sm">
+              {icons["calender"]}
               <span>Joined</span>
             </div>
           }
           className={
-            "relative text-xs w-fit text-white flex justify-center items-center gap-1  self-start"
+            "relative text-xs w-fit text-black dark:text-white flex justify-center items-center gap-1  self-start"
           }
           date={user.createdAt}
         />

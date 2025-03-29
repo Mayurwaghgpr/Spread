@@ -36,11 +36,11 @@ import {
 import { VscMention } from "react-icons/vsc";
 import { FaUserTag } from "react-icons/fa6";
 import { PiAlarm } from "react-icons/pi";
-import { BiRepost, BiSearch } from "react-icons/bi";
+import { BiCalendarAlt, BiRepost } from "react-icons/bi";
 import { GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSend } from "react-icons/ai";
-import { LuLink, LuLogOut } from "react-icons/lu";
+import { LuLogOut } from "react-icons/lu";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
 function useIcons() {
@@ -82,6 +82,7 @@ function useIcons() {
     moonFi: <BsMoonStarsFill />,
     sun: <IoSunny />,
     desktopO: <HiOutlineComputerDesktop />,
+    calender: <BiCalendarAlt />,
     default: <BsHandThumbsUp />,
   };
 }

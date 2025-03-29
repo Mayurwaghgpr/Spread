@@ -13,6 +13,7 @@ import Spinner from "../../component/loaders/Spinner";
 import SearchBar from "../../component/inputComponents/SearchBar";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
+import ProfileImage from "../../component/ProfileImage";
 
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
@@ -77,7 +78,9 @@ function MessageLog() {
           />
         </div>
         <SearchBar
-          className={"flex justify-center items-center border rounded-lg p-1"}
+          className={
+            "flex justify-center items-center border border-inherit rounded-lg p-1"
+          }
         />
       </header>
       <section className="border-inherit">
@@ -91,25 +94,20 @@ function MessageLog() {
               replace={true}
               className=" flex items-center gap-3 w-full  "
             >
-              <div>
-                <div className="w-10 h-10">
-                  <img
-                    className=" w-full h-full object-cover object-center rounded-full"
-                    src={
-                      conv.conversationType !== "group"
-                        ? conv?.members?.find((m) => m.id != user.id)?.userImage
-                        : conv?.image
-                    }
-                    alt={
-                      conv.conversationType !== "group"
-                        ? conv?.members?.find((m) => m.id != user.id)
-                            ?.displayName
-                        : conv.groupName
-                    }
-                    loading="lazy"
-                  />
-                </div>
-              </div>
+              <ProfileImage
+                className={"w-10 h-10"}
+                image={
+                  conv.conversationType !== "group"
+                    ? conv?.members?.find((m) => m.id != user.id)?.userImage
+                    : conv?.image
+                }
+                alt={
+                  conv.conversationType !== "group"
+                    ? conv?.members?.find((m) => m.id != user.id)?.displayName
+                    : conv.groupName
+                }
+              />
+
               <div>
                 {" "}
                 <h2>
@@ -117,7 +115,7 @@ function MessageLog() {
                     ? conv?.members?.find((m) => m.id != user.id)?.displayName
                     : conv?.groupName}
                 </h2>
-                <div className="flex  items-center text-xs text-black dark:text-opacity-40 dark:text-white text-opacity-40 gap-2">
+                <div className="flex justify-start items-center gap-2 text-xs text-black dark:text-opacity-40 dark:text-white text-opacity-40">
                   {" "}
                   <p className=" ">{conv?.lastMessage}</p>
                   <FormatedTime

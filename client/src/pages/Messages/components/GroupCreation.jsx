@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CommonInput from "../../../component/utilityComp/CommonInput.jsx";
+import CommonInput from "../../../component/inputComponents/CommonInput.jsx";
 import { BsBack, BsCamera } from "react-icons/bs";
 import SelectedGroupMemberList from "./SelectedGroupMemberList.jsx";
 import Ibutton from "../../../component/buttons/Ibutton.jsx";
@@ -9,10 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../redux/slices/uiSlice.js";
 import { setOpenNewConverstionBox } from "../../../redux/slices/messangerSlice.js";
 import { useNavigate } from "react-router-dom";
+import useIcons from "../../../hooks/useIcons.jsx";
 function GroupCreation({ handleGroupConfig, hashMap, users }) {
   const { isLogin, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const icons = useIcons();
   const [groupConfig, setGroupConfig] = useState({
     groupName: "",
     membersArr: [],
@@ -49,7 +51,7 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
     <div className="w-full border-inherit">
       <div className="flex justify-start items-center gap-3 text-2xl p-3 w-full  border rounded-lg border-inherit">
         <CommonInput
-          labelname={<BsCamera />}
+          labelname={icons["pCamera"]}
           type={"file"}
           Iname="groupInput"
           className={" hidden cursor-pointer"}
@@ -69,7 +71,7 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
         hashMap={hashMap}
         handleGroupConfig={handleGroupConfig}
       />
-      <Ibutton action={() => mutate()} innerText={"Create"} />
+      <Ibutton action={() => mutate()}>Create</Ibutton>
     </div>
   );
 }

@@ -15,7 +15,7 @@ function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
             {homeData?.topics?.map(({ topic }, index) => (
               <li
                 key={index}
-                className=" rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
+                className="rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
               >
                 <button
                   className="t-btn"

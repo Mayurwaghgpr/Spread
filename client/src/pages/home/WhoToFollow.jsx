@@ -9,11 +9,14 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
   return (
     <div className={className}>
       <h1 className=" text-start  text-xl font-bold"> Follow people </h1>
-      {!isLoadingHome ? (
-        <ul className="flex flex-wrap gap-5 py-3 w-full">
-          {homeData?.userSuggetion?.map((el, index) => (
+      <ul className="flex flex-wrap gap-5 py-3 w-full">
+        {(homeData?.userSuggetion?.length
+          ? homeData.userSuggetion
+          : Array(3).fill(null)
+        ) // To added loading effect if there while fetching
+          ?.map((el, index) => (
             <PeoplesList
-              key={el.id}
+              key={el?.id | index}
               action={() => navigate(`/profile/@${el?.username}/${el?.id}`)}
               people={el}
               index={index}
@@ -26,13 +29,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
               />
             </PeoplesList>
           ))}
-        </ul>
-      ) : (
-        <FollowPeopleLoader
-          items={4}
-          className={"flex h-8 w-full gap-2 my-4  "}
-        />
-      )}
+      </ul>
       <Link
         to={"/find_peoples"}
         className="w-full text-blue-500 self-center p-1 transition-all ease-in-out duration-300"

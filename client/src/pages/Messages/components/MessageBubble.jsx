@@ -6,7 +6,7 @@ import { formatISO, formatters } from "date-fns";
 const MessageBubble = ({ message, userId, readReceipt }) => {
   return (
     <p
-      className={` flex flex-col gap-1 w-fit p-1 px-3 sm:text-sm text-xs rounded-xl  my-3  ${
+      className={`relative flex flex-col gap-1 w-fit p-1 px-3 sm:text-sm text-xs rounded-xl  my-3 ${
         message.senderId === userId
           ? "ml-auto bg-sky-400 text-white dark:shadow-sky-400 rounded-br-none "
           : "mr-auto bg-[#fffefe]  items-end text-black dark:shadow-white rounded-bl-none"

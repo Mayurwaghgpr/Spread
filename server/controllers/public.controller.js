@@ -51,10 +51,10 @@ export const getHomeContent = async (req, res, next) => {
 };
 export const getPeoples = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
-  const cursor = req.query.cursor || req.authUser.id;
+  const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   const currentUserId = req.authUser.id;
   try {
-     const cacheKey = `find_peoples_${cursor}_${limit}`;
+     const cacheKey = `find_peoples_${lastTimestamp}_${limit}`;
     // Unique cache key for this combination
     // Checking Cache
     const cachedPostData = await redisClient.get(cacheKey);
@@ -64,9 +64,8 @@ export const getPeoples = async (req, res, next) => {
     }
     console.log('cach miss')
 
-     const peoples = await User.findAll({
-        where: { id: { [Op.gt]: cursor } },
-        include: [
+    const peoples = await User.findAll({
+       include: [
           {
             model: User,
             as: "Followers",
@@ -79,12 +78,16 @@ export const getPeoples = async (req, res, next) => {
             through: { attributes: [] }, // Exclude through table attributes
             attributes: ["id"], // Fetch only necessary fields
           },
-        ],
-        attributes: ["id", "username", "userImage", "bio"],
-       order: [
-        ["id", "DESC"],
-       ],
-       limit,
+      ],
+        attributes: ['id', 'displayName', 'username', 'userImage',"createdAt"],
+   
+    where: {
+        createdAt: { [Op.lt]: lastTimestamp }
+      },
+      order: [
+        ["createdAt", "ASC"],
+      ],
+      limit, 
      });
       await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(peoples))
    res.status(200).json({peoples});

@@ -1,15 +1,13 @@
 import React from "react";
 
-function Ibutton({ action, className, innerText }) {
+function Ibutton({ action, className, children }) {
   return (
-    <div className={`${className} rounded-full  p-1`}>
-      <button
-        className=" flex justify-center items-center w-full h-full   "
-        onClick={action}
-      >
-        {innerText}
-      </button>
-    </div>
+    <button
+      className={`flex items-center  border-inherit justify-center gap-2 ${className}`}
+      onClick={action}
+    >
+      {children}
+    </button>
   );
 }
 

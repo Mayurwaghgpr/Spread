@@ -33,15 +33,6 @@ export const io = sockIo.init(server);
 
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(","); 
 
-// export const Io = new Server(server, {
-//   connectionStateRecovery:{},
-//   cors: {
-//     origin: allowedOrigins, // Support multiple origins
-//     methods:["GET","POST","PUT","PATCH","DELETE"],
-//     credentials: true,
-//   },
-// }); 
-
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 app.use(express.json());
@@ -65,6 +56,7 @@ app.use(helmet({
     }
   }
 }));
+
 // Reate limmiter 
 // app.use("/", rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -72,6 +64,7 @@ app.use(helmet({
 //   message: { message: "Too many requests, please try again later." },
 //   headers: true,
 // })); 
+
 app.use(cookieParser());
 
 // Serve Static Files
@@ -131,6 +124,7 @@ process.on("uncaughtException", (error) => {
   console.error("Uncaught Exception:", error);
   process.exit(1);
 });
+
 // Start Server
 Database.sync()
   .then(() => {

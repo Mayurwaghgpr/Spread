@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import useAuthApi from "../../Apis/useAuthApi";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
-import CommonInput from "../../component/utilityComp/CommonInput";
+import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import AuthFormWrapper from "./AuthFormWrapper";
@@ -45,7 +45,8 @@ function ForgotPass() {
           Reset your password
         </h1>
         <p className="text-sm ">
-          Enter yout email address and you will get mail to reset your password{" "}
+          Enter yout email address and you will get mail to reset your
+          password{" "}
         </p>
       </div>
 

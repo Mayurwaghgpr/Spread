@@ -44,9 +44,9 @@ const ProfileHeader = React.memo(({ profileId }) => {
             <h1 className="sm:text-4xl sm:block hidden text-nowrap text-lg  font-medium">
               {userProfile?.displayName}
             </h1>
-            <div className=" flex  gap-4 justify-start ">
-              <button
-                onClick={() =>
+            <div className=" flex  justify-start  items-center gap-4">
+              <Ibutton
+                action={() =>
                   dispatch(
                     setFollowInfo({
                       Info: "Followers",
@@ -54,14 +54,13 @@ const ProfileHeader = React.memo(({ profileId }) => {
                     })
                   )
                 }
-                className="flex   justify-start  items-start h-full gap-1 "
               >
                 <span>
                   {abbreviateNumber(userProfile?.Followers?.length) || 0}
                 </span>
-                <h1>Followers</h1>
-              </button>
-              <button
+                Followers
+              </Ibutton>
+              <Ibutton
                 onClick={() =>
                   dispatch(
                     setFollowInfo({
@@ -70,13 +69,12 @@ const ProfileHeader = React.memo(({ profileId }) => {
                     })
                   )
                 }
-                className="flex   justify-start  items-start h-full  gap-1   "
               >
                 <span>
                   {abbreviateNumber(userProfile?.Following?.length) || 0}
                 </span>
-                <h1>Following</h1>
-              </button>
+                Following
+              </Ibutton>
             </div>
           </div>
         </div>
@@ -104,15 +102,11 @@ const ProfileHeader = React.memo(({ profileId }) => {
               People={userProfile}
               className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-1 border border-inherit  rounded-xl bg-white hover:bg-gray-200  dark:hover:bg-gray-300`}
             />
-            <Ibutton
-              className="flex items-center border border-inherit justify-center gap-2 w-full sm:h-9 h-6 bg-white hover:bg-gray-200 dark:hover:bg-gray-300 px-3 py-1 rounded-xl  "
-              innerText={
-                <>
-                  <LuMessagesSquare />
-                  "Message"
-                </>
-              }
-            />
+            <Ibutton className=" w-full sm:h-9 h-6 bg-white hover:bg-gray-200 dark:hover:bg-gray-300 px-3 py-1 rounded-xl  ">
+              {" "}
+              <LuMessagesSquare />
+              Message
+            </Ibutton>
           </div>
         ) : (
           <div className="">

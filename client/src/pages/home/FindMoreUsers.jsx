@@ -22,7 +22,7 @@ function FindMoreUsers() {
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].id
+          ? lastPage[lastPage.length - 1].createdAt
           : undefined; // Use last data id as cursor
       },
       refetchOnWindowFocus: false,

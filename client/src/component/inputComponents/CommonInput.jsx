@@ -22,19 +22,17 @@ const CommonInput = forwardRef(function CommonInput(
         </label>
       )}
       <div className={className}>
-        <div className="flex bg-inherit w-full border-inherit overflow-hidden ">
-          <input
-            ref={ref}
-            type={type}
-            id={Iname}
-            name={Iname}
-            className={`${IClassName} p-2 bg-inherit border-inherit w-full `}
-            placeholder={placeholder}
-            disabled={disabled}
-            {...props}
-          />
-          {comp}
-        </div>
+        <input
+          ref={ref}
+          type={type}
+          id={Iname}
+          name={Iname}
+          className={`${IClassName} p-2 bg-inherit border-inherit w-full `}
+          placeholder={placeholder}
+          disabled={disabled}
+          {...props}
+        />
+        {comp}
       </div>
     </>
   );

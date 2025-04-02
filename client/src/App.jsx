@@ -96,157 +96,156 @@ function App() {
         <Notifictionbox />
         {<ConfirmationBox />}
         <Suspense fallback={<LoaderScreen />}>
-          <PersistantUser>
-            {isLogin &&
-              !pathname.startsWith("/write") &&
-              !pathname.startsWith("/messages") && <SideBar />}
-            <Routes>
+          <PersistantUser />
+          {isLogin &&
+            !pathname.startsWith("/write") &&
+            !pathname.startsWith("/messages") && <SideBar />}
+          <Routes>
+            <Route
+              path="/"
+              element={
+                isLogin ? (
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                ) : (
+                  <Navigate to="/heros" replace />
+                )
+              }
+            >
+              {" "}
+              {/* <Route path="comments" element={<CommentSection />}  */}
+            </Route>
+            <Route
+              path="/heros"
+              element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
+            />
+            <Route
+              path="/profile/:username/:id"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profileEditor"
+              element={
+                <ProtectedRoute>
+                  <ProfileEditor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/write"
+              element={
+                <ProtectedRoute>
+                  <DynamicPostEditor />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/write/publish" element={<PostPreviewEditor />} />
+            </Route>
+            <Route
+              path="/setting"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            >
               <Route
-                path="/"
-                element={
-                  isLogin ? (
-                    <ProtectedRoute>
-                      <Home />
-                    </ProtectedRoute>
-                  ) : (
-                    <Navigate to="/heros" replace />
-                  )
-                }
-              >
-                {" "}
-                {/* <Route path="comments" element={<CommentSection />}  */}
-              </Route>
-              <Route
-                path="/heros"
-                element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
-              />
-              <Route
-                path="/profile/:username/:id"
+                path=""
                 element={
                   <ProtectedRoute>
-                    <Profile />
+                    <General />
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/profileEditor"
-                element={
-                  <ProtectedRoute>
-                    <ProfileEditor />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/write"
-                element={
-                  <ProtectedRoute>
-                    <DynamicPostEditor />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="/write/publish" element={<PostPreviewEditor />} />
-              </Route>
-              <Route
-                path="/setting"
-                element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                }
-              >
-                <Route
-                  path=""
-                  element={
-                    <ProtectedRoute>
-                      <General />
-                    </ProtectedRoute>
-                  }
-                />
 
-                <Route
-                  path="github/synch"
-                  element={<ProtectedRoute>{<div></div>}</ProtectedRoute>}
-                />
-              </Route>
               <Route
-                path="/messages"
-                element={
-                  <ProtectedRoute>
-                    <Messanger />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="c" element={<MessageSection />} />
-              </Route>
-              <Route path="/view/:username/:id" element={<PostView />}>
-                <Route path="comments" element={<CommentSection />} />
-              </Route>
-              <Route
-                path="/search"
-                element={
-                  <ProtectedRoute>
-                    <SearchBox />
-                  </ProtectedRoute>
-                }
+                path="github/synch"
+                element={<ProtectedRoute>{<div></div>}</ProtectedRoute>}
               />
-              <Route path="/find_peoples" element={<FindMoreUsers />} />
-              <Route path="*" element={<PageError />} />
-              <Route
-                path="/Read"
-                element={
-                  <ProtectedRoute>
-                    <ReadList />
-                  </ProtectedRoute>
-                }
-              />{" "}
-              <Route
-                path="/auth/signin"
-                element={!isLogin ? <SignIn /> : <Navigate to={"/"} />}
-              />
-              <Route
-                path="/auth/signup"
-                element={!isLogin ? <SignUp /> : <Navigate to={"/"} />}
-              />
-              <Route path="/about" element={<About />} />
-              <Route path="/forgot/pass" element={<ForgotPass />} />
-              <Route path="/reset/pass/:token" element={<ResetPassword />} />
-              <Route path="/error" element={<SomthingWentWrong />} />
-            </Routes>
+            </Route>
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <Messanger />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="c" element={<MessageSection />} />
+            </Route>
+            <Route path="/view/:username/:id" element={<PostView />}>
+              <Route path="comments" element={<CommentSection />} />
+            </Route>
+            <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <SearchBox />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/find_peoples" element={<FindMoreUsers />} />
+            <Route path="*" element={<PageError />} />
+            <Route
+              path="/Read"
+              element={
+                <ProtectedRoute>
+                  <ReadList />
+                </ProtectedRoute>
+              }
+            />{" "}
+            <Route
+              path="/auth/signin"
+              element={!isLogin ? <SignIn /> : <Navigate to={"/"} />}
+            />
+            <Route
+              path="/auth/signup"
+              element={!isLogin ? <SignUp /> : <Navigate to={"/"} />}
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="/forgot/pass" element={<ForgotPass />} />
+            <Route path="/reset/pass/:token" element={<ResetPassword />} />
+            <Route path="/error" element={<SomthingWentWrong />} />
+          </Routes>
 
-            {loginPop && (
-              <PopupBox
-                action={() => dispatch(setloginPop(false))}
+          {loginPop && (
+            <PopupBox
+              action={() => dispatch(setloginPop(false))}
+              className={
+                "flex flex-col justify-center gap-4 text-center  items-center p-10 border-inherit max-w-[25rem] min-h-[50%] shadow-lg"
+              }
+            >
+              <h1 className="text-3xl font-semibold">Hey there!</h1>
+              <p className="opacity-50 font-light">
+                Let start exploring and sharing,Sign In or Sign Up,learn,analyze
+                and more
+              </p>{" "}
+              <Ibutton
                 className={
-                  "flex flex-col justify-center gap-4 text-center  items-center p-10 border-inherit max-w-[25rem] min-h-[50%] shadow-lg"
+                  "text-white bg-black dark:bg-white dark:text-black py-2 text-center border-4 hover:opacity-60 border-inherit  w-full "
                 }
-              >
-                <h1 className="text-3xl font-semibold">Hey there!</h1>
-                <p className="opacity-50 font-light">
-                  Let start exploring and sharing,Sign In or Sign
-                  Up,learn,analyze and more
-                </p>{" "}
-                <Ibutton
-                  className={
-                    "text-white bg-black dark:bg-white dark:text-black py-2 text-center border-4 hover:opacity-60 border-inherit  w-full "
-                  }
-                  innerText={"Sign In"}
-                  action={() => {
-                    navigate("/auth/signIn", { replace: true });
-                    dispatch(setloginPop(false));
-                  }}
-                />
-                <Ibutton
-                  className={"  text-center py-2 border border-inherit  w-full"}
-                  innerText={"Sign Up"}
-                  action={() => {
-                    navigate("/auth/signUp", { replace: true });
-                    dispatch(setloginPop(false));
-                  }}
-                />
-              </PopupBox>
-            )}
-            <ToastContainer />
-          </PersistantUser>
+                innerText={"Sign In"}
+                action={() => {
+                  navigate("/auth/signIn", { replace: true });
+                  dispatch(setloginPop(false));
+                }}
+              />
+              <Ibutton
+                className={"  text-center py-2 border border-inherit  w-full"}
+                innerText={"Sign Up"}
+                action={() => {
+                  navigate("/auth/signUp", { replace: true });
+                  dispatch(setloginPop(false));
+                }}
+              />
+            </PopupBox>
+          )}
+          <ToastContainer />
         </Suspense>
         <ConfirmationBox />
 

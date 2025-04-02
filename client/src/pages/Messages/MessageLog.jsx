@@ -68,16 +68,16 @@ function MessageLog() {
           <Ibutton
             className=" border-inherit text-2xl font-bold"
             action={() => navigate(-1, { replace: true })}
-            innerText={icons["arrowL"]}
-          />
+          >
+            {icons["arrowL"]}
+          </Ibutton>
         </div>
         <div className="flex text-lg font-bold justify-between border-inherit">
           {" "}
           <h1>Messages</h1>
-          <Ibutton
-            action={() => dispatch(setOpenNewConverstionBox())}
-            innerText={icons["addPersonO"]}
-          />
+          <Ibutton action={() => dispatch(setOpenNewConverstionBox())}>
+            {icons["addPersonO"]}
+          </Ibutton>
         </div>
         <SearchBar
           className={

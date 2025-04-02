@@ -5,7 +5,7 @@ import { setIsLogin } from "../../redux/slices/authSlice.js";
 import { setToast } from "../../redux/slices/uiSlice.js";
 import { useMutation, useQueryClient } from "react-query";
 import useAuthApi from "../../Apis/useAuthApi.jsx";
-import CommonInput from "../../component/utilityComp/CommonInput.jsx";
+import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import { passwordRegex, emailRegex } from "../../utils/regex.js";
 import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";

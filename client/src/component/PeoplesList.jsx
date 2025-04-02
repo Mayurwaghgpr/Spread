@@ -41,17 +41,23 @@ const PeoplesList = forwardRef(
       >
         <div
           ref={buttonRef}
-          className="relative group border-inherit cursor-pointer "
+          className="relative group border-inherit cursor-pointer w-full "
         >
           <button
-            className="flex items-center gap-3 border-inherit h-full "
+            className="flex items-center gap-3 border-inherit h-full w-full "
             onClick={action}
           >
-            <ProfileImage className=" w-10 h-10 " image={userImageurl} />
-
-            <p className="hover:underline  underline-offset-4 overflow-hidden text-ellipsis whitespace-nowrap">
-              {people?.username}
-            </p>
+            <ProfileImage
+              className={`w-10 h-10 rounded-full ${!people && "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse "} `}
+              image={people && userImageurl}
+            />
+            <div
+              className={` ${!people?.username ? "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse py-4 w-full max-w-56 rounded-full" : " "}  overflow-hidden text-ellipsis whitespace-nowrap`}
+            >
+              <p className="hover:underline  underline-offset-4">
+                {people?.username}
+              </p>
+            </div>
           </button>
           {popover && (
             <UserPopover

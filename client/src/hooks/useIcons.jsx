@@ -2,6 +2,7 @@ import React from "react";
 import {
   BsArrowLeft,
   BsBellFill,
+  BsCamera,
   BsCameraVideo,
   BsGear,
   BsGearFill,
@@ -71,7 +72,9 @@ function useIcons() {
     bell: <BsBellFill />,
     search: <IoSearch />,
     searchO: <IoSearchOutline />,
+    pCamera: <BsCamera />,
     vCamera: <BsCameraVideo />,
+
     arrowL: <BsArrowLeft />,
     callO: <IoCallOutline />,
     sendO: <AiOutlineSend />,

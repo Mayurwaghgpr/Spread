@@ -22,6 +22,8 @@ import {
 } from "../../redux/slices/messangerSlice";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
+import { IoAttach } from "react-icons/io5";
+import CommonInput from "../../component/inputComponents/CommonInput";
 
 function MessageSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -45,6 +47,7 @@ function MessageSection() {
     onSuccess: (data) => {
       dispatch(addMessage(data));
     },
+    refetchOnWindowFocus: false,
   });
 
   const handleUserTyping = useCallback(({ senderId, image, typing }) => {
@@ -170,8 +173,8 @@ function MessageSection() {
           </div>
         </div>
         <div className="flex items-center justify-center gap-4 text-2xl">
-          <Ibutton innerText={icons["vCamera"]} />
-          <Ibutton innerText={icons["callO"]} />
+          <Ibutton>{icons["vCamera"]}</Ibutton>
+          <Ibutton>{icons["callO"]}</Ibutton>
         </div>
       </div>
 
@@ -200,20 +203,25 @@ function MessageSection() {
           <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white" />
         )}
       </div>
-      <div className="fixed bottom-0 flex justify-start col-span-full w-full px-10  py-3 z-10 border-inherit">
-        <div className="flex justify-center items-center sm:w-1/2 w-full ">
-          <input
+      <div className="fixed bottom-0 flex justify-center items-center py-5 px-10 z-10 col-span-full w-full border-inherit">
+        <div className="flex justify-start items-center gap-3 w-full ">
+          <Ibutton className={"text-2xl"}>
+            <IoAttach />
+          </Ibutton>
+          <CommonInput
+            className="flex justify-center items-center px-2 sm:w-1/2 border  rounded-full"
+            comp={<Ibutton className={"text-xl"}>{icons["smile"]}</Ibutton>}
             onChange={handleInput}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
             value={message}
-            className="col-span-10 bg-inherit p-2 w-full outline-none border rounded-full border-inherit"
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Start typing..."
           />
           <Ibutton
-            className="col-span-2 p-4 text-2xl min-w-fit"
+            className="col-span-2  text-2xl min-w-fit"
             action={handleSend}
-            innerText={icons["sendO"]}
-          />
+          >
+            {icons["sendO"]}
+          </Ibutton>
         </div>
       </div>
     </div>

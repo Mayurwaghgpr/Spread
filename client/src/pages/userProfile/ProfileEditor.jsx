@@ -9,12 +9,12 @@ import React, {
 import { useDispatch, useSelector } from "react-redux";
 import profileIcon from "/ProfOutlook.png";
 import { setUser } from "../../redux/slices/authSlice";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { setToast } from "../../redux/slices/uiSlice";
 import { debounce } from "../../utils/debounce";
 import useProfileApi from "../../Apis/ProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
-import CommonInput from "../../component/utilityComp/CommonInput";
+import CommonInput from "../../component/inputComponents/CommonInput";
 import Selector from "../../component/utilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
 function ProfileEditor() {

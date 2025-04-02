@@ -113,18 +113,17 @@ const NewConversation = () => {
         {isCreatingGroup && (
           <Ibutton
             action={() => (!next ? handelCancelGroup() : setNext(false))}
-            innerText={"Back"}
-          />
+          >
+            Back
+          </Ibutton>
         )}
         <h1 className="flex justify-center w-full font-bold text-lg">
           <span> New Conversation</span>
         </h1>
         {isCreatingGroup && Object.entries(hashMap).length > 1 && !next && (
-          <Ibutton
-            action={() => setNext(true)}
-            className={""}
-            innerText={<>Next</>}
-          />
+          <Ibutton action={() => setNext(true)} className={""}>
+            Next
+          </Ibutton>
         )}
       </header>
       {!next ? (
@@ -141,16 +140,10 @@ const NewConversation = () => {
           )}
           <div className="flex justify-center items-center text-sm gap-2">
             {!isCreatingGroup && (
-              <Ibutton
-                action={() => setCreatingGroup(true)}
-                className={""}
-                innerText={
-                  <>
-                    <BsPlus />
-                    New group
-                  </>
-                }
-              />
+              <Ibutton action={() => setCreatingGroup(true)} className={""}>
+                <BsPlus />
+                New group
+              </Ibutton>
             )}
           </div>
 

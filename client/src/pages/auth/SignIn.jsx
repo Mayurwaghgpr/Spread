@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsLogin, setUser } from "../../redux/slices/authSlice";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import useAuthApi from "../../Apis/useAuthApi";
-import CommonInput from "../../component/utilityComp/CommonInput";
+import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import OAuth from "./OAuth";
 import EyeBtn from "../../component/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";

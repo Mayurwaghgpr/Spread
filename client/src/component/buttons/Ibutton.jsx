@@ -3,7 +3,7 @@ import React from "react";
 function Ibutton({ action, className, children }) {
   return (
     <button
-      className={`flex items-center  border-inherit justify-center gap-2 ${className}`}
+      className={`flex items-centerjustify-center gap-2 hover:bg-black dark:hover:bg-opacity-20 dark:hover:bg-white hover:bg-opacity-10 duration-200 border-inherit ${className}`}
       onClick={action}
     >
       {children}

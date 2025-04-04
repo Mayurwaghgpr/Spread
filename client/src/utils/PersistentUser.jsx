@@ -9,6 +9,7 @@ function PersistentUser({ children }) {
   // const { isLogin } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { refreshToken, getLogInUserData } = useAuthApi();
+
   const { error, isError } = useQuery({
     queryKey: ["loggedInUser"],
     queryFn: () => getLogInUserData(),

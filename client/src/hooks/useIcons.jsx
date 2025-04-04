@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  BsAlphabetUppercase,
   BsArrowLeft,
   BsBellFill,
   BsCamera,
@@ -30,10 +31,10 @@ import {
   IoSearchOutline,
   IoSunny,
 } from "react-icons/io5";
-import { PiHandsClappingFill } from "react-icons/pi";
+import { PiHandsClappingFill, PiImageThin } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
-import { FaComment, FaHandHoldingHeart } from "react-icons/fa6";
+import { FaCode, FaComment, FaHandHoldingHeart } from "react-icons/fa6";
 import {
   RiQuillPenFill,
   RiQuillPenLine,
@@ -50,52 +51,116 @@ import { LuLogOut } from "react-icons/lu";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import { CiWarning } from "react-icons/ci";
+
 function useIcons() {
   return {
-    like: <BsHandThumbsUpFill />,
-    logout: <LuLogOut />,
-    cheer: <PiHandsClappingFill />,
-    celebration: <MdCelebration />,
+    // A
+    addPersonO: <IoPersonAddOutline />,
+    alphabetUp: <BsAlphabetUppercase />,
     appreciate: <MdAutoAwesome />,
-    helpfull: <FaHandHoldingHeart />,
-    smile: <IoHappyOutline />,
-    comment: <FaComment />,
-    follow: <RiUserFollowLine />,
-    message: <TbMessageCircle />,
-    messageFi: <TbMessageCircleFilled />,
-    mention: <VscMention />,
-    tag: <FaUserTag />,
-    reminder: <PiAlarm />,
-    system: <GrSystem />,
-    repost: <BiRepost />,
-    close: <IoCloseOutline />,
-    bell: <BsBellFill />,
-    search: <IoSearch />,
-    searchO: <IoSearchOutline />,
-    pCamera: <BsCamera />,
-    vCamera: <BsCameraVideo />,
-
     arrowL: <BsArrowLeft />,
+
+    // B
+    bell: <BsBellFill />,
+
+    // C
+    calender: <BiCalendarAlt />,
     callO: <IoCallOutline />,
-    sendO: <AiOutlineSend />,
-    link: <BsLink />,
-    homeO: <IoHomeOutline />,
+    celebration: <MdCelebration />,
+    cheer: <PiHandsClappingFill />,
+    close: <IoCloseOutline />,
+    code1: <FaCode />,
+    comment: <FaComment />,
+
+    // D
+    default: <BsHandThumbsUp />,
+    desktopO: <HiOutlineComputerDesktop />,
+    done: <MdDone color="green" />,
+
+    // E
+    error: <MdErrorOutline color="red" />,
+
+    // F
+    follow: <RiUserFollowLine />,
+
+    // G
+    gearFi: <BsGearFill />,
+    gearO: <BsGear />,
+
+    // H
+    helpfull: <FaHandHoldingHeart />,
     homeFi: <IoHomeSharp />,
-    penO: <RiQuillPenLine />,
-    penFi: <RiQuillPenFill />,
+    homeO: <IoHomeOutline />,
+
+    // I
+    image1: <PiImageThin />,
+
+    // J
+    // Placeholder for future grouping
+
+    // K
+    // Placeholder for future grouping
+
+    // L
     libraryFi: <IoLibrarySharp />,
     libraryO: <IoLibraryOutline />,
-    addPersonO: <IoPersonAddOutline />,
-    gearO: <BsGear />,
-    gearFi: <BsGearFill />,
+    link: <BsLink />,
+    logout: <LuLogOut />,
+
+    // M
+    mention: <VscMention />,
+    message: <TbMessageCircle />,
+    messageFi: <TbMessageCircleFilled />,
     moonFi: <BsMoonStarsFill />,
-    sun: <IoSunny />,
-    error: <MdErrorOutline color="red" />,
+
+    // N
+    // Placeholder for future grouping
+
+    // O
+    // Placeholder for future grouping
+
+    // P
+    pCamera: <BsCamera />,
+    penFi: <RiQuillPenFill />,
+    penO: <RiQuillPenLine />,
+    reminder: <PiAlarm />,
+    repost: <BiRepost />,
+
+    // Q
+    // Placeholder for future grouping
+
+    // R
+    // Placeholder for future grouping
+
+    // S
+    search: <IoSearch />,
+    searchO: <IoSearchOutline />,
+    sendO: <AiOutlineSend />,
+    smile: <IoHappyOutline />,
     success: <MdDone color="green" />,
+    sun: <IoSunny />,
+    system: <GrSystem />,
+
+    // T
+    tag: <FaUserTag />,
+
+    // U
+    // Placeholder for future grouping
+
+    // V
+    vCamera: <BsCameraVideo />,
+
+    // W
     warning: <CiWarning color="yellow" />,
-    desktopO: <HiOutlineComputerDesktop />,
-    calender: <BiCalendarAlt />,
-    default: <BsHandThumbsUp />,
+
+    // X
+    // Placeholder for future grouping
+
+    // Y
+    // Placeholder for future grouping
+
+    // Z
+    // Placeholder for future grouping
   };
 }
 

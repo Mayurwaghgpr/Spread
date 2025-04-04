@@ -8,6 +8,7 @@ import Messages from "../models/messaging/Messages.js";
 import ReadReceipt from "../models/messaging/ReadReceipt.js";
 import Post from "../models/posts.js";
 import User from "../models/user.js";
+import Notification from '../models/Notification.js'
 
 const DataBaseAssociations = () => {
     
@@ -53,6 +54,7 @@ Archive.belongsTo(Post, {
   as: "post",
   foreignKey: "postId",
 });
+  
   
   
 // Self-referencing association for child comments
@@ -112,6 +114,9 @@ Messages.hasOne(Attachments, { foreignKey: 'messageId', as: 'attachment', onDele
 ReadReceipt.belongsTo(Messages, { foreignKey: 'messageId', as: 'readReceipt', onDelete: 'CASCADE' });
 Messages.hasMany(ReadReceipt, { foreignKey: 'messageId', as: 'readReceipts', onDelete: 'CASCADE' });
 
+  
+  Notification.belongsTo(User, { foreignKey: 'receiverId', as: 'recipient', onDelete: 'CASCADE' })
+  Notification.belongsTo(User, { as: "actor", foreignKey: "actorId", allowNull: true });
 
   
  }

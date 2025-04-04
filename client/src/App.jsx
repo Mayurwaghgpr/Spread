@@ -5,6 +5,7 @@ import {
   useNavigate,
   Navigate,
   useLocation,
+  Link,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import MainNavBar from "./component/header/MainNavBar";
@@ -15,13 +16,11 @@ import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/homeComp/SideBar";
 import SomthingWentWrong from "./pages/ErrorPages/somthingWentWrong";
 import { PopupBox } from "./component/utilityComp/PopupBox";
-import Ibutton from "./component/buttons/Ibutton";
 import { setloginPop } from "./redux/slices/authSlice";
 import PersistantUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
-
 import Notifictionbox from "./component/notification/Notifictionbox";
-import FindMoreUsers from "./pages/home/FindMoreUsers";
+import Suggetions from "./pages/home/Suggetions";
 
 // Lazy load components
 
@@ -61,12 +60,13 @@ function App() {
   const { pathname } = useLocation();
   const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
-
+  const { socket } = useSocket();
   const [systemTheme, setSystemTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches
   );
 
   useEffect(() => {
+    socket?.emit("register", user.id);
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleSystemThemeChange = (e) => {
@@ -189,7 +189,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/find_peoples" element={<FindMoreUsers />} />
+            <Route path="/suggetions/find_peoples" element={<Suggetions />} />
             <Route path="*" element={<PageError />} />
             <Route
               path="/Read"
@@ -225,24 +225,30 @@ function App() {
                 Let start exploring and sharing,Sign In or Sign Up,learn,analyze
                 and more
               </p>{" "}
-              <Ibutton
+              <Link
+                onClick={() => {
+                  dispatch(setloginPop(false));
+                }}
+                replace
                 className={
-                  "text-white bg-black dark:bg-white dark:text-black py-2 text-center border-4 hover:opacity-60 border-inherit  w-full "
+                  "text-white bg-black dark:bg-white dark:text-black py-2 text-center border-2 hover:opacity-60 border-inherit w-full rounded-full "
                 }
-                innerText={"Sign In"}
-                action={() => {
-                  navigate("/auth/signIn", { replace: true });
+                to={"/auth/signIn"}
+              >
+                Sign In
+              </Link>
+              <Link
+                onClick={() => {
                   dispatch(setloginPop(false));
                 }}
-              />
-              <Ibutton
-                className={"  text-center py-2 border border-inherit  w-full"}
-                innerText={"Sign Up"}
-                action={() => {
-                  navigate("/auth/signUp", { replace: true });
-                  dispatch(setloginPop(false));
-                }}
-              />
+                className={
+                  "  text-center py-2 border border-inherit  w-full rounded-full"
+                }
+                replace
+                to={"/auth/signUp"}
+              >
+                Sign Up
+              </Link>
             </PopupBox>
           )}
           <ToastContainer />

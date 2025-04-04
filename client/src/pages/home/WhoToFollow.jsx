@@ -8,7 +8,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
   const navigate = useNavigate();
   return (
     <div className={className}>
-      <h1 className=" text-start  text-xl font-bold"> Follow people </h1>
+      <h1 className=" text-start  text-xl font-medium"> Follow people </h1>
       <ul className="flex flex-wrap gap-5 py-3 w-full">
         {(homeData?.userSuggetion?.length
           ? homeData.userSuggetion
@@ -31,7 +31,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
           ))}
       </ul>
       <Link
-        to={"/find_peoples"}
+        to={"/suggetions/find_peoples"}
         className="w-full text-blue-500 self-center p-1 transition-all ease-in-out duration-300"
       >
         See More

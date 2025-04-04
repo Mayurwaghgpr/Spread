@@ -15,7 +15,7 @@ function ToastItem({ ToastContent, arr, ...props }) {
     // Set timeout for each toast
     timerRefAf.current[ToastContent.id] = setTimeout(() => {
       dispatch(removeToast(ToastContent.id));
-    }, 3000);
+    }, 5000);
 
     // Cleanup timeout when unmounting
     return () => {
@@ -31,18 +31,19 @@ function ToastItem({ ToastContent, arr, ...props }) {
       {...props}
       className={` flex flex-col items-center justify-center shadow-lg animate-slide-in-bottom p-4 bg-white dark:text-black transition-all duration-300 ease-in-out pointer-events-auto rounded-lg`}
     >
-      <div className="flex justify-between items-center text-nowrap  w-full">
+      <div className="flex justify-between items-center gap-4 text-nowrap  w-full">
         <div className="flex justify-center items-center gap-2 text-sm">
           {icons[ToastContent.type]}
           <p className="">{ToastContent?.message}</p>
         </div>
         <Ibutton
-          className={"  text-xl font-semibold"}
+          className={"  text-xl font-medium rounded-full"}
           action={() => {
             dispatch(removeToast(ToastContent.id));
           }}
-          innerText={icons["close"]}
-        />
+        >
+          {icons["close"]}
+        </Ibutton>
       </div>
       <div className=" w-full text-end text-black dark:text-white  text-opacity-30  dark:text-opacity-40 ">
         <small>

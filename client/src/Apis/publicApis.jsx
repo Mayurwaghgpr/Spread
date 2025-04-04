@@ -13,7 +13,6 @@ function usePublicApis() {
           lastTimestamp: pageParam,
         },
       });
-      console.log(result.data.peoples);
       return result.data.peoples;
     } catch (error) {
       console.error("Error fetching user preferences data:", error);

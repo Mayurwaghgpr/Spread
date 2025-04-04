@@ -25,7 +25,6 @@ function Messanger() {
   );
   useEffect(() => {
     if (isLogin && user?.id && socket) {
-      socket?.emit("register", user.id);
       // Listen for new messages
       socket.on("newMessage", handleNewMessage);
 

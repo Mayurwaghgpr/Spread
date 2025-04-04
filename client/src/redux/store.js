@@ -4,6 +4,7 @@ import uiReducer from './slices/uiSlice';
 import postReducer from './slices/postSlice';
 import profileReducer from './slices/profileSlice';
 import messangerSlice from './slices/messangerSlice';
+import NotificationSlice from './slices/NotificationSlice';
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     ui: uiReducer,
     posts: postReducer,
     profile: profileReducer,
-    messanger:messangerSlice,
+    messanger: messangerSlice,
+    notification:NotificationSlice,
   },
 });
 

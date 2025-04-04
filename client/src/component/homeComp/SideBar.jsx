@@ -82,7 +82,7 @@ function SideBar() {
           <div className=" flex flex-col gap-4 h-fit w-full ">
             <Link
               to={`/profile/@${user?.username?.replace(/\s+/g, "")}/${user?.id}`}
-              className="flex justify-center items-center gap-2 w-full  hover:bg-gray-400  hover:bg-opacity-15 rounded-full "
+              className="flex justify-center items-center gap-2 w-full p-3 hover:bg-gray-400  hover:bg-opacity-15 rounded-full "
               onClick={() => dispatch(setManuOpen())}
             >
               <ProfileImage

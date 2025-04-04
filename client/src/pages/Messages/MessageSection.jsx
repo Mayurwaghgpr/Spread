@@ -160,7 +160,7 @@ function MessageSection() {
   return (
     <div
       ref={containerRef}
-      className={`relative ${conversationId ? "sm:visible" : "hidden"}  grid grid-cols-10 row-span-10 w-full h-screen   border-inherit overflow-y-auto`}
+      className={`relative ${conversationId ? "sm:visible" : "hidden"} grid grid-cols-10 row-span-10 w-full h-screen border-inherit overflow-y-auto bg-inherit`}
     >
       <div className="sticky top-0 flex justify-between col-span-10 bg-[#fff9f3] dark:bg-black z-20 w-full h-fit py-2 px-7 border-b border-inherit shadow-md">
         <div className="flex justify-start items-center gap-3 w-[80%]">
@@ -173,8 +173,10 @@ function MessageSection() {
           </div>
         </div>
         <div className="flex items-center justify-center gap-4 text-2xl">
-          <Ibutton>{icons["vCamera"]}</Ibutton>
-          <Ibutton>{icons["callO"]}</Ibutton>
+          <Ibutton className={"rounded-sm p-2 py-1"}>
+            {icons["vCamera"]}
+          </Ibutton>
+          <Ibutton className={"rounded-sm p-2 py-1"}>{icons["callO"]}</Ibutton>
         </div>
       </div>
 
@@ -194,7 +196,7 @@ function MessageSection() {
                   />
                 )
             )}
-            <div className="flex items-center justify-center py-2 px-2 text-sm bg-[#fffefe] dark:shadow-white rounded-xl rounded-tl-none">
+            <div className="flex items-center justify-center py-2 px-2 text-sm bg-[#fffefe]  dark:shadow-white rounded-xl rounded-tl-none">
               <span className="typingLoader"></span>
             </div>
           </div>
@@ -203,25 +205,31 @@ function MessageSection() {
           <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white" />
         )}
       </div>
-      <div className="fixed bottom-0 flex justify-center items-center py-5 px-10 z-10 col-span-full w-full border-inherit">
-        <div className="flex justify-start items-center gap-3 w-full ">
-          <Ibutton className={"text-2xl"}>
-            <IoAttach />
-          </Ibutton>
-          <CommonInput
-            className="flex justify-center items-center px-2 sm:w-1/2 border  rounded-full"
-            comp={<Ibutton className={"text-xl"}>{icons["smile"]}</Ibutton>}
-            onChange={handleInput}
-            value={message}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Start typing..."
-          />
-          <Ibutton
-            className="col-span-2  text-2xl min-w-fit"
-            action={handleSend}
-          >
-            {icons["sendO"]}
-          </Ibutton>
+      <div className="fixed bottom-0 flex justify-start items-center col-span-full w-full border-inherit bg-inherit">
+        <div className="flex flex-col justify-center items-start gap-3 p-3 sm:w-1/3 w-full my-4 sm:mx-32 mx-3 border-inherit bg-inherit bg-[#fff9f3] dark:bg-[#171616] rounded-full shadow-md ">
+          <div className="flex justify-start items-center gap-3 w-full border-inherit ">
+            <Ibutton className={"text-2xl rounded-full p-2 "}>
+              <IoAttach />
+            </Ibutton>
+            <CommonInput
+              className="flex justify-center items-center px-2 w-full border-inherit"
+              comp={
+                <Ibutton className={"text-xl rounded-full p-2"}>
+                  {icons["smile"]}
+                </Ibutton>
+              }
+              onChange={handleInput}
+              value={message}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              placeholder="Start typing..."
+            />
+            <Ibutton
+              className="flex justify-center items-center text-2xl min-w-fit rounded-full p-2"
+              action={handleSend}
+            >
+              {icons["sendO"]}
+            </Ibutton>
+          </div>
         </div>
       </div>
     </div>

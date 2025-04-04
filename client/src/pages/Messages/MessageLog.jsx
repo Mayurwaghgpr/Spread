@@ -66,7 +66,7 @@ function MessageLog() {
       <header className="flex flex-col gap-7 border-inherit">
         <div className="flex justify-start items-center w-full">
           <Ibutton
-            className=" border-inherit text-2xl font-bold"
+            className="px-2 rounded-lg border-inherit text-2xl font-bold"
             action={() => navigate(-1, { replace: true })}
           >
             {icons["arrowL"]}
@@ -75,7 +75,10 @@ function MessageLog() {
         <div className="flex text-lg font-bold justify-between border-inherit">
           {" "}
           <h1>Messages</h1>
-          <Ibutton action={() => dispatch(setOpenNewConverstionBox())}>
+          <Ibutton
+            className={"p-2 rounded-lg"}
+            action={() => dispatch(setOpenNewConverstionBox())}
+          >
             {icons["addPersonO"]}
           </Ibutton>
         </div>

@@ -6,8 +6,8 @@ import WhoToFollow from "../../pages/home/WhoToFollow";
 function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
   return (
     <aside className={`${className}`}>
-      <div className="flex flex-col w-full items-center text-start gap-2  border-inherit">
-        <h1 className=" text-start w-full text-xl font-bold">
+      <div className="flex flex-col w-full items-center text-start gap-2 border-inherit ">
+        <h1 className=" text-start w-full text-xl font-medium">
           Suggested topics
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
@@ -34,7 +34,7 @@ function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
       <WhoToFollow
         homeData={homeData}
         className={
-          " flex flex-col justify-start items-start gap-5 text-sm border-inherit"
+          " flex flex-col justify-start items-start gap-5 text-sm  border-inherit "
         }
         isLoadingHome={isLoadingHome}
       />

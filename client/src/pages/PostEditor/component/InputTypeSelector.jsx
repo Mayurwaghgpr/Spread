@@ -9,6 +9,12 @@ import {
   MdOutlineKeyboardDoubleArrowLeft,
   MdOutlineKeyboardDoubleArrowRight,
 } from "react-icons/md";
+import useIcons from "../../../hooks/useIcons";
+const buttonConsts = [
+  { type: "text", icon: "alphabetUp" },
+  { type: "url", icon: "link" },
+  { type: "code", icon: "code1" },
+];
 function InputTypeSelector({
   imageInputRef,
   addElement,
@@ -18,14 +24,7 @@ function InputTypeSelector({
   const { isScale } = useSelector((state) => state.ui);
   const [tooltip, setTooltip] = useState("");
   const dispatch = useDispatch();
-  const buttonConsts = useMemo(
-    () => [
-      { type: "text", icon: <BsAlphabetUppercase /> },
-      { type: "url", icon: <CiLink /> },
-      { type: "code", icon: <FaCode /> },
-    ],
-    []
-  );
+  const icons = useIcons();
 
   // const getTransitionClass = useMemo(
   //   () =>
@@ -52,7 +51,7 @@ function InputTypeSelector({
           <div className="group-hover:flex hidden justify-center gap-1 items-center flex-row px-2 rounded-md before:size-2 before:absolute before:border-b before:border-r before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black  dark:bg-white  absolute -top-10 border">
             <span>add</span> {conf.type}
           </div>
-          <span>{conf.icon}</span>
+          <span>{icons[conf.icon]}</span>
         </button>
       ))}
       <label
@@ -66,7 +65,7 @@ function InputTypeSelector({
         <span className=" group-hover:block hidden w-fit px-2  rounded-md before:size-2 before:absolute before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white absolute -top-10 border">
           Image
         </span>
-        <PiImageThin />
+        {icons["image1"]}
       </label>
       <input
         ref={imageInputRef}

@@ -98,12 +98,14 @@ const notifications = [
 
 function Notifictionbox() {
   const { openNotification } = useSelector((state) => state.ui);
+  const { notificationState } = useSelector((state) => state.notification);
   const { socket } = useSocket();
   const Icon = useIcons();
   const dispatch = useDispatch();
 
   // Memoize function to handle notification
   const handleNotification = useCallback((notify) => {
+    console.log(notify);
     dispatch(setNotificationStatePush(notify));
   }, []);
 
@@ -119,7 +121,7 @@ function Notifictionbox() {
     e.stopPropagation();
     dispatch(setOpenNotification());
   }, []);
-
+  console.log(notificationState);
   return (
     <div
       onClick={handeClick}

@@ -4,15 +4,17 @@ import useIcons from "../../hooks/useIcons";
 const SearchBar = ({ className, inputAction, btnAction, ...props }) => {
   const icons = useIcons();
   return (
-    <div className={className}>
+    <div className={`flex justify-center items-center  ${className}`}>
       <input
-        className="p-2 w-full outline-none bg-inherit"
+        className=" p-2 w-full outline-none bg-inherit"
         placeholder="Search"
         type="search"
         onChange={inputAction}
         {...props}
       />
-      <Ibutton action={inputAction} innerText={icons["search"]} />
+      <Ibutton className={"p-1 rounded-full"} action={inputAction}>
+        {icons["search"]}
+      </Ibutton>
     </div>
   );
 };

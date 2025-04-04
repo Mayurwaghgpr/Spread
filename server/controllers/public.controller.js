@@ -8,6 +8,7 @@ import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 import { io } from "../app.js";
+import { startedFollowing } from "../services/notification.js";
 
 
 // Fetch all users except the current user and distinct topics
@@ -241,16 +242,9 @@ export const FollowUser = async (req, res, next) => {
       // Follow user
       await Follow.create({ followerId, followedId });
       userInfo.Following = [...userInfo.Following, { id: followedId }];
-
-      // Notify the user being followed if they are online
-      const cacheKey = `socket_${followedId}`;
-      const userSocketId = await redisClient.get(cacheKey);
-      
-      if (userSocketId) {
-        io.to(userSocketId).emit("notification", `${followerId} started following you`);
-      }
+       startedFollowing(followedId, followerId)
     }
-
+   
     res
       .status(201)
       .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)

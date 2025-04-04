@@ -38,7 +38,7 @@ function Follow({ className, People }) {
           onClick={() =>
             mutate({ followerId: user?.id, followedId: People?.id })
           }
-          className={`relative group ${!People ? "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse p-1 px-5 w-20 rounded-full" : className} ${isFollowing && "hover:border-red-400  hover:border hover:bg-transparent"}`}
+          className={`relative group ${!People ? "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse p-4 px-5 w-20 rounded-full" : className} ${isFollowing && "hover:border-red-400  hover:border hover:bg-transparent"}`}
           disabled={followLoading}
         >
           {People && (

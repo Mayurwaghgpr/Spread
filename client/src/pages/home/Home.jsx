@@ -102,9 +102,9 @@ function Home() {
   };
 
   return (
-    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
+    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
       {/* Sticky Navigation */}
-      <div className="sticky top-[3.1rem] sm:top-[3.6rem] row-span-1 lg:col-span-6 col-span-full w-full flex  items-center justify-start border-b text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0   backdrop-blur-[20px] dark:border-[#383838] z-20  ">
+      <div className="sticky top-[3.1rem] sm:top-[3.6rem] row-span-1 lg:col-span-6 col-span-full w-full flex items-center justify-start border-b text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0   backdrop-blur-[20px] dark:border-[#383838] z-20  ">
         <ul className="flex items-center justify-between w-full h-full ">
           <li className="capitalize flex justify-center items-center w-full h-full hover:bg-gray-400 hover:bg-opacity-30">
             <button
@@ -123,7 +123,7 @@ function Home() {
         </ul>
       </div>
       {/* Posts Section */}
-      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full  row-start-2 row-span-10  border-inherit py-10 ">
+      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full row-start-2 row-span-10 border-inherit py-10 ">
         {/* Posts Content */}
         <div className="w-full pt-4 border-inherit">
           {isLoading

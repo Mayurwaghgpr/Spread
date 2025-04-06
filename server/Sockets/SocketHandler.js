@@ -32,7 +32,8 @@ export default function socketHandlers(io) {
     // Send message and broadcast to conversation
     socket.on('sendMessage', async ({ conversationId, senderId, content,replyedTo,createdAt }) => {
       try {
-         io.to(conversationId).emit('newMessage', { conversationId, senderId, content,replyedTo,createdAt });
+        
+         io.to(conversationId).emit('newMessage',{ conversationId, senderId, content,replyedTo,createdAt });
         await Messages.create({ conversationId, senderId, content, replyedTo });
        
       } catch (error) {

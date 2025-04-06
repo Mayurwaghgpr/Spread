@@ -57,8 +57,29 @@ function ChatApi() {
       throw error.response || error;
     }
   };
+  const setMessageToMute = async ({ isMuteMessage, conversationId }) => {
+    try {
+      const result = await axios.put(
+        `${BASE_URL}/messaging/c/message/mute`,
+        {
+          isMuteMessage,
+          conversationId,
+        },
+        { withCredentials: true }
+      );
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
 
-  return { getMessage, getConversations, startPrivateChate, createGroup };
+  return {
+    getMessage,
+    getConversations,
+    startPrivateChate,
+    createGroup,
+    setMessageToMute,
+  };
 }
 
 export default ChatApi;

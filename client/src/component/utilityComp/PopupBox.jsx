@@ -1,11 +1,8 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setloginPop } from "../../redux/slices/authSlice";
 
 export const PopupBox = ({ children, className, heading, subText, action }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
   return (
     <div
       onClick={action}

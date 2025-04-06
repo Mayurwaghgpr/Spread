@@ -12,6 +12,10 @@ const Members = Database.define('Members', {
         type: DataTypes.ENUM('admin', 'user'),
         default:'user'
     },
+    isMuteMessage: {
+        type: DataTypes.BOOLEAN,
+        default:false,
+    },
     memberId: {
         type: DataTypes.UUID,
         allowNull:false,

@@ -57,8 +57,6 @@ function MessageLog() {
   }, []);
 
   const conversations = data?.pages?.flatMap((page) => page);
-  // console.log(conversations);
-
   return (
     <aside
       className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[25%] sm:min-w-fit w-full p-5  h-full border-inherit `}
@@ -67,7 +65,7 @@ function MessageLog() {
         <div className="flex justify-start items-center w-full">
           <Ibutton
             className="px-2 rounded-lg border-inherit text-2xl font-bold"
-            action={() => navigate(-1, { replace: true })}
+            action={() => navigate(-1)}
           >
             {icons["arrowL"]}
           </Ibutton>
@@ -96,7 +94,6 @@ function MessageLog() {
               ref={arr.length % 10 === 0 ? lastItemRef : null}
               to={`c?Id=${conv.id}`}
               key={conv.id}
-              replace={true}
               className=" flex items-center gap-3 w-full  "
             >
               <ProfileImage
@@ -112,7 +109,6 @@ function MessageLog() {
                     : conv.groupName
                 }
               />
-
               <div>
                 {" "}
                 <h2>

@@ -1,15 +1,19 @@
 import express from 'express';
 import { createPrivateConversation} from '../../controllers/messaging/private.controller.js';
 import IsAuth from '../../middlewares/isAuth.js';
-import { getConversationsByUserId, getMessagesByConversationId } from '../../controllers/messaging/common.controller.js';
+import { getConversationsByUserId, getMembers, getMessagesByConversationId, setIsMuteMessage } from '../../controllers/messaging/common.controller.js';
 import { createGroupConversation, addAsGroupAdmin } from '../../controllers/messaging/group.controller.js';
 
 const router = express.Router();
 
 //Commen Messageing routes
+//Get
 router.get('/c/all',IsAuth,getConversationsByUserId)
-router.get('/c/messages',IsAuth,getMessagesByConversationId)
+router.get('/c/messages', IsAuth, getMessagesByConversationId)
+router.get('/c/members',IsAuth,getMembers)
 // router.post('/c/message/add')
+//Put
+router.put('/c/message/mute',IsAuth,setIsMuteMessage)
 
 //Private Messageing routes (one to one)
 router.post('/p/create',IsAuth, createPrivateConversation);

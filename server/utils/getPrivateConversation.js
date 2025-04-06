@@ -1,10 +1,7 @@
 import { Op, Sequelize } from 'sequelize';
 import Conversation from '../models/messaging/Conversation.js';
-import User from '../models/user.js';
 import Members from '../models/messaging/Members.js';
-import Database from './database.js';
-import redisClient from './redisClient.js';
-import { EXPIRATION } from '../config/constants.js';
+import User from '../models/user.js';
 
 export const getPrivateConversation = async (userId1, userId2) => {
 
@@ -22,7 +19,13 @@ export const getPrivateConversation = async (userId1, userId2) => {
 
         if (!memberCounts.length) return false;
         const conversation = await Conversation.findOne({
-            where: { id: memberCounts[0].conversationId, conversationType: 'private' }
+            where: { id: memberCounts[0].conversationId, conversationType: 'private' },
+             include:{
+                    model: User, //Get all users as member in conversation
+                    as: 'members', 
+                    through: { attributes: [] },
+                    attributes: ['id', 'displayName', 'username','userImage'],
+                }
         });
 
         return conversation || false;

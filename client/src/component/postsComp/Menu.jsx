@@ -29,11 +29,11 @@ function Menu({ content, items, className }) {
 
       <div
         onClick={() => setMenuId("")}
-        className={`transition-all  delay-300 ${menuId === content?.id ? "pointer-events-auto" : " pointer-events-none"} fixed sm:absolute flex justify-center border-inherit items-end  sm:-left-10 left-0 right-0 sm:top-5 top-0 bottom-0 z-10 sm:w-fit sm:h-fit h-screen  `}
+        className={`transition-all delay-300 ${menuId === content?.id ? "pointer-events-auto" : " pointer-events-none"} fixed sm:absolute flex justify-center items-end border-inherit sm:-left-10 left-0 right-0 sm:top-5 top-0 bottom-0 z-10 sm:w-fit sm:h-fit h-screen  `}
       >
         <ul
           onClick={(e) => e.stopPropagation()}
-          className={`${className} flex flex-col gap-1  transition-all duration-200 ${menuId === content?.id ? "sm:animate-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto animate-slide-in-bottom" : "sm:-translate-y-5 sm:opacity-0 sm:pointer-events-none animate-slide-out-bottom  "}  z-10 border-inherit text-sm    bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-xl m-1 border sm:shadow-md`}
+          className={`${className} flex flex-col gap-1  transition-all duration-200 ${menuId === content?.id ? "sm:animate-none sm:opacity-100 sm:translate-y-0 sm:pointer-events-auto animate-slide-in-bottom" : "sm:-translate-y-5 sm:opacity-0 sm:pointer-events-none animate-slide-out-bottom "} z-10 border border-inherit text-sm bg-[#e8e4df] dark:bg-[#0f0f0f] sm:rounded-lg rounded-xl m-1  sm:shadow-md`}
         >
           {items
             ?.filter((itm) => itm)

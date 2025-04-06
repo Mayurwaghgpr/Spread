@@ -21,6 +21,8 @@ import PersistantUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import Notifictionbox from "./component/notification/Notifictionbox";
 import Suggetions from "./pages/home/Suggetions";
+import ConversationInfo from "./pages/Messages/ConversationInfo";
+import InfoSection from "./pages/Messages/components/InfoSection";
 
 // Lazy load components
 
@@ -113,7 +115,6 @@ function App() {
                 )
               }
             >
-              {" "}
               {/* <Route path="comments" element={<CommentSection />}  */}
             </Route>
             <Route
@@ -176,7 +177,11 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              <Route path="c" element={<MessageSection />} />
+              <Route path="c" element={<MessageSection />}>
+                <Route path="Info" element={<ConversationInfo />}>
+                  <Route path="" element={<InfoSection />} />
+                </Route>
+              </Route>
             </Route>
             <Route path="/view/:username/:id" element={<PostView />}>
               <Route path="comments" element={<CommentSection />} />

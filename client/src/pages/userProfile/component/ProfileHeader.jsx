@@ -102,7 +102,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
               People={userProfile}
               className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-1 border border-inherit  rounded-xl bg-white hover:bg-gray-200  dark:hover:bg-gray-300`}
             />
-            <Ibutton className=" w-full sm:h-9 h-6 bg-white hover:bg-gray-200 dark:hover:bg-gray-300 px-3 py-1 rounded-xl  ">
+            <Ibutton className=" w-full sm:h-9 h-6  bg-white px-3 py-1 rounded-xl  ">
               {" "}
               <LuMessagesSquare />
               Message
@@ -112,7 +112,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
           <div className="">
             <Link
               to="/profileEditor"
-              className="  text-end text-xs w-fit   rounded-lg transition-colors duration-300 text-blue-600  "
+              className="text-end text-xs w-fit rounded-lg transition-colors duration-300 text-blue-600  "
             >
               Edite profile
             </Link>

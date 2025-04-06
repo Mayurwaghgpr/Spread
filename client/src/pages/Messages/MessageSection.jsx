@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ChatApi from "../../Apis/ChatApi";
-import { useSearchParams } from "react-router-dom";
+import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import useSocket from "../../hooks/useSocket";
 import { v4 as uuidv4 } from "uuid";
@@ -32,14 +32,16 @@ function MessageSection() {
   );
   const [typingUsers, setTypingUsers] = useState([]);
   const [message, setMessage] = useState("");
-  const { getMessage } = ChatApi();
-  const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
-  const conversationId = searchParams.get("Id");
-  const { socket } = useSocket();
   const containerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
   const prevMessagesCount = useRef(0);
+  const [searchParams] = useSearchParams();
+  const conversationId = searchParams.get("Id");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { getMessage } = ChatApi();
+  const { socket } = useSocket();
+
   const icons = useIcons();
 
   const { isLoading } = useQuery(["messages", conversationId], {
@@ -141,11 +143,12 @@ function MessageSection() {
 
   const conversationData = useMemo(() => {
     if (selectedConversation?.conversationType === "private") {
-      const appositeMember = selectedConversation?.members?.find(
-        (member) => member.id !== user?.id
+      const appositeMember = selectedConversation?.members.find(
+        (m) => m.id != user.id
       );
       return {
-        image: appositeMember?.userImage || "",
+        id: selectedConversation.id,
+        image: appositeMember?.userImage || " ",
         groupName: appositeMember?.displayName || "Unknown",
       };
     }
@@ -165,18 +168,25 @@ function MessageSection() {
       <div className="sticky top-0 flex justify-between col-span-10 bg-[#fff9f3] dark:bg-black z-20 w-full h-fit py-2 px-7 border-b border-inherit shadow-md">
         <div className="flex justify-start items-center gap-3 w-[80%]">
           <ProfileImage
+            onClick={() => navigate(`info?Id=${conversationId}`)}
             className="max-w-10 max-h-10 w-full h-full min-w-fit"
             image={conversationData?.image}
           />
           <div className="flex flex-col items-start justify-center gap-1 overflow-hidden overflow-ellipsis text-nowrap">
             <h1>{conversationData?.groupName}</h1>
+            <ul className="flex justify-start items-center gap-2 text-xs opacity-50">
+              {conversationData?.members?.length && <li>You</li>}
+              {conversationData?.members?.map((member) => (
+                <li key={member.id}>{member.username}</li>
+              ))}
+            </ul>
           </div>
         </div>
         <div className="flex items-center justify-center gap-4 text-2xl">
-          <Ibutton className={"rounded-sm p-2 py-1"}>
+          <Ibutton className={"rounded-lg p-2 py-1"}>
             {icons["vCamera"]}
           </Ibutton>
-          <Ibutton className={"rounded-sm p-2 py-1"}>{icons["callO"]}</Ibutton>
+          <Ibutton className={"rounded-lg p-2 py-1"}>{icons["callO"]}</Ibutton>
         </div>
       </div>
 
@@ -206,13 +216,13 @@ function MessageSection() {
         )}
       </div>
       <div className="fixed bottom-0 flex justify-start items-center col-span-full w-full border-inherit bg-inherit">
-        <div className="flex flex-col justify-center items-start gap-3 p-3 sm:w-1/3 w-full my-4 sm:mx-32 mx-3 border-inherit bg-inherit bg-[#fff9f3] dark:bg-[#171616] rounded-full shadow-md ">
+        <div className="flex flex-col justify-center items-start gap-3 p-1 sm:w-1/3 w-full my-4 sm:mx-32 mx-3 border border-inherit bg-inherit bg-[#fff9f3] dark:bg-[#171616] rounded-full shadow-md ">
           <div className="flex justify-start items-center gap-3 w-full border-inherit ">
             <Ibutton className={"text-2xl rounded-full p-2 "}>
               <IoAttach />
             </Ibutton>
             <CommonInput
-              className="flex justify-center items-center px-2 w-full border-inherit"
+              className="flex justify-center items-center px-2 w-full  border-inherit"
               comp={
                 <Ibutton className={"text-xl rounded-full p-2"}>
                   {icons["smile"]}
@@ -232,6 +242,12 @@ function MessageSection() {
           </div>
         </div>
       </div>
+      <Outlet
+        context={{
+          isGroup: selectedConversation?.conversationType === "group",
+          conversationData,
+        }}
+      />
     </div>
   );
 }

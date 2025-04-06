@@ -9,7 +9,10 @@ import usePublicApis from "../../Apis/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import ChatApi from "../../Apis/ChatApi";
 import { useNavigate } from "react-router-dom";
-import { setOpenNewConverstionBox } from "../../redux/slices/messangerSlice";
+import {
+  selectConversation,
+  setOpenNewConverstionBox,
+} from "../../redux/slices/messangerSlice";
 import { setToast } from "../../redux/slices/uiSlice";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 import { BsPlus } from "react-icons/bs";
@@ -36,10 +39,15 @@ const NewConversation = () => {
   const { mutate: PrivateMutaion, isLoading: isPrivateLoading } = useMutation({
     mutationFn: (chatUserId) => startPrivateChate(chatUserId),
     onSuccess: (data) => {
-      console.log(data);
       dispatch(setOpenNewConverstionBox());
-      // localStorage.setItem("conversationMeta", JSON.stringify(conv));
-      navigate(`c?Id=${data.conversation.id}`, { replace: true });
+      localStorage.setItem(
+        "conversationMeta",
+        JSON.stringify(data.newPrivateConversation)
+      );
+      dispatch(selectConversation(data.newPrivateConversation));
+
+      navigate(`c?Id=${data.newPrivateConversation.id}`, { replace: true });
+      dispatch(setToast({ message: data.message, type: "success" }));
     },
     onError: () => {
       dispatch(
@@ -113,6 +121,7 @@ const NewConversation = () => {
         {isCreatingGroup && (
           <Ibutton
             action={() => (!next ? handelCancelGroup() : setNext(false))}
+            className={"p-1 rounded-lg"}
           >
             Back
           </Ibutton>
@@ -121,7 +130,7 @@ const NewConversation = () => {
           <span> New Conversation</span>
         </h1>
         {isCreatingGroup && Object.entries(hashMap).length > 1 && !next && (
-          <Ibutton action={() => setNext(true)} className={""}>
+          <Ibutton action={() => setNext(true)} className={"p-1 rounded-lg"}>
             Next
           </Ibutton>
         )}
@@ -138,9 +147,12 @@ const NewConversation = () => {
               users={users}
             />
           )}
-          <div className="flex justify-center items-center text-sm gap-2">
+          <div className="flex justify-center items-center text-sm gap-1">
             {!isCreatingGroup && (
-              <Ibutton action={() => setCreatingGroup(true)} className={""}>
+              <Ibutton
+                action={() => setCreatingGroup(true)}
+                className={"p-1 rounded-full"}
+              >
                 <BsPlus />
                 New group
               </Ibutton>

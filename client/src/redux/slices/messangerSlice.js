@@ -5,7 +5,7 @@ const initialState = {
     conversations: [],
     messages: [],
     openNewConverstionBox: false,
-    selectedConversation:converstaioMeta
+    selectedConversation: converstaioMeta,
 }
 
 const messangerSlice = createSlice({

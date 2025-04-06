@@ -7,7 +7,10 @@ import { useMutation } from "react-query";
 import ChatApi from "../../../Apis/ChatApi.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../redux/slices/uiSlice.js";
-import { setOpenNewConverstionBox } from "../../../redux/slices/messangerSlice.js";
+import {
+  selectConversation,
+  setOpenNewConverstionBox,
+} from "../../../redux/slices/messangerSlice.js";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../../hooks/useIcons.jsx";
 function GroupCreation({ handleGroupConfig, hashMap, users }) {
@@ -25,7 +28,13 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
     () => createGroup(groupConfig),
     {
       onSuccess: (data) => {
-        navigate(`c?Id=${data.groupConversation.id}`, { replace: true });
+        localStorage.setItem(
+          "conversationMeta",
+          JSON.stringify(data.newGroupConversation)
+        );
+        // console.log(first);
+        dispatch(selectConversation(data.newGroupConversation));
+        navigate(`c?Id=${data.newGroupConversation.id}`, { replace: true });
         dispatch(setToast({ message: data.message, type: "success" }));
       },
       onError: (error) => {
@@ -46,7 +55,6 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
       membersArr: [...usersObjArry, hashMap[user.id]], //Pushing data of the login user who is creating group **/ Its done separatly because 'users' array dose not contain login user/**
     }));
   }, [hashMap, user, users]);
-  console.log(groupConfig);
   return (
     <div className="w-full border-inherit">
       <div className="flex justify-start items-center gap-3 text-2xl p-3 w-full  border rounded-lg border-inherit">
@@ -71,7 +79,9 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
         hashMap={hashMap}
         handleGroupConfig={handleGroupConfig}
       />
-      <Ibutton action={() => mutate()}>Create</Ibutton>
+      <Ibutton className={"mx-auto p-1  rounded-full"} action={() => mutate()}>
+        Create
+      </Ibutton>
     </div>
   );
 }

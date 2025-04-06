@@ -1,5 +1,6 @@
 import Conversation from "../../models/messaging/Conversation.js"
 import Members from "../../models/messaging/Members.js";
+import User from "../../models/user.js";
 
 
 export const createGroupConversation = async (req, res, next) => {
@@ -11,17 +12,26 @@ export const createGroupConversation = async (req, res, next) => {
     let groupConversation
     try {
 
-        //Creating Group Conversation
+        // Creating Group Conversation
         groupConversation = await Conversation.create({ conversationType: 'group', groupName });
         
-        //Prepare members data for add bulk members 
+        // Prepare members data for add bulk members 
         const members = membersArr.map((memberObj) => ({
-            conversationId:groupConversation.id,
+            conversationId: groupConversation.id,
         ...memberObj
         }))
         //Bulk members added
-     await Members.bulkCreate(members);
-     res.status(201).json({message:'Group created successfully',groupConversation})
+        await Members.bulkCreate(members);
+        const newGroupConversation = await Conversation.findByPk(groupConversation.id, {
+               include:{
+                    model: User, //Get all users as member in conversation
+                    as: 'members', 
+                    through: { attributes: [] },
+                    attributes: ['id', 'displayName', 'username'],
+                }
+        })
+    console.log(JSON.parse(JSON.stringify(newGroupConversation)))
+     res.status(201).json({message:'Group created successfully', newGroupConversation})
     } catch (error) {
     if(groupConversation) await groupConversation.destroy(); // Cleanup if members creation fails
     next(error)
@@ -35,7 +45,7 @@ export const addAsGroupAdmin = async (req, res, next) => {
         return res.status(401).json({message:'Please Provide user id,Can not make user admin without id'})
     }
     try {
-        const isAddmin = await Members.find({ wher: { memberId: currentUserId, memberType: 'admin' } })
+        const isAddmin = await Members.find({ where: { memberId: currentUserId, memberType: 'admin' } })
         if (!isAddmin) {
            return res.status(401).json({message:'Your not allowed to make a user admin,only admin and make admins'}) 
         }

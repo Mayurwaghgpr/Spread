@@ -17,7 +17,7 @@ const CommonInput = forwardRef(function CommonInput(
   return (
     <>
       {labelname && (
-        <label htmlFor={Iname} className="w-full cursor-pointer">
+        <label htmlFor={Iname} className=" cursor-pointer">
           {labelname}
         </label>
       )}

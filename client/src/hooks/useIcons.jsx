@@ -5,20 +5,17 @@ import {
   BsBellFill,
   BsCamera,
   BsCameraVideo,
+  BsClock,
+  BsClockHistory,
   BsGear,
   BsGearFill,
   BsHandThumbsUp,
-  BsHandThumbsUpFill,
+  BsInfoCircle,
   BsLink,
   BsMoonStarsFill,
-  BsSearch,
+  BsPeople,
 } from "react-icons/bs";
-import {
-  MdCelebration,
-  MdDone,
-  MdErrorOutline,
-  MdMessage,
-} from "react-icons/md";
+import { MdCelebration, MdDone, MdErrorOutline } from "react-icons/md";
 import {
   IoCallOutline,
   IoHappyOutline,
@@ -50,7 +47,12 @@ import { AiOutlineSend } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
-import { CiWarning } from "react-icons/ci";
+import { CiClock1, CiWarning } from "react-icons/ci";
+import {
+  IoMdInformation,
+  IoMdInformationCircle,
+  IoMdInformationCircleOutline,
+} from "react-icons/io";
 
 function useIcons() {
   return {
@@ -94,6 +96,7 @@ function useIcons() {
 
     // I
     image1: <PiImageThin />,
+    info: <BsInfoCircle />,
 
     // J
     // Placeholder for future grouping
@@ -125,6 +128,7 @@ function useIcons() {
     penO: <RiQuillPenLine />,
     reminder: <PiAlarm />,
     repost: <BiRepost />,
+    people: <BsPeople />,
 
     // Q
     // Placeholder for future grouping
@@ -143,6 +147,7 @@ function useIcons() {
 
     // T
     tag: <FaUserTag />,
+    duration: <BsClockHistory />,
 
     // U
     // Placeholder for future grouping

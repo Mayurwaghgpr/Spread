@@ -102,7 +102,7 @@ function Home() {
   };
 
   return (
-    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838]">
+    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
       {/* Sticky Navigation */}
       <div className="sticky top-[3.1rem] sm:top-[3.6rem] row-span-1 lg:col-span-6 col-span-full w-full flex items-center justify-start border-b text-sm sm:text-base md:text-lg lg:text-xl font-medium bg-gray-700 bg-opacity-0   backdrop-blur-[20px] dark:border-[#383838] z-20  ">
         <ul className="flex items-center justify-between w-full h-full ">

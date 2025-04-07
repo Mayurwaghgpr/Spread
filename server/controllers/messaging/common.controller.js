@@ -96,7 +96,7 @@ try {
             }, returning: true
         })
     
-    res.status(200).json({message:'messages mute for this conversation',updatedMember});
+    res.status(200).json({message:'messages mute for this conversation',updatedMember:updatedMember[0]});
 } catch (error) {
     console.error('Error updating IsMuteMessage:', error);
     next(error)

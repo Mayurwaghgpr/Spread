@@ -15,6 +15,8 @@ import FormatedTime from "../../component/utilityComp/FormatedTime";
 import Menu from "../../component/postsComp/Menu";
 import menuCosntant from "../../component/postsComp/menuCosntant";
 import ProfileImage from "../../component/ProfileImage";
+import Ibutton from "../../component/buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 
 const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const [openReplies, setOpenReplies] = useState("");
@@ -25,6 +27,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const dispatch = useDispatch();
   const postdata = useOutletContext();
   const { MENU_ITEMS } = menuCosntant();
+  const icons = useIcons();
 
   const commenterImg = userImageSrc(comt?.commenter);
   const isLiked = comt?.commentLikes?.some((like) => like.likedBy === user.id);
@@ -44,14 +47,22 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     onSuccess: (data) => {
       console.log({ data });
       comt.pind = data.pind;
+      dispatch(
+        setToast({ message: "Comment pinned successfully!", type: "success" })
+      );
+
       setOptLike("");
     },
     onError: (error) => {
       setOptLike("");
       dispatch(
-        setToast({ message: "Error occured will adding like", type: "error" })
+        setToast({
+          message: "Error occurred while pinning comment",
+          type: "error",
+        })
       );
     },
+    refetchOnWindowFocus: false,
   });
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery(
@@ -75,13 +86,20 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     onSuccess: ({ updtCommentLikes }) => {
       comt.commentLikes = updtCommentLikes || [];
       setOptLike("");
+      dispatch(
+        setToast({
+          message: "Liked the comment successfully!",
+          type: "success",
+        })
+      );
     },
     onError: (error) => {
       setOptLike("");
       dispatch(
-        setToast({ message: "Error occured will adding like", type: "error" })
+        setToast({ message: "Error occurred while adding like", type: "error" })
       );
     },
+    refetchOnWindowFocus: false,
   });
 
   const isPostOwnerLiked = useMemo(
@@ -98,46 +116,37 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
 
   return (
     <div ref={ref} className={`${className}`}>
-      <article className="p-2 flex flex-col  w-full justify-center items-start gap-2 select-none border-inherit">
-        <div className=" flex  w-full justify-start gap-5 items-start border-inherit">
+      <article className=" flex flex-col  w-full justify-center items-start gap-2 select-none border-inherit">
+        <div className=" grid grid-cols-12 border-inherit w-full">
           <ProfileImage
-            className={`flex min-w-fit min-h-fit  justify-center items-center rounded-full  ${
-              isTopComment ? " w-10 h-10" : " w-6 h-6 "
+            className={`flex justify-center items-center col-span-1  rounded-full  ${
+              isTopComment ? " w-10 h-10" : " w-8 h-8 "
             } `}
             image={commenterImg.userImageurl}
             alt={comt?.commenter?.username}
           />
-
-          <div className="flex  flex-col justify-center items-start gap-2 w-full border-inherit">
+          <div className="flex flex-col justify-center items-start gap-1 col-start-3 col-span-full w-full border-inherit">
             <div className="flex justify-between w-full items-center text-nowrap  text-sm border-inherit ">
               <div className="flex justify-start items-center text-nowrap gap-2 text-sm border-inherit">
                 <h1 className="font-semibold">{comt?.commenter?.username}</h1>
                 {/*pind comment */}
-                {comt?.pind && (
-                  <TiPin className="text-black text-opacity-30 dark:text-opacity-20 dark:text-white" />
-                )}
-                {console.log(comt.topCommentId)}
+                {comt?.pind && icons["pin"]}
                 <FormatedTime
                   date={comt?.createdAt}
-                  className={` dark:text-white  text-black ${comt.topCommentId === null ? "text-xs" : "text-[.6rem]"}`}
+                  className={` opacity-20 ${comt.topCommentId === null ? "text-xs" : "text-[.6rem]"}`}
                   formate={"dd/MMM/yyyy"}
                 />
                 {comt?.commenter?.id === postdata?.User?.id && (
-                  <small className=" text-black text-opacity-30 dark:text-opacity-20 dark:text-white">
-                    author
-                  </small>
+                  <small className="opacity-20 ">author</small>
                 )}
                 {/* if Post owner liked this post show the image of owner*/}
                 {isPostOwnerLiked && (
-                  <div className="flex items-center justify-center gap-1 animate-fedin.2s">
-                    <BsHeartFill className="text-red-500 text-[10px]" />{" "}
-                    <div className=" w-5 h-5">
-                      <img
-                        className="w-full h-full object-cover object-top  rounded-full"
-                        src={postdata.User.userImage}
-                        loading="lazy"
-                      />
-                    </div>
+                  <div className="flex justify-start items-center gap-2 text-xs/10 ">
+                    {icons["heartFi"]}
+                    <ProfileImage
+                      className="w-5 h-5"
+                      image={postdata.User.userImage}
+                    />
                   </div>
                 )}
               </div>
@@ -150,31 +159,37 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
                     postdata.authorId === user.id) &&
                     MENU_ITEMS.deleteComment,
                   comt.commenter.id === user.id && MENU_ITEMS.editComment,
-                ]}
+                ]?.filter((itm) => itm)}
                 content={comt}
               />
             </div>
             <div>
-              <p>{comt.content}</p>
+              <p>
+                {comt.content} Lorem, ipsum dolor sit amet consectetur
+                adipisicing elit. Est et, in excepturi aliquam veritatis
+                voluptatibus omnis quo deleniti? Illo similique placeat alias.
+                Esse et alias necessitatibus quia nisi corporis magni!
+              </p>
             </div>
             <div className="flex justify-start items-center gap-3 my-3">
-              <button
-                onClick={() => {
+              <Ibutton
+                className={"p-1 rounded-full"}
+                action={() => {
                   likeUnlikeMutation(comt?.id);
                   setOptLike(comt?.id);
                 }}
-                className="flex justify-start min-w-8 items-center gap-1"
               >
-                {(optLike === comt?.id && !isLiked) ||
-                (optLike === "" && isLiked) ? (
-                  <BsHeartFill className="text-red-500" />
-                ) : (
-                  <BsHeart />
-                )}
+                {(() => {
+                  const showFilled =
+                    (optLike === comt?.id && !isLiked) ||
+                    (optLike === "" && isLiked);
+                  return showFilled ? icons["heartFi"] : icons["heartO"];
+                })()}
                 {memoLike}
-              </button>
-              <button
-                onClick={() =>
+              </Ibutton>
+              <Ibutton
+                className={"p-1 rounded-full"}
+                action={() =>
                   dispatch(
                     setCommentCred({
                       ...commentCred,
@@ -186,7 +201,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
                 }
               >
                 Reply
-              </button>
+              </Ibutton>
               {/* {(comt?.commenter?.id === user.id ||
                   postdata.User.id === user.id) && (
                   <button onClick={() => deletMutate(comt?.id)}>
@@ -194,26 +209,26 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
                   </button>
                 )} */}
               {!comt?.topCommentId && postdata.User.id === user.id && (
-                <button
-                  onClick={() =>
+                <Ibutton
+                  className="opacity-30 "
+                  action={() =>
                     pinMutation({ pin: !comt.pind, commentId: comt.id })
                   }
-                  className="text-black text-opacity-30 dark:text-opacity-20 dark:text-white"
                 >
-                  <TiPin />
-                </button>
+                  {icons["pin"]}
+                </Ibutton>
               )}
             </div>
           </div>
         </div>
         {!comt?.topCommentId && (
-          <button
-            onClick={handleRepliesClick}
-            className="flex justify-start items-center gap-3 px-10  text-blue-400"
+          <Ibutton
+            className={"ml-12 px-1 text-blue-500 rounded-full"}
+            action={handleRepliesClick}
           >
-            {openReplies !== comt.id ? <IoIosArrowDown /> : <IoIosArrowUp />}{" "}
+            {openReplies !== comt.id ? icons["arrowDown"] : icons["arrowUp"]}
             Replies {abbreviateNumber(comt?.reply?.length)}
-          </button>
+          </Ibutton>
         )}
       </article>
       {openReplies === comt.id && Comments?.length > 0 && (

@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import abbreviateNumber from "../../../utils/numAbrivation";
 import { useNavigate } from "react-router-dom";
 import LikesList from "./LikesList";
-import useLikeIcons from "../../../hooks/useIcons";
+import useIcons from "../../../hooks/useIcons";
 
 function Like({ post, className }) {
-  const likeIconObj = useLikeIcons();
+  const icons = useIcons();
   const { LikePost } = usePublicApis();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ function Like({ post, className }) {
         className="flex items-center justify-center gap-1 text-inherit"
       >
         {/* Icon rendering */}
-        {likeIconObj[optimistIcon || "default"]}
+        {icons[optimistIcon || "likeO"]}
         <span className="text-md mt-1">{likeCount}</span>
       </button>
     </div>

@@ -121,7 +121,6 @@ function Notifictionbox() {
     e.stopPropagation();
     dispatch(setOpenNotification());
   }, []);
-  console.log(notificationState);
   return (
     <div
       onClick={handeClick}

@@ -10,6 +10,9 @@ import DOMPurify from "dompurify";
 import PostsApis from "../../Apis/PostsApis";
 import { setToast } from "../../redux/slices/uiSlice";
 import Spinner from "../../component/loaders/Spinner";
+import ProfileImage from "../../component/ProfileImage";
+import Ibutton from "../../component/buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 
 // const EmojiPicker = lazy(() => import("emoji-picker-react"));
 function CommentInput({ className }) {
@@ -22,6 +25,8 @@ function CommentInput({ className }) {
   const userImage = userImageSrc(user);
   const pickerRef = useRef();
   const inputRef = useRef();
+  const icons = useIcons();
+
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
       Comments(commentCred);
@@ -59,58 +64,54 @@ function CommentInput({ className }) {
   // console.log(commentCred);
   return (
     <div className={className}>
-      <div className="w-16 h-12 text-sm">
-        {" "}
-        <img
-          className="w-full h-full object-cover object-top rounded-full"
-          src={userImage.userImageurl}
-          alt={user?.username}
-          loading="lazy"
-        />
-      </div>
-      <div className="relative w-full flex items-center border-inherit">
-        {" "}
+      <ProfileImage
+        className={"min-w-10 min-h-10 h-10 w-10"}
+        image={userImage.userImageurl}
+        alt={user?.username}
+      />{" "}
+      <div className="relative flex flex-wrap justify-start items-start max-w-[70%] w-full text-wrap break-words text-sm">
         <p
           ref={inputRef}
           contentEditable={true}
           suppressContentEditableWarning
-          aria-label="Comment..."
-          className="w-full text-sm outline-none p-2 border-b bg-inherit border-inherit focus:border-black dark:focus:border-white resize-none"
+          className=" w-full border-b bg-inherit border-inherit outline-none p-2  text-inherit "
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(commentCred.at),
           }}
           onInput={(e) => handelInput(e.currentTarget.innerText)}
         ></p>
-        <div className=" w-1 h-1 bg-none p-1 text-xl border-inherit">
-          <MdOutlineTagFaces
-            onClick={() => setOpenEmojiPicker((prev) => !prev)}
-          />
-          <div
-            ref={pickerRef}
-            className="absolute -right-16 min-size-10 -top-[30rem] border-inherit"
-          >
-            {/* <Suspense fallback={<Spinner />}>
+      </div>
+      <div className="flex justify-center items-center gap-2">
+        <Ibutton
+          className={"p-1 rounded-full"}
+          action={() => setOpenEmojiPicker((prev) => !prev)}
+        >
+          {icons["smile"]}
+        </Ibutton>
+        {/* <div
+        ref={pickerRef}
+        className="absolute -right-16 min-size-10 -top-[30rem] border-inherit"
+      >
+        <Suspense fallback={<Spinner />}>
               <EmojiPicker
                 lazyLoadEmojis={true}
                 open={openEmojiPicker}
                 theme={ThemeMode}
                 onEmojiClick={(e) => console.log(e.emoji)}
               />
-            </Suspense> */}
-          </div>
-        </div>
-      </div>
-      <div className=" flex justify-end *:transition-all *:duration-100 my-2 items-center gap-3">
-        {/* <button className=" py-1 px-2 rounded-full">cancle</button> */}
-        {
-          <button
-            onClick={mutate}
-            className={`${!commentCred.content.trim() && "text-gray-300"} hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full p-3 `}
-            disabled={isLoading || !commentCred.content.trim()}
-          >
-            {isLoading ? <Spinner /> : <IoSend />}
-          </button>
-        }
+            </Suspense>
+      </div> */}
+        <Ibutton
+          action={mutate}
+          disabled={isLoading || !commentCred.content.trim()}
+          className={`${!commentCred.content.trim() && "text-gray-300"} text-2xl rounded-full p-2 `}
+        >
+          {isLoading ? (
+            <Spinner className={"w-5 h-5 dark:bg-white bg-black"} />
+          ) : (
+            icons["sendO"]
+          )}
+        </Ibutton>
       </div>
     </div>
   );

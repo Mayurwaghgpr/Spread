@@ -10,13 +10,18 @@ import {
   BsGear,
   BsGearFill,
   BsHandThumbsUp,
+  BsHandThumbsUpFill,
+  BsHeart,
+  BsHeartFill,
   BsInfoCircle,
   BsLink,
   BsMoonStarsFill,
   BsPeople,
+  BsThreeDotsVertical,
 } from "react-icons/bs";
 import { MdCelebration, MdDone, MdErrorOutline } from "react-icons/md";
 import {
+  IoArrowDown,
   IoCallOutline,
   IoHappyOutline,
   IoHomeOutline,
@@ -31,7 +36,12 @@ import {
 import { PiHandsClappingFill, PiImageThin } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
-import { FaCode, FaComment, FaHandHoldingHeart } from "react-icons/fa6";
+import {
+  FaCode,
+  FaComment,
+  FaHandHoldingHeart,
+  FaThumbsUp,
+} from "react-icons/fa6";
 import {
   RiQuillPenFill,
   RiQuillPenLine,
@@ -47,12 +57,9 @@ import { AiOutlineSend } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
-import { CiClock1, CiWarning } from "react-icons/ci";
-import {
-  IoMdInformation,
-  IoMdInformationCircle,
-  IoMdInformationCircleOutline,
-} from "react-icons/io";
+import { CiWarning } from "react-icons/ci";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { TiPin } from "react-icons/ti";
 
 function useIcons() {
   return {
@@ -61,6 +68,8 @@ function useIcons() {
     alphabetUp: <BsAlphabetUppercase />,
     appreciate: <MdAutoAwesome />,
     arrowL: <BsArrowLeft />,
+    arrowUp: <IoIosArrowUp />,
+    arrowDown: <IoIosArrowDown />,
 
     // B
     bell: <BsBellFill />,
@@ -75,9 +84,9 @@ function useIcons() {
     comment: <FaComment />,
 
     // D
-    default: <BsHandThumbsUp />,
     desktopO: <HiOutlineComputerDesktop />,
     done: <MdDone color="green" />,
+    duration: <BsClockHistory />,
 
     // E
     error: <MdErrorOutline color="red" />,
@@ -93,6 +102,9 @@ function useIcons() {
     helpfull: <FaHandHoldingHeart />,
     homeFi: <IoHomeSharp />,
     homeO: <IoHomeOutline />,
+    redHeartFi: <BsHeartFill color="red" />,
+    heartFi: <BsHeartFill className="text-gray-600" />,
+    heartO: <BsHeart />,
 
     // I
     image1: <PiImageThin />,
@@ -109,6 +121,8 @@ function useIcons() {
     libraryO: <IoLibraryOutline />,
     link: <BsLink />,
     logout: <LuLogOut />,
+    like: <BsHandThumbsUpFill />,
+    likeO: <BsHandThumbsUp />,
 
     // M
     mention: <VscMention />,
@@ -129,6 +143,7 @@ function useIcons() {
     reminder: <PiAlarm />,
     repost: <BiRepost />,
     people: <BsPeople />,
+    pin: <TiPin />,
 
     // Q
     // Placeholder for future grouping
@@ -147,7 +162,7 @@ function useIcons() {
 
     // T
     tag: <FaUserTag />,
-    duration: <BsClockHistory />,
+    ThreeDot: <BsThreeDotsVertical />,
 
     // U
     // Placeholder for future grouping

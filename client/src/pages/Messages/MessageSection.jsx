@@ -190,7 +190,7 @@ function MessageSection() {
         </div>
       </div>
 
-      <div className="sm:flex flex-col justify-end h-full col-span-full scroll-smooth no-scroll px-3 pt-5 pb-20 drop-shadow-xl">
+      <div className="sm:flex flex-col justify-end w-full h-full col-span-full scroll-smooth no-scroll px-3 pt-5 pb-20 drop-shadow-xl">
         {messages?.map((message) => (
           <MessageBubble key={message.id} message={message} userId={user.id} />
         ))}
@@ -212,7 +212,7 @@ function MessageSection() {
           </div>
         )}
         {isLoading && (
-          <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white" />
+          <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
         )}
       </div>
       <div className="fixed bottom-0 flex justify-start items-center col-span-full w-full border-inherit bg-inherit">

@@ -109,7 +109,7 @@ function PostView() {
 
   return (
     <section
-      className={`relative  flex justify-center h-full border-inherit transition-all duration-500 w-full  my-16 dark:*:border-[#383838] `}
+      className={`relative flex justify-center w-full h-full px-5 my-16 border-inherit transition-all duration-500  dark:*:border-[#383838] `}
     >
       {!show ? (
         <article

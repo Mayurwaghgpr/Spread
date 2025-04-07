@@ -8,6 +8,8 @@ import CommentInput from "./CommentInput";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { IoClose, IoCloseSharp } from "react-icons/io5";
+import Ibutton from "../../component/buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 const CommentBox = lazy(() => import("./CommentBox"));
 
 function CommentSection() {
@@ -16,6 +18,8 @@ function CommentSection() {
   const { getComments } = PostsApis();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const icons = useIcons();
+
   const postdata = useOutletContext();
   const {
     data: TopComments,
@@ -58,16 +62,17 @@ function CommentSection() {
           })
         );
       }}
-      className=" flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0 lg:w-fit w-full  animate-fedin.2s   lg:h-[90vh] h-full sm:z-0 z-30  overflow-hidden "
+      className=" flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0  w-full  animate-fedin.2s  lg:h-[90vh] h-full sm:z-0 z-30 "
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-[#f3efeb] dark:bg-black sm:border border-inherit flex flex-col gap-2  sm:animate-none  animate-slide-in-bottom lg:w-[30rem] w-full sm:m-0 rounded-xl m-1 border  lg:h-full h-[60%] overflow-hidden "
+        className="relative flex flex-col gap-2 max-w-[30rem] w-full  lg:h-full h-[60%] border sm:border border-inherit sm:m-0 rounded-xl m-1 bg-[#f3efeb] dark:bg-black  sm:animate-none  animate-slide-in-bottom   overflow-hidden "
       >
-        <div className="flex p-4 justify-between border-b border-inherit items-center">
+        <div className="flex items-center justify-between p-4 border-b border-inherit ">
           <h1 className="text-xl ">Comments</h1>
-          <button
-            onClick={() => {
+          <Ibutton
+            className={"p-1 rounded-full"}
+            action={() => {
               navigate(-1, { replace: true });
               dispatch(
                 setCommentCred({
@@ -80,11 +85,11 @@ function CommentSection() {
               );
             }}
           >
-            <IoCloseSharp />
-          </button>
+            {icons["close"]}
+          </Ibutton>
         </div>
 
-        <div className=" px-4 flex flex-col justify-start pb-32 items-center w-full h-[80%] overflow-y-auto border-inherit ">
+        <div className="flex flex-col justify-start items-center gap-5 py-10 px-5  w-full h-[80%] overflow-y-auto border-inherit ">
           <Suspense
             fallback={
               <Spinner className={"w-10 h-10  bg-black dark:bg-white"} />
@@ -113,7 +118,7 @@ function CommentSection() {
         </div>
         <CommentInput
           className={
-            " bg-[#f3efeb] border-t border-[#1d1c1c22] dark:bg-black  z-10 flex justify-start items-start gap-5  w-full h-[20%] animate-slide-in-top  p-5  dark:border-inherit"
+            "flex justify-center items-start gap-5 w-full p-5 z-10 bg-[#f3efeb] border-t border-[#1d1c1c22] dark:bg-black animate-slide-in-top dark:border-inherit"
           }
         />
       </div>

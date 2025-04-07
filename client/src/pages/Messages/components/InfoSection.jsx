@@ -1,10 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import ProfileImage from "../../../component/ProfileImage";
 import Ibutton from "../../../component/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 import { useOutletContext } from "react-router-dom";
-import CommentInput from "../../Comment/CommentInput";
-import CommonInput from "../../../component/inputComponents/CommonInput";
 import ToggleCheckbox from "../../../component/inputComponents/ToggleCheckBox";
 import { useMutation } from "react-query";
 import ChatApi from "../../../Apis/ChatApi";
@@ -13,25 +11,30 @@ import { setToast } from "../../../redux/slices/uiSlice";
 
 function InfoSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
-
+  const [isMute, setIsMute] = useState(false);
   const icons = useIcons();
   const dispatch = useDispatch();
   const { isGroup, conversationData } = useOutletContext();
   const { setMessageToMute } = ChatApi();
+  const currentUser = useMemo(() => {
+    const userInfo = conversationData?.members?.find(
+      (member) => member.id === user.id
+    );
+    setIsMute(userInfo?.Members?.isMuteMessage);
+    return userInfo;
+  }, [conversationData?.members, user?.id]);
+
   const { mutate } = useMutation({
     mutationFn: (config) => setMessageToMute(config),
     onSuccess: (data) => {
+      setIsMute(data.updatedMember.isMuteMessage);
       dispatch(setToast({ message: data.message, type: "success" }));
     },
     onError: () => {
       dispatch(setToast({ messge: "Fail to mute messages", type: "error" }));
     },
   });
-  const currentUser = useMemo(
-    () => conversationData.members.find((member) => member.id === user.id),
-    [conversationData.members, user.id]
-  );
-  console.log(currentUser);
+
   return (
     <section className="p-4 w-full overflow-y-auto h-full">
       <header>
@@ -54,10 +57,10 @@ function InfoSection() {
           <Ibutton className={"flex justify-start  p-2 rounded-lg"}>
             {icons["bell"]} Mute
             <ToggleCheckbox
-              checked={currentUser?.Members?.isMuteMessage}
+              checked={isMute}
               onChange={() =>
                 mutate({
-                  isMuteMessage: currentUser?.Members?.isMuteMessage,
+                  isMuteMessage: isMute,
                   conversationId: conversationData.id,
                 })
               }

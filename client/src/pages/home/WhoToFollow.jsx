@@ -1,5 +1,4 @@
 import React from "react";
-import FollowPeopleLoader from "../../component/loaders/FollowPeopleLoader";
 import PeoplesList from "../../component/PeoplesList";
 import Follow from "../../component/buttons/follow";
 import { Link, useNavigate } from "react-router-dom";

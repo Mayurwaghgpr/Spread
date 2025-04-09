@@ -46,7 +46,7 @@ function ThemeBtn({ Modes, className, separate }) {
           aria-label="THEME"
           className="p-2 transition-all duration-100 rounded-full flex items-center"
         >
-          {icons[currentMode?.icon]}
+          {icons[currentMode?.icon || "sun"]}
         </button>
       ) : (
         //It used to diplay toggle buttons
@@ -60,7 +60,7 @@ function ThemeBtn({ Modes, className, separate }) {
               aria-label="THEME"
               className={`${mode.value === ThemeMode ? "shadow-md dark:shadow-[#c5c3c3] scale-110" : " shadow-none"} transition-all duration-100  flex items-center`}
             >
-              {icons[mode?.icon]}
+              {icons[mode?.icon || "sun"]}
             </button>
           );
         })

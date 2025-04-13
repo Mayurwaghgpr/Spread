@@ -68,6 +68,7 @@ function App() {
   );
 
   useEffect(() => {
+    // register user to web socket
     socket?.emit("register", user.id);
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 

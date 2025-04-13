@@ -52,12 +52,17 @@ function MessageSection() {
     refetchOnWindowFocus: false,
   });
 
-  const handleUserTyping = useCallback(({ senderId, image, typing }) => {
-    setTypingUsers((prev) => [
-      ...prev.filter((evn) => evn.senderId !== senderId),
-      { senderId, image, typing },
-    ]);
-  }, []);
+  const handleUserTyping = useCallback(
+    ({ conversationId: convId, senderId, image, typing }) => {
+      if (convId === conversationId) {
+        setTypingUsers((prev) => [
+          ...prev.filter((evn) => evn.senderId !== senderId),
+          { senderId, image, typing },
+        ]);
+      }
+    },
+    [conversationId]
+  );
 
   // const handleNewMessage = useCallback(
   //   (msg) => {
@@ -129,7 +134,7 @@ function MessageSection() {
           senderId: user?.id,
           typing: false,
         });
-      }, 1500);
+      }, 2000);
     },
     [conversationId, socket, user?.id, user?.userImage]
   );
@@ -159,10 +164,8 @@ function MessageSection() {
     () => typingUsers.some((env) => env.senderId !== user?.id && env.typing),
     [typingUsers, user?.id]
   );
-
   return (
     <div
-      ref={containerRef}
       className={`relative ${conversationId ? "sm:visible" : "hidden"} grid grid-cols-10 grid-rows-12 w-full h-screen  border-inherit  bg-inherit`}
     >
       <header className="flex justify-between col-span-full  bg-[#fff9f3] dark:bg-black z-20 w-full h-fit py-2 px-7 border-b border-inherit shadow-md">
@@ -190,39 +193,50 @@ function MessageSection() {
         </div>
       </header>
 
-      <div className="sm:flex flex-col justify-between w-full h-full col-span-full row-start-2 row-span-full  scroll-smooth p-5  border-inherit no-scroll  overflow-y-auto drop-shadow-xl ">
-        {messages?.map((message) => (
-          <MessageBubble key={message.id} message={message} userId={user.id} />
-        ))}
-        {isUsersTyping && (
-          <div className="flex gap-1 my-4">
-            {typingUsers.map(
-              (usr, idx) =>
-                usr.senderId !== user.id && (
-                  <ProfileImage
-                    key={usr.senderId}
-                    className="w-6 h-6"
-                    image={usr?.image}
-                  />
-                )
-            )}
-            <div className=" relative flex items-center justify-center py-2 px-2 text-sm mt-2 ml-2 bg-[#fffefe]  dark:shadow-white rounded-xl rounded-tl-none">
-              <div
-                class="absolute left-[-5px] top-0 -z-[1] w-0 h-0 
+      <div
+        ref={containerRef}
+        className="sm:flex flex-col justify-end w-full h-full col-span-full row-start-2 row-span-full  scroll-smooth p-5  border-inherit no-scroll  overflow-y-auto"
+      >
+        {!isLoading &&
+          messages?.map((message) => (
+            <MessageBubble
+              key={message.id}
+              message={message}
+              userId={user.id}
+            />
+          ))}
+        <div className="w-full min-h-16">
+          {isUsersTyping && (
+            <div className="flex gap-1 my-4">
+              {conversationData.conversationType === "group" &&
+                typingUsers.map(
+                  (usr, idx) =>
+                    usr.senderId !== user.id && (
+                      <ProfileImage
+                        key={usr.senderId}
+                        className="w-6 h-6"
+                        image={usr?.image}
+                      />
+                    )
+                )}
+              <div className=" relative flex items-center justify-center py-2 px-2 text-sm mt-2 ml-2 bg-[#fffefe]  dark:shadow-white rounded-xl rounded-tl-none">
+                <div
+                  class="absolute left-[-5px] top-0 -z-[1] w-0 h-0 
                 border-t-transparent 
                 border-b-[10px] border-b-transparent 
                 border-r-[10px] border-r-inherit"
-              ></div>
-              <span className="typingLoader"></span>
+                ></div>
+                <span className="typingLoader"></span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
         {isLoading && (
           <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
         )}
       </div>
       <div className="flex justify-center items-center col-span-full w-full h-fit border-t px-5 pt-2 pb-5 border-inherit bg-inherit">
-        <div className="relative flex justify-center items-baseline gap-3 p-3 sm:w-[70%] w-full  rounded-lg bg-gray-200 dark:bg-white dark:bg-opacity-10 border-inherit ">
+        <div className="relative flex justify-center items-baseline gap-3 p-2 sm:w-[70%] w-full  rounded-lg bg-gray-200 dark:bg-white dark:bg-opacity-10 border-inherit ">
           <CommonInput
             className="relative flex flex-col justify-center items-center  px-2 w-full h-full border-inherit  "
             IClassName={
@@ -230,7 +244,7 @@ function MessageSection() {
             }
             comp={
               <>
-                <div className="absolute w-full transition-transform duration-500 border-t border-inherit scale-0 peer-focus:scale-100 bg-red-500"></div>
+                <div className="absolute w-full transition-transform duration-300 border-t border-black dark:border-inherit scale-0 peer-focus:scale-100 "></div>
                 <div className="flex justify-start items-center w-full ">
                   <Ibutton className={"text-2xl rounded-full p-2 "}>
                     <IoAttach />

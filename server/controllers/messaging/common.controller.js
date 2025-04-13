@@ -20,6 +20,7 @@ export const getConversationsByUserId = async (req, res, next) => {
     }
         
         const conversations = await Conversation.findAll({
+            attributes: ['id', 'lastMessage', 'conversationType', 'groupName', 'image', 'updatedAt', 'createdAt'],
            include: [
                 {
                     model: Members, //find conversations where userId matches
@@ -36,8 +37,8 @@ export const getConversationsByUserId = async (req, res, next) => {
                 },
                 
             ],
-            where: { createdAt: { [Op.lt]: lastTimestamp } },
-           order: [["createdAt", "DESC"]],
+            where: { updatedAt: { [Op.lt]: lastTimestamp } },
+            order: [["updatedAt", "DESC"]],
             limit,
         });
         await redisClient.setEx(cacheKey, EXPIRATION, JSON.stringify(conversations))

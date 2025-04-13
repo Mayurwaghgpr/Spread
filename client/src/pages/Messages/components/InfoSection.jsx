@@ -12,17 +12,20 @@ import { setToast } from "../../../redux/slices/uiSlice";
 function InfoSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const [isMute, setIsMute] = useState(false);
+  const [isOptMute, setIsOptMute] = useState(false);
   const icons = useIcons();
   const dispatch = useDispatch();
+  const { selectedConversation } = useSelector((state) => state.messanger);
+
   const { isGroup, conversationData } = useOutletContext();
   const { setMessageToMute } = ChatApi();
   const currentUser = useMemo(() => {
-    const userInfo = conversationData?.members?.find(
+    const userInfo = selectedConversation?.members?.find(
       (member) => member.id === user.id
     );
     setIsMute(userInfo?.Members?.isMuteMessage);
     return userInfo;
-  }, [conversationData?.members, user?.id]);
+  }, [selectedConversation?.members, user?.id]);
 
   const { mutate } = useMutation({
     mutationFn: (config) => setMessageToMute(config),
@@ -31,25 +34,38 @@ function InfoSection() {
       dispatch(setToast({ message: data.message, type: "success" }));
     },
     onError: () => {
+      setIsOptMute(false);
       dispatch(setToast({ messge: "Fail to mute messages", type: "error" }));
     },
   });
-
+  const convarsationInfo = useMemo(
+    () => selectedConversation?.members.find((member) => member.id !== user.id),
+    [selectedConversation?.members]
+  );
+  const handleMuteToggleMutation = () => {
+    setIsOptMute((prev) => !prev);
+    mutate({
+      isMuteMessage: isMute,
+      conversationId: conversationData.id,
+    });
+  };
   return (
     <section className="p-4 w-full overflow-y-auto h-full">
       <header>
         <h1 className="text-xl font-medium">
-          {isGroup ? "Group Info" : "User Info"}
+          {selectedConversation.conversationType == "group"
+            ? "Group Info"
+            : "User Info"}
         </h1>
       </header>
       <div className="flex flex-col justify-center items-center gap-2 w-full p-5 ">
         <ProfileImage
           className={"w-20 h-20 border-2 rounded-full"}
-          image={conversationData?.image}
+          image={selectedConversation.image || convarsationInfo.userImage}
         ></ProfileImage>
-        <h2>{conversationData?.groupName}</h2>
+        <h2>{selectedConversation?.groupName || convarsationInfo.username}</h2>
         <small className=" opacity-30">
-          {conversationData?.members?.length} ⁠members{" "}
+          {selectedConversation?.members?.length} ⁠members{" "}
         </small>
       </div>
       <div className="  w-full p-5 ">
@@ -57,13 +73,8 @@ function InfoSection() {
           <Ibutton className={"flex justify-start  p-2 rounded-lg"}>
             {icons["bell"]} Mute
             <ToggleCheckbox
-              checked={isMute}
-              onChange={() =>
-                mutate({
-                  isMuteMessage: isMute,
-                  conversationId: conversationData.id,
-                })
-              }
+              checked={isOptMute || isMute}
+              onChange={handleMuteToggleMutation}
             />
           </Ibutton>
           {/* <Ibutton className={"flex justify-start p-2 rounded-lg"}>

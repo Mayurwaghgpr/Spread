@@ -9,11 +9,13 @@ import {
 } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import useIcons from "../../hooks/useIcons";
+import { useSelector } from "react-redux";
 
 function ConversationInfo() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
+  const { selectedConversation } = useSelector((state) => state.messanger);
   const { isGroup, conversationData } = useOutletContext();
   const icons = useIcons();
   const sideNav = useMemo(

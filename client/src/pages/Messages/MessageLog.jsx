@@ -7,6 +7,7 @@ import ChatApi from "../../Apis/ChatApi";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import {
   selectConversation,
+  setMessageLogData,
   setOpenNewConverstionBox,
 } from "../../redux/slices/messangerSlice";
 import Spinner from "../../component/loaders/Spinner";
@@ -17,6 +18,7 @@ import ProfileImage from "../../component/ProfileImage";
 
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
+  const { messageLogData } = useSelector((state) => state.messanger);
   const { getConversations } = ChatApi();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
@@ -25,7 +27,6 @@ function MessageLog() {
   const icons = useIcons();
 
   const {
-    data,
     isFetching,
     isFetchingNextPage,
     fetchNextPage,
@@ -36,6 +37,9 @@ function MessageLog() {
     ({ pageParam = new Date().toISOString() }) =>
       getConversations({ pageParam }),
     {
+      onSuccess: (data) => {
+        dispatch(setMessageLogData(data?.pages?.flatMap((page) => page)));
+      },
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
           ? lastPage[lastPage.length - 1].createdAt
@@ -53,16 +57,15 @@ function MessageLog() {
 
   const haldelSelectConversation = useCallback((conv) => {
     dispatch(selectConversation(conv));
-    localStorage.setItem("conversationMeta", JSON.stringify(conv));
+    sessionStorage.setItem("conversationMeta", JSON.stringify(conv));
   }, []);
 
-  const conversations = data?.pages?.flatMap((page) => page);
   return (
     <aside
-      className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[25%] sm:min-w-fit w-full p-5  h-full border-inherit `}
+      className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[30%] w-full overflow-y-auto   border-inherit `}
     >
-      <header className="flex flex-col gap-7 border-inherit">
-        <div className="flex justify-start items-center w-full">
+      <header className="sticky top-0 flex flex-col gap-7 w-full h-fit p-5 z-10 border-b border-inherit bg-[#fff9f3] dark:bg-black">
+        <div className="flex justify-start items-center h-full w-full">
           <Ibutton
             className="px-2 rounded-lg border-inherit text-2xl font-bold"
             action={() => navigate(-1)}
@@ -86,18 +89,19 @@ function MessageLog() {
           }
         />
       </header>
-      <section className="border-inherit">
-        <div className="flex flex-col items-start max-h-screen w-full  gap-7 py-6  overflow-y-auto no-scrollbar scroll-smooth ">
-          {conversations?.map((conv, idx, arr) => (
+      <section className="border-inherit w-full p-5 ">
+        <div className="flex flex-col items-start gap-7 h-full w-full  py-6  no-scrollbar scroll-smooth   ">
+          {messageLogData?.map((conv, idx, arr) => (
             <Link
               onClick={() => haldelSelectConversation(conv)}
               ref={arr.length % 10 === 0 ? lastItemRef : null}
               to={`c?Id=${conv.id}`}
+              replace={conversationId !== null}
               key={conv.id}
-              className=" flex items-center gap-3 w-full  "
+              className=" flex justify-start items-start gap-3 w-full  "
             >
               <ProfileImage
-                className={"w-10 h-10"}
+                className={"min-w-10 min-h-10 w-10 h-10 "}
                 image={
                   conv.conversationType !== "group"
                     ? conv?.members?.find((m) => m.id != user.id)?.userImage
@@ -109,20 +113,22 @@ function MessageLog() {
                     : conv.groupName
                 }
               />
-              <div>
+              <div className="w-full">
                 {" "}
-                <h2>
-                  {conv.conversationType !== "group"
-                    ? conv?.members?.find((m) => m.id != user.id)?.displayName
-                    : conv?.groupName}
-                </h2>
-                <div className="flex justify-start items-center gap-2 text-xs text-black dark:text-opacity-40 dark:text-white text-opacity-40">
-                  {" "}
-                  <p className=" ">{conv?.lastMessage}</p>
+                <div className="flex justify-between items-center w-full">
+                  <h2>
+                    {conv.conversationType !== "group"
+                      ? conv?.members?.find((m) => m.id != user.id)?.displayName
+                      : conv?.groupName}
+                  </h2>
                   <FormatedTime
-                    className={"text-black dark:text-white"}
+                    className={"opacity-40 text-xs"}
                     date={conv?.createdAt}
                   />
+                </div>
+                <div className="flex justify-start items-start gap-2 w-3/4 max-h-14 text-sm  text-ellipsis overflow-hidden opacity-20 ">
+                  {" "}
+                  <p className="">{conv?.lastMessage}</p>
                   {/* <span>{user.timestamp}</span> */}
                 </div>
               </div>

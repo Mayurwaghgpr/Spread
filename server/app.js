@@ -30,7 +30,7 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 export const io = sockIo.init(server);
-
+// io.sockets.adapter.rooms.set()
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(","); 
 
 const port = process.env.PORT || 3000;

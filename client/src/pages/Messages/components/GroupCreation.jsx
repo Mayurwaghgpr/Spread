@@ -28,7 +28,7 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
     () => createGroup(groupConfig),
     {
       onSuccess: (data) => {
-        localStorage.setItem(
+        sessionStorage.setItem(
           "conversationMeta",
           JSON.stringify(data.newGroupConversation)
         );

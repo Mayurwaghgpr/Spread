@@ -195,7 +195,7 @@ function MessageSection() {
 
       <div
         ref={containerRef}
-        className="sm:flex flex-col justify-end w-full h-full col-span-full row-start-2 row-span-full  scroll-smooth p-5  border-inherit no-scroll  overflow-y-auto"
+        className="sm:flex flex-col justify-start w-full h-full col-span-full row-start-2 row-span-full  scroll-smooth p-5  border-inherit no-scroll  overflow-y-auto"
       >
         {!isLoading &&
           messages?.map((message) => (

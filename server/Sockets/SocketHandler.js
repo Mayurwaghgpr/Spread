@@ -2,6 +2,7 @@ import Messages from "../models/messaging/Messages.js";
 import redisClient from "../utils/redisClient.js";
 import Convarsation from "../models/messaging/Conversation.js";
 import { io } from "../app.js";
+
 const users = new Map();
 
 export default function socketHandlers() {
@@ -16,7 +17,6 @@ export default function socketHandlers() {
       console.log(`User joined conversation: ${activeConversationId}`);
     }
     
-
     // Register user with socket ID
     socket.on("register", async (userId) => {
       const cacheKey = `socket_${userId}`;
@@ -27,7 +27,6 @@ export default function socketHandlers() {
     // Join a conversation room
     socket.on("joinConversation", (conversationId) => {
       socket.join(conversationId);
-
       console.log(`User joined conversation: ${conversationId}`);
     });
 
@@ -91,10 +90,10 @@ export default function socketHandlers() {
     });
 
     // Handle user disconnect
-    socket.on("disconnect", () => {
+    socket.on("disconnect", async() => {
       for (let [userId, socketId] of users) {
         if (socketId === socket.id) {
-          users.delete(userId);
+            await redisClient.del(userId);
           break;
         }
       }

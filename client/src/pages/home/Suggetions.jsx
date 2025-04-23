@@ -42,8 +42,8 @@ function Suggetions() {
     [peopleData?.pages]
   );
   return (
-    <section className="grid grid-cols-10 grid-rows-12  w-full h-screen overflow-y-auto border-inherit ">
-      <div className=" sticky top-16 flex flex-col justify-between items-start col-start-3 col-span-5 row-start-2 row-span-2 py-3 w-full h-full z-10 border-b border-inherit bg-[#fff9f3] dark:bg-black ">
+    <section className="grid grid-cols-10 grid-rows-12  w-full h-screen overflow-y-auto border-inherit  px-4">
+      <div className="sticky top-16 flex flex-col justify-between sm:items-start sm:col-start-3 sm:col-span-5 col-span-full row-start-2 row-span-2 py-3  w-full h-full z-10 border-b border-inherit bg-[#fff9f3] dark:bg-black ">
         {/* <SearchBar className={" border rounded-full px-2"} /> */}
         <h1 className="text-2xl font-medium">Suggetions</h1>
         <ul className=" flex justify-start items-center gap-3 w-full *:transition-all *:duration-500">
@@ -71,7 +71,7 @@ function Suggetions() {
           </NavLink>
         </ul>
       </div>
-      <ul className="flex flex-col justify-start items-start gap-5 col-start-3 col-span-5  row-start-5 row-span-full">
+      <ul className="flex flex-col justify-start items-start gap-5 sm:col-start-3 sm:col-span-5 col-span-full  row-start-4 py-4 row-span-full">
         {(peoples ? peoples : [...Array(10).fill(null)]).map(
           (pers, idx, arr) => (
             <PeoplesList

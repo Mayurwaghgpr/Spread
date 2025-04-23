@@ -19,6 +19,7 @@ import { BsPlus } from "react-icons/bs";
 import GroupCreation from "./components/GroupCreation";
 import SelectedGroupMemberList from "./components/SelectedGroupMemberList";
 import Spinner from "../../component/loaders/Spinner";
+import usePrivateChatMutation from "../../hooks/usePrivateChatMutation";
 
 const NewConversation = () => {
   const { user } = useSelector((state) => state.auth);
@@ -31,31 +32,10 @@ const NewConversation = () => {
 
   //Api functions providers
   const { fetchAllUsers } = usePublicApis();
-  const { startPrivateChate } = ChatApi();
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { mutate: PrivateMutaion, isLoading: isPrivateLoading } = useMutation({
-    mutationFn: (chatUserId) => startPrivateChate(chatUserId),
-    onSuccess: (data) => {
-      dispatch(setOpenNewConverstionBox());
-      localStorage.setItem(
-        "conversationMeta",
-        JSON.stringify(data.newPrivateConversation)
-      );
-      dispatch(selectConversation(data.newPrivateConversation));
-
-      navigate(`c?Id=${data.newPrivateConversation.id}`, { replace: true });
-      dispatch(setToast({ message: data.message, type: "success" }));
-    },
-    onError: () => {
-      dispatch(
-        setToast({ messge: "Fail to start conversation", type: "error" })
-      );
-    },
-  });
-
+  const { PrivateMutaion, isPrivateLoading } = usePrivateChatMutation();
   const {
     data,
     fetchNextPage,

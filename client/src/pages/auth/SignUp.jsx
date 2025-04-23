@@ -111,24 +111,21 @@ function SignUp() {
       {signUpInputs.map((input) => (
         <CommonInput
           key={input.id}
-          className="mb-3 w-full flex flex-col gap-2 border p-1 rounded-lg  border-inherit "
+          className="mb-3 w-full flex flex-col gap-2  border-inherit "
           type={input.type}
           labelname={input.labelname}
           Iname={input.Iname}
           disabled={isLoading}
-          comp={input.comp}
-        />
+        >
+          {input.comp}
+        </CommonInput>
       ))}
-      <div className="flex justify-start w-full">
-        <CommonInput
-          className={
-            "mb-4 flex flex-row-reverse justify-start  items-center gap-2 text-sm"
-          }
-          type={"checkbox"}
-          labelname={"RemberMe"}
-          label={"RemberMe"}
-        />
-      </div>
+      <CommonInput
+        className={"flex justify-start items-center gap-4 w-full text-sm"}
+        type={"checkbox"}
+        labelname={"RemberMe"}
+        label={"RemberMe"}
+      />
       <div className="mb-4 w-full">
         <button
           type="submit"

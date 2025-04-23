@@ -15,6 +15,7 @@ import SearchBar from "../../component/inputComponents/SearchBar";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import ProfileImage from "../../component/ProfileImage";
+import TimeAgo from "../../component/utilityComp/TimeAgo";
 
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
@@ -62,7 +63,7 @@ function MessageLog() {
 
   return (
     <aside
-      className={`${conversationId ? "sm:block hidden" : "  block"} border-r sm:max-w-[30%] w-full overflow-y-auto   border-inherit `}
+      className={`${conversationId ? "sm:block hidden" : "  block"} border-r lg:max-w-[30%] sm:max-w-[50%] w-full overflow-y-auto   border-inherit `}
     >
       <header className="sticky top-0 flex flex-col gap-7 w-full h-fit p-5 z-10 border-b border-inherit bg-[#fff9f3] dark:bg-black">
         <div className="flex justify-start items-center h-full w-full">
@@ -121,10 +122,7 @@ function MessageLog() {
                       ? conv?.members?.find((m) => m.id != user.id)?.displayName
                       : conv?.groupName}
                   </h2>
-                  <FormatedTime
-                    className={"opacity-40 text-xs"}
-                    date={conv?.createdAt}
-                  />
+                  <TimeAgo className={"text-xs"} date={conv?.createdAt} />
                 </div>
                 <div className="flex justify-start items-start gap-2 w-3/4 max-h-14 text-sm  text-ellipsis overflow-hidden opacity-20 ">
                   {" "}

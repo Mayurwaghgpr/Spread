@@ -150,6 +150,7 @@ export const EditUserProfile = async (req, res, next) => {
     });
 
     if (updatedUser) {
+      await redisClient.del(req.authUser.id)
       res
         .status(200)
         .cookie("_userDetail", JSON.stringify(updatedUser), CookieOptions)

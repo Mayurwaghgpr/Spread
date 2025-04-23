@@ -6,6 +6,7 @@ import useIcons from "../../hooks/useIcons";
 import useSocket from "../../hooks/useSocket";
 import Spinner from "../loaders/Spinner";
 import { setNotificationStatePush } from "../../redux/slices/NotificationSlice";
+import Ibutton from "../buttons/Ibutton";
 
 const notifications = [
   {
@@ -130,27 +131,27 @@ function Notifictionbox() {
         onClick={(e) => e.stopPropagation()}
         className={` transition-all duration-150 border-inherit ${openNotification ? " scale-100 opacity-100 pointer-events-auto " : "scale-95 opacity-0 pointer-events-none"} flex flex-col justify-start items-start gap-5 sm:w-[20rem] sm:h-1/2  w-full h-full p-5 pt-0 bg-[#fff9f3] dark:bg-black border sm:rounded-lg absolute sm:right-40 right-0 sm:top-[4.3rem] top-[3.1rem]  overflow-y-auto`}
       >
-        <div className="flex justify-between items-center gap-3 w-full p-2 bg-inherit sticky top-0 ">
+        <div className=" sticky top-0 flex justify-between items-center gap-3 w-full p-2 z-10 bg-inherit   ">
           <div className="flex justify-start items-center gap-3 ">
-            {Icon.bell}
+            {Icon["bell"]}
             <h1>notification</h1>
           </div>
-          <button className="text-xl sm:hidden" onClick={handeClick}>
-            {Icon.close}
-          </button>
+          <Ibutton className="text-xl sm:hidden" action={handeClick}>
+            {Icon["close"]}
+          </Ibutton>
         </div>
-        {/* <div className="flex justify-center items-center h-full w-full">
+        <div className="flex justify-center items-center h-full w-full">
           {" "}
           <h1>will implement soon</h1>
-        </div> */}
+        </div>
 
-        <Suspense
+        {/* <Suspense
           fallback={<Spinner className={"w-5 h-5 bg-black dark:bg-white"} />}
         >
           {notifications.map((noitify) => (
             <NotifictionItem key={noitify.id} data={noitify} />
           ))}
-        </Suspense>
+        </Suspense> */}
       </div>
     </div>
   );

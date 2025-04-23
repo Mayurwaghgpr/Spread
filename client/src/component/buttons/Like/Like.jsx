@@ -7,6 +7,7 @@ import abbreviateNumber from "../../../utils/numAbrivation";
 import { useNavigate } from "react-router-dom";
 import LikesList from "./LikesList";
 import useIcons from "../../../hooks/useIcons";
+import Ibutton from "../Ibutton";
 
 function Like({ post, className }) {
   const icons = useIcons();
@@ -80,7 +81,7 @@ function Like({ post, className }) {
       <LikesList mutate={handleLike} post={post} />
 
       {/* Like button */}
-      <button
+      <Ibutton
         name=""
         onClick={isLiked ? handleLike : null}
         className="flex items-center justify-center gap-1 text-inherit"
@@ -88,7 +89,7 @@ function Like({ post, className }) {
         {/* Icon rendering */}
         {icons[optimistIcon || "likeO"]}
         <span className="text-md mt-1">{likeCount}</span>
-      </button>
+      </Ibutton>
     </div>
   );
 }

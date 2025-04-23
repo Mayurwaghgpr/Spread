@@ -22,6 +22,8 @@ import ErrorPage from "../ErrorPages/ErrorPage";
 import menuCosntant from "../../component/postsComp/menuCosntant";
 import Menu from "../../component/postsComp/Menu";
 import ProfileImage from "../../component/ProfileImage";
+import Ibutton from "../../component/buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
@@ -36,6 +38,7 @@ function PostView() {
   const { fetchDataById } = usePublicApis();
   const { getAiGenAnalysis } = PostsApis();
   const { MENU_ITEMS } = menuCosntant();
+  const icons = useIcons();
 
   //Fetch Post Full View
   const {
@@ -166,19 +169,19 @@ function PostView() {
             </section>
           </header>
 
-          <div className="flex justify-between items-center sm:text-base text-xs py-3 w-full">
-            <div className="flex items-center gap-4  text-[#383838] ">
+          <div className="flex justify-between items-center font-thin sm:text-base text-xs py-3 w-full">
+            <div className="flex items-center gap-4  ">
               <Like className={"min-w-10"} post={postView} />
-              <button
-                onClick={handelComment}
+              <Ibutton
+                action={handelComment}
                 className="flex items-center gap-1 min-w-10"
               >
-                <FaRegComment />
+                {icons["comment"]}
                 <span>{abbreviateNumber(Comments?.length)}</span>
-              </button>
+              </Ibutton>
               <Bookmark post={postView} />
             </div>
-            <div className="flex gap-7 text-[#383838]  justify-between">
+            <div className="flex gap-7  justify-between">
               <Menu
                 items={[
                   MENU_ITEMS["copylike"],

@@ -58,7 +58,7 @@ function SignIn() {
       >
         <CommonInput
           ref={userRef}
-          className={`${"flex flex-col justify-start gap-2 w-full mb-4  border rounded-lg p-1 "} `}
+          className={`flex flex-col  justify-start items-start gap-2 w-full  p-1 `}
           type={"email"}
           name={"email"}
           labelname={"Email address"}
@@ -68,15 +68,16 @@ function SignIn() {
         {passVisible && (
           <CommonInput
             className={
-              " flex flex-col gap-2 mb-4 w-full border rounded-lg p-1 "
+              " flex flex-col justify-center items-start gap-2 w-full  p-1 "
             }
             type={"password"}
             name={"password"}
             labelname={"Password"}
             disabled={isLoading}
             required
-            comp={<EyeBtn />}
-          />
+          >
+            <EyeBtn />
+          </CommonInput>
         )}
         {passVisible && (
           <div className=" flex justify-between mb-4 w-full">

@@ -62,13 +62,13 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
           labelname={icons["pCamera"]}
           type={"file"}
           Iname="groupInput"
-          className={" hidden cursor-pointer"}
+          IClassName={"hidden cursor-pointer w-full"}
         />
         <CommonInput
           onChange={(e) =>
             setGroupConfig((prev) => ({ ...prev, groupName: e.target.value }))
           }
-          className={"text-lg font-light w-full"}
+          className={"text-lg font-light w-full *:border-none"}
           placeholder={"Group name"}
           Iname={"groupName"}
           required

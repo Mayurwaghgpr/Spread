@@ -44,7 +44,7 @@ const PostView = lazy(() => import("./pages/PostView/PostView"));
 const ProfileEditor = lazy(() => import("./pages/userProfile/ProfileEditor"));
 const About = lazy(() => import("./pages/About"));
 const ReadList = lazy(() => import("./pages/ReadList"));
-const Settings = lazy(() => import("./pages/settings/settings"));
+const Settings = lazy(() => import("./pages/settings/Settings"));
 const General = lazy(() => import("./pages/settings/General"));
 const ConfirmationBox = lazy(
   () => import("./component/utilityComp/ConfirmationBox")
@@ -63,6 +63,7 @@ function App() {
   const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
   const { socket } = useSocket();
+
   const [systemTheme, setSystemTheme] = useState(
     window.matchMedia("(prefers-color-scheme: dark)").matches
   );

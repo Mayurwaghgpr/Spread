@@ -43,6 +43,19 @@ function MessageSection() {
   const { socket } = useSocket();
 
   const icons = useIcons();
+  const conversationData = useMemo(() => {
+    if (selectedConversation?.conversationType === "private") {
+      const appositeMember = selectedConversation?.members.find(
+        (m) => m.id != user.id
+      );
+      return {
+        id: selectedConversation.id,
+        image: appositeMember?.userImage || " ",
+        groupName: appositeMember?.displayName || "Unknown",
+      };
+    }
+    return selectedConversation || { groupName: "Unknown", image: "" };
+  }, [selectedConversation, user?.id]);
 
   const { isLoading } = useQuery(["messages", conversationId], {
     queryFn: () => getMessage({ conversationId }),
@@ -122,7 +135,10 @@ function MessageSection() {
       socket?.emit("IamTyping", {
         conversationId,
         senderId: user?.id,
-        image: user?.userImage,
+        image:
+          conversationData.conversationType === "group"
+            ? user?.userImage
+            : null,
         typing: true,
       });
 
@@ -145,20 +161,6 @@ function MessageSection() {
       prevMessagesCount.current = messages.length;
     }
   }, [messages.length]);
-
-  const conversationData = useMemo(() => {
-    if (selectedConversation?.conversationType === "private") {
-      const appositeMember = selectedConversation?.members.find(
-        (m) => m.id != user.id
-      );
-      return {
-        id: selectedConversation.id,
-        image: appositeMember?.userImage || " ",
-        groupName: appositeMember?.displayName || "Unknown",
-      };
-    }
-    return selectedConversation || { groupName: "Unknown", image: "" };
-  }, [selectedConversation, user?.id]);
 
   const isUsersTyping = useMemo(
     () => typingUsers.some((env) => env.senderId !== user?.id && env.typing),
@@ -185,12 +187,12 @@ function MessageSection() {
             </ul>
           </div>
         </div>
-        <div className="flex items-center justify-center gap-4 text-2xl">
+        {/* <div className="flex items-center justify-center gap-4 text-2xl">
           <Ibutton className={"rounded-lg p-2 py-1"}>
             {icons["vCamera"]}
           </Ibutton>
           <Ibutton className={"rounded-lg p-2 py-1"}>{icons["callO"]}</Ibutton>
-        </div>
+        </div> */}
       </header>
 
       <div
@@ -208,17 +210,17 @@ function MessageSection() {
         <div className="w-full min-h-16">
           {isUsersTyping && (
             <div className="flex gap-1 my-4">
-              {conversationData.conversationType === "group" &&
-                typingUsers.map(
-                  (usr, idx) =>
-                    usr.senderId !== user.id && (
-                      <ProfileImage
-                        key={usr.senderId}
-                        className="w-6 h-6"
-                        image={usr?.image}
-                      />
-                    )
-                )}
+              {typingUsers.map(
+                (usr, idx) =>
+                  usr.senderId !== user.id &&
+                  usr?.image && (
+                    <ProfileImage
+                      key={usr.senderId}
+                      className="w-6 h-6"
+                      image={usr?.image}
+                    />
+                  )
+              )}
               <div className=" relative flex items-center justify-center py-2 px-2 text-sm mt-2 ml-2 bg-[#fffefe]  dark:shadow-white rounded-xl rounded-tl-none">
                 <div
                   class="absolute left-[-5px] top-0 -z-[1] w-0 h-0 

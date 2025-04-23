@@ -9,32 +9,34 @@ const CommonInput = forwardRef(function CommonInput(
     placeholder,
     IClassName = "outline-none",
     disabled,
-    comp,
+    children,
     ...props
   },
   ref
 ) {
   return (
-    <>
+    <div className={className}>
       {labelname && (
-        <label htmlFor={Iname} className=" cursor-pointer">
+        <label htmlFor={Iname} className="w-fit cursor-pointer">
           {labelname}
         </label>
       )}
-      <div className={className}>
+      <div
+        className={`flex border rounded-lg bg-inherit border-inherit w-full ${IClassName}`}
+      >
         <input
           ref={ref}
           type={type}
           id={Iname}
           name={Iname}
-          className={`${IClassName} p-2 bg-inherit border-inherit w-full h-full `}
+          className={` p-2 bg-inherit border-inherit w-full h-full outline-none `}
           placeholder={placeholder}
           disabled={disabled}
           {...props}
         />
-        {comp}
+        {children}
       </div>
-    </>
+    </div>
   );
 });
 

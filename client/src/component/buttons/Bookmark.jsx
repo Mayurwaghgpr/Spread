@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import usePublicApis from "../../Apis/publicApis";
 import { useNavigate } from "react-router-dom";
+import Ibutton from "./Ibutton";
 
 function Bookmark({ className, post }) {
   const [bookmarkIcon, setIcon] = useState("");
@@ -45,10 +46,10 @@ function Bookmark({ className, post }) {
   );
   return (
     <div
-      className={`${isBookmarked ? "dark:text-opacity-100 text-opacity-100 text-black dark:text-white" : " dark:hover:text-opacity-100  hover:text-opacity-100 text-opacity-20 dark:text-opacity-20"} ${className} `}
+      className={`${isBookmarked ? " text-black dark:text-white" : ""} ${className} `}
     >
       {" "}
-      <button
+      <Ibutton
         id="bookmark"
         onClick={(e) => {
           if (isLogin) {
@@ -60,13 +61,13 @@ function Bookmark({ className, post }) {
         disabled={post?.user?.id === user?.id}
       >
         <i
-          className={` bi cursor-pointer transition-all duration-300 ${
+          className={`bi cursor-pointer transition-all duration-300 ${
             isBookmarked || bookmarkIcon === `bookmark-${post?.id}`
               ? "bi-bookmark-fill"
               : "bi-bookmark"
           }`}
         ></i>
-      </button>
+      </Ibutton>
     </div>
   );
 }

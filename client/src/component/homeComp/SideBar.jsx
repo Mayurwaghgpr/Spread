@@ -54,7 +54,7 @@ const LoginMenuLinks = [
     lkname: "settings",
     icon1: "gearO",
     icon2: "gearFi",
-    stub: "/setting",
+    // stub: "/setting",
   },
 ];
 function SideBar() {

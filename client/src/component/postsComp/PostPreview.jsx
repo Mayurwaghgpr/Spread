@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useState,
   forwardRef,
   memo,
   useEffect,
@@ -16,22 +15,23 @@ import Menu from "./Menu";
 import { FaRegComment } from "react-icons/fa6";
 import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
-import { useMutation } from "react-query";
 import PostsApis from "../../Apis/PostsApis";
-import { FaHashtag } from "react-icons/fa";
+
 import menuCosntant from "./menuCosntant";
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
+import Ibutton from "../buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { getAiGenTags } = PostsApis();
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { MENU_ITEMS } = menuCosntant();
   const { userImageurl } = userImageSrc(post?.user);
-
+  const { getAiGenTags } = PostsApis();
+  const icons = useIcons();
   const Comments = useMemo(() => {
     return post?.comments?.filter((comment) => comment.topCommentId === null);
   }, [post?.comments]);
@@ -46,13 +46,14 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
     }
   }, [navigate, post?.user?.username, post?.id]);
 
-  const {
-    mutate,
-    data,
-    isLoading: tagLoading,
-  } = useMutation({
-    mutationFn: getAiGenTags,
-  });
+  // const {
+  //   mutate,
+  //   data,
+  //   isLoading: tagLoading,
+  // } = useMutation({
+  //   mutationFn: getAiGenTags,
+  // });
+
   return (
     <article
       ref={ref}
@@ -82,7 +83,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           <h1 className="text-opacity-30 text-black dark:text-white dark:text-opacity-30 rounded-lg">
             {post?.topic}
           </h1>
-
+          {/* 
           {post && (
             <div className=" relative flex justify-center items-center cursor-pointer before:hidden before:hover:block  before:text-xs text-lg before:p-1 before:absolute  before:w-fit before:top-5 text-nowrap before:bg-black before:bg-opacity-20 before:rounded-md  before:content-['Generate_tags_with_ai']">
               <FaHashtag
@@ -97,7 +98,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 }
               />
             </div>
-          )}
+          )} */}
         </div>
         <Link
           to={`/view/@${post?.user?.username}/${post?.id}`}
@@ -115,15 +116,15 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-full sm:w-[20rem] w-[60%] h-6  dark:bg-white bg-black  bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
-                <div className="rounded-full sm:w-[25rem] w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full  w-[60%] h-6  dark:bg-white bg-black  bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full  w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full  w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
               </>
             )}
           </div>
 
           <div
-            className={`rounded-lg ${!post && " animate-pulse"} border border-inherit z-0 sm:w-72 sm:h-32 h-40  overflow-hidden w-full  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
+            className={` ${!post && " animate-pulse"} border border-inherit z-0 sm:w-1/3 w-full h-[7em]  rounded-lg  overflow-hidden   dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
           >
             {post && (
               <img
@@ -135,7 +136,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             )}
           </div>
         </Link>
-        <div className="sm:text-sm text-[.7rem] flex-wrap flex justify-start items-center text-nowrap gap-2">
+        {/* <div className="sm:text-sm text-[.7rem] flex-wrap flex justify-start items-center text-nowrap gap-2">
           {!tagLoading
             ? data &&
               data?.map((tag, idx) => (
@@ -149,24 +150,17 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             : [...Array(5)].map(() => (
                 <span className="bg-[#e0dbd7] block animate-pulse  p-3 rounded-full w-20 "></span>
               ))}
-        </div>
+        </div> */}
         {post && (
           <div className="flex w-full h-full justify-between text-md border-inherit p-3 items-center ">
             <div className="flex justify-start items-center gap-3">
               <Like className={"min-w-10"} post={post} />
-              <button
-                onClick={handelComment}
-                className="flex justify-center items-center gap-1 min-w-10 cursor-pointer"
-              >
-                <FaRegComment />
-                <span>{abbreviateNumber(Comments?.length)}</span>
-              </button>
+              <Ibutton action={handelComment}>
+                {icons["comment"]} {abbreviateNumber(Comments?.length)}
+              </Ibutton>
             </div>
             <div className="flex justify-end gap-5 items-center border-inherit">
-              <Bookmark
-                className={"text-black dark:text-white "}
-                post={post || null}
-              />
+              <Bookmark className={" "} post={post || null} />
               <Menu
                 items={[
                   MENU_ITEMS["copylike"],

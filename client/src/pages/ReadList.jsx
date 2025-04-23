@@ -7,7 +7,6 @@ import useProfileApi from "../Apis/ProfileApis";
 
 const ReadList = () => {
   const { getArchivedPosts } = useProfileApi();
-  // const { user, isLogin } = useSelector((state) => state.auth);
   const {
     data,
     isFetching,
@@ -48,12 +47,12 @@ const ReadList = () => {
           <h1>Read list </h1>
         </div>
       </div>
-      <div className=" flex flex-col justify-start items-center max-w-[45rem] h-full my-20 bg-inherit ">
-        {!isLoading
+      <div className=" flex flex-col justify-start items-center sm:max-w-[45rem] w-full h-full my-20 bg-inherit ">
+        {isLoading
           ? pages?.map((page, idx) => {
               return (
                 <PostPreview
-                  className={""}
+                  className={" w-full"}
                   ref={pages?.length % 3 === 0 ? lastItemRef : null}
                   key={idx}
                   post={page}
@@ -62,7 +61,7 @@ const ReadList = () => {
               );
             })
           : [...Array(3)].map((_, idx) => (
-              <PostPreview key={idx} className="border-inherit " />
+              <PostPreview key={idx} className="border-inherit w-full " />
             ))}
         {isFetchingNextPage && (
           <div className="w-full flex justify-center items-center h-full p-5">

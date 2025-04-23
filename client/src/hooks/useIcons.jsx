@@ -40,6 +40,7 @@ import {
   FaCode,
   FaComment,
   FaHandHoldingHeart,
+  FaRegComment,
   FaThumbsUp,
 } from "react-icons/fa6";
 import {
@@ -81,7 +82,7 @@ function useIcons() {
     cheer: <PiHandsClappingFill />,
     close: <IoCloseOutline />,
     code1: <FaCode />,
-    comment: <FaComment />,
+    comment: <FaRegComment />,
 
     // D
     desktopO: <HiOutlineComputerDesktop />,

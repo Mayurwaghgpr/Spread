@@ -1,6 +1,7 @@
 import React from "react";
 import { BsCheck2All } from "react-icons/bs";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";
+import TimeAgo from "../../../component/utilityComp/TimeAgo";
 
 const MessageBubble = ({ message, userId, readReceipt }) => {
   const isSender = message.senderId === userId;
@@ -8,8 +9,8 @@ const MessageBubble = ({ message, userId, readReceipt }) => {
 
   return (
     <div
-      className={`relative flex flex-col gap-1 text-xs sm:text-sm max-w-[50%] px-5 p-1 my-5 border border-inherit rounded-lg  bg-[#fff9f3] dark:bg-black
-        ${isSender ? "ml-auto items-start text-end rounded-tr-none" : "mr-auto items-end rounded-tl-none"}`}
+      className={`relative flex flex-col gap-1 text-xs sm:text-sm max-w-[50%] break-words w-fit my-5 border border-inherit rounded-lg  bg-[#fff9f3] dark:bg-black
+        ${isSender ? "ml-auto items-start text-start rounded-tr-none  pr-5  p-2" : "mr-auto items-end rounded-tl-none  pl-5  p-2"}`}
       key={message?.id}
     >
       {/* Bubble Tail */}
@@ -18,20 +19,19 @@ const MessageBubble = ({ message, userId, readReceipt }) => {
           ${isSender ? "right-[-10px] border-l-[10px] border-l-inherit" : "left-[-10px] border-r-[10px] border-r-inherit"}`}
       ></span>
 
-      <p>{message.content}</p>
+      <p className=" w-full">{message.content}</p>
 
-      <span className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
         {isSender && (
           <BsCheck2All
             className={`text-[1rem] ${isRead ? "text-blue-500" : "text-gray-400"}`}
           />
         )}
-        <FormatedTime
+        <TimeAgo
           className="text-[0.5rem] opacity-25"
           date={message.createdAt}
-          formate="hb"
         />
-      </span>
+      </div>
     </div>
   );
 };

@@ -49,7 +49,7 @@ function Bookmark({ className, post }) {
       className={`${isBookmarked ? " text-black dark:text-white" : ""} ${className} `}
     >
       {" "}
-      <Ibutton
+      <button
         id="bookmark"
         onClick={(e) => {
           if (isLogin) {
@@ -67,7 +67,7 @@ function Bookmark({ className, post }) {
               : "bi-bookmark"
           }`}
         ></i>
-      </Ibutton>
+      </button>
     </div>
   );
 }

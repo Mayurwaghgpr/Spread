@@ -81,7 +81,7 @@ function Like({ post, className }) {
       <LikesList mutate={handleLike} post={post} />
 
       {/* Like button */}
-      <Ibutton
+      <button
         name=""
         onClick={isLiked ? handleLike : null}
         className="flex items-center justify-center gap-1 text-inherit"
@@ -89,7 +89,7 @@ function Like({ post, className }) {
         {/* Icon rendering */}
         {icons[optimistIcon || "likeO"]}
         <span className="text-md mt-1">{likeCount}</span>
-      </Ibutton>
+      </button>
     </div>
   );
 }

@@ -27,7 +27,6 @@ function Messanger() {
       const logWithNewMessage = messageLogData.find(
         (log) => log.id === msg.conversationId
       );
-      console.log(filterLog, logWithNewMessage);
       if (msg.senderId !== user?.id && msg.conversationId === conversationId) {
         dispatch(pushMessage(msg));
       }
@@ -54,7 +53,7 @@ function Messanger() {
       };
     }
   }, [isLogin && user?.id, socket, handleNewMessage]);
-  console.log(messageLogData);
+
   return (
     <section className="h-screen w-full border-inherit">
       <div className="fixed w-full flex h-full border-y border-inherit">

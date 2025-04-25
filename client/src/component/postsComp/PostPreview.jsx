@@ -124,7 +124,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           </div>
 
           <div
-            className={` ${!post && " animate-pulse"} border border-inherit z-0 sm:w-1/3 w-full h-[7em]  rounded-lg  overflow-hidden   dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
+            className={`${!post && " animate-pulse"} border border-inherit z-0 sm:w-1/3 w-full h-[7em]  rounded  overflow-hidden   dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
           >
             {post && (
               <img

@@ -1,7 +1,10 @@
 import React from "react";
-import { IoClose } from "react-icons/io5";
+import ProfileImage from "../../../component/ProfileImage";
+import Ibutton from "../../../component/buttons/Ibutton";
+import useIcons from "../../../hooks/useIcons";
 
 const SelectedGroupMemberList = ({ users, handleGroupConfig, hashMap }) => {
+  const icons = useIcons();
   return (
     <div className="text-start w-full border-inherit h-full">
       {" "}
@@ -10,19 +13,18 @@ const SelectedGroupMemberList = ({ users, handleGroupConfig, hashMap }) => {
         {users?.map((user) => {
           return (
             hashMap[user.id] && (
-              <div className="relative w-10 h-10 animate-fedin.2s ">
-                <img
-                  className="h-full w-full object-cover object-top rounded-full "
-                  src={user.userImage}
-                  alt={user.username}
-                />
-                <button
-                  onClick={() => handleGroupConfig(user.id)}
-                  className="absolute top-0 right-0 z-10 text-sm  bg-gray-200 bg-opacity-50 backdrop-blur-sm rounded-full"
+              <ProfileImage
+                className={"relative w-10 h-10 animate-fedin.2s"}
+                image={user.userImage}
+                alt={user.username}
+              >
+                <Ibutton
+                  action={() => handleGroupConfig(user.id)}
+                  className="absolute -top-1 -right-1 z-10 text-sm  bg-gray-200 bg-opacity-50 backdrop-blur-sm rounded-full"
                 >
-                  <IoClose />
-                </button>
-              </div>
+                  {icons["close"]}
+                </Ibutton>
+              </ProfileImage>
             )
           );
         })}

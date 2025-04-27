@@ -16,6 +16,8 @@ import {
   BsInfoCircle,
   BsLink,
   BsMoonStarsFill,
+  BsPen,
+  BsPenFill,
   BsPeople,
   BsThreeDotsVertical,
 } from "react-icons/bs";
@@ -33,7 +35,12 @@ import {
   IoSearchOutline,
   IoSunny,
 } from "react-icons/io5";
-import { PiHandsClappingFill, PiImageThin } from "react-icons/pi";
+import {
+  PiHandsClappingFill,
+  PiImageThin,
+  PiPen,
+  PiPenFill,
+} from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
 import {
@@ -51,16 +58,22 @@ import {
 import { VscMention } from "react-icons/vsc";
 import { FaUserTag } from "react-icons/fa6";
 import { PiAlarm } from "react-icons/pi";
-import { BiCalendarAlt, BiRepost } from "react-icons/bi";
+import { BiCalendarAlt, BiRepost, BiTrash } from "react-icons/bi";
 import { GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSend } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
-import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
+import {
+  TbMessageCircle,
+  TbMessageCircleFilled,
+  TbTrash,
+  TbTrashX,
+} from "react-icons/tb";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
+import { WiStars } from "react-icons/wi";
 
 function useIcons() {
   return {
@@ -88,6 +101,7 @@ function useIcons() {
     desktopO: <HiOutlineComputerDesktop />,
     done: <MdDone color="green" />,
     duration: <BsClockHistory />,
+    delete: <BiTrash />,
 
     // E
     error: <MdErrorOutline color="red" />,
@@ -139,8 +153,10 @@ function useIcons() {
 
     // P
     pCamera: <BsCamera />,
-    penFi: <RiQuillPenFill />,
-    penO: <RiQuillPenLine />,
+    penFi: <BsPenFill />,
+    penO: <BsPen />,
+    fetherFi: <RiQuillPenFill />,
+    fetherO: <RiQuillPenLine />,
     reminder: <PiAlarm />,
     repost: <BiRepost />,
     people: <BsPeople />,
@@ -160,6 +176,7 @@ function useIcons() {
     success: <MdDone color="green" />,
     sun: <IoSunny />,
     system: <GrSystem />,
+    glitter: <WiStars className="" />,
 
     // T
     tag: <FaUserTag />,

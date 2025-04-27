@@ -3,11 +3,12 @@ import usePublicApis from "../../../Apis/publicApis";
 import { useMutation } from "react-query";
 import { setToast } from "../../../redux/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import abbreviateNumber from "../../../utils/numAbrivation";
+import abbreviateNumber from "../../../utils/AbbreviateNumber";
 import { useNavigate } from "react-router-dom";
 import LikesList from "./LikesList";
 import useIcons from "../../../hooks/useIcons";
 import Ibutton from "../Ibutton";
+import AbbreviateNumber from "../../../utils/AbbreviateNumber";
 
 function Like({ post, className }) {
   const icons = useIcons();
@@ -64,11 +65,11 @@ function Like({ post, className }) {
   const likeCount = useMemo(() => {
     const baseCount = post?.Likes?.length || 0;
     if (!isLiked && optimistIcon) {
-      return abbreviateNumber(baseCount + 1);
+      return <AbbreviateNumber rawNumber={baseCount + 1} />;
     } else if (isLiked && !optimistIcon) {
-      return abbreviateNumber(baseCount - 1);
+      return <AbbreviateNumber rawNumber={baseCount - 1} />;
     }
-    return abbreviateNumber(baseCount);
+    return <AbbreviateNumber rawNumber={baseCount} />;
   }, [optimistIcon, post?.Likes, isLiked]);
 
   return (

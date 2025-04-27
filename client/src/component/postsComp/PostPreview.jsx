@@ -4,6 +4,7 @@ import React, {
   memo,
   useEffect,
   useMemo,
+  useRef,
 } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,27 +12,29 @@ import { useDispatch, useSelector } from "react-redux";
 // Dynamically load components to optimize performance
 import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like/Like";
-import Menu from "./Menu";
-import { FaRegComment } from "react-icons/fa6";
-import abbreviateNumber from "../../utils/numAbrivation";
+import Menu from "../Menus/Menu";
 import { setCommentCred } from "../../redux/slices/postSlice";
-import PostsApis from "../../Apis/PostsApis";
 
-import menuCosntant from "./menuCosntant";
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import Ibutton from "../buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
+import useClickOutside from "../../hooks/useClickOutside";
+import useMenuCosntant from "../../hooks/useMenuCosntant";
+import AbbreviateNumber from "../../utils/AbbreviateNumber";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { MENU_ITEMS } = menuCosntant();
   const { userImageurl } = userImageSrc(post?.user);
-  const { getAiGenTags } = PostsApis();
+  // const { getAiGenTags } = PostsApis();
+  const menuRef = useRef(null);
   const icons = useIcons();
+  const { menuId, setMenuId } = useClickOutside(menuRef);
+  const { POST_MENU } = useMenuCosntant(post, "post");
+
   const Comments = useMemo(() => {
     return post?.comments?.filter((comment) => comment.topCommentId === null);
   }, [post?.comments]);
@@ -156,18 +159,17 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             <div className="flex justify-start items-center gap-3">
               <Like className={"min-w-10"} post={post} />
               <Ibutton action={handelComment}>
-                {icons["comment"]} {abbreviateNumber(Comments?.length)}
+                {icons["comment"]}
+                <AbbreviateNumber rawNumber={Comments?.length} />
               </Ibutton>
             </div>
             <div className="flex justify-end gap-5 items-center border-inherit">
               <Bookmark className={" "} post={post || null} />
               <Menu
-                items={[
-                  MENU_ITEMS["copylike"],
-                  MENU_ITEMS["share"],
-                  post.authorId === user?.id && MENU_ITEMS["deletePost"],
-                  post.authorId === user?.id && MENU_ITEMS["editPost"],
-                ]}
+                ref={menuRef}
+                items={POST_MENU}
+                menuId={menuId}
+                setMenuId={setMenuId}
                 content={post}
                 className={"w-full"}
               />

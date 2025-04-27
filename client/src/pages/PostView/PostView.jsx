@@ -1,29 +1,35 @@
-import React, { lazy, memo, useCallback, useMemo, useState } from "react";
-import { format } from "date-fns";
+import React, {
+  lazy,
+  memo,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DOMPurify from "dompurify";
-import "boxicons";
 import { useMutation, useQuery } from "react-query";
 import Bookmark from "../../component/buttons/Bookmark";
 import usePublicApis from "../../Apis/publicApis";
 import Like from "../../component/buttons/Like/Like";
 import Follow from "../../component/buttons/follow";
 import userImageSrc from "../../utils/userImageSrc";
-import { FaRegComment } from "react-icons/fa6";
-import abbreviateNumber from "../../utils/numAbrivation";
 import { setCommentCred } from "../../redux/slices/postSlice";
-import { WiStars } from "react-icons/wi";
 import AIResponse from "../../component/aiComp/AiResponse";
 import PostsApis from "../../Apis/PostsApis";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { setToast } from "../../redux/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
-import menuCosntant from "../../component/postsComp/menuCosntant";
-import Menu from "../../component/postsComp/Menu";
+import Menu from "../../component/Menus/Menu";
 import ProfileImage from "../../component/ProfileImage";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
+import useMenuCosntant from "../../hooks/useMenuCosntant";
+import useClickOutside from "../../hooks/useClickOutside";
+import ImageFigure from "../../component/utilityComp/ImageFigure";
+import AbbreviateNumber from "../../utils/AbbreviateNumber";
+
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
@@ -32,13 +38,17 @@ function PostView() {
   const [show, setshow] = useState(false);
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const { fetchDataById } = usePublicApis();
   const { getAiGenAnalysis } = PostsApis();
-  const { MENU_ITEMS } = menuCosntant();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const menuRef = useRef(null);
+
   const icons = useIcons();
+  const { menuId, setMenuId } = useClickOutside(menuRef);
 
   //Fetch Post Full View
   const {
@@ -59,6 +69,9 @@ function PostView() {
     },
     refetchOnWindowFocus: false,
   });
+
+  //Getting menu items array from hook
+  const { POST_MENU } = useMenuCosntant(postView, "post");
 
   // Fetches  Ai generated analysis on post
   const {
@@ -118,7 +131,9 @@ function PostView() {
         <article
           style={{ backgroundColor: "" }}
           className={`relative animate-fedin1s max-w-4xl px-4  flex flex-col justify-center items-center 
-           border-inheri ${isAnalyzing ? "shimmer-effect dark:shimmer-effect-dark" : " "} `}
+           border-inheri ${
+             isAnalyzing ? "shimmer-effect dark:shimmer-effect-dark" : " "
+           } `}
         >
           <header className="mb-6 w-full border-inherit">
             <section className="flex flex-col gap-2  border-inherit">
@@ -177,18 +192,16 @@ function PostView() {
                 className="flex items-center gap-1 min-w-10"
               >
                 {icons["comment"]}
-                <span>{abbreviateNumber(Comments?.length)}</span>
+                <AbbreviateNumber rawNumber={Comments?.length} />
               </Ibutton>
               <Bookmark post={postView} />
             </div>
             <div className="flex gap-7  justify-between">
               <Menu
-                items={[
-                  MENU_ITEMS["copylike"],
-                  MENU_ITEMS["share"],
-                  postView?.authorId === user?.id && MENU_ITEMS["deletePost"],
-                  postView?.authorId === user?.id && MENU_ITEMS["editPost"],
-                ]}
+                ref={menuRef}
+                menuId={menuId}
+                setMenuId={setMenuId}
+                items={POST_MENU}
                 className={"w-full max-h-1/2"}
                 content={postView}
               />
@@ -196,32 +209,20 @@ function PostView() {
           </div>
 
           {postView?.titleImage && (
-            <figure className="my-6 w-full ">
-              <img
-                className="w-full object-fill object-center "
-                src={`${postView?.titleImage}`}
-                alt="Title Image"
-                loading="lazy"
-              />
-              <figcaption></figcaption>
-            </figure>
+            <ImageFigure imageUrl={postView?.titleImage} objectFit="fill" />
           )}
-
           {postView?.postContent?.map((item) => (
             <section
               key={item.id}
               className="mb-6 w-full border-inherit sm:text-lg text-sm "
             >
               {item.type === "image" && item.content && (
-                <figure className="my-6 w-full h-auto">
-                  <img
-                    src={`${item.content}`}
-                    alt="Content"
-                    className="w-full object-cover object-center"
-                    loading="lazy"
-                  />
-                  <figcaption className="text-center">{item.title}</figcaption>
-                </figure>
+                <ImageFigure
+                  className=""
+                  imageUrl={item.content}
+                  altText={""}
+                  caption={item.title}
+                />
               )}
               {item?.type === "text" ? (
                 <p
@@ -248,17 +249,16 @@ function PostView() {
           postData={postView}
         />
       )}
-      <div
-        onClick={() => {
+      <Ibutton
+        action={() => {
           setshow(true);
           !data && mutate({ id });
         }}
         className="z-40 border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
       >
-        {" "}
-        <span>AI</span>
-        <WiStars className="" />
-      </div>
+        AI
+        {icons["glitter"]}
+      </Ibutton>
       <Outlet context={postView} />
     </section>
   );

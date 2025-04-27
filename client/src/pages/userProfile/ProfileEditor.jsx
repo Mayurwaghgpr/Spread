@@ -1,11 +1,4 @@
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import profileIcon from "/ProfOutlook.png";
 import { setUser } from "../../redux/slices/authSlice";
@@ -17,6 +10,8 @@ import userImageSrc from "../../utils/userImageSrc";
 import CommonInput from "../../component/inputComponents/CommonInput";
 import Selector from "../../component/utilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
+import Ibutton from "../../component/buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 function ProfileEditor() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -26,6 +21,7 @@ function ProfileEditor() {
   const [profileImage, setProfileImage] = useState(profileIcon);
 
   const { userImageurl, IsUserFromOAth } = userImageSrc(newInfo);
+  const icons = useIcons();
 
   const {
     mutate: nameMutate,
@@ -105,7 +101,7 @@ function ProfileEditor() {
   });
 
   return (
-    <section className=" relative flex sm:h-screen w-full h-1/2 dark:*:border-[#0f0f0f] overflow-y-auto dark:bg-black">
+    <section className=" relative flex sm:h-screen w-full h-1/2 border-inherit overflow-y-auto dark:bg-black">
       <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">
         <h1 className="w-full text-center text-2xl p-2  bg-inherit  ">
           User Information
@@ -114,18 +110,15 @@ function ProfileEditor() {
           className=" flex justify-start gap-5 w-full border-inherit "
           aria-label="Upload profile picture"
         >
-          <div className="relative sm:w-32 sm:h-24  group flex  flex-col">
+          <div className="relative  group flex justify-center items-center  max-h-32 max-w-32 h-fit w-full border-2 rounded-full border-inherit ">
             <label
-              className="absolute h-full w-full cursor-pointer "
+              className="absolute left-1 bottom-3 p-1 border border-inherit hover:opacity-50 rounded-full text-nowrap w-fit h-fit bg-white dark:bg-black cursor-pointer "
               htmlFor="fileInput"
             >
-              <span className="absolute transition-all duration-300 top-10  bg-gray-500 p-[.2rem] rounded-md bg-opacity-60 left-5 group-hover:opacity-100 opacity-0  z-10 text-xs m-auto">
-                {" "}
-                add image..{" "}
-              </span>{" "}
+              {icons["penO"]}
             </label>
             <input
-              className="w-full h-full p-3 bg-inherit hidden  border border-inherit"
+              className=" bg-inherit hidden  border border-inherit"
               id="fileInput"
               type="file"
               name="image"
@@ -141,17 +134,15 @@ function ProfileEditor() {
             />
           </div>
           <div className="flex flex-col justify-center items-start w-full ">
-            <div className="">
-              <button
-                className="rounded-xl text-md  text-red-500 flex gap-2"
-                onClick={handleRemoveImage}
-                disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
-              >
-                <i className="bi bi-trash3"></i>
-                Remove
-              </button>
-            </div>
-            <p className="text-start text-xs  break-words text-black dark:text-white text-opacity-15 dark:text-opacity-30 ">
+            <Ibutton
+              className="rounded-xl text-md text-red-500 flex gap-2"
+              action={handleRemoveImage}
+              disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
+            >
+              {icons["delete"]}
+              Remove
+            </Ibutton>
+            <p className="text-start text-xs break-words opacity-50 ">
               Importent: Insert image in JPG,JPEG,PNG format and high quality
             </p>
             <Selector
@@ -166,14 +157,15 @@ function ProfileEditor() {
             />
           </div>
         </div>
-        <div className="flex flex-col w-full items-end h-full bg-inherit gap-10   dark:*:border-black  px-2 ">
-          <div className="flex flex-col items-start w-full h-full   capitalize bg-inherit gap-3 ">
+        <div className="flex flex-col w-full items-end h-full bg-inherit gap-10   border-inherit px-2 ">
+          <div className="flex flex-col items-end justify-center gap-3 w-full h-full capitalize bg-inherit border-inherit  ">
             {" "}
-            <div className="w-full">
+            <div className="w-full border-inherit">
               <CommonInput
                 ref={uNameRef}
-                className={`border transition-all duration-500 ${isError ? "outline outline-red-500" : "outline-none"} ${isSuccess ? "  outline-green-500" : " outline-none"} rounded-md w-full border-inherit text-sm mt-3 flex flex-col gap-3 bg-inherit `}
+                className={` flex flex-col gap-3 transition-all duration-500  w-full border-inherit text-sm mt-3 bg-inherit `}
                 type={"text"}
+                IClassName={`${isError ? "outline outline-red-500" : "outline-none"} ${isSuccess ? "  outline-green-500" : " outline-none"}`}
                 Iname={"username"}
                 labelname={"username"}
                 disabled={isLoading}
@@ -189,7 +181,7 @@ function ProfileEditor() {
               )}
             </div>
             <CommonInput
-              className="flex flex-col items-start w-full border rounded-md border-inherit text-sm   gap-3 bg-inherit "
+              className="flex flex-col items-start w-full border-inherit text-sm gap-3 bg-inherit "
               type={"text"}
               Iname={"displayName"}
               labelname={"Full Name"}
@@ -202,7 +194,7 @@ function ProfileEditor() {
               {`${newInfo?.displayName?.length || 0} / 20`}
             </span>{" "}
             <CommonInput
-              className="w-full border  rounded-md border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              className="flex flex-col gap-3 w-full border-inherit text-sm  bg-inherit "
               type={"email"}
               Iname={"email"}
               labelname={"email"}
@@ -215,7 +207,8 @@ function ProfileEditor() {
               {`${newInfo?.email?.length || 0} / 30`}
             </span>{" "}
             <CommonInput
-              className="w-full border  rounded-md border-inherit text-sm  flex flex-col gap-3 bg-inherit "
+              className="flex flex-col gap-3 w-full rounded-md border-inherit text-sm   bg-inherit "
+              IClassName={"border rounded-lg"}
               type={"text"}
               Iname={"bio"}
               labelname={"Bio"}

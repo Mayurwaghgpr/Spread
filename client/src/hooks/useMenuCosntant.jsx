@@ -1,23 +1,26 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { setConfirmBox, setToast } from "../../redux/slices/uiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setConfirmBox, setToast } from "../redux/slices/uiSlice";
 import { useNavigate } from "react-router-dom";
+import useIcons from "./useIcons";
 
-function menuCosntant() {
+function useMenuConstant(parent, kind) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const icons = useIcons();
+  const { user } = useSelector((state) => state.auth);
 
-  const MENU_ITEMS = {
-    copylike: {
+  const basePostMenu = [
+    {
       id: "copy-link",
       itemName: "Copy Link",
-      icon: <i className="bi bi-link "></i>,
-      action: (post) => {
+      icon: icons["link"],
+      action: () => {
         navigator.clipboard
           .writeText(window.location.href)
           .then(() => {
             dispatch(
-              setToast({ message: "copied to clipboard", type: "success" })
+              setToast({ message: "Copied to clipboard", type: "success" })
             );
           })
           .catch((err) => {
@@ -25,13 +28,13 @@ function menuCosntant() {
           });
       },
     },
-    share: {
+    {
       id: "share",
       itemName: "Share",
       icon: <i className="bi bi-share"></i>,
       action: () => console.log("Share action triggered"),
     },
-    deletePost: {
+    {
       id: "delete-post",
       itemName: "Delete Post",
       icon: <i className="bi bi-trash2"></i>,
@@ -39,7 +42,7 @@ function menuCosntant() {
         dispatch(
           setConfirmBox({
             message: "Do you really want to delete the post?",
-            title: "delete this post",
+            title: "Delete this post",
             status: true,
             content: "post",
             type: "delete",
@@ -48,13 +51,16 @@ function menuCosntant() {
         );
       },
     },
-    editPost: {
+    {
       id: "edit-post",
       itemName: "Edit Post",
-      icon: <i className="bi bi-pencil"></i>,
+      icon: icons["penO"],
       action: () => console.log("Edit action triggered"),
     },
-    deleteComment: {
+  ];
+
+  const baseCommentMenu = [
+    {
       id: "delete-comment",
       itemName: "Delete Comment",
       icon: <i className="bi bi-trash2"></i>,
@@ -62,7 +68,7 @@ function menuCosntant() {
         dispatch(
           setConfirmBox({
             message: "Do you really want to delete the comment?",
-            title: "delete this comment",
+            title: "Delete this comment",
             status: true,
             content: "comment",
             type: "delete",
@@ -71,14 +77,34 @@ function menuCosntant() {
         );
       },
     },
-    editComment: {
+    {
       id: "edit-comment",
-      itemName: "Edit comment",
-      icon: <i className="bi bi-pencil"></i>,
+      itemName: "Edit Comment",
+      icon: icons["penO"],
       action: () => console.log("Edit action triggered"),
     },
-  };
-  return { MENU_ITEMS };
+  ];
+
+  const POST_MENU = React.useMemo(() => {
+    if (!parent?.user?.id || parent.user.id === user?.id) {
+      return basePostMenu;
+    }
+    // If not the owner, hide 'delete' and 'edit'
+    return basePostMenu.filter(
+      (item) => item.id !== "delete-post" && item.id !== "edit-post"
+    );
+  }, [parent?.user?.id, user?.id, icons]);
+
+  const COMMENT_MENU = React.useMemo(() => {
+    if (!parent?.user?.id || parent.user.id === user?.id) {
+      return baseCommentMenu;
+    }
+    return baseCommentMenu.filter(
+      (item) => item.id !== "delete-comment" && item.id !== "edit-comment"
+    );
+  }, [parent?.user?.id, user?.id, icons]);
+
+  return { POST_MENU, COMMENT_MENU };
 }
 
-export default menuCosntant;
+export default useMenuConstant;

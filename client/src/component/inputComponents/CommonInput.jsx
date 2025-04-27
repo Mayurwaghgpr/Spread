@@ -29,7 +29,7 @@ const CommonInput = forwardRef(function CommonInput(
           type={type}
           id={Iname}
           name={Iname}
-          className={` p-2 bg-inherit border-inherit w-full h-full outline-none `}
+          className={`p-2 bg-inherit border-inherit w-full h-full outline-none `}
           placeholder={placeholder}
           disabled={disabled}
           {...props}

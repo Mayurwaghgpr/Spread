@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { setManuOpen } from "../../redux/slices/uiSlice";
-import abbreviateNumber from "../../utils/numAbrivation";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
 import useIcons from "../../hooks/useIcons";
 import LogoutBtn from "../buttons/LogoutBtn";
 import ProfileImage from "../ProfileImage";
 import { v4 as uuidv4 } from "uuid";
+import AbbreviateNumber from "../../utils/AbbreviateNumber";
 
 const LoginMenuLinks = [
   {
@@ -27,8 +27,8 @@ const LoginMenuLinks = [
   },
   {
     id: uuidv4(),
-    icon1: "penO",
-    icon2: "penFi",
+    icon1: "fetherO",
+    icon2: "fetherFi",
     stub: "/write",
     className: "text-3xl",
     lkname: "write",
@@ -101,12 +101,14 @@ function SideBar() {
                 {user.email}
               </h2> */}
             <div className="xl:flex justify-start items-center sm:hidden flex gap-3 text-sm  dark:text-white  text-[#222222] dark:opacity-50 text-opacity-20">
-              <h3>
-                {abbreviateNumber(user?.Followers?.length) || 0} Followers
-              </h3>
-              <h4>
-                {abbreviateNumber(user?.Following?.length) || 0} Following
-              </h4>
+              <div>
+                <AbbreviateNumber rawNumber={user?.Followers?.length} />{" "}
+                Followers
+              </div>
+              <div>
+                <AbbreviateNumber rawNumber={user?.Following?.length} />{" "}
+                Following
+              </div>
             </div>
           </div>
           {LoginMenuLinks.map((link) => {

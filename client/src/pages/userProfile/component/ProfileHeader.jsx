@@ -6,12 +6,11 @@ import { setFollowInfo } from "../../../redux/slices/profileSlice";
 import userImageSrc from "../../../utils/userImageSrc";
 import { LuMessagesSquare } from "react-icons/lu";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";
-import abbreviateNumber from "../../../utils/numAbrivation";
 import ProfileImage from "../../../component/ProfileImage";
-import Ibutton from "../../../component/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 import LinkBtn from "../../../component/LinkBtn";
 import usePrivateChatMutation from "../../../hooks/usePrivateChatMutation";
+import AbbreviateNumber from "../../../utils/AbbreviateNumber";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -48,9 +47,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
             </h1>
             <div className="flex justify-start items-center gap-4">
               <LinkBtn
-                className={
-                  " font-normal hover:first:underline underline-offset-4 "
-                }
+                className={" font-normal "}
                 action={() =>
                   dispatch(
                     setFollowInfo({
@@ -60,15 +57,13 @@ const ProfileHeader = React.memo(({ profileId }) => {
                   )
                 }
               >
-                <span>
-                  {abbreviateNumber(userProfile?.Followers?.length) || 0}
-                </span>
+                <AbbreviateNumber
+                  rawNumber={userProfile?.Followers?.length || 0}
+                />
                 <span>Followers</span>
               </LinkBtn>
               <LinkBtn
-                className={
-                  " font-normal hover:last:underline  underline-offset-4"
-                }
+                className={" font-normal"}
                 action={() =>
                   dispatch(
                     setFollowInfo({
@@ -78,9 +73,9 @@ const ProfileHeader = React.memo(({ profileId }) => {
                   )
                 }
               >
-                <span>
-                  {abbreviateNumber(userProfile?.Following?.length) || 0}
-                </span>
+                <AbbreviateNumber
+                  rawNumber={userProfile?.Following?.length || 0}
+                />
                 <span> Following</span>
               </LinkBtn>
             </div>

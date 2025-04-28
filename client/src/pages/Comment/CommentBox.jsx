@@ -1,14 +1,10 @@
 import React, { forwardRef, memo, useMemo, useState } from "react";
 import userImageSrc from "../../utils/userImageSrc";
-import { BsHeart, BsHeartFill } from "react-icons/bs";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import abbreviateNumber from "../../utils/numAbrivation";
 import { useInfiniteQuery, useMutation } from "react-query";
 
 import PostsApis from "../../Apis/PostsApis";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentCred } from "../../redux/slices/postSlice";
-import { TiPin } from "react-icons/ti";
 import { setToast } from "../../redux/slices/uiSlice";
 import { useOutletContext } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
@@ -17,7 +13,7 @@ import menuCosntant from "../../component/postsComp/menuCosntant";
 import ProfileImage from "../../component/ProfileImage";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
-
+import AbbreviateNumber from "../../utils/AbbreviateNumber";
 const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const [openReplies, setOpenReplies] = useState("");
   const [optLike, setOptLike] = useState("");
@@ -227,7 +223,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
             action={handleRepliesClick}
           >
             {openReplies !== comt.id ? icons["arrowDown"] : icons["arrowUp"]}
-            Replies {abbreviateNumber(comt?.reply?.length)}
+            Replies <AbbreviateNumber rawNumber={comt?.reply?.length} />
           </Ibutton>
         )}
       </article>

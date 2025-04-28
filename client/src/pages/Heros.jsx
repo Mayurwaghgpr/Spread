@@ -82,7 +82,7 @@ function Heros() {
         </section> */}
 
         {/* --- Additional/Optional Section: Reserved for Future Content --- */}
-        <section></section>
+        {/* <section></section> */}
 
         {/* --- Footer Section --- */}
         <Footer />

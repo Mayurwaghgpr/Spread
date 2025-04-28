@@ -25,7 +25,7 @@ function DynamicPostEditor() {
   } = usePostCreator();
 
   const dispatch = useDispatch();
-  const { elements, beforsubmit } = useSelector((state) => state.posts);
+  const { elements } = useSelector((state) => state.posts);
   const { isScale } = useSelector((state) => state.ui);
   const checkAllMatch = elements.every(
     (obj, i, arr) =>

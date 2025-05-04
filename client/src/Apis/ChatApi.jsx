@@ -1,15 +1,11 @@
-import axios from "axios";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "./axios";
+
 function ChatApi() {
   const startPrivateChate = async (chatUserId) => {
     try {
-      const result = await axios.post(
-        `${BASE_URL}/messaging/p/create`,
-        { chatUserId },
-        {
-          withCredentials: true,
-        }
-      );
+      const result = await axiosInstance.post(`/messaging/p/create`, {
+        chatUserId,
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -18,13 +14,10 @@ function ChatApi() {
   //Create Group
   const createGroup = async ({ groupName, membersArr }) => {
     try {
-      const result = await axios.post(
-        `${BASE_URL}/messaging/g/create`,
-        { groupName, membersArr },
-        {
-          withCredentials: true,
-        }
-      );
+      const result = await axiosInstance.post(`/messaging/g/create`, {
+        groupName,
+        membersArr,
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -32,7 +25,7 @@ function ChatApi() {
   };
   const getMessage = async ({ pageParam, conversationId }) => {
     try {
-      const result = await axios.get(`${BASE_URL}/messaging/c/messages`, {
+      const result = await axiosInstance.get(`/messaging/c/messages`, {
         withCredentials: true,
         params: {
           conversationId,
@@ -46,11 +39,10 @@ function ChatApi() {
   };
   const getConversations = async ({ pageParam }) => {
     try {
-      const result = await axios.get(`${BASE_URL}/messaging/c/all`, {
+      const result = await axiosInstance.get(`/messaging/c/all`, {
         params: {
           lastTimestamp: pageParam,
         },
-        withCredentials: true,
       });
       return result.data;
     } catch (error) {
@@ -59,14 +51,10 @@ function ChatApi() {
   };
   const setMessageToMute = async ({ isMuteMessage, conversationId }) => {
     try {
-      const result = await axios.put(
-        `${BASE_URL}/messaging/c/message/mute`,
-        {
-          isMuteMessage,
-          conversationId,
-        },
-        { withCredentials: true }
-      );
+      const result = await axiosInstance.put(`/messaging/c/message/mute`, {
+        isMuteMessage,
+        conversationId,
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;

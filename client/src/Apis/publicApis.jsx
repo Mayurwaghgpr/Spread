@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useDispatch } from "react-redux";
+import axiosInstance from "./axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -7,8 +7,7 @@ function usePublicApis() {
   const dispatch = useDispatch();
   const fetchPeopels = async ({ pageParam }) => {
     try {
-      const result = await axios.get(`${BASE_URL}/public/h/peoples`, {
-        withCredentials: true,
+      const result = await axiosInstance.get(`/public/h/peoples`, {
         params: {
           lastTimestamp: pageParam,
         },
@@ -22,9 +21,7 @@ function usePublicApis() {
   // Fetch user preferences data
   const fetchHomeContent = async () => {
     try {
-      const result = await axios.get(`${BASE_URL}/public/h/content`, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.get(`/public/h/content`, {});
       return result.data;
     } catch (error) {
       console.error("Error fetching user preferences data:", error);
@@ -35,9 +32,7 @@ function usePublicApis() {
   // Fetch data by post ID
   const fetchDataById = async (id) => {
     try {
-      const response = await axios.get(`${BASE_URL}/posts/${id}`, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get(`/posts/${id}`, {});
       return response.data;
     } catch (error) {
       console.error("Error fetching post by ID:", error);
@@ -48,21 +43,18 @@ function usePublicApis() {
   // fetch data search by user
 
   const fetchSearchData = async (search) => {
-    const searchResult = await axios.get(
-      `${BASE_URL}/public/search?q=${search}`,
-      {
-        withCredentials: true,
-      }
+    const searchResult = await axiosInstance.get(
+      `/public/search?q=${search}`,
+      {}
     );
     return searchResult.data;
   };
   const followUser = async ({ followerId, followedId }) => {
     try {
-      const result = await axios.put(
-        `${BASE_URL}/public/follow`,
-        { followerId, followedId },
-        { withCredentials: true }
-      );
+      const result = await axiosInstance.put(`/public/follow`, {
+        followerId,
+        followedId,
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -70,8 +62,7 @@ function usePublicApis() {
   };
   const fetchAllUsers = async (pageParam) => {
     try {
-      const result = await axios.get(`${BASE_URL}/public/users/all`, {
-        withCredentials: true,
+      const result = await axiosInstance.get(`/public/users/all`, {
         params: {
           limit: 5,
           lastTimestamp: pageParam,
@@ -86,13 +77,10 @@ function usePublicApis() {
   const LikePost = async ({ postId, liketype }) => {
     console.log(postId, liketype);
     try {
-      const result = await axios.put(
-        `${BASE_URL}/public/like`,
-        { postId, liketype },
-        {
-          withCredentials: true,
-        }
-      );
+      const result = await axiosInstance.put(`/public/like`, {
+        postId,
+        liketype,
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -101,11 +89,10 @@ function usePublicApis() {
 
   const unfollowUser = async ({ followerId, followedId }) => {
     try {
-      const result = await axios.post(
-        `${BASE_URL}/public/unfollow`,
-        { followerId, followedId },
-        { withCredentials: true }
-      );
+      const result = await axiosInstance.post(`/public/unfollow`, {
+        followerId,
+        followedId,
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -114,11 +101,7 @@ function usePublicApis() {
 
   const ArchivePost = async (postId) => {
     try {
-      const result = await axios.put(
-        `${BASE_URL}/public/archive`,
-        { postId },
-        { withCredentials: true }
-      );
+      const result = await axiosInstance.put(`/public/archive`, { postId });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -126,9 +109,7 @@ function usePublicApis() {
   };
   const removePostFromArchive = async (id) => {
     try {
-      const result = await axios.delete(`${BASE_URL}/public/archive?id=${id}`, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.delete(`/public/archive?id=${id}`);
       return result.data;
     } catch (error) {
       throw error.response || error;

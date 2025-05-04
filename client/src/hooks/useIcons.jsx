@@ -2,6 +2,7 @@ import React from "react";
 import {
   BsAlphabetUppercase,
   BsArrowLeft,
+  BsBell,
   BsBellFill,
   BsCamera,
   BsCameraVideo,
@@ -21,7 +22,13 @@ import {
   BsPeople,
   BsThreeDotsVertical,
 } from "react-icons/bs";
-import { MdCelebration, MdDone, MdErrorOutline } from "react-icons/md";
+import {
+  MdCelebration,
+  MdDone,
+  MdErrorOutline,
+  MdOutlineKeyboardDoubleArrowLeft,
+  MdOutlineKeyboardDoubleArrowRight,
+} from "react-icons/md";
 import {
   IoArrowDown,
   IoCallOutline,
@@ -86,7 +93,8 @@ function useIcons() {
     arrowDown: <IoIosArrowDown />,
 
     // B
-    bell: <BsBellFill />,
+    bellFi: <BsBellFill />,
+    bellO: <BsBell />,
 
     // C
     calender: <BiCalendarAlt />,
@@ -102,7 +110,8 @@ function useIcons() {
     done: <MdDone color="green" />,
     duration: <BsClockHistory />,
     delete: <BiTrash />,
-
+    doubleArrowR: <MdOutlineKeyboardDoubleArrowRight />,
+    doubleArrowL: <MdOutlineKeyboardDoubleArrowLeft />,
     // E
     error: <MdErrorOutline color="red" />,
 

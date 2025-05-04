@@ -74,8 +74,7 @@ export const getUserPostsById = async (req, res, next) => {
       res.status(404).send("No posts found");
     }
   } catch (error) {
-    console.error("Server error:", error);
-    // res.status(500).send('Server error');
+    console.error("Error while fetching user posts error:", error.message);
     next(error);
   }
 };
@@ -106,7 +105,7 @@ export const getFollowing = async (req, res, next) => {
 
     res.status(200).json(user.Following);
   } catch (error) {
-    // res.status(400).json({ error: error.message });
+    console.log('Error while get followings',error.message)
     next(error);
   }
 };
@@ -175,7 +174,8 @@ if (!username) {
     return res.status(409).json({message: 'username is already taken',exist})
   }
   res.status(200).json({username})
-} catch (error) {
+  } catch (error) {
+    console.log('Error while searching username',error.message)
     next(error);
 }
 }

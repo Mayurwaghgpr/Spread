@@ -57,11 +57,11 @@ function MainNavBar() {
     >
       <nav className={`relative  w-full border-inherit    `}>
         <div className="flex  items-center justify-between w-full border-inherit m-auto">
-          <Link to="/" className="sm:text-2xl  font-bold ">
+          <Link to="/" className="sm:text-2xl  font-semibold ">
             Spread
           </Link>
 
-          <div className="flex justify-end items-center  gap-5  w-fit border-inherit pr-5  ">
+          <div className="flex justify-end items-center  gap-5 w-fit border-inherit text-xl ">
             {/* Toggle Theme button */}
             <ThemeBtn Modes={Modes} separate={false} className={"relative"} />
             {isLogin && (

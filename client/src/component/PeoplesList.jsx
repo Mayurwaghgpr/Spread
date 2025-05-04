@@ -35,7 +35,7 @@ const PeoplesList = forwardRef(
     return (
       <li
         ref={ref}
-        className={`${className} font-medium capitalize  relative dark:border-[#383838]`}
+        className={`${className} font-medium capitalize  relative dark:border-[#383838] text-xs`}
         key={people?.id}
         id={people?.id}
       >
@@ -48,7 +48,7 @@ const PeoplesList = forwardRef(
             onClick={action}
           >
             <ProfileImage
-              className={`w-10 h-10 rounded-full ${!people && "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse "} `}
+              className={`w-8 h-8 rounded-full ${!people && "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse "} `}
               image={people && userImageurl}
             />
             <div
@@ -63,7 +63,7 @@ const PeoplesList = forwardRef(
             <UserPopover
               ref={boxRef}
               people={people}
-              className="z-40 px-4 w-[20rem] absolute transition-all duration-500 top-11  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
+              className="z-40 px-4 w-[20rem] absolute transition-all duration-300 top-8  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
               attributes={attributes}
               styles={styles}
             />

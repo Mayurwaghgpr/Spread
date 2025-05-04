@@ -14,11 +14,11 @@ function AuthFormWrapper({
   const navigate = useNavigate();
   return (
     <section className="sm:flex w-full animate-fedin.2s relative justify-start items-center flex-col z-50 h-screen  top-0 left-0 bottom-0 right-0 overflow-scroll  bg-[#fff9f3] dark:bg-black  dark:*:border-[#383838]">
-      {(isError || validation) && (
+      {/* {(isError || validation) && (
         <div className=" flex justify-center w-full bg-red-100 py-2 text-red-500 border-y-2 border-red-600 ">
           {error?.response?.data.message || validation}
         </div>
-      )}
+      )} */}
       <div className="flex justify-end items-center w-full p-3 ">
         <button
           onClick={() => navigate(-1)}

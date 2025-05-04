@@ -1,13 +1,11 @@
 import axios from "axios";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "./axios";
 
 function PostsApis() {
   // Fetch all posts with pagination and filtering by topic
   const fetchDataAll = async ({ pageParam, topic }) => {
-    console.log(pageParam);
     try {
-      const response = await axios.get(`${BASE_URL}/posts/all`, {
+      const response = await axiosInstance.get(`/posts/all`, {
         params: {
           limit: 3,
           lastTimestamp: pageParam,
@@ -22,7 +20,7 @@ function PostsApis() {
   };
   const AddNewPost = async (newPost, signal) => {
     try {
-      const result = await axios.post(`${BASE_URL}/posts/add`, newPost, {
+      const result = await axiosInstance.post(`/posts/add`, newPost, {
         withCredentials: true,
         signal: signal,
       });
@@ -33,7 +31,7 @@ function PostsApis() {
   };
   const Comments = async (comment) => {
     try {
-      const result = await axios.post(`${BASE_URL}/comment/new`, comment, {
+      const result = await axiosInstance.post(`/comment/new`, comment, {
         withCredentials: true,
       });
       return result.data;
@@ -44,7 +42,7 @@ function PostsApis() {
   const getComments = async ({ postId, pageParam }) => {
     // console.log("fetch", postId);
     try {
-      const result = await axios.get(`${BASE_URL}/comment/top/all`, {
+      const result = await axiosInstance.get(`/comment/top/all`, {
         params: {
           postId,
           limit: 5,
@@ -59,7 +57,7 @@ function PostsApis() {
   };
   const hitLike = async (comtId) => {
     try {
-      const result = await axios.get(`${BASE_URL}/comment/like/${comtId}`, {
+      const result = await axiosInstance.get(`/comment/like/${comtId}`, {
         withCredentials: true,
       });
       return result.data; // Return the actual data
@@ -69,7 +67,7 @@ function PostsApis() {
   };
   const getReplies = async ({ topCommentId, postId, pageParam }) => {
     try {
-      const result = await axios.get(`${BASE_URL}/comment/replys/all`, {
+      const result = await axiosInstance.get(`/comment/replys/all`, {
         withCredentials: true,
         params: {
           topCommentId,
@@ -85,9 +83,7 @@ function PostsApis() {
   };
   const pinComment = async (data) => {
     try {
-      const result = await axios.put(`${BASE_URL}/comment/pin`, data, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.put(`/comment/pin`, data);
       return result.data.result;
     } catch (error) {
       throw error.response || error;
@@ -95,8 +91,7 @@ function PostsApis() {
   };
   const getAiGenAnalysis = async (data) => {
     try {
-      const result = await axios.post(`${BASE_URL}/ai/analysis`, data, {
-        withCredentials: true,
+      const result = await axiosInstance.post(`/ai/analysis`, data, {
         headers: { "Content-Type": "application/json" },
       });
       return result.data;
@@ -106,9 +101,8 @@ function PostsApis() {
   };
   const getAiGenTags = async (data) => {
     try {
-      const result = await axios.post(`${BASE_URL}/ai/tags`, data, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.post(`/ai/tags`, data);
+
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -116,8 +110,8 @@ function PostsApis() {
   };
   const deleteComtApi = async (commentId) => {
     try {
-      const result = await axios.delete(
-        `${BASE_URL}/comment/delete/${commentId}`,
+      const result = await axiosInstance.delete(
+        `/comment/delete/${commentId}`,
         {
           withCredentials: true,
         }
@@ -130,12 +124,7 @@ function PostsApis() {
 
   const DeletePostApi = async (id) => {
     try {
-      const response = await axios.delete(
-        `${BASE_URL}/posts/delete/${id.trim()}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axiosInstance.delete(`/posts/delete/${id.trim()}`);
 
       // console.log("DeletePostApi response:", response);
       return response.data; // Return the actual data

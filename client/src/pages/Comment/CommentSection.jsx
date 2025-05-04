@@ -7,7 +7,6 @@ import Spinner from "../../component/loaders/Spinner";
 import CommentInput from "./CommentInput";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { IoClose, IoCloseSharp } from "react-icons/io5";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 const CommentBox = lazy(() => import("./CommentBox"));

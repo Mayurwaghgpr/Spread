@@ -1,12 +1,9 @@
-import axios from "axios";
+import axiosInstance from "./axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 function useAuthApi() {
   const loginUser = async (signinConfig) => {
     try {
-      const result = await axios.post(`${BASE_URL}/auth/signin`, signinConfig, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.post(`/auth/signin`, signinConfig);
       return result.data;
     } catch (error) {
       throw error;
@@ -14,9 +11,7 @@ function useAuthApi() {
   };
   const getLogInUserData = async () => {
     try {
-      const result = await axios.get(`${BASE_URL}/auth/details`, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.get(`/auth/details`);
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -25,9 +20,7 @@ function useAuthApi() {
 
   const registerUser = async (signUpcofig) => {
     try {
-      const result = await axios.post(`${BASE_URL}/auth/signup`, signUpcofig, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.post(`/auth/signup`, signUpcofig);
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -36,9 +29,7 @@ function useAuthApi() {
 
   const refreshToken = async (params) => {
     try {
-      const result = await axios.post(`${BASE_URL}/auth/refresh-token`, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.post(`/auth/refresh-token`);
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -47,7 +38,7 @@ function useAuthApi() {
 
   const forgotPassword = async (email) => {
     try {
-      const result = await axios.post(`${BASE_URL}/auth/forgotpassword`, email);
+      const result = await axiosInstance.post(`/auth/forgotpassword`, email);
       return result.data;
     } catch (error) {
       throw error.response;
@@ -56,8 +47,8 @@ function useAuthApi() {
 
   const resetPasswordApi = async (newpassword, token) => {
     try {
-      const result = await axios.put(
-        `${BASE_URL}/auth/resetpassword/${token}`,
+      const result = await axiosInstance.put(
+        `/auth/resetpassword/${token}`,
         newpassword
       );
       return result.data;
@@ -68,9 +59,7 @@ function useAuthApi() {
 
   const logout = async () => {
     try {
-      const result = await axios.delete(`${BASE_URL}/auth/logout`, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.delete(`/auth/logout`);
       return result.data;
     } catch (error) {
       throw error.response;

@@ -1,13 +1,9 @@
-import axios from "axios";
-
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "./axios";
 
 function useProfileApi() {
   const fetchUserProfile = async (id) => {
     try {
-      const response = await axios.get(`${BASE_URL}/user/profile/${id}`, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get(`/user/profile/${id}`);
       return response.data;
     } catch (error) {
       throw error.response || error;
@@ -16,8 +12,7 @@ function useProfileApi() {
   const fetchUserData = async (profileId, pageParam) => {
     // console.log(profileId, pageParam);
     try {
-      const response = await axios.get(`${BASE_URL}/user/posts/${profileId}`, {
-        withCredentials: true,
+      const response = await axiosInstance.get(`/user/posts/${profileId}`, {
         params: {
           limit: 3,
           lastTimestamp: pageParam,
@@ -31,8 +26,7 @@ function useProfileApi() {
 
   const getArchivedPosts = async ({ pageParam }) => {
     try {
-      const result = await axios.get(`${BASE_URL}/posts/archived`, {
-        withCredentials: true,
+      const result = await axiosInstance.get(`/posts/archived`, {
         params: {
           lastTimestamp: pageParam,
           limit: 3,
@@ -46,11 +40,8 @@ function useProfileApi() {
 
   const fetchFollowInfo = async ({ FollowInfo, profileId }) => {
     try {
-      const result = await axios.get(
-        `${BASE_URL}/user/${FollowInfo}/${profileId}`,
-        {
-          withCredentials: true,
-        }
+      const result = await axiosInstance.get(
+        `/user/${FollowInfo}/${profileId}`
       );
       return result.data;
     } catch (error) {
@@ -81,16 +72,14 @@ function useProfileApi() {
     formData.append("cloudinaryPubId", newData.cloudinaryPubId);
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/user/profile/edit`,
+      const response = await axiosInstance.post(
+        `/user/profile/edit`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // Uncomment the line below if token-based authentication is implemented
             // ...(getToken() && { Authorization: `Bearer ${getToken()}` }),
           },
-          withCredentials: true,
         }
       );
       return response.data;
@@ -104,8 +93,8 @@ function useProfileApi() {
   };
   const searchUsername = async (username) => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/user/search/username`,
+      const response = await axiosInstance.post(
+        `/user/search/username`,
         username
       );
       return response.data;

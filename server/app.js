@@ -73,13 +73,13 @@ app.use(express.static(path.join(__dirname, "/client/dist"), { maxAge: "1d" }));
 // Associations
 DataBaseAssociations()
 
-app.use("/auth", authRouter);
-app.use("/public", publicRouter);
-app.use("/posts", postsRouter);
-app.use("/user", userRouter);
-app.use("/comment", commentRouter);
-app.use("/ai", aiRouter);
-app.use('/messaging',messagingRouter)
+app.use("/api/auth", authRouter);
+app.use("/api/public", publicRouter);
+app.use("/api/posts", postsRouter);
+app.use("/api/user", userRouter);
+app.use("/api/comment", commentRouter);
+app.use("/api/ai", aiRouter);
+app.use("/api/messaging",messagingRouter)
 
 socketHandlers(io)
 

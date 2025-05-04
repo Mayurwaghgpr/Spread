@@ -1,8 +1,6 @@
 import React, { memo, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
-import { IoSend } from "react-icons/io5";
-import { MdOutlineTagFaces } from "react-icons/md";
 import { useMutation, useQueryClient } from "react-query";
 import { setCommentCred } from "../../redux/slices/postSlice";
 import DOMPurify from "dompurify";
@@ -16,14 +14,14 @@ import useIcons from "../../hooks/useIcons";
 
 // const EmojiPicker = lazy(() => import("emoji-picker-react"));
 function CommentInput({ className }) {
-  const { isLogin, user } = useSelector((state) => state.auth);
+  // const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred } = useSelector((state) => state.posts);
-  const { ThemeMode } = useSelector((state) => state.ui);
+  // const { ThemeMode } = useSelector((state) => state.ui);
   const { Comments } = PostsApis();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const userImage = userImageSrc(user);
-  const pickerRef = useRef();
+  // const pickerRef = useRef();
   const inputRef = useRef();
   const icons = useIcons();
 

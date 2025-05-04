@@ -26,11 +26,12 @@ function SignUp() {
       queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
       localStorage.setItem("AccessToken", AccessToken);
       navigate("/", { replace: true });
+      dispatch(setToast({ message: "Signed up successfuly", type: "error" }));
     },
     onError: (error) => {
       const errorMessage =
         error.response?.data.message || "Registration failed";
-      dispatch(setToast({ message: errorMessage }));
+      dispatch(setToast({ message: errorMessage, type: "error" }));
     },
   });
 

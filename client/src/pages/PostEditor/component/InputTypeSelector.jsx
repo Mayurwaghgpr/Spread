@@ -1,20 +1,21 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsScale } from "../../../redux/slices/uiSlice";
-import { BsAlphabetUppercase, BsImage } from "react-icons/bs";
-import { CiLink } from "react-icons/ci";
-import { FaCode } from "react-icons/fa6";
-import { PiImageThin } from "react-icons/pi";
-import {
-  MdOutlineKeyboardDoubleArrowLeft,
-  MdOutlineKeyboardDoubleArrowRight,
-} from "react-icons/md";
 import useIcons from "../../../hooks/useIcons";
-const buttonConsts = [
-  { type: "text", icon: "alphabetUp" },
-  { type: "url", icon: "link" },
-  { type: "code", icon: "code1" },
+
+// Move constants outside component to prevent recreation on each render
+const BUTTON_CONFIGS = [
+  { type: "text", icon: "alphabetUp", label: "Add text" },
+  { type: "url", icon: "link", label: "Add url" },
+  { type: "code", icon: "code1", label: "Add code" },
 ];
+
+const TOOLTIP_CLASS =
+  "group-hover:flex hidden justify-center gap-1 text-xs font-light items-center flex-row px-2 rounded-md before:size-2 before:-z-10 before:absolute before:border-b before:border-r before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white absolute -top-10 border";
+
+const BUTTON_CLASS =
+  "group flex justify-center items-center hover:scale-110 shadow-inner hover:shadow-md hover:shadow-gray-300 dark:hover:shadow-md dark:hover:shadow-gray-600";
+
 function InputTypeSelector({
   imageInputRef,
   addElement,
@@ -22,51 +23,45 @@ function InputTypeSelector({
   className,
 }) {
   const { isScale } = useSelector((state) => state.ui);
-  const [tooltip, setTooltip] = useState("");
   const dispatch = useDispatch();
   const icons = useIcons();
 
-  // const getTransitionClass = useMemo(
-  //   () =>
-  //     `transition-all duration-200 ease-linear ${
-  //       isScale ? "scale-100 opacity-100 z-10" : "scale-0 opacity-0 -z-50"
-  //     }`,
-  //   [isScale]
+  // Memoize handlers to prevent recreating functions on every render
+  const toggleScale = useCallback(() => dispatch(setIsScale()), [dispatch]);
+
   return (
     <div
-      className={`${isScale ? "translate-x-0" : "-translate-x-48 sm:translate-x-0"} ${className}`}
+      className={`transition-all duration-300 ${
+        isScale ? "translate-x-0" : "-translate-x-48 sm:translate-x-0"
+      } ${className}`}
     >
-      {buttonConsts.map((conf, idx) => (
+      {BUTTON_CONFIGS.map(({ type, icon, label }) => (
         <button
-          key={idx}
-          name={conf.type}
-          title={conf.type}
-          aria-label={`Add ${conf.type}`}
-          onMouseOver={() => setTooltip(conf.type)}
-          onMouseOut={() => setTooltip("")}
-          // className={getTransitionClass}
-          className={`group flex justify-center items-center hover:scale-115 shadow-inner hover:shadow-md hover:shadow-gray-300 dark:hover:shadow-md dark:hover:shadow-gray-600`}
-          onClick={() => addElement(conf.type)}
+          key={type}
+          name={type}
+          title={type}
+          aria-label={label}
+          className={BUTTON_CLASS}
+          onClick={() => addElement(type)}
         >
-          <div className="group-hover:flex hidden justify-center gap-1 items-center flex-row px-2 rounded-md before:size-2 before:absolute before:border-b before:border-r before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black  dark:bg-white  absolute -top-10 border">
-            <span>add</span> {conf.type}
+          <div className={TOOLTIP_CLASS}>
+            <span>add</span>
+            {type}
           </div>
-          <span>{icons[conf.icon]}</span>
+          <span>{icons[icon]}</span>
         </button>
       ))}
+
       <label
         title="add an image"
         aria-label="Add an image"
-        className={`group items-center flex justify-center hover:scale-110 hover:shadow-md hover:shadow-gray-300 dark:hover:shadow-md dark:hover:shadow-gray-600`}
+        className={BUTTON_CLASS}
         htmlFor="imgbtn"
-        onMouseOver={() => setTooltip("image")}
-        onMouseOut={() => setTooltip("")}
       >
-        <span className=" group-hover:block hidden w-fit px-2  rounded-md before:size-2 before:absolute before:left-[40%] before:-bottom-1 before:rotate-45 before:bg-inherit text-black dark:bg-white absolute -top-10 border">
-          Image
-        </span>
+        <span className={`${TOOLTIP_CLASS} w-fit px-2`}>Image</span>
         {icons["image1"]}
       </label>
+
       <input
         ref={imageInputRef}
         className="hidden"
@@ -76,16 +71,14 @@ function InputTypeSelector({
         accept="image/*"
         onChange={handleFileChange}
       />
-      <span
-        onClick={() => dispatch(setIsScale())}
-        className=" sm:hidden border-none flex justify-center items-center  absolute -right-8"
+
+      <button
+        onClick={toggleScale}
+        aria-label={isScale ? "Hide toolbar" : "Show toolbar"}
+        className="sm:hidden border-none flex justify-center items-center absolute -right-8"
       >
-        {!isScale ? (
-          <MdOutlineKeyboardDoubleArrowRight />
-        ) : (
-          <MdOutlineKeyboardDoubleArrowLeft />
-        )}
-      </span>
+        {!isScale ? icons["doubleArrowR"] : icons["doubleArrowL"]}
+      </button>
     </div>
   );
 }

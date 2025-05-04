@@ -58,7 +58,7 @@ export const signUp = async (req, res, next) => {
 
     delete newUser.password;
 
-    await redisClient.set(newUser.id,EXPIRATION,JSON.stringify(newUser))
+    await redisClient.set(newUser.id,JSON.stringify(newUser))
 
     // Set tokens as cookies and respond
     res
@@ -130,7 +130,7 @@ export const signIn = async (req, res, next) => {
     if (!AccessToken || !RefreshToken) {
       throw new Error("Failed to generate tokens");
     }
-    await redisClient.set(user.id,EXPIRATION,JSON.stringify(user))
+    await redisClient.set(user.id,JSON.stringify(user))
     // Set tokens as cookies and respond
        res
       .cookie("_userDetail", JSON.stringify(user),CookieOptions)

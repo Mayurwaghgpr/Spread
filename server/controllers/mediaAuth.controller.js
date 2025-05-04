@@ -17,7 +17,9 @@ export const googleAuth = async (req, res, next) => {
 //   _userDetail: user,
 //   AccessToken: AccessToken,
 //   RefreshToken: RefreshToken,
-// });
+    // });
+    await redisClient.set(user.id,EXPIRATION,JSON.stringify(user))
+    
     res
       .cookie("_userDetail",JSON.stringify(user),CookieOptions)
       .cookie("AccessToken", AccessToken, CookieOptions)
@@ -35,6 +37,8 @@ export const gitHubAuth = async (req, res, next) => {
       id: user.id,
       email: user.email,
     });
+
+    await redisClient.set(user.id,EXPIRATION,JSON.stringify(user))
 
     res
       .cookie("_userDetail", JSON.stringify(user), CookieOptions)

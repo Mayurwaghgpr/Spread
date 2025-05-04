@@ -9,6 +9,7 @@ import { CookieOptions } from "../utils/cookie-options.js";
 import Post from "../models/posts.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
 import redisClient from "../utils/redisClient.js";
+import { EXPIRATION } from "../config/constants.js";
 
 dotenv.config();
 const saltRounds = 10;
@@ -54,7 +55,10 @@ export const signUp = async (req, res, next) => {
     }
 
     const newUser = { ...newAddedUser.toJSON() };
+
     delete newUser.password;
+
+    await redisClient.set(newUser.id,EXPIRATION,JSON.stringify(newUser))
 
     // Set tokens as cookies and respond
     res
@@ -126,7 +130,7 @@ export const signIn = async (req, res, next) => {
     if (!AccessToken || !RefreshToken) {
       throw new Error("Failed to generate tokens");
     }
-
+    await redisClient.set(user.id,EXPIRATION,JSON.stringify(user))
     // Set tokens as cookies and respond
        res
       .cookie("_userDetail", JSON.stringify(user),CookieOptions)
@@ -145,7 +149,8 @@ export const signIn = async (req, res, next) => {
 
 //Fetch login user details
 export const getLoginUser = async (req, res, nex) => {
-  const userInfo = req.cookies._userDetail
+  const userInfo = req.cookies._userDetail || await redisClient.get(req.authUser.id);
+
   res.status(200).json(userInfo);
 };
 
@@ -194,7 +199,7 @@ export const refreshToken = async (req, res, next) => {
       .status(200)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", user,CookieOptions)
+      .cookie("_userDetail", JSON.stringify(user),CookieOptions)
       .json({ user: user, AccessToken, RefreshToken });
   } catch (error) {
     console.error("Error during token refresh:", error);
@@ -207,7 +212,7 @@ export const refreshToken = async (req, res, next) => {
 export const logout = async (req, res, next) => {
   const option = {
     httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production",
    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'strict',
  }
   res
@@ -222,7 +227,6 @@ export const logout = async (req, res, next) => {
       { where: { id: req.authUser.id } }
     );
     await redisClient.del(req.authUser.id)
-     await redisClient.del("_userDetail")
     res.json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error during logout:", error);

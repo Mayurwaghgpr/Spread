@@ -258,8 +258,8 @@ function App() {
               </Link>
             </PopupBox>
           )}
-          <ToastContainer />
         </Suspense>
+        <ToastContainer />
         <ConfirmationBox />
 
         {/* <ScrollToTopButton /> */}

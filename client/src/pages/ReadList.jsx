@@ -43,7 +43,7 @@ const ReadList = () => {
   return (
     <section className="relative flex flex-col justify-start items-start w-full h-screen xl:items-center  bg-inherit dark:*:border-[#383838] dark:bg-black  overflow-y-auto">
       <div className=" sticky top-[3.5rem] flex  justify-end items-center gap-4 w-full z-10  border-inherit  ">
-        <div className="w-full h-full p-7 bg-[#f3efeb] dark:bg-black text-3xl  border-b border-inherit">
+        <div className="w-full h-full p-7 bg-light dark:bg-dark text-3xl  border-b border-inherit">
           <h1>Read list </h1>
         </div>
       </div>

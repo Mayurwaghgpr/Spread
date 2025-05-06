@@ -8,6 +8,7 @@ import LogoutBtn from "../buttons/LogoutBtn";
 import ProfileImage from "../ProfileImage";
 import { v4 as uuidv4 } from "uuid";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import LinkBtn from "../LinkBtn";
 
 const LoginMenuLinks = [
   {
@@ -54,7 +55,7 @@ const LoginMenuLinks = [
     lkname: "settings",
     icon1: "gearO",
     icon2: "gearFi",
-    // stub: "/setting",
+    stub: "/setting",
   },
 ];
 function SideBar() {
@@ -75,7 +76,7 @@ function SideBar() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between h-full sm:min-w-full w-fit  me-16  p-10  sm:dark:bg-transparent  dark:bg-black bg-[#fff9f3] xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg  shadow-sm"
+        className="flex flex-col justify-between h-full sm:min-w-full w-fit  me-16  p-10  sm:dark:bg-transparent  bg-light dark:bg-dark  xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg  shadow-sm"
       >
         <div className="flex flex-col justify-center items-center gap-4 w-fit sm:mt-16">
           {/* Profile Link */}
@@ -113,14 +114,10 @@ function SideBar() {
           </div>
           {LoginMenuLinks.map((link) => {
             return (
-              <NavLink
+              <LinkBtn
                 key={link.id}
-                isActive={(match, location) =>
-                  location.pathname.startsWith(link.stub)
-                }
-                className={({ isActive }) =>
-                  `flex ${isActive && "font-bold "} capitalize  justify-start items-center p-3   hover:bg-gray-400  hover:bg-opacity-15 rounded-full  gap-5 w-full`
-                }
+                stub={link.stub}
+                className={`flex  justify-start items-center p-3 no-underline capitalize  hover:bg-gray-400  hover:bg-opacity-15 rounded-full  gap-5 w-full`}
                 to={link.stub}
                 onClick={() => dispatch(setManuOpen())}
               >
@@ -135,7 +132,7 @@ function SideBar() {
                   {" "}
                   <span>{link.lkname}</span>{" "}
                 </div>
-              </NavLink>
+              </LinkBtn>
             );
           })}
         </div>

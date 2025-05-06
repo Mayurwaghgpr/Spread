@@ -66,7 +66,7 @@ function MainNavBar() {
             <ThemeBtn Modes={Modes} separate={false} className={"relative"} />
             {isLogin && (
               <>
-                <NotifictionBell className={""} />
+                <NotifictionBell className={"opacity-50 hover:opacity-100"} />
               </>
             )}
             {isLogin ? (

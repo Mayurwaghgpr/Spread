@@ -22,7 +22,7 @@ import useIcons from "../../hooks/useIcons";
 import useClickOutside from "../../hooks/useClickOutside";
 import useMenuCosntant from "../../hooks/useMenuCosntant";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
-
+import ImageFigure from "../utilityComp/ImageFigure";
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
   // const { user } = useSelector((state) => state.auth);
@@ -83,7 +83,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             </div>
           </Link>
 
-          <h1 className="text-opacity-30 text-black dark:text-white dark:text-opacity-30 rounded-lg">
+          <h1 className="text-opacity-30 opacity-30 rounded-lg">
             {post?.topic}
           </h1>
           {/* 
@@ -113,7 +113,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 <p className="font-medium text-xl sm:text-2xl overflow-hidden overflow-ellipsis">
                   {post?.title}
                 </p>
-                <p className="text-sm sm:text-base h-11 text-opacity-60 text-black dark:text-white dark:text-opacity-60 font-normal overflow-hidden overflow-ellipsis">
+                <p className="text-sm sm:text-base h-11 opacity-60 font-normal overflow-hidden overflow-ellipsis">
                   {post?.subtitelpagraph}
                 </p>
               </>
@@ -130,11 +130,11 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             className={`${!post && " animate-pulse"} border border-inherit z-0 sm:w-1/3 w-full h-[7em]  rounded  overflow-hidden   dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
           >
             {post && (
-              <img
-                className="object-fill object-center z-0 h-full w-full"
-                src={post?.titleImage && `${post?.titleImage}`}
-                loading="lazy"
-                alt="PreviewImage"
+              <ImageFigure
+                objectFit="fill"
+                imageClassName="w-full h-full"
+                imageUrl={post?.titleImage && `${post?.titleImage}`}
+                altText={"PreviewImage"}
               />
             )}
           </div>
@@ -158,7 +158,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           <div className="flex w-full h-full justify-between text-md border-inherit p-3 items-center ">
             <div className="flex justify-start items-center gap-3">
               <Like className={"min-w-10"} post={post} />
-              <Ibutton action={handelComment}>
+              <Ibutton
+                className={"opacity-50 hover:opacity-100"}
+                action={handelComment}
+              >
                 {icons["comment"]}
                 <AbbreviateNumber rawNumber={Comments?.length} />
               </Ibutton>

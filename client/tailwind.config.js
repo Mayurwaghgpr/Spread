@@ -7,6 +7,10 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        dark: "var(--dark-color)",
+        light:"var(--light-color)",
+      },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
       },
@@ -20,7 +24,6 @@ export default {
         nunito: 'normal', // Custom font-style
       },
       animation: {
-
         },
 
       keyframes: {

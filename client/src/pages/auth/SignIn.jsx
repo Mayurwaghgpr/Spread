@@ -9,6 +9,7 @@ import OAuth from "./OAuth";
 import EyeBtn from "../../component/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 import LoaderScreen from "../../component/loaders/loaderScreen";
+import { setToast } from "../../redux/slices/uiSlice.js";
 
 function SignIn() {
   const [passVisible, setpassVisible] = useState(false);
@@ -26,13 +27,20 @@ function SignIn() {
       onSuccess: (response) => {
         const { AccessToken, user } = response;
         if (AccessToken) {
+          dispatch(
+            setToast({ message: "Sign in successfull", type: "success" })
+          );
           dispatch(setIsLogin(true));
           localStorage.setItem("AccessToken", true);
           queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
+
           // dispatch(setUser(user));
           // localStorage.setItem("userAccount", JSON.stringify(user));
           navigate("/", { replace: true });
         }
+      },
+      onError: () => {
+        dispatch(setToast({ message: "Sign in successfull", type: "success" }));
       },
     }
   );

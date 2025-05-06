@@ -20,7 +20,7 @@ function Settings() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className=" relative sm:w-[70%] sm:h-[40rem] h-full w-full flex flex-col  overflow-hidden items-center border bg-[#f3efeb] dark:bg-[#222222] border-inherit sm:rounded-lg"
+        className=" relative sm:w-[70%] sm:h-[40rem] h-full w-full flex flex-col  overflow-hidden items-center border bg-light dark:bg-dark  border-inherit sm:rounded-lg"
       >
         <header className="w-full text-4xl flex justify-between items-center p-5 border-b border-inherit">
           <h1> Settings</h1>

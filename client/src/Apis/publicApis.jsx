@@ -1,10 +1,7 @@
 import { useDispatch } from "react-redux";
 import axiosInstance from "./axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
 function usePublicApis() {
-  const dispatch = useDispatch();
   const fetchPeopels = async ({ pageParam }) => {
     try {
       const result = await axiosInstance.get(`/public/h/peoples`, {

@@ -4,12 +4,15 @@ import { createPortal } from "react-dom";
 import { useCallback } from "react";
 import Spinner from "../../component/loaders/Spinner";
 import useDeleteHandlers from "../../hooks/useDeleteHandlers";
+import Ibutton from "../buttons/Ibutton";
+import useIcons from "../../hooks/useIcons";
 
 function ConfirmationBox() {
-  const dispatch = useDispatch();
   const { confirmBox } = useSelector((state) => state.ui);
   const { delPost, delComment, isPostDeleting, isCommentDeleting } =
     useDeleteHandlers();
+  const dispatch = useDispatch();
+  const icons = useIcons();
   // handles confirmation
   const handleConfirm = useCallback(() => {
     confirmBox.content === "comment" && delComment(confirmBox.id);
@@ -25,12 +28,10 @@ function ConfirmationBox() {
   return (
     confirmBox.status &&
     createPortal(
-      <div className="flex  justify-center z-50  transition-transform delay-700 items-center fixed top-0 bottom-0 left-0 right-0  bg-opacity-10 backdrop-blur-[1px] bg-black  border-inherit ">
-        <div className="p-3  flex flex-col justify-between bg-white dark:bg-[#222222]  text-inherit  h-[20rem] z-50  border border-inherit  sm:w-1/2 rounded-lg ">
-          <div className="text-lg flex justify-end">
-            <button className="" onClick={handleCancel}>
-              <i className="bi bi-x-lg"></i>
-            </button>
+      <div className=" fixed top-0 bottom-0 left-0 right-0  flex  justify-center items-center z-50  transition-transform delay-700  bg-opacity-10 backdrop-blur-[1px] bg-black  border-inherit ">
+        <div className="p-3  flex flex-col justify-between bg-[#fff9f3] dark:bg-[#222222]  text-inherit  h-[20rem] z-50  border border-inherit  sm:w-1/2 rounded-lg ">
+          <div className=" flex justify-end text-xl">
+            <Ibutton action={handleCancel}>{icons["close"]}</Ibutton>
           </div>
           <div className="flex justify-center items-center flex-col px-5 ">
             <div>

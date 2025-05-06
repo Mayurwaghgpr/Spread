@@ -14,7 +14,7 @@ const Menu = forwardRef(function (
     >
       {" "}
       <Ibutton
-        className={"rounded-full py-1"}
+        className={"opacity-50 hover:opacity-100"}
         action={() => setMenuId((prev) => (prev === null ? content?.id : null))}
       >
         {icons["ThreeDot"]}

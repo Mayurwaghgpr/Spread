@@ -4,10 +4,12 @@ import {
   BsArrowLeft,
   BsBell,
   BsBellFill,
+  BsBookmark,
   BsCamera,
   BsCameraVideo,
   BsClock,
   BsClockHistory,
+  BsFillBookmarkFill,
   BsGear,
   BsGearFill,
   BsHandThumbsUp,
@@ -47,6 +49,8 @@ import {
   PiImageThin,
   PiPen,
   PiPenFill,
+  PiPlus,
+  PiPulse,
 } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
@@ -65,7 +69,7 @@ import {
 import { VscMention } from "react-icons/vsc";
 import { FaUserTag } from "react-icons/fa6";
 import { PiAlarm } from "react-icons/pi";
-import { BiCalendarAlt, BiRepost, BiTrash } from "react-icons/bi";
+import { BiBookmark, BiCalendarAlt, BiRepost, BiTrash } from "react-icons/bi";
 import { GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSend } from "react-icons/ai";
@@ -95,6 +99,8 @@ function useIcons() {
     // B
     bellFi: <BsBellFill />,
     bellO: <BsBell />,
+    bookmarkFi: <BsFillBookmarkFill />,
+    bookmarkO: <BsBookmark />,
 
     // C
     calender: <BiCalendarAlt />,
@@ -117,10 +123,12 @@ function useIcons() {
 
     // F
     follow: <RiUserFollowLine />,
-
+    fetherFi: <RiQuillPenFill />,
+    fetherO: <RiQuillPenLine />,
     // G
     gearFi: <BsGearFill />,
     gearO: <BsGear />,
+    glitter: <WiStars className="" />,
 
     // H
     helpfull: <FaHandHoldingHeart />,
@@ -164,18 +172,16 @@ function useIcons() {
     pCamera: <BsCamera />,
     penFi: <BsPenFill />,
     penO: <BsPen />,
-    fetherFi: <RiQuillPenFill />,
-    fetherO: <RiQuillPenLine />,
-    reminder: <PiAlarm />,
-    repost: <BiRepost />,
     people: <BsPeople />,
     pin: <TiPin />,
+    plus: <PiPlus />,
 
     // Q
     // Placeholder for future grouping
 
     // R
-    // Placeholder for future grouping
+    reminder: <PiAlarm />,
+    repost: <BiRepost />,
 
     // S
     search: <IoSearch />,
@@ -185,7 +191,6 @@ function useIcons() {
     success: <MdDone color="green" />,
     sun: <IoSunny />,
     system: <GrSystem />,
-    glitter: <WiStars className="" />,
 
     // T
     tag: <FaUserTag />,

@@ -1,24 +1,25 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../redux/slices/uiSlice";
 import usePublicApis from "../../Apis/publicApis";
 import { useNavigate } from "react-router-dom";
-import Ibutton from "./Ibutton";
-
+import useIcons from "../../hooks/useIcons";
 function Bookmark({ className, post }) {
-  const [bookmarkIcon, setIcon] = useState("");
+  const [optimisticIcon, setOptimisticIcon] = useState("");
   const { isLogin, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { ArchivePost } = usePublicApis();
   const queryClient = useQueryClient();
-
+  const icons = useIcons();
   const ArchiveMutation = useMutation((id) => ArchivePost(id), {
     onSuccess: (data) => {
-      console.log(data);
+      if (data.removed) {
+        setOptimisticIcon("");
+      }
       dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
-      queryClient.invalidateQueries(["loggedInUser"]);
+      // queryClient.invalidateQueries(["loggedInUser"]);
     },
     onError: (error) => {
       console.log(error);
@@ -29,46 +30,44 @@ function Bookmark({ className, post }) {
         })
       );
     },
-    onSettled: () => {
-      setIcon("");
-    },
   });
 
   const handleSavePost = useCallback(
-    (post, icon) => {
-      ArchiveMutation.mutate(post);
-      setIcon(`${icon?.id}-${post}`);
+    (id) => {
+      ArchiveMutation.mutate(id);
+      setOptimisticIcon(id);
     },
     [ArchiveMutation]
   );
   const isBookmarked = user?.savedPosts?.some(
     (savedPost) => savedPost?.id === post?.id
   );
+  const isIcon = useMemo(() => {
+    if (optimisticIcon === post?.id && !isBookmarked) {
+      return icons["bookmarkFi"];
+    } else if (optimisticIcon === post?.id && isBookmarked) {
+      return icons["bookmarkO"];
+    } else if (optimisticIcon !== post?.id && isBookmarked) {
+      return icons["bookmarkFi"];
+    } else {
+      return icons["bookmarkO"];
+    }
+  }, [user?.savedPosts, optimisticIcon, isBookmarked]);
+
   return (
-    <div
+    <button
       className={`${isBookmarked ? " text-black dark:text-white" : ""} ${className} `}
+      id="bookmark"
+      onClick={(e) => {
+        if (isLogin) {
+          handleSavePost(post?.id);
+        } else {
+          navigate("/auth/signin");
+        }
+      }}
     >
-      {" "}
-      <button
-        id="bookmark"
-        onClick={(e) => {
-          if (isLogin) {
-            handleSavePost(post?.id, e.target);
-          } else {
-            navigate("/auth/signin");
-          }
-        }}
-        disabled={post?.user?.id === user?.id}
-      >
-        <i
-          className={`bi cursor-pointer transition-all duration-300 ${
-            isBookmarked || bookmarkIcon === `bookmark-${post?.id}`
-              ? "bi-bookmark-fill"
-              : "bi-bookmark"
-          }`}
-        ></i>
-      </button>
-    </div>
+      {isIcon}
+    </button>
   );
 }
 

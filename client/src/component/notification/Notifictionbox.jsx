@@ -129,7 +129,7 @@ function Notifictionbox() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`transition-all duration-150 border-inherit ${openNotification ? " scale-100 opacity-100 pointer-events-auto " : "scale-95 opacity-0 pointer-events-none"} flex flex-col justify-start items-start gap-5 sm:w-[20rem] sm:h-1/2  w-full h-full p-5 pt-0 bg-[#fff9f3] dark:bg-black border shadow-sm sm:rounded-lg absolute sm:right-40 right-0 sm:top-[4.3rem] top-[3.1rem]  overflow-y-auto`}
+        className={`transition-all duration-150 border-inherit ${openNotification ? " scale-100 opacity-100 pointer-events-auto " : "scale-95 opacity-0 pointer-events-none"} flex flex-col justify-start items-start gap-5 sm:w-[20rem] sm:h-1/2  w-full h-full p-5 pt-0 bg-light dark:bg-dark border shadow-sm sm:rounded-lg absolute sm:right-40 right-0 sm:top-[4.3rem] top-[3.1rem]  overflow-y-auto`}
       >
         <div className=" sticky top-0 flex justify-between items-center gap-3 w-full p-2 z-10 bg-inherit   ">
           <div className="flex justify-start items-center gap-3 ">

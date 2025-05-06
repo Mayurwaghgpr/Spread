@@ -101,8 +101,8 @@ function ProfileEditor() {
   });
 
   return (
-    <section className=" relative flex sm:h-screen w-full h-1/2 border-inherit overflow-y-auto dark:bg-black">
-      <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto  dark:bg-black   my-14 px-4  border-inherit  gap-6 py-5">
+    <section className=" relative flex sm:h-screen w-full h-1/2 border-inherit overflow-y-auto bg-light dark:bg-dark ">
+      <article className=" flex flex-col sm:w-fit  sm:h-fit rounded-xl m-auto bg-light dark:bg-dark  my-14 px-4  border-inherit  gap-6 py-5">
         <h1 className="w-full text-center text-2xl p-2  bg-inherit  ">
           User Information
         </h1>

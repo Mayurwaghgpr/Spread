@@ -16,21 +16,15 @@ function PersistentUser({ children }) {
     onSuccess: (data) => {
       localStorage.setItem("AccessToken", true);
       dispatch(setIsLogin(true));
-      console.log(data);
       dispatch(setUser(JSON.parse(data) || data));
     },
     onError: (error) => {
-      if (error.status === 401) {
-        // const respons = refreshToken();
-        // console.log(respons);
-        dispatch(setIsLogin(false));
-        return localStorage.removeItem("AccessToken");
-      }
       console.error("Error fetching logged-in user data:", error);
     },
     refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
+
   return children;
 }
 

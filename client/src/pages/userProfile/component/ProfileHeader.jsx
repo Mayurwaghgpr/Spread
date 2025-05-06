@@ -47,7 +47,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
             </h1>
             <div className="flex justify-start items-center gap-4">
               <LinkBtn
-                className={" font-normal "}
+                className={"no-underline "}
                 action={() =>
                   dispatch(
                     setFollowInfo({
@@ -63,7 +63,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
                 <span>Followers</span>
               </LinkBtn>
               <LinkBtn
-                className={" font-normal"}
+                className={"no-underline"}
                 action={() =>
                   dispatch(
                     setFollowInfo({
@@ -88,7 +88,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
       <div className="flex flex-col items-start gap-4 border-inherit text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
         <FormatedTime
           content={
-            <div className="flex justify-start items-center gap-2 text-sm">
+            <div className="flex justify-start items-center gap-2 text-sm no-underline">
               {icons["calender"]}
               <span>Joined</span>
             </div>

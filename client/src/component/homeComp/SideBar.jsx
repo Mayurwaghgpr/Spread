@@ -139,7 +139,7 @@ function SideBar() {
         {/* Logout Button */}
         <div className="w-fit">
           {" "}
-          <LogoutBtn className="flex  justify-start  items-center gap-5 p-3 hover:bg-gray-400  hover:bg-opacity-5 rounded-full " />
+          <LogoutBtn className="flex  justify-start  items-center gap-5 p-3 no-underline opacity-50 hover:opacity-100  hover:bg-gray-400  hover:bg-opacity-15 rounded-full " />
         </div>
       </div>
     </aside>

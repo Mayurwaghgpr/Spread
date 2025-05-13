@@ -51,7 +51,7 @@ function TaskBar() {
     ,
   ];
   return (
-    <div className=" fixed bottom-0 flex justify-center items-center gap-4 w-full border-inherit border-t text-2xl py-2 bg-white dark:bg-black   sm:hidden dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg">
+    <div className=" fixed bottom-0 flex justify-center items-center gap-4 w-full border-inherit border-t text-2xl py-2 bg-light dark:bg-dark  sm:hidden dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg">
       <div className="flex justify-around items-center w-full ">
         {" "}
         {LoginMenuLinks.map((link) => {

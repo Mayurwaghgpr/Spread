@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import LoaderScreen from "../loaders/loaderScreen";
 import useSocket from "../../hooks/useSocket";
 import useIcons from "../../hooks/useIcons";
+import LinkBtn from "../LinkBtn";
+import Ibutton from "./Ibutton";
 
 function LogoutBtn({ className }) {
   const { socket, disconnectSocket } = useSocket();
@@ -37,8 +39,8 @@ function LogoutBtn({ className }) {
     return <LoaderScreen message={"logging out..."} />;
   }
   return (
-    <button
-      onClick={mutate}
+    <Ibutton
+      action={mutate}
       type="button"
       aria-label="Logout"
       className={className}
@@ -46,7 +48,7 @@ function LogoutBtn({ className }) {
       {icons["logout"]}
 
       <span className=" xl:block sm:hidden block ">Sign out</span>
-    </button>
+    </Ibutton>
   );
 }
 

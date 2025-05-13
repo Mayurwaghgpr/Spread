@@ -43,7 +43,7 @@ function ProfileinfoCard({ className }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`flex flex-col justify-start gap-10 sm:w-1/3 w-full sm:h-full h-[80%] p-8 dark:bg-black border dark:border-[#383838] sm:animate-slide-in-right animate-slide-in-bottom bg-[#fff9f3] sm:rounded-xl  overflow-hidden `}
+        className={`flex flex-col justify-start gap-10 sm:w-1/3 w-full sm:h-full h-[80%] p-8 bg-light dark:bg-dark border dark:border-[#383838] sm:animate-slide-in-right animate-slide-in-bottom  sm:rounded-xl  overflow-hidden `}
       >
         <h1 className="text-2xl ">{FollowInfo.Info}</h1>
         <div className="relative h-full drop-shadow-sm">

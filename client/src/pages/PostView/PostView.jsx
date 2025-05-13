@@ -184,7 +184,7 @@ function PostView() {
             </section>
           </header>
 
-          <div className="flex justify-between items-center font-thin sm:text-base text-xs py-3 w-full">
+          <div className="flex justify-between items-center font-light sm:text-base text-xs py-3 w-full">
             <div className="flex items-center gap-4  ">
               <Like className={"min-w-10"} post={postView} />
               <Ibutton
@@ -254,7 +254,7 @@ function PostView() {
           setshow(true);
           !data && mutate({ id });
         }}
-        className="z-40 border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-[#efecec] before:dark:bg-black before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
+        className="z-40 border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-light before:dark:bg-dark before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
       >
         AI
         {icons["glitter"]}

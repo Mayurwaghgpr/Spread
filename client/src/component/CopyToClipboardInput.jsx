@@ -29,7 +29,7 @@ const CopyToClipboardInput = ({ item }) => {
 
   return (
     <pre className={`border rounded-lg border-inherit`}>
-      <div className="w-full  min-h-[2.5rem] flex justify-end rounded-t-lg bg-white dark:bg-black "></div>
+      <div className="w-full  min-h-[2.5rem] flex justify-end rounded-t-lg bg-light dark:bg-dark "></div>
       <div className="sticky top-[7rem] w-full ">
         <div className="absolute bottom-0 right-2 flex h-7 mb-1  items-center dark:bg-[#3c3c3c] bg-[#faf5f0] rounded-lg text-xs ">
           <button

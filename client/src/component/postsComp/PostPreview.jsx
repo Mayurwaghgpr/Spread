@@ -119,7 +119,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-full  w-[60%] h-6  dark:bg-white bg-black  bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full  w-[60%] h-6  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
                 <div className="rounded-full  w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
                 <div className="rounded-full  w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
               </>
@@ -132,6 +132,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             {post && (
               <ImageFigure
                 objectFit="fill"
+                className="w-full h-full"
                 imageClassName="w-full h-full"
                 imageUrl={post?.titleImage && `${post?.titleImage}`}
                 altText={"PreviewImage"}
@@ -155,7 +156,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               ))}
         </div> */}
         {post && (
-          <div className="flex w-full h-full justify-between text-md border-inherit p-3 items-center ">
+          <div className="flex justify-between items-center w-full h-full text-md border-inherit p-3  font-light ">
             <div className="flex justify-start items-center gap-3">
               <Like className={"min-w-10"} post={post} />
               <Ibutton

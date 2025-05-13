@@ -9,13 +9,13 @@ import Database from "./utils/database.js";
 import helmet from "helmet";
 // import rateLimit from "express-rate-limit";
 // Routes
-import authRouter from "./routes/auth.route.js";
-import postsRouter from "./routes/posts.route.js";
-import userRouter from "./routes/user.route.js";
-import publicRouter from "./routes/public.route.js";
-import commentRouter from "./routes/comments.route.js";
-import aiRouter from "./routes/AI.route.js";
-import messagingRouter from './routes/messaging/messaging.route.js'
+// import authRouter from "./routes/auth.route.js";
+// import postsRouter from "./routes/posts.route.js";
+// import userRouter from "./routes/user.route.js";
+// import publicRouter from "./routes/public.route.js";
+// import commentRouter from "./routes/comments.route.js";
+// import aiRouter from "./routes/AI.route.js";
+// import messagingRouter from './routes/messaging/messaging.route.js'
 
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
@@ -73,13 +73,41 @@ app.use(express.static(path.join(__dirname, "/client/dist"), { maxAge: "1d" }));
 // Associations
 DataBaseAssociations()
 
-app.use("/api/auth", authRouter);
-app.use("/api/public", publicRouter);
-app.use("/api/posts", postsRouter);
-app.use("/api/user", userRouter);
-app.use("/api/comment", commentRouter);
-app.use("/api/ai", aiRouter);
-app.use("/api/messaging",messagingRouter)
+app.use("/api/auth", async (req, res, next) => {
+  const module = await import("./routes/auth.route.js");
+  return module.default(req, res, next);
+});
+
+app.use("/api/public", async (req, res, next) => {
+  const module = await import("./routes/public.route.js");
+  return module.default(req, res, next);
+});
+
+app.use("/api/posts", async (req, res, next) => {
+  const module = await import("./routes/posts.route.js");
+  return module.default(req, res, next);
+});
+
+app.use("/api/user", async (req, res, next) => {
+  const module = await import("./routes/user.route.js");
+  return module.default(req, res, next);
+});
+
+app.use("/api/comment", async (req, res, next) => {
+  const module = await import("./routes/comments.route.js");
+  return module.default(req, res, next);
+});
+
+app.use("/api/ai", async (req, res, next) => {
+  const module = await import("./routes/AI.route.js");
+  return module.default(req, res, next);
+});
+
+app.use("/api/messaging", async (req, res, next) => {
+  const module = await import("./routes/messaging/messaging.route.js");
+  return module.default(req, res, next);
+});
+
 
 socketHandlers(io)
 

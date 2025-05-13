@@ -20,7 +20,7 @@ const AIResponse = ({
     [postData?.User]
   );
   return (
-    <div className=" right-5 animate-fedin1s bg-[#fff9f3] dark:bg-black w-full max-w-4xl h-full overflow-hidden border-inherit">
+    <div className=" right-5 animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full overflow-hidden border-inherit">
       {/* Header */}
       <header className="border-b border-inherit flex justify-between items-center p-4">
         {isAnalyzing ? (

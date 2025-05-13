@@ -86,7 +86,7 @@ export const signIn = async (req, res, next) => {
   try {
     // Find user by username
     const user = await User.findOne({
-      where: { email },
+      where: { email},
       include: [
         {
           model: User,

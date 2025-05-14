@@ -148,7 +148,7 @@ function ProfileEditor() {
             <Selector
               name={"pronouns"}
               className={
-                "w-fit outline-none self-start my-2 text-xs flex flex-col gap-3 bg-inherit"
+                "w-fit outline-none self-start my-2 text-xs flex flex-col gap-3 bg-inherit cursor-pointer"
               }
               setOptions={debouncedHandleChange}
               options={["he/him", "she/her"]}
@@ -181,9 +181,10 @@ function ProfileEditor() {
               )}
             </div>
             <CommonInput
-              className="flex flex-col items-start w-full border-inherit text-sm gap-3 bg-inherit "
+              className="flex flex-col items-start w-full border-inherit text-sm gap-3 bg-inherit  "
               type={"text"}
               Iname={"displayName"}
+              IClassName={"w-full "}
               labelname={"Full Name"}
               disabled={isLoading}
               maxLength={20}

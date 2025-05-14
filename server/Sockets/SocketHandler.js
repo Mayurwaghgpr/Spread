@@ -51,7 +51,6 @@ export default function socketHandlers(io) {
       async ({ conversationId, senderId, content, replyedTo, createdAt }) => {
         try {
 
-          // console.log({conversationId,senderId,content,replyedTo,createdAt});
           io.to(conversationId).emit("newMessage", {
             conversationId,
             senderId,
@@ -59,6 +58,19 @@ export default function socketHandlers(io) {
             replyedTo,
             createdAt,
           });
+          // TEST: commented temporarly
+          // Push to Redis Stream for async storage
+          // await redisClient.xAdd(
+          //   "message_queue",
+          //   "*", // Auto-generate ID
+          //   {
+          //     conversationId: conversationId,
+          //     senderId: senderId,
+          //     content: content,
+          //     replyedTo: replyedTo || "",
+          //   }
+          // );
+
           await Messages.create({
             conversationId,
             senderId,

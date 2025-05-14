@@ -7,8 +7,8 @@ import genUniqueUserName from "../utils/UserNameGenerator.js";
 import Sequelize from "sequelize";
 import { fetchProfile } from "../utils/data-fetching.js";
 dotenv.config();
-
-export const passportStrategies = (passport) => {
+import passport from "passport";
+export const passportStrategies = () => {
   passport.use(
     new GoogleStrategy(
       {

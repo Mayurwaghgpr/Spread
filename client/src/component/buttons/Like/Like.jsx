@@ -80,7 +80,6 @@ function Like({ post, className }) {
     >
       {/* Likes list when hovered */}
       <LikesList mutate={handleLike} post={post} />
-
       {/* Like button */}
       <button
         name=""
@@ -88,8 +87,8 @@ function Like({ post, className }) {
         className="flex items-center justify-center gap-1 text-inherit"
       >
         {/* Icon rendering */}
-        {icons[optimistIcon || "likeO"]}
-        <span className="text-md mt-1">{likeCount}</span>
+        <span className="">{icons[optimistIcon || "likeO"]}</span>
+        <span className="">{likeCount}</span>
       </button>
     </div>
   );

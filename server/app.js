@@ -1,140 +1,146 @@
 import express from "express";
-import { Server } from "socket.io";
 import dotenv from "dotenv";
 import path from "path";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import passport from "passport";
-import Database from "./utils/database.js";
 import helmet from "helmet";
+import hpp from "hpp";
+import morgan from "morgan";
 // import rateLimit from "express-rate-limit";
-// Routes
-// import authRouter from "./routes/auth.route.js";
-// import postsRouter from "./routes/posts.route.js";
-// import userRouter from "./routes/user.route.js";
-// import publicRouter from "./routes/public.route.js";
-// import commentRouter from "./routes/comments.route.js";
-// import aiRouter from "./routes/AI.route.js";
-// import messagingRouter from './routes/messaging/messaging.route.js'
 
-import { passportStrategies } from "./middlewares/passportStrategies.js";
-import socketHandlers from "./Sockets/SocketHandler.js";
+import { createServer } from "http";
+import Database from "./utils/database.js";
 import redisClient from "./utils/redisClient.js";
 import DataBaseAssociations from "./utils/DataBaseAssociations.js";
-import { createServer } from "http";
+import { passportStrategies } from "./middlewares/passportStrategies.js";
+import socketHandlers from "./Sockets/SocketHandler.js";
 import sockIo from "./socket.js";
 
-
-// Initialize dotenv
 dotenv.config();
 const app = express();
 const server = createServer(app);
 export const io = sockIo.init(server);
-// io.sockets.adapter.rooms.set()
-const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(","); 
 
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
+
+//  morgan  routes loging
+app.use(morgan("dev"));
+
+const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(",");
+
+// Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: allowedOrigins, // Support multiple origins
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
-}))
+}));
 
-app.use(express.urlencoded({extended:true}))
+app.use(cookieParser());
+app.use(hpp());
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       "img-src": [
-        "'self'", 
-        "data:", 
-        "https://res.cloudinary.com", 
+        "'self'",
+        "data:",
+        "https://res.cloudinary.com",
         "https://lh3.googleusercontent.com",
         "https://avatars.githubusercontent.com"
       ]
     }
+  },
+  crossOriginEmbedderPolicy: true,
+  crossOriginOpenerPolicy: true,
+  crossOriginResourcePolicy: { policy: "same-site" }
+}));
+
+//  Rate Limiting
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 100,
+//   message: { message: "Too many requests, please try again later." },
+// });
+// app.use("/api/", limiter);
+
+// Passport Setup
+app.use(passport.initialize());
+
+// Static Files
+app.use(express.static(path.join(__dirname, "/client/dist"), {
+  maxAge: '1d',
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
   }
 }));
 
-// Reate limmiter 
-// app.use("/", rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100, // Limit each IP to 100 requests per windowMs
-//   message: { message: "Too many requests, please try again later." },
-//   headers: true,
-// })); 
+// Database Associations
+DataBaseAssociations();
 
-app.use(cookieParser());
+// Sockets
+io.on("connection", (socket) => {
+  socket.on("error", (err) => console.error("Socket Error:", err));
+});
+socketHandlers(io);
 
-// Serve Static Files
-app.use(express.static(path.join(__dirname, "/client/dist"), { maxAge: "1d" }));
-
-// Associations
-DataBaseAssociations()
-
-
-
-app.use("/api/auth", async (req, res, next) => {
-  const module = await import("./routes/auth.route.js");
-  return module.default(req, res, next);
+app.get('/health', (req, res) => {
+  const healthcheck = {
+    uptime: process.uptime(),
+    message: 'OK',
+    timestamp: Date.now(),
+    database: Database.authenticate() ? 'connected' : 'disconnected',
+    redis: redisClient.isReady ? 'connected' : 'disconnected'
+  };
+  res.status(200).json(healthcheck);
 });
 
-app.use("/api/public", async (req, res, next) => {
-  const module = await import("./routes/public.route.js");
-  return module.default(req, res, next);
-});
+// Dynamic Route Loader
+const loadRoute = (route, filePath) => {
+  app.use(route, async (req, res, next) => {
+    const module = await import(filePath);
+    return module.default(req, res, next);
+  });
+};
 
-app.use("/api/posts", async (req, res, next) => {
-  const module = await import("./routes/posts.route.js");
-  return module.default(req, res, next);
-});
+//Routes
+loadRoute("/api/auth", "./routes/auth.route.js");
+loadRoute("/api/public", "./routes/public.route.js");
+loadRoute("/api/posts", "./routes/posts.route.js");
+loadRoute("/api/user", "./routes/user.route.js");
+loadRoute("/api/comment", "./routes/comments.route.js");
+loadRoute("/api/ai", "./routes/AI.route.js");
+loadRoute("/api/messaging", "./routes/messaging/messaging.route.js");
 
-app.use("/api/user", async (req, res, next) => {
-  const module = await import("./routes/user.route.js");
-  return module.default(req, res, next);
-});
-
-app.use("/api/comment", async (req, res, next) => {
-  const module = await import("./routes/comments.route.js");
-  return module.default(req, res, next);
-});
-
-app.use("/api/ai", async (req, res, next) => {
-  const module = await import("./routes/AI.route.js");
-  return module.default(req, res, next);
-});
-
-app.use("/api/messaging", async (req, res, next) => {
-  const module = await import("./routes/messaging/messaging.route.js");
-  return module.default(req, res, next);
-});
-
-
-
-// Passport Configuration
-passportStrategies(passport);
-app.use(passport.initialize());
-
-
-socketHandlers(io)
-
-// Handle React Routes (After API Routes)
+// Fallback for React (client side routing)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
 });
 
-// Wildcard Route for Frontend
-app.use("/api", (req, res) => res.status(404).json({ message: "API route not found" })); 
-app.use((error, req, res, next) => {
-  console.error("Error:", error);
-  console.log(error.statusCode)
-  res.status(error.statusCode || 500).json({ message: error.statusCode!==500 ?error.message :"Server Error" });
+//Fallback for unmatched API routes
+app.use("/api/*", (req, res) => {
+  res.status(404).json({ message: "API route not found" });
 });
 
+//Error handler
+app.use((error, req, res, next) => {
+  console.error("Error:", error);
+  res.status(error.statusCode || 500).json({
+    message: error.statusCode !== 500 ? error.message : "Server Error"
+  });
+});
 
-
-// Graceful Shutdown Handling
+// Graceful Shutdown
 const shutdown = async () => {
   try {
     await redisClient.quit();
@@ -167,5 +173,5 @@ Database.sync()
   })
   .catch((err) => {
     console.error("Database connection error:", err);
-    process.exit(1); // Exiting the process on DB error
+    process.exit(1);
   });

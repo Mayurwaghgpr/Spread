@@ -66,7 +66,8 @@ function SignIn() {
       >
         <CommonInput
           ref={userRef}
-          className={`flex flex-col  justify-start items-start gap-2 w-full  p-1 `}
+          className={`flex flex-col justify-start items-start gap-2 w-full  p-1 `}
+          IClassName={"w-full"}
           type={"email"}
           name={"email"}
           labelname={"Email address"}

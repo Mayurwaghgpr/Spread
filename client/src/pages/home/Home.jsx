@@ -120,8 +120,6 @@ function Home() {
     });
   };
 
-  console.log(selectedFeed);
-
   return (
     <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
       {/* Sticky Navigation */}

@@ -199,12 +199,6 @@ function MessageSection() {
             </ul>
           </div>
         </div>
-        {/* <div className="flex items-center justify-center gap-4 text-2xl">
-          <Ibutton className={"rounded-lg p-2 py-1"}>
-            {icons["vCamera"]}
-          </Ibutton>
-          <Ibutton className={"rounded-lg p-2 py-1"}>{icons["callO"]}</Ibutton>
-        </div> */}
       </header>
 
       <div

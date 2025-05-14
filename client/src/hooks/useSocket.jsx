@@ -11,18 +11,29 @@ const useSocket = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
-
   useEffect(() => {
-    if (isLogin && user?.id && !socket) {
-      socket = io(BASE_URL, {
-        query: {
-          connectedUserId: user.id,
-          activeConversationId: conversationId,
-        },
-        withCredentials: true,
-        autoConnect: false,
-      }).connect();
-      socket.emit("register", user.id);
+    if (isLogin && user?.id) {
+      if (!socket) {
+        socket = io(BASE_URL, {
+          query: {
+            connectedUserId: user.id,
+            activeConversationId: conversationId,
+          },
+          withCredentials: true,
+        });
+        socket.on("connect", () => {
+          // console.log("✅ Socket connected");
+          socket.emit("register", user.id);
+        });
+
+        socket.on("connect_error", (err) => {
+          // console.error("Socket connect error:", err);
+        });
+
+        socket.connect();
+      } else {
+        socket.emit("updateActiveConversation", conversationId);
+      }
     }
 
     return () => {
@@ -31,7 +42,7 @@ const useSocket = () => {
         socket = null;
       }
     };
-  }, [isLogin, user, dispatch, BASE_URL]);
+  }, [isLogin, user?.id, conversationId]);
 
   const disconnectSocket = () => {
     if (socket) {

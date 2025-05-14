@@ -1,12 +1,11 @@
 import Messages from "../models/messaging/Messages.js";
 import redisClient from "../utils/redisClient.js";
 import Convarsation from "../models/messaging/Conversation.js";
-import { io } from "../app.js";
 
-const users = new Map();
 
-export default function socketHandlers() {
-  io.on("connection", async(socket) => {
+export default function socketHandlers(io) {
+  io.on("connection", async (socket) => {
+    // console.log(socket.handshake.query)
     const { connectedUserId, activeConversationId } = socket.handshake.query;
     console.log(`Connected user: ${connectedUserId} (${socket.id})`);
 
@@ -37,7 +36,7 @@ export default function socketHandlers() {
     });
 
     socket.on("IamTyping", ({ conversationId, senderId, image, typing }) => {
-      // console.log('userIsTyping', { conversationId, senderId })
+      console.log('userIsTyping', { conversationId, senderId })
       io.to(conversationId).emit("userIsTyping", {
         conversationId,
         senderId,
@@ -91,12 +90,6 @@ export default function socketHandlers() {
 
     // Handle user disconnect
     socket.on("disconnect", async() => {
-      for (let [userId, socketId] of users) {
-        if (socketId === socket.id) {
-            await redisClient.del(userId);
-          break;
-        }
-      }
       console.log("User disconnected:", socket.id);
     });
   });

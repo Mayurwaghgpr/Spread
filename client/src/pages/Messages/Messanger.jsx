@@ -19,6 +19,7 @@ function Messanger() {
   const { socket } = useSocket();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
+
   const handleNewMessage = useCallback(
     (msg) => {
       const filterLog = messageLogData.filter(
@@ -42,6 +43,7 @@ function Messanger() {
     },
     [dispatch, user?.id, messageLogData]
   );
+
   useEffect(() => {
     if (isLogin && user?.id && socket) {
       // Listen for new messages
@@ -52,7 +54,7 @@ function Messanger() {
         socket?.off("newMessage", handleNewMessage);
       };
     }
-  }, [isLogin && user?.id, socket, handleNewMessage]);
+  }, [isLogin, user?.id, socket, handleNewMessage]);
 
   return (
     <section className="h-screen w-full border-inherit">

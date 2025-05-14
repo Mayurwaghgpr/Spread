@@ -6,6 +6,7 @@ import usePublicApis from "../../Apis/publicApis";
 import Spinner from "../../component/loaders/Spinner";
 import SearchBar from "../../component/inputComponents/SearchBar";
 import useIcons from "../../hooks/useIcons";
+
 function SearchBox({ className, scrollDirection }) {
   const [isFocused, setIsFocused] = useState(false);
   const [searchResult, setSearchResult] = useState([]);

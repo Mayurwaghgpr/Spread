@@ -56,6 +56,7 @@ const CommentSection = lazy(() => import("./pages/Comment/CommentSection"));
 const ToastContainer = lazy(
   () => import("./component/utilityComp/ToastContainer")
 );
+
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

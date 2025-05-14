@@ -24,6 +24,7 @@ import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import { IoAttach } from "react-icons/io5";
 import CommonInput from "../../component/inputComponents/CommonInput";
+import { debounce } from "../../utils/debounce";
 
 function MessageSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -94,7 +95,6 @@ function MessageSection() {
   useEffect(() => {
     if (isLogin && user?.id && conversationId) {
       socket?.emit("joinConversation", conversationId);
-
       socket?.on("userIsTyping", handleUserTyping);
       // socket?.on("newMessage", handleNewMessage);
       socket?.on("ErrorSendMessage", handleError);
@@ -125,31 +125,41 @@ function MessageSection() {
       createdAt: new Date().toISOString(),
     };
     dispatch(pushMessage(messageObj));
-    socket?.emit("sendMessage", messageObj);
+    socket?.emit("sendMessage", messageObj, (response) => {});
     setMessage("");
   }, [message, socket, user?.id, conversationId, dispatch]);
+  const sendTypingStatus = useMemo(
+    () =>
+      debounce((isTyping) => {
+        socket?.emit("IamTyping", {
+          conversationId,
+          senderId: user?.id,
+          image:
+            conversationData.conversationType === "group"
+              ? user?.userImage
+              : null,
+          typing: isTyping,
+        });
+      }, 500),
+    [
+      socket,
+      conversationId,
+      user?.id,
+      user?.userImage,
+      conversationData.conversationType,
+    ]
+  );
 
   const handleInput = useCallback(
     (e) => {
       setMessage(e.target.value);
-      socket?.emit("IamTyping", {
-        conversationId,
-        senderId: user?.id,
-        image:
-          conversationData.conversationType === "group"
-            ? user?.userImage
-            : null,
-        typing: true,
-      });
+      setMessage(e.target.value);
+      sendTypingStatus(true);
 
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
       typingTimeoutRef.current = setTimeout(() => {
-        socket?.emit("IamTyping", {
-          conversationId,
-          senderId: user?.id,
-          typing: false,
-        });
+        sendTypingStatus(false);
       }, 2000);
     },
     [conversationId, socket, user?.id, user?.userImage]
@@ -180,7 +190,9 @@ function MessageSection() {
           <div className="flex flex-col items-start justify-center gap-1 overflow-hidden overflow-ellipsis text-nowrap">
             <h1>{conversationData?.groupName}</h1>
             <ul className="flex justify-start items-center gap-2 text-xs opacity-50">
-              {conversationData?.members?.length && <li>You</li>}
+              {conversationData?.members?.some((m) => m.id === user.id) && (
+                <li>You</li>
+              )}
               {conversationData?.members?.map((member) => (
                 <li key={member.id}>{member.username}</li>
               ))}
@@ -240,28 +252,25 @@ function MessageSection() {
       <div className="flex justify-center items-center col-span-full w-full h-fit border-t px-5 pt-2 pb-5 border-inherit bg-inherit">
         <div className="relative flex justify-center items-baseline gap-3 p-2 sm:w-[70%] w-full  rounded-lg bg-gray-200 dark:bg-white dark:bg-opacity-10 border-inherit ">
           <CommonInput
-            className="relative flex flex-col justify-center items-center  px-2 w-full h-full border-inherit  "
+            className="relative px-2 w-full h-full border-inherit  "
             IClassName={
-              "peer placeholder:text-inherit placeholder:font-thin placeholder:text-sm outline-none  "
-            }
-            comp={
-              <>
-                <div className="absolute w-full transition-transform duration-300 border-t border-black dark:border-inherit scale-0 peer-focus:scale-100 "></div>
-                <div className="flex justify-start items-center w-full ">
-                  <Ibutton className={"text-2xl rounded-full p-2 "}>
-                    <IoAttach />
-                  </Ibutton>
-                  <Ibutton className={"text-xl rounded-full p-2"}>
-                    {icons["smile"]}
-                  </Ibutton>
-                </div>
-              </>
+              "  flex flex-col justify-center items-center placeholder:text-inherit placeholder:font-thin placeholder:text-sm outline-none  "
             }
             onChange={handleInput}
             value={message}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Start Writting..."
-          />
+          >
+            <div className="absolute w-full  transition-transform duration-300 border-t border-black dark:border-inherit scale-0 peer-focus:scale-100 "></div>
+            <div className="flex justify-start items-center w-full ">
+              <Ibutton className={"text-2xl rounded-full p-2 "}>
+                <IoAttach />
+              </Ibutton>
+              <Ibutton className={"text-xl rounded-full p-2"}>
+                {icons["smile"]}
+              </Ibutton>
+            </div>
+          </CommonInput>
 
           <Ibutton
             className="flex justify-center items-center text-2xl min-w-fit rounded-full p-2"

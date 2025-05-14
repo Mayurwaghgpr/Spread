@@ -13,6 +13,7 @@ const Database = new Sequelize(process.env.DATABASE_URL, {
         },
       }
     : {},
+
 });
 
 export default Database;

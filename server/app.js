@@ -73,6 +73,8 @@ app.use(express.static(path.join(__dirname, "/client/dist"), { maxAge: "1d" }));
 // Associations
 DataBaseAssociations()
 
+
+
 app.use("/api/auth", async (req, res, next) => {
   const module = await import("./routes/auth.route.js");
   return module.default(req, res, next);
@@ -109,13 +111,13 @@ app.use("/api/messaging", async (req, res, next) => {
 });
 
 
-socketHandlers(io)
 
 // Passport Configuration
 passportStrategies(passport);
 app.use(passport.initialize());
 
 
+socketHandlers(io)
 
 // Handle React Routes (After API Routes)
 app.get("*", (req, res) => {

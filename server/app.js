@@ -15,6 +15,7 @@ import DataBaseAssociations from "./utils/DataBaseAssociations.js";
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import sockIo from "./socket.js";
+import passport from "passport";
 
 dotenv.config();
 const app = express();

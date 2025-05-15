@@ -1,6 +1,7 @@
 import { forwardRef, memo } from "react";
 import useIcons from "../../hooks/useIcons";
 import Ibutton from "../buttons/Ibutton";
+import FedInBtn from "../buttons/FedInBtn";
 
 const Menu = forwardRef(function (
   { content, items, className, menuId, setMenuId },
@@ -13,12 +14,11 @@ const Menu = forwardRef(function (
       className="relative flex justify-center items-center border-inherit"
     >
       {" "}
-      <Ibutton
-        className={"opacity-50 hover:opacity-100"}
+      <FedInBtn
         action={() => setMenuId((prev) => (prev === null ? content?.id : null))}
       >
         {icons["ThreeDot"]}
-      </Ibutton>
+      </FedInBtn>
       {menuId === content?.id && (
         <div
           onClick={() => setMenuId("")}

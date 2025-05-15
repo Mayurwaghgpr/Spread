@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
-import { BsBell } from "react-icons/bs";
+
 import { useDispatch } from "react-redux";
 import { setOpenNotification } from "../../redux/slices/uiSlice";
-import Ibutton from "../buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
+import FedInBtn from "../buttons/FedInBtn";
 
 const NotifictionBell = ({ isNotfiy = false, className }) => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const NotifictionBell = ({ isNotfiy = false, className }) => {
   const icons = useIcons();
 
   return (
-    <Ibutton action={handeClick} className={`${className} relative `}>
+    <FedInBtn action={handeClick} className={`${className} relative `}>
       {icons["bellO"]}
       {isNotfiy && (
         <span className="absolute top-0 flex h-3 w-3 -right-1">
@@ -21,7 +21,7 @@ const NotifictionBell = ({ isNotfiy = false, className }) => {
           <span className="relative inline-flex rounded-full h-[6px] w-[6px] bg-slate-500"></span>
         </span>
       )}
-    </Ibutton>
+    </FedInBtn>
   );
 };
 

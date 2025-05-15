@@ -23,7 +23,7 @@ const CommonInput = forwardRef(
           </label>
         )}
         <div
-          className={`flex border rounded-lg bg-inherit border-inherit overflow-hidden ${IClassName}`}
+          className={`flex rounded-lg bg-inherit border-inherit overflow-hidden ${IClassName}`}
         >
           <input
             ref={ref}

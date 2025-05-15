@@ -11,6 +11,8 @@ import useIcons from "../../../hooks/useIcons";
 import LinkBtn from "../../../component/LinkBtn";
 import usePrivateChatMutation from "../../../hooks/usePrivateChatMutation";
 import AbbreviateNumber from "../../../utils/AbbreviateNumber";
+import Ibutton from "../../../component/buttons/Ibutton";
+import FedInBtn from "../../../component/buttons/FedInBtn";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -39,14 +41,14 @@ const ProfileHeader = React.memo(({ profileId }) => {
           </div>
         </div>
 
-        <div className="flex sm:flex-row flex-col  justify-between  gap-2   h-full sm:text-lg  ">
+        <div className="flex sm:flex-row flex-col  justify-between  gap-2   h-full ">
           <div className="flex flex-col gap-1 justify-start  p-4 w-full ">
             {/* <div className="flex justify-start items-center">{}</div> */}
             <h1 className="sm:text-4xl sm:block hidden text-nowrap text-lg  font-medium">
               {userProfile?.displayName}
             </h1>
-            <div className="flex justify-start items-center gap-4">
-              <LinkBtn
+            <div className="flex justify-start items-center gap-3 text-sm">
+              <FedInBtn
                 className={"no-underline "}
                 action={() =>
                   dispatch(
@@ -61,8 +63,8 @@ const ProfileHeader = React.memo(({ profileId }) => {
                   rawNumber={userProfile?.Followers?.length || 0}
                 />
                 <span>Followers</span>
-              </LinkBtn>
-              <LinkBtn
+              </FedInBtn>
+              <FedInBtn
                 className={"no-underline"}
                 action={() =>
                   dispatch(
@@ -77,7 +79,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
                   rawNumber={userProfile?.Following?.length || 0}
                 />
                 <span> Following</span>
-              </LinkBtn>
+              </FedInBtn>
             </div>
           </div>
         </div>
@@ -103,16 +105,14 @@ const ProfileHeader = React.memo(({ profileId }) => {
           <div className="flex justify-start items-center gap-4 w-full sm:text-sm text-xs text-black border-inherit">
             <Follow
               People={userProfile}
-              className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-2 border border-inherit  rounded-xl bg-white hover:bg-gray-200  dark:hover:bg-gray-300`}
+              className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-2 border border-inherit  rounded-xl bg-white hover:bg-gray-200  dark:hover:bg-gray-300 `}
             />
-            <LinkBtn
+            <Ibutton
               action={() => PrivateMutaion(userProfile?.id)}
-              className="w-full bg-white px-3 py-1.5 rounded-xl border  "
+              className="w-full bg-white px-3 py-2.5 rounded-xl border  "
             >
-              {" "}
               <LuMessagesSquare />
-              Message
-            </LinkBtn>
+            </Ibutton>
           </div>
         ) : (
           <div className="">

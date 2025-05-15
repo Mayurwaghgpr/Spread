@@ -5,6 +5,7 @@ import { setToast } from "../../redux/slices/uiSlice";
 import usePublicApis from "../../Apis/publicApis";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../hooks/useIcons";
+import FedInBtn from "./FedInBtn";
 function Bookmark({ className, post }) {
   const [optimisticIcon, setOptimisticIcon] = useState("");
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -55,7 +56,7 @@ function Bookmark({ className, post }) {
   }, [user?.savedPosts, optimisticIcon, isBookmarked]);
 
   return (
-    <button
+    <FedInBtn
       className={`${isBookmarked ? " text-black dark:text-white" : ""} ${className} `}
       id="bookmark"
       onClick={(e) => {
@@ -67,7 +68,7 @@ function Bookmark({ className, post }) {
       }}
     >
       {isIcon}
-    </button>
+    </FedInBtn>
   );
 }
 

@@ -29,6 +29,7 @@ import useMenuCosntant from "../../hooks/useMenuCosntant";
 import useClickOutside from "../../hooks/useClickOutside";
 import ImageFigure from "../../component/utilityComp/ImageFigure";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import FedInBtn from "../../component/buttons/FedInBtn";
 
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
@@ -187,13 +188,13 @@ function PostView() {
           <div className="flex justify-between items-center font-light sm:text-base text-xs py-3 w-full">
             <div className="flex items-center gap-4  ">
               <Like className={"min-w-10"} post={postView} />
-              <Ibutton
+              <FedInBtn
                 action={handelComment}
                 className="flex items-center gap-1 min-w-10"
               >
                 {icons["comment"]}
                 <AbbreviateNumber rawNumber={Comments?.length} />
-              </Ibutton>
+              </FedInBtn>
               <Bookmark post={postView} />
             </div>
             <div className="flex gap-7  justify-between">

@@ -63,10 +63,10 @@ function MainNavBar() {
 
           <div className="flex justify-end items-center  gap-5 w-fit border-inherit text-xl ">
             {/* Toggle Theme button */}
-            <ThemeBtn Modes={Modes} separate={false} className={"relative"} />
+            {/* <ThemeBtn Modes={Modes} separate={false} className={"relative"} /> */}
             {isLogin && (
               <>
-                <NotifictionBell className={"opacity-50 hover:opacity-100"} />
+                <NotifictionBell />
               </>
             )}
             {isLogin ? (

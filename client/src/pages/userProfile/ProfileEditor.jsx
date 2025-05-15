@@ -12,6 +12,7 @@ import Selector from "../../component/utilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
+import FedInBtn from "../../component/buttons/FedInBtn";
 function ProfileEditor() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -134,14 +135,14 @@ function ProfileEditor() {
             />
           </div>
           <div className="flex flex-col justify-center items-start w-full ">
-            <Ibutton
+            <FedInBtn
               className="rounded-xl text-md text-red-500 flex gap-2"
               action={handleRemoveImage}
               disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
             >
               {icons["delete"]}
               Remove
-            </Ibutton>
+            </FedInBtn>
             <p className="text-start text-xs break-words opacity-50 ">
               Importent: Insert image in JPG,JPEG,PNG format and high quality
             </p>
@@ -165,7 +166,7 @@ function ProfileEditor() {
                 ref={uNameRef}
                 className={` flex flex-col gap-3 transition-all duration-500  w-full border-inherit text-sm mt-3 bg-inherit `}
                 type={"text"}
-                IClassName={`${isError ? "outline outline-red-500" : "outline-none"} ${isSuccess ? "  outline-green-500" : " outline-none"}`}
+                IClassName={`${isError ? "outline outline-red-500" : "outline-none"} ${isSuccess ? "  outline-green-500" : " outline-none"} border`}
                 Iname={"username"}
                 labelname={"username"}
                 disabled={isLoading}
@@ -184,7 +185,7 @@ function ProfileEditor() {
               className="flex flex-col items-start w-full border-inherit text-sm gap-3 bg-inherit  "
               type={"text"}
               Iname={"displayName"}
-              IClassName={"w-full "}
+              IClassName={"w-full border"}
               labelname={"Full Name"}
               disabled={isLoading}
               maxLength={20}
@@ -193,11 +194,12 @@ function ProfileEditor() {
             />
             <span className=" flex text-xs text-black dark:text-white text-opacity-15 dark:text-opacity-30 justify-end">
               {`${newInfo?.displayName?.length || 0} / 20`}
-            </span>{" "}
+            </span>
             <CommonInput
               className="flex flex-col gap-3 w-full border-inherit text-sm  bg-inherit "
               type={"email"}
               Iname={"email"}
+              IClassName={"border"}
               labelname={"email"}
               disabled={isLoading}
               maxLength={30}
@@ -223,7 +225,7 @@ function ProfileEditor() {
             </span>
           </div>
           <button
-            className={`px-4 py-1 text-white rounded-xl  border bg-sky-400`}
+            className={`px-4 py-1 text-white rounded-xl  border bg-sky-700`}
             onClick={useCallback(() => mutate(newInfo), [newInfo])}
           >
             {isLoading ? "Updating..." : "Save"}

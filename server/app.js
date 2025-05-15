@@ -54,9 +54,13 @@ app.use(helmet({
       ]
     }
   },
+  "connect-src": [
+    "'self'",       // Only allow API calls to same origin
+    ...allowedOrigins
+  ],
   crossOriginEmbedderPolicy: true,
   crossOriginOpenerPolicy: true,
-  crossOriginResourcePolicy: { policy: "same-site" }
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
 //  Rate Limiting

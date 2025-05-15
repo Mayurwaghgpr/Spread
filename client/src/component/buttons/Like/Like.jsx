@@ -9,6 +9,7 @@ import LikesList from "./LikesList";
 import useIcons from "../../../hooks/useIcons";
 import Ibutton from "../Ibutton";
 import AbbreviateNumber from "../../../utils/AbbreviateNumber";
+import FedInBtn from "../FedInBtn";
 
 function Like({ post, className }) {
   const icons = useIcons();
@@ -81,7 +82,7 @@ function Like({ post, className }) {
       {/* Likes list when hovered */}
       <LikesList mutate={handleLike} post={post} />
       {/* Like button */}
-      <button
+      <FedInBtn
         name=""
         onClick={isLiked ? handleLike : null}
         className="flex items-center justify-center gap-1 text-inherit"
@@ -89,7 +90,7 @@ function Like({ post, className }) {
         {/* Icon rendering */}
         <span className="">{icons[optimistIcon || "likeO"]}</span>
         <span className="">{likeCount}</span>
-      </button>
+      </FedInBtn>
     </div>
   );
 }

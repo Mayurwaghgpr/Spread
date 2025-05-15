@@ -23,6 +23,7 @@ import useClickOutside from "../../hooks/useClickOutside";
 import useMenuCosntant from "../../hooks/useMenuCosntant";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import ImageFigure from "../utilityComp/ImageFigure";
+import FedInBtn from "../buttons/FedInBtn";
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
   // const { user } = useSelector((state) => state.auth);
@@ -159,13 +160,13 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           <div className="flex justify-between items-center w-full h-full text-md border-inherit p-3  font-light ">
             <div className="flex justify-start items-center gap-3">
               <Like className={"min-w-10"} post={post} />
-              <Ibutton
+              <FedInBtn
                 className={"opacity-50 hover:opacity-100"}
                 action={handelComment}
               >
                 {icons["comment"]}
                 <AbbreviateNumber rawNumber={Comments?.length} />
-              </Ibutton>
+              </FedInBtn>
             </div>
             <div className="flex justify-end gap-5 items-center border-inherit">
               <Bookmark className={" "} post={post || null} />

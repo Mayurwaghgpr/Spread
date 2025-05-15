@@ -6,8 +6,9 @@ import Post from "../models/posts.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
 import Sequelize from "sequelize";
 import { fetchProfile } from "../utils/data-fetching.js";
-dotenv.config();
 import passport from "passport";
+
+dotenv.config();
 export const passportStrategies = () => {
   passport.use(
     new GoogleStrategy(

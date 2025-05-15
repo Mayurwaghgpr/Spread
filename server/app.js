@@ -68,7 +68,9 @@ app.use(helmet({
 // app.use("/api/", limiter);
 
 // Passport Setup
+app.use(passportStrategies())
 app.use(passport.initialize());
+
 
 // Static Files
 app.use(express.static(path.join(__dirname, "/client/dist"), {

@@ -54,8 +54,8 @@ app.use(helmet({
       ]
     }
   },
-  crossOriginEmbedderPolicy: true,
-  crossOriginOpenerPolicy: true,
+  // crossOriginEmbedderPolicy: true,
+  // crossOriginOpenerPolicy: true,
 }));
 
 //  Rate Limiting

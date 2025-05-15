@@ -68,7 +68,7 @@ app.use(helmet({
 // app.use("/api/", limiter);
 
 // Passport Setup
-app.use(passportStrategies())
+passportStrategies()
 app.use(passport.initialize());
 
 

@@ -18,6 +18,7 @@ export const getUserProfile = async (req, res, next) => {
   try {
     const cachedUserData = await redisClient.get(id);
     if (cachedUserData !== null) {
+          console.log('cach hit')
       return res.status(200).json(JSON.parse(cachedUserData));
     }
 

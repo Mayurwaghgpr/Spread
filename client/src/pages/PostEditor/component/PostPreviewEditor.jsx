@@ -8,6 +8,8 @@ import PostsApis from "../../../Apis/PostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../component/loaders/Spinner";
 import { createPortal } from "react-dom";
+import CommentInput from "../../Comment/CommentInput";
+import CommonInput from "../../../component/inputComponents/CommonInput";
 
 const DEFAULT_ELEMENT = { type: "text", data: "", id: uuidv4(), index: 0 };
 
@@ -84,7 +86,7 @@ function PostPreviewEditor() {
   const imageElements = elements?.filter((el) => el.type === "image");
 
   return createPortal(
-    <main className=" fixed top-0 right-0 z-50 bg-[#fff9f3] px-10  dark:bg-black w-full flex justify-center min-h-screen h-full flex-col gap-10 m-auto items-center overflow-y-auto">
+    <main className=" fixed top-0 right-0 z-50 bg-[#fff9f3] px-10  dark:bg-black w-full flex justify-center min-h-screen h-full flex-col gap-10 m-auto items-center overflow-y-auto border-inherit">
       <div className="w-full  text-center ">
         <Link className=" absolute right-5 text-xl top-5" to={-1}>
           <i className="bi bi-x-lg"></i>
@@ -98,7 +100,7 @@ function PostPreviewEditor() {
         </hgroup>
       </div>
 
-      <article className="  w-full max-w-[60rem] flex sm:flex-row flex-col sm:gap-5 justify-center items-center  ">
+      <article className="  w-full max-w-[60rem] flex sm:flex-row flex-col sm:gap-5 justify-center items-center border-inherit  ">
         <div className="w-full flex flex-col justify-center items-start bg-inherit">
           <h1 className="">Post Preview</h1>
           <div className="flex justify-center items-center bg-inherit">
@@ -132,48 +134,42 @@ function PostPreviewEditor() {
             />
           </div>
         </div>
-        <div className=" w-full flex my-7 gap-5 flex-col">
-          <div className="w-full h-full gap-6  flex flex-col justify-start items-center ">
-            <div className="w-full">
-              <label htmlFor="title">Title</label>
-              <input
-                className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
-                type="text"
-                name="title"
-                defaultValue={elements[0]?.data}
-                title=""
-                placeholder="Write Preview title"
-                onChange={(e) =>
-                  handleTextChange(elements[0]?.id, e.target.value)
-                }
-              />
-            </div>
-
-            <div className="w-full">
-              <label htmlFor="subtitle">Subetitle</label>
-              <input
-                className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
-                type="text"
-                name="subtitle"
-                defaultValue={elements[1]?.data}
-                placeholder=" Write Preview Subtitle"
-                onChange={(e) =>
-                  handleTextChange(elements[1]?.id, e.target.value)
-                }
-              />
-            </div>
-
-            <div className=" w-full">
-              <label htmlFor="Topics">Topic</label>
-              <input
-                className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
-                type="text"
-                placeholder="Add Topics..."
-                onChange={(e) => setTopic(e.target.value)}
-              />
-            </div>
+        <div className=" w-full flex my-7 gap-5 flex-col border-inherit">
+          <div className="w-full h-full gap-1  flex flex-col justify-start items-center border-inherit">
+            <CommonInput
+              label={"Title"}
+              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              type="text"
+              name="title"
+              defaultValue={elements[0]?.data}
+              title=""
+              placeholder="Write Preview title"
+              onChange={(e) =>
+                handleTextChange(elements[0]?.id, e.target.value)
+              }
+            />
+            <CommonInput
+              type="text"
+              label={"Subetitle"}
+              name={"subtitle"}
+              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              defaultValue={elements[1]?.data}
+              placeholder=" Write Preview Subtitle"
+              onChange={(e) =>
+                handleTextChange(elements[1]?.id, e.target.value)
+              }
+            />
+            <CommonInput
+              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              label={"Topic"}
+              type="text"
+              name={"Topics"}
+              placeholder="Add Topics..."
+              onChange={(e) => setTopic(e.target.value)}
+            />
+            {/* <input  /> */}
           </div>
-          <div className="h-full flex gap-3 items-start">
+          <div className="h-full flex gap-3 items-start border-inherit">
             <button
               onClick={() => handeSubmit("fetch")}
               className={`flex gap-2 text-white ${
@@ -185,7 +181,10 @@ function PostPreviewEditor() {
               {mutation.isLoading ? `Submitting...` : "Submit"}
             </button>
 
-            <Link className=" border px-4 py-2 rounded-lg" to={-1}>
+            <Link
+              className=" border px-4 py-2 rounded-lg border-inherit"
+              to={-1}
+            >
               Cancel
             </Link>
           </div>

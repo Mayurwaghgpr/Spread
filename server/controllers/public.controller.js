@@ -261,46 +261,36 @@ export const AddPostToArchive = async (req, res, next) => {
   const userId = req.authUser.id;
 
   try {
-
-    // Parsing userInfo from cookies to further make modification rather than refetching from user database 
     let userInfo = JSON.parse(req.cookies._userDetail);
-    console.log(userInfo)
-    // delete if the post is already archived
-    const deleted = await Archive.destroy({ where: { postId, userId } });
-    if (deleted) {
-      console.log("exist")
-      userInfo.savedPosts = userInfo.savedPosts.filter((post) => post.id !== postId);
+
+    const exist = await Archive.findOne({ where: { postId, userId } });
+
+    if (exist) {
+      await exist.destroy();
+      userInfo.savedPosts = userInfo.savedPosts.filter((post) => post.postId !== postId);
       return res
         .status(200)
         .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
-        .json({ removed: true, message: "Removed from archive", archived: { postId, userId } });
+        .json({
+          removed: true,
+          message: "Removed from archive",
+          archived:userInfo.savedPosts,
+        });
     }
-    console.log('new')
-    // Create archive entry & fetch post details in one go
-    const archiveWithPost = await Archive.upsert({ postId, userId });
-      userInfo.savedPosts.push({id:postId});
 
+    const [archiveEntry] = await Archive.upsert({ postId, userId }, { returning: true });
+
+    // Add new archive data to the user info 
+    userInfo.savedPosts.push(JSON.parse(JSON.stringify(archiveEntry)));
+    console.log(userInfo)
     res
       .status(200)
       .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
-      .json({ message: "Post archived successfully", archived: archiveWithPost });
-  } catch (error) {
-    console.error("Error archiving post:", error);
-    next(error);
-  }
-};
+      .json({
+        message: "Post archived successfully",
+        archived: userInfo.savedPosts,
+      });
 
-// Remove archived post for current user
-export const removeFromArchive = async (req, res, next) => {
-  const userId = req.authUser.id;
-  const postId = req.query.id;
-  console.log({ postId });
-  try {
-    const exist = await Archive.findOne({
-      where: {  postId, userId },
-    });
-    if (exist) {
-    }
   } catch (error) {
     console.error("Error archiving post:", error);
     next(error);

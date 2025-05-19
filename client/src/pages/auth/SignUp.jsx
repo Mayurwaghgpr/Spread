@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import EyeBtn from "../../component/buttons/EyeBtn.jsx";
 import { BsGoogle } from "react-icons/bs";
 import AuthFormWrapper from "./AuthFormWrapper.jsx";
+import Ibutton from "../../component/buttons/Ibutton.jsx";
 function SignUp() {
   const [validation, setValidation] = useState("");
   const dispatch = useDispatch();
@@ -112,30 +113,30 @@ function SignUp() {
       {signUpInputs.map((input) => (
         <CommonInput
           key={input.id}
-          className="mb-3 w-full flex flex-col gap-2  border-inherit "
+          className="mb-3 w-full flex flex-col gap-2 border  border-inherit bg-inherit "
           type={input.type}
-          labelname={input.labelname}
-          Iname={input.Iname}
+          label={input.labelname}
+          name={input.Iname}
           disabled={isLoading}
         >
           {input.comp}
         </CommonInput>
       ))}
-      <CommonInput
-        className={"flex justify-start items-center gap-4 w-full text-sm"}
-        type={"checkbox"}
-        labelname={"RemberMe"}
-        label={"RemberMe"}
-      />
-      <div className="mb-4 w-full">
-        <button
-          type="submit"
-          className=" bg-black text-white dark:bg-white dark:text-black  p-3 w-full text-center rounded-lg"
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing Up..." : "Sign Up"}
-        </button>
+      <div className="flex justify-start items-center gap-2 w-full text-nowrap ">
+        <span className=" opacity-45">Read Me</span>
+        <CommonInput
+          className={"flex justify-start items-center gap-4 w-fit text-sm  "}
+          type={"checkbox"}
+          name={"readme"}
+        />
       </div>
+      <Ibutton
+        type="submit"
+        className=" justify-center w-full bg-black text-white dark:bg-white dark:text-black  p-3  text-center rounded-lg"
+        disabled={isLoading}
+      >
+        {isLoading ? "Signing Up..." : "Sign Up"}
+      </Ibutton>
     </AuthFormWrapper>
   );
 }

@@ -51,6 +51,7 @@ function SignIn() {
     const obj = Object.fromEntries(fromData);
     mutate(obj);
   }
+
   if (isLoading) {
     return <LoaderScreen message={"Authenticating please wait"} />;
   }
@@ -66,22 +67,21 @@ function SignIn() {
       >
         <CommonInput
           ref={userRef}
-          className={`flex flex-col justify-start items-start gap-2 w-full  p-1 `}
-          IClassName={"w-full"}
+          className={`flex justify-start items-start gap-2 border w-full  p-1 bg-inherit`}
           type={"email"}
           name={"email"}
-          labelname={"Email address"}
+          label={"Email address"}
           disabled={isLoading}
           required
         />
         {passVisible && (
           <CommonInput
             className={
-              " flex flex-col justify-center items-start gap-2 w-full  p-1 "
+              " flex justify-center items-start gap-2 w-full  p-1  border bg-inherit"
             }
             type={"password"}
             name={"password"}
-            labelname={"Password"}
+            label={"Password"}
             disabled={isLoading}
             required
           >
@@ -124,7 +124,7 @@ function SignIn() {
             className={` bg-black text-white dark:bg-white dark:text-black p-3 w-full   rounded-lg ${
               isLoading && "cursor-wait bg-opacity-40"
             }`}
-            disabled={userRef?.current?.value}
+            disabled={!userRef?.current?.value.trim()}
           >
             Continue
           </button>

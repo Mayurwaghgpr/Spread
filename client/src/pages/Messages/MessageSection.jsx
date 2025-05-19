@@ -246,17 +246,16 @@ function MessageSection() {
       </div>
       <div className="flex justify-center items-center col-span-full w-full h-fit border-t px-5 pt-2 pb-5 border-inherit bg-inherit">
         <div className="relative flex justify-center items-baseline gap-3 p-2 sm:w-[70%] w-full  rounded-lg bg-white border dark:bg-opacity-10 border-inherit ">
-          <CommonInput
-            className="relative px-2 w-full h-full border-inherit  "
-            IClassName={
-              " flex flex-col justify-center items-center placeholder:text-inherit placeholder:font-thin placeholder:text-sm outline-none  "
-            }
-            onChange={handleInput}
-            value={message}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Start Writting..."
-          >
-            <div className="absolute w-full  transition-transform duration-300 border-t  border-black dark:border-inherit scale-0 peer-focus:scale-100 "></div>
+          <div className="flex flex-col justify-start items-center gap-3 w-full border-inherit">
+            <CommonInput
+              className="relative px-2 w-full h-full border-inherit border-0  bg-inherit outline-none peer"
+              onChange={handleInput}
+              value={message}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              placeholder="Start Writting..."
+            >
+              <div className="absolute w-full bottom-0  transition-transform duration-300 border-t  border-black dark:border-inherit scale-0 peer-focus:scale-100 "></div>
+            </CommonInput>
             <div className="flex justify-start items-center gap-2 w-full border-inherit ">
               <FedInBtn className={"text-xl rounded-full p-2 rouded border"}>
                 <IoAttach />
@@ -265,8 +264,7 @@ function MessageSection() {
                 {icons["smile"]}
               </FedInBtn>
             </div>
-          </CommonInput>
-
+          </div>
           <FedInBtn
             className="flex justify-center items-center text-xl min-w-fit rounded-full p-2"
             action={handleSend}

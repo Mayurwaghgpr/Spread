@@ -164,11 +164,12 @@ export const EditUserProfile = async (req, res, next) => {
   }
 };
 
+// Check if user name already exist
 export const searchForUsername = async (req, res, next) => {
   const username = req.body.username;
   try {
 if (!username) {
-    return res.status(400).json({message:"cannot set empty username,you should proved username"})
+    return res.status(400).json({message:"cannot set empty username,please provied username"})
   }
   const exist = await User.findOne({ where: {username} });
   if (exist) {

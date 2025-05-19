@@ -13,11 +13,11 @@ export const googleAuth = async (req, res, next) => {
       id: user.id,
       email: user.email,
     });
-// console.log("Setting cookies:", {
-//   _userDetail: user,
-//   AccessToken: AccessToken,
-//   RefreshToken: RefreshToken,
-    // });
+      // console.log("Setting cookies:", {
+      //   _userDetail: user,
+      //   AccessToken: AccessToken,
+      //   RefreshToken: RefreshToken,
+      // });
     await redisClient.set(user.id,JSON.stringify(user))
     
     res

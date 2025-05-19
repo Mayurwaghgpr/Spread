@@ -3,7 +3,6 @@ import {
   searchData, 
   FollowUser,
   AddPostToArchive,
-  removeFromArchive,
   LikePost,
   getHomeContent,
   getAllUser,
@@ -28,9 +27,5 @@ router.get("/search", IsAuth, searchData);
 router.put('/like/',IsAuth,LikePost)
 router.put('/follow', IsAuth, FollowUser);
 router.put('/archive', IsAuth, AddPostToArchive);// Changed route to 'archive' for consistency
-
-
-//Delete Routes
-router.delete('/archive',IsAuth,removeFromArchive)
 
 export default router;

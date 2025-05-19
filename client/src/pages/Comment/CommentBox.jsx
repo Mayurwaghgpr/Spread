@@ -14,6 +14,7 @@ import ProfileImage from "../../component/ProfileImage";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import Spinner from "../../component/loaders/Spinner";
 const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const [openReplies, setOpenReplies] = useState("");
   const [optLike, setOptLike] = useState("");
@@ -22,7 +23,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const { hitLike, getReplies, deleteComtApi, pinComment } = PostsApis();
   const dispatch = useDispatch();
   const postdata = useOutletContext();
-  const { MENU_ITEMS } = menuCosntant();
+  const { COMMENT_MENU } = menuCosntant();
   const icons = useIcons();
 
   const commenterImg = userImageSrc(comt?.commenter);
@@ -30,11 +31,11 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
 
   const memoLike = useMemo(() => {
     if (optLike === comt?.id && !isLiked) {
-      return abbreviateNumber(comt?.commentLikes?.length) + 1;
+      return <AbbreviateNumber rawNumber={comt?.commentLikes?.length + 1} />;
     } else if (isLiked && optLike === comt?.id) {
-      return abbreviateNumber(comt?.commentLikes?.length) - 1;
+      return <AbbreviateNumber rawNumber={comt?.commentLikes?.length - 1} />;
     } else {
-      return abbreviateNumber(comt?.commentLikes?.length);
+      return <AbbreviateNumber rawNumber={comt?.commentLikes?.length} />;
     }
   }, [optLike, comt?.commentLikes?.length]);
 
@@ -60,22 +61,28 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     },
     refetchOnWindowFocus: false,
   });
-  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
-    useInfiniteQuery(
-      ["replies", comt?.id],
-      ({ pageParam = 1 }) =>
-        getReplies({
-          postId: comt.postId,
-          pageParam,
-          topCommentId: comt?.id,
-        }),
-      {
-        enabled: comt?.reply?.length > 0 && openReplies === comt?.id, // Only fetch when replies are open
-        getNextPageParam: (lastPage) =>
-          lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
-        refetchOnWindowFocus: false,
-      }
-    );
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    ["replies", comt?.id],
+    ({ pageParam = 1 }) =>
+      getReplies({
+        postId: comt.postId,
+        pageParam,
+        topCommentId: comt?.id,
+      }),
+    {
+      enabled: comt?.reply?.length > 0 && openReplies === comt?.id, // Only fetch when replies are open
+      getNextPageParam: (lastPage) =>
+        lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const { mutate: likeUnlikeMutation } = useMutation({
     mutationFn: (comtId) => hitLike(comtId),
@@ -116,13 +123,15 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
         <div className=" grid grid-cols-12 border-inherit w-full">
           <ProfileImage
             className={`flex justify-center items-center col-span-1  rounded-full  ${
-              isTopComment ? " w-10 h-10" : " w-8 h-8 "
+              isTopComment
+                ? " sm:w-10 sm:h-10 w-8 h-8 "
+                : " sm:w-8 sm:h-8 w-6 h-6"
             } `}
             image={commenterImg.userImageurl}
             alt={comt?.commenter?.username}
           />
           <div className="flex flex-col justify-center items-start gap-1 col-start-3 col-span-full w-full border-inherit">
-            <div className="flex justify-between w-full items-center text-nowrap  text-sm border-inherit ">
+            <div className="flex justify-between w-full items-center text-nowrap border-inherit ">
               <div className="flex justify-start items-center text-nowrap gap-2 text-sm border-inherit">
                 <h1 className="font-semibold">{comt?.commenter?.username}</h1>
                 {/*pind comment */}
@@ -153,19 +162,14 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
                 items={[
                   (comt.commenter.id === user.id ||
                     postdata.authorId === user.id) &&
-                    MENU_ITEMS.deleteComment,
-                  comt.commenter.id === user.id && MENU_ITEMS.editComment,
+                    COMMENT_MENU?.deleteComment,
+                  comt.commenter.id === user.id && COMMENT_MENU.editComment,
                 ]?.filter((itm) => itm)}
                 content={comt}
               />
             </div>
             <div>
-              <p>
-                {comt.content} Lorem, ipsum dolor sit amet consectetur
-                adipisicing elit. Est et, in excepturi aliquam veritatis
-                voluptatibus omnis quo deleniti? Illo similique placeat alias.
-                Esse et alias necessitatibus quia nisi corporis magni!
-              </p>
+              <p>{comt.content}</p>
             </div>
             <div className="flex justify-start items-center gap-3 my-3">
               <Ibutton
@@ -219,11 +223,14 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
         </div>
         {!comt?.topCommentId && (
           <Ibutton
-            className={"ml-12 px-1 text-blue-500 rounded-full"}
+            className={
+              " ml-12 flex justify-center items-center gap-2 px-1 text-blue-500 rounded-full"
+            }
             action={handleRepliesClick}
           >
             {openReplies !== comt.id ? icons["arrowDown"] : icons["arrowUp"]}
             Replies <AbbreviateNumber rawNumber={comt?.reply?.length} />
+            {isLoading && <Spinner className={"w-3 h-3 bg-black p-0.5"} />}
           </Ibutton>
         )}
       </article>

@@ -45,7 +45,7 @@ function ToastItem({ ToastContent, arr, ...props }) {
           {icons["close"]}
         </Ibutton>
       </div>
-      <div className=" w-full text-end text-black dark:text-white  text-opacity-30  dark:text-opacity-40 ">
+      <div className=" w-full text-end opacity-40 ">
         <small>
           {arr.length} of {ToastContent.count}
         </small>

@@ -61,11 +61,11 @@ function CommentSection() {
           })
         );
       }}
-      className=" flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0  w-full  animate-fedin.2s  lg:h-[90vh] h-full sm:z-0 z-30 "
+      className=" flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0 w-full  animate-fedin.2s  lg:h-[90vh] h-full sm:z-0 z-30 "
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex flex-col gap-2 max-w-[30rem] w-full  lg:h-full h-[60%] border sm:border border-inherit sm:m-0 rounded-xl m-1 bg-[#f3efeb] dark:bg-black  sm:animate-none  animate-slide-in-bottom   overflow-hidden "
+        className="relative flex flex-col gap-2 max-w-[30rem] w-full lg:h-full h-[60%] border sm:border border-inherit sm:m-0 rounded-xl m-1 bg-[#f3efeb] dark:bg-black  sm:animate-none  animate-slide-in-bottom   overflow-hidden "
       >
         <div className="flex items-center justify-between p-4 border-b border-inherit ">
           <h1 className="text-xl ">Comments</h1>

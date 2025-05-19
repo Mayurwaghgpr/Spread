@@ -39,15 +39,16 @@ function ResetPassword() {
     >
       <CommonInput
         className={
-          "flex flex-col gap-2 mb-4 w-full border border-inherit rounded-lg   bg-inherit "
+          "flex items-center justify-center gap-2 w-full border border-inherit rounded-lg bg-inherit "
         }
         type={"password"}
         name={"password"}
-        labelname={"Password"}
+        label={"Password"}
         disabled={isLoading}
-        comp={<EyeBtn />}
         required
-      />
+      >
+        <EyeBtn />
+      </CommonInput>
       <div className="mb-4 w-full">
         <button
           type="submit"

@@ -6,70 +6,82 @@ import usePublicApis from "../../Apis/publicApis";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../hooks/useIcons";
 import FedInBtn from "./FedInBtn";
+import PropTypes from "prop-types";
+import { setUser } from "../../redux/slices/authSlice";
+
 function Bookmark({ className, post }) {
-  const [optimisticIcon, setOptimisticIcon] = useState("");
+  const [optimisticId, setOptimisticId] = useState(false);
   const { isLogin, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { ArchivePost } = usePublicApis();
   const queryClient = useQueryClient();
   const icons = useIcons();
+
+  const isBookmarked = useMemo(
+    () => user?.savedPosts?.some((savedPost) => savedPost?.postId === post?.id),
+    [user?.savedPosts, post?.id]
+  );
+
   const ArchiveMutation = useMutation((id) => ArchivePost(id), {
     onSuccess: (data) => {
-      if (data.removed) {
-        setOptimisticIcon("");
-      }
-      dispatch(setToast({ message: ` ${data.message} ✨`, type: "success" }));
+      dispatch(setUser({ ...user, savedPosts: data.archived }));
       // queryClient.invalidateQueries(["loggedInUser"]);
+      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
     },
     onError: (error) => {
-      console.log(error);
+      setOptimisticId(false); // Revert optimistic update on error
       dispatch(
         setToast({
-          message: error.message,
+          message: error.response?.data?.message || "Failed to update bookmark",
           type: "error",
         })
       );
     },
+    onMutate: () => {
+      setOptimisticId(true); // Optimistic update
+    },
+    onSettled: () => {
+      setOptimisticId(false); // Revert optimistic update on error
+    },
   });
 
-  const handleSavePost = useCallback(
-    (id) => {
-      ArchiveMutation.mutate(id);
-      setOptimisticIcon(id);
-    },
-    [ArchiveMutation]
-  );
-  const isBookmarked = user?.savedPosts?.some(
-    (savedPost) => savedPost?.id === post?.id
-  );
-  const isIcon = useMemo(() => {
-    if (optimisticIcon === post?.id && !isBookmarked) {
-      return icons["bookmarkFi"];
-    } else if (optimisticIcon === post?.id && isBookmarked) {
-      return icons["bookmarkO"];
-    } else if (optimisticIcon !== post?.id && isBookmarked) {
-      return icons["bookmarkFi"];
-    } else {
-      return icons["bookmarkO"];
+  const handleBookmark = useCallback(() => {
+    if (!isLogin) {
+      navigate("/auth/signin");
+      return;
     }
-  }, [user?.savedPosts, optimisticIcon, isBookmarked]);
+    ArchiveMutation.mutate(post?.id);
+  }, [isLogin, navigate, ArchiveMutation, post?.id]);
+
+  const icon = useMemo(() => {
+    if (optimisticId) {
+      // We are performing an action
+      return isBookmarked ? icons["bookmarkO"] : icons["bookmarkFi"];
+    } else {
+      // No action in progress
+      return isBookmarked ? icons["bookmarkFi"] : icons["bookmarkO"];
+    }
+  }, [isBookmarked, optimisticId, icons]);
 
   return (
     <FedInBtn
-      className={`${isBookmarked ? " text-black dark:text-white" : ""} ${className} `}
+      className={`${isBookmarked ? "text-black dark:text-white" : ""} ${className}`}
       id="bookmark"
-      onClick={(e) => {
-        if (isLogin) {
-          handleSavePost(post?.id);
-        } else {
-          navigate("/auth/signin");
-        }
-      }}
+      onClick={handleBookmark}
+      aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+      disabled={ArchiveMutation.isLoading}
     >
-      {isIcon}
+      {icon}
     </FedInBtn>
   );
 }
+
+Bookmark.propTypes = {
+  className: PropTypes.string,
+  post: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  }).isRequired,
+};
 
 export default memo(Bookmark);

@@ -13,15 +13,10 @@ export const googleAuth = async (req, res, next) => {
       id: user.id,
       email: user.email,
     });
-      // console.log("Setting cookies:", {
-      //   _userDetail: user,
-      //   AccessToken: AccessToken,
-      //   RefreshToken: RefreshToken,
-      // });
+
     await redisClient.set(user.id,JSON.stringify(user))
     
     res
-      .cookie("_userDetail",JSON.stringify(user),CookieOptions)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
       .redirect(process.env.FRONT_END_URL+"/");
@@ -37,11 +32,9 @@ export const gitHubAuth = async (req, res, next) => {
       id: user.id,
       email: user.email,
     });
-
-    await redisClient.set(user.id,JSON.stringify(user))
+    await redisClient.set(user.id, JSON.stringify(user))
 
     res
-      .cookie("_userDetail", JSON.stringify(user), CookieOptions)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
 

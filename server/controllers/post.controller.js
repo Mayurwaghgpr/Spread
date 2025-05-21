@@ -11,6 +11,7 @@ import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import redisClient from "../utils/redisClient.js";
 
 import { EXPIRATION } from "../config/constants.js";
+import Archive from "../models/Archive.js";
 
 
 export const AddNewPost = async (req, res, next) => {
@@ -215,55 +216,61 @@ export const getPostView = async (req, res, next) => {
     next(error);
   }
 };
-
 export const getArchivedPosts = async (req, res, next) => {
   const userId = req.authUser.id;
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
 
   try {
-    const Posts = await User.findOne({
+    const savedPosts = await Archive.findAll({
       where: {
         createdAt: { [Op.lt]: lastTimestamp },
-        id:userId
+        userId
       },
+      attributes: ["createdAt"],
       include: [
         {
           model: Post,
-          as: "savedPosts",
-          through: { attributes: [] }, // Exclude the intermediate table attributes
-
+          as: "post",
+          required: true,
+          
           include: [
             {
               model: User,
-              attributes: ["id", "username", "userImage"], // Include the post owner details
+              attributes: ["id", "username", "userImage"],
             },
             {
-              model: Likes, // Include likes
+              model: Likes,
               as: "Likes",
               required: false,
             },
-             {
-          model: Comments,
-          as: "comments",
-        }
-          ],
+            {
+              model: PostContent,
+              as: "postContent",
+              required: false,
+            },
+            {
+              model: Comments,
+              as: "comments",
+              required: false,
+            },
+          ]
         },
       ],
-      order: [
-        ["createdAt", "DESC"],
-      ],
+      order: [["createdAt", "DESC"]],
       limit,
     });
-    console.log(Posts)
 
-    const postData = formatPostData(Posts.savedPosts);
+    const posts = savedPosts.map((archive) => archive.post);
+    const postData = formatPostData(posts);
+    
     res.status(200).json(postData);
   } catch (error) {
     console.error("Error fetching archived posts:", error);
     next(error);
   }
 };
+
 
 // Edit an existing post by its ID
 export const EditPost = async (req, res, next) => {

@@ -4,7 +4,6 @@ import Post from "../models/posts.js";
 import Follow from "../models/Follow.js";
 import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
-import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 import { io } from "../app.js";
@@ -247,7 +246,6 @@ export const FollowUser = async (req, res, next) => {
    
     res
       .status(201)
-      .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
       .json({ status: "success", message: existingFollow ? "Unfollowed successfully" : "Followed successfully" });
   } catch (error) {
     console.error("Error in FollowUser:", error);
@@ -260,35 +258,29 @@ export const AddPostToArchive = async (req, res, next) => {
   const { postId } = req.body;
   const userId = req.authUser.id;
 
+  const userInfo = JSON.parse(await redisClient.get(userId))
   try {
-    let userInfo = JSON.parse(req.cookies._userDetail);
-
+    let updatedUserInfo;
+    let message;
     const exist = await Archive.findOne({ where: { postId, userId } });
-
     if (exist) {
-      await exist.destroy();
-      userInfo.savedPosts = userInfo.savedPosts.filter((post) => post.postId !== postId);
-      return res
-        .status(200)
-        .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
-        .json({
-          removed: true,
-          message: "Removed from archive",
-          archived:userInfo.savedPosts,
-        });
+      const filterSavedPost = userInfo?.savedPosts?.filter(post => post.id !== postId)
+      if (Array.isArray(filterSavedPost)) { 
+        updatedUserInfo = { ...userInfo, savedPosts: filterSavedPost }
     }
-
-    const [archiveEntry] = await Archive.upsert({ postId, userId }, { returning: true });
-
-    // Add new archive data to the user info 
-    userInfo.savedPosts.push(JSON.parse(JSON.stringify(archiveEntry)));
-    console.log(userInfo)
+      await exist.destroy();
+      message = "Removed from archive"
+    } else {
+      await Archive.create({ postId, userId });
+      updatedUserInfo = { ...userInfo, savedPosts: [...userInfo.savedPosts, { id: postId }] }
+      message="Post archived successfully"
+    }
+    await redisClient.setEx(userId,3600,JSON.stringify(updatedUserInfo))
     res
       .status(200)
-      .cookie("_userDetail", JSON.stringify(userInfo), CookieOptions)
       .json({
-        message: "Post archived successfully",
-        archived: userInfo.savedPosts,
+        message ,
+        archived: updatedUserInfo.savedPosts,
       });
 
   } catch (error) {

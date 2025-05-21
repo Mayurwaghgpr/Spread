@@ -10,6 +10,7 @@ import Post from "../models/posts.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
+import { fetchProfile } from "../utils/data-fetching.js";
 
 dotenv.config();
 const saltRounds = 10;
@@ -65,7 +66,6 @@ export const signUp = async (req, res, next) => {
       .status(201)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", JSON.stringify(newUser), CookieOptions)
       .json({ user: newUser.dataValues, AccessToken, RefreshToken });
   } catch (err) {
     next(err);
@@ -85,30 +85,7 @@ export const signIn = async (req, res, next) => {
 
   try {
     // Find user by username
-    const user = await User.findOne({
-      where: { email},
-      include: [
-        {
-          model: User,
-          as: "Followers",
-          through: { attributes: { exclude: ["password"] } },
-        },
-        {
-          model: User,
-          as: "Following",
-          through: { attributes: { exclude: ["password"] } },
-        },
-         {
-            model: Post,
-            attributes: ['id']
-        },
-        {
-            model: Post,
-            as: 'savedPosts',
-            through: { attributes: [] }, // Fetch only related posts
-          },
-      ],
-    });
+    const user = await fetchProfile({ email});
 
     if (!user) {
       return res.status(400).json({ message: "User does not exist" });
@@ -133,7 +110,6 @@ export const signIn = async (req, res, next) => {
     await redisClient.set(user.id,JSON.stringify(user))
     // Set tokens as cookies and respond
        res
-      .cookie("_userDetail", JSON.stringify(user),CookieOptions)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
       .status(200)
@@ -149,7 +125,7 @@ export const signIn = async (req, res, next) => {
 
 //Fetch login user details
 export const getLoginUser = async (req, res, nex) => {
-  const userInfo = req.cookies._userDetail || await redisClient.get(req.authUser.id);
+  const userInfo = await redisClient.get(req.authUser.id);
 
   res.status(200).json(userInfo);
 };
@@ -199,7 +175,6 @@ export const refreshToken = async (req, res, next) => {
       .status(200)
       .cookie("AccessToken", AccessToken, CookieOptions)
       .cookie("RefreshToken", RefreshToken, CookieOptions)
-      .cookie("_userDetail", JSON.stringify(user),CookieOptions)
       .json({ user: user, AccessToken, RefreshToken });
   } catch (error) {
     console.error("Error during token refresh:", error);
@@ -215,10 +190,7 @@ export const logout = async (req, res, next) => {
     secure: process.env.NODE_ENV === "production",
    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'strict',
  }
-  res
-    .clearCookie("AccessToken", option)
-    .clearCookie("RefreshToken", option)
-    .clearCookie("_userDetail", option);
+  
   try {
    
     // Clear refresh token from user record
@@ -227,7 +199,8 @@ export const logout = async (req, res, next) => {
       { where: { id: req.authUser.id } }
     );
     await redisClient.del(req.authUser.id)
-    res.json({ message: "Logged out successfully" });
+    res.clearCookie("AccessToken", option)
+    .clearCookie("RefreshToken", option).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error during logout:", error);
     // res.status(500).json({ message: 'Server error' });

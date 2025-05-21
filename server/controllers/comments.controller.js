@@ -20,23 +20,6 @@ export const createComment = async (req, res, next) => {
     next(error);
   }
 };
-// export const replyComment = async (req, res, next) => {
-//   const userId = req.authUser.id;
-//   const { topCommentId } = req.params;
-
-//   try {
-//     const respons = await Comments.create({
-//       postId,
-//       userId,
-//       content,
-//       topCommentId,
-//       replyTo: commentId||null,
-//     });
-//     res.status(200).json({ message: "commented successfuly " });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 export const getTopComments = async (req, res, next) => {
   try {

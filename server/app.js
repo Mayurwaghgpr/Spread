@@ -29,6 +29,8 @@ const __dirname = path.resolve();
 app.use(morgan("dev"));
 
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(",");
+app.use(cookieParser());
+app.use(hpp());
 
 // Middleware
 app.use(express.json());
@@ -39,8 +41,6 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use(cookieParser());
-app.use(hpp());
 
 app.use(helmet({
   contentSecurityPolicy: {

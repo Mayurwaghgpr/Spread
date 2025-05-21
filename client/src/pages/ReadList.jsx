@@ -48,7 +48,7 @@ const ReadList = () => {
         </div>
       </div>
       <div className=" flex flex-col justify-start items-center sm:max-w-[45rem] w-full h-full my-20 bg-inherit ">
-        {isLoading
+        {!isLoading
           ? pages?.map((page, idx) => {
               return (
                 <PostPreview

@@ -19,7 +19,7 @@ function Bookmark({ className, post }) {
   const icons = useIcons();
 
   const isBookmarked = useMemo(
-    () => user?.savedPosts?.some((savedPost) => savedPost?.postId === post?.id),
+    () => user?.savedPosts?.some((savedPost) => savedPost?.id === post?.id),
     [user?.savedPosts, post?.id]
   );
 

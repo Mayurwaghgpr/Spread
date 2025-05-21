@@ -23,17 +23,17 @@ export const passportStrategies = () => {
           if (!profile) {
             return;
           }
-          const {email,provider} = profile
+          const {email,provider,displayName,picture,id} = profile
           let user = await fetchProfile({ email, signedWith: provider })
           if (!user) {
             const username = await genUniqueUserName( profile.email);
             user = await User.create({
               username: username,
-              displayName: profile.displayName,
-              email: profile.email,
-              userImage: profile.picture,
-              password: profile.id,
-              signedWith: profile.provider,
+              displayName: displayName,
+              email: email,
+              userImage: picture,
+              password: id,
+              signedWith: provider,
             });
           }
           done(null, user);

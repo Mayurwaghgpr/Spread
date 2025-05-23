@@ -103,7 +103,8 @@ function App() {
           <PersistantUser />
           {isLogin &&
             !pathname.startsWith("/write") &&
-            !pathname.startsWith("/messages") && <SideBar />}
+            !pathname.startsWith("/messages") &&
+            !pathname.startsWith("/search") && <SideBar />}
           <Routes>
             <Route
               path="/"

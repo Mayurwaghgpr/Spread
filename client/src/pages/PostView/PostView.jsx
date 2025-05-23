@@ -25,7 +25,7 @@ import Menu from "../../component/Menus/Menu";
 import ProfileImage from "../../component/ProfileImage";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
-import useMenuCosntant from "../../hooks/useMenuCosntant";
+import useMenuConstant from "../../hooks/useMenuConstant";
 import useClickOutside from "../../hooks/useClickOutside";
 import ImageFigure from "../../component/utilityComp/ImageFigure";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
@@ -72,7 +72,7 @@ function PostView() {
   });
 
   //Getting menu items array from hook
-  const { POST_MENU } = useMenuCosntant(postView, "post");
+  const { POST_MENU } = useMenuConstant(postView, "post");
 
   // Fetches  Ai generated analysis on post
   const {

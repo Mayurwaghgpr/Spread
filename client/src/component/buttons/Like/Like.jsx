@@ -75,6 +75,7 @@ function Like({ post, className }) {
 
   return (
     <div
+      onClick={(e) => e.stopPropagation()}
       className={`relative flex items-end cursor-pointer group ${
         isLiked ? "dark:text-white text-inherit" : ""
       } ${className}`}

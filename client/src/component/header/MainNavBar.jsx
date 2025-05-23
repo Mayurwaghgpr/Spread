@@ -4,16 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import ThemeBtn from "../buttons/ThemeBtn";
 import { setManuOpen } from "../../redux/slices/uiSlice";
-import { BsMoonStarsFill } from "react-icons/bs";
-import { IoSunny } from "react-icons/io5";
-import { HiOutlineComputerDesktop } from "react-icons/hi2";
+
 import LogoutBtn from "../buttons/LogoutBtn";
 import NotifictionBell from "../notification/NotifictionBell";
 import { PiSignInDuotone } from "react-icons/pi";
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import useIcons from "../../hooks/useIcons";
-
+import spreadLogo from "/spread_logo_03_robopus.png";
 const Modes = [
   {
     name: "Dark mode",
@@ -53,13 +51,17 @@ function MainNavBar() {
 
   return (
     <header
-      className={`fixed top-0 p-3  sm:px-24 flex justify-center w-full transform-all duration-300 ease-in-out z-40 dark:border-[#383838] border-b  border-inherit  bg-light dark:bg-dark dark:bg-opacity-30 dark:backdrop-blur-lg bg-opacity-10 backdrop-blur-lg`}
+      className={`fixed top-0 p-2 sm:px-20 px-8 flex justify-center w-full transform-all duration-300 ease-in-out z-40 dark:border-[#383838] border-b  border-inherit  bg-light dark:bg-dark dark:bg-opacity-30 dark:backdrop-blur-lg bg-opacity-10 backdrop-blur-lg`}
     >
-      <nav className={`relative  w-full border-inherit    `}>
-        <div className="flex  items-center justify-between w-full border-inherit m-auto">
-          <Link to="/" className="sm:text-2xl  font-semibold ">
-            Spread
-          </Link>
+      <nav className={`relative w-full border-inherit`}>
+        <div className="flex items-center justify-between w-full border-inherit m-auto">
+          <ProfileImage
+            onClick={() => navigate("/")}
+            image={spreadLogo}
+            className="w-10 h-10 flex justify-start items-center sm:text-2xl  font-semibold "
+          >
+            <span className="sm:block hidden">Spread</span>
+          </ProfileImage>
 
           <div className="flex justify-end items-center  gap-5 w-fit border-inherit text-xl ">
             {/* Toggle Theme button */}

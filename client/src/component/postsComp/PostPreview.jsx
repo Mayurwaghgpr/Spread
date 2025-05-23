@@ -17,24 +17,22 @@ import { setCommentCred } from "../../redux/slices/postSlice";
 
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
-import Ibutton from "../buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import useClickOutside from "../../hooks/useClickOutside";
-import useMenuCosntant from "../../hooks/useMenuCosntant";
+import useMenuConstant from "../../hooks/useMenuConstant";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import ImageFigure from "../utilityComp/ImageFigure";
 import FedInBtn from "../buttons/FedInBtn";
+
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
-  // const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userImageurl } = userImageSrc(post?.user);
-  // const { getAiGenTags } = PostsApis();
   const menuRef = useRef(null);
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
-  const { POST_MENU } = useMenuCosntant(post, "post");
+  const { POST_MENU } = useMenuConstant(post, "post");
 
   const Comments = useMemo(() => {
     return post?.comments?.filter((comment) => comment.topCommentId === null);
@@ -50,136 +48,115 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
     }
   }, [navigate, post?.user?.username, post?.id]);
 
-  // const {
-  //   mutate,
-  //   data,
-  //   isLoading: tagLoading,
-  // } = useMutation({
-  //   mutationFn: getAiGenTags,
-  // });
-
   return (
     <article
       ref={ref}
-      className={` ${className} border-inherit flex w-full flex-col`}
+      className={`${className} border-inherit flex w-full flex-col`}
     >
-      <div className="p-3 flex leading-0 border-inherit flex-col  justify-center gap-4 w-full">
-        <div className="flex justify-start items-center border-inherit gap-2 text-sm ">
+      <div className="p-3 sm:p-4 md:p-6 flex leading-0 border-inherit flex-col justify-center gap-3 sm:gap-4 w-full">
+        {/* Header with user profile */}
+        <header className="flex justify-start items-center border-inherit gap-2 sm:gap-3 text-xs sm:text-sm">
           <Link
             to={`/profile/@${post?.user?.username}/${post?.user?.id}`}
-            className="flex items-center justify-center gap-3"
+            className="flex items-center justify-center gap-2 sm:gap-3 min-w-0 flex-shrink-0"
           >
             <ProfileImage
-              className={`${!post && "animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20"} h-[2rem] w-[2rem]  hover:opacity-75 rounded-full`}
+              className={`${
+                !post &&
+                "animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20"
+              } h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 hover:opacity-75 rounded-full flex-shrink-0`}
               image={post && userImageurl}
             />
-            <div className="text-sm rounded-lg flex">
+            <div className="text-xs sm:text-sm rounded-lg flex min-w-0">
               {post ? (
-                <p className="capitalize underline-offset-4 hover:underline">
+                <p className="capitalize underline-offset-4 hover:underline truncate">
                   {post?.user?.username}
                 </p>
               ) : (
-                <span className="w-20 h-3 animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 bg-inherit rounded-xl"></span>
+                <span className="w-16 sm:w-20 h-3 animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 bg-inherit rounded-xl"></span>
               )}
             </div>
           </Link>
 
-          <h1 className="text-opacity-30 opacity-30 rounded-lg">
+          {/* Topic - hide on very small screens */}
+          <h1 className="text-opacity-30 opacity-30 rounded-lg text-xs sm:text-sm truncate hidden xs:block">
             {post?.topic}
           </h1>
-          {/* 
-          {post && (
-            <div className=" relative flex justify-center items-center cursor-pointer before:hidden before:hover:block  before:text-xs text-lg before:p-1 before:absolute  before:w-fit before:top-5 text-nowrap before:bg-black before:bg-opacity-20 before:rounded-md  before:content-['Generate_tags_with_ai']">
-              <FaHashtag
-                className={`${tagLoading && "animate-pulse"} `}
-                onClick={() =>
-                  mutate({
-                    title: post?.title,
-                    subtitle: post?.subtitelpagraph,
-                    author: post?.user,
-                    titleImage: post?.titleImage,
-                  })
-                }
-              />
-            </div>
-          )} */}
-        </div>
+        </header>
+
+        {/* Post content */}
         <Link
           to={`/view/@${post?.user?.username}/${post?.id}`}
-          className="relative cursor-pointer h-full border-inherit flex sm:flex-row sm:items-center flex-col-reverse  justify-between items-start gap-3"
+          className="relative cursor-pointer h-full border-inherit flex items-start justify-between gap-3 sm:gap-4"
         >
-          <div className="flex w-full flex-col gap-1">
+          <div className="flex w-full flex-col gap-1 sm:gap-2 min-w-0 flex-grow">
             {post ? (
               <>
-                <p className="font-medium text-xl sm:text-2xl overflow-hidden overflow-ellipsis">
-                  {post?.title}
-                </p>
-                <p className="text-sm sm:text-base h-11 opacity-60 font-normal overflow-hidden overflow-ellipsis">
-                  {post?.subtitelpagraph}
+                <h2 className="font-medium text-base sm:text-xl md:text-2xl leading-tight overflow-hidden">
+                  <span className="line-clamp-2 sm:line-clamp-3">
+                    {post?.title}
+                  </span>
+                </h2>
+                <p className="text-xs sm:text-sm md:text-base opacity-60 font-normal overflow-hidden leading-relaxed">
+                  <span className="line-clamp-2 sm:line-clamp-3">
+                    {post?.subtitelpagraph}
+                  </span>
                 </p>
               </>
             ) : (
               <>
-                <div className="rounded-full  w-[60%] h-6  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
-                <div className="rounded-full  w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
-                <div className="rounded-full  w-[80%] h-4  dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-6 dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
+                <div className="rounded-full w-[75%] sm:w-[80%] h-3 sm:h-4 dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20 animate-pulse"></div>
               </>
             )}
           </div>
 
+          {/* Preview Image - responsive sizing */}
           <div
-            className={`${!post && " animate-pulse"} border border-inherit z-0 sm:w-1/3 w-full h-[7em]  rounded  overflow-hidden   dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
+            className={`relative ${
+              !post && "animate-pulse"
+            } border border-inherit z-0 w-20 h-16 sm:w-24 sm:h-20 md:w-28 md:h-24 lg:w-40 lg:h-28 rounded flex-shrink-0 dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
           >
-            {post && (
-              <ImageFigure
-                objectFit="fill"
-                className="w-full h-full"
-                imageClassName="w-full h-full"
-                imageUrl={post?.titleImage && `${post?.titleImage}`}
-                altText={"PreviewImage"}
+            {post && post?.titleImage && (
+              <img
+                className="w-full h-full object-cover object-center rounded"
+                src={post.titleImage}
+                alt="Post preview"
+                loading="lazy"
               />
             )}
           </div>
         </Link>
-        {/* <div className="sm:text-sm text-[.7rem] flex-wrap flex justify-start items-center text-nowrap gap-2">
-          {!tagLoading
-            ? data &&
-              data?.map((tag, idx) => (
-                <span
-                  className="dark:bg-gray-700 bg-[#e0dbd7] p-1 px-3 rounded-full"
-                  key={idx}
-                >
-                  {tag}
-                </span>
-              ))
-            : [...Array(5)].map(() => (
-                <span className="bg-[#e0dbd7] block animate-pulse  p-3 rounded-full w-20 "></span>
-              ))}
-        </div> */}
+
+        {/* Footer with actions */}
         {post && (
-          <div className="flex justify-between items-center w-full h-full text-md border-inherit p-3  font-light ">
-            <div className="flex justify-start items-center gap-3">
-              <Like className={"min-w-10"} post={post} />
+          <footer className="flex justify-between items-center w-full text-sm sm:text-base border-inherit px-0 sm:px-3 font-light">
+            <div className="flex justify-start items-center gap-2 sm:gap-3 min-w-0">
+              <Like className="min-w-8 sm:min-w-10 flex-shrink-0" post={post} />
               <FedInBtn
-                className={"opacity-50 hover:opacity-100"}
+                className="opacity-50 hover:opacity-100 flex items-center gap-1 sm:gap-2 min-w-0"
                 action={handelComment}
               >
-                {icons["comment"]}
-                <AbbreviateNumber rawNumber={Comments?.length} />
+                <span className="flex-shrink-0">{icons["comment"]}</span>
+                <span className="text-xs sm:text-sm">
+                  <AbbreviateNumber rawNumber={Comments?.length} />
+                </span>
               </FedInBtn>
             </div>
-            <div className="flex justify-end gap-5 items-center border-inherit">
-              <Bookmark className={" "} post={post || null} />
+
+            <div className="flex justify-end gap-3 sm:gap-5 items-center border-inherit">
+              <Bookmark className="flex-shrink-0" post={post || null} />
               <Menu
                 ref={menuRef}
                 items={POST_MENU}
                 menuId={menuId}
                 setMenuId={setMenuId}
                 content={post}
-                className={"w-full"}
+                className="w-full flex-shrink-0 "
               />
             </div>
-          </div>
+          </footer>
         )}
       </div>
     </article>

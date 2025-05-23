@@ -11,7 +11,7 @@ const ImageFigure = ({
   return (
     <figure className={`w-full ${className}`}>
       <img
-        className={`w-full object-${objectFit} object-center ${imageClassName}`}
+        className={`w-full  ${imageClassName}`}
         src={imageUrl}
         alt={altText}
         loading="lazy"

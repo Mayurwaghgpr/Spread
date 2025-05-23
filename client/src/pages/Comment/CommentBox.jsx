@@ -9,7 +9,7 @@ import { setToast } from "../../redux/slices/uiSlice";
 import { useOutletContext } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import Menu from "../../component/Menus/Menu";
-import menuCosntant from "../../hooks/useMenuCosntant";
+import useMenuConstant from "../../hooks/useMenuConstant";
 import ProfileImage from "../../component/ProfileImage";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
@@ -23,7 +23,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
   const { hitLike, getReplies, deleteComtApi, pinComment } = PostsApis();
   const dispatch = useDispatch();
   const postdata = useOutletContext();
-  const { COMMENT_MENU } = menuCosntant();
+  const { COMMENT_MENU } = useMenuConstant();
   const icons = useIcons();
 
   const commenterImg = userImageSrc(comt?.commenter);

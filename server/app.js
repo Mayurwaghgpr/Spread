@@ -17,6 +17,15 @@ import socketHandlers from "./Sockets/SocketHandler.js";
 import sockIo from "./socket.js";
 import passport from "passport";
 
+import authRoutes from "./routes/auth.route.js";
+import publicRoutes from "./routes/public.route.js";
+import postsRoutes from "./routes/posts.route.js";
+import userRoutes from "./routes/user.route.js";
+import commentRoutes from "./routes/comments.route.js";
+import aiRoutes from "./routes/AI.route.js";
+import messagingRoutes from "./routes/messaging/messaging.route.js";
+
+
 dotenv.config();
 const app = express();
 const server = createServer(app);
@@ -101,22 +110,23 @@ app.get('/health', (req, res) => {
   res.status(200).json(healthcheck);
 });
 
-// Dynamic Route Loader
-const loadRoute = (route, filePath) => {
-  app.use(route, async (req, res, next) => {
-    const module = await import(filePath);
-    return module.default(req, res, next);
-  });
-};
+// // Dynamic Route Loader
+// const loadRoute = (route, filePath) => {
+//   app.use(route, async (req, res, next) => {
+//     const module = await import(filePath);
+//     return module.default(req, res, next);
+//   });
+// };
 
 //Routes
-loadRoute("/api/auth", "./routes/auth.route.js");
-loadRoute("/api/public", "./routes/public.route.js");
-loadRoute("/api/posts", "./routes/posts.route.js");
-loadRoute("/api/user", "./routes/user.route.js");
-loadRoute("/api/comment", "./routes/comments.route.js");
-loadRoute("/api/ai", "./routes/AI.route.js");
-loadRoute("/api/messaging", "./routes/messaging/messaging.route.js");
+app.use("/api/auth", authRoutes);
+app.use("/api/public", publicRoutes);
+app.use("/api/posts", postsRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/comment", commentRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/messaging", messagingRoutes);
+
 
 // Fallback for React (client side routing)
 app.get("*", (req, res) => {

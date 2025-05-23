@@ -68,7 +68,8 @@ function Home() {
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
-    hasNextPage
+    hasNextPage,
+    1
   );
 
   // Handle post data fetch errors
@@ -101,7 +102,7 @@ function Home() {
             />
             <PostPreview
               className="w-full border-inherit border-b pt-2"
-              ref={idx === arr.length - 1 || idx % 3 === 0 ? lastItemRef : null}
+              ref={idx === arr.length - 1 ? lastItemRef : null}
               key={post?.id}
               post={post}
             />
@@ -111,7 +112,7 @@ function Home() {
 
       return (
         <PostPreview
-          className="w-full border-inherit border-b pt-2"
+          className={`w-full border-inherit border-b pt-2`}
           ref={idx === arr.length - 1 || idx % 3 === 0 ? lastItemRef : null}
           key={post?.id}
           post={post}
@@ -160,7 +161,7 @@ function Home() {
       </div>
 
       {/* Posts Section */}
-      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full row-start-2 row-span-10 border-inherit py-10">
+      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full row-start-2 row-span-full border-inherit py-10 ">
         {/* Posts Content */}
         <div className="w-full pt-10 border-inherit">
           {isLoading
@@ -187,12 +188,14 @@ function Home() {
       </div>
 
       {/* Sidebar */}
-      <Aside
-        isLoadingHome={isLoadingHome}
-        homeData={homeData}
-        handleTopicClick={handleTopicClick}
-        className="sticky top-16 lg:flex flex-col justify-start gap-5 col-start-7 col-span-4 row-start-2 row-span-full border-x w-full p-6 border-inherit hidden text-xs"
-      />
+      {!isDeviceSize && (
+        <Aside
+          isLoadingHome={isLoadingHome}
+          homeData={homeData}
+          handleTopicClick={handleTopicClick}
+          className="sticky top-16 lg:flex flex-col justify-start gap-5 col-start-7 col-span-4 row-start-2 row-span-full border-x w-full p-6 border-inherit hidden text-xs"
+        />
+      )}
     </section>
   );
 }

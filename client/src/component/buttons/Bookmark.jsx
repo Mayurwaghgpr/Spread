@@ -46,13 +46,17 @@ function Bookmark({ className, post }) {
     },
   });
 
-  const handleBookmark = useCallback(() => {
-    if (!isLogin) {
-      navigate("/auth/signin");
-      return;
-    }
-    ArchiveMutation.mutate(post?.id);
-  }, [isLogin, navigate, ArchiveMutation, post?.id]);
+  const handleBookmark = useCallback(
+    (e) => {
+      e.stopPropagation();
+      if (!isLogin) {
+        navigate("/auth/signin");
+        return;
+      }
+      ArchiveMutation.mutate(post?.id);
+    },
+    [isLogin, navigate, ArchiveMutation, post?.id]
+  );
 
   const icon = useMemo(() => {
     if (optimisticId) {

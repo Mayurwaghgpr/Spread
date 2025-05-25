@@ -1,7 +1,8 @@
 .DS_store
-Spread-Backend/config/config.json
-Spread-Backend/images/userImages/*
-Spread-Backend/images/*.{jpg,png}
+server/config/config.json
+server/images/userImages/*
+server/images/*.{jpg,png}
+server/migrations/
  dump.rdb
 # Logs
 logs
@@ -36,7 +37,6 @@ coverage
 
 # Bower dependency directory (https://bower.io/)
 bower_components
-
 # node-waf configuration
 .lock-wscript
 

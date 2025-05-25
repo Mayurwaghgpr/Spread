@@ -52,7 +52,7 @@ function CommentInput({ className }) {
       );
       inputRef.current.innerText = "";
       dispatch(
-        setToast({ message: "Successfuly commented ", type: "success" })
+        setToast({ message: "You commented on this post", type: "success" })
       );
       queryClient.invalidateQueries(["TopComments"]);
     },
@@ -132,7 +132,7 @@ function CommentInput({ className }) {
         <div className="absolute w-full bottom-0  transition-transform duration-300 border-t border-black dark:border-white scale-0 peer-focus:scale-100 "></div>
       </div>
       <div className="relative flex justify-center items-center gap-2">
-        <div className="relative">
+        {/* <div className="relative">
           <Ibutton
             className={"p-1 rounded-full"}
             action={() => setOpenEmojiPicker(!openEmojiPicker)}
@@ -148,7 +148,7 @@ function CommentInput({ className }) {
               />
             </div>
           )}
-        </div>
+        </div> */}
         <Ibutton
           action={mutate}
           disabled={isLoading || !commentCred.content.trim()}

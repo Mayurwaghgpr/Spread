@@ -30,7 +30,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
           ))}
       </ul>
       <Link
-        to={"/suggetions/find_peoples"}
+        to={"/suggestions/find_peoples"}
         className="w-full text-blue-500 self-center p-1 transition-all ease-in-out duration-300"
       >
         See More

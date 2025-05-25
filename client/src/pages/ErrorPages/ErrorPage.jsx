@@ -9,7 +9,7 @@ function ErrorPage({ message, statusCode, action }) {
         <img src="" alt="" />
 
         <h1 className="first-letter:animate-bounce text-5xl w-fit  mt-[20%]">
-          {statusCode || "404"}
+          {statusCode}
         </h1>
         <p>
           {message ||

@@ -6,10 +6,8 @@ import dotenv from "dotenv";
 import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenerator.js";
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
-import Post from "../models/posts.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
 import redisClient from "../utils/redisClient.js";
-import { EXPIRATION } from "../config/constants.js";
 import { fetchProfile } from "../utils/data-fetching.js";
 
 dotenv.config();

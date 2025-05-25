@@ -44,9 +44,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     onSuccess: (data) => {
       console.log({ data });
       comt.pind = data.pind;
-      dispatch(
-        setToast({ message: "Comment pinned successfully!", type: "success" })
-      );
+      dispatch(setToast({ message: "Comment pinned!", type: "success" }));
 
       setOptLike("");
     },
@@ -91,7 +89,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
       setOptLike("");
       dispatch(
         setToast({
-          message: "Liked the comment successfully!",
+          message: "Liked the comment!",
           type: "success",
         })
       );

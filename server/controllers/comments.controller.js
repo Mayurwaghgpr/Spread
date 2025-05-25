@@ -1,20 +1,23 @@
-import { Sequelize } from "sequelize";
 import Comments from "../models/Comments.js";
 import LikeComment from "../models/LikeComment.js";
 import User from "../models/user.js";
 import Database from "../utils/database.js";
 import sequelize from "sequelize";
+import redisClient from "../utils/redisClient.js";
+import { EXPIRATION } from "../config/constants.js";
+import { io } from "../app.js";
 
 //Create Comment
 export const createComment = async (req, res, next) => {
-  // console.log("new...");
-  // const postId = req.params.postId;
-  
   const userId = req.authUser.id;
-  // const { content } = req.body;
     const { postId, replyTo, content,topCommentId } = req.body;
   try {
-    const respons = await Comments.create({ postId, userId, content,topCommentId,replyTo });
+    const post = JSON.parse(await redisClient.get(postId))
+    const respons = await Comments.create({ postId, userId, content: content?.trim(), topCommentId, replyTo });
+    const newComment = JSON.parse(JSON.stringify(respons))
+    const postWithNewComment = { ...post, comments: [...post.comments, newComment] }
+    await redisClient.setEx(postId, EXPIRATION, JSON.stringify(postWithNewComment))
+    io.emit("update_post",postWithNewComment)
     res.status(200).json({ message: "commented successfuly "});
   } catch (error) {
     next(error);

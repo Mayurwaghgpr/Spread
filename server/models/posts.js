@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
-
 import Database from "../utils/database.js";
-import Comments from "./Comments.js";
 
 const Post = Database.define("post", {
   id: {
@@ -13,13 +11,17 @@ const Post = Database.define("post", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  subtitelpagraph: {
+  subtitle: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  titleImage: {
+  previewImage: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  status: {
+    type: DataTypes.ENUM("draft", "published"),
+    default:"draft"
   },
   topic: {
     type: DataTypes.STRING,
@@ -28,12 +30,19 @@ const Post = Database.define("post", {
   },
   cloudinaryPubId: {
       type: DataTypes.STRING,
-        allowNull: true
+      allowNull: true
+  },
+  publicationId: {
+    type: DataTypes.UUID,
+    allowNull: true
   },
   authorId: {
     type: DataTypes.UUID,
     allowNull: false,
   },
+  publishedAt: {
+    type: DataTypes.DATE,
+   }
 });
 
 export default Post;

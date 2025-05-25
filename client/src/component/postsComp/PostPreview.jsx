@@ -47,11 +47,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
       navigate(`/view/@${post?.user?.username}/${post?.id}/comments`);
     }
   }, [navigate, post?.user?.username, post?.id]);
-
   return (
     <article
       ref={ref}
-      className={`${className} border-inherit flex w-full flex-col`}
+      className={`${className} border-inherit flex w-full flex-col max-h-[20rem]`}
     >
       <div className="p-3 sm:p-4 md:p-6 flex leading-0 border-inherit flex-col justify-center gap-3 sm:gap-4 w-full">
         {/* Header with user profile */}
@@ -69,7 +68,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             />
             <div className="text-xs sm:text-sm rounded-lg flex min-w-0">
               {post ? (
-                <p className="capitalize underline-offset-4 hover:underline truncate">
+                <p className="capitalize underline-offset-4 hover:underline">
                   {post?.user?.username}
                 </p>
               ) : (
@@ -99,7 +98,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 </h2>
                 <p className="text-xs sm:text-sm md:text-base opacity-60 font-normal overflow-hidden leading-relaxed">
                   <span className="line-clamp-2 sm:line-clamp-3">
-                    {post?.subtitelpagraph}
+                    {post?.subtitle}
                   </span>
                 </p>
               </>
@@ -118,10 +117,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               !post && "animate-pulse"
             } border border-inherit z-0 w-20 h-16 sm:w-24 sm:h-20 md:w-28 md:h-24 lg:w-40 lg:h-28 rounded flex-shrink-0 dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20`}
           >
-            {post && post?.titleImage && (
+            {post && post?.previewImage && (
               <img
                 className="w-full h-full object-cover object-center rounded"
-                src={post.titleImage}
+                src={post.previewImage}
                 alt="Post preview"
                 loading="lazy"
               />

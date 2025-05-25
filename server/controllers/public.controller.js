@@ -1,4 +1,4 @@
-import sequelize, { Op, Sequelize, where } from "sequelize";
+import sequelize, { Op} from "sequelize";
 import User from "../models/user.js";
 import Post from "../models/posts.js";
 import Follow from "../models/Follow.js";
@@ -6,7 +6,6 @@ import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
-import { io } from "../app.js";
 import { startedFollowing } from "../services/notification.js";
 
 

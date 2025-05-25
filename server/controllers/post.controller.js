@@ -154,7 +154,7 @@ export const getPostPreview = async (req, res, next) => {
       ],
       limit,
     });
-   const postData = formatPostData(posts); // Format the post data
+   const postData = formatPostData(JSON.parse(JSON.stringify(posts))); // Format the post data
   
     // Caching the result to redis with expiration time
     await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(postData))
@@ -262,7 +262,7 @@ export const getArchivedPosts = async (req, res, next) => {
     });
 
     const posts = savedPosts.map((archive) => archive.post);
-    const postData = formatPostData(posts);
+    const postData = formatPostData(JSON.parse(JSON.stringify(posts)));
     
     res.status(200).json(postData);
   } catch (error) {
@@ -342,6 +342,8 @@ export const DeletePost = async (req, res, next) => {
       Comments.destroy({ where: { postId } }),
       post.destroy(),
     ]);
+
+    await redisClient.del(postId)
 
     return res.status(200).json({ id: postId, message: "Post deleted successfully" });
   } catch (error) {

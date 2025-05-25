@@ -1,6 +1,6 @@
 import Messages from "../models/messaging/Messages.js";
 import redisClient from "../utils/redisClient.js";
-import Convarsation from "../models/messaging/Conversation.js";
+import Conversation from "../models/messaging/Conversation.js";
 
 
 export default function socketHandlers(io) {
@@ -11,14 +11,13 @@ export default function socketHandlers(io) {
 
     // Check and create room if server has restared and client is still in conversation
     const roomExists = io.sockets.adapter.rooms.get(activeConversationId)?.has(socket.id)
-    if (!roomExists) {
-      socket.join(activeConversationId);
-      console.log(`User joined conversation: ${activeConversationId}`);
-    }
+if (activeConversationId && !roomExists) {
+  socket.join(activeConversationId);
+}
     
     // Register user with socket ID
     socket.on("register", async (userId) => {
-      const cacheKey = `socket_${userId}`;
+      const cacheKey = `sockets:user:${userId}`;
       await redisClient.set(cacheKey, socket.id);
       console.log(`User ${userId} registered with socket ID ${socket.id}`);
     });
@@ -48,7 +47,7 @@ export default function socketHandlers(io) {
     // Send message and broadcast to conversation
     socket.on(
       "sendMessage",
-      async ({ conversationId, senderId, content, replyedTo, createdAt }) => {
+      async ({ conversationId, senderId, content, replyedTo }) => {
         try {
 
           io.to(conversationId).emit("newMessage", {
@@ -56,13 +55,14 @@ export default function socketHandlers(io) {
             senderId,
             content,
             replyedTo,
-            createdAt,
+            createdAt:new Date().toISOString(),
           });
+
           // TEST: commented temporarly
           // Push to Redis Stream for async storage
           // await redisClient.xAdd(
           //   "message_queue",
-          //   "*", // Auto-generate ID
+          //   "*",//ID
           //   {
           //     conversationId: conversationId,
           //     senderId: senderId,
@@ -77,7 +77,7 @@ export default function socketHandlers(io) {
             content,
             replyedTo,
           });
-          await Convarsation.update(
+          await Conversation.update(
             { lastMessage: content },
             { where: { id: conversationId } }
           );
@@ -103,6 +103,7 @@ export default function socketHandlers(io) {
     // Handle user disconnect
     socket.on("disconnect", async() => {
       console.log("User disconnected:", socket.id);
+  await redisClient.del(`sockets:user:${connectedUserId}`);
     });
   });
 }

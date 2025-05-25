@@ -2,6 +2,7 @@ import React, {
   lazy,
   memo,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -30,6 +31,7 @@ import useClickOutside from "../../hooks/useClickOutside";
 import ImageFigure from "../../component/utilityComp/ImageFigure";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import FedInBtn from "../../component/buttons/FedInBtn";
+import useSocket from "../../hooks/useSocket";
 
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
@@ -39,7 +41,7 @@ function PostView() {
   const [show, setshow] = useState(false);
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
-
+  const [postView, setPostView] = useState({});
   const { fetchDataById } = usePublicApis();
   const { getAiGenAnalysis } = PostsApis();
 
@@ -50,17 +52,22 @@ function PostView() {
 
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
+  const { socket } = useSocket();
 
+  useEffect(() => {
+    socket?.on("update_post", (updtPost) => {
+      console.log({ updtPost });
+      if (updtPost?.id === postView?.id) {
+        setPostView(updtPost);
+      }
+    });
+  }, [socket]);
   //Fetch Post Full View
-  const {
-    data: postView,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { isLoading, isError, error } = useQuery({
     queryKey: ["fullpostData", id],
     queryFn: () => fetchDataById(id),
     onSuccess: (data) => {
+      setPostView(data);
       dispatch(
         setCommentCred({
           ...commentCred,
@@ -110,8 +117,8 @@ function PostView() {
   if (isError) {
     return (
       <ErrorPage
-        message={error?.data?.message}
-        statusCode={error?.data?.status}
+        message={error?.data?.message || "Failed to load post"}
+        statusCode={error?.data?.status || 500}
       />
     );
   }
@@ -169,7 +176,7 @@ function PostView() {
                       className={
                         "text-black dark:text-white sm:text-xs text-[.7em]"
                       }
-                      date={postView.createdAt}
+                      date={postView?.createdAt}
                     />
                   </div>
                 </div>
@@ -179,7 +186,7 @@ function PostView() {
                   {postView?.title}
                 </h1>
                 <p className="text-sm text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-xl leading-relaxed">
-                  {postView?.subtitelpagraph}
+                  {postView?.subtitle}
                 </p>
               </div>
             </section>
@@ -209,8 +216,8 @@ function PostView() {
             </div>
           </div>
 
-          {postView?.titleImage && (
-            <ImageFigure imageUrl={postView?.titleImage} objectFit="fill" />
+          {postView?.previewImage && (
+            <ImageFigure imageUrl={postView?.previewImage} objectFit="fill" />
           )}
           {postView?.postContent?.map((item) => (
             <section

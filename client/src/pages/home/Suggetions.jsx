@@ -54,7 +54,7 @@ function Suggetions() {
             className={({ isActive }) =>
               ` underline-offset-[1.1rem] ${isActive ? "underline" : "hover:underline"}`
             }
-            to={"publications"}
+            to={"/suggestions/publications"}
           >
             Publications
           </NavLink>
@@ -65,7 +65,7 @@ function Suggetions() {
             className={({ isActive }) =>
               ` underline-offset-[1.1rem] ${isActive ? "underline" : "hover:underline"}`
             }
-            to={"/find_peoples"}
+            to={"/suggestions/find_peoples"}
           >
             Peoples
           </NavLink>

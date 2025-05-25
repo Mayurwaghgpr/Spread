@@ -1,12 +1,11 @@
 
-import sequelize, { Sequelize } from 'sequelize';
 import Conversation from '../../models/messaging/Conversation.js';
 import Messages from '../../models/messaging/Messages.js';
 import redisClient from '../../utils/redisClient.js';
 import Database from '../../utils/database.js';
 await redisClient.connect()
 async function processMessages() {
-    console.log('🎉 worker running')
+    console.log('worker running')
   while (true) {
     try {
       const result = await redisClient.xRead(

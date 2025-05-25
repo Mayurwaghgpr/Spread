@@ -91,7 +91,7 @@ function CommentSection() {
         <div className="flex flex-col justify-start items-center gap-5 py-10 px-5  w-full h-[80%] overflow-y-auto border-inherit ">
           <Suspense
             fallback={
-              <Spinner className={"w-10 h-10  bg-black dark:bg-white"} />
+              <Spinner className={"w-10 h-10 p-1 bg-black dark:bg-white"} />
             }
           >
             {Comments.map((comt, idx, arr) => {

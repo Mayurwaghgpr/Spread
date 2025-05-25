@@ -123,10 +123,9 @@ function MessageSection() {
       content: message,
       senderId: user?.id,
       conversationId,
-      createdAt: new Date().toISOString(),
     };
     dispatch(pushMessage(messageObj));
-    socket?.emit("sendMessage", messageObj, (response) => {});
+    socket?.emit("sendMessage", messageObj);
     setMessage("");
   }, [message, socket, user?.id, conversationId, dispatch]);
   const sendTypingStatus = useMemo(

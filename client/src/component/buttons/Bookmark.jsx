@@ -17,7 +17,7 @@ function Bookmark({ className, post }) {
   const { ArchivePost } = usePublicApis();
   const queryClient = useQueryClient();
   const icons = useIcons();
-
+  console.log(post);
   const isBookmarked = useMemo(
     () => user?.savedPosts?.some((savedPost) => savedPost?.id === post?.id),
     [user?.savedPosts, post?.id]
@@ -80,12 +80,5 @@ function Bookmark({ className, post }) {
     </FedInBtn>
   );
 }
-
-Bookmark.propTypes = {
-  className: PropTypes.string,
-  post: PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  }).isRequired,
-};
 
 export default memo(Bookmark);

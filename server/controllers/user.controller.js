@@ -67,9 +67,8 @@ export const getUserPostsById = async (req, res, next) => {
       limit,
       order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
     });
-
     if (posts.length > 0) {
-      const postData = formatPostData(posts); // Format post data
+      const postData = formatPostData(JSON.parse(JSON.stringify(posts))); // Format post data
       res.status(200).json(postData);
     } else {
       res.status(404).send("No posts found");

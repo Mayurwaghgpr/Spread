@@ -15,9 +15,10 @@ export const createComment = async (req, res, next) => {
     const post = JSON.parse(await redisClient.get(postId))
     const respons = await Comments.create({ postId, userId, content: content?.trim(), topCommentId, replyTo });
     const newComment = JSON.parse(JSON.stringify(respons))
-    const postWithNewComment = { ...post, comments: [...post.comments, newComment] }
+    const newCommentsArray=[...post.comments, newComment]
+    const postWithNewComment = { ...post, comments: newCommentsArray }
     await redisClient.setEx(postId, EXPIRATION, JSON.stringify(postWithNewComment))
-    io.emit("update_post",postWithNewComment)
+    io.emit("update_comment",newComment)
     res.status(200).json({ message: "commented successfuly "});
   } catch (error) {
     next(error);

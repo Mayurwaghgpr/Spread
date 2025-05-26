@@ -55,13 +55,17 @@ function PostView() {
   const { socket } = useSocket();
 
   useEffect(() => {
-    socket?.on("update_post", (updtPost) => {
-      console.log({ updtPost });
-      if (updtPost?.id === postView?.id) {
-        setPostView(updtPost);
+    socket?.on("update_comment", (newComment) => {
+      console.log({ newComment });
+      if (newComment?.postId === postView?.id) {
+        console.log("matching");
+        setPostView((prev) => ({
+          ...prev,
+          comments: [...prev.comments, newComment],
+        }));
       }
     });
-  }, [socket]);
+  }, [socket, postView?.id]);
   //Fetch Post Full View
   const { isLoading, isError, error } = useQuery({
     queryKey: ["fullpostData", id],

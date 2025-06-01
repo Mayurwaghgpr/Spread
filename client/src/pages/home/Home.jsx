@@ -9,10 +9,9 @@ import Aside from "../../component/homeComp/Aside";
 import PostsApis from "../../Apis/PostsApis";
 import WhoToFollow from "./WhoToFollow";
 import useDeviceSize from "../../hooks/useDeviceSize";
-import ErrorPage from "../ErrorPages/ErrorPage";
-import LinkBtn from "../../component/LinkBtn";
 import useIcons from "../../hooks/useIcons";
 import Ibutton from "../../component/buttons/Ibutton";
+import ErrorPage from "../ErrorPages/ErrorPage";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();

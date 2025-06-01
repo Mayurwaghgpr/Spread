@@ -32,6 +32,8 @@ import ImageFigure from "../../component/utilityComp/ImageFigure";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import FedInBtn from "../../component/buttons/FedInBtn";
 import useSocket from "../../hooks/useSocket";
+import Spinner from "../../component/loaders/Spinner";
+import LoaderScreen from "../../component/loaders/loaderScreen";
 
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
@@ -127,12 +129,8 @@ function PostView() {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <h1>Loading...</h1>
-      </div>
-    );
+  if (!isLoading) {
+    return <LoaderScreen message={"loading post..."} />;
   }
 
   return (

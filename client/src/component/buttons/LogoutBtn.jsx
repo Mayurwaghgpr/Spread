@@ -3,7 +3,7 @@ import { LuLogOut } from "react-icons/lu";
 import { useMutation } from "react-query";
 import { setIsLogin, setloginPop, setUser } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import SomthingWentWrong from "../../pages/ErrorPages/somthingWentWrong";
+import SomthingWentWrong from "../Errors/SomethingWentWrong";
 import useAuthApi from "../../Apis/useAuthApi";
 import { useDispatch } from "react-redux";
 import LoaderScreen from "../loaders/loaderScreen";

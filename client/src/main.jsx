@@ -12,6 +12,7 @@ import {
   useQuery,
 } from "react-query";
 import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundaryFallback from "./component/Errors/ErrorBoundaryFallback.jsx";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -20,16 +21,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       {({ reset }) => (
         <ErrorBoundary
           onReset={reset}
-          fallbackRender={({ resetErrorBoundary }) => (
-            <div className="flex flex-col  justify-center items-center gap-5 text-xl w-full h-screen">
-              There was an error!
-              <button
-                className="bg-white text-black text-sm p-2 rounded-lg border-2"
-                onClick={() => resetErrorBoundary()}
-              >
-                Try again
-              </button>
-            </div>
+          fallbackRender={({ resetErrorBoundary, error }) => (
+            <ErrorBoundaryFallback
+              error={error}
+              resetErrorBoundary={resetErrorBoundary}
+            />
           )}
         >
           <QueryClientProvider client={queryClient}>

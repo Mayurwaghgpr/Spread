@@ -1,11 +1,17 @@
-import React, { useEffect, Suspense, lazy, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  Suspense,
+  lazy,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import {
   Routes,
   Route,
   useNavigate,
   Navigate,
   useLocation,
-  Link,
 } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import MainNavBar from "./component/header/MainNavBar";
@@ -14,49 +20,148 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
 import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/homeComp/SideBar";
-import SomthingWentWrong from "./pages/ErrorPages/somthingWentWrong";
-import { PopupBox } from "./component/utilityComp/PopupBox";
-import { setloginPop } from "./redux/slices/authSlice";
-import PersistantUser from "./utils/PersistentUser";
+import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
-import Notifictionbox from "./component/notification/Notifictionbox";
-import Suggetions from "./pages/home/Suggetions";
+import NotificationBox from "./component/notification/NotificationBox";
+import Suggestions from "./pages/home/Suggestions";
 import ConversationInfo from "./pages/Messages/ConversationInfo";
 import InfoSection from "./pages/Messages/components/InfoSection";
 import WelcomeLoginBox from "./component/utilityComp/WelcomeLoginBox";
+import SomethingWentWrong from "./component/Errors/SomethingWentWrong";
 
-// Lazy load components
+// Lazy load components with better error boundaries
+const SignUp = lazy(() =>
+  import("./pages/auth/SignUp").catch(() => ({
+    default: () => <div>Error loading SignUp</div>,
+  }))
+);
+const SignIn = lazy(() =>
+  import("./pages/auth/SignIn").catch(() => ({
+    default: () => <div>Error loading SignIn</div>,
+  }))
+);
+const ForgotPass = lazy(() =>
+  import("./pages/auth/ForgotPass").catch(() => ({
+    default: () => <div>Error loading ForgotPass</div>,
+  }))
+);
+const ResetPassword = lazy(() =>
+  import("./pages/auth/ResetPassword").catch(() => ({
+    default: () => <div>Error loading ResetPassword</div>,
+  }))
+);
+const Home = lazy(() =>
+  import("./pages/home/Home").catch(() => ({
+    default: () => <div>Error loading Home</div>,
+  }))
+);
+const Heroes = lazy(() =>
+  import("./pages/Heroes").catch(() => ({
+    default: () => <div>Error loading Heroes</div>,
+  }))
+);
+const PageError = lazy(() =>
+  import("./pages/ErrorPages/ErrorPage").catch(() => ({
+    default: () => <div>Error loading PageError</div>,
+  }))
+);
+const Profile = lazy(() =>
+  import("./pages/userProfile/Profile").catch(() => ({
+    default: () => <div>Error loading Profile</div>,
+  }))
+);
+const DynamicPostEditor = lazy(() =>
+  import("./pages/PostEditor/DynamicPostEditor").catch(() => ({
+    default: () => <div>Error loading DynamicPostEditor</div>,
+  }))
+);
+const PostPreviewEditor = lazy(() =>
+  import("./pages/PostEditor/component/PostPreviewEditor").catch(() => ({
+    default: () => <div>Error loading PostPreviewEditor</div>,
+  }))
+);
+const PostView = lazy(() =>
+  import("./pages/PostView/PostView").catch(() => ({
+    default: () => <div>Error loading PostView</div>,
+  }))
+);
+const ProfileEditor = lazy(() =>
+  import("./pages/userProfile/ProfileEditor").catch(() => ({
+    default: () => <div>Error loading ProfileEditor</div>,
+  }))
+);
+const About = lazy(() =>
+  import("./pages/About").catch(() => ({
+    default: () => <div>Error loading About</div>,
+  }))
+);
+const ReadList = lazy(() =>
+  import("./pages/ReadList").catch(() => ({
+    default: () => <div>Error loading ReadList</div>,
+  }))
+);
+const Settings = lazy(() =>
+  import("./pages/settings/Settings").catch(() => ({
+    default: () => <div>Error loading Settings</div>,
+  }))
+);
+const General = lazy(() =>
+  import("./pages/settings/General").catch(() => ({
+    default: () => <div>Error loading General</div>,
+  }))
+);
+const ConfirmationBox = lazy(() =>
+  import("./component/utilityComp/ConfirmationBox").catch(() => ({
+    default: () => <div>Error loading ConfirmationBox</div>,
+  }))
+);
+const Messenger = lazy(() =>
+  import("./pages/Messages/Messenger").catch(() => ({
+    default: () => <div>Error loading Messenger</div>,
+  }))
+);
+const MessageSection = lazy(() =>
+  import("./pages/Messages/MessageSection").catch(() => ({
+    default: () => <div>Error loading MessageSection</div>,
+  }))
+);
+const SearchBox = lazy(() =>
+  import("./pages/Search&Explorer/SearchBox").catch(() => ({
+    default: () => <div>Error loading SearchBox</div>,
+  }))
+);
+const CommentSection = lazy(() =>
+  import("./pages/Comment/CommentSection").catch(() => ({
+    default: () => <div>Error loading CommentSection</div>,
+  }))
+);
+const ToastContainer = lazy(() =>
+  import("./component/utilityComp/ToastContainer").catch(() => ({
+    default: () => <div>Error loading ToastContainer</div>,
+  }))
+);
 
-const SignUp = lazy(() => import("./pages/auth/SignUp"));
-const SignIn = lazy(() => import("./pages/auth/SignIn"));
-const ForgotPass = lazy(() => import("./pages/auth/ForgotPass"));
-const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
-const Home = lazy(() => import("./pages/home/Home"));
-const Heros = lazy(() => import("./pages/Heros"));
-const PageError = lazy(() => import("./pages/ErrorPages/ErrorPage"));
-const Profile = lazy(() => import("./pages/userProfile/Profile"));
-const DynamicPostEditor = lazy(
-  () => import("./pages/PostEditor/DynamicPostEditor")
-);
-const PostPreviewEditor = lazy(
-  () => import("./pages/PostEditor/component/PostPreviewEditor")
-);
-const PostView = lazy(() => import("./pages/PostView/PostView"));
-const ProfileEditor = lazy(() => import("./pages/userProfile/ProfileEditor"));
-const About = lazy(() => import("./pages/About"));
-const ReadList = lazy(() => import("./pages/ReadList"));
-const Settings = lazy(() => import("./pages/settings/Settings"));
-const General = lazy(() => import("./pages/settings/General"));
-const ConfirmationBox = lazy(
-  () => import("./component/utilityComp/ConfirmationBox")
-);
-const Messanger = lazy(() => import("./pages/Messages/Messanger"));
-const MessageSection = lazy(() => import("./pages/Messages/MessageSection"));
-const SearchBox = lazy(() => import("./pages/Seach&Explorer/SearchBox"));
-const CommentSection = lazy(() => import("./pages/Comment/CommentSection"));
-const ToastContainer = lazy(
-  () => import("./component/utilityComp/ToastContainer")
-);
+// Constants for better maintainability
+const THEME_STORAGE_KEY = "ThemeMode";
+const ROUTES = {
+  HOME: "/",
+  HEROES: "/heroes",
+  PROFILE: "/profile/:username/:id",
+  PROFILE_EDITOR: "/profileEditor",
+  WRITE: "/write",
+  SETTINGS: "/setting",
+  MESSAGES: "/messages",
+  POST_VIEW: "/view/:username/:id",
+  SEARCH: "/search",
+  SUGGESTIONS: "/suggestions/find_peoples",
+  READ: "/Read",
+  AUTH_SIGNIN: "/auth/signin",
+  AUTH_SIGNUP: "/auth/signup",
+  ABOUT: "/about",
+  FORGOT_PASS: "/forgot/pass",
+  RESET_PASS: "/reset/pass/:token",
+  ERROR: "/error",
+};
 
 function App() {
   const navigate = useNavigate();
@@ -65,171 +170,232 @@ function App() {
   const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
   const { socket } = useSocket();
+
   const [systemTheme, setSystemTheme] = useState(
-    window.matchMedia("(prefers-color-scheme: dark)").matches
+    () => window.matchMedia("(prefers-color-scheme: dark)").matches
   );
 
+  // Memoize path checks for better performance
+  const pathChecks = useMemo(
+    () => ({
+      isMessagesPath: pathname.startsWith("/messages"),
+      isWritePath: pathname.startsWith("/write"),
+      isSearchPath: pathname.startsWith("/search"),
+      showSidebar:
+        isLogin &&
+        !pathname.startsWith("/write") &&
+        !pathname.startsWith("/messages") &&
+        !pathname.startsWith("/search"),
+    }),
+    [pathname, isLogin]
+  );
+
+  // Handle system theme changes
   useEffect(() => {
-    // register user to web socket
-    socket?.emit("register", user.id);
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleSystemThemeChange = (e) => {
-      setSystemTheme(e.matches); // Update state when system theme changes
+      setSystemTheme(e.matches);
     };
 
     mediaQuery.addEventListener("change", handleSystemThemeChange);
 
-    // Cleanup event listener when component unmounts
-    return () =>
+    return () => {
       mediaQuery.removeEventListener("change", handleSystemThemeChange);
+    };
   }, []);
 
-  // Handle dark mode based on ThemeMode
-  useCallback(() => {
+  // Handle socket registration
+  useEffect(() => {
+    if (socket && user?.id) {
+      socket.emit("register", user.id);
+    }
+  }, [socket, user?.id]);
+
+  // Handle theme changes
+  useEffect(() => {
     const isDarkMode =
       ThemeMode === "dark" || (ThemeMode === "system" && systemTheme);
     document.documentElement.classList.toggle("dark", isDarkMode);
-    localStorage.setItem("ThemeMode", ThemeMode);
-  }, [ThemeMode, systemTheme, dispatch]);
+
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, ThemeMode);
+    } catch (error) {
+      console.warn("Failed to save theme preference:", error);
+    }
+  }, [ThemeMode, systemTheme]);
+
+  // Memoize protected route wrapper to avoid re-renders
+  const ProtectedRouteWrapper = useCallback(
+    ({ children }) => <ProtectedRoute>{children}</ProtectedRoute>,
+    []
+  );
 
   return (
     <>
-      {" "}
-      {!pathname.startsWith("/messages") && <MainNavBar />}
-      <main className=" relative flex justify-between items-center border-inherit ">
-        <Notifictionbox />
-        {<ConfirmationBox />}
+      {!pathChecks.isMessagesPath && <MainNavBar />}
+
+      <main className="relative flex justify-between items-center border-inherit">
+        <NotificationBox />
+
         <Suspense fallback={<LoaderScreen />}>
-          <PersistantUser />
-          {isLogin &&
-            !pathname.startsWith("/write") &&
-            !pathname.startsWith("/messages") &&
-            !pathname.startsWith("/search") && <SideBar />}
+          <PersistentUser />
+          <ConfirmationBox />
+
+          {pathChecks.showSidebar && <SideBar />}
+
           <Routes>
+            {/* Home Route */}
             <Route
-              path="/"
+              path={ROUTES.HOME}
               element={
                 isLogin ? (
-                  <ProtectedRoute>
+                  <ProtectedRouteWrapper>
                     <Home />
-                  </ProtectedRoute>
+                  </ProtectedRouteWrapper>
                 ) : (
-                  <Navigate to="/heros" replace />
+                  <Navigate to={ROUTES.HEROES} replace />
                 )
               }
-            >
-              {/* <Route path="comments" element={<CommentSection />}  */}
-            </Route>
+            />
+
+            {/* Public Routes */}
             <Route
-              path="/heros"
-              element={!isLogin ? <Heros /> : <Navigate to="/" replace />}
+              path={ROUTES.HEROES}
+              element={
+                !isLogin ? <Heroes /> : <Navigate to={ROUTES.HOME} replace />
+              }
+            />
+
+            <Route path={ROUTES.ABOUT} element={<About />} />
+            <Route path={ROUTES.FORGOT_PASS} element={<ForgotPass />} />
+            <Route path={ROUTES.RESET_PASS} element={<ResetPassword />} />
+            <Route path={ROUTES.ERROR} element={<SomethingWentWrong />} />
+
+            {/* Auth Routes */}
+            <Route
+              path={ROUTES.AUTH_SIGNIN}
+              element={
+                !isLogin ? <SignIn /> : <Navigate to={ROUTES.HOME} replace />
+              }
             />
             <Route
-              path="/profile/:username/:id"
+              path={ROUTES.AUTH_SIGNUP}
               element={
-                <ProtectedRoute>
+                !isLogin ? <SignUp /> : <Navigate to={ROUTES.HOME} replace />
+              }
+            />
+
+            {/* Protected Routes */}
+            <Route
+              path={ROUTES.PROFILE}
+              element={
+                <ProtectedRouteWrapper>
                   <Profile />
-                </ProtectedRoute>
+                </ProtectedRouteWrapper>
               }
             />
+
             <Route
-              path="/profileEditor"
+              path={ROUTES.PROFILE_EDITOR}
               element={
-                <ProtectedRoute>
+                <ProtectedRouteWrapper>
                   <ProfileEditor />
-                </ProtectedRoute>
+                </ProtectedRouteWrapper>
               }
             />
+
+            {/* Post Editor Routes */}
             <Route
-              path="/write"
+              path={ROUTES.WRITE}
               element={
-                <ProtectedRoute>
+                <ProtectedRouteWrapper>
                   <DynamicPostEditor />
-                </ProtectedRoute>
+                </ProtectedRouteWrapper>
               }
             >
-              <Route path="/write/publish" element={<PostPreviewEditor />} />
+              <Route path="publish" element={<PostPreviewEditor />} />
             </Route>
+
+            {/* Settings Routes */}
             <Route
-              path="/setting"
+              path={ROUTES.SETTINGS}
               element={
-                <ProtectedRoute>
+                <ProtectedRouteWrapper>
                   <Settings />
-                </ProtectedRoute>
+                </ProtectedRouteWrapper>
               }
             >
               <Route
-                path=""
+                index
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRouteWrapper>
                     <General />
-                  </ProtectedRoute>
+                  </ProtectedRouteWrapper>
                 }
               />
-
               <Route
-                path="github/synch"
-                element={<ProtectedRoute>{<div></div>}</ProtectedRoute>}
+                path="github/sync"
+                element={
+                  <ProtectedRouteWrapper>
+                    <div>GitHub Sync Feature Coming Soon</div>
+                  </ProtectedRouteWrapper>
+                }
               />
             </Route>
+
+            {/* Messages Routes */}
             <Route
-              path="/messages"
+              path={ROUTES.MESSAGES}
               element={
-                <ProtectedRoute>
-                  <Messanger />
-                </ProtectedRoute>
+                <ProtectedRouteWrapper>
+                  <Messenger />
+                </ProtectedRouteWrapper>
               }
             >
               <Route path="c" element={<MessageSection />}>
-                <Route path="Info" element={<ConversationInfo />}>
-                  <Route path="" element={<InfoSection />} />
+                <Route path="info" element={<ConversationInfo />}>
+                  <Route index element={<InfoSection />} />
                 </Route>
               </Route>
             </Route>
-            <Route path="/view/:username/:id" element={<PostView />}>
+
+            {/* Post View Routes */}
+            <Route path={ROUTES.POST_VIEW} element={<PostView />}>
               <Route path="comments" element={<CommentSection />} />
             </Route>
+
+            {/* Other Protected Routes */}
             <Route
-              path="/search"
+              path={ROUTES.SEARCH}
               element={
-                <ProtectedRoute>
+                <ProtectedRouteWrapper>
                   <SearchBox />
-                </ProtectedRoute>
+                </ProtectedRouteWrapper>
               }
             />
-            <Route path="/suggestions/find_peoples" element={<Suggetions />} />
-            <Route path="*" element={<PageError />} />
+
             <Route
-              path="/Read"
+              path={ROUTES.READ}
               element={
-                <ProtectedRoute>
+                <ProtectedRouteWrapper>
                   <ReadList />
-                </ProtectedRoute>
+                </ProtectedRouteWrapper>
               }
-            />{" "}
-            <Route
-              path="/auth/signin"
-              element={!isLogin ? <SignIn /> : <Navigate to={"/"} />}
             />
-            <Route
-              path="/auth/signup"
-              element={!isLogin ? <SignUp /> : <Navigate to={"/"} />}
-            />
-            <Route path="/about" element={<About />} />
-            <Route path="/forgot/pass" element={<ForgotPass />} />
-            <Route path="/reset/pass/:token" element={<ResetPassword />} />
-            <Route path="/error" element={<SomthingWentWrong />} />
+
+            <Route path={ROUTES.SUGGESTIONS} element={<Suggestions />} />
+
+            {/* Catch-all route */}
+            <Route path="*" element={<PageError />} />
           </Routes>
 
           {loginPop && <WelcomeLoginBox />}
           <ToastContainer />
         </Suspense>
-        <ConfirmationBox />
-
-        {/* <ScrollToTopButton /> */}
       </main>
-      {isLogin && !pathname.startsWith("/messages") && <TaskBar />}
+
+      {isLogin && !pathChecks.isMessagesPath && <TaskBar />}
     </>
   );
 }

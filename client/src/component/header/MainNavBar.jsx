@@ -6,7 +6,7 @@ import ThemeBtn from "../buttons/ThemeBtn";
 import { setManuOpen } from "../../redux/slices/uiSlice";
 
 import LogoutBtn from "../buttons/LogoutBtn";
-import NotifictionBell from "../notification/NotifictionBell";
+import NotifictionBell from "../notification/NotificationBell";
 import { PiSignInDuotone } from "react-icons/pi";
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";

@@ -96,7 +96,7 @@ const notifications = [
   },
 ];
 
-function Notificationbox() {
+function NotificationBox() {
   const { openNotification } = useSelector((state) => state.ui);
   const { notificationState } = useSelector((state) => state.notification);
   const { socket } = useSocket();
@@ -156,4 +156,4 @@ function Notificationbox() {
   );
 }
 
-export default Notificationbox;
+export default NotificationBox;

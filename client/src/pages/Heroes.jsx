@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Footer from "../component/footer/Footer";
 import coverImg2 from "../assets/images/coverImage2.jpg";
 
-function Heros() {
+function Heroes() {
   // Scroll to top when this component renders
   window.scrollTo({
     top: 0,
@@ -91,4 +91,4 @@ function Heros() {
   );
 }
 
-export default Heros;
+export default Heroes;

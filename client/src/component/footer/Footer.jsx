@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className=" pt-6 pb-3 w-full border-inherit h-fit">
+    <footer className=" w-full border-inherit h-fit">
       <div className="flex  items-center h-full  w-full   pr-4">
         <div className="flex sm:justify-center gap-10 sm:flex-row flex-col justify-start p-4  sm:items-center w-full">
           <p className="sm:text-sm text-xs ">

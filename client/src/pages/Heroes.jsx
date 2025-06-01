@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../component/footer/Footer";
-import coverImg2 from "../assets/images/coverImage2.jpg";
-
+import ImageFigure from "../component/utilityComp/ImageFigure";
+import spreadLogo from "/spread_logo_03_robopus.png";
 function Heroes() {
   // Scroll to top when this component renders
   window.scrollTo({
@@ -13,22 +13,51 @@ function Heroes() {
   return (
     <>
       {/* Main Container */}
-      <main className="relative h-[80vh] w-full mt-[3.6rem] dark:bg-inherit dark:*:border-[#383838]">
+      <main className="relative h-screen w-full dark:bg-inherit dark:*:border-[#383838]">
         {/* --- Primary Hero Section: Branding, Headline, CTA, and Main Image --- */}
         <section className="relative bg-inherit h-full  flex sm:flex-row flex-col-reverse gap-8 justify-center items-center">
           <div className="relative z-10   flex justify-start sm:pl-40 px-10 items-center w-full h-full bg-gradient-to-t from-[#fff9f3]  dark:from-black to-transparent">
-            <div className="sm:w-1/2  z-[5] animate-fedin1s rounded-lg h-fit flex flex-col gap-4  overflow-hidden">
-              <h1 className="xl:text-2xl lg:text-xl flex items-center text-lg mb-4">
-                <span>Spread.. </span>
-                <i className="bi bi-feather pb-2"></i>
-              </h1>
-              <h2 className="sm:text-6xl text-3xl  font-semibold">
-                Unleash Your Ideas, Inspire the World
-              </h2>
-              <p className="dark:text-white text-xs sm:text-lg dark:text-opacity-60 text-wrap">
-                Connect with fellow creators, share your work, and spark new
-                ideas—join a vibrant community of innovators.
-              </p>
+            <div className="sm:w-1/2  animate-fedin1s rounded-lg h-fit flex flex-col gap-4  overflow-hidden">
+              <div className=" text-2xl font-bold flex items-center justify-start gap-4">
+                <ImageFigure
+                  imageClassName="w-full h-full object-cover rounded-full"
+                  className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
+                  imageUrl={spreadLogo}
+                />
+                <span>Spread</span>
+              </div>
+              {/* Main Headline */}
+              <div className="space-y-4">
+                <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+                  <span>Code.</span>
+                  <br />
+                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    Collaborate.
+                  </span>
+                  <br />
+                  <span className="bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                    Create.
+                  </span>
+                </h1>
+
+                <p className={`text-xl leading-relaxed max-w-2xl `}>
+                  The ultimate platform where developers{" "}
+                  <span className="text-cyan-500 font-semibold">
+                    share ideas
+                  </span>
+                  ,
+                  <span className="text-purple-500 font-semibold">
+                    {" "}
+                    collaborate on projects
+                  </span>
+                  , and
+                  <span className="text-green-500 font-semibold">
+                    {" "}
+                    build the future together
+                  </span>
+                  .
+                </p>
+              </div>
               <div className="w-full flex justify py-4">
                 <Link
                   to="/auth/signin"
@@ -40,14 +69,14 @@ function Heroes() {
               <div className="mt-4 text-sm ">Trusted by creators worldwide</div>
             </div>
           </div>
-          <div className="absolute top-0 bottom-0 right-0 left-0 w-full h-full">
+          {/* <div className="absolute top-0 bottom-0 right-0 left-0 w-full h-full">
             <img
               className=" w-full h-full  shadow-inner shadow-black  rounded-sm object-cover object-center"
               src={coverImg2}
               alt="Showcase of Spread platform"
               loading="lazy"
             />
-          </div>
+          </div> */}
         </section>
 
         {/* --- Secondary/Supporting Section: Content Teaser and Visual Demo --- */}

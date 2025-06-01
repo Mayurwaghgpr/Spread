@@ -9,7 +9,7 @@ const ImageFigure = ({
   captionClassName = "",
 }) => {
   return (
-    <figure className={`w-full ${className}`}>
+    <figure className={`${className}`}>
       <img
         className={`w-full  ${imageClassName}`}
         src={imageUrl}

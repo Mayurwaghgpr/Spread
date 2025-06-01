@@ -178,7 +178,8 @@ function App() {
   // Memoize path checks for better performance
   const pathChecks = useMemo(
     () => ({
-      isMessagesPath: pathname.startsWith("/messages"),
+      isMessagesPath:
+        pathname.startsWith("/messages") || pathname.startsWith("/heroes"),
       isWritePath: pathname.startsWith("/write"),
       isSearchPath: pathname.startsWith("/search"),
       showSidebar:

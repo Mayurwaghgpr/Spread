@@ -4,7 +4,9 @@ function General() {
   return (
     <section className="flex flex-col  bg-inherit px-3">
       {" "}
-      <div className=" flex gap-10  bg-inherit items-center"></div>
+      <div className=" flex gap-10  bg-inherit items-center">
+        Feature Coming Soon
+      </div>
     </section>
   );
 }

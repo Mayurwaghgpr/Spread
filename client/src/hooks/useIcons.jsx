@@ -73,7 +73,7 @@ import { BiBookmark, BiCalendarAlt, BiRepost, BiTrash } from "react-icons/bi";
 import { GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSend } from "react-icons/ai";
-import { LuLogOut } from "react-icons/lu";
+import { LuGithub, LuLogOut } from "react-icons/lu";
 import {
   TbMessageCircle,
   TbMessageCircleFilled,
@@ -85,6 +85,7 @@ import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
+import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 function useIcons() {
   return {
@@ -129,6 +130,7 @@ function useIcons() {
     gearFi: <BsGearFill />,
     gearO: <BsGear />,
     glitter: <WiStars className="" />,
+    github: <LuGithub />,
 
     // H
     helpfull: <FaHandHoldingHeart />,

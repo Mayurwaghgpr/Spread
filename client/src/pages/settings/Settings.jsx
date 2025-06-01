@@ -1,14 +1,14 @@
 import React, { memo } from "react";
 
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { LuGithub } from "react-icons/lu";
+import useIcons from "../../hooks/useIcons";
 
 function Settings() {
   const navigate = useNavigate();
-
+  const icons = useIcons();
   const settingItem = [
-    { name: "General", icon: <i className="bi bi-gear"></i> || "G", stub: "" },
-    { name: "Sync Github", icon: <LuGithub />, stub: "githubSynch" },
+    { name: "General", icon: icons["gearO"] || "G", stub: "" },
+    { name: "Sync Github", icon: icons["github"], stub: "githubSynch" },
   ];
 
   return (

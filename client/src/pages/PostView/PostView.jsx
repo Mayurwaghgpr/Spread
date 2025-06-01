@@ -129,7 +129,7 @@ function PostView() {
     );
   }
 
-  if (!isLoading) {
+  if (isLoading) {
     return <LoaderScreen message={"loading post..."} />;
   }
 

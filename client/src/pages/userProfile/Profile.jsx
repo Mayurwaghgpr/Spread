@@ -10,6 +10,7 @@ import ProfileinfoCard from "../../component/ProfileinfoCard";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import useProfileApi from "../../Apis/ProfileApis";
 import ErrorPage from "../ErrorPages/ErrorPage";
+import LoaderScreen from "../../component/loaders/loaderScreen";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -75,11 +76,7 @@ function Profile() {
     return <ErrorPage message={errorMessage} statusCode={statusCode} />;
   }
   if (isLoading) {
-    return (
-      <div className="flex h-screen w-full  justify-center items-center dark:*:border-[#383838]">
-        <h1>Loading profile...</h1>
-      </div>
-    );
+    return <LoaderScreen message={"Loading profile..."} />;
   }
 
   return (

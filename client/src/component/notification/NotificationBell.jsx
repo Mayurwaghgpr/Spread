@@ -5,7 +5,7 @@ import { setOpenNotification } from "../../redux/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
 import FedInBtn from "../buttons/FedInBtn";
 
-const NotifictionBell = ({ isNotfiy = false, className }) => {
+const NotificationBell = ({ isNotfiy = false, className }) => {
   const dispatch = useDispatch();
   const handeClick = useCallback(() => {
     dispatch(setOpenNotification());
@@ -25,4 +25,4 @@ const NotifictionBell = ({ isNotfiy = false, className }) => {
   );
 };
 
-export default NotifictionBell;
+export default NotificationBell;

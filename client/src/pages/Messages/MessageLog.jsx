@@ -8,7 +8,6 @@ import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import {
   selectConversation,
   setMessageLogData,
-  setOpenNewConverstionBox,
 } from "../../redux/slices/messangerSlice";
 import Spinner from "../../component/loaders/Spinner";
 import SearchBar from "../../component/inputComponents/SearchBar";
@@ -79,7 +78,7 @@ function MessageLog() {
           <h1>Messages</h1>
           <Ibutton
             className={"p-2 rounded-lg"}
-            action={() => dispatch(setOpenNewConverstionBox())}
+            action={() => navigate("new/c")}
           >
             {icons["addPersonO"]}
           </Ibutton>

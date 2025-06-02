@@ -3,10 +3,7 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ChatApi from "../Apis/ChatApi";
-import {
-  selectConversation,
-  setOpenNewConverstionBox,
-} from "../redux/slices/messangerSlice";
+import { selectConversation } from "../redux/slices/messangerSlice";
 import { setToast } from "../redux/slices/uiSlice";
 
 function usePrivateChatMutation() {
@@ -17,7 +14,6 @@ function usePrivateChatMutation() {
   const { mutate: PrivateMutaion, isLoading: isPrivateLoading } = useMutation({
     mutationFn: (chatUserId) => startPrivateChate(chatUserId),
     onSuccess: (data) => {
-      dispatch(setOpenNewConverstionBox());
       localStorage.setItem(
         "conversationMeta",
         JSON.stringify(data.newPrivateConversation)

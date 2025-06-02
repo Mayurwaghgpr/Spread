@@ -160,30 +160,25 @@ function Home() {
       </div>
 
       {/* Posts Section */}
-      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full row-start-2 row-span-full border-inherit py-10 ">
+      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full row-start-2 row-span-full border-inherit pt-10 ">
         {/* Posts Content */}
-        <div className="w-full pt-10 border-inherit">
-          {isLoading
-            ? Array.from({ length: 3 }, (_, idx) => (
-                <PostPreview
-                  key={`skeleton-${idx}`}
-                  className="border-inherit"
-                />
-              ))
-            : renderPosts()}
+        {isLoading
+          ? Array.from({ length: 10 }, (_, idx) => (
+              <PostPreview key={`skeleton-${idx}`} className="border-inherit" />
+            ))
+          : renderPosts()}
 
-          {isFetchingNextPage && (
-            <div className="w-full flex justify-center items-center py-4">
-              <Spinner className="bg-black dark:bg-white w-10 p-1" />
-            </div>
-          )}
+        {isFetchingNextPage && (
+          <div className="w-full flex justify-center items-center py-4">
+            <Spinner className="bg-black dark:bg-white w-10 p-1" />
+          </div>
+        )}
 
-          {!posts.length && !isLoading && (
-            <div className="w-full flex justify-center items-center py-4">
-              <h2 className="text-xl">No posts</h2>
-            </div>
-          )}
-        </div>
+        {!posts.length && !isLoading && (
+          <div className="w-full flex justify-center items-center py-4">
+            <h2 className="text-xl">No posts</h2>
+          </div>
+        )}
       </div>
 
       {/* Sidebar */}
@@ -192,7 +187,7 @@ function Home() {
           isLoadingHome={isLoadingHome}
           homeData={homeData}
           handleTopicClick={handleTopicClick}
-          className="sticky top-16 lg:flex flex-col justify-start gap-5 col-start-7 col-span-4 row-start-2 row-span-full border-x w-full p-6 border-inherit hidden text-xs"
+          className="sticky top-[3rem] lg:flex flex-col justify-start gap-5 col-start-7 col-span-4 row-start-2 row-span-full border-x w-full p-6 border-inherit hidden text-xs"
         />
       )}
     </section>

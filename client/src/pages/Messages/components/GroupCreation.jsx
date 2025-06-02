@@ -7,10 +7,7 @@ import { useMutation } from "react-query";
 import ChatApi from "../../../Apis/ChatApi.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../redux/slices/uiSlice.js";
-import {
-  selectConversation,
-  setOpenNewConverstionBox,
-} from "../../../redux/slices/messangerSlice.js";
+import { selectConversation } from "../../../redux/slices/messangerSlice.js";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../../hooks/useIcons.jsx";
 function GroupCreation({ handleGroupConfig, hashMap, users }) {
@@ -39,9 +36,6 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
       },
       onError: (error) => {
         dispatch(setToast({ message: error.data.message, type: "error" }));
-      },
-      onSettled: () => {
-        dispatch(setOpenNewConverstionBox());
       },
     }
   );

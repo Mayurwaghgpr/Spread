@@ -7,13 +7,9 @@ import Ibutton from "../../component/buttons/Ibutton";
 import { useInfiniteQuery, useMutation } from "react-query";
 import usePublicApis from "../../Apis/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import ChatApi from "../../Apis/ChatApi";
+// import ChatApi from "../../Apis/ChatApi";
 import { useNavigate } from "react-router-dom";
-import {
-  selectConversation,
-  setOpenNewConverstionBox,
-} from "../../redux/slices/messangerSlice";
-import { setToast } from "../../redux/slices/uiSlice";
+// import { setToast } from "../../redux/slices/uiSlice";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 import { BsPlus } from "react-icons/bs";
 import GroupCreation from "./components/GroupCreation";
@@ -95,7 +91,7 @@ const NewConversation = () => {
       className={
         "flex flex-col justify-start items-center gap-5 animate-fedin.2s text-center p-4 border-inherit max-w-[30rem] w-full sm:max-h-[60%] h-full min-h-[60%] shadow-sm overflow-auto"
       }
-      action={() => dispatch(setOpenNewConverstionBox())}
+      action={() => navigate(-1)}
     >
       <header className="flex justify-between items-center w-full">
         {isCreatingGroup && (

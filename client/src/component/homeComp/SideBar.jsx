@@ -72,11 +72,11 @@ function SideBar() {
       onClick={(e) => {
         dispatch(setManuOpen());
       }}
-      className={`sm:static fixed left-0 top-0 w-full sm:block h-screen sm:w-fit *:transition-all *:duration-200 border-r sm:z-30 z-40 lg:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"} ${pathname.startsWith("/view") && "sm:hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838]  sm:bg-[#fff9f3] sm:dark:bg-black dark:border-[#383838]`}
+      className={`sm:static fixed left-0 top-0 w-full sm:block h-screen sm:w-fit *:transition-all *:duration-200 border-r sm:z-30 z-40 lg:animate-none animate-fedin.2s overflow-hidden ${!MenuOpen && "hidden"} ${pathname.startsWith("/view") && "sm:hidden"}  *:transition-all  *:duration-100 dark:*:border-[#383838] bg-black dark:bg-white dark:bg-opacity-10 bg-opacity-30 backdrop-blur-[1px]  sm:bg-light sm:dark:bg-dark dark:border-[#383838]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between h-full sm:min-w-full w-fit  me-16  p-10  sm:dark:bg-transparent  bg-light dark:bg-dark  xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg  shadow-sm"
+        className="flex flex-col justify-between h-full sm:min-w-full w-fit me-16 p-10  sm:dark:bg-transparent  bg-light dark:bg-dark  xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg  shadow-md dark:shadow-gray-100 "
       >
         <div className="flex flex-col justify-center items-center gap-4 w-fit sm:mt-16">
           {/* Profile Link */}

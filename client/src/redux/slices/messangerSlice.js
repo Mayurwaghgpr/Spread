@@ -4,7 +4,6 @@ const converstaioMeta = JSON.parse(sessionStorage.getItem("conversationMeta"));
 const initialState = {
   conversations: [],
   messages: [],
-  openNewConverstionBox: false,
   selectedConversation: converstaioMeta,
   messageLogData: [],
 };
@@ -25,10 +24,6 @@ const messangerSlice = createSlice({
     popMessage: (state, action) => {
       state.messages.pop();
     },
-
-    setOpenNewConverstionBox: (state) => {
-      state.openNewConverstionBox = !state.openNewConverstionBox;
-    },
     selectConversation: (state, action) => {
       state.selectedConversation = action.payload;
     },
@@ -40,7 +35,6 @@ const messangerSlice = createSlice({
 
 export const {
   setConversations,
-  setOpenNewConverstionBox,
   selectConversation,
   setMessageLogData,
   pushMessage,

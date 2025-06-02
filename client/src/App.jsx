@@ -28,6 +28,7 @@ import ConversationInfo from "./pages/Messages/ConversationInfo";
 import InfoSection from "./pages/Messages/components/InfoSection";
 import WelcomeLoginBox from "./component/utilityComp/WelcomeLoginBox";
 import SomethingWentWrong from "./component/Errors/SomethingWentWrong";
+import NewConversation from "./pages/Messages/NewConversation";
 
 // Lazy load components with better error boundaries
 const SignUp = lazy(() =>
@@ -353,6 +354,7 @@ function App() {
                 </ProtectedRouteWrapper>
               }
             >
+              <Route path="new/c" element={<NewConversation />} />
               <Route path="c" element={<MessageSection />}>
                 <Route path="info" element={<ConversationInfo />}>
                   <Route index element={<InfoSection />} />

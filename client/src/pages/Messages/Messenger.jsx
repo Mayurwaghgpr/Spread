@@ -8,13 +8,10 @@ import {
   setMessageLogData,
 } from "../../redux/slices/messangerSlice";
 import useSocket from "../../hooks/useSocket";
-import NewConversation from "./NewConversation";
 
 function Messenger() {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const { openNewConverstionBox, messageLogData } = useSelector(
-    (state) => state.messanger
-  );
+  const { messageLogData } = useSelector((state) => state.messanger);
   const dispatch = useDispatch();
   const { socket } = useSocket();
   const [searchParams] = useSearchParams();
@@ -59,7 +56,6 @@ function Messenger() {
   return (
     <section className="h-screen w-full border-inherit">
       <div className="fixed w-full flex h-full border-y border-inherit">
-        {openNewConverstionBox && <NewConversation />}
         <MessageLog />
         <Outlet />
       </div>

@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Bookmark from "../buttons/Bookmark";
 import Like from "../buttons/Like/Like";
 import Menu from "../Menus/Menu";
-import { setCommentCred } from "../../redux/slices/postSlice";
+import { setCommentCred } from "../../store/slices/postSlice";
 
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";

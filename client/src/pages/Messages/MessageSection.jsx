@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ChatApi from "../../Apis/ChatApi";
+import ChatApi from "../../services/ChatApi";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import useSocket from "../../hooks/useSocket";
@@ -19,7 +19,7 @@ import {
   addMessage,
   popMessage,
   pushMessage,
-} from "../../redux/slices/messangerSlice";
+} from "../../store/slices/messangerSlice";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import { IoAttach } from "react-icons/io5";

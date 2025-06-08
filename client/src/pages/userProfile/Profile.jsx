@@ -2,13 +2,13 @@ import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import PostPreview from "../../component/postsComp/PostPreview";
-import { setuserProfile } from "../../redux/slices/profileSlice";
+import { setuserProfile } from "../../store/slices/profileSlice";
 import ProfileHeader from "./component/ProfileHeader";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import useProfileApi from "../../Apis/ProfileApis";
+import useProfileApi from "../../services/ProfileApis";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 

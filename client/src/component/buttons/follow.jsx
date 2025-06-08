@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useMemo } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import usePublicApis from "../../Apis/publicApis";
-import { setToast } from "../../redux/slices/uiSlice";
+import usePublicApis from "../../services/publicApis";
+import { setToast } from "../../store/slices/uiSlice";
 
 function Follow({ className, People }) {
   const { user } = useSelector((state) => state.auth);

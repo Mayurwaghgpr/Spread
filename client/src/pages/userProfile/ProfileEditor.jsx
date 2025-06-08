@@ -1,10 +1,10 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../redux/slices/authSlice";
+import { setUser } from "../../store/slices/authSlice";
 import { useMutation } from "react-query";
-import { setToast } from "../../redux/slices/uiSlice";
+import { setToast } from "../../store/slices/uiSlice";
 import { debounce } from "../../utils/debounce";
-import useProfileApi from "../../Apis/ProfileApis";
+import useProfileApi from "../../services/ProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
 import CommonInput from "../../component/inputComponents/CommonInput";
 import Selector from "../../component/utilityComp/Selector";

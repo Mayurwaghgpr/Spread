@@ -1,7 +1,7 @@
 import React, { memo, useMemo, useState, useCallback } from "react";
-import usePublicApis from "../../../Apis/publicApis";
+import usePublicApis from "../../../services/publicApis";
 import { useMutation } from "react-query";
-import { setToast } from "../../../redux/slices/uiSlice";
+import { setToast } from "../../../store/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import abbreviateNumber from "../../../utils/AbbreviateNumber";
 import { useNavigate } from "react-router-dom";

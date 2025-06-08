@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setConfirmBox, setToast } from "../redux/slices/uiSlice";
+import { setConfirmBox, setToast } from "../store/slices/uiSlice";
 import { useNavigate } from "react-router-dom";
 import useIcons from "./useIcons";
 

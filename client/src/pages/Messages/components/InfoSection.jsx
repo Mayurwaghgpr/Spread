@@ -5,9 +5,9 @@ import useIcons from "../../../hooks/useIcons";
 import { useOutletContext } from "react-router-dom";
 import ToggleCheckbox from "../../../component/inputComponents/ToggleCheckBox";
 import { useMutation } from "react-query";
-import ChatApi from "../../../Apis/ChatApi";
+import ChatApi from "../../../services/ChatApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setToast } from "../../../redux/slices/uiSlice";
+import { setToast } from "../../../store/slices/uiSlice";
 
 function InfoSection() {
   const { isLogin, user } = useSelector((state) => state.auth);

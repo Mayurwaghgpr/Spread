@@ -19,7 +19,7 @@ import ProtectedRoute from "./utils/ProtectedRoutes";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
 import TaskBar from "./component/phoneview/TaskBar";
-import SideBar from "./component/homeComp/SideBar";
+import SideBar from "./component/layout/SideBar";
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import NotificationBox from "./component/notification/NotificationBox";

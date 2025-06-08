@@ -1,11 +1,11 @@
 import React, { memo, useEffect, lazy, Suspense } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import PostsApis from "../../Apis/PostsApis";
+import PostsApis from "../../services/PostsApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import Spinner from "../../component/loaders/Spinner";
 import CommentInput from "./CommentInput";
-import { setCommentCred } from "../../redux/slices/postSlice";
+import { setCommentCred } from "../../store/slices/postSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";

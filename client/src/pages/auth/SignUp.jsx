@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsLogin } from "../../redux/slices/authSlice.js";
-import { setToast } from "../../redux/slices/uiSlice.js";
+import { setIsLogin } from "../../store/slices/authSlice.js";
+import { setToast } from "../../store/slices/uiSlice.js";
 import { useMutation, useQueryClient } from "react-query";
-import useAuthApi from "../../Apis/useAuthApi.jsx";
+import useAuthApi from "../../services/useAuthApi.jsx";
 import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import { passwordRegex, emailRegex } from "../../utils/regex.js";
 import OAuth from "./OAuth.jsx";

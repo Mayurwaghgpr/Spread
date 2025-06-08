@@ -1,13 +1,13 @@
 import React, { memo, useCallback, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import { setToast } from "../../redux/slices/uiSlice";
-import usePublicApis from "../../Apis/publicApis";
+import { setToast } from "../../store/slices/uiSlice";
+import usePublicApis from "../../services/publicApis";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../hooks/useIcons";
 import FedInBtn from "./FedInBtn";
 import PropTypes from "prop-types";
-import { setUser } from "../../redux/slices/authSlice";
+import { setUser } from "../../store/slices/authSlice";
 
 function Bookmark({ className, post }) {
   const [optimisticId, setOptimisticId] = useState(false);

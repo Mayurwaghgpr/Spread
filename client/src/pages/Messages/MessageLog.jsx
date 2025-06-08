@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { useInfiniteQuery } from "react-query";
-import ChatApi from "../../Apis/ChatApi";
+import ChatApi from "../../services/ChatApi";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import {
   selectConversation,
   setMessageLogData,
-} from "../../redux/slices/messangerSlice";
+} from "../../store/slices/messangerSlice";
 import Spinner from "../../component/loaders/Spinner";
 import SearchBar from "../../component/inputComponents/SearchBar";
 import Ibutton from "../../component/buttons/Ibutton";

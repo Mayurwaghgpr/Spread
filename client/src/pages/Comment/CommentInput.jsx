@@ -10,17 +10,18 @@ import React, {
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
 import { useMutation, useQueryClient } from "react-query";
-import { setCommentCred } from "../../redux/slices/postSlice";
+import { setCommentCred } from "../../store/slices/postSlice";
 import DOMPurify from "dompurify";
 
-import PostsApis from "../../Apis/PostsApis";
-import { setToast } from "../../redux/slices/uiSlice";
+import PostsApis from "../../services/PostsApis";
+import { setToast } from "../../store/slices/uiSlice";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileImage from "../../component/ProfileImage";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import EditableElementInput from "../../component/inputComponents/EditableElementInput";
 
 function CommentInput({ className }) {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -46,7 +47,6 @@ function CommentInput({ className }) {
           ...commentCred,
           topCommentId: null,
           content: "",
-          at: "",
           replyTo: null,
         })
       );
@@ -118,21 +118,9 @@ function CommentInput({ className }) {
         image={userImage.userImageurl}
         alt={user?.username}
       />
-      <div className="relative flex flex-wrap justify-start items-start max-w-[70%] w-full text-wrap break-words text-sm border-inherit">
-        <p
-          ref={inputRef}
-          contentEditable={true}
-          suppressContentEditableWarning
-          className="w-full  bg-inherit border-inherit outline-none p-2 text-inherit peer"
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(commentCred.at),
-          }}
-          onInput={(e) => handelInput(e.currentTarget.innerText)}
-        ></p>
-        <div className="absolute w-full bottom-0  transition-transform duration-300 border-t border-black dark:border-white scale-0 peer-focus:scale-100 "></div>
-      </div>
+      <EditableElementInput ref={inputRef} onInput={handelInput} />
       <div className="relative flex justify-center items-center gap-2">
-        {/* <div className="relative">
+        <div className="relative">
           <Ibutton
             className={"p-1 rounded-full"}
             action={() => setOpenEmojiPicker(!openEmojiPicker)}
@@ -148,7 +136,7 @@ function CommentInput({ className }) {
               />
             </div>
           )}
-        </div> */}
+        </div>
         <Ibutton
           action={mutate}
           disabled={isLoading || !commentCred.content.trim()}

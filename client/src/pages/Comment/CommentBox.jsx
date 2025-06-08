@@ -2,10 +2,10 @@ import React, { forwardRef, memo, useMemo, useState } from "react";
 import userImageSrc from "../../utils/userImageSrc";
 import { useInfiniteQuery, useMutation } from "react-query";
 
-import PostsApis from "../../Apis/PostsApis";
+import PostsApis from "../../services/PostsApis";
 import { useDispatch, useSelector } from "react-redux";
-import { setCommentCred } from "../../redux/slices/postSlice";
-import { setToast } from "../../redux/slices/uiSlice";
+import { setCommentCred } from "../../store/slices/postSlice";
+import { setToast } from "../../store/slices/uiSlice";
 import { useOutletContext } from "react-router-dom";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import Menu from "../../component/Menus/Menu";

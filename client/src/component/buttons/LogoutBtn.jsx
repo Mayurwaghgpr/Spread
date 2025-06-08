@@ -1,10 +1,10 @@
 import React from "react";
 import { LuLogOut } from "react-icons/lu";
 import { useMutation } from "react-query";
-import { setIsLogin, setloginPop, setUser } from "../../redux/slices/authSlice";
+import { setIsLogin, setloginPop, setUser } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import SomthingWentWrong from "../Errors/SomethingWentWrong";
-import useAuthApi from "../../Apis/useAuthApi";
+import useAuthApi from "../../services/useAuthApi";
 import { useDispatch } from "react-redux";
 import LoaderScreen from "../loaders/loaderScreen";
 import useSocket from "../../hooks/useSocket";

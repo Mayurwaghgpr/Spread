@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "react-query";
-import PostsApis from "../Apis/PostsApis";
+import PostsApis from "../services/PostsApis";
 import audio from "../assets/audio/paper-rip-fast-252617.mp3";
 import { useNavigate } from "react-router-dom";
 function useDeleteHandlers() {

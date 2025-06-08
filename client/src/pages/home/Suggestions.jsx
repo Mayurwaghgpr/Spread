@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import { useInfiniteQuery } from "react-query";
-import usePublicApis from "../../Apis/publicApis";
+import usePublicApis from "../../services/publicApis";
 import PeoplesList from "../../component/PeoplesList";
 import Follow from "../../component/buttons/follow";
 import { Link, NavLink, useLocation } from "react-router-dom";

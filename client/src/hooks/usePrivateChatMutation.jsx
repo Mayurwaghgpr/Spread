@@ -2,9 +2,9 @@ import React from "react";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import ChatApi from "../Apis/ChatApi";
-import { selectConversation } from "../redux/slices/messangerSlice";
-import { setToast } from "../redux/slices/uiSlice";
+import ChatApi from "../services/ChatApi";
+import { selectConversation } from "../store/slices/messangerSlice";
+import { setToast } from "../store/slices/uiSlice";
 
 function usePrivateChatMutation() {
   const navigate = useNavigate();

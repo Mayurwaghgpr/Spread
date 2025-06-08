@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import PeoplesList from "./PeoplesList";
 import { useDispatch, useSelector } from "react-redux";
-import { setFollowInfo } from "../redux/slices/profileSlice";
+import { setFollowInfo } from "../store/slices/profileSlice";
 import { createPortal } from "react-dom";
 import { useQuery } from "react-query";
 import FollowPeopleLoader from "./loaders/FollowPeopleLoader";
-import useProfileApi from "../Apis/ProfileApis";
+import useProfileApi from "../services/ProfileApis";
 import Follow from "./buttons/follow";
 import { useNavigate } from "react-router-dom";
 

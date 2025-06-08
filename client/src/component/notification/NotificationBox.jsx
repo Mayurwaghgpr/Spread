@@ -1,10 +1,10 @@
 import React, { lazy, Suspense, useCallback, useEffect } from "react";
 const NotifictionItem = lazy(() => import("./NotificationItem"));
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenNotification } from "../../redux/slices/uiSlice";
+import { setOpenNotification } from "../../store/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
 import useSocket from "../../hooks/useSocket";
-import { setNotificationStatePush } from "../../redux/slices/NotificationSlice";
+import { setNotificationStatePush } from "../../store/slices/NotificationSlice";
 import Ibutton from "../buttons/Ibutton";
 
 const notifications = [

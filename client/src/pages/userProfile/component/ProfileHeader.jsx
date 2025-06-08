@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Follow from "../../../component/buttons/follow";
 import { useDispatch, useSelector } from "react-redux";
-import { setFollowInfo } from "../../../redux/slices/profileSlice";
+import { setFollowInfo } from "../../../store/slices/profileSlice";
 import userImageSrc from "../../../utils/userImageSrc";
 import { LuMessagesSquare } from "react-icons/lu";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";

@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useAuthApi from "../../Apis/useAuthApi";
+import useAuthApi from "../../services/useAuthApi.jsx";
 import { useMutation } from "react-query";
 import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import { useDispatch } from "react-redux";
-import { setToast } from "../../redux/slices/uiSlice";
+import { setToast } from "../../store/slices/uiSlice.js";
 import EyeBtn from "../../component/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 function ResetPassword() {

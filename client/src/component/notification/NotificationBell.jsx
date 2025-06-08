@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import { useDispatch } from "react-redux";
-import { setOpenNotification } from "../../redux/slices/uiSlice";
+import { setOpenNotification } from "../../store/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
 import FedInBtn from "../buttons/FedInBtn";
 

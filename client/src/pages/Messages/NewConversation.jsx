@@ -5,7 +5,7 @@ import PeoplesList from "../../component/PeoplesList";
 import { useDispatch, useSelector } from "react-redux";
 import Ibutton from "../../component/buttons/Ibutton";
 import { useInfiniteQuery, useMutation } from "react-query";
-import usePublicApis from "../../Apis/publicApis";
+import usePublicApis from "../../services/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 // import ChatApi from "../../Apis/ChatApi";
 import { useNavigate } from "react-router-dom";

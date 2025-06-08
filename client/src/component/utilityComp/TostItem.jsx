@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeToast } from "../../redux/slices/uiSlice";
+import { removeToast } from "../../store/slices/uiSlice";
 import Ibutton from "../buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 

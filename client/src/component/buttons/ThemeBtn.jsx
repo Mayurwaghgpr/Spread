@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setThemeMode } from "../../redux/slices/uiSlice";
+import { setThemeMode } from "../../store/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
 
 function ThemeBtn({ Modes, className, separate }) {

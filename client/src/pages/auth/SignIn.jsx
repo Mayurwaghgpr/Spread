@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsLogin, setUser } from "../../redux/slices/authSlice";
+import { setIsLogin, setUser } from "../../store/slices/authSlice.js";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import useAuthApi from "../../Apis/useAuthApi";
+import useAuthApi from "../../services/useAuthApi.jsx";
 import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import OAuth from "./OAuth";
 import EyeBtn from "../../component/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 import LoaderScreen from "../../component/loaders/loaderScreen";
-import { setToast } from "../../redux/slices/uiSlice.js";
+import { setToast } from "../../store/slices/uiSlice.js";
 
 function SignIn() {
   const [passVisible, setpassVisible] = useState(false);

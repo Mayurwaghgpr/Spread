@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ThemeBtn from "../buttons/ThemeBtn";
-import { setManuOpen } from "../../redux/slices/uiSlice";
+import { setManuOpen } from "../../store/slices/uiSlice";
 
 import LogoutBtn from "../buttons/LogoutBtn";
 import NotifictionBell from "../notification/NotificationBell";

@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "react-query";
 import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
 import { useLastItemObserver } from "../hooks/useLastItemObserver";
-import useProfileApi from "../Apis/ProfileApis";
+import useProfileApi from "../services/ProfileApis";
 
 const ReadList = () => {
   const { getArchivedPosts } = useProfileApi();

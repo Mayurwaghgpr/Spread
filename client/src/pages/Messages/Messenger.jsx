@@ -6,7 +6,7 @@ import {
   addMessage,
   pushMessage,
   setMessageLogData,
-} from "../../redux/slices/messangerSlice";
+} from "../../store/slices/messangerSlice";
 import useSocket from "../../hooks/useSocket";
 
 function Messenger() {

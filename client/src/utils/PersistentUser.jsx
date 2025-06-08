@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { useDispatch } from "react-redux";
 import { useQuery } from "react-query";
-import { setIsLogin, setUser } from "../redux/slices/authSlice";
-import useAuthApi from "../Apis/useAuthApi";
+import { setIsLogin, setUser } from "../store/slices/authSlice";
+import useAuthApi from "../services/useAuthApi";
 
 function PersistentUser({ children }) {
   // const navigate = useNavigate();

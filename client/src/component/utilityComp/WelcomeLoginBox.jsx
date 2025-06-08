@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { PopupBox } from "./PopupBox";
-import { setloginPop } from "../../redux/slices/authSlice";
+import { setloginPop } from "../../store/slices/authSlice";
 
 function WelcomeLoginBox() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setConfirmBox } from "../../redux/slices/uiSlice";
+import { setConfirmBox } from "../../store/slices/uiSlice";
 import { createPortal } from "react-dom";
 import { useCallback } from "react";
 import Spinner from "../../component/loaders/Spinner";

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import CommonInput from "../../../component/inputComponents/CommonInput.jsx";
-import { BsBack, BsCamera } from "react-icons/bs";
 import SelectedGroupMemberList from "./SelectedGroupMemberList.jsx";
 import Ibutton from "../../../component/buttons/Ibutton.jsx";
 import { useMutation } from "react-query";
-import ChatApi from "../../../Apis/ChatApi.jsx";
+import ChatApi from "../../../services/ChatApi.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { setToast } from "../../../redux/slices/uiSlice.js";
-import { selectConversation } from "../../../redux/slices/messangerSlice.js";
+import { setToast } from "../../../store/slices/uiSlice.js";
+import { selectConversation } from "../../../store/slices/messangerSlice.js";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../../hooks/useIcons.jsx";
 function GroupCreation({ handleGroupConfig, hashMap, users }) {

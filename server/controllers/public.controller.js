@@ -52,43 +52,50 @@ export const getPeoples = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   const currentUserId = req.authUser.id;
+  const searchQuery = req.query.q || "";
+  console.log("peoples")
   try {
-     const cacheKey = `find_peoples_${lastTimestamp}_${limit}`;
-    // Unique cache key for this combination
-    // Checking Cache
-    const cachedPostData = await redisClient.get(cacheKey);
-    if (cachedPostData !== null) {
-      console.log('cach hit')
-      return res.status(200).json({peoples:JSON.parse(cachedPostData)}); // Send cached data
-    }
-    console.log('cach miss')
+    // const cacheKey = `find_peoples_${currentUserId}_${searchQuery}_${lastTimestamp}_${limit}`;
 
-    const peoples = await User.findAll({
-       include: [
-          {
-            model: User,
-            as: "Followers",
-            through: { attributes: [] }, // Exclude through table attributes
-            attributes: ["id"], // Fetch only necessary fields
-          },
-          {
-            model: User,
-            as: "Following",
-            through: { attributes: [] }, // Exclude through table attributes
-            attributes: ["id"], // Fetch only necessary fields
-          },
+    // // Unique cache key for this combination
+    // // Checking Cache
+    // const cachedPostData = await redisClient.get(cacheKey);
+    // if (cachedPostData !== null) {
+    //   console.log('cach hit')
+    //   return res.status(200).json({peoples:JSON.parse(cachedPostData)}); // Send cached data
+    // }
+    // console.log('cach miss')
+
+const peoples = await User.findAll({
+  include: [
+    {
+      model: User,
+      as: "Followers",
+      through: { attributes: [] },
+      attributes: ["id"],
+    },
+    {
+      model: User,
+      as: "Following",
+      through: { attributes: [] },
+      attributes: ["id"],
+    },
+  ],
+  attributes: ["id", "displayName", "username", "userImage", "createdAt"],
+  where: {
+    username: {
+      [Op.or]: [
+        { [Op.iLike]: `${searchQuery}%` },
+        { [Op.iLike]: `%${searchQuery}%` },
+        { [Op.iLike]: `${searchQuery}` },
       ],
-        attributes: ['id', 'displayName', 'username', 'userImage',"createdAt"],
-   
-    where: {
-        createdAt: { [Op.lt]: lastTimestamp }
-      },
-      order: [
-        ["createdAt", "ASC"],
-      ],
-      limit, 
-     });
-      await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(peoples))
+    },
+    createdAt: { [Op.lt]: lastTimestamp },
+  },
+  order: [["createdAt", "DESC"]], // IMPORTANT
+  limit,
+});
+      // await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(peoples))
    res.status(200).json({peoples});
   } catch (error) {
     console.error("Error fetching peoples data:", error);

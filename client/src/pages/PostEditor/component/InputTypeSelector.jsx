@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsScale } from "../../../redux/slices/uiSlice";
+import { setIsScale } from "../../../store/slices/uiSlice";
 import useIcons from "../../../hooks/useIcons";
 
 // Move constants outside component to prevent recreation on each render

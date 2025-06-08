@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
-import { setElements } from "../../../redux/slices/postSlice";
-import { setToast } from "../../../redux/slices/uiSlice";
+import { setElements } from "../../../store/slices/postSlice";
+import { setToast } from "../../../store/slices/uiSlice";
 import { useMutation, useQueryClient } from "react-query";
-import PostsApis from "../../../Apis/PostsApis";
+import PostsApis from "../../../services/PostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../component/loaders/Spinner";
 import { createPortal } from "react-dom";

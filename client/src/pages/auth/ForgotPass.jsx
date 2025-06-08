@@ -1,11 +1,11 @@
 import React from "react";
 import { useMutation } from "react-query";
-import useAuthApi from "../../Apis/useAuthApi";
+import useAuthApi from "../../services/useAuthApi.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
 import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import { useDispatch } from "react-redux";
-import { setToast } from "../../redux/slices/uiSlice";
+import { setToast } from "../../store/slices/uiSlice.js";
 import AuthFormWrapper from "./AuthFormWrapper";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 

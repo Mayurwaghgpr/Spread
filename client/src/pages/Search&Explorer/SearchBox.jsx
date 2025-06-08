@@ -2,7 +2,7 @@ import React, { memo, useState, useCallback, useRef, useEffect } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { debounce } from "../../utils/debounce";
-import usePublicApis from "../../Apis/publicApis";
+import usePublicApis from "../../services/publicApis";
 import Spinner from "../../component/loaders/Spinner";
 import SearchBar from "../../component/inputComponents/SearchBar";
 import useIcons from "../../hooks/useIcons";

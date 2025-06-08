@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "react-query";
-import usePublicApis from "../../Apis/publicApis";
+import usePublicApis from "../../services/publicApis";
 import PostPreview from "../../component/postsComp/PostPreview";
 import Spinner from "../../component/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import Aside from "../../component/homeComp/Aside";
-import PostsApis from "../../Apis/PostsApis";
+import Aside from "../../component/layout/Aside";
+import PostsApis from "../../services/PostsApis";
 import WhoToFollow from "./WhoToFollow";
 import useDeviceSize from "../../hooks/useDeviceSize";
 import useIcons from "../../hooks/useIcons";

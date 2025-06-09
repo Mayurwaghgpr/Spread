@@ -7,7 +7,7 @@ function usePublicApis() {
       const result = await axiosInstance.get(`/public/h/peoples`, {
         params: {
           lastTimestamp: pageParam,
-          q: mentionedUsername,
+          q: mentionedUsername.trim(),
         },
       });
       return result.data.peoples;

@@ -59,14 +59,17 @@ const EditableElementInput = React.forwardRef(
 
     function placeCaretAtEnd(el) {
       const range = document.createRange();
+      console.log({ range });
       const sel = window.getSelection();
+      console.log({ sel });
       range.selectNodeContents(el);
+
       range.collapse(false);
+      console.log({ range, sel });
       sel.removeAllRanges();
       sel.addRange(range);
     }
 
-    console.log(selectedUser);
     return (
       <>
         {" "}

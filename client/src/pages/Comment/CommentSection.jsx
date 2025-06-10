@@ -9,7 +9,7 @@ import { setCommentCred } from "../../store/slices/postSlice";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
-const CommentBox = lazy(() => import("./CommentBox"));
+import CommentBox from "./CommentBox";
 
 function CommentSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -88,16 +88,12 @@ function CommentSection() {
           </Ibutton>
         </div>
 
-        <div className="flex flex-col justify-start items-center gap-5 py-10 px-5  w-full h-[80%] overflow-y-auto border-inherit ">
-          <Suspense
-            fallback={
-              <Spinner className={"w-10 h-10 p-1 bg-black dark:bg-white"} />
-            }
-          >
-            {Comments.map((comt, idx, arr) => {
+        <div className="flex flex-col justify-start items-center gap-5 pb-10 pt-5 px-5  w-full h-[80%] overflow-y-auto border-inherit ">
+          {(!isFetching ? Comments : Array(20).fill(null)).map(
+            (comt, idx, arr) => {
               return (
                 <CommentBox
-                  ref={arr.length % 5 === 0 ? lastItemRef : null}
+                  ref={comt && arr.length % 5 === 0 ? lastItemRef : null}
                   className={
                     "animate-slide-in-top flex flex-col text-sm justify-center w-full items-start gap-2 border-inherit"
                   }
@@ -107,8 +103,8 @@ function CommentSection() {
                   topCommentId={comt?.id} // Here we maping top most post and setting top most to these comment of it self
                 />
               );
-            })}
-          </Suspense>
+            }
+          )}
           {isFetchingNextPage && (
             <div className=" flex justify-center items-center py-2 h-20">
               <Spinner className={"w-5 h-5  bg-black dark:bg-white"} />

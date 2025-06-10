@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useCallback, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsLogin, setUser } from "../../store/slices/authSlice.js";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { setIsLogin } from "../../store/slices/authSlice.js";
+import { useMutation, useQueryClient } from "react-query";
 import useAuthApi from "../../services/useAuthApi.jsx";
 import CommonInput from "../../component/inputComponents/CommonInput.jsx";
 import OAuth from "./OAuth";
@@ -10,155 +10,180 @@ import EyeBtn from "../../component/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 import { setToast } from "../../store/slices/uiSlice.js";
+import { emailRegex } from "../../utils/regex.js";
+import CommenAuthBtn from "./components/CommenAuthBtn.jsx";
+import Divider from "./components/Divider.jsx";
 
 function SignIn() {
-  const [passVisible, setpassVisible] = useState(false);
+  const [passVisible, setPassVisible] = useState(false);
+  const [currentInputValue, setCurrentInputValue] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const { isLogin } = useSelector((state) => state.auth);
   const userRef = useRef();
-  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { loginUser } = useAuthApi();
 
-  const { isLoading, isSuccess, isError, mutate, error } = useMutation(
+  // Mutation for login
+  const { isLoading, isError, mutate, error } = useMutation(
     (loginInfo) => loginUser(loginInfo),
     {
       onSuccess: (response) => {
         const { AccessToken, user } = response;
         if (AccessToken) {
           dispatch(
-            setToast({ message: "Sign in successfull", type: "success" })
+            setToast({ message: "Sign in successful", type: "success" })
           );
           dispatch(setIsLogin(true));
-          localStorage.setItem("AccessToken", true);
+          localStorage.setItem("AccessToken", AccessToken); // Store actual token, not boolean
           queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
-
-          // dispatch(setUser(user));
-          // localStorage.setItem("userAccount", JSON.stringify(user));
           navigate("/", { replace: true });
         }
       },
-      onError: () => {
-        dispatch(setToast({ message: "Sign in successfull", type: "success" }));
+      onError: (error) => {
+        const errorMessage =
+          error?.response?.data?.message || "Sign in failed. Please try again.";
+        dispatch(setToast({ message: errorMessage, type: "error" })); // Fixed: was showing success on error
       },
     }
   );
+  // handleLogin function to manage form submission
+  const handleLogin = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const credentials = Object.fromEntries(formData);
 
-  function handleLogin(e) {
-    e.preventDefault();
-    const fromData = new FormData(e.target);
-    const obj = Object.fromEntries(fromData);
-    mutate(obj);
-  }
+      // Basic validation
+      if (!credentials.email || !credentials.password) {
+        dispatch(
+          setToast({ message: "Please fill in all fields", type: "error" })
+        );
+        return;
+      }
 
+      mutate(credentials);
+    },
+    [mutate, dispatch]
+  );
+  // handleFormChanges function to manage input changes
+  const handleFormChanges = useCallback((e) => {
+    const value = e.target.value;
+    setCurrentInputValue(emailRegex.test(value) ? value : "");
+  }, []);
+  // handleContinue function to manage the continue button click
+  const handleContinue = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (currentInputValue) {
+        setPassVisible(true);
+      }
+    },
+    [currentInputValue]
+  );
+
+  // Early returns for different states
   if (isLoading) {
-    return <LoaderScreen message={"Authenticating please wait"} />;
+    return <LoaderScreen message="Authenticating, please wait..." />;
   }
-  if (!isLogin) {
-    return (
-      <AuthFormWrapper
-        className
-        onSubmit={handleLogin}
-        heading={"Welcome"}
-        error={error}
-        isError={isError}
-        formType={"signin"}
-      >
+
+  return (
+    //
+    <AuthFormWrapper
+      onSubmit={handleLogin}
+      heading="Welcome"
+      error={error}
+      isError={isError}
+      formType="signin"
+      onChange={handleFormChanges}
+    >
+      {/* Email Input */}
+      <CommonInput
+        ref={userRef}
+        className="flex justify-start items-start gap-2 border w-full p-1 bg-inherit"
+        type="email"
+        name="email"
+        label="Email address"
+        disabled={isLoading}
+        required
+        autoComplete="email"
+        autoFocus
+      />
+      {/* Password Input */}
+      {passVisible && (
         <CommonInput
-          ref={userRef}
-          className={`flex justify-start items-start gap-2 border w-full  p-1 bg-inherit`}
-          type={"email"}
-          name={"email"}
-          label={"Email address"}
+          className="flex justify-center items-start gap-2 w-full p-1 border bg-inherit "
+          type={showPassword ? "text" : "password"}
+          name="password"
+          label="Password"
           disabled={isLoading}
           required
-        />
-        {passVisible && (
-          <CommonInput
-            className={
-              " flex justify-center items-start gap-2 w-full  p-1  border bg-inherit"
-            }
-            type={"password"}
-            name={"password"}
-            label={"Password"}
-            disabled={isLoading}
-            required
-          >
-            <EyeBtn />
-          </CommonInput>
-        )}
-        {passVisible && (
-          <div className=" flex justify-between mb-4 w-full">
-            <small>
-              <Link
-                to="/forgot/pass"
-                onClick={(e) => e.stopPropagation()}
-                state={{ email: userRef.current?.value }}
-                className=""
-              >
-                Forgot Password?
-              </Link>
-            </small>
-          </div>
-        )}
-        <div className="mb-4 w-full">
-          {passVisible && (
-            <button
-              type="submit"
-              className={` bg-black text-white  dark:bg-white dark:text-black p-3 w-full  rounded-lg ${
-                isLoading && "cursor-wait "
-              }`}
-              disabled={isLoading}
+          autoComplete="current-password"
+        >
+          <EyeBtn />
+        </CommonInput>
+      )}
+
+      {passVisible && (
+        <div className="flex justify-between mb-4 w-full">
+          <small>
+            <Link
+              to="/forgot/pass"
+              onClick={(e) => e.stopPropagation()}
+              state={{ email: currentInputValue }}
+              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
             >
-              {isLoading ? "Signing In..." : "Signin"}
-            </button>
-          )}
+              Forgot Password?
+            </Link>
+          </small>
         </div>
-        {!passVisible && (
-          <button
-            onClick={(e) => {
-              setpassVisible(true);
-            }}
-            type="button"
-            className={` bg-black text-white dark:bg-white dark:text-black p-3 w-full   rounded-lg ${
-              isLoading && "cursor-wait bg-opacity-40"
+      )}
+
+      <div className="mb-4 w-full">
+        {passVisible ? (
+          <CommenAuthBtn
+            type="submit"
+            className={`${
+              isLoading ? "cursor-wait opacity-50" : "hover:opacity-90"
             }`}
-            disabled={!userRef?.current?.value.trim()}
+            disabled={isLoading}
+          >
+            {isLoading ? "Signing In..." : "Sign In"}
+          </CommenAuthBtn>
+        ) : (
+          <CommenAuthBtn
+            onClick={handleContinue}
+            disabled={!currentInputValue}
+            className={`${
+              !currentInputValue
+                ? "cursor-not-allowed opacity-50"
+                : "hover:opacity-90"
+            }`}
           >
             Continue
-          </button>
+          </CommenAuthBtn>
         )}
+      </div>
+      <Divider text="or" className="mb-4" />
 
-        {!passVisible && (
-          <>
-            {" "}
-            <div className=" w-full text-center text-xl flex items-center  *:border-inherit">
-              <hr className="flex-1" />
-              <p className="mx-2">or</p>
-              <hr className="flex-1" />
-            </div>
-            <div className="mb-4 w-full flex justify-center items-center text-nowrap gap-3 sm:text-sm  text-xs  *:border-inherit ">
-              <OAuth
-                className={
-                  "border bg-black text-white dark:bg-white dark:text-black"
-                }
-                service={"google"}
-                icon={<i className="bi bi-google"></i>}
-              />
-              <OAuth
-                className={"bg-black text-white dark:bg-white dark:text-black"}
-                service={"github"}
-                icon={<i className="bi bi-github"></i>}
-              />
-            </div>
-          </>
-        )}
-      </AuthFormWrapper>
-    );
-  }
-
-  return null;
+      {!passVisible && (
+        <>
+          <div className="mb-4 w-full flex justify-center items-center text-nowrap gap-3 sm:text-sm text-xs">
+            <OAuth
+              className="border bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity"
+              service="google"
+            />
+            <OAuth
+              className="bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity"
+              service="github"
+            />
+          </div>
+        </>
+      )}
+    </AuthFormWrapper>
+  );
 }
 
 export default SignIn;

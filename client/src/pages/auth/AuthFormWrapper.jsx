@@ -10,6 +10,7 @@ function AuthFormWrapper({
   isError,
   error,
   heading,
+  onChange,
 }) {
   const navigate = useNavigate();
   return (
@@ -40,6 +41,7 @@ function AuthFormWrapper({
           <form
             onSubmit={onSubmit}
             className="flex flex-col items-center justify-start w-full gap-2   py-2  *:border-inherit  sm:text-sm  text-xs "
+            onChange={onChange}
           >
             {children}
             {formType && (

@@ -1,13 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox, setToast } from "../store/slices/uiSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import useIcons from "./useIcons";
 
 function useMenuConstant(parent, kind) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const icons = useIcons();
+  const postdata = useOutletContext();
+
   const { user } = useSelector((state) => state.auth);
 
   const basePostMenu = [
@@ -96,13 +98,15 @@ function useMenuConstant(parent, kind) {
   }, [parent?.user?.id, user?.id, icons]);
 
   const COMMENT_MENU = React.useMemo(() => {
-    if (!parent?.user?.id || parent.user.id === user?.id) {
-      return baseCommentMenu;
+    if (parent?.commenter?.id === user?.id) {
+      return postdata?.User?.id === user?.id
+        ? baseCommentMenu[0]
+        : baseCommentMenu;
     }
     return baseCommentMenu.filter(
       (item) => item.id !== "delete-comment" && item.id !== "edit-comment"
     );
-  }, [parent?.user?.id, user?.id, icons]);
+  }, [parent?.commenter?.id, user?.id, icons]);
 
   return { POST_MENU, COMMENT_MENU };
 }

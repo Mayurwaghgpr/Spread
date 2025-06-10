@@ -1,12 +1,16 @@
 import { useMutation, useQueryClient } from "react-query";
 import PostsApis from "../services/PostsApis";
 import audio from "../assets/audio/paper-rip-fast-252617.mp3";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { setConfirmBox, setToast } from "../store/slices/uiSlice";
+import { useDispatch } from "react-redux";
 function useDeleteHandlers() {
   const { DeletePostApi, deleteComtApi } = PostsApis();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const location = useLocation();
   const tarePaper = new Audio(audio);
+  const dispatch = useDispatch();
   //post deleting mutation
   const { mutate: delPost, isPostDeleting } = useMutation(DeletePostApi, {
     onSuccess: (data) => {
@@ -47,9 +51,6 @@ function useDeleteHandlers() {
       },
       onSettled: () => {
         dispatch(setConfirmBox({ message: "", status: false }));
-        if (location.pathname.startsWith("/view")) {
-          navigate(-1);
-        }
       },
     }
   );

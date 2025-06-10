@@ -8,6 +8,7 @@ const Menu = forwardRef(function (
   ref
 ) {
   const icons = useIcons();
+  if (!content || !items.length || items.length === 0) return null;
   return (
     <div
       ref={ref}

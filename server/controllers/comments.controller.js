@@ -10,7 +10,9 @@ import { io } from "../app.js";
 //Create Comment
 export const createComment = async (req, res, next) => {
   const userId = req.authUser.id;
-    const { postId, replyTo, content,topCommentId } = req.body;
+  const { postId, replyTo, content, topCommentId } = req.body;
+  console.log(postId, replyTo, content, topCommentId, userId);
+
   try {
     const post = JSON.parse(await redisClient.get(postId))
     const respons = await Comments.create({ postId, userId, content: content?.trim(), topCommentId, replyTo });
@@ -21,6 +23,10 @@ export const createComment = async (req, res, next) => {
     io.emit("update_comment",newComment)
     res.status(200).json({ message: "commented successfuly "});
   } catch (error) {
+    console.log('Error creating comment:', error);
+    // Handle the error appropriately, e.g., log it and send a response
+    error.status = 500; // Set a status code if needed
+    error.message = "Failed to create comment";
     next(error);
   }
 };

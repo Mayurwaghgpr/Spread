@@ -6,7 +6,6 @@ import usePublicApis from "../../services/publicApis";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../hooks/useIcons";
 import FedInBtn from "./FedInBtn";
-import PropTypes from "prop-types";
 import { setUser } from "../../store/slices/authSlice";
 
 function Bookmark({ className, post }) {
@@ -17,7 +16,6 @@ function Bookmark({ className, post }) {
   const { ArchivePost } = usePublicApis();
   const queryClient = useQueryClient();
   const icons = useIcons();
-  console.log(post);
   const isBookmarked = useMemo(
     () => user?.savedPosts?.some((savedPost) => savedPost?.id === post?.id),
     [user?.savedPosts, post?.id]

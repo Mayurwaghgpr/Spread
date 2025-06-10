@@ -70,7 +70,7 @@ import { VscMention } from "react-icons/vsc";
 import { FaUserTag } from "react-icons/fa6";
 import { PiAlarm } from "react-icons/pi";
 import { BiBookmark, BiCalendarAlt, BiRepost, BiTrash } from "react-icons/bi";
-import { GrSystem } from "react-icons/gr";
+import { GrGoogle, GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineSend } from "react-icons/ai";
 import { LuGithub, LuLogOut } from "react-icons/lu";
@@ -131,6 +131,7 @@ function useIcons() {
     gearO: <BsGear />,
     glitter: <WiStars className="" />,
     github: <LuGithub />,
+    google: <GrGoogle />,
 
     // H
     helpfull: <FaHandHoldingHeart />,

@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import UserNamesSuggestion from "../UserNamesSuggestion";
+import { useSelector } from "react-redux";
 
 const EditableElementInput = React.forwardRef(
   (
@@ -31,44 +32,47 @@ const EditableElementInput = React.forwardRef(
         element.innerHTML = ""; // Clear if empty
         return;
       }
-      const textInclutesAt = text.includes("@");
-      if (textInclutesAt) {
+      const mentionMatch = text.match(/@(\w+)$/); // Only match @word at the end (no space after word)
+      const textIncludesAt = mentionMatch !== null;
+
+      // console.log(text);
+      onChange?.(element.innerHTML); // plain text (if needed for state)
+      if (textIncludesAt) {
         setIsOpen(true);
-        const foundMentions = text.match(/@(\w+)/g); // Find all mentions starting with '@'
-        if (foundMentions) {
-          setMentionedUsername(foundMentions[0]?.substring(1)); // Extract username after '@'
+        if (mentionMatch) {
+          setMentionedUsername(mentionMatch[0]?.substring(1)); // Extract username after '@'
         }
-        const highlightedHTML = DOMPurify.sanitize(
-          text.replace(/@(\w+)/g, '<span class="text-blue-500">@$1</span>')
-        );
-
-        // Keep caret position (optional enhancement, can be complex)
-        // Set HTML and call onChange with original text
-        element.innerHTML = highlightedHTML;
-
         placeCaretAtEnd(element); // optional: maintain cursor position
       } else {
         setIsOpen(false);
         setMentionedUsername("");
       }
-      //   const foudMentions = text.match(/@(\w+)/g); // Find all mentions starting with '@'
-
-      onChange?.(text); // plain text (if needed for state)
     };
-    console.log(mentionedUsername);
 
     function placeCaretAtEnd(el) {
       const range = document.createRange();
-      console.log({ range });
       const sel = window.getSelection();
-      console.log({ sel });
       range.selectNodeContents(el);
 
       range.collapse(false);
-      console.log({ range, sel });
       sel.removeAllRanges();
       sel.addRange(range);
     }
+    // Handle mention insertion
+    useEffect(() => {
+      if (selectedUser?.username && ref?.current) {
+        const currentText = ref.current.innerHTML;
+        const updatedText = currentText.replace(
+          `@${mentionedUsername}`,
+          `<a href="/profile/@${selectedUser.username}/${selectedUser.id}" class="text-blue-500 cursor-pointer">@${selectedUser.username}</a>`
+        );
+        ref.current.innerHTML = updatedText;
+        onChange?.(updatedText);
+        setIsOpen(false);
+        setMentionedUsername("");
+        setSelectUserData({});
+      }
+    }, [selectedUser, mentionedUsername]);
 
     return (
       <>

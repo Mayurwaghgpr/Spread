@@ -1,7 +1,9 @@
 import React from "react";
+import useIcons from "../../hooks/useIcons";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-function OAuth({ service, icon, className, ...props }) {
+function OAuth({ service, className, ...props }) {
+  const icons = useIcons();
   // Ensure the service is correctly used
   if (!service) {
     console.error("OAuth service is undefined");
@@ -19,7 +21,7 @@ function OAuth({ service, icon, className, ...props }) {
       className={`flex items-center p-3 w-full justify-center gap-3 rounded-lg ${className}`}
       {...props}
     >
-      {icon}
+      {icons[service]}
       <span>{service}</span>
     </button>
   );

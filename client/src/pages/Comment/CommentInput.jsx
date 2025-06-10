@@ -59,13 +59,14 @@ function CommentInput({ className }) {
   });
 
   const handelInput = useCallback(
-    (content) =>
+    (content) => {
       dispatch(
         setCommentCred({
           ...commentCred,
           content,
         })
-      ),
+      );
+    },
     [dispatch, commentCred]
   );
 
@@ -110,6 +111,12 @@ function CommentInput({ className }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [pickerRef, emojiButtonRef]);
+  useEffect(() => {
+    if (commentCred.replyTo && inputRef?.current) {
+      //
+      inputRef.current.innerHTML = `<a href="#${commentCred.replyTo}" class="text-blue-500 cursor-pointer">@${commentCred.at}</a>`;
+    }
+  }, [commentCred.replyTo]);
 
   return (
     <div className={className}>
@@ -118,7 +125,7 @@ function CommentInput({ className }) {
         image={userImage.userImageurl}
         alt={user?.username}
       />
-      <EditableElementInput ref={inputRef} onInput={handelInput} />
+      <EditableElementInput ref={inputRef} onChange={handelInput} />
       <div className="relative flex justify-center items-center gap-2">
         <div className="relative">
           <Ibutton

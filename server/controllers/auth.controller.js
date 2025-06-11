@@ -122,10 +122,19 @@ export const signIn = async (req, res, next) => {
 
 
 //Fetch login user details
-export const getLoginUser = async (req, res, nex) => {
-  const userInfo = await redisClient.get(req.authUser.id);
-
-  res.status(200).json(userInfo);
+export const getLoginUser = async (req, res, next) => {
+try {
+    const userInfo = await redisClient.get(req.authUser.id);
+    if (userInfo) {
+      return res.status(200).json(userInfo);
+    }
+  const userInfoFromDatabase = await fetchProfile({ id: req.authUser.id })
+  await redisClient.set(req.authUser.id,JSON.stringify(userInfoFromDatabase))
+    res.status(200).json(userInfoFromDatabase);
+} catch (error) {
+  console.log("Error during fetching user data",error)
+  next(error)
+}
 };
 
 // Refresh access token using refresh token

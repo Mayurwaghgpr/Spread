@@ -157,7 +157,7 @@ export const getPostPreview = async (req, res, next) => {
    const postData = formatPostData(JSON.parse(JSON.stringify(posts))); // Format the post data
   
     // Caching the result to redis with expiration time
-    await redisClient.setEx(cacheKey,EXPIRATION,JSON.stringify(postData))
+    await redisClient.setEx(cacheKey,300,JSON.stringify(postData))
     res.status(200).json(postData)
 
   } catch (error) {

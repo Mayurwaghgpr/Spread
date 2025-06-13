@@ -8,11 +8,12 @@ import { LuMessagesSquare } from "react-icons/lu";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";
 import ProfileImage from "../../../component/ProfileImage";
 import useIcons from "../../../hooks/useIcons";
-import LinkBtn from "../../../component/LinkBtn";
 import usePrivateChatMutation from "../../../hooks/usePrivateChatMutation";
 import AbbreviateNumber from "../../../utils/AbbreviateNumber";
 import Ibutton from "../../../component/buttons/Ibutton";
 import FedInBtn from "../../../component/buttons/FedInBtn";
+import ImageInBigFrame from "../../../component/utilityComp/ImageInBigFrame";
+import { setOpenBigFrame } from "../../../store/slices/uiSlice";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -21,16 +22,28 @@ const ProfileHeader = React.memo(({ profileId }) => {
   const { userImageurl } = userImageSrc(userProfile);
   const icons = useIcons();
   const { PrivateMutaion, isPrivateLoading } = usePrivateChatMutation();
+
+  const handleBigFrame = () => {
+    dispatch(
+      setOpenBigFrame({
+        src: userImageurl,
+        alt: userProfile?.username,
+        profile: true,
+      })
+    );
+  };
   return (
     <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit dark:border-[#383838] px-4">
       <div className="flex justify-start items-start  gap-9">
         <div className=" flex  flex-col  items-center justify-center text-center gap-3 ">
           <ProfileImage
+            onClick={handleBigFrame}
             className={"sm:w-32 sm:h-32 w-20 h-20"}
             image={userImageurl}
             alt={userProfile?.username}
             title={"user profile"}
           />
+
           <div className=" w-full">
             <h1 className="sm:text-3xl sm:hidden text-nowrap text-sm  font-medium">
               {userProfile?.displayName}

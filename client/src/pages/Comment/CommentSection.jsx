@@ -65,7 +65,7 @@ function CommentSection() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative flex flex-col gap-2 max-w-[30rem] w-full lg:h-full h-[60%] border sm:border border-inherit sm:m-0 rounded-xl m-1 bg-[#f3efeb] dark:bg-black  sm:animate-none  animate-slide-in-bottom   overflow-hidden "
+        className="relative flex flex-col gap-2 max-w-[30rem] w-full sm:h-full h-[60%] border sm:border border-inherit sm:m-0 rounded-xl m-1 bg-[#f3efeb] dark:bg-black  sm:animate-none  animate-slide-in-bottom   overflow-hidden "
       >
         <div className="flex items-center justify-between p-4 border-b border-inherit ">
           <h1 className="text-xl ">Comments</h1>
@@ -88,14 +88,14 @@ function CommentSection() {
           </Ibutton>
         </div>
 
-        <div className="flex flex-col justify-start items-center gap-5 pb-10 pt-5 px-5  w-full h-[80%] overflow-y-auto border-inherit ">
+        <div className="flex flex-col justify-start items-center gap-5 pb-10 pt-5 px-5 w-full h-[80%] overflow-y-auto border-inherit ">
           {(!isFetching ? Comments : Array(20).fill(null)).map(
             (comt, idx, arr) => {
               return (
                 <CommentBox
                   ref={comt && arr.length % 5 === 0 ? lastItemRef : null}
                   className={
-                    "animate-slide-in-top flex flex-col text-sm justify-center w-full items-start gap-2 border-inherit"
+                    "animate-fedin2s flex flex-col text-sm justify-center w-full items-start gap-2 border-inherit"
                   }
                   key={comt?.id}
                   comt={comt}
@@ -108,6 +108,21 @@ function CommentSection() {
           {isFetchingNextPage && (
             <div className=" flex justify-center items-center py-2 h-20">
               <Spinner className={"w-5 h-5  bg-black dark:bg-white"} />
+            </div>
+          )}
+          {!isFetching && Comments.length === 0 && (
+            <div className="flex flex-col justify-center items-center gap-2 opacity-60 h-full text-center">
+              <span className="text-sm">No comments yet.</span>
+              {isLogin && (
+                <span className="text-xs text-muted-foreground">
+                  Be the first to share your thoughts!
+                </span>
+              )}
+            </div>
+          )}
+          {errorPosts && (
+            <div className="text-red-500 text-center py-2">
+              Failed to load comments. Please try again.
             </div>
           )}
         </div>

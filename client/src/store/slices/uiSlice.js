@@ -16,8 +16,8 @@ const initialState = {
   ToastState: [],
   ThemeMode:Theme,
   isScale: false,
-  MenuOpen: false,
-  
+  menuOpen: false,
+  openBigFrame:null,
   openNotification: false,
 
 };
@@ -45,7 +45,6 @@ const uiSlice = createSlice({
     state.ToastState = [...state.ToastState, { id: uuidv4(), count:1,...action.payload }].slice(-3);
       }
     },
-
     removeToast: (state, action) => {
       state.ToastState = state.ToastState.filter(el => el.id !== action.payload);
     },
@@ -59,16 +58,17 @@ const uiSlice = createSlice({
       state.isScale = !state.isScale
     },
     setManuOpen: (state) => {
-      state.MenuOpen = !state.MenuOpen
+      state.menuOpen = !state.menuOpen
     },
     setOpenNotification: (state) => {
       state.openNotification = !state.openNotification
     },
-
     // setFocusedIndex: (state,action) => {
     //   state.focusedIndex= action.payload
     // },
-
+    setOpenBigFrame: (state, action) => {
+      state.openBigFrame = action.payload;
+    },
   },
 });
 
@@ -82,7 +82,7 @@ export const {
   removeAllToast,
   setManuOpen,
   setOpenNotification,
-  
+  setOpenBigFrame
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

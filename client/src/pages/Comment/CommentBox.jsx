@@ -87,14 +87,14 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
     }
   );
 
-  const { mutate: likeUnlikeMutation } = useMutation({
+  const { mutate: likeMutation } = useMutation({
     mutationFn: (comtId) => hitLike(comtId),
-    onSuccess: ({ updtCommentLikes }) => {
+    onSuccess: ({ message, updtCommentLikes }) => {
       comt.commentLikes = updtCommentLikes || [];
       setOptLike("");
       dispatch(
         setToast({
-          message: "Liked the comment!",
+          message: `${message} the comment!`,
           type: "success",
         })
       );
@@ -187,7 +187,7 @@ const CommentBox = forwardRef(({ comt, className, topCommentId }, ref) => {
                 <Ibutton
                   className={"p-1 rounded-full"}
                   action={() => {
-                    likeUnlikeMutation(comt?.id);
+                    likeMutation(comt?.id);
                     setOptLike(comt?.id);
                   }}
                 >

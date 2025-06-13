@@ -20,7 +20,7 @@ import { setCommentCred } from "../../store/slices/postSlice";
 import AIResponse from "../../component/aiComp/AiResponse";
 import PostsApis from "../../services/PostsApis";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
-import { setToast } from "../../store/slices/uiSlice";
+import { setOpenBigFrame, setToast } from "../../store/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import Menu from "../../component/Menus/Menu";
 import ProfileImage from "../../component/ProfileImage";
@@ -132,7 +132,14 @@ function PostView() {
   if (isLoading) {
     return <LoaderScreen message={"loading post..."} />;
   }
-
+  const handleBigFrame = (src) => {
+    dispatch(
+      setOpenBigFrame({
+        src,
+        alt: postView.title,
+      })
+    );
+  };
   return (
     <section
       className={`relative flex justify-center w-full h-full px-2 my-16 border-inherit transition-all duration-500  dark:*:border-[#383838] `}
@@ -219,7 +226,11 @@ function PostView() {
           </div>
 
           {postView?.previewImage && (
-            <ImageFigure imageUrl={postView?.previewImage} objectFit="fill" />
+            <ImageFigure
+              onClick={() => handleBigFrame(postView?.previewImage)}
+              imageUrl={postView?.previewImage}
+              objectFit="fill"
+            />
           )}
           {postView?.postContent?.map((item) => (
             <section
@@ -228,9 +239,10 @@ function PostView() {
             >
               {item.type === "image" && item.content && (
                 <ImageFigure
+                  onClick={() => handleBigFrame(item.content)}
                   className=""
                   imageUrl={item.content}
-                  altText={""}
+                  altText={"item.content"}
                   caption={item.title}
                 />
               )}

@@ -76,14 +76,10 @@ function SearchBox({ className, scrollDirection }) {
     setTimeout(() => setIsFocused(false), 150);
   }, []);
 
-  // Handle backdrop click
-  const handleBackdropClick = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
-
   // Handle container click (prevent event bubbling)
   const handleContainerClick = useCallback((e) => {
     e.stopPropagation();
+    navigate(-1);
   }, []);
 
   // Keyboard navigation

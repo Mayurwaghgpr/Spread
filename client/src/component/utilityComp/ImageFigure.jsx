@@ -7,10 +7,12 @@ const ImageFigure = ({
   className = "",
   imageClassName = "",
   captionClassName = "",
+  ...props
 }) => {
   return (
     <figure className={`w-full ${className}`}>
       <img
+        {...props}
         className={`w-full  ${imageClassName}`}
         src={imageUrl}
         alt={altText}

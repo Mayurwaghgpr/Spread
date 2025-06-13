@@ -163,7 +163,7 @@ export const likeComment = async (req, res, next) => {
         where: { commentId },
       });
 
-      res.status(201).json({ message: "removed like", updtCommentLikes });
+      res.status(201).json({ message: "Unliked", updtCommentLikes });
     } else {
       const result = await LikeComment.create({
         likedBy: req.authUser.id,
@@ -177,7 +177,7 @@ export const likeComment = async (req, res, next) => {
         ]
       });
       // console.log('like',result);
-      res.status(201).json({ message: "added like", updtCommentLikes });
+      res.status(201).json({ message: "Liked", updtCommentLikes });
     }
   } catch (error) {
     next(error);

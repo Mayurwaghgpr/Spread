@@ -123,7 +123,7 @@ function Home() {
   return (
     <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
       {/* Sticky Navigation */}
-      <div className="sticky top-[3.1rem] sm:top-[3.6rem] flex items-center justify-start row-span-1 lg:col-span-6 col-span-full w-full border-b bg-gray-700 bg-opacity-0 backdrop-blur-[20px] dark:border-[#383838] z-20">
+      <div className="sticky top-[3.1rem] sm:top-[3.6rem] flex items-center justify-start row-span-1 lg:col-span-6 col-span-full w-full border-b bg-gray-700 bg-opacity-0 backdrop-blur-[20px] dark:border-[#383838] z-10">
         <ul className="flex items-center justify-start gap-4 px-4 w-full h-full">
           <li className="capitalize flex justify-center items-center">
             <Ibutton

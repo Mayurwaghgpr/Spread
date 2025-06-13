@@ -29,6 +29,7 @@ import InfoSection from "./pages/Messages/components/InfoSection";
 import WelcomeLoginBox from "./component/utilityComp/WelcomeLoginBox";
 import SomethingWentWrong from "./component/Errors/SomethingWentWrong";
 import NewConversation from "./pages/Messages/NewConversation";
+import ImageInBigFrame from "./component/utilityComp/ImageInBigFrame";
 
 // Lazy load components with better error boundaries
 const SignUp = lazy(() =>
@@ -394,6 +395,7 @@ function App() {
 
           {loginPop && <WelcomeLoginBox />}
           <ToastContainer />
+          <ImageInBigFrame />
         </Suspense>
       </main>
 

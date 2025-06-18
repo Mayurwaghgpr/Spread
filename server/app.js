@@ -24,8 +24,8 @@ import userRoutes from "./routes/user.route.js";
 import commentRoutes from "./routes/comments.route.js";
 import aiRoutes from "./routes/AI.route.js";
 import messagingRoutes from "./routes/messaging/messaging.route.js";
-
-
+import pg from 'pg';
+const { Client } = pg;
 dotenv.config();
 const app = express();
 const server = createServer(app);
@@ -33,6 +33,10 @@ export const io = sockIo.init(server);
 
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL
+});
 
 //  morgan  routes loging
 app.use(morgan("dev"));
@@ -146,6 +150,21 @@ app.use((error, req, res, next) => {
   });
 });
 
+
+
+
+client.connect();
+
+client.query('LISTEN manual_change_channel');
+
+client.on('notification', async (msg) => {
+  const payload = JSON.parse(msg.payload);
+  console.log("📣 Manual DB Change Detected:", payload);
+
+  // Send to logging service, notify admin, or trigger webhooks, etc.
+});
+
+
 // Graceful Shutdown
 const shutdown = async () => {
   try {
@@ -167,17 +186,12 @@ process.on("uncaughtException", (error) => {
   process.exit(1);
 });
 
+
+    await Database.sync();
+await redisClient.connect();
 // Start Server
-Database.sync()
-  .then(() => {
-    server.listen(port, async () => {
-      await redisClient.connect();
+server.listen(port, async () => {
       console.log("Connected to Redis");
-      console.log(`API is running at http://localhost:${port}`);
+  console.log(`API is running at http://localhost:${port}`);
+  
     });
-    console.log("Connected to PostgreSQL");
-  })
-  .catch((err) => {
-    console.error("Database connection error:", err);
-    process.exit(1);
-  });

@@ -30,20 +30,21 @@ const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 // `;
 const prompt = `You are a professional content analyst.
 
-Analyze the given post and return exactly six short, informative points using clean and minimal HTML.
+Analyze the given post and output structured HTML as follows:
 
-Instructions:
-1. Start with a <h2>Summary</h2> — describe the main idea of the post in 2–3 sentences.
-2. Then give five <h3>Insight</h3> sections — each with:
-   - A <p> explanation (2–4 concise sentences).
-   - One relevant external link formatted as:
-     <a href="https://example.com" style="color:skyblue; text-decoration:underline;" target="_blank" rel="noopener noreferrer">Source</a>
+1. First, wrap a short 2–3 sentence summary of the post inside a <p> tag.
+2. Then, create an unordered list using <ul> with exactly six <li> elements.
+3. Each <li> must:
+   - Contain a distinct point related to or inspired by the post.
+   - Be written in 4–6 short, skimmable sentences.
+   - Start with a <b>bolded summary</b> of the point (first few words only).
+4. You must use valid and clean HTML only — no markdown, no extra formatting.
+5. Only these HTML tags are allowed: <p>, <ul>, <li>, <b>, <a>, <code>, <blockquote>.
+6. If adding a link, wrap it like: <a href="URL" target="_blank" className="text-blue-500" rel="noopener noreferrer">link text</a> — only one link allowed.
+7. Do NOT include any headers, titles, or introductory/explanatory text outside the HTML.
+8. The final output must contain only valid HTML and must always include both <p> and <ul><li> elements.
 
-Formatting Rules:
-- Use clear, structured HTML tags only: <h2>, <h3>, <p>, <b>, <ul>, <li>, <code>, <blockquote>, <a>.
-- Keep all text short, skimmable, and straight to the point.
-- Do NOT include markdown or font styles.
-- Ensure the entire output is clean, valid HTML and ready to be rendered directly in a web UI.`;
+Strict Rule: If you do not return the <ul> with exactly six <li> elements, the response is considered invalid.`;
 
 
 export const generateAIAnalysis = async (req, res, next) => {

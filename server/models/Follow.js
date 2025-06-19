@@ -1,6 +1,6 @@
  import { DataTypes } from 'sequelize';
 
-import Database from '../utils/database.js';
+import Database from '../db/database.js';
 
 
 const Follow = Database.define('Follow', {

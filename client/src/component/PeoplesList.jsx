@@ -74,7 +74,7 @@ const PeoplesList = forwardRef(
               id={`popover-${people?.id}`}
               ref={boxRef}
               people={people}
-              className="z-40 px-4 w-[20rem] absolute transition-all duration-300 top-8  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
+              className="z-20 px-4 w-[20rem] absolute transition-all duration-300 top-8  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
               attributes={attributes}
               styles={styles}
             />

@@ -30,7 +30,7 @@ export const getHomeContent = async (req, res, next) => {
         },
       ],
 
-      attributes: ["id", "username", "userImage", "bio"],
+      attributes: ["id", "username", "userImage", "bio", "displayName", "createdAt"],
       order: [[sequelize.fn("RANDOM")]], // Random order
       limit: 4,
     });

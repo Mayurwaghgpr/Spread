@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import { CheckCircle, MapPin, Calendar, ExternalLink } from "lucide-react";
+import AbbreviateNumber from "../../utils/AbbreviateNumber";
 
 // Mock Follow component for demo
 const Follow = ({ People, className }) => (
@@ -10,13 +11,6 @@ const Follow = ({ People, className }) => (
 
 const UserPopover = forwardRef(
   ({ people, styles, attributes, className }, ref) => {
-    const formatCount = (count) => {
-      if (!count) return "0";
-      if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
-      if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
-      return count.toString();
-    };
-
     if (!people) {
       return (
         <div
@@ -37,7 +31,7 @@ const UserPopover = forwardRef(
     return (
       <div
         ref={ref}
-        className={`${className} z-20  bg-inherit rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-sm w-full`}
+        className={`${className} z-20  rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-light dark:bg-dark w-full`}
         role="dialog"
         aria-label={`${people?.username}'s profile information`}
         style={styles?.popper}
@@ -104,10 +98,10 @@ const UserPopover = forwardRef(
                 <span>{people.location}</span>
               </div>
             )}
-            {people?.joinedDate && (
+            {people?.createdAt && (
               <div className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
-                <span>Joined {people.joinedDate}</span>
+                <span>Joined {people.createdAt}</span>
               </div>
             )}
           </div>
@@ -116,7 +110,7 @@ const UserPopover = forwardRef(
           <div className="flex gap-6 pt-4 border-t border-gray-100 dark:border-gray-800 w-full">
             <div className="text-center">
               <div className="font-bold text-lg text-gray-900 dark:text-white">
-                {formatCount(people?.Followers?.length)}
+                {<AbbreviateNumber rawNumber={people?.Followers?.length} />}
               </div>
               <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                 Followers
@@ -124,7 +118,7 @@ const UserPopover = forwardRef(
             </div>
             <div className="text-center">
               <div className="font-bold text-lg text-gray-900 dark:text-white">
-                {formatCount(people?.Following?.length)}
+                {<AbbreviateNumber rawNumber={people?.Following?.length} />}
               </div>
               <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                 Following
@@ -133,7 +127,7 @@ const UserPopover = forwardRef(
             {people?.postsCount && (
               <div className="text-center">
                 <div className="font-bold text-lg text-gray-900 dark:text-white">
-                  {formatCount(people.postsCount)}
+                  {<AbbreviateNumber rawNumber={people.postsCount} />}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                   Posts

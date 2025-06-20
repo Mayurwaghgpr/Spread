@@ -113,7 +113,7 @@ function SideBar() {
               </div>
             </Link>
 
-            <div className="xl:flex justify-center items-center sm:hidden flex gap-6 text-sm bg-gradient-to-r from-gray-50 to-gray-100 dark:from-slate-800/30 dark:to-slate-700/30 rounded-xl px-4 py-3 backdrop-blur-sm">
+            <div className="xl:flex justify-center items-center sm:hidden flex gap-6 text-sm  dark:from-slate-800/30 dark:to-slate-700/30 rounded-xl px-4 py-3 backdrop-blur-sm">
               <div className="flex flex-col items-center gap-1">
                 <span className="font-bold text-gray-900 dark:text-white">
                   <AbbreviateNumber rawNumber={user?.Followers?.length || 0} />
@@ -138,10 +138,10 @@ function SideBar() {
             <LinkBtn
               key={link.id}
               stub={link.stub}
-              className={`group flex lg:justify-start justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 hover:scale-[1.02] ${
+              className={`group flex lg:justify-start justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 ${
                 isActiveLink(link.stub)
-                  ? "shadow-lg "
-                  : "hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:shadow-md"
+                  ? ""
+                  : "hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white  "
               }`}
               to={link.stub}
               onClick={() => dispatch(setManuOpen())}

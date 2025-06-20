@@ -19,7 +19,7 @@ function CommentSection() {
   const navigate = useNavigate();
   const icons = useIcons();
 
-  const postdata = useOutletContext();
+  const { postData } = useOutletContext();
   const {
     data: TopComments,
     error: errorPosts,
@@ -29,7 +29,7 @@ function CommentSection() {
     hasNextPage,
   } = useInfiniteQuery(
     ["TopComments"],
-    ({ pageParam = 1 }) => getComments({ postId: postdata?.id, pageParam }),
+    ({ pageParam = 1 }) => getComments({ postId: postData?.id, pageParam }),
     {
       getNextPageParam: (lastPage, allPages) =>
         lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,

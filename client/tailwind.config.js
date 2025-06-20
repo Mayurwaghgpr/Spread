@@ -27,6 +27,24 @@ export default {
         },
 
       keyframes: {
+        typewriter: {
+          '0%': {
+            width: '0%',
+            opacity: '0',
+            borderRightColor: 'transparent',
+          },
+          '50%': {
+
+            width: '100%',
+            opacity: '0.5',
+            borderRightColor: 'black',
+          },
+          '100%': {
+            width: '100%',
+            opacity: '1',
+            borderRightColor: 'transparent',
+          },
+        },
         fromRight: { // Corrected typo here
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(0%)' }, // Corrected typo here
@@ -69,11 +87,11 @@ export default {
         },
           fedin: {
             '0%': { opacity: '0' },
-            '100%': { opacity: '1' }, // Correct opacity range
+            '100%': { opacity: '1' }, 
           },
           fedOut: {
             '0%': { opacity: '1' },
-            '100%': { opacity: '0' }, // Correct opacity range
+            '100%': { opacity: '0' }, 
           },
        slideUp: { 
       "0%": { transform: "translateY(20px)", opacity: "0" },
@@ -104,10 +122,10 @@ export default {
         'fedin1s':'fedin 1s  ease-in-out',
         'fedin.2s': 'fedin .2s  ease-in-out',
         'fed-out': 'fedOut .3s ease-in-out',
-                'pop': "pop 0.3s ease-out",
-
+        'pop': "pop 0.3s ease-out",
+        'animate-typewriter': 'typewriter 2s steps(30) infinite',
       },
-      
+
     },
   },
   plugins: [],

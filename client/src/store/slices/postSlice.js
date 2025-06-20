@@ -1,20 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
-// const post = JSON.parse(localStorage.getItem("selectedPost"));
+import { createSlice,nanoid } from "@reduxjs/toolkit";
 const initialState = {
     selectedPostId:'',
     topiclist:[],
     submit: false,
     beforsubmit: false,
     elements:[
-    {type: "text", data: "", id: uuidv4(), index: 0 },
+    {type: "text", data: "", id: nanoid(), index: 0 },
     ],
     commentCred: { postId: null, topCommentId: null, content: '', replyTo: null },
     selectedPost: {},
 }
 
 
-const PostSclic = createSlice({
+const PostSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
@@ -42,7 +40,6 @@ const PostSclic = createSlice({
     }
 })
 
+export const { setSelectedPostId, setTopiclist, setSubmit ,setBeforeSubmit ,FilterData,setElements,pushNewData,setCommentCred,setSelectedPost} = PostSlice.actions
 
-export const { setSelectedPostId, setTopiclist, setSubmit ,setBeforeSubmit ,FilterData,setElements,pushNewData,setCommentCred,setSelectedPost} = PostSclic.actions
-
-export default PostSclic.reducer
+export default PostSlice.reducer

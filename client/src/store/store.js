@@ -8,13 +8,15 @@ import NotificationSlice from './slices/NotificationSlice';
 
 const store = configureStore({
   reducer: {
-    auth: authReducer,
-    ui: uiReducer,
-    posts: postReducer,
-    profile: profileReducer,
-    messanger: messangerSlice,
-    notification:NotificationSlice,
+    auth: authReducer, // Authentication reducer
+    ui: uiReducer, // UI reducer
+    posts: postReducer, // Posts reducer
+    profile: profileReducer, // Profile reducer
+    messanger: messangerSlice, // Messenger reducer
+    notification: NotificationSlice, // Notification reducer
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(/* your custom middleware */),
 });
 
 export default store;

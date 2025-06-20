@@ -1,7 +1,7 @@
 import Comments from "../models/Comments.js";
 import LikeComment from "../models/LikeComment.js";
 import User from "../models/user.js";
-import Database from "../utils/database.js";
+import Database from "../db/database.js";
 import sequelize from "sequelize";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";

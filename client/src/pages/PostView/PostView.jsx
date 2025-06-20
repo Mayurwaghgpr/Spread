@@ -18,7 +18,7 @@ import Follow from "../../component/buttons/follow";
 import userImageSrc from "../../utils/userImageSrc";
 import { setCommentCred } from "../../store/slices/postSlice";
 import AIResponse from "../../component/aiComp/AiResponse";
-import PostsApis from "../../services/PostsApis";
+// import PostsApis from "../../services/PostsApis";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { setOpenBigFrame, setToast } from "../../store/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
@@ -32,7 +32,7 @@ import ImageFigure from "../../component/utilityComp/ImageFigure";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import FedInBtn from "../../component/buttons/FedInBtn";
 import useSocket from "../../hooks/useSocket";
-import Spinner from "../../component/loaders/Spinner";
+// import Spinner from "../../component/loaders/Spinner";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 
 const CopyToClipboardInput = lazy(
@@ -45,7 +45,7 @@ function PostView() {
   const { user } = useSelector((state) => state.auth);
   const [postView, setPostView] = useState({});
   const { fetchDataById } = usePublicApis();
-  const { getAiGenAnalysis } = PostsApis();
+  // const { getAiGenAnalysis } = PostsApis();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -68,6 +68,7 @@ function PostView() {
       }
     });
   }, [socket, postView?.id]);
+
   //Fetch Post Full View
   const { isLoading, isError, error } = useQuery({
     queryKey: ["fullpostData", id],
@@ -86,20 +87,6 @@ function PostView() {
 
   //Getting menu items array from hook
   const { POST_MENU } = useMenuConstant(postView, "post");
-
-  // Fetches  Ai generated analysis on post
-  const {
-    mutate,
-    data,
-    isLoading: isAnalyzing,
-    error: aiError,
-  } = useMutation({
-    mutationFn: getAiGenAnalysis,
-    onSuccess: () => {},
-    onError: ({ data }) => {
-      setToast({ message: data.message, type: "success" });
-    },
-  });
 
   //To Open Comments of post
   const handelComment = useCallback(() => {
@@ -148,9 +135,10 @@ function PostView() {
         <article
           style={{ backgroundColor: "" }}
           className={`relative animate-fedin1s max-w-4xl px-4  flex flex-col justify-center items-center 
-           border-inheri ${
-             isAnalyzing ? "shimmer-effect dark:shimmer-effect-dark" : " "
-           } `}
+           border-inherit
+
+          
+            `}
         >
           <header className="mb-6 w-full border-inherit">
             <section className="flex flex-col gap-2  border-inherit">
@@ -261,22 +249,15 @@ function PostView() {
           ))}
         </article>
       ) : (
+        // <></>
         // To show ai response after post analysis
-        <AIResponse
-          setshow={setshow}
-          mutate={mutate}
-          isAnalyzing={isAnalyzing}
-          aiError={aiError}
-          data={data}
-          postData={postView}
-        />
+        <AIResponse setshow={setshow} postData={postView} />
       )}
       <Ibutton
         action={() => {
           setshow(true);
-          !data && mutate({ id });
         }}
-        className="z-40 border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-light before:dark:bg-dark before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
+        className="z-50 border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-light before:dark:bg-dark before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
       >
         AI
         {icons["glitter"]}

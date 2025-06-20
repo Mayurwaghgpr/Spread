@@ -6,17 +6,19 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import hpp from "hpp";
 import morgan from "morgan";
-// import rateLimit from "express-rate-limit";
-
+import passport from "passport";
 import { createServer } from "http";
-import Database from "./utils/database.js";
+
+// Custom Imports
+import Database from "./db/database.js";
 import redisClient from "./utils/redisClient.js";
 import DataBaseAssociations from "./utils/DataBaseAssociations.js";
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "./Sockets/SocketHandler.js";
 import sockIo from "./socket.js";
-import passport from "passport";
+import client from "./db/pgclient.js";
 
+// Routes
 import authRoutes from "./routes/auth.route.js";
 import publicRoutes from "./routes/public.route.js";
 import postsRoutes from "./routes/posts.route.js";
@@ -24,50 +26,56 @@ import userRoutes from "./routes/user.route.js";
 import commentRoutes from "./routes/comments.route.js";
 import aiRoutes from "./routes/AI.route.js";
 import messagingRoutes from "./routes/messaging/messaging.route.js";
-
+import initMessageChangeListener from "./db/triggers/messages.js";
 
 dotenv.config();
 const app = express();
 const server = createServer(app);
 export const io = sockIo.init(server);
 
+// Constants
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
-//  morgan  routes loging
+
+// Morgan for logging
 app.use(morgan("dev"));
 
-const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(",");
+// Middlewares
 app.use(cookieParser());
 app.use(hpp());
-
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin:allowedOrigins,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  credentials: true,
-}));
 
+// CORS setup
+const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(",");
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
 
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      "img-src": [
-        "'self'",
-        "data:",
-        "https://res.cloudinary.com",
-        "https://lh3.googleusercontent.com",
-        "https://avatars.githubusercontent.com"
-      ]
-    }
-  },
-  // crossOriginEmbedderPolicy: true,
-  // crossOriginOpenerPolicy: true,
-}));
+// Helmet for security headers
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "img-src": [
+          "'self'",
+          "data:",
+          "https://res.cloudinary.com",
+          "https://lh3.googleusercontent.com",
+          "https://avatars.githubusercontent.com",
+        ],
+      },
+    },
+  })
+);
 
-//  Rate Limiting
+// Rate Limiting (optional, uncomment if needed)
+// import rateLimit from "express-rate-limit";
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000,
 //   max: 100,
@@ -75,50 +83,50 @@ app.use(helmet({
 // });
 // app.use("/api/", limiter);
 
-// Passport Setup
-passportStrategies()
+// Passport setup
+passportStrategies();
 app.use(passport.initialize());
 
+// Serve static files
+app.use(
+  express.static(path.join(__dirname, "/client/dist"), {
+    maxAge: "1d",
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith(".html")) {
+        res.setHeader("Cache-Control", "no-cache");
+      }
+    },
+  })
+);
 
-// Static Files
-app.use(express.static(path.join(__dirname, "/client/dist"), {
-  maxAge: '1d',
-  setHeaders: (res, path) => {
-    if (path.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-cache');
-    }
-  }
-}));
-
-// Database Associations
+// Database associations
 DataBaseAssociations();
 
-// Sockets
+//DB changes listener
+initMessageChangeListener()
+
+// Socket.IO
 io.on("connection", (socket) => {
   socket.on("error", (err) => console.error("Socket Error:", err));
 });
 socketHandlers(io);
 
-app.get('/health', (req, res) => {
-  const healthcheck = {
+// Healthcheck route
+app.get("/health", async (req, res) => {
+  const dbStatus = await Database.authenticate()
+    .then(() => "connected")
+    .catch(() => "disconnected");
+
+  res.status(200).json({
     uptime: process.uptime(),
-    message: 'OK',
+    message: "OK",
     timestamp: Date.now(),
-    database: Database.authenticate() ? 'connected' : 'disconnected',
-    redis: redisClient.isReady ? 'connected' : 'disconnected'
-  };
-  res.status(200).json(healthcheck);
+    database: dbStatus,
+    redis: redisClient.isReady ? "connected" : "disconnected",
+  });
 });
 
-// // Dynamic Route Loader
-// const loadRoute = (route, filePath) => {
-//   app.use(route, async (req, res, next) => {
-//     const module = await import(filePath);
-//     return module.default(req, res, next);
-//   });
-// };
-
-//Routes
+// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/public", publicRoutes);
 app.use("/api/posts", postsRoutes);
@@ -127,32 +135,33 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/messaging", messagingRoutes);
 
-
-// Fallback for React (client side routing)
+// Fallback for client-side routing
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
 });
 
-//Fallback for unmatched API routes
+// Fallback for unmatched API routes
 app.use("/api/*", (req, res) => {
   res.status(404).json({ message: "API route not found" });
 });
 
-//Error handler
+// Global error handler
 app.use((error, req, res, next) => {
   console.error("Error:", error);
   res.status(error.statusCode || 500).json({
-    message: error.statusCode !== 500 ? error.message : "Server Error"
+    message: error.statusCode !== 500 ? error.message : "Server Error",
   });
 });
 
-// Graceful Shutdown
+// Graceful shutdown
 const shutdown = async () => {
   try {
     await redisClient.quit();
     console.log("Redis client disconnected.");
+
     await Database.close();
     console.log("Database connection closed.");
+
     process.exit(0);
   } catch (error) {
     console.error("Error during shutdown:", error);
@@ -167,17 +176,17 @@ process.on("uncaughtException", (error) => {
   process.exit(1);
 });
 
-// Start Server
+// Start the server after DB & Redis setup
 Database.sync()
-  .then(() => {
-    server.listen(port, async () => {
-      await redisClient.connect();
-      console.log("Connected to Redis");
+  .then(async () => {
+    await redisClient.connect();
+    console.log("Redis client connected.");
+    server.listen(port, () => {
       console.log(`API is running at http://localhost:${port}`);
     });
-    console.log("Connected to PostgreSQL");
+    console.log("Database connected and synchronized successfully.");
   })
-  .catch((err) => {
-    console.error("Database connection error:", err);
+  .catch((error) => {
+    console.error("Database connection error:", error);
     process.exit(1);
   });

@@ -1,24 +1,72 @@
 import DOMPurify from "dompurify";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
-import { Link, useParams } from "react-router-dom";
 import userImageSrc from "../../utils/userImageSrc";
 
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 
-const AIResponse = ({
-  data,
-  aiError,
-  isAnalyzing,
-  setshow,
-  mutate,
-  postData,
-}) => {
-  const { id } = useParams();
+const AIResponse = ({ setshow, postData }) => {
+  const [aiStreamText, setAiStreamText] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [error, setError] = useState();
+
+  // const { id } = useParams();
   const userImage = useMemo(
     () => userImageSrc(postData?.User),
     [postData?.User]
   );
+  useEffect(() => {
+    if (!postData?.title) return;
+
+    const controller = new AbortController(); // optional for cancellation
+    const fetchStream = async () => {
+      setIsAnalyzing(true);
+      setAiStreamText("");
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/api/ai/analysis`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ post: postData }),
+            signal: controller.signal,
+          }
+        );
+
+        if (!response.ok) throw new Error("AI analysis failed");
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+
+        let done = false;
+
+        while (!done) {
+          const { value, done: streamDone } = await reader.read();
+          done = streamDone;
+
+          if (value) {
+            const chunk = decoder.decode(value, { stream: true });
+            setAiStreamText((prev) => prev + chunk);
+          }
+        }
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          setError(err.message || "Streaming error");
+        }
+      } finally {
+        setIsAnalyzing(false);
+      }
+    };
+
+    fetchStream();
+
+    return () => controller.abort(); // optional cleanup
+  }, [postData?.title]);
+
   return (
     <div className=" right-5 animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full overflow-hidden border-inherit">
       {/* Header */}
@@ -34,7 +82,7 @@ const AIResponse = ({
         )}
         <div className="flex items-center gap-6 text-2xl ">
           <button
-            onClick={() => mutate({ id })}
+            // onClick={() => mutate({ id })}
             className="flex justify-center items-center w-10 h-10 "
           >
             <TiArrowSync
@@ -97,43 +145,53 @@ const AIResponse = ({
       </div>
       {/* AI Explanation Points */}
       <ul className="flex animate-fedin1s flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter">
-        {isAnalyzing && (
+        {/* {isAnalyzing && (
           <div className=" flex justify-center bg-white p-2 w-[3rem] shadow-sm rounded-lg rounded-tl-sm">
             <div className="dotloader "></div>
           </div>
-        )}
-        {!aiError ? (
-          data?.map((points, idx) => {
-            if (typeof points === "object") {
-              return (
-                <div>
-                  <Link
-                    component="a"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    to={points.resource}
-                  >
-                    {points.description}
-                  </Link>
-                </div>
-              );
-            } else {
-              return (
-                <li
-                  key={idx}
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(points),
-                  }}
-                  className="list-disc text-[15px] leading-relaxed"
-                >
-                  {}
-                </li>
-              );
-            }
-          })
+        )} */}
+
+        {!error ? (
+          <div className="w-full ">
+            {" "}
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(aiStreamText),
+              }}
+            ></p>
+            <div className=" w-2 h-2 dark:bg-white bg-black  animate-pulse rounded-full"></div>
+          </div>
         ) : (
+          // data?.map((points, idx) => {
+          //   if (typeof points === "object") {
+          //     return (
+          //       <div>
+          //         <Link
+          //           component="a"
+          //           target="_blank"
+          //           rel="noopener noreferrer"
+          //           to={points.resource}
+          //         >
+          //           {points.description}
+          //         </Link>
+          //       </div>
+          //     );
+          //   } else {
+          //     return (
+          //       <li
+          //         key={idx}
+          //         dangerouslySetInnerHTML={{
+          //           __html: DOMPurify.sanitize(points),
+          //         }}
+          //         className="list-disc text-[15px] leading-relaxed"
+          //       >
+          //         {}
+          //       </li>
+          //     );
+          //   }
+          // })
           <div className=" text-xs text-red-400 border border-red-500 p-3 rounded-full bg-opacity-5 backdrop-blur-sm bg-red-400">
-            <span>{aiError.data}</span>
+            <span>{error.data}</span>
           </div>
         )}
       </ul>

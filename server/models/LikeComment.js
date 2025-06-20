@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import Database from "../utils/database.js";
+import Database from "../db/database.js";
 import User from "./user.js";
 import Post from "./posts.js";
 import Comments from "./Comments.js";

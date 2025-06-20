@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from 'uuid';
+import { createSlice,nanoid } from "@reduxjs/toolkit";
 const Theme=localStorage.getItem("ThemeMode")
 
 const initialState = {
@@ -42,7 +41,7 @@ const uiSlice = createSlice({
         existingToast.count = (existingToast.count || 1) + 1; // Increase count if already present
          existingToast.message=action.payload.message
       } else {
-    state.ToastState = [...state.ToastState, { id: uuidv4(), count:1,...action.payload }].slice(-3);
+    state.ToastState = [...state.ToastState, { id: nanoid(), count:1,...action.payload }].slice(-3);
       }
     },
     removeToast: (state, action) => {

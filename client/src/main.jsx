@@ -9,7 +9,6 @@ import {
   QueryClient,
   QueryClientProvider,
   QueryErrorResetBoundary,
-  useQuery,
 } from "react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorBoundaryFallback from "./component/Errors/ErrorBoundaryFallback.jsx";

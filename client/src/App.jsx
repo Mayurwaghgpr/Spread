@@ -30,6 +30,7 @@ import WelcomeLoginBox from "./component/utilityComp/WelcomeLoginBox";
 import SomethingWentWrong from "./component/Errors/SomethingWentWrong";
 import NewConversation from "./pages/Messages/NewConversation";
 import ImageInBigFrame from "./component/utilityComp/ImageInBigFrame";
+import AIResponse from "./component/aiComp/AiResponse";
 
 // Lazy load components with better error boundaries
 const SignUp = lazy(() =>
@@ -187,7 +188,9 @@ function App() {
         isLogin &&
         !pathname.startsWith("/write") &&
         !pathname.startsWith("/messages") &&
-        !pathname.startsWith("/search"),
+        !pathname.startsWith("/search") &&
+        !pathname.startsWith("/analysis") &&
+        !pathname.startsWith("/view"),
     }),
     [pathname, isLogin]
   );
@@ -367,7 +370,7 @@ function App() {
             <Route path={ROUTES.POST_VIEW} element={<PostView />}>
               <Route path="comments" element={<CommentSection />} />
             </Route>
-
+            <Route path="/analysis" element={<AIResponse />} />
             {/* Other Protected Routes */}
             <Route
               path={ROUTES.SEARCH}

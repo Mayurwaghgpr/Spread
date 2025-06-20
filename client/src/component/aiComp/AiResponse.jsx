@@ -4,197 +4,196 @@ import { TiArrowSync } from "react-icons/ti";
 import userImageSrc from "../../utils/userImageSrc";
 
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const AIResponse = ({ setshow, postData }) => {
+const AIResponse = () => {
   const [aiStreamText, setAiStreamText] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState();
-
+  const [isStreaming, setIsStreaming] = useState(true);
+  const controllerRef = React.useRef(null);
+  const navigate = useNavigate();
+  const {
+    state: { postData },
+  } = useLocation();
   // const { id } = useParams();
   const userImage = useMemo(
     () => userImageSrc(postData?.User),
     [postData?.User]
   );
+  // Reference for cancellation
+  const fetchStream = async () => {
+    setIsAnalyzing(true);
+    setAiStreamText("");
+    setError(null);
+    setIsStreaming(true);
+    // Create a new AbortController for this request
+    const controller = new AbortController();
+    controllerRef.current = controller; // Store the controller in a ref for later use
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/ai/analysis`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ post: postData }),
+          signal: controller.signal,
+        }
+      );
+
+      if (!response.ok) throw new Error("AI analysis failed");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let done = false;
+
+      while (!done) {
+        const { value, done: streamDone } = await reader.read();
+        done = streamDone;
+        setIsStreaming(!streamDone);
+        if (value) {
+          const chunk = decoder.decode(value, { stream: true });
+          setAiStreamText((prev) => prev + chunk);
+        }
+      }
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        setError(err.message || "Streaming error");
+      }
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   useEffect(() => {
     if (!postData?.title) return;
 
-    const controller = new AbortController(); // optional for cancellation
-    const fetchStream = async () => {
-      setIsAnalyzing(true);
+    fetchStream();
+    // Cleanup function to abort the fetch request if the component unmounts
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+      setIsAnalyzing(false);
       setAiStreamText("");
       setError(null);
-
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/api/ai/analysis`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ post: postData }),
-            signal: controller.signal,
-          }
-        );
-
-        if (!response.ok) throw new Error("AI analysis failed");
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-
-        let done = false;
-
-        while (!done) {
-          const { value, done: streamDone } = await reader.read();
-          done = streamDone;
-
-          if (value) {
-            const chunk = decoder.decode(value, { stream: true });
-            setAiStreamText((prev) => prev + chunk);
-          }
-        }
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          setError(err.message || "Streaming error");
-        }
-      } finally {
-        setIsAnalyzing(false);
-      }
+      setIsStreaming(false);
     };
-
-    fetchStream();
-
-    return () => controller.abort(); // optional cleanup
   }, [postData?.title]);
 
   return (
-    <div className=" right-5 animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full overflow-hidden border-inherit">
-      {/* Header */}
-      <header className="border-b border-inherit flex justify-between items-center p-4">
-        {isAnalyzing ? (
-          <h1 className="font-bold shimmer-effect dark:shimmer-effect-dark">
-            Analyzing post
-          </h1>
-        ) : (
-          <h1 className="text-lg font-semibold tracking-wide">
-            AI Explanation
-          </h1>
-        )}
-        <div className="flex items-center gap-6 text-2xl ">
-          <button
-            // onClick={() => mutate({ id })}
-            className="flex justify-center items-center w-10 h-10 "
-          >
-            <TiArrowSync
-              title=""
-              className={` m-auto opacity-30 hover:opacity-100 cursor-pointer`}
-            />
-          </button>
-          <button
-            onClick={() => setshow(false)}
-            className="flex justify-center items-center "
-          >
-            <MdKeyboardDoubleArrowLeft
-              className="opacity-30 hover:opacity-100
-            transition duration-300 cursor-pointer "
-            />
-          </button>
-        </div>
-      </header>{" "}
-      <div className="flex  items-start gap-5  p-3 border-inherit">
-        <div className="w-10 h-10">
-          {" "}
-          <img
-            alt={`${postData?.User?.username}`}
-            src={userImage.userImageurl}
-            className="w-full h-full rounded-full mr-4 object-cover object-top"
-            loading="lazy"
-          />
-        </div>
-        <div
-          className={` border p-3 rounded-lg  border-inherit    ${isAnalyzing ? "ai-scanning" : ""}`}
-        >
-          <div className="flex -space-x-4 border-[#fff9f3] dark:border-black">
+    <div className="flex items-center justify-center w-full h-screen my-16 border-inherit">
+      <div className="animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full overflow-hidden border-inherit">
+        {/* Header */}
+        <header className="border-b border-inherit flex justify-between items-center p-4">
+          {isAnalyzing ? (
+            <h1 className="font-bold shimmer-effect dark:shimmer-effect-dark">
+              Analyzing post
+            </h1>
+          ) : (
+            <h1 className="text-lg font-semibold tracking-wide">
+              AI Explanation
+            </h1>
+          )}
+          <div className="flex items-center gap-6 text-2xl  *:transition-all *:duration-300">
+            <button
+              onClick={() => fetchStream()}
+              disabled={isAnalyzing}
+              title="Refresh"
+              aria-label="Refresh"
+              type="button"
+              className="flex justify-center items-center w-10 h-10 *:transition-all *:duration-300 "
+            >
+              <TiArrowSync
+                title=""
+                className={` m-auto opacity-30 hover:opacity-100 cursor-pointer`}
+              />
+            </button>
+            <button
+              onClick={() => navigate(-1, { replace: true })}
+              title="Back"
+              aria-label="Back"
+              type="button"
+              className="flex justify-center items-center font-thin  *:transition-all *:duration-300"
+            >
+              <MdKeyboardDoubleArrowLeft
+                className="opacity-30 hover:opacity-100
+            cursor-pointer "
+              />
+            </button>
+          </div>
+        </header>{" "}
+        <div className="flex  items-start gap-5  p-3 border-inherit">
+          <div className="w-10 h-10">
+            {" "}
             <img
-              className="w-10 h-10 z-10 rounded-full object-fill object-center border-2 border-inherit "
-              src={`${postData?.titleImage}`}
-              alt="Title Image"
+              alt={`${postData?.User?.username}`}
+              src={userImage.userImageurl}
+              className="w-full h-full rounded-full mr-4 object-cover object-top"
               loading="lazy"
             />
-            {postData.postContent?.map((item, idx) => {
-              if (item.type !== "image") return null;
-              return (
-                <img
-                  key={item.id || idx}
-                  src={item?.content}
-                  alt="Content"
-                  style={{ zIndex: Math.max(0, 8 - idx) }}
-                  className="w-10 h-10 rounded-full object-cover object-center border-2 border-inherit"
-                  loading="lazy"
-                />
-              );
-            })}
           </div>
-          <div className="p-3 text-sm">
-            <h1>{postData?.title}</h1>
-            <h2 className="text-black dark:text-white text-opacity-40 dark:text-opacity-30 ">
-              {postData?.subtitelpagraph}
-            </h2>
+          <div className={` border p-3 rounded-lg  border-inherit`}>
+            <div className="flex -space-x-4 border-[#fff9f3] dark:border-black">
+              <img
+                className="w-10 h-10 z-10 rounded-full object-fill object-center border-2 border-inherit "
+                src={`${postData?.titleImage}`}
+                alt="Title Image"
+                loading="lazy"
+              />
+              {postData.postContent?.map((item, idx) => {
+                if (item.type !== "image") return null;
+                return (
+                  <img
+                    key={item.id || idx}
+                    src={item?.content}
+                    alt="Content"
+                    style={{ zIndex: Math.max(0, 8 - idx) }}
+                    className="w-10 h-10 rounded-full object-cover object-center border-2 border-inherit"
+                    loading="lazy"
+                  />
+                );
+              })}
+            </div>
+            <div className="p-3 text-sm">
+              <h1>{postData?.title}</h1>
+              <h2 className="text-black dark:text-white text-opacity-40 dark:text-opacity-30 ">
+                {postData?.subtitelpagraph}
+              </h2>
+            </div>
           </div>
         </div>
-      </div>
-      {/* AI Explanation Points */}
-      <ul className="flex animate-fedin1s flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter">
+        {/* AI Explanation Points */}
+        {/* <ul className="flex animate-fedin1s flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter"> */}
         {/* {isAnalyzing && (
           <div className=" flex justify-center bg-white p-2 w-[3rem] shadow-sm rounded-lg rounded-tl-sm">
             <div className="dotloader "></div>
           </div>
         )} */}
-
         {!error ? (
-          <div className="w-full ">
+          <div className="w-full  transition-all duration-1000 ease-linear animate-typewriter text-sm ">
             {" "}
             <p
+              className="leading-relaxed text-black dark:text-white"
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(aiStreamText),
               }}
             ></p>
-            <div className=" w-2 h-2 dark:bg-white bg-black  animate-pulse rounded-full"></div>
+            {isStreaming && (
+              <span className="block w-1 h-1 p-1 rounded-full bg-black dark:bg-white animate-pulse">
+                &nbsp;
+              </span>
+            )}
           </div>
         ) : (
-          // data?.map((points, idx) => {
-          //   if (typeof points === "object") {
-          //     return (
-          //       <div>
-          //         <Link
-          //           component="a"
-          //           target="_blank"
-          //           rel="noopener noreferrer"
-          //           to={points.resource}
-          //         >
-          //           {points.description}
-          //         </Link>
-          //       </div>
-          //     );
-          //   } else {
-          //     return (
-          //       <li
-          //         key={idx}
-          //         dangerouslySetInnerHTML={{
-          //           __html: DOMPurify.sanitize(points),
-          //         }}
-          //         className="list-disc text-[15px] leading-relaxed"
-          //       >
-          //         {}
-          //       </li>
-          //     );
-          //   }
-          // })
           <div className=" text-xs text-red-400 border border-red-500 p-3 rounded-full bg-opacity-5 backdrop-blur-sm bg-red-400">
-            <span>{error.data}</span>
+            <span>{error.data || "An error occurred"}</span>
           </div>
         )}
-      </ul>
+      </div>
     </div>
   );
 };

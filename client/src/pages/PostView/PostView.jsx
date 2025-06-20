@@ -17,10 +17,9 @@ import Like from "../../component/buttons/Like/Like";
 import Follow from "../../component/buttons/follow";
 import userImageSrc from "../../utils/userImageSrc";
 import { setCommentCred } from "../../store/slices/postSlice";
-import AIResponse from "../../component/aiComp/AiResponse";
 // import PostsApis from "../../services/PostsApis";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
-import { setOpenBigFrame, setToast } from "../../store/slices/uiSlice";
+import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import Menu from "../../component/Menus/Menu";
 import ProfileImage from "../../component/ProfileImage";
@@ -34,13 +33,13 @@ import FedInBtn from "../../component/buttons/FedInBtn";
 import useSocket from "../../hooks/useSocket";
 // import Spinner from "../../component/loaders/Spinner";
 import LoaderScreen from "../../component/loaders/loaderScreen";
+import LinkBtn from "../../component/LinkBtn";
 
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
 
 function PostView() {
-  const [show, setshow] = useState(false);
   const { commentCred } = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
   const [postView, setPostView] = useState({});
@@ -131,138 +130,132 @@ function PostView() {
     <section
       className={`relative flex justify-center w-full h-full px-2 my-16 border-inherit transition-all duration-500  dark:*:border-[#383838] `}
     >
-      {!show ? (
-        <article
-          style={{ backgroundColor: "" }}
-          className={`relative animate-fedin1s max-w-4xl px-4  flex flex-col justify-center items-center 
+      <article
+        style={{ backgroundColor: "" }}
+        className={`relative animate-fedin1s max-w-4xl px-4  flex flex-col justify-center items-center 
            border-inherit
 
           
             `}
-        >
-          <header className="mb-6 w-full border-inherit">
-            <section className="flex flex-col gap-2  border-inherit">
-              <div className=" relative flex items-center sm:text-base text-xs justify-between gap-5 my-4 ">
-                <div className="flex items-center gap-5 ">
-                  <ProfileImage
-                    className="sm:w-10 sm:h-10 w-8 h-8"
-                    image={userImageurl}
-                    alt={postView?.User?.username}
-                    title={"author profile"}
-                  />
+      >
+        <header className="mb-6 w-full border-inherit">
+          <section className="flex flex-col gap-2  border-inherit">
+            <div className=" relative flex items-center sm:text-base text-xs justify-between gap-5 my-4 ">
+              <div className="flex items-center gap-5 ">
+                <ProfileImage
+                  className="sm:w-10 sm:h-10 w-8 h-8"
+                  image={userImageurl}
+                  alt={postView?.User?.username}
+                  title={"author profile"}
+                />
 
-                  <div className="">
-                    <div className="flex gap-2 items-center w-full">
-                      {" "}
-                      <Link
-                        className="w-full text-nowrap hover:underline underline-offset-4"
-                        to={`/profile/@${postView?.User?.username
-                          ?.split(" ")
-                          .slice(0, -1)
-                          .join("")}/${postView?.User?.id}`}
-                      >
-                        {postView?.User?.username}
-                      </Link>
-                      <Follow
-                        People={postView?.User}
-                        className={`relative hover:underline underline-offset-4 border-none  text-blue-500 `}
-                      />
-                    </div>
-
-                    <FormatedTime
-                      className={
-                        "text-black dark:text-white sm:text-xs text-[.7em]"
-                      }
-                      date={postView?.createdAt}
+                <div className="">
+                  <div className="flex gap-2 items-center w-full">
+                    {" "}
+                    <Link
+                      className="w-full text-nowrap hover:underline underline-offset-4"
+                      to={`/profile/@${postView?.User?.username
+                        ?.split(" ")
+                        .slice(0, -1)
+                        .join("")}/${postView?.User?.id}`}
+                    >
+                      {postView?.User?.username}
+                    </Link>
+                    <Follow
+                      People={postView?.User}
+                      className={`relative hover:underline underline-offset-4 border-none  text-blue-500 `}
                     />
                   </div>
+
+                  <FormatedTime
+                    className={
+                      "text-black dark:text-white sm:text-xs text-[.7em]"
+                    }
+                    date={postView?.createdAt}
+                  />
                 </div>
               </div>
-              <div className="w-full flex flex-wrap justify-start ">
-                <h1 className="text-xl break-words lg:text-4xl w-full font-semibold mb-2">
-                  {postView?.title}
-                </h1>
-                <p className="text-sm text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-xl leading-relaxed">
-                  {postView?.subtitle}
-                </p>
-              </div>
-            </section>
-          </header>
-
-          <div className="flex justify-between items-center font-light sm:text-base text-xs py-3 w-full">
-            <div className="flex items-center gap-4  ">
-              <Like className={"min-w-10"} post={postView} />
-              <FedInBtn
-                action={handelComment}
-                className="flex items-center gap-1 min-w-10"
-              >
-                {icons["comment"]}
-                <AbbreviateNumber rawNumber={Comments?.length} />
-              </FedInBtn>
-              <Bookmark post={postView} />
             </div>
-            <div className="flex gap-7  justify-between">
-              <Menu
-                ref={menuRef}
-                menuId={menuId}
-                setMenuId={setMenuId}
-                items={POST_MENU}
-                className={"w-full max-h-1/2"}
-                content={postView}
-              />
+            <div className="w-full flex flex-wrap justify-start ">
+              <h1 className="text-xl break-words lg:text-4xl w-full font-semibold mb-2">
+                {postView?.title}
+              </h1>
+              <p className="text-sm text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-xl leading-relaxed">
+                {postView?.subtitle}
+              </p>
             </div>
-          </div>
+          </section>
+        </header>
 
-          {postView?.previewImage && (
-            <ImageFigure
-              onClick={() => handleBigFrame(postView?.previewImage)}
-              imageUrl={postView?.previewImage}
-              objectFit="fill"
-            />
-          )}
-          {postView?.postContent?.map((item) => (
-            <section
-              key={item.id}
-              className="mb-6 w-full border-inherit sm:text-lg text-sm "
+        <div className="flex justify-between items-center font-light sm:text-base text-xs py-3 w-full">
+          <div className="flex items-center gap-4  ">
+            <Like className={"min-w-10"} post={postView} />
+            <FedInBtn
+              action={handelComment}
+              className="flex items-center gap-1 min-w-10"
             >
-              {item.type === "image" && item.content && (
-                <ImageFigure
-                  onClick={() => handleBigFrame(item.content)}
-                  className=""
-                  imageUrl={item.content}
-                  altText={"item.content"}
-                  caption={item.title}
-                />
-              )}
-              {item?.type === "text" ? (
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(item.content),
-                  }}
-                  className="w-full "
-                ></p>
-              ) : (
-                item?.type !== "text" &&
-                item?.type !== "image" && <CopyToClipboardInput item={item} />
-              )}
-            </section>
-          ))}
-        </article>
-      ) : (
-        // <></>
-        // To show ai response after post analysis
-        <AIResponse setshow={setshow} postData={postView} />
-      )}
-      <Ibutton
-        action={() => {
-          setshow(true);
-        }}
-        className="z-50 border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-light before:dark:bg-dark before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
+              {icons["comment"]}
+              <AbbreviateNumber rawNumber={Comments?.length} />
+            </FedInBtn>
+            <Bookmark post={postView} />
+          </div>
+          <div className="flex gap-7  justify-between">
+            <Menu
+              ref={menuRef}
+              menuId={menuId}
+              setMenuId={setMenuId}
+              items={POST_MENU}
+              className={"w-full max-h-1/2"}
+              content={postView}
+            />
+          </div>
+        </div>
+
+        {postView?.previewImage && (
+          <ImageFigure
+            onClick={() => handleBigFrame(postView?.previewImage)}
+            imageUrl={postView?.previewImage}
+            objectFit="fill"
+          />
+        )}
+        {postView?.postContent?.map((item) => (
+          <section
+            key={item.id}
+            className="mb-6 w-full border-inherit sm:text-lg text-sm "
+          >
+            {item.type === "image" && item.content && (
+              <ImageFigure
+                onClick={() => handleBigFrame(item.content)}
+                className=""
+                imageUrl={item.content}
+                altText={"item.content"}
+                caption={item.title}
+              />
+            )}
+            {item?.type === "text" ? (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(item.content),
+                }}
+                className="w-full "
+              ></p>
+            ) : (
+              item?.type !== "text" &&
+              item?.type !== "image" && <CopyToClipboardInput item={item} />
+            )}
+          </section>
+        ))}
+      </article>
+
+      <Link
+        to={`/analysis`}
+        state={{ postData: postView }}
+        className="z-50  border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-light before:dark:bg-dark before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
       >
         AI
         {icons["glitter"]}
-      </Ibutton>
-      <Outlet context={postView} />
+      </Link>
+      <Outlet context={{ postData: postView }} />
     </section>
   );
 }

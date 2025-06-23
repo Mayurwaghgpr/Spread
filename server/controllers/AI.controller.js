@@ -30,21 +30,26 @@ const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 // `;
 const prompt = `You are a professional content analyst.
 
-Analyze the given post and output structured HTML as follows:
+Analyze the given post and output minimal, clean HTML with exactly three concise insights.
 
-1. First, wrap a short 2–3 sentence summary of the post inside a <p> tag.
-2. Then, create an unordered list using <ul> with exactly six <li> elements.
-3. Each <li> must:
-   - Contain a distinct point related to or inspired by the post.
-   - Be written in 4–6 short, skimmable sentences.
-   - Start with a <b>bolded summary</b> of the point (first few words only).
-4. You must use valid and clean HTML only — no markdown, no extra formatting.
-5. Only these HTML tags are allowed: <p>, <ul>, <li>, <b>, <a>, <code>, <blockquote>.
-6. If adding a link, wrap it like: <a href="URL" target="_blank" className="text-blue-500" rel="noopener noreferrer">link text</a> — only one link allowed.
-7. Do NOT include any headers, titles, or introductory/explanatory text outside the HTML.
-8. The final output must contain only valid HTML and must always include both <p> and <ul><li> elements.
+Structure:
+1. Begin with a <p> tag summarizing the main idea of the post in 2–3 short sentences.
+2. Follow with a <ul> element containing exactly three <li> elements.
 
-Strict Rule: If you do not return the <ul> with exactly six <li> elements, the response is considered invalid.`;
+Each <li> must:
+- Start with a <b>highlighted key phrase</b>.
+- Be a short, unique point (2–4 sentences max).
+- Be skimmable and informative.
+- Optionally include an <a href="..." target="_blank" className="text-blue-500" rel="noopener noreferrer">link</a> if relevant (only one total).
+
+Formatting Rules:
+- Use only the following tags: <p>, <ul>, <li>, <b>, <a>.
+- Output must be valid, clean HTML only — no markdown, no headers, no extra text.
+
+Important:
+- Do NOT return more than 3 bullet points.
+- Do NOT include any content outside of the HTML structure.`;
+
 
 
 export const generateAIAnalysis = async (req, res, next) => {
@@ -55,11 +60,13 @@ export const generateAIAnalysis = async (req, res, next) => {
     res.setHeader("Cache-Control", "no-cache");
     res.flushHeaders(); // flush the headers to establish SSE with client
     const { post } = req.body;
+    console.log(post)
     const response = await genAI.models.generateContentStream({
       model: "gemini-2.5-flash",
       contents: `${prompt}\n\nPost:\n${JSON.stringify(post)}`,
     });
-      for await (const chunk of response) {
+    for await (const chunk of response) {
+        console.log(chunk.text)
       res.write(`${chunk.text}\n\n`);
     }
     res.end();

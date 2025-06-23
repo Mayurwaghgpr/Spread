@@ -117,7 +117,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
         {profileId !== user.id ? (
           <div className="flex justify-start items-center gap-4 w-full sm:text-sm text-xs text-black border-inherit">
             <Follow
-              People={userProfile}
+              person={userProfile}
               className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-2 border border-inherit  rounded-xl bg-white hover:bg-gray-200  dark:hover:bg-gray-300 `}
             />
             <Ibutton

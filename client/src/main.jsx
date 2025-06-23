@@ -13,7 +13,6 @@ import {
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorBoundaryFallback from "./component/Errors/ErrorBoundaryFallback.jsx";
 const queryClient = new QueryClient();
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryErrorResetBoundary>

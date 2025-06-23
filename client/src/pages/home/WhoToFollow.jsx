@@ -23,7 +23,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
             >
               {" "}
               <Follow
-                People={el}
+                person={el}
                 className="text-black min-h-4 text-sm border p-1 px-3 flex justify-center items-center transition-all  duration-100 bg-white hover:bg-gray-300 rounded-full"
               />
             </PeoplesList>

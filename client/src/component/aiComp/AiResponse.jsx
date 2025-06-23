@@ -1,5 +1,5 @@
 import DOMPurify from "dompurify";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
 import userImageSrc from "../../utils/userImageSrc";
 
@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const AIResponse = () => {
   const [aiStreamText, setAiStreamText] = useState("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [error, setError] = useState();
   const [isStreaming, setIsStreaming] = useState(true);
   const controllerRef = React.useRef(null);
@@ -22,7 +22,7 @@ const AIResponse = () => {
     [postData?.User]
   );
   // Reference for cancellation
-  const fetchStream = async () => {
+  const fetchStream = useCallback(async () => {
     setIsAnalyzing(true);
     setAiStreamText("");
     setError(null);
@@ -43,7 +43,9 @@ const AIResponse = () => {
         }
       );
 
-      if (!response.ok) throw new Error("AI analysis failed");
+      if (!response.ok) {
+        throw new Error("AI analysis failed");
+      }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
@@ -54,6 +56,8 @@ const AIResponse = () => {
         const { value, done: streamDone } = await reader.read();
         done = streamDone;
         setIsStreaming(!streamDone);
+        setIsAnalyzing(false);
+
         if (value) {
           const chunk = decoder.decode(value, { stream: true });
           setAiStreamText((prev) => prev + chunk);
@@ -63,10 +67,8 @@ const AIResponse = () => {
       if (err.name !== "AbortError") {
         setError(err.message || "Streaming error");
       }
-    } finally {
-      setIsAnalyzing(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (!postData?.title) return;
@@ -77,15 +79,10 @@ const AIResponse = () => {
       if (controllerRef.current) {
         controllerRef.current.abort();
       }
-      setIsAnalyzing(false);
-      setAiStreamText("");
-      setError(null);
-      setIsStreaming(false);
     };
   }, [postData?.title]);
-
   return (
-    <div className="flex items-center justify-center w-full h-screen my-16 border-inherit">
+    <div className="flex items-center justify-center w-full my-16 border-inherit">
       <div className="animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full overflow-hidden border-inherit">
         {/* Header */}
         <header className="border-b border-inherit flex justify-between items-center p-4">
@@ -108,7 +105,6 @@ const AIResponse = () => {
               className="flex justify-center items-center w-10 h-10 *:transition-all *:duration-300 "
             >
               <TiArrowSync
-                title=""
                 className={` m-auto opacity-30 hover:opacity-100 cursor-pointer`}
               />
             </button>
@@ -176,12 +172,12 @@ const AIResponse = () => {
         {!error ? (
           <div className="w-full  transition-all duration-1000 ease-linear animate-typewriter text-sm ">
             {" "}
-            <p
-              className="leading-relaxed text-black dark:text-white"
+            <div
+              className="prose dark:prose-invert leading-relaxed text-black dark:text-white"
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(aiStreamText),
               }}
-            ></p>
+            ></div>
             {isStreaming && (
               <span className="block w-1 h-1 p-1 rounded-full bg-black dark:bg-white animate-pulse">
                 &nbsp;

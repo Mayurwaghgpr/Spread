@@ -16,134 +16,62 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import MainNavBar from "./component/header/MainNavBar";
 import ProtectedRoute from "./utils/ProtectedRoutes";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import LoaderScreen from "./component/loaders/loaderScreen";
 import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/layout/SideBar";
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import NotificationBox from "./component/notification/NotificationBox";
-import Suggestions from "./pages/home/Suggestions";
-import ConversationInfo from "./pages/Messages/ConversationInfo";
-import InfoSection from "./pages/Messages/components/InfoSection";
-import WelcomeLoginBox from "./component/utilityComp/WelcomeLoginBox";
-import SomethingWentWrong from "./component/Errors/SomethingWentWrong";
-import NewConversation from "./pages/Messages/NewConversation";
-import ImageInBigFrame from "./component/utilityComp/ImageInBigFrame";
-import AIResponse from "./component/aiComp/AiResponse";
 
 // Lazy load components with better error boundaries
-const SignUp = lazy(() =>
-  import("./pages/auth/SignUp").catch(() => ({
-    default: () => <div>Error loading SignUp</div>,
-  }))
+const SignUp = lazy(() => import("./pages/auth/SignUp"));
+const SignIn = lazy(() => import("./pages/auth/SignIn"));
+const ForgotPass = lazy(() => import("./pages/auth/ForgotPass"));
+const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
+const Home = lazy(() => import("./pages/home/Home"));
+const Heroes = lazy(() => import("./pages/Heroes"));
+const PageError = lazy(() => import("./pages/ErrorPages/ErrorPage"));
+const Profile = lazy(() => import("./pages/userProfile/Profile"));
+const DynamicPostEditor = lazy(
+  () => import("./pages/PostEditor/DynamicPostEditor")
 );
-const SignIn = lazy(() =>
-  import("./pages/auth/SignIn").catch(() => ({
-    default: () => <div>Error loading SignIn</div>,
-  }))
+const PostPreviewEditor = lazy(
+  () => import("./pages/PostEditor/component/PostPreviewEditor")
 );
-const ForgotPass = lazy(() =>
-  import("./pages/auth/ForgotPass").catch(() => ({
-    default: () => <div>Error loading ForgotPass</div>,
-  }))
+const PostView = lazy(() => import("./pages/PostView/PostView"));
+const ProfileEditor = lazy(() => import("./pages/userProfile/ProfileEditor"));
+const About = lazy(() => import("./pages/About"));
+const ReadList = lazy(() => import("./pages/ReadList"));
+const Settings = lazy(() => import("./pages/settings/Settings"));
+const General = lazy(() => import("./pages/settings/General"));
+const ConfirmationBox = lazy(
+  () => import("./component/utilityComp/ConfirmationBox")
 );
-const ResetPassword = lazy(() =>
-  import("./pages/auth/ResetPassword").catch(() => ({
-    default: () => <div>Error loading ResetPassword</div>,
-  }))
+const Messenger = lazy(() => import("./pages/Messages/Messenger"));
+const MessageSection = lazy(() => import("./pages/Messages/MessageSection"));
+const SearchBox = lazy(() => import("./pages/Search&Explorer/SearchBox"));
+const CommentSection = lazy(() => import("./pages/Comment/CommentSection"));
+const ToastContainer = lazy(
+  () => import("./component/utilityComp/ToastContainer")
 );
-const Home = lazy(() =>
-  import("./pages/home/Home").catch(() => ({
-    default: () => <div>Error loading Home</div>,
-  }))
+const Suggestions = lazy(() => import("./pages/home/Suggestions"));
+const ConversationInfo = lazy(
+  () => import("./pages/Messages/ConversationInfo")
 );
-const Heroes = lazy(() =>
-  import("./pages/Heroes").catch(() => ({
-    default: () => <div>Error loading Heroes</div>,
-  }))
+const InfoSection = lazy(
+  () => import("./pages/Messages/components/InfoSection")
 );
-const PageError = lazy(() =>
-  import("./pages/ErrorPages/ErrorPage").catch(() => ({
-    default: () => <div>Error loading PageError</div>,
-  }))
+const WelcomeLoginBox = lazy(
+  () => import("./component/utilityComp/WelcomeLoginBox")
 );
-const Profile = lazy(() =>
-  import("./pages/userProfile/Profile").catch(() => ({
-    default: () => <div>Error loading Profile</div>,
-  }))
+const SomethingWentWrong = lazy(
+  () => import("./component/Errors/SomethingWentWrong")
 );
-const DynamicPostEditor = lazy(() =>
-  import("./pages/PostEditor/DynamicPostEditor").catch(() => ({
-    default: () => <div>Error loading DynamicPostEditor</div>,
-  }))
+const NewConversation = lazy(() => import("./pages/Messages/NewConversation"));
+const ImageInBigFrame = lazy(
+  () => import("./component/utilityComp/ImageInBigFrame")
 );
-const PostPreviewEditor = lazy(() =>
-  import("./pages/PostEditor/component/PostPreviewEditor").catch(() => ({
-    default: () => <div>Error loading PostPreviewEditor</div>,
-  }))
-);
-const PostView = lazy(() =>
-  import("./pages/PostView/PostView").catch(() => ({
-    default: () => <div>Error loading PostView</div>,
-  }))
-);
-const ProfileEditor = lazy(() =>
-  import("./pages/userProfile/ProfileEditor").catch(() => ({
-    default: () => <div>Error loading ProfileEditor</div>,
-  }))
-);
-const About = lazy(() =>
-  import("./pages/About").catch(() => ({
-    default: () => <div>Error loading About</div>,
-  }))
-);
-const ReadList = lazy(() =>
-  import("./pages/ReadList").catch(() => ({
-    default: () => <div>Error loading ReadList</div>,
-  }))
-);
-const Settings = lazy(() =>
-  import("./pages/settings/Settings").catch(() => ({
-    default: () => <div>Error loading Settings</div>,
-  }))
-);
-const General = lazy(() =>
-  import("./pages/settings/General").catch(() => ({
-    default: () => <div>Error loading General</div>,
-  }))
-);
-const ConfirmationBox = lazy(() =>
-  import("./component/utilityComp/ConfirmationBox").catch(() => ({
-    default: () => <div>Error loading ConfirmationBox</div>,
-  }))
-);
-const Messenger = lazy(() =>
-  import("./pages/Messages/Messenger").catch(() => ({
-    default: () => <div>Error loading Messenger</div>,
-  }))
-);
-const MessageSection = lazy(() =>
-  import("./pages/Messages/MessageSection").catch(() => ({
-    default: () => <div>Error loading MessageSection</div>,
-  }))
-);
-const SearchBox = lazy(() =>
-  import("./pages/Search&Explorer/SearchBox").catch(() => ({
-    default: () => <div>Error loading SearchBox</div>,
-  }))
-);
-const CommentSection = lazy(() =>
-  import("./pages/Comment/CommentSection").catch(() => ({
-    default: () => <div>Error loading CommentSection</div>,
-  }))
-);
-const ToastContainer = lazy(() =>
-  import("./component/utilityComp/ToastContainer").catch(() => ({
-    default: () => <div>Error loading ToastContainer</div>,
-  }))
-);
-
+const AIResponse = lazy(() => import("./component/aiComp/AiResponse"));
 // Constants for better maintainability
 const THEME_STORAGE_KEY = "ThemeMode";
 const ROUTES = {

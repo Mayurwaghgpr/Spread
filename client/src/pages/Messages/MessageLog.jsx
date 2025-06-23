@@ -89,54 +89,52 @@ function MessageLog() {
           }
         />
       </header>
-      <section className="border-inherit w-full p-5 ">
-        <div className="flex flex-col items-start gap-7 h-full w-full  py-6  no-scrollbar scroll-smooth   ">
-          {messageLogData?.map((conv, idx, arr) => (
-            <Link
-              onClick={() => haldelSelectConversation(conv)}
-              ref={arr.length % 10 === 0 ? lastItemRef : null}
-              to={`c?Id=${conv.id}`}
-              replace={conversationId !== null}
-              key={conv.id}
-              className=" flex justify-start items-start gap-3 w-full  "
-            >
-              <ProfileImage
-                className={"min-w-10 min-h-10 w-10 h-10 "}
-                image={
-                  conv.conversationType !== "group"
-                    ? conv?.members?.find((m) => m.id != user.id)?.userImage
-                    : conv?.image
-                }
-                alt={
-                  conv.conversationType !== "group"
+      <section className=" space-y-4 border-inherit w-full p-5  ">
+        {messageLogData?.map((conv, idx, arr) => (
+          <Link
+            onClick={() => haldelSelectConversation(conv)}
+            ref={arr.length % 10 === 0 ? lastItemRef : null}
+            to={`c?Id=${conv.id}`}
+            replace={conversationId !== null}
+            key={conv.id}
+            className=" flex justify-start items-start gap-3 w-full  "
+          >
+            <ProfileImage
+              className={"min-w-10 min-h-10 w-10 h-10 "}
+              image={
+                conv.conversationType !== "group"
+                  ? conv?.members?.find((m) => m.id != user.id)?.userImage
+                  : conv?.image
+              }
+              alt={
+                conv.conversationType !== "group"
+                  ? conv?.members?.find((m) => m.id != user.id)?.displayName
+                  : conv.groupName
+              }
+            />
+            <div className="w-full">
+              {" "}
+              <div className="flex justify-between items-center w-full">
+                <h2>
+                  {conv.conversationType !== "group"
                     ? conv?.members?.find((m) => m.id != user.id)?.displayName
-                    : conv.groupName
-                }
-              />
-              <div className="w-full">
-                {" "}
-                <div className="flex justify-between items-center w-full">
-                  <h2>
-                    {conv.conversationType !== "group"
-                      ? conv?.members?.find((m) => m.id != user.id)?.displayName
-                      : conv?.groupName}
-                  </h2>
-                  <TimeAgo className={"text-xs"} date={conv?.createdAt} />
-                </div>
-                <div className="flex justify-start items-start gap-2 w-3/4 max-h-14 text-sm  text-ellipsis overflow-hidden opacity-20 ">
-                  {" "}
-                  <p className="">{conv?.lastMessage}</p>
-                  {/* <span>{user.timestamp}</span> */}
-                </div>
+                    : conv?.groupName}
+                </h2>
+                <TimeAgo className={"text-xs"} date={conv?.createdAt} />
               </div>
-            </Link>
-          ))}
-          {isLoading && (
-            <div className="flex justify-center items-center w-full h-full ">
-              <Spinner className={"w-10 h-10 bg-black p-1 dark:bg-white"} />
+              <div className="flex justify-start items-start gap-2 w-3/4 max-h-14 text-sm  text-ellipsis overflow-hidden opacity-20 ">
+                {" "}
+                <p className="">{conv?.lastMessage}</p>
+                {/* <span>{user.timestamp}</span> */}
+              </div>
             </div>
-          )}
-        </div>
+          </Link>
+        ))}
+        {isLoading && (
+          <div className="flex justify-center items-center w-full h-full ">
+            <Spinner className={"w-10 h-10 bg-black p-1 dark:bg-white"} />
+          </div>
+        )}
       </section>
     </aside>
   );

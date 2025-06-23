@@ -55,7 +55,7 @@ function DesktopTooltip() {
           <ThemeBtn
             Modes={Modes}
             separate={true}
-            className="flex gap-1 bg-gray-50 dark:bg-gray-900 rounded-lg p-1"
+            className="flex gap-3 bg-gray-50 dark:bg-gray-900 rounded-lg p-2 px-5 w-fit"
           />
         </div>
 

@@ -67,16 +67,16 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
         <button
           onClick={changeTheme}
           aria-label={`Switch to ${Modes[(Modes.findIndex((mode) => mode.value === ThemeMode) + 1) % Modes.length]?.name}`}
-          className="group relative p-3 bg-[#fff9f3] dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:scale-105 hover:shadow-lg dark:hover:shadow-xl"
+          className="group relative p-3   transition-all duration-200 hover:scale-105 "
         >
           <div className="text-gray-600 dark:text-gray-400 text-lg group-hover:scale-110 transition-transform duration-200">
             {icons[currentMode?.icon || "sun"]}
           </div>
 
-          {/* Tooltip */}
+          {/* Tooltip
           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
             {currentMode?.name || "Toggle Theme"}
-          </div>
+          </div> */}
         </button>
       </div>
     );

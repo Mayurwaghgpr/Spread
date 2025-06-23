@@ -12,7 +12,23 @@ import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import spreadLogo from "/spread_logo_03_robopus.png";
 import DesktopTooltip from "./DesktopTooltip";
-
+const Modes = [
+  {
+    name: "Dark mode",
+    value: "dark",
+    icon: "moonFi",
+  },
+  {
+    name: "Light mode",
+    value: "light",
+    icon: "sun",
+  },
+  {
+    name: "System",
+    value: "system",
+    icon: "desktopO",
+  },
+];
 function MainNavBar() {
   const [deviceSize, setDeviceSize] = useState(window.innerWidth);
   const { MenuOpen } = useSelector((state) => state.ui);
@@ -66,9 +82,8 @@ function MainNavBar() {
             {isLogin && (
               <>
                 {/* Notification Bell */}
-                <div className="relative">
-                  <NotifictionBell />
-                </div>
+                <ThemeBtn className=" " Modes={Modes} />
+                <NotifictionBell />
 
                 {/* User Profile Section */}
                 <div className="relative group">

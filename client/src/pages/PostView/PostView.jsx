@@ -9,66 +9,83 @@ import React, {
 } from "react";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import DOMPurify from "dompurify";
-import { useMutation, useQuery } from "react-query";
+
+import { useQuery } from "react-query";
+
+// Component imports
 import Bookmark from "../../component/buttons/Bookmark";
-import usePublicApis from "../../services/publicApis";
 import Like from "../../component/buttons/Like/Like";
 import Follow from "../../component/buttons/follow";
-import userImageSrc from "../../utils/userImageSrc";
-import { setCommentCred } from "../../store/slices/postSlice";
-// import PostsApis from "../../services/PostsApis";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
-import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import Menu from "../../component/Menus/Menu";
 import ProfileImage from "../../component/ProfileImage";
-import Ibutton from "../../component/buttons/Ibutton";
+import ImageFigure from "../../component/utilityComp/ImageFigure";
+import FedInBtn from "../../component/buttons/FedInBtn";
+import LoaderScreen from "../../component/loaders/loaderScreen";
+
+// Hook imports
+import usePublicApis from "../../services/publicApis";
 import useIcons from "../../hooks/useIcons";
 import useMenuConstant from "../../hooks/useMenuConstant";
 import useClickOutside from "../../hooks/useClickOutside";
-import ImageFigure from "../../component/utilityComp/ImageFigure";
-import AbbreviateNumber from "../../utils/AbbreviateNumber";
-import FedInBtn from "../../component/buttons/FedInBtn";
 import useSocket from "../../hooks/useSocket";
-// import Spinner from "../../component/loaders/Spinner";
-import LoaderScreen from "../../component/loaders/loaderScreen";
-import LinkBtn from "../../component/LinkBtn";
 
+// Utility imports
+import userImageSrc from "../../utils/userImageSrc";
+import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import { setCommentCred } from "../../store/slices/postSlice";
+import { setOpenBigFrame } from "../../store/slices/uiSlice";
+import AIBtn from "../../component/buttons/AIBtn";
+import PostContent from "./components/PostContent";
+import PostHeader from "./components/PostHeader";
+
+// Lazy loaded components
 const CopyToClipboardInput = lazy(
   () => import("../../component/CopyToClipboardInput")
 );
 
-function PostView() {
-  const { commentCred } = useSelector((state) => state.posts);
-  const { user } = useSelector((state) => state.auth);
-  const [postView, setPostView] = useState({});
-  const { fetchDataById } = usePublicApis();
-  // const { getAiGenAnalysis } = PostsApis();
+// Memoized sub-components for better performance
 
+function PostView() {
+  // Redux state
+  const { commentCred } = useSelector((state) => state.posts);
+  // const { user } = useSelector((state) => state.auth);
+
+  // Local state
+  const [postView, setPostView] = useState({});
+
+  // Hooks
+  const { fetchDataById } = usePublicApis();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const menuRef = useRef(null);
-
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
   const { socket } = useSocket();
 
+  // Socket event handler for real-time comment updates
   useEffect(() => {
-    socket?.on("update_comment", (newComment) => {
-      console.log({ newComment });
+    if (!socket || !postView?.id) return;
+
+    const handleUpdateComment = (newComment) => {
       if (newComment?.postId === postView?.id) {
-        console.log("matching");
         setPostView((prev) => ({
           ...prev,
-          comments: [...prev.comments, newComment],
+          comments: [...(prev.comments || []), newComment],
         }));
       }
-    });
+    };
+
+    socket.on("update_comment", handleUpdateComment);
+
+    return () => {
+      socket.off("update_comment", handleUpdateComment);
+    };
   }, [socket, postView?.id]);
 
-  //Fetch Post Full View
+  // Fetch Post Full View with React Query
   const { isLoading, isError, error } = useQuery({
     queryKey: ["fullpostData", id],
     queryFn: () => fetchDataById(id),
@@ -84,28 +101,39 @@ function PostView() {
     refetchOnWindowFocus: false,
   });
 
-  //Getting menu items array from hook
+  // Memoized values
   const { POST_MENU } = useMenuConstant(postView, "post");
 
-  //To Open Comments of post
-  const handelComment = useCallback(() => {
-    //Setting data initialy
-    navigate("comments");
-  }, []);
-
-  // Returns the image url by cheking the original path
   const { userImageurl } = useMemo(
     () => userImageSrc(postView?.User),
     [postView?.User]
   );
 
-  // Memoies the filltered topComment data by comments which don't have topCommentId
-  const Comments = useMemo(
+  const comments = useMemo(
     () =>
-      postView?.comments?.filter((comment) => comment.topCommentId === null),
+      postView?.comments?.filter((comment) => comment.topCommentId === null) ||
+      [],
     [postView?.comments]
   );
 
+  // Event handlers
+  const handleComment = useCallback(() => {
+    navigate("comments");
+  }, [navigate]);
+
+  const handleBigFrame = useCallback(
+    (src) => {
+      dispatch(
+        setOpenBigFrame({
+          src,
+          alt: postView.title,
+        })
+      );
+    },
+    [dispatch, postView.title]
+  );
+
+  // Error and loading states
   if (isError) {
     return (
       <ErrorPage
@@ -116,96 +144,37 @@ function PostView() {
   }
 
   if (isLoading) {
-    return <LoaderScreen message={"loading post..."} />;
+    return <LoaderScreen message="Loading post..." />;
   }
-  const handleBigFrame = (src) => {
-    dispatch(
-      setOpenBigFrame({
-        src,
-        alt: postView.title,
-      })
-    );
-  };
+
   return (
-    <section
-      className={`relative flex justify-center w-full h-full px-2 my-16 border-inherit transition-all duration-500  dark:*:border-[#383838] `}
-    >
-      <article
-        style={{ backgroundColor: "" }}
-        className={`relative animate-fedin1s max-w-4xl px-4  flex flex-col justify-center items-center 
-           border-inherit
-
-          
-            `}
-      >
-        <header className="mb-6 w-full border-inherit">
-          <section className="flex flex-col gap-2  border-inherit">
-            <div className=" relative flex items-center sm:text-base text-xs justify-between gap-5 my-4 ">
-              <div className="flex items-center gap-5 ">
-                <ProfileImage
-                  className="sm:w-10 sm:h-10 w-8 h-8"
-                  image={userImageurl}
-                  alt={postView?.User?.username}
-                  title={"author profile"}
-                />
-
-                <div className="">
-                  <div className="flex gap-2 items-center w-full">
-                    {" "}
-                    <Link
-                      className="w-full text-nowrap hover:underline underline-offset-4"
-                      to={`/profile/@${postView?.User?.username
-                        ?.split(" ")
-                        .slice(0, -1)
-                        .join("")}/${postView?.User?.id}`}
-                    >
-                      {postView?.User?.username}
-                    </Link>
-                    <Follow
-                      People={postView?.User}
-                      className={`relative hover:underline underline-offset-4 border-none  text-blue-500 `}
-                    />
-                  </div>
-
-                  <FormatedTime
-                    className={
-                      "text-black dark:text-white sm:text-xs text-[.7em]"
-                    }
-                    date={postView?.createdAt}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-full flex flex-wrap justify-start ">
-              <h1 className="text-xl break-words lg:text-4xl w-full font-semibold mb-2">
-                {postView?.title}
-              </h1>
-              <p className="text-sm text-black dark:text-white text-opacity-60 dark:text-opacity-70 lg:text-xl leading-relaxed">
-                {postView?.subtitle}
-              </p>
-            </div>
-          </section>
-        </header>
+    <section className="relative flex justify-center w-full h-full px-2 my-16 border-inherit transition-all duration-500 dark:*:border-[#383838]">
+      <article className="relative animate-fedin1s max-w-4xl w-full px-4 flex flex-col justify-center items-center border-inherit">
+        <PostHeader
+          postView={postView}
+          userImageurl={userImageurl}
+          onImageClick={handleBigFrame}
+        />
 
         <div className="flex justify-between items-center font-light sm:text-base text-xs py-3 w-full">
-          <div className="flex items-center gap-4  ">
-            <Like className={"min-w-10"} post={postView} />
+          <div className="flex items-center gap-4">
+            <Like className="min-w-10" post={postView} />
             <FedInBtn
-              action={handelComment}
+              action={handleComment}
               className="flex items-center gap-1 min-w-10"
             >
               {icons["comment"]}
-              <AbbreviateNumber rawNumber={Comments?.length} />
+              <AbbreviateNumber rawNumber={comments?.length} />
             </FedInBtn>
             <Bookmark post={postView} />
           </div>
-          <div className="flex gap-7  justify-between">
+          <div className="flex gap-7 justify-between">
             <Menu
               ref={menuRef}
               menuId={menuId}
               setMenuId={setMenuId}
               items={POST_MENU}
-              className={"w-full max-h-1/2"}
+              className="w-full max-h-1/2"
               content={postView}
             />
           </div>
@@ -218,43 +187,17 @@ function PostView() {
             objectFit="fill"
           />
         )}
-        {postView?.postContent?.map((item) => (
-          <section
-            key={item.id}
-            className="mb-6 w-full border-inherit sm:text-lg text-sm "
-          >
-            {item.type === "image" && item.content && (
-              <ImageFigure
-                onClick={() => handleBigFrame(item.content)}
-                className=""
-                imageUrl={item.content}
-                altText={"item.content"}
-                caption={item.title}
-              />
-            )}
-            {item?.type === "text" ? (
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(item.content),
-                }}
-                className="w-full "
-              ></p>
-            ) : (
-              item?.type !== "text" &&
-              item?.type !== "image" && <CopyToClipboardInput item={item} />
-            )}
-          </section>
-        ))}
+
+        <PostContent
+          postContent={postView?.postContent}
+          onImageClick={handleBigFrame}
+        />
       </article>
 
-      <Link
-        to={`/analysis`}
+      <AIBtn
         state={{ postData: postView }}
-        className="z-50  border-inherit before:transition-all before:text-xs sm:text-xl text-lg flex justify-center  before:content-['Gerente_AI_analysis_for_this_post'] before:border-inherit before:text-center before:p-2  before:duration-200 before:bg-light before:dark:bg-dark before:hover:opacity-100 before:opacity-0 before:pointer-events-none before:border before:shadow-sm before:w-52  before:absolute before:top-14 before:rounded-lg cursor-pointer fixed top-4 sm:right-64"
-      >
-        AI
-        {icons["glitter"]}
-      </Link>
+        className="fixed bottom-20 right-10 rounded-xl bg-blue-600 text-white  before:text-black p-2 shadow-lg hover:bg-blue-700 transition-colors duration-200 z-30"
+      />
       <Outlet context={{ postData: postView }} />
     </section>
   );

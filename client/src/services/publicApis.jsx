@@ -2,12 +2,12 @@ import { useDispatch } from "react-redux";
 import axiosInstance from "./axios";
 
 function usePublicApis() {
-  const fetchPeopels = async ({ pageParam, mentionedUsername }) => {
+  const fetchPeopels = async ({ pageParam, username }) => {
     try {
       const result = await axiosInstance.get(`/public/h/peoples`, {
         params: {
           lastTimestamp: pageParam,
-          q: mentionedUsername.trim(),
+          q: username.trim(),
         },
       });
       return result.data.peoples;

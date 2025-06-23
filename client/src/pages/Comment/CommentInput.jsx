@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
 import { useMutation, useQueryClient } from "react-query";
 import { setCommentCred } from "../../store/slices/postSlice";
-import DOMPurify from "dompurify";
 
 import PostsApis from "../../services/PostsApis";
 import { setToast } from "../../store/slices/uiSlice";

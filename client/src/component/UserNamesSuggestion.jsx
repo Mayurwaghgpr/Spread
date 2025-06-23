@@ -22,7 +22,7 @@ function UserNamesSuggestion({
   } = useInfiniteQuery(
     ["people_to_mention", mentionedUsername],
     ({ pageParam = new Date().toISOString() }) =>
-      fetchPeopels({ pageParam, mentionedUsername }),
+      fetchPeopels({ pageParam, username: mentionedUsername }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0

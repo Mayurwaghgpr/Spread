@@ -22,6 +22,7 @@ import SideBar from "./component/layout/SideBar";
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import NotificationBox from "./component/notification/NotificationBox";
+import MessageFallBack from "./pages/Messages/components/MessageFallBack";
 
 // Lazy load components with better error boundaries
 const SignUp = lazy(() => import("./pages/auth/SignUp"));
@@ -286,6 +287,7 @@ function App() {
                 </ProtectedRouteWrapper>
               }
             >
+              <Route path="" element={<MessageFallBack />} />
               <Route path="new/c" element={<NewConversation />} />
               <Route path="c" element={<MessageSection />}>
                 <Route path="info" element={<ConversationInfo />}>

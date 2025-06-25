@@ -89,7 +89,7 @@ function MessageLog() {
           }
         />
       </header>
-      <section className=" space-y-4 border-inherit w-full p-5  ">
+      <section className=" space-y-4 border-inherit w-full p-5 px-7  ">
         {messageLogData?.map((conv, idx, arr) => (
           <Link
             onClick={() => haldelSelectConversation(conv)}

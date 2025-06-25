@@ -113,7 +113,7 @@ const NewConversation = () => {
             </Ibutton>
           )}
         </div>
-        <div className="flex flex-col justify-center items-center w-full gap-2">
+        <div className="flex flex-col justify-center items-center w-full gap-2 border-inherit">
           <SearchBar
             onChange={(e) => setSearch(e.target.value)}
             value={search}

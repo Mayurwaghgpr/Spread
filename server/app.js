@@ -37,7 +37,6 @@ export const io = sockIo.init(server);
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
-
 // Morgan for logging
 app.use(morgan("dev"));
 
@@ -103,7 +102,7 @@ app.use(
 DataBaseAssociations();
 
 //DB changes listener
-initMessageChangeListener()
+initMessageChangeListener();
 
 // Socket.IO
 io.on("connection", (socket) => {

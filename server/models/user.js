@@ -1,15 +1,15 @@
 import { DataTypes } from "sequelize";
 import Database from "../db/database.js";
 
-const   User = Database.define("User", {
+const User = Database.define("user", {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  displayName:{
+  displayName: {
     type: DataTypes.STRING,
-    allowNull: false, 
+    allowNull: false,
   },
   userImage: {
     type: DataTypes.STRING,
@@ -18,15 +18,15 @@ const   User = Database.define("User", {
   },
   username: {
     type: DataTypes.STRING,
-    allowNull: false, 
+    allowNull: false,
     unique: true,
   },
   cloudinaryPubId: {
-        type: DataTypes.STRING,
-        allowNull: true,
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   pronouns: {
-    type: DataTypes.ENUM(['he/him', 'she/her']),
+    type: DataTypes.ENUM(["he/him", "she/her"]),
     defaultValue: "he/him",
   },
   email: {

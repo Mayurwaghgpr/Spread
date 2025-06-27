@@ -18,7 +18,7 @@ function Home() {
   const isDeviceSize = useDeviceSize("1023");
   const { fetchDataAll } = PostsApis();
   const selectedTopic = searchParams.get("topic") || "All";
-  const selectedFeed = searchParams.get("feed") || "All"; // Note: This is defined but unused
+  const selectedFeed = searchParams.get("feed"); // Note: This is defined but unused
   const { fetchHomeContent } = usePublicApis();
   const Icons = useIcons();
   const navigate = useNavigate();
@@ -50,9 +50,9 @@ function Home() {
     hasNextPage,
     isLoading,
   } = useInfiniteQuery(
-    ["Allposts", selectedTopic],
+    ["Allposts", selectedTopic, selectedFeed],
     ({ pageParam = new Date().toISOString() }) =>
-      fetchDataAll({ pageParam, topic: selectedTopic }),
+      fetchDataAll({ pageParam, topic: selectedTopic, endpoint: selectedFeed }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
@@ -131,7 +131,7 @@ function Home() {
               aria-label="View all feeds"
               id="all"
               className={
-                selectedFeed === "All"
+                selectedFeed !== "following"
                   ? "opacity-100  underline underline-offset-[1.5rem] "
                   : "opacity-50"
               }
@@ -141,11 +141,11 @@ function Home() {
           </li>
           <li className="capitalize flex justify-center items-center">
             <Ibutton
-              id={"Followings"}
-              aria-label="View Followings"
-              onClick={() => navigate("?feed=followings")}
+              id={"Following"}
+              aria-label="View Following"
+              onClick={() => navigate("?feed=following")}
               className={
-                selectedFeed === "followings"
+                selectedFeed === "following"
                   ? " opacity-100 underline underline-offset-[1.5rem]"
                   : "opacity-50"
               }

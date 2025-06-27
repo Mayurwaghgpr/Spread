@@ -3,16 +3,19 @@ import axiosInstance from "./axios";
 
 function PostsApis() {
   // Fetch all posts with pagination and filtering by topic
-  const fetchDataAll = async ({ pageParam, topic }) => {
+  const fetchDataAll = async ({ pageParam, topic, endpoint }) => {
     try {
-      const response = await axiosInstance.get(`/posts/all`, {
-        params: {
-          limit: 3,
-          lastTimestamp: pageParam,
-          type: topic,
-        },
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get(
+        `/posts/feed/${endpoint || ""}`,
+        {
+          params: {
+            limit: 3,
+            lastTimestamp: pageParam,
+            type: topic,
+          },
+          withCredentials: true,
+        }
+      );
       return response.data;
     } catch (error) {
       throw error.response || error;

@@ -256,7 +256,7 @@ function MessageSection() {
       } grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit bg-inherit`}
     >
       {/* Header */}
-      <header className="flex justify-between col-span-full bg-[#fff9f3] dark:bg-black z-20 w-full h-fit py-2 px-7">
+      <header className=" sticky top-0  border-b border-inherit flex justify-between col-span-full bg-light dark:bg-dark  z-20 w-full h-fit py-2 px-7">
         <div className="flex justify-start items-center gap-3 w-[80%]">
           <ProfileImage
             onClick={() => navigate(`info?Id=${conversationId}`)}
@@ -293,18 +293,10 @@ function MessageSection() {
       </header>
 
       {/* Messages Container */}
-      <div
+      <main
         ref={containerRef}
         className="sm:flex flex-col justify-start w-full h-full col-span-full row-start-2 row-span-full scroll-smooth p-5 border-inherit no-scroll overflow-y-auto"
       >
-        {/* No Conversation Selected */}
-        {!conversationId && (
-          <div className="flex items-center justify-center w-full h-full">
-            <p className="text-gray-500">
-              Select a conversation to start chatting.
-            </p>
-          </div>
-        )}
         {/* Messages List */}
         {!isLoading &&
           messages?.map((msg) => (
@@ -324,7 +316,7 @@ function MessageSection() {
                     image={usr.image}
                   />
                 ))}
-              <div className="relative flex items-center justify-center py-2 px-2 text-sm mt-2 ml-2 bg-[#fffefe] dark:shadow-white rounded-xl rounded-tl-none">
+              <div className="relative flex items-center justify-center py-2 px-2 text-sm mt-2 ml-2 bg-light dark:bg-dark  dark:shadow-white rounded-xl rounded-tl-none">
                 <div className="absolute left-[-5px] top-0 -z-[1] w-0 h-0 border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-inherit"></div>
                 <span className="typingLoader"></span>
               </div>
@@ -342,10 +334,10 @@ function MessageSection() {
         {isLoading && (
           <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
         )}
-      </div>
+      </main>
 
       {/* Input Section */}
-      <div className="flex justify-center items-center col-span-full w-full h-fit border-t sm:px-5 px-2 pt-2 pb-5 border-inherit bg-inherit">
+      <footer className=" sticky bottom-0 z-20 flex justify-center items-center col-span-full w-full h-fit border-t sm:px-5 px-2 pt-2 pb-5 border-inherit bg-inherit">
         <div className="relative flex justify-center items-baseline gap-3 p-2 w-4/5 rounded-lg bg-white border dark:bg-opacity-10 border-inherit">
           <div className="flex justify-start items-center sm:gap-3 w-full border-inherit">
             <div className="flex justify-start items-center gap-2 w-fit border-inherit">
@@ -379,7 +371,7 @@ function MessageSection() {
             {icons["sendO"]}
           </FedInBtn>
         </div>
-      </div>
+      </footer>
 
       <Outlet
         context={{

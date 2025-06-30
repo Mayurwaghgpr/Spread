@@ -21,7 +21,6 @@ import useIcons from "../../hooks/useIcons";
 import useClickOutside from "../../hooks/useClickOutside";
 import useMenuConstant from "../../hooks/useMenuConstant";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
-import ImageFigure from "../utilityComp/ImageFigure";
 import FedInBtn from "../buttons/FedInBtn";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {

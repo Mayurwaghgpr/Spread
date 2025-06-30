@@ -12,23 +12,23 @@ const PostHeader = memo(({ postView, userImageurl, onImageClick }) => (
           <ProfileImage
             className="sm:w-10 sm:h-10 w-8 h-8"
             image={userImageurl}
-            alt={postView?.User?.username}
+            alt={postView?.user?.username}
             title="author profile"
           />
           <div>
             <div className="flex gap-2 items-center w-full">
               <Link
                 className="w-full text-nowrap hover:underline underline-offset-4"
-                to={`/profile/@${postView?.User?.username
+                to={`/profile/@${postView?.user?.username
                   ?.split(" ")
                   .slice(0, -1)
-                  .join("")}/${postView?.User?.id}`}
+                  .join("")}/${postView?.user?.id}`}
               >
-                {postView?.User?.username}
+                {postView?.user?.username}
               </Link>
               <Follow
-                person={postView?.User}
-                className="relative hover:underline underline-offset-4 border-none text-blue-500"
+                person={postView?.user}
+                className="relative px-5 py-2 hover:underline underline-offset-4 border-none text-blue-500"
               />
             </div>
             <FormatedTime

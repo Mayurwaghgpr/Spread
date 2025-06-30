@@ -9,7 +9,7 @@ function MessageFallBack() {
       <h1 className="text-3xl font-bold ">
         Select a conversation to start chatting
       </h1>
-      <p className=" text-gray-500 dark:text-gray-400">
+      <p className=" opacity-40">
         You can create a new conversation by clicking on the +Icon button or
         chose from existing conversations on the left.
       </p>

@@ -116,7 +116,7 @@ function App() {
       showSidebar:
         isLogin &&
         !pathname.startsWith("/write") &&
-        !pathname.startsWith("/messages") &&
+        // !pathname.startsWith("/messages") &&
         !pathname.startsWith("/search") &&
         !pathname.startsWith("/analysis") &&
         !pathname.startsWith("/view"),

@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFollowInfo } from "../store/slices/profileSlice";
 import { createPortal } from "react-dom";
 import { useQuery } from "react-query";
-import FollowPeopleLoader from "./loaders/FollowPeopleLoader";
 import useProfileApi from "../services/ProfileApis";
 import Follow from "./buttons/follow";
 import { useNavigate } from "react-router-dom";
+import ProfileListItemLoadingSkeleton from "./loaders/ProfileListItemLoadingSkeleton";
 
 function ProfileinfoCard({ className }) {
   const dispatch = useDispatch();
@@ -30,12 +30,6 @@ function ProfileinfoCard({ className }) {
     };
   }, []);
 
-  const variants = {
-    hidden: { x: "100%" },
-    visible: { x: "0%" },
-    exit: { x: "100%" },
-  };
-
   return createPortal(
     <div
       onClick={() => dispatch(setFollowInfo(""))}
@@ -56,7 +50,7 @@ function ProfileinfoCard({ className }) {
                       " flex justify-between items-center w-full text-nowrap"
                     }
                     key={`${followings.id}-${idx}`} // Ensure unique key
-                    people={followings}
+                    person={followings}
                     index={idx}
                     action={() =>
                       navigate(
@@ -66,7 +60,7 @@ function ProfileinfoCard({ className }) {
                   >
                     {" "}
                     <Follow
-                      People={followings}
+                      person={followings}
                       className="text-black min-h-8 min-w-[6.7rem] border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
                     />
                   </PeoplesList>
@@ -78,12 +72,7 @@ function ProfileinfoCard({ className }) {
               </div>
             )
           ) : (
-            [...Array(FollowInfo.count)].map((_, idx) => (
-              <FollowPeopleLoader
-                key={`loader-${idx}`} // Ensure unique key for loaders
-                className="w-full h-10 flex justify-center items-center gap-4 my-3"
-              />
-            ))
+            <ProfileListItemLoadingSkeleton count={10} />
           )}
         </div>
       </div>

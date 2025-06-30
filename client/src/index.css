@@ -8,6 +8,8 @@
 :root{
   --dark-color:black;
   --light-color:#fff9f3;
+  /* --dark-color: rgb(17 24 39 / 0.95);
+    --light-color: rgb(255 255 255 / 0.95); */
 }
 * {
   margin: 0;

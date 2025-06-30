@@ -16,7 +16,7 @@ function useMenuConstant(parent, kind) {
     {
       id: "copy-link",
       itemName: "Copy Link",
-      icon: icons["link"],
+      icon: "link",
       action: () => {
         navigator.clipboard
           .writeText(window.location.href)
@@ -33,13 +33,13 @@ function useMenuConstant(parent, kind) {
     {
       id: "share",
       itemName: "Share",
-      icon: <i className="bi bi-share"></i>,
+      icon: "share",
       action: () => console.log("Share action triggered"),
     },
     {
       id: "delete-post",
       itemName: "Delete Post",
-      icon: <i className="bi bi-trash2"></i>,
+      icon: "delete1",
       action: (id) => {
         dispatch(
           setConfirmBox({
@@ -56,7 +56,7 @@ function useMenuConstant(parent, kind) {
     {
       id: "edit-post",
       itemName: "Edit Post",
-      icon: icons["penO"],
+      icon: "penO",
       action: () => console.log("Edit action triggered"),
     },
   ];
@@ -65,7 +65,7 @@ function useMenuConstant(parent, kind) {
     {
       id: "delete-comment",
       itemName: "Delete Comment",
-      icon: <i className="bi bi-trash2"></i>,
+      icon: "delete1",
       action: (id) => {
         dispatch(
           setConfirmBox({
@@ -82,7 +82,7 @@ function useMenuConstant(parent, kind) {
     {
       id: "edit-comment",
       itemName: "Edit Comment",
-      icon: icons["penO"],
+      icon: "penO",
       action: () => console.log("Edit action triggered"),
     },
   ];

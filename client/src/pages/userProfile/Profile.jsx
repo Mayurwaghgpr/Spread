@@ -80,8 +80,8 @@ function Profile() {
   }
 
   return (
-    <section className="flex h-screen w-full lg:justify-start justify-end dark:*:border-[#383838] overflow-y-auto">
-      <div className="flex flex-col h-full md:w-[80%]  lg:w-[70%]  w-full  mt-20 ">
+    <section className="flex h-screen w-full lg:justify-start justify-end border-inherit overflow-y-auto">
+      <div className="flex flex-col h-full md:w-[80%]  lg:w-[70%]  w-full  mt-20 border-inherit ">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />
           <div className="w-full flex gap-5  p-2 px-4 border-inherit">
@@ -91,7 +91,7 @@ function Profile() {
             </div>
           </div>
           <div
-            className={` py-20 w-full flex  justify-center items-center flex-col border-inherit pt-5 dark:*:border-[#383838] `}
+            className={` py-20 w-full flex  justify-center items-center flex-col border-inherit pt-5`}
           >
             {/* <RenderPosts /> */}
             {userProfile?.posts?.length > 0

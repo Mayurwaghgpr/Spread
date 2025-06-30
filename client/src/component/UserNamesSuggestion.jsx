@@ -4,8 +4,8 @@ import { useInfiniteQuery, useMutation } from "react-query";
 import usePublicApis from "../services/publicApis";
 import { useLastItemObserver } from "../hooks/useLastItemObserver";
 import ProfileImage from "./ProfileImage";
-import DisplayUsername from "./DisplayUsername";
 import userImageSrc from "../utils/userImageSrc";
+import Heading from "./texts/Heading";
 function UserNamesSuggestion({
   mentionedUsername,
   className = "",
@@ -66,10 +66,11 @@ function UserNamesSuggestion({
                   className={`rounded-full w-6 min-w-max h-6 ${!item && " dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse "}`}
                   image={userImageurl}
                 />
-                <DisplayUsername
+                <Heading
                   className={`${!item && "p-2 w-full rounded-full  dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse"} text-ellipsis overflow-hidden whitespace-nowrap flex-1 min-w-0`}
-                  username={item?.username}
-                />
+                >
+                  {item?.username}
+                </Heading>
               </li>
             );
           }

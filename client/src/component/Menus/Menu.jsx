@@ -35,7 +35,7 @@ const Menu = forwardRef(function (
                 className="flex gap-2 text-nowrap items-center sm:px-3 sm:py-1 p-3  hover:bg-gray-400 hover:bg-opacity-10 rounded-md cursor-pointer"
                 onClick={() => item.action(content.id)}
               >
-                {item.icon}
+                {icons[item.icon]}
                 {item.itemName}
               </li>
             ))}

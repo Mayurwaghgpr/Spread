@@ -105,8 +105,8 @@ function PostView() {
   const { POST_MENU } = useMenuConstant(postView, "post");
 
   const { userImageurl } = useMemo(
-    () => userImageSrc(postView?.User),
-    [postView?.User]
+    () => userImageSrc(postView?.user),
+    [postView?.user]
   );
 
   const comments = useMemo(
@@ -196,7 +196,7 @@ function PostView() {
 
       <AIBtn
         state={{ postData: postView }}
-        className="fixed bottom-20 right-10 rounded-xl bg-blue-600 text-white  before:text-black p-2 shadow-lg hover:bg-blue-700 transition-colors duration-200 z-30"
+        className="fixed bottom-20 right-10 rounded-xl bg-blue-600 text-white  before:text-black p-2 shadow-lg hover:bg-blue-700 transition-colors duration-200 "
       />
       <Outlet context={{ postData: postView }} />
     </section>

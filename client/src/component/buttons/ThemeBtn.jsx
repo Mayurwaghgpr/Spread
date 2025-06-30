@@ -96,8 +96,8 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
             aria-pressed={isActive}
             className={`group relative px-3 py-2 rounded-lg border transition-all duration-200 hover:scale-105 ${
               isActive
-                ? "bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 border-gray-700 dark:border-gray-300 shadow-lg shadow-gray-200 dark:shadow-gray-800/50"
-                : "bg-[#fff9f3] dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500"
+                ? "bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 border-inherit shadow-lg shadow-gray-200 dark:shadow-gray-800/50"
+                : "bg-[#fff9f3] dark:bg-gray-800 text-gray-600 dark:text-gray-400  border-inherit hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500"
             }`}
           >
             <div

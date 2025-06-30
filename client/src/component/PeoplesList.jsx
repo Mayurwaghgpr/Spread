@@ -4,11 +4,11 @@ import userImageSrc from "../utils/userImageSrc";
 import UserPopover from "./utilityComp/UserPopover";
 import ProfileImage from "./ProfileImage";
 
-const PeoplesList = forwardRef(
-  ({ people, className, children, action, popover = true }, ref) => {
+const personsList = forwardRef(
+  ({ person, className, children, action, popover = true }, ref) => {
     const buttonRef = useRef(null);
     const boxRef = useRef(null);
-    const { userImageurl } = userImageSrc(people);
+    const { userImageurl } = userImageSrc(person);
     const { styles, attributes } = usePopper(
       buttonRef.current,
       boxRef.current,
@@ -37,8 +37,8 @@ const PeoplesList = forwardRef(
       <li
         ref={ref}
         className={`${className} font-medium capitalize  relative dark:border-[#383838] text-xs`}
-        key={people?.id}
-        id={people?.id}
+        key={person?.id}
+        id={person?.id}
       >
         <div
           ref={buttonRef}
@@ -47,33 +47,25 @@ const PeoplesList = forwardRef(
           <button
             className="flex items-center gap-3 border-inherit h-full w-full"
             onClick={action}
-            aria-label={`View ${people?.username || "user"} profile`}
-            aria-describedby={popover ? `popover-${people?.id}` : undefined}
+            aria-label={`View ${person?.username || "user"} profile`}
+            aria-describedby={popover ? `popover-${person?.id}` : undefined}
           >
             <ProfileImage
-              className={`w-8 h-8 rounded-full transition-opacity duration-200 ${
-                !people
-                  ? "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse"
-                  : ""
-              }`}
-              image={people && userImageurl}
+              className={`w-8 h-8 rounded-full transition-opacity duration-200`}
+              image={person && userImageurl}
             />
 
             <span
-              className={`overflow-hidden text-ellipsis whitespace-nowrap transition-all duration-200 ${
-                !people
-                  ? "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse py-4 w-full max-w-56 rounded-full"
-                  : ""
-              }`}
+              className={`overflow-hidden text-ellipsis whitespace-nowrap transition-all duration-200 `}
             >
-              {people?.username}
+              {person?.username}
             </span>
           </button>
-          {popover && people && (
+          {popover && person && (
             <UserPopover
-              id={`popover-${people?.id}`}
+              id={`popover-${person?.id}`}
               ref={boxRef}
-              people={people}
+              person={person}
               className="z-20 px-4 w-[20rem] absolute transition-all duration-300 top-8  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto hidden sm:flex flex-col gap-3 border bg-[#e8e4df] shadow-md border-inherit dark:bg-black font-normal text-sm p-3 overflow-hidden rounded-md"
               attributes={attributes}
               styles={styles}
@@ -87,4 +79,4 @@ const PeoplesList = forwardRef(
   }
 );
 
-export default memo(PeoplesList);
+export default memo(personsList);

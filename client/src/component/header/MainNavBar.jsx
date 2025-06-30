@@ -59,9 +59,9 @@ function MainNavBar() {
   }, [location.pathname, userProfile?.id, user?.id]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3 bg-[#fff9f3]/80 dark:bg-black/80 backdrop-blur-xl border-b border-gray-200/30 dark:border-gray-800/50 shadow-sm dark:shadow-gray-900/20">
-      <nav className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl border-b border-inherit ">
+      <nav className="max-w-7xl mx-auto border-inherit">
+        <div className="flex items-center justify-between border-inherit">
           {/* Logo Section */}
           <div
             onClick={() => navigate("/")}
@@ -78,7 +78,7 @@ function MainNavBar() {
           </div>
 
           {/* Right Section */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 border-inherit">
             {isLogin && (
               <>
                 {/* Notification Bell */}
@@ -86,7 +86,7 @@ function MainNavBar() {
                 <NotifictionBell />
 
                 {/* User Profile Section */}
-                <div className="relative group">
+                <div className="relative group border-inherit">
                   <ProfileImage
                     onClick={() => dispatch(setManuOpen())}
                     className={`box-content border-3 sm:w-10 sm:h-10 w-8 h-8 rounded-full cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-lg ${

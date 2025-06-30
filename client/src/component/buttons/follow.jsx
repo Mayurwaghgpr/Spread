@@ -67,7 +67,7 @@ function Follow({ className, person }) {
   return (
     <button
       onClick={handleFollowToggle}
-      className={`relative group font-bold ${className} ${
+      className={`relative group text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${className} ${
         isFollowing
           ? "hover:border-red-400 hover:border hover:bg-transparent"
           : ""

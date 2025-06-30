@@ -12,6 +12,8 @@ import useDeviceSize from "../../hooks/useDeviceSize";
 import useIcons from "../../hooks/useIcons";
 import Ibutton from "../../component/buttons/Ibutton";
 import ErrorPage from "../ErrorPages/ErrorPage";
+import EmptyState from "../../component/utilityComp/EmptyState";
+import { BsPostage, BsPostcard } from "react-icons/bs";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -121,11 +123,11 @@ function Home() {
   };
 
   return (
-    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out dark:border-[#383838] overflow-y-auto">
+    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out  overflow-y-auto">
       {/* Sticky Navigation */}
-      <div className="sticky top-[3.1rem] sm:top-[3.6rem] flex items-center justify-start row-span-1 lg:col-span-6 col-span-full w-full border-b bg-gray-700 bg-opacity-0 backdrop-blur-[20px] dark:border-[#383838] z-10">
-        <ul className="flex items-center justify-start gap-4 px-4 w-full h-full">
-          <li className="capitalize flex justify-center items-center">
+      <div className="sticky top-[3.1rem] sm:top-[3.6rem] flex items-center justify-start row-span-1 lg:col-span-6 col-span-full w-full border-b bg-gray-700 bg-opacity-0 backdrop-blur-[20px] border-inherit z-10">
+        <ul className="flex items-center justify-start gap-4 px-4 w-full h-full border-inherit">
+          <li className="capitalize flex justify-center items-center ">
             <Ibutton
               action={() => navigate("/")}
               aria-label="View all feeds"
@@ -168,16 +170,31 @@ function Home() {
             ))
           : renderPosts()}
 
-        {isFetchingNextPage && (
-          <div className="w-full flex justify-center items-center py-4">
-            <Spinner className="bg-black dark:bg-white w-10 p-1" />
+        <div className=" w-full  ">
+          <div className="flex justify-center items-center w-full  h-20  ">
+            {isFetchingNextPage && (
+              <Spinner className="bg-black dark:bg-white w-10 p-1" />
+            )}
+            {/* End of list indicater */}
+            {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
+              <div className="text-center py-8 w-full">
+                <div className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-full">
+                  <BsPostcard className="w-4 h-4" />
+                  <span>You've seen all suggestions</span>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
-        {!posts.length && !isLoading && (
-          <div className="w-full flex justify-center items-center py-4">
-            <h2 className="text-xl">No posts</h2>
-          </div>
+        {posts.length === 0 && !isLoading && (
+          <EmptyState
+            Icon={BsPostcard}
+            heading={"No Post available"}
+            description={
+              "There are posts found right now. Check back later for  new recommendations."
+            }
+          />
         )}
       </div>
 

@@ -90,7 +90,7 @@ const NewConversation = () => {
   return (
     <PopupBox
       className={
-        " relative flex flex-col justify-start items-center gap-5 animate-fedin.2s text-center  border-inherit max-w-[30rem] w-full sm:max-h-[60%] h-full shadow-sm overflow-y-auto"
+        " relative flex flex-col justify-start items-center gap-5 animate-fedin.2s text-center  border-inherit max-w-[30rem] w-full sm:max-h-[60%] h-full shadow-sm *:transition-all *:duration-200 overflow-y-auto"
       }
       action={() => navigate(-1)}
     >
@@ -144,7 +144,7 @@ const NewConversation = () => {
       {!next ? (
         <div
           ref={containerRef}
-          className="flex flex-col justify-start items-start h-full gap-3 w-full   no-scrollbar p-4"
+          className="flex flex-col justify-start items-start h-full gap-3 w-full no-scrollbar p-4 "
         >
           {users?.map((Usr, idx, arr) => (
             <PeoplesList
@@ -171,12 +171,14 @@ const NewConversation = () => {
               )}
             </PeoplesList>
           ))}
-          {isLoading ||
-            (isFetchingNextPage && (
-              <Spinner
-                className={"w-10 h-10 p-1 dark:bg-white bg-black m-auto"}
-              />
-            ))}
+          <div className="w-full min-h-10 ">
+            {isLoading ||
+              (!isFetchingNextPage && (
+                <Spinner
+                  className={"w-5 h-5 p-1 dark:bg-white bg-black m-auto"}
+                />
+              ))}
+          </div>
           {!isLoading && users?.length === 0 && (
             <div className="text-gray-500 text-sm">
               No users found for "{search}"

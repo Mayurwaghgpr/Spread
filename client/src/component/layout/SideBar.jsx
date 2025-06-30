@@ -79,7 +79,7 @@ function SideBar() {
         !MenuOpen && "hidden"
       } ${
         pathname.startsWith("/view") && "sm:hidden"
-      } dark:border-slate-700/50 border-gray-200/80 bg-light dark:bg-dark backdrop-blur-xl sm:bg-light sm:dark:bg-dark sm:backdrop-blur-sm`}
+      } border-inherit bg-light dark:bg-dark backdrop-blur-xl sm:bg-light sm:dark:bg-dark sm:backdrop-blur-sm`}
     >
       <div
         onClick={(e) => e.stopPropagation()}

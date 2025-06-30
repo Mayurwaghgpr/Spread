@@ -51,6 +51,8 @@ import {
   PiPenFill,
   PiPlus,
   PiPulse,
+  PiTrash,
+  PiTrashSimpleLight,
 } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
@@ -60,6 +62,8 @@ import {
   FaHandHoldingHeart,
   FaRegComment,
   FaThumbsUp,
+  FaTrash,
+  FaTrashCan,
 } from "react-icons/fa6";
 import {
   RiQuillPenFill,
@@ -69,10 +73,16 @@ import {
 import { VscMention } from "react-icons/vsc";
 import { FaUserTag } from "react-icons/fa6";
 import { PiAlarm } from "react-icons/pi";
-import { BiBookmark, BiCalendarAlt, BiRepost, BiTrash } from "react-icons/bi";
+import {
+  BiBookmark,
+  BiCalendarAlt,
+  BiRepost,
+  BiShare,
+  BiTrash,
+} from "react-icons/bi";
 import { GrGoogle, GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
-import { AiOutlineSend } from "react-icons/ai";
+import { AiOutlineMessage, AiOutlineSend } from "react-icons/ai";
 import { LuGithub, LuLogOut } from "react-icons/lu";
 import {
   TbMessageCircle,
@@ -86,6 +96,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Trash2, TrashIcon } from "lucide-react";
 
 function useIcons() {
   return {
@@ -117,6 +128,7 @@ function useIcons() {
     done: <MdDone color="green" />,
     duration: <BsClockHistory />,
     delete: <BiTrash />,
+    delete1: <PiTrashSimpleLight />,
     doubleArrowR: <MdOutlineKeyboardDoubleArrowRight />,
     doubleArrowL: <MdOutlineKeyboardDoubleArrowLeft />,
     // E
@@ -163,6 +175,7 @@ function useIcons() {
     mention: <VscMention />,
     message: <TbMessageCircle />,
     messageFi: <TbMessageCircleFilled />,
+    messageDoted: <AiOutlineMessage />,
     moonFi: <BsMoonStarsFill />,
 
     // N
@@ -194,6 +207,7 @@ function useIcons() {
     success: <MdDone color="green" />,
     sun: <IoSunny />,
     system: <GrSystem />,
+    share: <BiShare />,
 
     // T
     tag: <FaUserTag />,

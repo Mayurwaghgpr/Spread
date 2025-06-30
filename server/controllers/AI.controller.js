@@ -50,8 +50,6 @@ Important:
 - Do NOT return more than 3 bullet points.
 - Do NOT include any content outside of the HTML structure.`;
 
-
-
 export const generateAIAnalysis = async (req, res, next) => {
   try {
     // const model = genAI.models.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -60,13 +58,13 @@ export const generateAIAnalysis = async (req, res, next) => {
     res.setHeader("Cache-Control", "no-cache");
     res.flushHeaders(); // flush the headers to establish SSE with client
     const { post } = req.body;
-    console.log(post)
+    console.log(post);
     const response = await genAI.models.generateContentStream({
       model: "gemini-2.5-flash",
       contents: `${prompt}\n\nPost:\n${JSON.stringify(post)}`,
     });
     for await (const chunk of response) {
-        console.log(chunk.text)
+      console.log(chunk.text);
       res.write(`${chunk.text}\n\n`);
     }
     res.end();

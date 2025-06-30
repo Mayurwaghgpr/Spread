@@ -64,7 +64,7 @@ function MessageLog() {
     <aside
       className={`${conversationId ? "sm:block hidden" : "  block"} border-r lg:max-w-[30%] sm:max-w-[50%] w-full overflow-y-auto   border-inherit `}
     >
-      <header className="sticky top-0 flex flex-col gap-7 w-full h-fit p-5 z-10 border-b border-inherit bg-[#fff9f3] dark:bg-black">
+      <header className="sticky top-0 flex flex-col gap-7 w-full h-fit p-5 z-10 border-b border-inherit bg-light dark:bg-dark ">
         <div className="flex justify-start items-center h-full w-full">
           <Ibutton
             className="px-2 rounded-lg border-inherit text-2xl font-bold"
@@ -89,7 +89,7 @@ function MessageLog() {
           }
         />
       </header>
-      <section className=" space-y-4 border-inherit w-full p-5 px-7  ">
+      <main className=" space-y-4 border-inherit w-full p-5 px-7  text-sm font-light ">
         {messageLogData?.map((conv, idx, arr) => (
           <Link
             onClick={() => haldelSelectConversation(conv)}
@@ -135,7 +135,7 @@ function MessageLog() {
             <Spinner className={"w-10 h-10 bg-black p-1 dark:bg-white"} />
           </div>
         )}
-      </section>
+      </main>
     </aside>
   );
 }

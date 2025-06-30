@@ -2,13 +2,21 @@ import React, { memo, useMemo } from "react";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import { useInfiniteQuery } from "react-query";
 import usePublicApis from "../../services/publicApis";
-import PeoplesList from "../../component/PeoplesList";
 import Follow from "../../component/buttons/follow";
 import { Link, NavLink, useLocation } from "react-router-dom";
-
+import { Search, Users, Loader2, RefreshCw } from "lucide-react";
+import ProfileImage from "../../component/ProfileImage";
+import userImageSrc from "../../utils/userImageSrc";
+import Heading from "../../component/texts/Heading";
+import SubHeading from "../../component/texts/SubHeading";
+import Paragraph from "../../component/texts/Paragraph";
+import Spinner from "../../component/loaders/Spinner";
+import ProfileListItemLoadingSkeleton from "../../component/loaders/ProfileListItemLoadingSkeleton";
+import EmptyState from "../../component/utilityComp/EmptyState";
 function Suggestions() {
   const { fetchPeopels } = usePublicApis();
-  // const location = useLocation();
+  const location = useLocation();
+
   const {
     data: peopleData,
     error: errorPeoples,
@@ -18,6 +26,7 @@ function Suggestions() {
     fetchNextPage,
     hasNextPage,
     isLoading,
+    refetch,
   } = useInfiniteQuery(
     ["find_people"],
     ({ pageParam }) => fetchPeopels({ pageParam }),
@@ -25,70 +34,200 @@ function Suggestions() {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
           ? lastPage[lastPage.length - 1].createdAt
-          : undefined; // Use last data id as cursor
+          : undefined;
       },
       refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
     }
   );
+
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
     hasNextPage
   );
-
+  console.log(lastItemRef);
   const peoples = useMemo(
     () => peopleData?.pages.flatMap((page) => page) || [],
     [peopleData?.pages]
   );
-  return (
-    <section className="grid grid-cols-10 grid-rows-12  w-full h-screen overflow-y-auto border-inherit px-4">
-      <div className="sticky top-16 flex flex-col justify-between sm:items-start sm:col-start-3 sm:col-span-5 col-span-full row-start-2 row-span-2 py-3  w-full h-full z-10 border-b border-inherit bg-light dark:bg-dark  ">
-        {/* <SearchBar className={" border rounded-full px-2"} /> */}
-        <h1 className="text-2xl font-medium">Suggestions</h1>
-        <ul className=" flex justify-start items-center gap-3 w-full *:transition-all *:duration-500">
-          <NavLink
-            isActive={(match, location) =>
-              location.pathname.includes("publications")
-            }
-            className={({ isActive }) =>
-              ` underline-offset-[1.1rem] ${isActive ? "underline" : "hover:underline"}`
-            }
-            to={"/suggestions/publications"}
-          >
-            Publications
-          </NavLink>
-          <NavLink
-            isActive={(match, location) => {
-              location.pathname.includes("find_peoples");
-            }}
-            className={({ isActive }) =>
-              ` underline-offset-[1.1rem] ${isActive ? "underline" : "hover:underline"}`
-            }
-            to={"/suggestions/find_peoples"}
-          >
-            Peoples
-          </NavLink>
-        </ul>
+
+  // Error state component
+  const ErrorState = () => (
+    <div className="flex flex-col items-center justify-center py-12 text-center">
+      <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-4">
+        <RefreshCw className="w-8 h-8 text-red-500" />
       </div>
-      <ul className="flex flex-col justify-start items-start gap-5 sm:col-start-3 sm:col-span-5 col-span-full  row-start-4 py-4 row-span-full">
-        {(peoples ? peoples : [...Array(10).fill(null)]).map(
-          (pers, idx, arr) => (
-            <PeoplesList
-              key={pers?.id || idx}
-              ref={idx === arr.length ? lastItemRef : null}
-              people={pers}
-              className=" flex justify-between items-center  w-full "
-            >
-              <Follow
-                className="flex justify-center items-center text-black  text-sm border p-1  transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
-                People={pers}
-              />
-            </PeoplesList>
-          )
-        )}
-      </ul>
-    </section>
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        Unable to load suggestions
+      </h3>
+      <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-sm">
+        Something went wrong while fetching people suggestions. Please try
+        again.
+      </p>
+      <button
+        onClick={() => refetch()}
+        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 flex items-center gap-2"
+      >
+        <RefreshCw className="w-4 h-4" />
+        Try Again
+      </button>
+    </div>
+  );
+
+  // Empty state component
+  // const EmptyState = () => (
+  //   <div className="flex flex-col items-center justify-center py-12 text-center">
+  //     <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+  //       <Users className="w-8 h-8 text-gray-400" />
+  //     </div>
+  //     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+  //       No suggestions available
+  //     </h3>
+  //     <p className="text-gray-600 dark:text-gray-400 max-w-sm">
+  //       We couldn't find any people to suggest right now. Check back later for
+  //       new recommendations.
+  //     </p>
+  //   </div>
+  // );
+
+  return (
+    <div className="h-screen bg-light dark:bg-dark w-full overflow-scroll">
+      {/* Container with better responsive breakpoints */}
+      <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        {/* Header Section - Improved sticky behavior and responsive design */}
+        <div className="sticky top-16 z-20 bg-light/80 dark:bg-dark/80 backdrop-blur-md border-b dark:border-gray-800 py-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Title with icon */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-yellow-300 to-amber-600 rounded-xl flex items-center justify-center">
+                <Users className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                  Discover People
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 hidden sm:block">
+                  Find and connect with interesting people
+                </p>
+              </div>
+            </div>
+
+            {/* Navigation tabs - Better mobile design */}
+            <nav className="flex items-center">
+              <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+                <NavLink
+                  to="/suggestions/find_peoples"
+                  className={({ isActive }) =>
+                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isActive || location.pathname.includes("find_peoples")
+                        ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`
+                  }
+                >
+                  <span className="flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    <span className="hidden sm:inline">People</span>
+                  </span>
+                </NavLink>
+
+                {/* Add more nav items here if needed */}
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="max-w-4xl mx-auto">
+          {/* Stats/Info Bar */}
+          {!isLoading && !isPeoplesError && peoples.length > 0 && (
+            <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <Users className="w-4 h-4" />
+                <span>{peoples.length} people found</span>
+              </div>
+              {isFetching && !isFetchingNextPage && (
+                <div className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+                  <Spinner className="w-4 h-4 p-1 animate-spin" />
+                  <span>Refreshing...</span>
+                </div>
+              )}
+            </div>
+          )}
+          {/* Content Area */}
+
+          {isLoading ? (
+            <ProfileListItemLoadingSkeleton count={10} />
+          ) : (
+            <ul className="space-y-3">
+              {peoples.map((person, idx, arr) => {
+                const { userImageurl } = userImageSrc(person);
+                return (
+                  <li
+                    key={person?.id || idx}
+                    ref={idx === arr.length - 1 ? lastItemRef : null}
+                    className="flex items-center justify-between bg-light dark:bg-dark rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md dark:shadow-gray-900/10 border dark:border-gray-700 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-600"
+                  >
+                    <div className="flex items-center justify-start gap-5 w-full">
+                      <ProfileImage
+                        className={`w-8 h-8 rounded-full transition-opacity duration-200`}
+                        image={person && userImageurl}
+                      />
+                      <div className=" text-nowrap w-full space-y-2">
+                        <Heading className="w-[30%] text-sm">
+                          {person?.displayName}
+                        </Heading>
+                        <SubHeading className="text-sm w-[20%]">
+                          {person?.username}
+                        </SubHeading>
+                        <Paragraph className={"w-3/4"}>{person?.bio}</Paragraph>
+                      </div>
+                    </div>
+                    {/* Enhanced Follow Button */}
+                    <Follow
+                      className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full transition-all duration-200 hover:scale-105 min-w-[100px] sm:min-w-[120px]"
+                      person={person}
+                    />
+                  </li>
+                );
+              })}
+
+              {/* Loading more indicator */}
+              {isFetchingNextPage && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                    <Spinner className="w-5 h-5 p-1 animate-spin" />
+                    <span className="text-sm">Loading more people...</span>
+                  </div>
+                </div>
+              )}
+
+              {/* End of list indicator */}
+              {!hasNextPage && !isFetchingNextPage && peoples.length > 0 && (
+                <div className="text-center py-8">
+                  <div className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-full">
+                    <Users className="w-4 h-4" />
+                    <span>You've seen all suggestions</span>
+                  </div>
+                </div>
+              )}
+              {isPeoplesError && !isLoading && <ErrorState />}
+              {peoples.length === 0 && !isLoading && (
+                <EmptyState
+                  Icon={Users}
+                  heading={" No suggestions available"}
+                  description={
+                    " We couldn't find any people to suggest right now. Check back later for  new recommendations."
+                  }
+                />
+              )}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 

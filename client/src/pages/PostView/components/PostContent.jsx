@@ -1,7 +1,11 @@
 import { memo } from "react";
 import ImageFigure from "../../../component/utilityComp/ImageFigure";
 import DOMPurify from "dompurify";
-import CopyToClipboardInput from "../../../component/CopyToClipboardInput";
+// Lazy loaded components
+const CopyToClipboardInput = lazy(
+  () => import("../../../component/CopyToClipboardInput")
+);
+
 const PostContent = memo(({ postContent, onImageClick }) => {
   return (
     <>

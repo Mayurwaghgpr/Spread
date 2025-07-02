@@ -1,4 +1,3 @@
-import React from "react";
 import useIcons from "../../hooks/useIcons";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 

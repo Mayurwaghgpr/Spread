@@ -15,11 +15,9 @@ import { useQuery } from "react-query";
 // Component imports
 import Bookmark from "../../component/buttons/Bookmark";
 import Like from "../../component/buttons/Like/Like";
-import Follow from "../../component/buttons/follow";
-import FormatedTime from "../../component/utilityComp/FormatedTime";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import Menu from "../../component/Menus/Menu";
-import ProfileImage from "../../component/ProfileImage";
+
 import ImageFigure from "../../component/utilityComp/ImageFigure";
 import FedInBtn from "../../component/buttons/FedInBtn";
 import LoaderScreen from "../../component/loaders/loaderScreen";
@@ -39,11 +37,6 @@ import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import AIBtn from "../../component/buttons/AIBtn";
 import PostContent from "./components/PostContent";
 import PostHeader from "./components/PostHeader";
-
-// Lazy loaded components
-const CopyToClipboardInput = lazy(
-  () => import("../../component/CopyToClipboardInput")
-);
 
 // Memoized sub-components for better performance
 

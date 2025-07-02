@@ -1,5 +1,6 @@
 import React from "react";
 import useIcons from "../../hooks/useIcons";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function OAuth({ service, className, ...props }) {
   const icons = useIcons();
@@ -10,7 +11,7 @@ function OAuth({ service, className, ...props }) {
   }
 
   const handleOAuth = () => {
-    window.location.href = `/api/auth/login/${service}`;
+    window.location.href = `${BASE_URL}/api/auth/login/${service}`;
   };
 
   return (

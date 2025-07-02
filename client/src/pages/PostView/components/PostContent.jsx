@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { lazy, memo } from "react";
 import ImageFigure from "../../../component/utilityComp/ImageFigure";
 import DOMPurify from "dompurify";
 // Lazy loaded components

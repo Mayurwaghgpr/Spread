@@ -50,7 +50,13 @@ app.use(express.urlencoded({ extended: true }));
 const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(",");
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })

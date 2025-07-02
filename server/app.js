@@ -149,7 +149,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
 });
 
-// Fallback for unmatched API routes
+// Fallback for unmatched API route
 app.use("/api/*", (req, res) => {
   res.status(404).json({ message: "API route not found" });
 });

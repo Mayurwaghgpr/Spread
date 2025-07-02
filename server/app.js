@@ -31,7 +31,7 @@ import initMessageChangeListener from "./db/triggers/messages.js";
 dotenv.config();
 const app = express();
 const server = createServer(app);
-export const io = sockIo.init(server);
+const io = sockIo.init(server);
 
 // Constants
 const port = process.env.PORT || 3000;

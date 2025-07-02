@@ -11,7 +11,7 @@ function OAuth({ service, className, ...props }) {
   }
 
   const handleOAuth = () => {
-    window.location.href = `${BASE_URL}/api/auth/login/${service}`;
+    window.location.href = `/api/auth/login/${service}`;
   };
 
   return (

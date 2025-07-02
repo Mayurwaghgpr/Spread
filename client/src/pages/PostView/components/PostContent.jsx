@@ -1,6 +1,7 @@
 import { memo } from "react";
 import ImageFigure from "../../../component/utilityComp/ImageFigure";
 import DOMPurify from "dompurify";
+import CopyToClipboardInput from "../../../component/CopyToClipboardInput";
 const PostContent = memo(({ postContent, onImageClick }) => {
   return (
     <>

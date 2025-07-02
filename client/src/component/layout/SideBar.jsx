@@ -58,7 +58,7 @@ const LoginMenuLinks = [
 
 function SideBar() {
   const { user } = useSelector((state) => state.auth);
-  const { MenuOpen } = useSelector((state) => state.ui);
+  const { menuOpen } = useSelector((state) => state.ui);
   const location = useLocation();
   const dispatch = useDispatch();
   const { pathname } = location;
@@ -76,7 +76,7 @@ function SideBar() {
     <aside
       onClick={() => dispatch(setManuOpen())}
       className={`sm:static fixed left-0 top-0 w-full sm:block h-screen sm:w-fit transition-all duration-300 ease-in-out border-r sm:z-30 z-40 lg:animate-none animate-fedin.2s overflow-hidden ${
-        !MenuOpen && "hidden"
+        !menuOpen && "hidden"
       } ${
         pathname.startsWith("/view") && "sm:hidden"
       } border-inherit bg-light dark:bg-dark backdrop-blur-xl sm:bg-light sm:dark:bg-dark sm:backdrop-blur-sm`}

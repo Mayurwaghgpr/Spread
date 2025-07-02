@@ -22,7 +22,6 @@ import SideBar from "./component/layout/SideBar";
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import NotificationBox from "./component/notification/NotificationBox";
-import MessageFallBack from "./pages/Messages/components/MessageFallBack";
 
 // Lazy load components with better error boundaries
 const SignUp = lazy(() => import("./pages/auth/SignUp"));
@@ -73,6 +72,9 @@ const ImageInBigFrame = lazy(
   () => import("./component/utilityComp/ImageInBigFrame")
 );
 const AIResponse = lazy(() => import("./component/aiComp/AiResponse"));
+const MessageFallBack = lazy(
+  () => import("./pages/Messages/components/MessageFallBack")
+);
 // Constants for better maintainability
 const THEME_STORAGE_KEY = "ThemeMode";
 const ROUTES = {

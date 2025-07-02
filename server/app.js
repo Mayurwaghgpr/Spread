@@ -47,7 +47,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS setup
-const allowedOrigins = process.env.WHITLIST_ORIGINS?.split(",");
+const allowedOrigins = process.env.WHITLIST_ORIGINS
+  ? process.env.WHITLIST_ORIGINS.split(",").map((origin) => origin.trim())
+  : [];
+
 app.use(
   cors({
     origin: function (origin, callback) {

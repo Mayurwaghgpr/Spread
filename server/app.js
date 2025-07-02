@@ -54,6 +54,7 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.log("Not allowed by CORS");
         callback(new Error("Not allowed by CORS"));
       }
     },

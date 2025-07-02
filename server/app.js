@@ -145,9 +145,9 @@ app.use("/api/ai", aiRoutes);
 app.use("/api/messaging", messagingRoutes);
 
 // Fallback for client-side routing
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
+});
 
 // Fallback for unmatched API routes
 app.use("/api/*", (req, res) => {

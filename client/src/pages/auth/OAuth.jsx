@@ -1,6 +1,5 @@
 import React from "react";
 import useIcons from "../../hooks/useIcons";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function OAuth({ service, className, ...props }) {
   const icons = useIcons();

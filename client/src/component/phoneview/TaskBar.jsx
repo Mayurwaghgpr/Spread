@@ -27,7 +27,7 @@ function TaskBar() {
       id: uuidv4(),
       icon1: <IoSearchOutline />,
       icon2: <IoSearch />,
-      stub: "/explore",
+      stub: "/search",
     },
     {
       id: uuidv4(),
@@ -42,16 +42,16 @@ function TaskBar() {
       icon2: <IoLibrarySharp />,
       stub: "/read",
     },
-    {
-      id: uuidv4(),
-      icon1: <IoIosPeople />,
-      icon2: <IoIosPeople />,
-      stub: `/peoples`,
-    },
+    // {
+    //   id: uuidv4(),
+    //   icon1: <IoIosPeople />,
+    //   icon2: <IoIosPeople />,
+    //   stub: `/peoples`,
+    // },
     ,
   ];
   return (
-    <div className=" fixed bottom-0 flex justify-center items-center gap-4 w-full border-inherit border-t text-2xl py-2 bg-light dark:bg-dark  sm:hidden dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg">
+    <div className=" fixed bottom-0 flex justify-center items-center gap-4 w-full border-inherit border-t text-xl py-2 bg-light dark:bg-dark  sm:hidden dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg">
       <div className="flex justify-around items-center w-full ">
         {" "}
         {LoginMenuLinks.map((link) => {

@@ -96,7 +96,6 @@ function MainNavBar() {
                     }`}
                     image={userImageurl}
                     alt={user?.displayName}
-                    disabled={deviceSize <= 639}
                   />
 
                   {/* Desktop Tooltip */}

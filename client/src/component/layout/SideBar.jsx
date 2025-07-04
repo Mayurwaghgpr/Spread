@@ -75,22 +75,20 @@ function SideBar() {
   return (
     <aside
       onClick={() => dispatch(setManuOpen())}
-      className={`sm:static fixed left-0 top-0 w-full sm:block h-screen sm:w-fit transition-all duration-300 ease-in-out border-r sm:z-30 z-40 lg:animate-none animate-fedin.2s overflow-hidden ${
+      className={`z-50 sm:static fixed left-0 top-0 w-full sm:block h-screen sm:w-fit transition-all duration-300 ease-in-out border-r sm:z-30  lg:animate-none animate-fedin.2s overflow-hidden ${
         !menuOpen && "hidden"
-      } ${
-        pathname.startsWith("/view") && "sm:hidden"
-      } border-inherit bg-light dark:bg-dark backdrop-blur-xl sm:bg-light sm:dark:bg-dark sm:backdrop-blur-sm`}
+      } ${pathname.startsWith("/view") && "sm:hidden"} border-inherit bg-dark/40 backdrop-blur-[1px]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between h-full sm:min-w-full w-fit me-16 px-6 py-8 sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none"
+        className="flex flex-col justify-between items-start h-full sm:min-w-full w-fit me-16 px-6 py-8 sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none "
       >
-        <div className="flex flex-col justify-center items-center gap-6 w-fit sm:mt-8">
+        <div className="flex flex-col justify-center items-start gap-6 w-full sm:mt-8">
           {/* Profile Link */}
-          <div className="flex flex-col gap-6 h-fit w-full">
+          <div className="flex flex-col items-start gap-6 h-fit w-full">
             <Link
               to={`/profile/@${user?.username}/${user?.id}`}
-              className="group flex justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
+              className="group flex  lg:justify-start  justify-start sm:justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
               onClick={() => dispatch(setManuOpen())}
             >
               <div className="relative">
@@ -138,7 +136,7 @@ function SideBar() {
             <LinkBtn
               key={link.id}
               stub={link.stub}
-              className={`group flex lg:justify-start justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 ${
+              className={`group flex lg:justify-start  justify-start sm:justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 ${
                 isActiveLink(link.stub)
                   ? ""
                   : "hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white  "

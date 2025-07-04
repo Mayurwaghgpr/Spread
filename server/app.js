@@ -54,6 +54,7 @@ console.log({ allowedOrigins });
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log(origin);
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -97,16 +98,7 @@ passportStrategies();
 app.use(passport.initialize());
 
 // Serve static files
-app.use(
-  express.static(path.join(__dirname, "/client/dist"), {
-    maxAge: "1d",
-    setHeaders: (res, filePath) => {
-      if (filePath.endsWith(".html")) {
-        res.setHeader("Cache-Control", "no-cache");
-      }
-    },
-  })
-);
+app.use(express.static(path.join(__dirname, "/client/dist")));
 
 // Database associations
 DataBaseAssociations();

@@ -168,17 +168,16 @@ function App() {
   );
 
   return (
-    <>
+    <div className=" relative flex justify-between ">
       {!pathChecks.isMessagesPath && <MainNavBar />}
+      {pathChecks.showSidebar && <SideBar />}
 
-      <main className="relative flex justify-between items-center border-inherit">
+      <main className="relative flex justify-between items-center border-inherit h-full w-full">
         <NotificationBox />
 
         <Suspense fallback={<LoaderScreen />}>
           <PersistentUser />
           <ConfirmationBox />
-
-          {pathChecks.showSidebar && <SideBar />}
 
           <Routes>
             {/* Home Route */}
@@ -335,7 +334,7 @@ function App() {
       </main>
 
       {isLogin && !pathChecks.isMessagesPath && <TaskBar />}
-    </>
+    </div>
   );
 }
 

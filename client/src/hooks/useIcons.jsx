@@ -18,11 +18,13 @@ import {
   BsHeartFill,
   BsInfoCircle,
   BsLink,
+  BsLinkedin,
   BsMoonStarsFill,
   BsPen,
   BsPenFill,
   BsPeople,
   BsThreeDotsVertical,
+  BsTwitterX,
 } from "react-icons/bs";
 import {
   MdCelebration,
@@ -170,6 +172,7 @@ function useIcons() {
     logout: <LuLogOut />,
     like: <BsHandThumbsUpFill />,
     likeO: <BsHandThumbsUp />,
+    linkedLine: <BsLinkedin />,
 
     // M
     mention: <VscMention />,
@@ -223,7 +226,7 @@ function useIcons() {
     warning: <CiWarning color="yellow" />,
 
     // X
-    // Placeholder for future grouping
+    XCom: <BsTwitterX />,
 
     // Y
     // Placeholder for future grouping

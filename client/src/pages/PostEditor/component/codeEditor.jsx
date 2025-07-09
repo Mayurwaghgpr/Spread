@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
-import Selector from "../../../component/utilityComp/Selector";
-import Editor from "@monaco-editor/react";
+const Selector = lazy(() => import("../../../component/utilityComp/Selector"));
+const Editor = lazy(() => import("@monaco-editor/react"));
 import { useSelector } from "react-redux";
+import { lazy } from "react";
 
 function CodeEditor({
   element,

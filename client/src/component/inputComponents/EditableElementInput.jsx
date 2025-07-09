@@ -1,7 +1,9 @@
 import React, { memo, useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import UserNamesSuggestion from "../UserNamesSuggestion";
-import { useSelector } from "react-redux";
+import { lazy } from "react";
+import { Suspense } from "react";
+import Spinner from "../loaders/Spinner";
+const UserNamesSuggestion = lazy(() => import("../UserNamesSuggestion"));
 
 const EditableElementInput = React.forwardRef(
   (
@@ -81,12 +83,18 @@ const EditableElementInput = React.forwardRef(
           className={`relative flex flex-wrap justify-start items-start w-full text-wrap break-words text-sm border-inherit ${className}`}
           style={{ maxWidth }}
         >
-          {isOpen && (
-            <UserNamesSuggestion
-              mentionedUsername={mentionedUsername}
-              selectUserData={setSelectUserData}
-            />
-          )}
+          <Suspense
+            fallback={
+              <Spinner className={"w-8 h-8 p-1 bg-black dark:bg-white"} />
+            }
+          >
+            {isOpen && (
+              <UserNamesSuggestion
+                mentionedUsername={mentionedUsername}
+                selectUserData={setSelectUserData}
+              />
+            )}
+          </Suspense>
           <p
             ref={ref}
             contentEditable

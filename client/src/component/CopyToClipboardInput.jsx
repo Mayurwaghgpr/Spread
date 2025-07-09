@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import SyntaxHighlighter from "react-syntax-highlighter";
+const SyntaxHighlighter = lazy(() => import("react-syntax-highlighter"));
 import {
   dark,
   lightfair,
@@ -7,9 +7,12 @@ import {
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { FaCheck } from "react-icons/fa6";
 import { useSelector } from "react-redux";
+import { lazy } from "react";
+import useIcons from "../hooks/useIcons";
 const CopyToClipboardInput = ({ item }) => {
   const [copySuccess, setCopySuccess] = useState("");
   const contentref = useRef();
+  const icons = useIcons();
   const { ThemeMode } = useSelector((state) => state.ui);
   const handleCopyClick = useCallback(() => {
     const inputValue =
@@ -39,12 +42,13 @@ const CopyToClipboardInput = ({ item }) => {
             {copySuccess ? (
               <span className=" rounded-md  flex gap-2 items-center  ">
                 <FaCheck />
+                {icons["done"]}
                 {copySuccess}
               </span>
             ) : (
               <span className="flex items-center gap-2">
                 {" "}
-                <i className="bi bi-copy"></i>
+                {icons["code1"]}
                 Copy code
               </span>
             )}

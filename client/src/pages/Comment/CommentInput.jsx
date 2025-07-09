@@ -19,7 +19,7 @@ import ProfileImage from "../../component/ProfileImage";
 import Ibutton from "../../component/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
+const Picker = lazy(() => import("@emoji-mart/react"));
 import EditableElementInput from "../../component/inputComponents/EditableElementInput";
 
 function CommentInput({ className }) {
@@ -133,15 +133,21 @@ function CommentInput({ className }) {
           >
             {icons["smile"]}
           </Ibutton>
-          {openEmojiPicker && (
-            <div ref={pickerRef} className="absolute bottom-12 right-0 z-10">
-              <Picker
-                data={data}
-                onEmojiSelect={handleEmojiSelect}
-                theme={ThemeMode === "dark" ? "dark" : "light"}
-              />
-            </div>
-          )}
+          <Suspense
+            fallback={
+              <Spinner className={"w-8 h-8 p-1 bg-black dark:bg-white"} />
+            }
+          >
+            {openEmojiPicker && (
+              <div ref={pickerRef} className="absolute bottom-12 right-0 z-10">
+                <Picker
+                  data={data}
+                  onEmojiSelect={handleEmojiSelect}
+                  theme={ThemeMode === "dark" ? "dark" : "light"}
+                />
+              </div>
+            )}
+          </Suspense>
         </div>
         <Ibutton
           action={mutate}

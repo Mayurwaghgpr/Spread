@@ -168,7 +168,7 @@ function App() {
   );
 
   return (
-    <div className=" relative flex justify-between ">
+    <div className=" relative flex justify-between bg-inherit border-inherit ">
       {!pathChecks.isMessagesPath && <MainNavBar />}
       {pathChecks.showSidebar && <SideBar />}
 

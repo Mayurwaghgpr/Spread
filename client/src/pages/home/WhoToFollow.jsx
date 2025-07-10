@@ -49,7 +49,7 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
                     {/* Bio */}
                     <Paragraph className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                       <span className="line-clamp-1 sm:line-clamp-2">
-                        {person?.bio || "No bio available"}
+                        {person?.bio}
                       </span>
                     </Paragraph>
                   </div>

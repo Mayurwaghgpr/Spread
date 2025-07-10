@@ -5,10 +5,8 @@ const ProfileImage = ({ className, image, children, alt, title, ...props }) => {
     <div
       {...props}
       name="profileBtn"
-      className={` ${className} cursor-pointer flex justify-center items-center hover:opacity-90  ${
-        !image
-          ? "dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse"
-          : ""
+      className={` ${className} rounded-full cursor-pointer flex justify-center items-center hover:opacity-90  ${
+        !image ? "bg-gray-300 dark:bg-gray-700 animate-pulse" : ""
       } `}
     >
       <img

@@ -26,7 +26,7 @@ function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
                 </button>
               </li>
             ))}
-            {isLoadingHome && <TopicsSkeletonLoader />}
+            {isLoadingHome && <TopicsSkeletonLoader count={10} />}
           </ul>
         </div>
       </div>

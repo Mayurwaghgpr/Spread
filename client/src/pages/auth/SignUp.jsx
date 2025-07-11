@@ -10,9 +10,11 @@ import { passwordRegex, emailRegex } from "../../utils/regex.js";
 import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";
 import EyeBtn from "../../component/buttons/EyeBtn.jsx";
-import { BsGoogle } from "react-icons/bs";
 import AuthFormWrapper from "./AuthFormWrapper.jsx";
 import Ibutton from "../../component/buttons/Ibutton.jsx";
+import Divider from "./components/Divider.jsx";
+import CommenAuthBtn from "./components/CommenAuthBtn.jsx";
+
 function SignUp() {
   const [validation, setValidation] = useState("");
   const dispatch = useDispatch();
@@ -88,28 +90,22 @@ function SignUp() {
       validation={validation}
       error={error}
       formType={"signup"}
-      heading={"Create Account"}
+      heading={"Create your account"}
     >
-      <div className="mb-4 w-full flex text-nowrap text-xs  gap-3  *:border-inherit ">
+      <div className="mb-4 w-full flex text-nowrap  gap-3  *:border-inherit ">
         <OAuth
           className={
             "border bg-black text-white dark:bg-white dark:text-black "
           }
           service={"google"}
-          icon={<BsGoogle />}
         />
         <OAuth
           className={"border bg-black text-white dark:bg-white dark:text-black"}
           service={"github"}
-          icon={<i className="bi bi-github"></i>}
           disabled={true}
         />
       </div>
-      <div className="mb-3 w-full text-center text-xl flex items-center  *:border-inherit">
-        <hr className="flex-1" />
-        <p className="mx-2">or</p>
-        <hr className="flex-1" />
-      </div>
+      <Divider text="or" className="mb-4" />
       {signUpInputs.map((input) => (
         <CommonInput
           key={input.id}
@@ -130,13 +126,9 @@ function SignUp() {
           name={"readme"}
         />
       </div>
-      <Ibutton
-        type="submit"
-        className=" justify-center w-full bg-black text-white dark:bg-white dark:text-black  p-3  text-center rounded-lg"
-        disabled={isLoading}
-      >
+      <CommenAuthBtn type="submit" disabled={isLoading}>
         {isLoading ? "Signing Up..." : "Sign Up"}
-      </Ibutton>
+      </CommenAuthBtn>
     </AuthFormWrapper>
   );
 }

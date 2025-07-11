@@ -7,9 +7,9 @@ import {
   BsBookmark,
   BsCamera,
   BsCameraVideo,
-  BsClock,
   BsClockHistory,
   BsFillBookmarkFill,
+  BsFillMoonStarsFill,
   BsGear,
   BsGearFill,
   BsHandThumbsUp,
@@ -19,7 +19,6 @@ import {
   BsInfoCircle,
   BsLink,
   BsLinkedin,
-  BsMoonStarsFill,
   BsPen,
   BsPenFill,
   BsPeople,
@@ -49,24 +48,12 @@ import {
 import {
   PiHandsClappingFill,
   PiImageThin,
-  PiPen,
-  PiPenFill,
   PiPlus,
-  PiPulse,
-  PiTrash,
   PiTrashSimpleLight,
 } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
-import {
-  FaCode,
-  FaComment,
-  FaHandHoldingHeart,
-  FaRegComment,
-  FaThumbsUp,
-  FaTrash,
-  FaTrashCan,
-} from "react-icons/fa6";
+import { FaCode, FaHandHoldingHeart, FaRegComment } from "react-icons/fa6";
 import {
   RiQuillPenFill,
   RiQuillPenLine,
@@ -75,30 +62,17 @@ import {
 import { VscMention } from "react-icons/vsc";
 import { FaUserTag } from "react-icons/fa6";
 import { PiAlarm } from "react-icons/pi";
-import {
-  BiBookmark,
-  BiCalendarAlt,
-  BiRepost,
-  BiShare,
-  BiTrash,
-} from "react-icons/bi";
+import { BiCalendarAlt, BiRepost, BiShare, BiTrash } from "react-icons/bi";
 import { GrGoogle, GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineMessage, AiOutlineSend } from "react-icons/ai";
-import { LuGithub, LuLogOut } from "react-icons/lu";
-import {
-  TbMessageCircle,
-  TbMessageCircleFilled,
-  TbTrash,
-  TbTrashX,
-} from "react-icons/tb";
+import { LuGithub, LuLogOut, LuMonitorSmartphone } from "react-icons/lu";
+import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
 import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
-import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { Trash2, TrashIcon } from "lucide-react";
 
 function useIcons() {
   return {
@@ -126,7 +100,7 @@ function useIcons() {
     comment: <FaRegComment />,
 
     // D
-    desktopO: <HiOutlineComputerDesktop />,
+    desktopO: <LuMonitorSmartphone />,
     done: <MdDone color="green" />,
     duration: <BsClockHistory />,
     delete: <BiTrash />,
@@ -179,7 +153,7 @@ function useIcons() {
     message: <TbMessageCircle />,
     messageFi: <TbMessageCircleFilled />,
     messageDoted: <AiOutlineMessage />,
-    moonFi: <BsMoonStarsFill />,
+    moonFi: <BsFillMoonStarsFill />,
 
     // N
     // Placeholder for future grouping

@@ -1,6 +1,8 @@
-import React from "react";
-import { IoCloseOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
+import spreadLogo from "/spread_logo_03_robopus.png";
+import ProfileImage from "../../component/ProfileImage";
+import octbot from "/octbot.png";
+import useIcons from "../../hooks/useIcons";
 
 function AuthFormWrapper({
   children,
@@ -13,54 +15,80 @@ function AuthFormWrapper({
   onChange,
 }) {
   const navigate = useNavigate();
-  return (
-    <section className="sm:flex w-full animate-fedin.2s relative justify-start items-center flex-col z-50 h-screen  top-0 left-0 bottom-0 right-0 overflow-scroll  bg-light dark:bg-dark  dark:*:border-[#383838]">
-      {/* {(isError || validation) && (
-        <div className=" flex justify-center w-full bg-red-100 py-2 text-red-500 border-y-2 border-red-600 ">
-          {error?.response?.data.message || validation}
-        </div>
-      )} */}
-      <div className="flex justify-end items-center w-full p-3 ">
-        <button
-          onClick={() => navigate(-1)}
-          className="sm:text-4xl text-xl "
-          aria-label="Close"
-        >
-          <IoCloseOutline />
-        </button>
-      </div>
+  const icons = useIcons();
 
-      <div className="flex flex-col justify-between gap-3 p-7 min-w-[300px] sm:w-[500px] h-full rounded-xl  dark:bg-inherit *:border-inherit ">
-        <header className=" flex justify-center items-center w-full self-end sm:text-4xl text-xl mx-auto text-center ">
-          {"Spread"}
-        </header>
-        <div className="flex flex-col justify-center h-full w-full px-5 *:border-inherit">
-          <h1 className="sm:text-2xl text-xl py-5 text-center font-medium">
-            {heading}
-          </h1>
+  return (
+    <section className="fixed left-0 right-0 bottom-0 top-0 z-50 flex flex-col sm:flex-row justify-between items-center h-screen  w-full font-light sm:text-sm text-xs bg-light dark:bg-dark overflow-hidden animate-fedin1s">
+      {/* Error/Validation Banner */}
+      {(isError || validation) && (
+        <div className="absolute top-0 left-0 right-0 z-10 flex justify-center w-full bg-red-100 py-3 text-red-600 border-b-2 border-red-300">
+          <span className="text-sm font-medium">
+            {error?.response?.data?.message || validation}
+          </span>
+        </div>
+      )}
+
+      {/* Close Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-4 right-4 z-20 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-2xl text-gray-600 dark:text-gray-300 transition-colors duration-200"
+        aria-label="Close"
+      >
+        {icons["close"]}
+      </button>
+
+      {/* Main Content Container */}
+      <div className="flex flex-col sm:flex-row w-full h-full min-h-screen">
+        {/* Left Side - Form */}
+        <div className="flex flex-col justify-center items-center w-full sm:w-1/2 px-6 py-8 sm:px-12">
+          {/* Header */}
+          <header className="flex flex-col items-center mb-8 text-center">
+            <ProfileImage
+              image={spreadLogo}
+              className="w-20 h-20 mb-4 rounded-full shadow-lg hover:scale-105 transition-transform duration-300"
+              alt="Spread Logo"
+            />
+            <h1 className="text-2xl sm:text-3xl font-light text-gray-800 dark:text-white">
+              {heading}
+            </h1>
+          </header>
+
+          {/* Form */}
           <form
             onSubmit={onSubmit}
-            className="flex flex-col items-center justify-start w-full gap-2   py-2  *:border-inherit  sm:text-sm  text-xs "
             onChange={onChange}
+            className="w-full max-w-sm space-y-4"
           >
             {children}
+
+            {/* Form Type Toggle */}
             {formType && (
-              <footer className="text-center">
-                <small>
-                  {formType == "signup"
+              <footer className="text-center pt-6 text-inherit">
+                <p className=" text-gray-600 dark:text-gray-400">
+                  {formType === "signup"
                     ? "Already have an account?"
-                    : " Don't have an Account?"}
+                    : "Don't have an account?"}
                   <Link
-                    to={`/auth/${formType == "signup" ? "signin" : "signup"}`}
+                    to={`/auth/${formType === "signup" ? "signin" : "signup"}`}
                     replace={true}
-                    className="text-blue-500"
+                    className="ml-1 text-gray-800 hover:text-gray-950 font-normal transition-colors duration-200"
                   >
-                    {formType == "signup" ? " Sign In" : " Sign Up"}
+                    {formType === "signup" ? "Sign In" : "Sign Up"}
                   </Link>
-                </small>
+                </p>
               </footer>
             )}
           </form>
+        </div>
+
+        {/* Right Side - Decorative Image */}
+        <div className="hidden sm:block w-1/2 h-full min-h-screen relative overflow-hidden">
+          <img
+            className="w-full h-full object-cover object-center"
+            src={octbot}
+            alt="Decorative illustration"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
         </div>
       </div>
     </section>

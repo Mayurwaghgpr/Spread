@@ -59,7 +59,7 @@ function MainNavBar() {
   }, [location.pathname, userProfile?.id, user?.id]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl border-b border-inherit ">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl border-inherit ">
       <nav className="max-w-7xl mx-auto border-inherit">
         <div className="flex items-center justify-between border-inherit">
           {/* Logo Section */}
@@ -79,10 +79,11 @@ function MainNavBar() {
 
           {/* Right Section */}
           <div className="flex items-center gap-4 border-inherit">
+            <ThemeBtn className="" Modes={Modes} />
             {isLogin && (
               <>
                 {/* Notification Bell */}
-                <ThemeBtn className=" " Modes={Modes} />
+
                 <NotifictionBell />
 
                 {/* User Profile Section */}
@@ -106,13 +107,21 @@ function MainNavBar() {
 
             {/* Sign In Button for Non-logged Users */}
             {!isLogin && (
-              <Link
-                to="/auth/signin"
-                className="flex items-center gap-2 px-6 py-2.5  rounded-full font-medium transition-all duration-200  text-sm sm:text-base"
-              >
-                <PiSignInDuotone className="text-lg" />
-                <span className="sm:block hidden">Sign In</span>
-              </Link>
+              <div className=" flex justify-center items-center text-sm font-light">
+                {" "}
+                <Link
+                  to="/auth/signup"
+                  className="flex  items-center gap-2 px-6 py-1 bg-dark dark:bg-light text-white dark:text-black  rounded-full transition-all duration-200 "
+                >
+                  <span className="">Sign Up</span>
+                </Link>
+                <Link
+                  to="/auth/signin"
+                  className="sm:flex hidden items-center gap-2 px-6 py-1  rounded-full  transition-all duration-200"
+                >
+                  Sign In
+                </Link>
+              </div>
             )}
           </div>
         </div>

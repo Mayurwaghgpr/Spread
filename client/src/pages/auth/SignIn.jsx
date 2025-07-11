@@ -93,7 +93,7 @@ function SignIn() {
     //
     <AuthFormWrapper
       onSubmit={handleLogin}
-      heading="Welcome"
+      heading="SignIn to your account"
       error={error}
       isError={isError}
       formType="signin"
@@ -133,7 +133,7 @@ function SignIn() {
               to="/forgot/pass"
               onClick={(e) => e.stopPropagation()}
               state={{ email: currentInputValue }}
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              className="text-blue-600 hover:text-blue-800 underline dark:text-blue-400 dark:hover:text-blue-300"
             >
               Forgot Password?
             </Link>
@@ -145,7 +145,7 @@ function SignIn() {
         {passVisible ? (
           <CommenAuthBtn
             type="submit"
-            className={`${
+            className={`  ${
               isLoading ? "cursor-wait opacity-50" : "hover:opacity-90"
             }`}
             disabled={isLoading}
@@ -157,9 +157,7 @@ function SignIn() {
             onClick={handleContinue}
             disabled={!currentInputValue}
             className={`${
-              !currentInputValue
-                ? "cursor-not-allowed opacity-50"
-                : "hover:opacity-90"
+              !currentInputValue ? "cursor-not-allowed " : "hover:opacity-90"
             }`}
           >
             Continue
@@ -170,7 +168,7 @@ function SignIn() {
 
       {!passVisible && (
         <>
-          <div className="mb-4 w-full flex justify-center items-center text-nowrap gap-3 sm:text-sm text-xs">
+          <div className="mb-4 w-full flex justify-center items-center text-nowrap gap-3">
             <OAuth
               className="border bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity"
               service="google"

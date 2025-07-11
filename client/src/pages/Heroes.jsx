@@ -50,7 +50,7 @@ function Heroes() {
 
         {/* Content */}
         <div className="relative z-20 max-w-7xl mx-auto py-20 px-6 sm:px-12 flex items-center min-h-screen">
-          <div className="animate-slide-in-bottom transform transition-all duration-700 mt-20 max-w-3xl">
+          <div className="transform transition-all duration-700 mt-20 max-w-3xl">
             {/* Logo Badge */}
             <div className="inline-flex items-center gap-3 sm:mb-8 mb-4 sm:px-6 sm:py-3 px-3 py-2 bg-white/80 dark:bg-white/10 backdrop-blur-lg rounded-full border border-amber-200 dark:border-zinc-700 shadow-lg">
               <div className="sm:w-8 sm:h-8 w-6 h-6 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-md">

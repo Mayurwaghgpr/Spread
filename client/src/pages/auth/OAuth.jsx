@@ -17,7 +17,7 @@ function OAuth({ service, className, ...props }) {
     <button
       type="button"
       onClick={handleOAuth}
-      className={`flex items-center p-3 w-full justify-center gap-3 rounded-lg ${className}`}
+      className={`flex items-center p-2 w-full justify-center gap-3 rounded-full ${className}`}
       {...props}
     >
       {icons[service]}

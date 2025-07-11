@@ -81,19 +81,19 @@ function SideBar() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between items-start h-full sm:min-w-full w-fit me-16 px-6 py-8 sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-xl sm:text-lg shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none "
+        className="flex flex-col justify-between items h-full w-fit sm:m-0 me-16 lg:me-16 px-6 py-8 sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-lg sm:text-sm shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none "
       >
-        <div className="flex flex-col justify-center items-start gap-6 w-full sm:mt-8">
+        <div className="flex flex-col justify-center items-center gap-4 sm:mt-8 w-fit">
           {/* Profile Link */}
-          <div className="flex flex-col items-start gap-6 h-fit w-full">
+          <div className="flex flex-col items-start gap-2 h-fit w-fit">
             <Link
               to={`/profile/@${user?.username}/${user?.id}`}
-              className="group flex  lg:justify-start  justify-start sm:justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
+              className="group flex justify-center sm:justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
               onClick={() => dispatch(setManuOpen())}
             >
               <div className="relative">
                 <ProfileImage
-                  className="xl:w-12 xl:h-12 h-10 w-10 ring-2 rounded-full ring-gray-200 dark:ring-slate-700 group-hover:ring-blue-300 dark:group-hover:ring-blue-600 transition-all duration-200"
+                  className=" h-10 w-10 ring-2 rounded-full ring-gray-200 dark:ring-slate-700 group-hover:ring-blue-300 dark:group-hover:ring-blue-600 transition-all duration-200"
                   image={userImageurl}
                   alt={user?.username}
                   title="user profile"
@@ -102,7 +102,7 @@ function SideBar() {
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-slate-900 xl:block hidden"></div>
               </div>
               <div className="xl:block sm:hidden block text-nowrap">
-                <h1 className="font-semibold  transition-colors duration-200">
+                <h1 className="font-medium  transition-colors duration-200">
                   {user?.displayName}
                 </h1>
                 <p className="text-sm text-gray-500 dark:text-gray-400 xl:block hidden">
@@ -167,9 +167,8 @@ function SideBar() {
         </div>
 
         {/* Logout Button */}
-        <div className="w-fit">
-          <LogoutBtn className="group flex justify-start items-center gap-4 px-4 py-3 no-underline rounded-2xl transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:scale-[1.02] hover:shadow-md" />
-        </div>
+
+        <LogoutBtn className="group flex justify-center items-center gap-4 px-4 py-3 w-fit sm:w-full lg:w-fit no-underline rounded-2xl transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:scale-[1.02] hover:shadow-md" />
       </div>
     </aside>
   );

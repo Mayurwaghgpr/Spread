@@ -59,7 +59,7 @@ function MainNavBar() {
   }, [location.pathname, userProfile?.id, user?.id]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl border-inherit ">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl border-b border-inherit ">
       <nav className="max-w-7xl mx-auto border-inherit">
         <div className="flex items-center justify-between border-inherit">
           {/* Logo Section */}
@@ -90,7 +90,7 @@ function MainNavBar() {
                 <div className="relative group border-inherit">
                   <ProfileImage
                     onClick={() => dispatch(setManuOpen())}
-                    className={`box-content border-3 sm:w-10 sm:h-10 w-8 h-8 rounded-full cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-lg ${
+                    className={`box-content border-3  w-7 h-7 rounded-full cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-lg ${
                       isProfileActive
                         ? "border-gray-500 dark:border-gray-400 ring-2 ring-gray-200 dark:ring-gray-800"
                         : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"

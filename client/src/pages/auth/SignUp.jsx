@@ -105,7 +105,7 @@ function SignUp() {
           disabled={true}
         />
       </div>
-      <Divider text="or" className="mb-4" />
+      <Divider text="or" className="mb-4  border-inherit" />
       {signUpInputs.map((input) => (
         <CommonInput
           key={input.id}

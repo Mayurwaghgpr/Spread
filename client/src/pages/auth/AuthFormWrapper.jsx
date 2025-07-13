@@ -18,7 +18,7 @@ function AuthFormWrapper({
   const icons = useIcons();
 
   return (
-    <section className="fixed left-0 right-0 bottom-0 top-0 z-50 flex flex-col sm:flex-row justify-between items-center h-screen  w-full font-light sm:text-sm text-xs bg-light dark:bg-dark overflow-hidden animate-fedin1s">
+    <section className="fixed left-0 right-0 bottom-0 top-0 z-50 flex flex-col sm:flex-row justify-between items-center h-screen  w-full font-light sm:text-sm text-xs bg-light dark:bg-dark overflow-hidden animate-fedin1s border-inherit">
       {/* Error/Validation Banner */}
       {(isError || validation) && (
         <div className="absolute top-0 left-0 right-0 z-10 flex justify-center w-full bg-red-100 py-3 text-red-600 border-b-2 border-red-300">
@@ -38,9 +38,9 @@ function AuthFormWrapper({
       </button>
 
       {/* Main Content Container */}
-      <div className="flex flex-col sm:flex-row w-full h-full min-h-screen">
+      <div className="flex flex-col sm:flex-row w-full h-full min-h-screen border-inherit">
         {/* Left Side - Form */}
-        <div className="flex flex-col justify-center items-center w-full sm:w-1/2 px-6 py-8 sm:px-12">
+        <div className="flex flex-col justify-center items-center w-full sm:w-1/2 px-6 py-8 sm:px-12 border-inherit">
           {/* Header */}
           <header className="flex flex-col items-center mb-8 text-center">
             <ProfileImage
@@ -57,7 +57,7 @@ function AuthFormWrapper({
           <form
             onSubmit={onSubmit}
             onChange={onChange}
-            className="w-full max-w-sm space-y-4"
+            className="w-full max-w-sm space-y-4 border-inherit"
           >
             {children}
 
@@ -71,7 +71,7 @@ function AuthFormWrapper({
                   <Link
                     to={`/auth/${formType === "signup" ? "signin" : "signup"}`}
                     replace={true}
-                    className="ml-1 text-gray-800 hover:text-gray-950 font-normal transition-colors duration-200"
+                    className="ml-1 dark:text-slate-400 dark:hover:text-slate-600 text-gray-800 hover:text-gray-950 font-normal transition-colors duration-200"
                   >
                     {formType === "signup" ? "Sign In" : "Sign Up"}
                   </Link>

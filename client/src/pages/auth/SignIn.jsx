@@ -164,7 +164,7 @@ function SignIn() {
           </CommenAuthBtn>
         )}
       </div>
-      <Divider text="or" className="mb-4" />
+      <Divider text="or" className="mb-4 border-inherit" />
 
       {!passVisible && (
         <>

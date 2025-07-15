@@ -115,10 +115,8 @@ npm run dev
 ```
 ---
 ## 🤝 Contributing
-Contributions are welcome and appreciated!
----
-
-## ⑂ Fork the repository
+  Contributions are welcome and appreciated!
+# ⑂ Fork the repository
 ```bash
 Create a new branch (git checkout -b feature/your-feature)
 

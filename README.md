@@ -112,7 +112,7 @@ npm install
 
 # Start the development server
 npm run dev
-
+```
 ---
 ## 🤝 Contributing
 Contributions are welcome and appreciated!
@@ -127,6 +127,7 @@ Commit your changes (git commit -m 'Add new feature')
 Push to your branch (git push origin feature/your-feature)
 
 Open a Pull Request
+```
 ---
 ## 📄 License
 - This project is licensed under the MIT License. See the LICENSE file for details.

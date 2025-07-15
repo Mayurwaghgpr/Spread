@@ -67,7 +67,37 @@
 - Express Rate Limit
 
 ---
+## 📂 Folder Structure
+Spread/
+├── client/ # React frontend
+│ ├── public/
+│ ├── src/
+│ │ ├── assets/ # Images and static files
+│ │ ├── component/ # Reusable components
+│ │ ├── hooks/ # Custom React hooks
+│ │ ├── pages/ # Route-based pages
+│ │ ├── sample/ # Demo or experimental files
+│ │ ├── service/ # API call logic
+│ │ ├── store/ # Redux store configuration
+│ │ └── utils/ # Utility functions
+│ └── test/
+│ └── components/ # Component test cases
+│
+├── server/ # Express backend
+│ ├── config/ # Configuration (DB, OAuth, etc.)
+│ ├── controllers/ # Request handlers
+│ ├── db/ # DB connection and triggers
+│ ├── images/ # Uploaded images (temp/static)
+│ ├── middleware/ # Middleware (auth, multer.js, passport.js)
+│ ├── models/ # Sequelize models
+│ ├── routes/ # API route definitions
+│ ├── service/ # Worker services
+│ └── socket/ # WebSocket event handlers
+│
+├── .env # Environment variables
+└── README.md # Project documentation
 
+---
 ## 📦 Installation
 
 ```bash

@@ -112,3 +112,31 @@ npm install
 
 # Start the development server
 npm run dev
+
+## 🤝 Contributing
+Contributions are welcome and appreciated!
+
+# Fork the repository
+```bash
+Create a new branch (git checkout -b feature/your-feature)
+
+Commit your changes (git commit -m 'Add new feature')
+
+Push to your branch (git push origin feature/your-feature)
+
+Open a Pull Request
+
+## 📄 License
+- This project is licensed under the MIT License. See the LICENSE file for details.
+
+## 📢 Feedback
+If you find a bug or want to suggest a feature, feel free to [open an issue](https://github.com/Mayurwaghgpr/Spread/issues).
+
+## 🙋‍♂️ Author
+# Mayur Shashikant Wagh
+- 🌐 [GitHub](https://github.com/Mayurwaghgpr)
+- 📫 mayur2002wagh@gmail.com
+
+
+## 🙌 Support
+# If you like this project, consider giving it a ⭐️ and sharing it with others!

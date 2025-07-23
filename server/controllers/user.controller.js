@@ -1,4 +1,4 @@
-import {Op } from "sequelize"
+import { Op } from "sequelize";
 import User from "../models/user.js";
 import Post from "../models/posts.js";
 import formatPostData from "../utils/dataFormater.js";
@@ -18,13 +18,13 @@ export const getUserProfile = async (req, res, next) => {
   try {
     const cachedUserData = await redisClient.get(id);
     if (cachedUserData !== null) {
-      console.log('cach hit')
+      console.log("cach hit");
       return res.status(200).json(JSON.parse(cachedUserData));
     }
 
-    console.log('cach miss')
+    console.log("cach miss");
 
-    const userInfo = await fetchProfile({id});
+    const userInfo = await fetchProfile({ id });
     // console.log("dsds",userInfo)
 
     if (userInfo) {
@@ -42,34 +42,33 @@ export const getUserProfile = async (req, res, next) => {
 // Get posts by user ID
 export const getUserPostsById = async (req, res, next) => {
   const userId = req.params.userId;
- const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
+  const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
 
   // console.log("getUserPostsById...")
   try {
     const { count: totalPosts, rows: posts } = await Post.findAndCountAll({
-      where: { authorId: userId , createdAt: { [Op.lt]: lastTimestamp }},
+      where: { authorId: userId, createdAt: { [Op.lt]: lastTimestamp } },
       include: [
         {
           model: User,
-          attributes: ["id", "username", "userImage","displayName"],
+          attributes: ["id", "username", "userImage", "displayName"],
         },
         {
           model: Likes, // Include likes
           as: "Likes",
           required: false,
         },
-         {
+        {
           model: Comments,
           as: "comments",
-        }
+        },
       ],
       limit,
       order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
     });
     if (posts.length > 0) {
-      const postData = formatPostData(JSON.parse(JSON.stringify(posts))); // Format post data
-      res.status(200).json(postData);
+      res.status(200).json(posts);
     } else {
       res.status(404).send("No posts found");
     }
@@ -105,7 +104,7 @@ export const getFollowing = async (req, res, next) => {
 
     res.status(200).json(user.Following);
   } catch (error) {
-    console.log('Error while get followings',error.message)
+    console.log("Error while get followings", error.message);
     next(error);
   }
 };
@@ -118,16 +117,20 @@ export const EditUserProfile = async (req, res, next) => {
   try {
     // update new image path and delete the old image file from folder
     if (image.length > 0) {
-      const result= await cloudinary.uploader.upload(image[0].path);
-      updatedData.userImage = result.secure_url  // Update user image path
+      const result = await cloudinary.uploader.upload(image[0].path);
+      updatedData.userImage = result.secure_url; // Update user image path
       updatedData.cloudinaryPubId = result.public_id;
 
       if (!data.userFromOAuth && data.cloudinaryPubId) {
         // console.log("old_pubId",data.cloudinaryPubId)
-      if (!data.userFromOAuth&&data.cloudinaryPubId!==process.env.USER_IMAGE_OUTLOOK) {// Delete old image
+        if (
+          !data.userFromOAuth &&
+          data.cloudinaryPubId !== process.env.USER_IMAGE_OUTLOOK
+        ) {
+          // Delete old image
 
-       await deleteCloudinaryImage(data.cloudinaryPubId);
-      }
+          await deleteCloudinaryImage(data.cloudinaryPubId);
+        }
         await deletePostImage(image);
       }
     }
@@ -135,8 +138,11 @@ export const EditUserProfile = async (req, res, next) => {
     if (data.removeImage && data.userImage && data.userImage !== " ") {
       updatedData.userImage = ""; // Remove user image
       //If user is not loged in with OAuth i.e google/github etc. so he will have image stored in backend
-      if (!data.userFromOAuth&&data.cloudinaryPubId!==process.env.USER_IMAGE_OUTLOOK) {
-       await deleteCloudinaryImage(data.cloudinaryPubId);
+      if (
+        !data.userFromOAuth &&
+        data.cloudinaryPubId !== process.env.USER_IMAGE_OUTLOOK
+      ) {
+        await deleteCloudinaryImage(data.cloudinaryPubId);
       }
     }
 
@@ -149,7 +155,7 @@ export const EditUserProfile = async (req, res, next) => {
     });
 
     if (updatedUser) {
-      await redisClient.del(req.authUser.id)
+      await redisClient.del(req.authUser.id);
       res
         .status(200)
         .cookie("_userDetail", JSON.stringify(updatedUser), CookieOptions)
@@ -167,16 +173,20 @@ export const EditUserProfile = async (req, res, next) => {
 export const searchForUsername = async (req, res, next) => {
   const username = req.body.username;
   try {
-if (!username) {
-    return res.status(400).json({message:"cannot set empty username,please provied username"})
-  }
-  const exist = await User.findOne({ where: {username} });
-  if (exist) {
-    return res.status(409).json({message: 'username is already taken',exist})
-  }
-  res.status(200).json({username})
+    if (!username) {
+      return res
+        .status(400)
+        .json({ message: "cannot set empty username,please provied username" });
+    }
+    const exist = await User.findOne({ where: { username } });
+    if (exist) {
+      return res
+        .status(409)
+        .json({ message: "username is already taken", exist });
+    }
+    res.status(200).json({ username });
   } catch (error) {
-    console.log('Error while searching username',error.message)
+    console.log("Error while searching username", error.message);
     next(error);
-}
-}
+  }
+};

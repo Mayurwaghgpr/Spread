@@ -8,7 +8,11 @@ const UserNamesSuggestion = lazy(() => import("../UserNamesSuggestion"));
 const EditableElementInput = React.forwardRef(
   (
     {
-      value = "",
+      value = (
+        <span className=" text-sm font-light opacity-40 ">
+          Write a Response
+        </span>
+      ),
       onChange,
       placeholder = "Write something...",
       maxWidth = "70%",
@@ -100,7 +104,8 @@ const EditableElementInput = React.forwardRef(
             contentEditable
             suppressContentEditableWarning
             className={`w-full bg-inherit border-inherit outline-none p-2 text-inherit peer ${textClassName}`}
-            placeholder={placeholder}
+            // placeholder={placeholder}
+            inputMode="text"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(value),
             }}

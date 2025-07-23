@@ -6,7 +6,6 @@ import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
-// import { startedFollowing } from "../services/notification.js";
 
 // Fetch all users except the current user and distinct topics
 export const getHomeContent = async (req, res, next) => {
@@ -164,7 +163,6 @@ export const getAllUser = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 5, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   const currentUserId = req.authUser.id;
-  console.log(limit);
   try {
     const cacheKey = `Users_Data_${lastTimestamp}__${limit}`;
     // Unique cache key for this combination
@@ -196,22 +194,23 @@ export const LikePost = async (req, res, next) => {
   const { id: likedBy } = req.authUser;
 
   try {
+    if (!postId) {
+      return res.status(400).json({ message: "postId is required" });
+    }
+    const cachedData = JSON.parse(await redisClient.get(postId));
+    console.log({ cachedData });
     // Check if the like already exists
     const existingLike = await Likes.findOne({ where: { likedBy, postId } });
 
     if (existingLike) {
-      !type
-        ? // If type is not provided, remove the like
-          await existingLike.destroy()
-        : // If type is provided, update the like type
-          await existingLike.update({ type });
+      if (!type) {
+        await existingLike.destroy();
+      } else {
+        await existingLike.update({ type });
+      }
     } else {
-      // If the like doesn't exist, create a new one
       await Likes.create({ likedBy, postId, type });
     }
-
-    // Fetch updated likes for the post
-    const updatedLikes = await Likes.findAll({ where: { postId } });
 
     // Send response
     res.status(201).json({
@@ -220,7 +219,6 @@ export const LikePost = async (req, res, next) => {
           ? "like updated"
           : "removed like"
         : "added like",
-      updatedLikes,
     });
   } catch (error) {
     next(error);

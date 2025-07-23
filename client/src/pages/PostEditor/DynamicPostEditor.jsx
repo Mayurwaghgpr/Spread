@@ -8,6 +8,7 @@ import { Outlet } from "react-router-dom";
 
 import InputTypeSelector from "./component/InputTypeSelector";
 import PostBtn from "../../component/buttons/PostBtn";
+import useIcons from "../../hooks/useIcons";
 
 function DynamicPostEditor() {
   const {
@@ -24,13 +25,12 @@ function DynamicPostEditor() {
     handleKeyDown,
   } = usePostCreator();
 
-  const dispatch = useDispatch();
   const { elements } = useSelector((state) => state.posts);
-  const { isScale } = useSelector((state) => state.ui);
+  const icons = useIcons();
   const checkAllMatch = elements.every(
     (obj, i, arr) =>
-      (arr.length >= 3 && obj.data !== undefined && obj.data !== "") ||
-      (arr.length >= 3 && obj.file && obj.data === "")
+      (arr.length > 3 && obj.data !== undefined && obj.data !== "") ||
+      (arr.length > 3 && obj.file && obj.data === "")
   );
 
   return (
@@ -38,7 +38,6 @@ function DynamicPostEditor() {
       <section className="relative flex flex-col justify-between  mt-20 mb-32 w-full border-inherit ">
         <PostBtn
           className={`fixed  xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
-          content={<i className="bi bi-send-fill"></i>}
           disabled={elements.length > 3 ? false : true}
         />
         <div
@@ -60,7 +59,7 @@ function DynamicPostEditor() {
                       isScale ? "rotate-0" : " rotate-45"
                     }`}
                   >
-                    <i className="bi bi-x"></i>
+                    {icons["close"]}
                   </span>
                 )}
               </div> */}

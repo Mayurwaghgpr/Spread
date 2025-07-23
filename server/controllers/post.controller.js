@@ -161,7 +161,6 @@ export const getPostPreview = async (req, res, next) => {
       order: [["createdAt", "DESC"]],
       limit,
     });
-    // const postData = formatPostData(JSON.parse(JSON.stringify(posts))); // Format the post data
 
     // Caching the result to redis with expiration time
     await redisClient.setEx(cacheKey, 300, JSON.stringify(posts));

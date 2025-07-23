@@ -3,7 +3,9 @@ import EditableParagraph from "./EditableParagraph";
 import Ibutton from "../../../component/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 const CodeEditor = lazy(() => import("./codeEditor"));
-
+const ImageFigure = lazy(
+  () => import("../../../component/utilityComp/ImageFigure")
+);
 const ElementsProvider = ({
   element,
   index,
@@ -39,7 +41,7 @@ const ElementsProvider = ({
       />
     ),
     image: (
-      <figure
+      <div
         key={element.id}
         ref={(el) => (inputRefs.current[index] = el)}
         onFocus={() => setFocusedIndex(index)}
@@ -51,26 +53,26 @@ const ElementsProvider = ({
           action={(e) => handleKeyDown(e, element.id, index)}
           innerText={icons["close"]}
         />
-        <img
+        <ImageFigure
           className="h-[100%] min-w-full "
-          src={element.file}
-          alt="Preview"
+          imageUrl={element.file}
+          altText={"Preview"}
           id="inputimage"
           contentEditable
           loading="lazy"
+          caption={
+            <span
+              className={`text-center ${element.data === "" && "text-gray-500"}`}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={(e) => handleContentEditableChange(element.id, e, index)}
+              placeholder={
+                element.data === "" ? "Enter description" : element.data
+              }
+            ></span>
+          }
         />
-        <figcaption>
-          <span
-            className={`text-center ${element.data === "" && "text-gray-500"}`}
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={(e) => handleContentEditableChange(element.id, e, index)}
-            placeholder={
-              element.data === "" ? "Enter description" : element.data
-            }
-          ></span>
-        </figcaption>
-      </figure>
+      </div>
     ),
   };
   return inputObj[element.type] || inputObj["text"];

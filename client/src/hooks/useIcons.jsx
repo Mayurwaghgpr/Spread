@@ -22,6 +22,7 @@ import {
   BsPen,
   BsPenFill,
   BsPeople,
+  BsSendFill,
   BsThreeDotsVertical,
   BsTwitterX,
 } from "react-icons/bs";
@@ -68,12 +69,10 @@ import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineMessage, AiOutlineSend } from "react-icons/ai";
 import { LuGithub, LuLogOut, LuMonitorSmartphone } from "react-icons/lu";
 import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
-import { HiOutlineComputerDesktop } from "react-icons/hi2";
 import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
-
 function useIcons() {
   return {
     // A
@@ -185,7 +184,7 @@ function useIcons() {
     sun: <IoSunny />,
     system: <GrSystem />,
     share: <BiShare />,
-
+    sendFi: <BsSendFill />,
     // T
     tag: <FaUserTag />,
     ThreeDot: <BsThreeDotsVertical />,

@@ -5,7 +5,7 @@ function Selector({ name, setOptions, options, className, defaultValue }) {
     <select
       name={name}
       defaultValue={defaultValue}
-      onChange={(e) => setOptions(e)}
+      onChange={(e) => setOptions(e.target.value)}
       className={className}
     >
       {options.map((option, idx) => (

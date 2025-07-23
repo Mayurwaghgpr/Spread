@@ -14,7 +14,7 @@ import Database from "./db/database.js";
 import redisClient from "./utils/redisClient.js";
 import DataBaseAssociations from "./utils/DataBaseAssociations.js";
 import { passportStrategies } from "./middlewares/passportStrategies.js";
-import socketHandlers from "./Sockets/SocketHandler.js";
+import socketHandlers from "../socket/SocketHandler.js";
 import sockIo from "./socket.js";
 import client from "./db/pgclient.js";
 

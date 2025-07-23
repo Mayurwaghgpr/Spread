@@ -21,6 +21,7 @@ import useIcons from "../../hooks/useIcons";
 import data from "@emoji-mart/data";
 const Picker = lazy(() => import("@emoji-mart/react"));
 import EditableElementInput from "../../component/inputComponents/EditableElementInput";
+import { useNavigate } from "react-router-dom";
 
 function CommentInput({ className }) {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -35,6 +36,7 @@ function CommentInput({ className }) {
   const emojiButtonRef = useRef();
   const inputRef = useRef();
   const icons = useIcons();
+  const navigate = useNavigate();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
@@ -68,6 +70,13 @@ function CommentInput({ className }) {
     },
     [dispatch, commentCred]
   );
+
+  const handleSend = useCallback(() => {
+    if (!isLogin) {
+      return navigate("/auth/signin");
+    }
+    mutate();
+  }, []);
 
   const handleEmojiSelect = (emoji) => {
     // Insert emoji at cursor position or append to end
@@ -110,6 +119,7 @@ function CommentInput({ className }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [pickerRef, emojiButtonRef]);
+
   useEffect(() => {
     if (commentCred.replyTo && inputRef?.current) {
       //
@@ -150,7 +160,7 @@ function CommentInput({ className }) {
           </Suspense>
         </div>
         <Ibutton
-          action={mutate}
+          action={handleSend}
           disabled={isLoading || !commentCred.content.trim()}
           className={`${!commentCred.content.trim() && "text-gray-300"} text-2xl rounded-full p-2`}
         >

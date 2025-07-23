@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useIcons from "../../hooks/useIcons";
 
 function PostBtn({ className, content, disabled }) {
   const navigat = useNavigate();
+  const icons = useIcons();
 
   return (
     <div className={className}>
@@ -12,6 +14,7 @@ function PostBtn({ className, content, disabled }) {
         className="w-full h-full"
         disabled={disabled}
       >
+        {icons["sendFi"]}
         {content}
       </button>
     </div>

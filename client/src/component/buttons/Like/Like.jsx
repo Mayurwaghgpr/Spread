@@ -3,11 +3,9 @@ import usePublicApis from "../../../services/publicApis";
 import { useMutation } from "react-query";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import abbreviateNumber from "../../../utils/AbbreviateNumber";
 import { useNavigate } from "react-router-dom";
 import LikesList from "./LikesList";
 import useIcons from "../../../hooks/useIcons";
-import Ibutton from "../Ibutton";
 import AbbreviateNumber from "../../../utils/AbbreviateNumber";
 import FedInBtn from "../FedInBtn";
 
@@ -31,9 +29,7 @@ function Like({ post, className }) {
   // Mutation for liking the post
   const { mutate } = useMutation({
     mutationFn: (likeConfig) => LikePost(likeConfig),
-    onSuccess: (data) => {
-      post.Likes = data.updatedLikes;
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       setOptimistIcon(""); // Revert optimistic update on error
       dispatch(

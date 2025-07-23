@@ -1,7 +1,6 @@
-import Messages from "../models/messaging/Messages.js";
-import redisClient from "../utils/redisClient.js";
-import Conversation from "../models/messaging/Conversation.js";
-
+import Messages from "../server/models/messaging/Messages.js";
+import redisClient from "../server/utils/redisClient.js";
+import Conversation from "../server/models/messaging/Conversation.js";
 
 export default function socketHandlers(io) {
   io.on("connection", async (socket) => {
@@ -10,11 +9,13 @@ export default function socketHandlers(io) {
     console.log(`Connected user: ${connectedUserId} (${socket.id})`);
 
     // Check and create room if server has restared and client is still in conversation
-    const roomExists = io.sockets.adapter.rooms.get(activeConversationId)?.has(socket.id)
-if (activeConversationId && !roomExists) {
-  socket.join(activeConversationId);
-}
-    
+    const roomExists = io.sockets.adapter.rooms
+      .get(activeConversationId)
+      ?.has(socket.id);
+    if (activeConversationId && !roomExists) {
+      socket.join(activeConversationId);
+    }
+
     // Register user with socket ID
     socket.on("register", async (userId) => {
       const cacheKey = `sockets:user:${userId}`;
@@ -35,7 +36,7 @@ if (activeConversationId && !roomExists) {
     });
 
     socket.on("IamTyping", ({ conversationId, senderId, image, typing }) => {
-      console.log('userIsTyping', { conversationId, senderId })
+      console.log("userIsTyping", { conversationId, senderId });
       io.to(conversationId).emit("userIsTyping", {
         conversationId,
         senderId,
@@ -49,13 +50,12 @@ if (activeConversationId && !roomExists) {
       "sendMessage",
       async ({ conversationId, senderId, content, replyedTo }) => {
         try {
-
           io.to(conversationId).emit("newMessage", {
             conversationId,
             senderId,
             content,
             replyedTo,
-            createdAt:new Date().toISOString(),
+            createdAt: new Date().toISOString(),
           });
 
           // TEST: commented temporarly
@@ -101,9 +101,9 @@ if (activeConversationId && !roomExists) {
     });
 
     // Handle user disconnect
-    socket.on("disconnect", async() => {
+    socket.on("disconnect", async () => {
       console.log("User disconnected:", socket.id);
-  await redisClient.del(`sockets:user:${connectedUserId}`);
+      await redisClient.del(`sockets:user:${connectedUserId}`);
     });
   });
 }

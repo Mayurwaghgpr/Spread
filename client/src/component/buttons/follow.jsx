@@ -3,13 +3,14 @@ import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import usePublicApis from "../../services/publicApis";
 import { setToast } from "../../store/slices/uiSlice";
+import { useNavigate } from "react-router-dom";
 
 function Follow({ className, person }) {
-  const { user } = useSelector((state) => state.auth);
+  const { user, isLogin } = useSelector((state) => state.auth);
   const { followUser } = usePublicApis();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   // Memoize the invalidation function
   const invalidateQueries = useCallback(() => {
     queryClient.invalidateQueries(["userProfile"]);
@@ -36,13 +37,19 @@ function Follow({ className, person }) {
 
   // Handle follow/unfollow action
   const handleFollowToggle = useCallback(() => {
+    if (!isLogin) {
+      return navigate("/auth/signin");
+    }
+
     if (!user?.id || !person?.id) return;
     mutate({ followerId: user.id, followedId: person.id });
   }, [user?.id, person?.id, isFollowing, mutate]);
 
   // Don't render if it's the current user
   if (person?.id === user?.id) {
-    return <button className={className}>You</button>;
+    return (
+      <button className={`${className} border border-inherit`}>You</button>
+    );
   }
 
   // Loading state
@@ -67,7 +74,7 @@ function Follow({ className, person }) {
   return (
     <button
       onClick={handleFollowToggle}
-      className={`relative group text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${className} ${
+      className={`relative group text-xs sm:text-sm font-normal text-white dark:text-black bg-black dark:bg-white hover:bg-black/60 dark:hover:bg-white/60 rounded-full transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${className} ${
         isFollowing
           ? "hover:border-red-400 hover:border hover:bg-transparent"
           : ""

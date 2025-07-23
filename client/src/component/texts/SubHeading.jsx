@@ -1,8 +1,6 @@
 const SubHeading = ({ children, className }) => {
   return (
-    <h2 className={`font-semibold opacity-50  ${className}`}>
-      {children || ""}
-    </h2>
+    <h2 className={`font-medium opacity-50  ${className}`}>{children || ""}</h2>
   );
 };
 

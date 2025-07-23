@@ -3,26 +3,45 @@ import Database from "../db/database.js";
 import User from "./user.js";
 import Post from "./posts.js";
 
-const Likes = Database.define("Like", {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+const Likes = Database.define(
+  "Like",
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    type: {
+      type: DataTypes.STRING,
+      defaultValue: "",
+      allowNull: false,
+    },
+    likedBy: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      index: true,
+    },
+    postId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      index: true,
+    },
   },
-  type: {
-    type: DataTypes.STRING,
-    defaultValue: "",
-    allowNull: false,
-  },
-  likedBy: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  postId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-});
+  {
+    indexes: [
+      {
+        fields: ["likedBy"],
+      },
+      {
+        fields: ["postId"],
+      },
+      {
+        unique: true,
+        fields: ["likedBy", "postId"],
+      },
+    ],
+  }
+);
 
 Likes.belongsTo(Post, {
   as: "likedPost",

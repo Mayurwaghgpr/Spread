@@ -97,7 +97,7 @@ function Home() {
         return (
           <React.Fragment key={`fragment-${post.id}`}>
             <WhoToFollow
-              homeData={homeData}
+              userSuggetion={homeData?.userSuggetion}
               className="w-full text-sm p-5 border-b border-inherit"
               isLoadingHome={isLoadingHome}
             />

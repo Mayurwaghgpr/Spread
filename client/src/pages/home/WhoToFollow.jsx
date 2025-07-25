@@ -1,5 +1,3 @@
-import React from "react";
-import PeoplesList from "../../component/PeoplesList";
 import Follow from "../../component/buttons/follow";
 import { Link, useNavigate } from "react-router-dom";
 import ProfileListItemLoadingSkeleton from "../../component/loaders/ProfileListItemLoadingSkeleton";
@@ -8,8 +6,8 @@ import Paragraph from "../../component/texts/Paragraph";
 import ProfileImage from "../../component/ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import Heading from "../../component/texts/Heading";
-
-function WhoToFollow({ className, homeData, isLoadingHome }) {
+import UserPopover from "../../component/utilityComp/UserPopover";
+function WhoToFollow({ className, userSuggetion, isLoadingHome }) {
   const navigate = useNavigate();
   return (
     <div className={className}>
@@ -18,29 +16,40 @@ function WhoToFollow({ className, homeData, isLoadingHome }) {
         <ProfileListItemLoadingSkeleton count={5} />
       ) : (
         <ul className="flex flex-wrap gap-5 py-3 w-full">
-          {homeData?.userSuggetion?.map((person, idx, arr) => {
+          {userSuggetion?.map((person, idx, arr) => {
             const { userImageurl } = userImageSrc(person);
-
             return (
               <li
-                key={person?.id || idx}
+                key={person?.id}
                 className="flex items-center justify-between w-full bg-light dark:bg-dark"
               >
                 {/* Left Section - Profile Info */}
                 <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0 pr-4">
                   {/* Profile Image */}
-                  <ProfileImage
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0 ring-2 ring-gray-100 dark:ring-gray-700 transition-all duration-200 hover:ring-gray-300 dark:hover:ring-gray-600"
-                    image={person && userImageurl}
-                  />
-
+                  <Link className=" cursor-pointer " to={person.profileLink}>
+                    <ProfileImage
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0 ring-2 ring-gray-100 dark:ring-gray-700 transition-all duration-200 hover:ring-gray-300 dark:hover:ring-gray-600"
+                      image={person && userImageurl}
+                    />
+                  </Link>
                   {/* Profile Details */}
                   <div className="flex-1 min-w-0 space-y-1 sm:space-y-2">
-                    {/* Display Name */}
-                    <Heading className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
-                      {person?.displayName || "Unknown User"}
-                    </Heading>
-
+                    <div className=" relative group flex items-center justify-between">
+                      <Link
+                        className=" cursor-pointer  hover:underline"
+                        to={`/profile/@${person?.username}/${person?.id}`}
+                      >
+                        {/* Display Name */}
+                        <Heading className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
+                          {person?.displayName || "Unknown User"}
+                        </Heading>
+                      </Link>
+                      <UserPopover
+                        // ref={}
+                        className="absolute z-40 left-0 right-0 bottom-10 w-full bg-light dark:bg-dark opacity-0 pointer-events-none group-hover:pointer-events-auto  transition-all duration-300 delay-500 group-hover:opacity-100 text-red-600"
+                        person={person}
+                      />
+                    </div>
                     {/* Username */}
                     <SubHeading className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">
                       @{person?.username || "username"}

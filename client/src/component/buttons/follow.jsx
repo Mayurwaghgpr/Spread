@@ -18,10 +18,9 @@ function Follow({ className, person }) {
   }, [queryClient]);
 
   // Check if currently following this user
-  const isFollowing = useMemo(
-    () => user?.Following?.some((followed) => followed?.id === person?.id),
-    [(user?.Following, person?.id)]
-  );
+  const isFollowing = useMemo(() => {
+    return user?.Following?.some((followed) => followed?.id === person?.id);
+  }, [user, person?.id]);
 
   // Follow mutation
   const { mutate, isLoading: isLoading } = useMutation(followUser, {
@@ -43,19 +42,23 @@ function Follow({ className, person }) {
 
     if (!user?.id || !person?.id) return;
     mutate({ followerId: user.id, followedId: person.id });
-  }, [user?.id, person?.id, isFollowing, mutate]);
+  }, [user?.id, person?.id, isFollowing]);
 
   // Don't render if it's the current user
   if (person?.id === user?.id) {
     return (
-      <button className={`${className} border border-inherit`}>You</button>
+      <button className={`${className} font-semibold border border-inherit`}>
+        You
+      </button>
     );
   }
 
   // Loading state
   if (isLoading) {
     return (
-      <div className={className}>
+      <div
+        className={`${className} py-4 text-white dark:text-black bg-black dark:bg-white hover:bg-black/60 dark:hover:bg-white/60 rounded-full transition-all duration-200 hover:scale-105 `}
+      >
         <div className="dotloader"></div>
       </div>
     );
@@ -74,10 +77,10 @@ function Follow({ className, person }) {
   return (
     <button
       onClick={handleFollowToggle}
-      className={`relative group text-xs sm:text-sm font-normal text-white dark:text-black bg-black dark:bg-white hover:bg-black/60 dark:hover:bg-white/60 rounded-full transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${className} ${
+      className={`relative group text-xs sm:text-sm font-semibold text-white dark:text-black  rounded-full transition-all duration-200 hover:scale-105 ${className} ${
         isFollowing
-          ? "hover:border-red-400 hover:border hover:bg-transparent"
-          : ""
+          ? "hover:border-red-400 bg-black dark:bg-white  hover:border hover:bg-white dark:hover:bg-black/60"
+          : "bg-black dark:bg-white  hover:bg-black/60 dark:hover:bg-white/90"
       }`}
       disabled={isLoading}
       aria-label={

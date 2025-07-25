@@ -238,12 +238,9 @@ export const FollowUser = async (req, res, next) => {
     }
 
     let userInfo;
-    try {
-      userInfo = JSON.parse(req.cookies._userDetail) || { Following: [] };
-    } catch {
-      userInfo = { Following: [] }; // Fallback if cookie parsing fails
-    }
+    userInfo = JSON.parse(await redisClient.get(followerId));
 
+    console.log({ userInfo });
     // Check if the follow relationship already exists
     const existingFollow = await Follow.findOne({
       where: { followerId, followedId },
@@ -252,16 +249,17 @@ export const FollowUser = async (req, res, next) => {
     if (existingFollow) {
       // Unfollow user
       await existingFollow.destroy();
-      userInfo.Following = userInfo.Following.filter(
-        (follow) => follow.id !== followedId
-      );
+      userInfo.Following = userInfo?.Following
+        ? userInfo?.Following?.filter((follow) => follow.id !== followedId)
+        : [];
     } else {
       // Follow user
       await Follow.create({ followerId, followedId });
-      userInfo.Following = [...userInfo.Following, { id: followedId }];
+      userInfo.Following = [...userInfo?.Following, { id: followedId }];
+
       //  startedFollowing(followedId, followerId)
     }
-
+    await redisClient.setEx(followerId, EXPIRATION, JSON.stringify(userInfo));
     res.status(201).json({
       status: "success",
       message: existingFollow

@@ -50,7 +50,6 @@ app.use(express.urlencoded({ extended: true }));
 const allowedOrigins = process.env.WHITLIST_ORIGINS
   ? process.env.WHITLIST_ORIGINS.split(",").map((origin) => origin.trim())
   : [];
-console.log({ allowedOrigins });
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -178,7 +177,7 @@ process.on("uncaughtException", (error) => {
 });
 
 // Start the server after DB & Redis setup
-Database.sync()
+Database.sync({ alter: true })
   .then(async () => {
     await redisClient.connect();
     console.log("Redis client connected.");

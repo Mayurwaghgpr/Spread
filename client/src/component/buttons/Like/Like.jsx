@@ -1,6 +1,6 @@
 import React, { memo, useMemo, useState, useCallback } from "react";
 import usePublicApis from "../../../services/publicApis";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,9 +15,13 @@ function Like({ post, className }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLogin, user } = useSelector((state) => state.auth);
-
+  const queryClient = useQueryClient();
   // State for optimistic UI updates
   const [optimistIcon, setOptimistIcon] = useState("");
+  const invalidateQueries = useCallback(() => {
+    queryClient.invalidateQueries(["userProfile"]);
+    queryClient.invalidateQueries(["loggedInUser"]);
+  }, [queryClient]);
 
   // Memoized check if the post is liked by the user
   const isLiked = useMemo(() => {
@@ -29,7 +33,9 @@ function Like({ post, className }) {
   // Mutation for liking the post
   const { mutate } = useMutation({
     mutationFn: (likeConfig) => LikePost(likeConfig),
-    onSuccess: (data) => {},
+    onSuccess: (data) => {
+      invalidateQueries();
+    },
     onError: (error) => {
       setOptimistIcon(""); // Revert optimistic update on error
       dispatch(

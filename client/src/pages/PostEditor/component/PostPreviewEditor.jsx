@@ -8,7 +8,6 @@ import PostsApis from "../../../services/PostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../component/loaders/Spinner";
 import { createPortal } from "react-dom";
-import CommentInput from "../../Comment/CommentInput";
 import CommonInput from "../../../component/inputComponents/CommonInput";
 
 const DEFAULT_ELEMENT = { type: "text", data: "", id: uuidv4(), index: 0 };
@@ -20,10 +19,8 @@ function PostPreviewEditor() {
 
   const [Topic, setTopic] = useState();
   const { elements } = useSelector((state) => state.posts);
-
   const { user } = useSelector((state) => state.auth);
   const { AddNewPost } = PostsApis();
-  const queryClient = useQueryClient();
 
   const mutation = useMutation((NewPosts) => AddNewPost(NewPosts), {
     onSuccess: (response) => {
@@ -71,7 +68,9 @@ function PostPreviewEditor() {
       // const textElements = elements.filter((el) => el.type == "image");
       formData.append("blog", JSON.stringify(elements));
       formData.append("Topic", Topic);
-      imageFiles.forEach((el, idx) => {
+      // console.log({ imageFiles });
+      imageFiles?.forEach((el, idx) => {
+        console.log({ el });
         formData.append(`image-${el.index}`, el.file);
         formData.append(`description-${el.index}`, el.data);
       });

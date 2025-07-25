@@ -32,7 +32,7 @@ function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
       </div>
 
       <WhoToFollow
-        homeData={homeData}
+        userSuggetion={homeData?.userSuggetion}
         className={
           " flex flex-col justify-start items-start gap-5 text-sm  border-inherit "
         }

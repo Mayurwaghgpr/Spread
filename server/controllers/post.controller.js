@@ -17,31 +17,32 @@ export const AddNewPost = async (req, res, next) => {
   const parsedBlogData = JSON.parse(req.body.blog);
   const topic = req.body.Topic.toLowerCase();
   const postTitle = parsedBlogData.find((p) => p.index === 0)?.data;
-  const subtitleParagraph = parsedBlogData.at(1)?.data;
+  const subtitle = parsedBlogData.at(1)?.data;
   const imageFileArray = req.files || [];
+
   try {
     // Validate incoming request
     if (!req.body.blog || !req.body.Topic) {
       return res.status(400).json({ error: "Blog data or topic is missing" });
     }
 
-    if (!postTitle || !subtitleParagraph) {
+    if (!postTitle || !subtitle) {
       return res
         .status(400)
         .json({ error: "Invalid title or subtitle data provided" });
     }
-
     // Handle title image
 
-    const titleImage = imageFileArray.at(0);
-    const titleImageUrl = await cloudinary.uploader.upload(titleImage?.path);
-
+    const previewImage = imageFileArray.at(0);
+    const previewImageUrl = await cloudinary.uploader.upload(
+      previewImage?.path
+    );
     // Create a new post
     const newPost = await Post.create({
       title: postTitle,
-      subtitelpagraph: subtitleParagraph,
-      titleImage: titleImageUrl.secure_url,
-      cloudinaryPubId: titleImageUrl.public_id,
+      subtitle: subtitle,
+      previewImage: previewImageUrl.secure_url,
+      cloudinaryPubId: previewImageUrl.public_id,
       topic,
       authorId: req.authUser.id,
     });
@@ -69,7 +70,6 @@ export const AddNewPost = async (req, res, next) => {
       imageMap.set(img.index, img.imageUrl);
       publicIdMap.set(img.index, img.cloudinaryPubId);
     }
-
     // Arrange post content
     const postData = parsedBlogData
       .filter((p) => p.index > 1) // Skip title and subtitle
@@ -92,12 +92,13 @@ export const AddNewPost = async (req, res, next) => {
     if (imageFileArray.length) {
       await deletePostImage(imageFileArray);
     }
+
     // Send success response
     return res
       .status(201)
       .json({ newPost, message: "Post created successfully" });
   } catch (error) {
-    console.error("Error adding new post:", error.message);
+    console.error("Error adding new post:", error);
     next(error);
   }
 };

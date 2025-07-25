@@ -87,7 +87,7 @@ function SideBar() {
           {/* Profile Link */}
           <div className="flex flex-col items-start gap-2 h-fit w-fit">
             <Link
-              to={`/profile/@${user?.username}/${user?.id}`}
+              to={user?.profileLink}
               className="group flex justify-center sm:justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
               onClick={() => dispatch(setManuOpen())}
             >

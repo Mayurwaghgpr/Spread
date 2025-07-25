@@ -26,6 +26,9 @@ function PostsApis() {
       const result = await axiosInstance.post(`/posts/add`, newPost, {
         withCredentials: true,
         signal: signal,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       return result.data; // Return the actual data
     } catch (error) {

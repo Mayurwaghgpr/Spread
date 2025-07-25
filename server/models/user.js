@@ -36,6 +36,10 @@ const User = Database.define("user", {
       isEmail: true,
     },
   },
+  profileLink: {
+    type: DataTypes.STRING,
+    defaultValue: "",
+  },
   signedWith: {
     type: DataTypes.STRING,
     defaultValue: "",
@@ -54,4 +58,9 @@ const User = Database.define("user", {
   },
 });
 
+User.afterCreate(async (user) => {
+  const link = `${process.env.FRONT_END_URL}profile/${user.username}/${user.id}`;
+  user.profileLink = link;
+  await user.save();
+});
 export default User;

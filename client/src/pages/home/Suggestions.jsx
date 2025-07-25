@@ -201,7 +201,7 @@ function Suggestions() {
                     </div>
                     {/* Enhanced Follow Button */}
                     <Follow
-                      className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium  bg-black dark:bg-white hover:bg-black/60 dark:hover:bg-white/60 rounded-full transition-all duration-200 hover:scale-105 min-w-[100px] sm:min-w-[120px]"
+                      className="inline-flex items-center justify-center px-6 py-2.5 text-sm rounded-full transition-all duration-200 hover:scale-105 min-w-[100px] sm:min-w-[120px]"
                       person={person}
                     />
                   </li>

@@ -26,7 +26,7 @@ function NotificationBox() {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
-    refetchInterval: 10000, // Refetch every 10 seconds
+    refetchInterval: 10000,
     retry: 1,
   });
 

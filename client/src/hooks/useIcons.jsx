@@ -35,6 +35,7 @@ import {
 } from "react-icons/md";
 import {
   IoArrowDown,
+  IoAttach,
   IoCallOutline,
   IoHappyOutline,
   IoHomeOutline,
@@ -82,6 +83,7 @@ function useIcons() {
     arrowL: <BsArrowLeft />,
     arrowUp: <IoIosArrowUp />,
     arrowDown: <IoIosArrowDown />,
+    attachPin: <IoAttach />,
 
     // B
     bellFi: <BsBellFill />,

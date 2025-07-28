@@ -5,7 +5,6 @@ import ProfileImage from "../ProfileImage";
 
 function NotificationItem({ className, data }) {
   const icons = useIcons();
-  console.log(data);
   return (
     <div
       className={`${className} flex justify-center items-center  gap-5 border-inherit`}

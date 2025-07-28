@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './slices/authSlice';
-import uiReducer from './slices/uiSlice';
-import postReducer from './slices/postSlice';
-import profileReducer from './slices/profileSlice';
-import messangerSlice from './slices/messangerSlice';
-import NotificationSlice from './slices/NotificationSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./slices/authSlice";
+import uiReducer from "./slices/uiSlice";
+import postReducer from "./slices/postSlice";
+import profileReducer from "./slices/profileSlice";
+import messangerSlice from "./slices/messangerSlice";
+import NotificationSlice from "./slices/notificationSlice";
 
 const store = configureStore({
   reducer: {

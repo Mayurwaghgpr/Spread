@@ -16,7 +16,6 @@ import DataBaseAssociations from "./utils/DataBaseAssociations.js";
 import { passportStrategies } from "./middlewares/passportStrategies.js";
 import socketHandlers from "../socket/SocketHandler.js";
 import sockIo from "./socket.js";
-import client from "./db/pgclient.js";
 
 // Routes
 import authRoutes from "./routes/auth.route.js";
@@ -27,11 +26,11 @@ import commentRoutes from "./routes/comments.route.js";
 import aiRoutes from "./routes/AI.route.js";
 import messagingRoutes from "./routes/messaging/messaging.route.js";
 import initMessageChangeListener from "./db/triggers/messages.js";
-
+import notificationRoutes from "./routes/notification.route.js";
 dotenv.config();
 const app = express();
 const server = createServer(app);
-const io = sockIo.init(server);
+export const io = sockIo.init(server);
 
 // Constants
 const port = process.env.PORT || 3000;
@@ -134,6 +133,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/messaging", messagingRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Fallback for client-side routing
 app.get("*", (req, res) => {
@@ -177,7 +177,7 @@ process.on("uncaughtException", (error) => {
 });
 
 // Start the server after DB & Redis setup
-Database.sync({ alter: true })
+Database.sync()
   .then(async () => {
     await redisClient.connect();
     console.log("Redis client connected.");

@@ -21,7 +21,6 @@ import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/layout/SideBar";
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
-import NotificationBox from "./component/notification/NotificationBox";
 
 // Lazy load components with better error boundaries
 const SignUp = lazy(() => import("./pages/auth/SignUp"));
@@ -74,6 +73,9 @@ const ImageInBigFrame = lazy(
 const AIResponse = lazy(() => import("./component/aiComp/AiResponse"));
 const MessageFallBack = lazy(
   () => import("./pages/Messages/components/MessageFallBack")
+);
+const NotificationBox = lazy(
+  () => import("./component/notification/NotificationBox")
 );
 // Constants for better maintainability
 const THEME_STORAGE_KEY = "ThemeMode";

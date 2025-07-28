@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Op } from "sequelize";
 import Database from "../db/database.js";
 
 const Notify = Database.define("Notification", {
@@ -40,10 +40,26 @@ const Notify = Database.define("Notification", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  read: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
   status: {
     type: DataTypes.ENUM("unread", "read"),
     defaultValue: "unread",
   },
 });
+Notify.afterCreate(async (notification, options) => {
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const oldNotifications = await Notify.destroy({
+    where: {
+      createdAt: {
+        [Op.gt]: thirtyDaysAgo,
+      },
+      read: true,
+    },
+  });
 
+  oldNotifications;
+});
 export default Notify;

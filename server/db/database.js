@@ -1,6 +1,5 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
@@ -15,7 +14,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
         },
       }
     : {},
-  logging: false, // Disable SQL logging; useful in production
+  logging: false,
 });
 
 export default sequelize;

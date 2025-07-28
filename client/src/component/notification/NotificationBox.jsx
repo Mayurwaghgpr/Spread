@@ -1,126 +1,40 @@
 import React, { lazy, Suspense, useCallback, useEffect } from "react";
-const NotifictionItem = lazy(() => import("./NotificationItem"));
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenNotification } from "../../store/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
-import useSocket from "../../hooks/useSocket";
-import { setNotificationStatePush } from "../../store/slices/NotificationSlice";
-import Ibutton from "../buttons/Ibutton";
 
-const notifications = [
-  {
-    id: 1,
-    type: "like",
-    message: "John liked your post.",
-    timestamp: "2025-02-24T10:15:00Z",
-    read: false,
-    userId: 101,
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
-  },
-  {
-    id: 2,
-    type: "comment",
-    message: "Alice commented on your post: 'Great work!'",
-    timestamp: "2025-02-24T09:45:00Z",
-    read: true,
-    userId: 102,
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
-  },
-  {
-    id: 3,
-    type: "follow",
-    message: "Michael started following you.",
-    timestamp: "2025-02-24T08:30:00Z",
-    read: false,
-    userId: 103,
-    image: "https://randomuser.me/api/portraits/men/3.jpg",
-  },
-  {
-    id: 4,
-    type: "mention",
-    message: "Sarah mentioned you in a post.",
-    timestamp: "2025-02-23T18:20:00Z",
-    read: false,
-    userId: 104,
-    image: "https://randomuser.me/api/portraits/women/4.jpg",
-  },
-  {
-    id: 5,
-    type: "message",
-    message: "You have a new message from David.",
-    timestamp: "2025-02-23T15:10:00Z",
-    read: true,
-    userId: 105,
-    image: "https://randomuser.me/api/portraits/men/5.jpg",
-  },
-  {
-    id: 6,
-    type: "like",
-    message: "Emily liked your comment.",
-    timestamp: "2025-02-22T12:05:00Z",
-    read: false,
-    userId: 106,
-    image: "https://randomuser.me/api/portraits/women/6.jpg",
-  },
-  {
-    id: 7,
-    type: "repost",
-    message: "Emma reposted your article.",
-    timestamp: "2025-02-22T08:40:00Z",
-    read: true,
-    userId: 107,
-    image: "https://randomuser.me/api/portraits/women/7.jpg",
-  },
-  {
-    id: 8,
-    type: "tag",
-    message: "Liam tagged you in a photo.",
-    timestamp: "2025-02-21T20:55:00Z",
-    read: false,
-    userId: 108,
-    image: "https://randomuser.me/api/portraits/men/8.jpg",
-  },
-  {
-    id: 9,
-    type: "reminder",
-    message: "Don't forget to check your saved posts.",
-    timestamp: "2025-02-21T10:00:00Z",
-    read: true,
-  },
-  {
-    id: 10,
-    type: "system",
-    message: "Your password was changed successfully.",
-    timestamp: "2025-02-20T05:30:00Z",
-    read: true,
-  },
-];
+import Ibutton from "../buttons/Ibutton";
+import { useQuery } from "react-query";
+import notificationApi from "../../services/notificationApi";
+const NotifictionItem = lazy(() => import("./NotificationItem"));
+import { setNotificationState } from "../../store/slices/notificationSlice";
+import NotificationItem from "./NotificationItem";
+import Spinner from "../loaders/Spinner";
 
 function NotificationBox() {
   const { openNotification } = useSelector((state) => state.ui);
   const { notificationState } = useSelector((state) => state.notification);
-  const { socket } = useSocket();
   const Icon = useIcons();
   const dispatch = useDispatch();
-
-  // Memoize function to handle notification
-  const handleNotification = useCallback((notify) => {
-    console.log(notify);
-    dispatch(setNotificationStatePush(notify));
-  }, []);
-
-  //Listening for realtime notification
-  useEffect(() => {
-    socket?.on("notification", handleNotification);
-    return () => {
-      socket?.off("notification", handleNotification);
-    };
-  }, [socket, handleNotification]);
+  const { fetchNotifications } = notificationApi();
+  const { isLoading } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: fetchNotifications,
+    onSuccess: (data) => {
+      dispatch(setNotificationState(data));
+    },
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+    refetchInterval: 10000, // Refetch every 10 seconds
+    retry: 1,
+  });
 
   const handeClick = useCallback((e) => {
     e.stopPropagation();
     dispatch(setOpenNotification());
   }, []);
+
   return (
     <div
       onClick={handeClick}
@@ -139,18 +53,23 @@ function NotificationBox() {
             {Icon["close"]}
           </Ibutton>
         </div>
-        <div className="flex justify-center items-center h-full w-full">
-          {" "}
-          <h1>will implement soon</h1>
-        </div>
-
-        {/* <Suspense
+        <Suspense
           fallback={<Spinner className={"w-5 h-5 bg-black dark:bg-white"} />}
         >
-          {notifications.map((noitify) => (
-            <NotifictionItem key={noitify.id} data={noitify} />
+          {notificationState?.map((notify) => (
+            <NotificationItem key={notify.id} data={notify} />
           ))}
-        </Suspense> */}
+          {notificationState?.length === 0 && !isLoading && (
+            <div className="flex justify-center items-center w-full h-full">
+              <span className="w-10 h-10 text-gray-500 dark:text-gray-400">
+                {Icon["bellFi"]}
+              </span>
+              <span className="text-gray-500 dark:text-gray-400">
+                No notifications
+              </span>
+            </div>
+          )}
+        </Suspense>
       </div>
     </div>
   );

@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import ThemeBtn from "../buttons/ThemeBtn";
 import { setManuOpen } from "../../store/slices/uiSlice";
 
-import LogoutBtn from "../buttons/LogoutBtn";
 import NotifictionBell from "../notification/NotificationBell";
-import { PiSignInDuotone } from "react-icons/pi";
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import spreadLogo from "/spread_logo_03_robopus.png";
 import DesktopTooltip from "./DesktopTooltip";
+
 const Modes = [
   {
     name: "Dark mode",
@@ -31,10 +30,10 @@ const Modes = [
 ];
 function MainNavBar() {
   const [deviceSize, setDeviceSize] = useState(window.innerWidth);
-  const { MenuOpen } = useSelector((state) => state.ui);
+
   const { isLogin, user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
-  const { ThemeMode } = useSelector((state) => state.ui);
+
   const { userImageurl } = userImageSrc(user);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -83,9 +82,7 @@ function MainNavBar() {
             {isLogin && (
               <>
                 {/* Notification Bell */}
-
                 <NotifictionBell />
-
                 {/* User Profile Section */}
                 <div className="relative group border-inherit">
                   <ProfileImage

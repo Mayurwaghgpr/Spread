@@ -54,33 +54,37 @@ export default function socketHandlers(io) {
             conversationId,
             senderId,
             content,
-            replyedTo,
+            replyedTo: replyedTo ? replyedTo : "",
             createdAt: new Date().toISOString(),
           });
-
-          // TEST: commented temporarly
-          // Push to Redis Stream for async storage
-          // await redisClient.xAdd(
-          //   "message_queue",
-          //   "*",//ID
-          //   {
-          //     conversationId: conversationId,
-          //     senderId: senderId,
-          //     content: content,
-          //     replyedTo: replyedTo || "",
-          //   }
-          // );
-
-          await Messages.create({
+          console.log("Message sent:", {
             conversationId,
             senderId,
             content,
-            replyedTo,
+            replyedTo: replyedTo ? replyedTo : "",
           });
-          await Conversation.update(
-            { lastMessage: content },
-            { where: { id: conversationId } }
+          // Push to Redis Stream for async storage
+          await redisClient.xAdd(
+            "message_queue",
+            "*", //ID
+            {
+              conversationId: conversationId,
+              senderId: senderId,
+              content: content,
+              replyedTo: replyedTo ? replyedTo : "",
+            }
           );
+
+          // await Messages.create({
+          //   conversationId,
+          //   senderId,
+          //   content,
+          //   replyedTo,
+          // });
+          // await Conversation.update(
+          //   { lastMessage: content },
+          //   { where: { id: conversationId } }
+          // );
         } catch (error) {
           console.error("Error sending message:", error);
           io.to(conversationId).emit("ErrorSendMessage", {

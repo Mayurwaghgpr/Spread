@@ -6,7 +6,7 @@ import Archive from "../models/Archive.js";
 import Likes from "../models/Likes.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
-
+import { startedFollowing } from "../services/notifications/follows.worker.js";
 // Fetch all users except the current user and distinct topics
 export const getHomeContent = async (req, res, next) => {
   try {
@@ -240,7 +240,7 @@ export const FollowUser = async (req, res, next) => {
     let userInfo;
     userInfo = JSON.parse(await redisClient.get(followerId));
 
-    console.log({ userInfo });
+    // console.log({ userInfo });
     // Check if the follow relationship already exists
     const existingFollow = await Follow.findOne({
       where: { followerId, followedId },
@@ -256,8 +256,8 @@ export const FollowUser = async (req, res, next) => {
       // Follow user
       await Follow.create({ followerId, followedId });
       userInfo.Following = [...userInfo?.Following, { id: followedId }];
-
-      //  startedFollowing(followedId, followerId)
+      // console.log({ followedId, followerId });
+      startedFollowing(followedId, followerId);
     }
     await redisClient.setEx(followerId, EXPIRATION, JSON.stringify(userInfo));
     res.status(201).json({

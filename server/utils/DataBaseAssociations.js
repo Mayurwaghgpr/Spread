@@ -142,7 +142,7 @@ const DataBaseAssociations = () => {
 
   Notification.belongsTo(User, {
     foreignKey: "receiverId",
-    as: "recipient",
+    as: "receiver",
     onDelete: "CASCADE",
   });
   Notification.belongsTo(User, {

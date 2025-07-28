@@ -8,11 +8,7 @@ const UserNamesSuggestion = lazy(() => import("../UserNamesSuggestion"));
 const EditableElementInput = React.forwardRef(
   (
     {
-      value = (
-        <span className=" text-sm font-light opacity-40 ">
-          Write a Response
-        </span>
-      ),
+      value,
       onChange,
       placeholder = "Write something...",
       maxWidth = "70%",
@@ -66,18 +62,24 @@ const EditableElementInput = React.forwardRef(
     }
     // Handle mention insertion
     useEffect(() => {
-      if (selectedUser?.username && ref?.current) {
-        const currentText = ref.current.innerHTML;
-        const updatedText = currentText.replace(
-          `@${mentionedUsername}`,
-          `<a href="/profile/@${selectedUser.username}/${selectedUser.id}" class="text-blue-500 cursor-pointer">@${selectedUser.username}</a>`
-        );
-        ref.current.innerHTML = updatedText;
-        onChange?.(updatedText);
-        setIsOpen(false);
-        setMentionedUsername("");
-        setSelectUserData({});
+      if (
+        !selectedUser?.username ||
+        !elementRef?.current ||
+        !mentionedUsername
+      ) {
+        return;
       }
+      const currentText = ref.current.innerHTML;
+      const mentionLink = `<a href="/profile/@${selectedUser.username}/${selectedUser.id}" class="text-blue-500 hover:text-blue-600 cursor-pointer font-medium" data-mention="true">@${selectedUser.username}</a>`;
+      const updatedText = currentText.replace(
+        `@${mentionedUsername}`,
+        mentionLink
+      );
+      ref.current.innerHTML = updatedText;
+      onChange?.(updatedText);
+      setIsOpen(false);
+      setMentionedUsername("");
+      setSelectUserData({});
     }, [selectedUser, mentionedUsername]);
 
     return (
@@ -103,16 +105,18 @@ const EditableElementInput = React.forwardRef(
             ref={ref}
             contentEditable
             suppressContentEditableWarning
-            className={`w-full bg-inherit border-inherit outline-none p-2 text-inherit peer ${textClassName}`}
-            // placeholder={placeholder}
+            data-placeholder={placeholder}
+            className={`w-full bg-inherit border-inherit outline-none p-2 text-inherit peer ${textClassName} before:content-[attr(data-placeholder)] before:absolute before:inset-0 before:opacity-50 before:pointer-events-none focus:before:content-[''] peer-focus:before:content-['']`}
+            style={{ maxWidth }}
             inputMode="text"
+            aria-label={placeholder}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(value),
             }}
             onInput={(e) => handleInput(e.currentTarget)}
           />
           <div
-            className={`absolute w-full bottom-0 transition-transform duration-300 border-t ${borderColor} scale-0 peer-focus:scale-100`}
+            className={`absolute w-full bottom-0 transition-transform duration-300 border-inherit border-t ${borderColor} scale-0 peer-focus:scale-100`}
           />
         </div>
       </>

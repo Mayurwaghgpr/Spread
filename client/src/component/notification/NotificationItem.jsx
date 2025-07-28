@@ -5,6 +5,7 @@ import ProfileImage from "../ProfileImage";
 
 function NotificationItem({ className, data }) {
   const icons = useIcons();
+  console.log(data);
   return (
     <div
       className={`${className} flex justify-center items-center  gap-5 border-inherit`}
@@ -13,11 +14,11 @@ function NotificationItem({ className, data }) {
         {icons[data.type]}
       </div>
       <div className=" flex flex-col justify-center items-start gap-2 border-inherit">
-        {data.image && (
+        {data.actor.userImage && (
           <ProfileImage
             className=" block w-6 h-6 rounded-full overflow-hidden border-inherit "
-            image={data?.image}
-            alt={data?.name}
+            image={data?.actor.userImage}
+            alt={data?.actor.displayName}
           />
         )}
         <p className="text-sm">{data.message}</p>

@@ -1,7 +1,6 @@
 import { Op } from "sequelize";
 import User from "../models/user.js";
 import Post from "../models/posts.js";
-import formatPostData from "../utils/dataFormater.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import Likes from "../models/Likes.js";
 import { fetchProfile } from "../utils/data-fetching.js";

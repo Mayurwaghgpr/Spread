@@ -204,8 +204,8 @@ function CommentSection() {
         </main>
 
         {/* Comment Input */}
-        <footer className="border-t border-gray-200 dark:border-gray-700">
-          <CommentInput className="flex justify-center items-start gap-5 w-full p-6 z-10  backdrop-blur-sm animate-slide-in-top" />
+        <footer className="border-t border-gray-200 dark:border-gray-700 border-inherit">
+          <CommentInput className="flex justify-center items-start gap-5 w-full p-6 z-10  backdrop-blur-sm animate-slide-in-top border-inherit" />
         </footer>
       </div>
     </section>

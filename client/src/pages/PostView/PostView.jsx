@@ -189,7 +189,7 @@ function PostView() {
 
       <AIBtn
         state={{ postData: postView }}
-        className="fixed bottom-20 right-10 rounded-xl   p-2   transition-colors duration-200 "
+        className="fixed bottom-20 right-10 rounded-xl p-2 transition-colors duration-200"
       />
       <Outlet context={{ postData: postView }} />
     </section>

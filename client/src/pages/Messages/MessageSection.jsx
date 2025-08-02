@@ -176,30 +176,31 @@ function MessageSection() {
         <div className="flex items-center gap-3 w-[80%]">
           <ProfileImage
             onClick={() => navigate(`info?Id=${conversationId}`)}
-            className="max-w-10 max-h-10 w-full h-full min-w-fit cursor-pointer"
+            className="w-10 h-10 min-w-fit cursor-pointer"
             image={conversationData.image}
           />
           <div className="flex flex-col items-start justify-center gap-1 overflow-hidden">
             <h1 className="truncate font-semibold">
               {conversationData.groupName}
             </h1>
-            {conversationData.members.length > 0 && (
-              <ul className="flex gap-2 text-xs opacity-50">
-                {conversationData.members.some((m) => m.id === user?.id) && (
-                  <li>You</li>
-                )}
-                <li>
-                  {conversationData.members
-                    .map((m) => (m.id !== user?.id ? m.username : null))
-                    .join(",")}
-                </li>
-                {conversationData.conversationType === "group" && (
-                  <li className="text-gray-400">
-                    ({conversationData.members.length} members)
+            {conversationData.members.length > 0 &&
+              conversationData.conversationType !== "private" && (
+                <ul className="flex gap-2 text-xs opacity-50">
+                  {conversationData.members.some((m) => m.id === user?.id) && (
+                    <li>You</li>
+                  )}
+                  <li>
+                    {conversationData.members
+                      .map((m) => (m.id !== user?.id ? m.username : null))
+                      .join(",")}
                   </li>
-                )}
-              </ul>
-            )}
+                  {conversationData.conversationType === "group" && (
+                    <li className="text-gray-400">
+                      ({conversationData.members.length} members)
+                    </li>
+                  )}
+                </ul>
+              )}
           </div>
         </div>
       </header>

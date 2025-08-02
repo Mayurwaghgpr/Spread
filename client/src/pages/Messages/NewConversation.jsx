@@ -43,7 +43,7 @@ const NewConversation = () => {
   } = useInfiniteQuery(
     ["UsersList"],
     ({ pageParam = new Date().toISOString() }) =>
-      fetchPeopels({ pageParam, username: "" }),
+      fetchPeopels({ pageParam, username: search }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
@@ -53,8 +53,9 @@ const NewConversation = () => {
       refetchOnWindowFocus: false,
     }
   );
-
-  const users = data?.pages?.flatMap((page) => page);
+  console.log(data);
+  const users = data?.pages?.flatMap((page) => page) || [];
+  console.log({ users });
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
@@ -151,7 +152,7 @@ const NewConversation = () => {
               ref={idx === arr.length - 1 ? lastItemRef : null}
               className={"flex justify-between items-center w-full"}
               key={Usr.id}
-              people={Usr}
+              person={Usr}
               popover={false}
               action={() =>
                 isCreatingGroup
@@ -172,12 +173,11 @@ const NewConversation = () => {
             </PeoplesList>
           ))}
           <div className="w-full min-h-10 ">
-            {isLoading ||
-              (!isFetchingNextPage && (
-                <Spinner
-                  className={"w-5 h-5 p-1 dark:bg-white bg-black m-auto"}
-                />
-              ))}
+            {!isLoading && isFetchingNextPage && (
+              <Spinner
+                className={"w-5 h-5 p-1 dark:bg-white bg-black m-auto"}
+              />
+            )}
           </div>
           {!isLoading && users?.length === 0 && (
             <div className="text-gray-500 text-sm">

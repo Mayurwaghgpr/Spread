@@ -61,7 +61,7 @@ function ProfileinfoCard({ className }) {
                     {" "}
                     <Follow
                       person={followings}
-                      className="text-black min-h-8 min-w-[6.7rem] border p-1 flex justify-center items-center transition-all px-5 duration-100 bg-white hover:bg-gray-300 rounded-full"
+                      className=" min-w-[80px] sm:min-w-[100px]  borderflex justify-center items-center transition-all px-5 duration-100  rounded-full"
                     />
                   </PeoplesList>
                 ))}

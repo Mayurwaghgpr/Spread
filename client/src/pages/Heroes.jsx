@@ -3,7 +3,7 @@ import coverImg2 from "/OctoCoverImage.png";
 import { useNavigate } from "react-router-dom";
 import Footer from "../component/footer/Footer";
 import spreadLogo from "/spread_logo_03_robopus.png";
-
+import { motion } from "motion/react";
 function Heroes() {
   const navigate = useNavigate();
 
@@ -28,12 +28,14 @@ function Heroes() {
       {/* Main Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* Background Layers */}
+        <motion.div className="box" />
         <div className="absolute inset-0 ">
           <div className="absolute inset-0">
             <img
               className="w-full h-full object-cover object-center "
               src={coverImg2}
               alt="cover"
+              loading="lazy"
             />
             {/* Overlay for better text readability */}
             <div className="absolute inset-0 bg-black/30 dark:bg-black/50"></div>
@@ -46,7 +48,12 @@ function Heroes() {
             {/* Logo Badge */}
             <div className="inline-flex items-center gap-3 sm:mb-8 mb-4 sm:px-6 sm:py-3 px-3 py-2 bg-white/10 backdrop-blur-lg rounded-full border border-gray-300/30 dark:border-gray-600/50 shadow-lg hover:bg-white/20 transition-all duration-300">
               <div className="sm:w-8 sm:h-8 w-6 h-6 rounded-full flex items-center justify-center shadow-md">
-                <img className="sm:w-10" src={spreadLogo} alt="Logo" />
+                <img
+                  className="sm:w-10"
+                  src={spreadLogo}
+                  alt="Logo"
+                  loading="lazy"
+                />
               </div>
               <span className="font-medium tracking-wide text-white">
                 Spread

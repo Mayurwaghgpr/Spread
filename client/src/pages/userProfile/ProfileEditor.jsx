@@ -1,4 +1,11 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/slices/authSlice";
 import { useMutation } from "react-query";
@@ -20,7 +27,7 @@ function ProfileEditor() {
   const { user } = useSelector((state) => state.auth);
   const { editUserProfile, searchUsername } = useProfileApi();
   const uNameRef = useRef();
-  const [newInfo, setNewInfo] = useState(user);
+  const [newInfo, setNewInfo] = useState();
   const [profileImage, setProfileImage] = useState(profileIcon);
 
   const { userImageurl, IsUserFromOAth } = userImageSrc(newInfo);
@@ -71,7 +78,7 @@ function ProfileEditor() {
 
   // Debounced input handlers
   const handleInputChange = useCallback(
-    debounce((event) => {
+    (event) => {
       const { name, value, files } = event.target;
       if (name === "image" && files?.length > 0) {
         setNewInfo((prev) => ({
@@ -85,44 +92,28 @@ function ProfileEditor() {
           [name]: value,
         }));
       }
-    }, 500),
+    },
     [IsUserFromOAth]
   );
 
-  const handleUsernameCheck = useCallback(
-    debounce((event) => {
-      const username = event.target.value?.trim();
-      if (username && username !== user.username) {
-        nameMutate({ username });
-      }
-    }, 500),
+  const debouncedUsernameCheck = useMemo(
+    () =>
+      debounce((username) => {
+        if (username && username !== user.username) {
+          nameMutate({ username });
+        }
+      }, 500),
     [user.username]
   );
 
-  // Initialize form state when user data changes
-  useEffect(() => {
-    if (user) {
-      setNewInfo(user);
-    }
-  }, [user]);
-
-  // Update profile image display based on current state
-  useEffect(() => {
-    if (newInfo?.removeImage) {
-      setProfileImage(profileIcon);
-    } else if (newInfo?.NewImageFile) {
-      setProfileImage(URL.createObjectURL(newInfo.NewImageFile));
-    } else if (newInfo?.userImage) {
-      setProfileImage(userImageurl);
-    } else {
-      setProfileImage(profileIcon);
-    }
-  }, [
-    newInfo?.removeImage,
-    newInfo?.NewImageFile,
-    newInfo?.userImage,
-    userImageurl,
-  ]);
+  const handleUsernameChange = useCallback(
+    (event) => {
+      const username = event.target.value?.trim();
+      setNewInfo((prev) => ({ ...prev, username }));
+      debouncedUsernameCheck(username);
+    },
+    [debouncedUsernameCheck]
+  );
 
   // Handle profile image removal
   const handleRemoveImage = useCallback(() => {
@@ -134,10 +125,46 @@ function ProfileEditor() {
     }));
   }, [IsUserFromOAth]);
 
+  // Initialize form state when user data changes
+  useEffect(() => {
+    if (user) {
+      setNewInfo(user);
+    }
+  }, [user]);
+
+  // Update profile image display based on current state
+  const profileImgPreview = useMemo(() => {
+    if (newInfo?.removeImage) return profileIcon;
+    if (newInfo?.NewImageFile) return URL.createObjectURL(newInfo.NewImageFile);
+    if (newInfo?.userImage) return userImageurl;
+    return profileIcon;
+  }, [
+    newInfo?.removeImage,
+    newInfo?.NewImageFile,
+    newInfo?.userImage,
+    userImageurl,
+  ]);
+
+  useEffect(() => {
+    if (!newInfo?.NewImageFile) return;
+
+    const tempUrl = URL.createObjectURL(newInfo.NewImageFile);
+    setProfileImage(tempUrl);
+
+    return () => URL.revokeObjectURL(tempUrl);
+  }, [newInfo?.NewImageFile]);
+
+  useEffect(() => {
+    if (!newInfo?.NewImageFile) {
+      setProfileImage(profileImgPreview);
+    }
+  }, [profileImgPreview, newInfo?.NewImageFile]);
+
   // Handle profile update submission
   const handleSubmit = useCallback(() => {
+    if (JSON.stringify(newInfo) === JSON.stringify(user)) return;
     updateProfile(newInfo);
-  }, [newInfo, updateProfile]);
+  }, [newInfo, user, updateProfile]);
 
   return (
     <section className="relative flex sm:h-screen w-full h-1/2 border-inherit overflow-y-auto bg-light dark:bg-dark">
@@ -214,9 +241,10 @@ function ProfileEditor() {
                 name="username"
                 label="Username"
                 disabled={isUpdating}
-                onChange={handleUsernameCheck}
-                maxLength={10}
+                onChange={handleUsernameChange}
+                maxLength={15}
                 defaultValue={newInfo?.username}
+                value={newInfo?.username}
                 aria-invalid={isError}
                 aria-describedby={isError ? "username-error" : undefined}
               >
@@ -239,12 +267,13 @@ function ProfileEditor() {
               name="displayName"
               label="Full Name"
               disabled={isUpdating}
-              maxLength={20}
+              maxLength={50}
               onChange={handleInputChange}
               defaultValue={newInfo?.displayName}
+              value={newInfo?.displayName}
             />
             <span className="flex text-xs opacity-30 justify-end">
-              {`${newInfo?.displayName?.length || 0} / 20`}
+              {`${newInfo?.displayName?.length || 0} / 50`}
             </span>
 
             {/* Email Input */}
@@ -257,6 +286,7 @@ function ProfileEditor() {
               maxLength={30}
               onChange={handleInputChange}
               defaultValue={newInfo?.email}
+              value={newInfo?.email}
             />
             <span className="flex text-xs opacity-30 justify-end">
               {`${newInfo?.email?.length || 0} / 30`}
@@ -280,12 +310,19 @@ function ProfileEditor() {
 
           {/* Submit Button */}
           <button
-            className="px-4 py-1 text-white rounded-xl border bg-sky-400 hover:bg-sky-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={handleSubmit}
             disabled={isUpdating || isError}
             aria-busy={isUpdating}
+            className="px-4 py-1 flex items-center justify-center gap-2 text-white rounded-xl border bg-sky-400 hover:bg-sky-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleSubmit}
           >
-            {isUpdating ? "Updating..." : "Save"}
+            {isUpdating ? (
+              <>
+                <Spinner className="w-4 h-4" />
+                Saving...
+              </>
+            ) : (
+              "Save"
+            )}
           </button>
         </div>
       </article>

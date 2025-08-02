@@ -62,11 +62,7 @@ const EditableElementInput = React.forwardRef(
     }
     // Handle mention insertion
     useEffect(() => {
-      if (
-        !selectedUser?.username ||
-        !elementRef?.current ||
-        !mentionedUsername
-      ) {
+      if (!selectedUser?.username || !mentionedUsername) {
         return;
       }
       const currentText = ref.current.innerHTML;
@@ -105,7 +101,7 @@ const EditableElementInput = React.forwardRef(
             ref={ref}
             contentEditable
             suppressContentEditableWarning
-            data-placeholder={placeholder}
+            // data-placeholder={placeholder}
             className={`w-full bg-inherit border-inherit outline-none p-2 text-inherit peer ${textClassName} before:content-[attr(data-placeholder)] before:absolute before:inset-0 before:opacity-50 before:pointer-events-none focus:before:content-[''] peer-focus:before:content-['']`}
             style={{ maxWidth }}
             inputMode="text"

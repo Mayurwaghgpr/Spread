@@ -87,6 +87,7 @@ function AuthFormWrapper({
             className="w-full h-full object-cover object-center"
             src={octbot}
             alt="Decorative illustration"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
         </div>

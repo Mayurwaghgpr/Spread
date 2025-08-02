@@ -82,7 +82,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
         {/* Post content */}
         <Link
           to={`/view/@${post?.user?.username}/${post?.id}`}
-          className="relative cursor-pointer h-full border-inherit flex items-start justify-between gap-3 sm:gap-4"
+          className={`relative  ${post ? "cursor-pointer" : "cursor-not-allowed"} h-full border-inherit flex items-start justify-between gap-3 sm:gap-4`}
         >
           <div className="flex w-full flex-col gap-1 sm:gap-2 min-w-0 flex-grow">
             {post ? (

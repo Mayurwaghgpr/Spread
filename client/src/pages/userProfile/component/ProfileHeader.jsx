@@ -12,7 +12,6 @@ import usePrivateChatMutation from "../../../hooks/usePrivateChatMutation";
 import AbbreviateNumber from "../../../utils/AbbreviateNumber";
 import Ibutton from "../../../component/buttons/Ibutton";
 import FedInBtn from "../../../component/buttons/FedInBtn";
-import ImageInBigFrame from "../../../component/utilityComp/ImageInBigFrame";
 import { setOpenBigFrame } from "../../../store/slices/uiSlice";
 
 const ProfileHeader = React.memo(({ profileId }) => {

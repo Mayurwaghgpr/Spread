@@ -5,10 +5,10 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "/",
   server: {
-    proxy: {
-      "/api": "http://localhost:3000/",
-    },
+    host: true,
+    port: 5173,
   },
+
   build: {
     outDir: "dist", // Configure the output directory
   },

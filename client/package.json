@@ -29,6 +29,7 @@
     "fix": "^0.0.6",
     "jsdom": "^25.0.0",
     "lucide-react": "^0.515.0",
+    "motion": "^12.23.11",
     "npm": "^10.9.2",
     "primereact": "^10.6.6",
     "prism-react-renderer": "^2.3.1",

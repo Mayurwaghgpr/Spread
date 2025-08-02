@@ -66,11 +66,7 @@ export const getUserPostsById = async (req, res, next) => {
       limit,
       order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
     });
-    if (posts.length > 0) {
-      res.status(200).json(posts);
-    } else {
-      res.status(404).send("No posts found");
-    }
+    res.status(200).json(posts);
   } catch (error) {
     console.error("Error while fetching user posts error:", error.message);
     next(error);
@@ -112,53 +108,57 @@ export const getFollowing = async (req, res, next) => {
 export const EditUserProfile = async (req, res, next) => {
   const image = req.files ? req.files : [];
   const data = req.body;
+  const oldCloudinaryPubId = data.cloudinaryPubId;
+
   let updatedData = { ...data };
+
   try {
-    // update new image path and delete the old image file from folder
+    // If new image uploaded
     if (image.length > 0) {
       const result = await cloudinary.uploader.upload(image[0].path);
-      updatedData.userImage = result.secure_url; // Update user image path
+      updatedData.userImage = result.secure_url;
       updatedData.cloudinaryPubId = result.public_id;
 
-      if (!data.userFromOAuth && data.cloudinaryPubId) {
-        // console.log("old_pubId",data.cloudinaryPubId)
-        if (
-          !data.userFromOAuth &&
-          data.cloudinaryPubId !== process.env.USER_IMAGE_OUTLOOK
-        ) {
-          // Delete old image
-
-          await deleteCloudinaryImage(data.cloudinaryPubId);
-        }
-        await deletePostImage(image);
-      }
-    }
-    // To only remove image
-    if (data.removeImage && data.userImage && data.userImage !== " ") {
-      updatedData.userImage = ""; // Remove user image
-      //If user is not loged in with OAuth i.e google/github etc. so he will have image stored in backend
       if (
         !data.userFromOAuth &&
-        data.cloudinaryPubId !== process.env.USER_IMAGE_OUTLOOK
+        oldCloudinaryPubId &&
+        oldCloudinaryPubId !== process.env.USER_IMAGE_OUTLOOK
       ) {
-        await deleteCloudinaryImage(data.cloudinaryPubId);
+        await deleteCloudinaryImage(oldCloudinaryPubId);
+      }
+
+      await deletePostImage(image);
+    }
+
+    // If image needs to be removed
+    if (data.removeImage && data.userImage && data.userImage.trim() !== "") {
+      updatedData.userImage = "";
+      updatedData.cloudinaryPubId = "";
+
+      if (
+        !data.userFromOAuth &&
+        oldCloudinaryPubId &&
+        oldCloudinaryPubId !== process.env.USER_IMAGE_OUTLOOK
+      ) {
+        await deleteCloudinaryImage(oldCloudinaryPubId);
       }
     }
 
-    delete data.userFromOAuth;
+    delete updatedData.userFromOAuth;
+
     const [_, updatedUser] = await User.update(updatedData, {
       where: { id: req.authUser.id },
-      attributes: { exclude: ["password"] },
       returning: true,
       plain: true,
     });
 
     if (updatedUser) {
-      await redisClient.del(req.authUser.id);
-      res
-        .status(200)
-        .cookie("_userDetail", JSON.stringify(updatedUser), CookieOptions)
-        .json(updatedUser); // Return updated user info
+      await redisClient.setEx(
+        req.authUser.id,
+        EXPIRATION,
+        JSON.stringify(updatedUser)
+      );
+      res.status(200).json(updatedUser);
     } else {
       res.status(400).json({ message: "User not found" });
     }

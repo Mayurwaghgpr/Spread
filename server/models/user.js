@@ -57,10 +57,21 @@ const User = Database.define("user", {
     allowNull: true,
   },
 });
-
+function generateProfileLink(user) {
+  return `${process.env.FRONT_END_URL}/profile/${user.username}/${user.id}`;
+}
 User.afterCreate(async (user) => {
-  const link = `${process.env.FRONT_END_URL}profile/${user.username}/${user.id}`;
-  user.profileLink = link;
+  user.profileLink = generateProfileLink(user);
   await user.save();
 });
+
+User.afterBulkUpdate(async (options) => {
+  // Re-fetch affected users using the options.where filter
+  const user = await User.findOne({ where: options.where });
+
+  user.profileLink = generateProfileLink(JSON.parse(JSON.stringify(user)));
+
+  await user.save(); // Triggers `beforeUpdate` and updates DB
+});
+
 export default User;

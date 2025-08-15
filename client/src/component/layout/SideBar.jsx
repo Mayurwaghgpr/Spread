@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { setManuOpen } from "../../store/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -71,6 +71,10 @@ function SideBar() {
     }
     return pathname.startsWith(stub);
   };
+  const manulProfileLink = useMemo(
+    () => `profile/@${user.username}/${user.id}`,
+    [user.username, user.id]
+  );
 
   return (
     <aside
@@ -87,7 +91,7 @@ function SideBar() {
           {/* Profile Link */}
           <div className="flex flex-col items-start gap-2 h-fit w-fit">
             <Link
-              to={user?.profileLink}
+              to={user?.profileLin || manulProfileLink}
               className="group flex justify-center sm:justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
               onClick={() => dispatch(setManuOpen())}
             >

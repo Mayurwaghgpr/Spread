@@ -2,17 +2,20 @@ import React from "react";
 import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
 import { Link } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
+import { useSelector } from "react-redux";
 
-function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
+function Aside({ className, handleTopicClick }) {
+  const { topics, isLoadingHome } = useSelector((state) => state.common);
+
   return (
     <aside className={`${className}`}>
-      <div className="flex flex-col w-full items-center text-start gap-2 border-inherit ">
+      <div className="  flex flex-col w-full items-center text-start gap-2 border-inherit ">
         <h1 className=" text-start w-full text-xl font-medium">
           Suggested topics
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
           <ul className="flex justify-start flex-wrap gap-2">
-            {homeData?.topics?.map(({ topic }, index) => (
+            {topics?.map(({ topic }, index) => (
               <li
                 key={index}
                 className="rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
@@ -32,11 +35,9 @@ function Aside({ className, homeData, isLoadingHome, handleTopicClick }) {
       </div>
 
       <WhoToFollow
-        userSuggetion={homeData?.userSuggetion}
         className={
           " flex flex-col justify-start items-start gap-5 text-sm  border-inherit "
         }
-        isLoadingHome={isLoadingHome}
       />
       <small className=" text-[#383838]">
         <Link className="" to="">

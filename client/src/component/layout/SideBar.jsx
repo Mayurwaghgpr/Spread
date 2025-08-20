@@ -79,13 +79,13 @@ function SideBar() {
   return (
     <aside
       onClick={() => dispatch(setManuOpen())}
-      className={`z-50 sm:static fixed left-0 top-0 w-full sm:block h-screen sm:w-fit transition-all duration-300 ease-in-out border-r sm:z-30  lg:animate-none animate-fedin.2s overflow-hidden ${
+      className={`z-50 sm:sticky fixed left-0 top-0 w-1/2 h-full sm:block  sm:w-fit transition-all duration-300 ease-in-out border-r sm:z-30  lg:animate-none animate-fedin.2s overflow-hidden ${
         !menuOpen && "hidden"
       } ${pathname.startsWith("/view") && "sm:hidden"} border-inherit bg-dark/40 backdrop-blur-[1px]`}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between items h-full w-fit sm:m-0 me-16 lg:me-16 px-6 py-8 sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-lg sm:text-sm shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none "
+        className="flex flex-col items-start gap-10 h-full w-full sm:m-0 me-16 lg:me-16 px-6 pb-8 sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-lg sm:text-sm shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none "
       >
         <div className="flex flex-col justify-center items-center gap-4 sm:mt-8 w-fit">
           {/* Profile Link */}

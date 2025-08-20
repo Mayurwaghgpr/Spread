@@ -13,34 +13,20 @@ import useIcons from "../../hooks/useIcons";
 import Ibutton from "../../component/buttons/Ibutton";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import EmptyState from "../../component/utilityComp/EmptyState";
-import { BsPostage, BsPostcard } from "react-icons/bs";
+import { BsPostcard } from "react-icons/bs";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isDeviceSize = useDeviceSize("1023");
   const { fetchDataAll } = PostsApis();
   const selectedTopic = searchParams.get("topic") || "All";
-  const selectedFeed = searchParams.get("feed"); // Note: This is defined but unused
-  const { fetchHomeContent } = usePublicApis();
+  const selectedFeed = searchParams.get("feed");
   const Icons = useIcons();
   const navigate = useNavigate();
-
-  // Fetch home content data
-  const {
-    isLoading: isLoadingHome,
-    error: errorHome,
-    isError: isHomeError,
-    data: homeData,
-  } = useQuery("homeContent", fetchHomeContent, {
-    staleTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
-
   const handleTopicClick = useCallback(
     (topic) => setSearchParams({ topic }),
     [setSearchParams]
   );
-
   // Fetch posts with infinite scrolling
   const {
     data: postsData,
@@ -59,7 +45,7 @@ function Home() {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
           ? lastPage[lastPage.length - 1].createdAt
-          : undefined; // Use last post's timestamp as cursor
+          : undefined;
       },
       refetchOnWindowFocus: false,
     }
@@ -73,37 +59,64 @@ function Home() {
     1
   );
 
-  // Handle post data fetch errors
+  // Handle errors
   if (isPostError) {
     const errorMessage = errorPosts?.data?.message;
     const statusCode = errorPosts?.status;
     return <ErrorPage message={errorMessage} statusCode={statusCode || 500} />;
   }
-
-  // Handle home content data fetch errors
-  if (isHomeError) {
-    const errorMessage = errorHome?.data?.message;
-    const statusCode = errorHome?.status;
-    return <ErrorPage message={errorMessage} statusCode={statusCode || 500} />;
-  }
-
   const posts = postsData?.pages.flatMap((page) => page) || [];
 
-  // Helper function to render posts with WhoToFollow inserted at index 3 on smaller devices
+  // Navigation items configuration
+  const navigationItems = [
+    {
+      id: "feed",
+      label: "Feed",
+      isActive: selectedFeed !== "following",
+      onClick: () => navigate("/"),
+      ariaLabel: "View all feeds",
+    },
+    {
+      id: "following",
+      label: "Following",
+      isActive: selectedFeed === "following",
+      onClick: () => navigate("?feed=following"),
+      ariaLabel: "View Following",
+    },
+    {
+      id: "topics",
+      label: Icons["plus"],
+      isActive: false,
+      onClick: () => {},
+      ariaLabel: "View specific topics",
+    },
+  ];
+
+  // Helper function to render posts with WhoToFollow insertion
   const renderPosts = () => {
+    if (posts.length === 0 && !isLoading) {
+      return (
+        <div className="flex items-center justify-center flex-1 p-8">
+          <EmptyState
+            Icon={BsPostcard}
+            heading="No Posts Available"
+            description="There are no posts found right now. Check back later for new recommendations."
+          />
+        </div>
+      );
+    }
+
     return posts.map((post, idx, arr) => {
-      // Insert WhoToFollow component after the 3rd post on smaller devices
-      if (idx === 3 && isDeviceSize) {
+      const isLastItem = idx === arr.length - 1;
+      const shouldInsertWhoToFollow = idx === 3 && isDeviceSize;
+
+      if (shouldInsertWhoToFollow) {
         return (
           <React.Fragment key={`fragment-${post.id}`}>
-            <WhoToFollow
-              userSuggetion={homeData?.userSuggetion}
-              className="w-full text-sm p-5 border-b border-inherit"
-              isLoadingHome={isLoadingHome}
-            />
+            <WhoToFollow className="w-full border-b border-inherit p-5 text-sm" />
             <PostPreview
-              className="w-full border-inherit border-b pt-2"
-              ref={idx === arr.length - 1 ? lastItemRef : null}
+              className="w-full border-b border-inherit pt-2"
+              ref={isLastItem ? lastItemRef : null}
               key={post?.id}
               post={post}
             />
@@ -113,8 +126,8 @@ function Home() {
 
       return (
         <PostPreview
-          className={`w-full border-inherit border-b pt-2`}
-          ref={idx === arr.length - 1 || idx % 3 === 0 ? lastItemRef : null}
+          className="w-full border-b border-inherit pt-2"
+          ref={isLastItem ? lastItemRef : null}
           key={post?.id}
           post={post}
         />
@@ -122,92 +135,75 @@ function Home() {
     });
   };
 
-  return (
-    <section className="grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit transition-all duration-300 ease-in-out  overflow-y-auto">
-      {/* Sticky Navigation */}
-      <div className="sticky top-[3.1rem] sm:top-[3.6rem] flex items-center justify-start row-span-1 lg:col-span-6 col-span-full w-full border-b bg-gray-700 bg-opacity-0 backdrop-blur-[20px] border-inherit z-10">
-        <ul className="flex items-center justify-start gap-4 px-4 w-full h-full border-inherit">
-          <li className="capitalize flex justify-center items-center ">
-            <Ibutton
-              action={() => navigate("/")}
-              aria-label="View all feeds"
-              id="all"
-              className={
-                selectedFeed !== "following"
-                  ? "opacity-100  underline underline-offset-[1.5rem] "
-                  : "opacity-50"
-              }
-            >
-              Feed
-            </Ibutton>
-          </li>
-          <li className="capitalize flex justify-center items-center">
-            <Ibutton
-              id={"Following"}
-              aria-label="View Following"
-              onClick={() => navigate("?feed=following")}
-              className={
-                selectedFeed === "following"
-                  ? " opacity-100 underline underline-offset-[1.5rem]"
-                  : "opacity-50"
-              }
-            >
-              Followings
-            </Ibutton>
-          </li>
-          <li className="capitalize flex justify-center items-center">
-            <Ibutton aria-label="View specific topics">{Icons["plus"]}</Ibutton>
-          </li>
-        </ul>
-      </div>
+  // Render loading skeletons
+  const renderLoadingSkeletons = () =>
+    Array.from({ length: 10 }, (_, idx) => (
+      <PostPreview
+        key={`skeleton-${idx}`}
+        className="w-full border-b border-inherit"
+      />
+    ));
 
-      {/* Posts Section */}
-      <div className="relative flex flex-col items-end lg:col-span-6 sm:col-start-2 sm:col-span-8 col-span-full row-start-2 row-span-full border-inherit pt-10 ">
-        {/* Posts Content */}
-        {isLoading
-          ? Array.from({ length: 10 }, (_, idx) => (
-              <PostPreview key={`skeleton-${idx}`} className="border-inherit" />
-            ))
-          : renderPosts()}
+  // Render loading/end state
+  const renderListFooter = () => (
+    <div className="flex items-center justify-center w-full h-20">
+      {isFetchingNextPage && (
+        <Spinner className="w-10 p-1 bg-black dark:bg-white" />
+      )}
 
-        <div className=" w-full  ">
-          <div className="flex justify-center items-center w-full  h-20  ">
-            {isFetchingNextPage && (
-              <Spinner className="bg-black dark:bg-white w-10 p-1" />
-            )}
-            {/* End of list indicater */}
-            {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
-              <div className="text-center py-8 w-full">
-                <div className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-full">
-                  <BsPostcard className="w-4 h-4" />
-                  <span>You've seen all suggestions</span>
-                </div>
-              </div>
-            )}
+      {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
+        <div className="text-center py-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+            <BsPostcard className="w-4 h-4" />
+            <span>You've seen all suggestions</span>
           </div>
         </div>
+      )}
+    </div>
+  );
 
-        {posts.length === 0 && !isLoading && (
-          <EmptyState
-            Icon={BsPostcard}
-            heading={"No Post available"}
-            description={
-              "There are posts found right now. Check back later for  new recommendations."
-            }
-          />
-        )}
+  return (
+    <>
+      <div className="flex flex-col w-full h-full border-inherit  pb-10">
+        <nav
+          className="sticky top-0 z-10 w-full border-b border-inherit bg-gray-700/0 backdrop-blur-[20px]"
+          role="navigation"
+          aria-label="Feed navigation"
+        >
+          <div className="flex items-center justify-start p-3">
+            <ul className="flex items-center gap-4 px-4 w-full">
+              {navigationItems.map((item) => (
+                <li key={item.id} className="flex items-center justify-center">
+                  <Ibutton
+                    action={item.onClick}
+                    aria-label={item.ariaLabel}
+                    id={item.id}
+                    className={`capitalize transition-opacity duration-200 ${
+                      item.isActive
+                        ? "opacity-100 underline underline-offset-[1rem]"
+                        : "opacity-50 hover:opacity-75"
+                    }`}
+                  >
+                    {item.label}
+                  </Ibutton>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        {/* Posts Container */}
+        {isLoading ? renderLoadingSkeletons() : renderPosts()}
+        {renderListFooter()}
       </div>
-
-      {/* Sidebar */}
+      {/* Sidebar - Desktop Only */}
       {!isDeviceSize && (
         <Aside
-          isLoadingHome={isLoadingHome}
-          homeData={homeData}
           handleTopicClick={handleTopicClick}
-          className="sticky top-[3rem] lg:flex flex-col justify-start gap-5 col-start-7 col-span-4 row-start-2 row-span-full border-x w-full p-6 border-inherit hidden text-xs z-20"
+          className=" sticky top-0 flex flex-col gap-5 p-6 text-xs border-inherit border-l w-1/2"
         />
       )}
-    </section>
+    </>
   );
 }
 

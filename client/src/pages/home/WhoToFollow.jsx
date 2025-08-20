@@ -7,8 +7,12 @@ import ProfileImage from "../../component/ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import Heading from "../../component/texts/Heading";
 import UserPopover from "../../component/utilityComp/UserPopover";
-function WhoToFollow({ className, userSuggetion, isLoadingHome }) {
+import { useSelector } from "react-redux";
+function WhoToFollow({ className }) {
   const navigate = useNavigate();
+  const { userSuggestions, isLoadingHome } = useSelector(
+    (state) => state.common
+  );
   return (
     <div className={className}>
       <h1 className=" text-start  text-xl font-medium"> Follow people </h1>
@@ -16,7 +20,7 @@ function WhoToFollow({ className, userSuggetion, isLoadingHome }) {
         <ProfileListItemLoadingSkeleton count={5} />
       ) : (
         <ul className="flex flex-wrap gap-5 py-3 w-full">
-          {userSuggetion?.map((person, idx, arr) => {
+          {userSuggestions?.map((person, idx, arr) => {
             const { userImageurl } = userImageSrc(person);
             return (
               <li

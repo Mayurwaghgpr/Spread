@@ -5,6 +5,7 @@ import postReducer from "./slices/postSlice";
 import profileReducer from "./slices/profileSlice";
 import messangerSlice from "./slices/messangerSlice";
 import NotificationSlice from "./slices/notificationSlice";
+import commonSlice from "./slices/commonSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     profile: profileReducer, // Profile reducer
     messanger: messangerSlice, // Messenger reducer
     notification: NotificationSlice, // Notification reducer
+    common: commonSlice, // Common state reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(/* your custom middleware */),

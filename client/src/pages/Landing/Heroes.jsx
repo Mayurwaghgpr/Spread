@@ -1,20 +1,46 @@
-import React from "react";
 import coverImg2 from "/OctoCoverImage.png";
-import { useNavigate } from "react-router-dom";
-import Footer from "../component/footer/Footer";
+import { Link, useNavigate } from "react-router-dom";
+import Footer from "../../component/footer/Footer";
 import spreadLogo from "/spread_logo_03_robopus.png";
 import { motion } from "motion/react";
+import ProfileImage from "../../component/ProfileImage";
 function Heroes() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative h-full w-full bg-gradient-to-br from-[#fff9f3] via-gray-50 to-white dark:from-black dark:via-gray-900 dark:to-black">
+    <main className="relative h-full w-full">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3  flex justify-between items-center">
+        <div>
+          {" "}
+          <div
+            onClick={() => navigate("/")}
+            className="flex items-center gap-3 cursor-pointer group transition-all duration-200 hover:opacity-80"
+          >
+            <ProfileImage
+              image={spreadLogo}
+              className="w-10 h-10 scale-110 transition-all duration-200"
+              alt="Spread Logo"
+            />
+            <span className="sm:block hidden text-xl font-bold bg-gradient-to-r from-gray-600 to-gray-400 dark:from-gray-700 dark:to-gray-400 bg-clip-text text-transparent">
+              Spread
+            </span>
+          </div>
+        </div>{" "}
+        <div className=" flex justify-center items-center text-sm ">
+          <Link
+            to="/auth/signin"
+            className="sm:flex hidden items-center gap-2 px-6 py-1 bg-white text-black rounded-full  transition-all duration-200"
+          >
+            Sign In
+          </Link>
+        </div>
+      </header>
       {/* Animated background particles */}
       <div className="absolute inset-0 overflow-hidden ">
-        {[...Array(60)].map((_, i) => (
+        {[...Array(200)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 rounded-full animate-ping bg-white dark:bg-cyan-500 z-20"
+            className="absolute w-[1px] h-[1px] rounded-full animate-pulse bg-white dark:bg-gradient-to-br dark:from-sky-300 dark:to-amber-200  z-20"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -45,22 +71,6 @@ function Heroes() {
         {/* Content */}
         <div className="relative z-20 max-w-7xl mx-auto py-20 px-6 sm:px-12 flex items-center min-h-screen text-white">
           <div className="transform transition-all duration-700 mt-20 max-w-3xl">
-            {/* Logo Badge */}
-            <div className="inline-flex items-center gap-3 sm:mb-8 mb-4 sm:px-6 sm:py-3 px-3 py-2 bg-white/10 backdrop-blur-lg rounded-full border border-gray-300/30 dark:border-gray-600/50 shadow-lg hover:bg-white/20 transition-all duration-300">
-              <div className="sm:w-8 sm:h-8 w-6 h-6 rounded-full flex items-center justify-center shadow-md">
-                <img
-                  className="sm:w-10"
-                  src={spreadLogo}
-                  alt="Logo"
-                  loading="lazy"
-                />
-              </div>
-              <span className="font-medium tracking-wide text-white">
-                Spread
-              </span>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-sm"></div>
-            </div>
-
             {/* Headline */}
             <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold leading-tight mb-8 text-white">
               <span className="bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
@@ -89,7 +99,7 @@ function Heroes() {
             {/* sign in button */}
             <div className="flex flex-col sm:flex-row gap-4 sm:mb-12 mb-2">
               <button
-                className="group relative sm:px-12 sm:py-5 px-6 py-4 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 rounded-full font-bold text-white dark:text-black sm:text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/25 dark:hover:shadow-white/25 border border-gray-600 dark:border-gray-300"
+                className="group relative sm:px-6 sm:py-3 px-3 py-2 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 rounded-full font-bold text-white dark:text-black sm:text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/25 dark:hover:shadow-white/25 border border-gray-600 dark:border-gray-300"
                 onClick={() => navigate("/auth/signin")}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-100 dark:to-gray-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
@@ -434,7 +444,7 @@ function Heroes() {
       </section>
 
       <Footer />
-    </div>
+    </main>
   );
 }
 

@@ -95,9 +95,9 @@ function Suggestions() {
   return (
     <div className="h-screen bg-light dark:bg-dark w-full overflow-scroll border-inherit">
       {/* Container with better responsive breakpoints */}
-      <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 mt-20 border-inherit">
+      <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 border-inherit">
         {/* Header Section - Improved sticky behavior and responsive design */}
-        <div className="sticky top-16 z-20 bg-light/80 dark:bg-dark/80 backdrop-blur-md border-b dark:border-gray-800 py-4 mb-6">
+        <div className="sticky top-0 z-20 bg-light/80 dark:bg-dark/80 backdrop-blur-md border-b dark:border-gray-800 py-4 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             {/* Title with icon */}
             <div className="flex items-center gap-3">

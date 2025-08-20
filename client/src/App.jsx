@@ -21,6 +21,7 @@ import TaskBar from "./component/phoneview/TaskBar";
 import SideBar from "./component/layout/SideBar";
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
+import Router from "./router/router";
 
 // Lazy load components with better error boundaries
 const SignUp = lazy(() => import("./pages/auth/SignUp"));
@@ -28,7 +29,7 @@ const SignIn = lazy(() => import("./pages/auth/SignIn"));
 const ForgotPass = lazy(() => import("./pages/auth/ForgotPass"));
 const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 const Home = lazy(() => import("./pages/home/Home"));
-const Heroes = lazy(() => import("./pages/Heroes"));
+const Heroes = lazy(() => import("./pages/Landing/Heroes"));
 const PageError = lazy(() => import("./pages/ErrorPages/ErrorPage"));
 const Profile = lazy(() => import("./pages/userProfile/Profile"));
 const DynamicPostEditor = lazy(
@@ -163,180 +164,16 @@ function App() {
     }
   }, [ThemeMode, systemTheme]);
 
-  // Memoize protected route wrapper to avoid re-renders
-  const ProtectedRouteWrapper = useCallback(
-    ({ children }) => <ProtectedRoute>{children}</ProtectedRoute>,
-    []
-  );
-
   return (
-    <div className=" relative flex justify-between bg-inherit border-inherit ">
-      {!pathChecks.isMessagesPath && <MainNavBar />}
-      {pathChecks.showSidebar && <SideBar />}
-
-      <main className="relative flex justify-between items-center border-inherit h-full w-full">
-        <NotificationBox />
-
-        <Suspense fallback={<LoaderScreen />}>
-          <PersistentUser />
-          <ConfirmationBox />
-
-          <Routes>
-            {/* Home Route */}
-            <Route
-              path={ROUTES.HOME}
-              element={
-                isLogin ? (
-                  <ProtectedRouteWrapper>
-                    <Home />
-                  </ProtectedRouteWrapper>
-                ) : (
-                  <Navigate to={ROUTES.HEROES} replace />
-                )
-              }
-            />
-
-            {/* Public Routes */}
-            <Route
-              path={ROUTES.HEROES}
-              element={
-                !isLogin ? <Heroes /> : <Navigate to={ROUTES.HOME} replace />
-              }
-            />
-
-            <Route path={ROUTES.ABOUT} element={<About />} />
-            <Route path={ROUTES.FORGOT_PASS} element={<ForgotPass />} />
-            <Route path={ROUTES.RESET_PASS} element={<ResetPassword />} />
-            <Route path={ROUTES.ERROR} element={<SomethingWentWrong />} />
-
-            {/* Auth Routes */}
-            <Route
-              path={ROUTES.AUTH_SIGNIN}
-              element={
-                !isLogin ? <SignIn /> : <Navigate to={ROUTES.HOME} replace />
-              }
-            />
-            <Route
-              path={ROUTES.AUTH_SIGNUP}
-              element={
-                !isLogin ? <SignUp /> : <Navigate to={ROUTES.HOME} replace />
-              }
-            />
-
-            {/* Protected Routes */}
-            <Route
-              path={ROUTES.PROFILE}
-              element={
-                <ProtectedRouteWrapper>
-                  <Profile />
-                </ProtectedRouteWrapper>
-              }
-            />
-
-            <Route
-              path={ROUTES.PROFILE_EDITOR}
-              element={
-                <ProtectedRouteWrapper>
-                  <ProfileEditor />
-                </ProtectedRouteWrapper>
-              }
-            />
-
-            {/* Post Editor Routes */}
-            <Route
-              path={ROUTES.WRITE}
-              element={
-                <ProtectedRouteWrapper>
-                  <DynamicPostEditor />
-                </ProtectedRouteWrapper>
-              }
-            >
-              <Route path="publish" element={<PostPreviewEditor />} />
-            </Route>
-
-            {/* Settings Routes */}
-            <Route
-              path={ROUTES.SETTINGS}
-              element={
-                <ProtectedRouteWrapper>
-                  <Settings />
-                </ProtectedRouteWrapper>
-              }
-            >
-              <Route
-                index
-                element={
-                  <ProtectedRouteWrapper>
-                    <General />
-                  </ProtectedRouteWrapper>
-                }
-              />
-              <Route
-                path="github/sync"
-                element={
-                  <ProtectedRouteWrapper>
-                    <div>GitHub Sync Feature Coming Soon</div>
-                  </ProtectedRouteWrapper>
-                }
-              />
-            </Route>
-
-            {/* Messages Routes */}
-            <Route
-              path={ROUTES.MESSAGES}
-              element={
-                <ProtectedRouteWrapper>
-                  <Messenger />
-                </ProtectedRouteWrapper>
-              }
-            >
-              <Route path="" element={<MessageFallBack />} />
-              <Route path="new/c" element={<NewConversation />} />
-              <Route path="c" element={<MessageSection />}>
-                <Route path="info" element={<ConversationInfo />}>
-                  <Route index element={<InfoSection />} />
-                </Route>
-              </Route>
-            </Route>
-
-            {/* Post View Routes */}
-            <Route path={ROUTES.POST_VIEW} element={<PostView />}>
-              <Route path="comments" element={<CommentSection />} />
-            </Route>
-            <Route path="/analysis" element={<AIResponse />} />
-            {/* Other Protected Routes */}
-            <Route
-              path={ROUTES.SEARCH}
-              element={
-                <ProtectedRouteWrapper>
-                  <SearchBox />
-                </ProtectedRouteWrapper>
-              }
-            />
-
-            <Route
-              path={ROUTES.READ}
-              element={
-                <ProtectedRouteWrapper>
-                  <ReadList />
-                </ProtectedRouteWrapper>
-              }
-            />
-
-            <Route path={ROUTES.SUGGESTIONS} element={<Suggestions />} />
-
-            {/* Catch-all route */}
-            <Route path="*" element={<PageError />} />
-          </Routes>
-
-          {loginPop && <WelcomeLoginBox />}
-          <ToastContainer />
-          <ImageInBigFrame />
-        </Suspense>
-      </main>
-
-      {isLogin && !pathChecks.isMessagesPath && <TaskBar />}
-    </div>
+    <>
+      <NotificationBox />
+      <PersistentUser />
+      <ConfirmationBox />
+      {loginPop && <WelcomeLoginBox />}
+      <ToastContainer />
+      <ImageInBigFrame />
+      <Router />
+    </>
   );
 }
 

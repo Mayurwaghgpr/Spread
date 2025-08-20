@@ -1,5 +1,3 @@
-import React from "react";
-import { IoIosPeople } from "react-icons/io";
 import {
   IoHomeOutline,
   IoHomeSharp,
@@ -11,7 +9,7 @@ import {
 
 import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 function TaskBar() {
   const { user, isLogin } = useSelector((state) => state.auth);
@@ -48,7 +46,6 @@ function TaskBar() {
     //   icon2: <IoIosPeople />,
     //   stub: `/peoples`,
     // },
-    ,
   ];
   return (
     <div className=" fixed bottom-0 flex justify-center items-center gap-4 w-full border-inherit border-t text-xl py-2 bg-light dark:bg-dark  sm:hidden dark:bg-opacity-50 dark:backdrop-blur-lg bg-opacity-50 backdrop-blur-lg">

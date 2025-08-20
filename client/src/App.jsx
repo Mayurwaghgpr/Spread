@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
-import Router from "./router/router";
+import Router from "./router/Router";
 
 // Lazy load components with better error boundaries
 

@@ -41,7 +41,7 @@ const ReadList = () => {
   );
 
   return (
-    <div className="relative flex flex-col justify-start items-start w-full h-full xl:items-center dark:*:border-[#383838] bg-light dark:bg-dark ">
+    <div className=" flex flex-col justify-start items-start w-full h-full xl:items-center dark:*:border-[#383838]  ">
       <div className=" sticky top-0 flex  justify-end items-center gap-4 w-full z-10  border-inherit  ">
         <div className="w-full h-full p-7 bg-light dark:bg-dark text-3xl  border-b border-inherit">
           <h1>Read list </h1>
@@ -51,7 +51,7 @@ const ReadList = () => {
         ? pages?.map((page, idx) => {
             return (
               <PostPreview
-                className={" w-full"}
+                className={" w-full max-w-2xl border-inherit"}
                 ref={pages?.length % 3 === 0 ? lastItemRef : null}
                 key={idx}
                 post={page}

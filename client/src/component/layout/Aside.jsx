@@ -11,7 +11,7 @@ function Aside({ className, handleTopicClick }) {
     <aside className={`${className}`}>
       <div className="  flex flex-col w-full items-center text-start gap-2 border-inherit ">
         <h1 className=" text-start w-full text-xl font-medium">
-          Suggested topics
+          Trending topics
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
           <ul className="flex justify-start flex-wrap gap-2">

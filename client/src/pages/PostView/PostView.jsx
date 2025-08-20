@@ -141,7 +141,7 @@ function PostView() {
   }
 
   return (
-    <section className="relative flex justify-center w-full h-full px-2 my-16 border-inherit transition-all duration-500 dark:*:border-[#383838]">
+    <div className="relative flex justify-center items-start w-full h-full px-2 border-inherit transition-all duration-500 dark:*:border-[#383838]">
       <article className="relative animate-fedin1s max-w-4xl w-full px-4 flex flex-col justify-center items-center border-inherit">
         <PostHeader
           postView={postView}
@@ -192,7 +192,7 @@ function PostView() {
         className="fixed bottom-20 right-10 rounded-xl p-2 transition-colors duration-200"
       />
       <Outlet context={{ postData: postView }} />
-    </section>
+    </div>
   );
 }
 

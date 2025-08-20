@@ -65,15 +65,15 @@ function Layout() {
   return (
     <main className="relative flex flex-col h-screen max-h-screen bg-inherit border-inherit overflow-hidden">
       {/* Navigation Bar */}
-      {showNavBar && <MainNavBar />}
+      {/* {showNavBar && <MainNavBar />} */}
 
       {/* Main Content Area */}
-      <div className="flex flex-1 w-full min-h-0 border-inherit h-full lg:px-20 ">
+      <div className="flex flex-1 w-full h-full border-inherit  lg:pl-10">
         {/* Sidebar */}
         {pathChecks.showSidebar && <SideBar />}
 
         {/* Main Content */}
-        <section className="flex border-inherit w-full overflow-y-auto">
+        <section className="flex border-inherit w-full h-full overflow-y-auto">
           <Suspense fallback={<LoaderScreen />}>
             <Outlet />
           </Suspense>

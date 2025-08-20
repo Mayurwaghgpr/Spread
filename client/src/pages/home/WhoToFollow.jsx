@@ -37,8 +37,8 @@ function WhoToFollow({ className }) {
                     />
                   </Link>
                   {/* Profile Details */}
-                  <div className="flex-1 min-w-0 space-y-1 sm:space-y-2">
-                    <div className=" relative group flex items-center justify-between">
+                  <div className="flex-1 min-w-0 space-y-1 sm:space-y-2 w-full">
+                    <div className=" relative group flex items-center justify-between w-full">
                       <Link
                         className=" cursor-pointer  hover:underline"
                         to={`/profile/@${person?.username}/${person?.id}`}
@@ -50,7 +50,7 @@ function WhoToFollow({ className }) {
                       </Link>
                       <UserPopover
                         // ref={}
-                        className="absolute z-40 left-0 right-0 bottom-10 w-full bg-light dark:bg-dark opacity-0 pointer-events-none group-hover:pointer-events-auto  transition-all duration-300 delay-500 group-hover:opacity-100 text-red-600"
+                        className="absolute z-40 left-0 right-0 bottom-10 min-w-fit p-3 text-nowrap bg-light dark:bg-dark opacity-0 pointer-events-none group-hover:pointer-events-auto  transition-all duration-300 delay-500 group-hover:opacity-100 text-red-600"
                         person={person}
                       />
                     </div>

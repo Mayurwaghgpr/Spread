@@ -1,8 +1,9 @@
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "../component/layout/Layout";
 import { useSelector } from "react-redux";
 import ProtectedRoutes from "../utils/ProtectedRoutes";
+import LoaderScreen from "../component/loaders/loaderScreen";
 // Lazy load components with better error boundaries
 const SignUp = lazy(() => import("../pages/auth/SignUp"));
 const SignIn = lazy(() => import("../pages/auth/SignIn"));
@@ -80,18 +81,43 @@ function Router() {
   return (
     <Routes>
       {/* Public Routes */}
+
       <Route
         path={ROUTES.HEROES}
-        element={!isLogin ? <Heroes /> : <Navigate to={ROUTES.HOME} replace />}
+        element={
+          !isLogin ? (
+            <Suspense fallback={<LoaderScreen />}>
+              <Heroes />
+            </Suspense>
+          ) : (
+            <Navigate to={ROUTES.HOME} replace />
+          )
+        }
       />
       {/* Auth Routes */}
       <Route
         path={ROUTES.AUTH_SIGNIN}
-        element={!isLogin ? <SignIn /> : <Navigate to={ROUTES.HOME} replace />}
+        element={
+          !isLogin ? (
+            <Suspense fallback={<LoaderScreen />}>
+              <SignIn />
+            </Suspense>
+          ) : (
+            <Navigate to={ROUTES.HOME} replace />
+          )
+        }
       />
       <Route
         path={ROUTES.AUTH_SIGNUP}
-        element={!isLogin ? <SignUp /> : <Navigate to={ROUTES.HOME} replace />}
+        element={
+          !isLogin ? (
+            <Suspense fallback={<LoaderScreen />}>
+              <SignUp />
+            </Suspense>
+          ) : (
+            <Navigate to={ROUTES.HOME} replace />
+          )
+        }
       />
 
       <Route path="/" element={<Layout />}>

@@ -141,8 +141,8 @@ function Profile() {
   };
 
   return (
-    <section className="flex h-screen w-full justify-start border-inherit overflow-y-auto">
-      <div className="flex flex-col h-full md:w-[80%] lg:w-[70%] w-full mt-20 border-inherit">
+    <section className="flex h-full w-full justify-start border-inherit">
+      <div className="flex flex-col h-full md:w-[80%] lg:w-[70%] w-full border-inherit">
         <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
           <ProfileHeader profileId={profileId} />
 

@@ -18,6 +18,14 @@ import Selector from "../../component/utilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
 import useIcons from "../../hooks/useIcons";
 import FedInBtn from "../../component/buttons/FedInBtn";
+import {
+  User,
+  Camera,
+  Trash2,
+  CheckCircle,
+  AlertCircle,
+  Edit3,
+} from "lucide-react";
 
 // Import profile icon with a consistent approach
 import profileIcon from "/ProfOutlook.png";
@@ -166,25 +174,44 @@ function ProfileEditor() {
     updateProfile(newInfo);
   }, [newInfo, user, updateProfile]);
 
-  return (
-    <section className="relative flex sm:h-screen w-full h-1/2 border-inherit overflow-y-auto bg-light dark:bg-dark">
-      <article className="flex flex-col sm:w-fit sm:h-fit rounded-xl m-auto bg-light dark:bg-dark my-14 px-4 border-inherit gap-6 py-5">
-        <h1 className="w-full text-center text-2xl p-2 bg-inherit">
-          User Information
-        </h1>
+  const hasChanges = JSON.stringify(newInfo) !== JSON.stringify(user);
 
-        {/* Profile Image Section */}
-        <div
-          className="flex justify-start gap-5 w-full border-inherit"
-          aria-label="Upload profile picture"
-        >
-          <div className="relative group flex justify-center items-center max-h-32 max-w-32 h-fit w-full border-2 rounded-full border-inherit">
+  return (
+    <div className=" mx-auto h-full pb-20">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Edit Profile
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Update your personal information and profile settings
+        </p>
+      </div>
+
+      {/* Profile Image Section */}
+      <div className=" p-8">
+        <div className="flex flex-col sm:flex-row items-center gap-8">
+          {/* Profile Image */}
+          <div className="relative group">
+            <div className="relative w-32 h-32 rounded-full border-4  shadow-xl overflow-hidden ">
+              <img
+                className="w-full h-full object-cover object-center"
+                src={profileImage}
+                alt="Profile"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                <Camera className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              </div>
+            </div>
+
+            {/* Edit Button */}
             <label
-              className="absolute left-1 bottom-3 p-1 border border-inherit hover:opacity-50 rounded-full text-nowrap w-fit h-fit bg-white dark:bg-black cursor-pointer"
+              className="absolute bottom-2 right-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full cursor-pointer shadow-lg transition-all duration-200 hover:scale-110"
               htmlFor="fileInput"
               aria-label="Change profile picture"
             >
-              {icons["penO"]}
+              <Edit3 className="w-4 h-4" />
             </label>
             <input
               className="hidden"
@@ -194,126 +221,180 @@ function ProfileEditor() {
               accept="image/*"
               onChange={handleInputChange}
             />
-            <img
-              className="cursor-pointer h-full w-full object-cover object-top rounded-full"
-              src={profileImage}
-              alt="Profile"
-              loading="lazy"
-            />
           </div>
 
-          <div className="flex flex-col justify-center items-start w-full">
-            <FedInBtn
-              className="rounded-xl text-md text-red-500 flex gap-2"
-              action={handleRemoveImage}
-              disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
-            >
-              {icons["delete"]}
-              Remove
-            </FedInBtn>
-            <p className="text-start text-xs break-words opacity-50">
-              Important: Insert image in JPG, JPEG, PNG format and high quality
+          {/* Profile Controls */}
+          <div className="flex-1 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={handleRemoveImage}
+                disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl border border-red-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Trash2 className="w-4 h-4" />
+                Remove Image
+              </button>
+
+              <Selector
+                name="pronouns"
+                className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                setOptions={handleInputChange}
+                options={["he/him", "she/her", "they/them"]}
+                defaultValue={newInfo?.pronouns}
+                disabled={isUpdating}
+              />
+            </div>
+
+            <p className="text-sm text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700 p-3 rounded-lg">
+              <span className="font-medium">Tip:</span> Upload high-quality
+              images in JPG, JPEG, or PNG format for the best results
             </p>
-            <Selector
-              name="pronouns"
-              className="w-fit outline-none self-start my-2 text-xs flex flex-col gap-3 bg-inherit cursor-pointer"
-              setOptions={handleInputChange}
-              options={["he/him", "she/her", "they/them"]}
-              defaultValue={newInfo?.pronouns}
+          </div>
+        </div>
+      </div>
+
+      {/* Form Fields Section */}
+      <div className="p-8 space-y-6">
+        {/* Username Field */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            Username
+          </label>
+          <div className="relative">
+            <CommonInput
+              ref={uNameRef}
+              className={`w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900 ${
+                isError
+                  ? "border-red-500 focus:border-red-500"
+                  : isSuccess
+                    ? "border-green-500 focus:border-green-500"
+                    : "border-gray-200 dark:border-gray-600 focus:border-blue-500"
+              }`}
+              type="text"
+              name="username"
               disabled={isUpdating}
+              onChange={handleUsernameChange}
+              maxLength={15}
+              defaultValue={newInfo?.username}
+              value={newInfo?.username}
+              placeholder="Enter your username"
+              aria-invalid={isError}
+              aria-describedby={isError ? "username-error" : undefined}
             />
+
+            {/* Loading/Status Icons */}
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              {nameLoading && <Spinner className="w-5 h-5 text-blue-500" />}
+              {isSuccess && <CheckCircle className="w-5 h-5 text-green-500" />}
+              {isError && <AlertCircle className="w-5 h-5 text-red-500" />}
+            </div>
+          </div>
+
+          {isError && (
+            <p
+              id="username-error"
+              className="text-red-500 text-sm flex items-center gap-2"
+            >
+              <AlertCircle className="w-4 h-4" />
+              {error?.data?.message || "Username error"}
+            </p>
+          )}
+
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>Choose a unique username</span>
+            <span>{newInfo?.username?.length || 0}/15</span>
           </div>
         </div>
 
-        {/* Form Fields Section */}
-        <div className="flex flex-col w-full items-end h-full bg-inherit gap-10 border-inherit px-2">
-          <div className="flex flex-col items-end justify-center gap-3 w-full h-full capitalize bg-inherit border-inherit">
-            {/* Username Input */}
-            <div className="w-full border-inherit">
-              <CommonInput
-                ref={uNameRef}
-                className={`${
-                  isError ? "outline outline-red-500" : "outline-none"
-                } ${
-                  isSuccess ? "outline outline-green-500" : "outline-none"
-                } border flex flex-col gap-3 transition-all duration-500 w-full border-inherit text-sm mt-3 bg-inherit`}
-                type="text"
-                name="username"
-                label="Username"
-                disabled={isUpdating}
-                onChange={handleUsernameChange}
-                maxLength={15}
-                defaultValue={newInfo?.username}
-                value={newInfo?.username}
-                aria-invalid={isError}
-                aria-describedby={isError ? "username-error" : undefined}
-              >
-                {nameLoading && <Spinner className="w-5 h-5" />}
-              </CommonInput>
-              {isError && (
-                <span
-                  id="username-error"
-                  className="text-red-500 text-xs w-full"
-                >
-                  {error?.data?.message || "Username error"}
-                </span>
-              )}
-            </div>
-
-            {/* Display Name Input */}
+        {/* Grid Layout for Other Fields */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Display Name */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Full Name
+            </label>
             <CommonInput
-              className="flex flex-col items-start w-full border-inherit text-sm gap-3 bg-inherit"
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900"
               type="text"
               name="displayName"
-              label="Full Name"
               disabled={isUpdating}
               maxLength={50}
               onChange={handleInputChange}
               defaultValue={newInfo?.displayName}
               value={newInfo?.displayName}
+              placeholder="Your full name"
             />
-            <span className="flex text-xs opacity-30 justify-end">
-              {`${newInfo?.displayName?.length || 0} / 50`}
-            </span>
+            <div className="text-xs text-gray-500 text-right">
+              {newInfo?.displayName?.length || 0}/50
+            </div>
+          </div>
 
-            {/* Email Input */}
+          {/* Email */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+              Email Address
+            </label>
             <CommonInput
-              className="flex flex-col gap-3 w-full border-inherit text-sm bg-inherit border"
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900"
               type="email"
               name="email"
-              label="Email"
               disabled={isUpdating}
               maxLength={30}
               onChange={handleInputChange}
               defaultValue={newInfo?.email}
               value={newInfo?.email}
+              placeholder="your.email@example.com"
             />
-            <span className="flex text-xs opacity-30 justify-end">
-              {`${newInfo?.email?.length || 0} / 30`}
-            </span>
+            <div className="text-xs text-gray-500 text-right">
+              {newInfo?.email?.length || 0}/30
+            </div>
+          </div>
+        </div>
 
-            {/* Bio Input */}
-            <CommonInput
-              className="flex flex-col gap-3 w-full rounded-md border-inherit text-sm bg-inherit"
-              type="text"
-              name="bio"
-              label="Bio"
-              disabled={isUpdating}
-              maxLength={50}
-              onChange={handleInputChange}
-              defaultValue={newInfo?.bio}
-            />
-            <span className="flex text-xs opacity-30 justify-end">
-              {`${newInfo?.bio?.length || 0} / 50`}
-            </span>
+        {/* Bio Field - Full Width */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            Bio
+          </label>
+          <CommonInput
+            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900"
+            type="text"
+            name="bio"
+            disabled={isUpdating}
+            maxLength={50}
+            onChange={handleInputChange}
+            defaultValue={newInfo?.bio}
+            placeholder="Tell us about yourself..."
+          />
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>A short description about yourself</span>
+            <span>{newInfo?.bio?.length || 0}/50</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer with Save Button */}
+      <div className="bg-gray-50 dark:bg-gray-700 px-8 py-6 border-t  border-gray-200 dark:border-gray-600 ">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {hasChanges ? (
+              <span className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
+                <AlertCircle className="w-4 h-4" />
+                You have unsaved changes
+              </span>
+            ) : (
+              <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
+                <CheckCircle className="w-4 h-4" />
+                All changes saved
+              </span>
+            )}
           </div>
 
-          {/* Submit Button */}
           <button
-            disabled={isUpdating || isError}
-            aria-busy={isUpdating}
-            className="px-4 py-1 flex items-center justify-center gap-2 text-white rounded-xl border bg-sky-400 hover:bg-sky-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isUpdating || isError || !hasChanges}
             onClick={handleSubmit}
+            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg flex items-center gap-2 min-w-32 justify-center"
+            aria-busy={isUpdating}
           >
             {isUpdating ? (
               <>
@@ -321,12 +402,15 @@ function ProfileEditor() {
                 Saving...
               </>
             ) : (
-              "Save"
+              <>
+                <CheckCircle className="w-4 h-4" />
+                Save Changes
+              </>
             )}
           </button>
         </div>
-      </article>
-    </section>
+      </div>
+    </div>
   );
 }
 

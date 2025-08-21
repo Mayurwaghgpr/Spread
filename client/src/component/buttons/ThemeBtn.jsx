@@ -69,7 +69,7 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
           aria-label={`Switch to ${Modes[(Modes.findIndex((mode) => mode.value === ThemeMode) + 1) % Modes.length]?.name}`}
           className=" relative p-3 transition-all duration-200  "
         >
-          <div className="text-gray-600 dark:text-gray-400 hover:text-gray-800 text-sm  transition-transform duration-200">
+          <div className="text-gray-600 dark:text-gray-400 hover:text-gray-800   transition-transform duration-200">
             {icons[currentMode?.icon || "sun"]}
           </div>
         </button>
@@ -89,14 +89,14 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
             onClick={() => handleThemeSelect(mode.value)}
             aria-label={`Switch to ${mode.name}`}
             aria-pressed={isActive}
-            className={`group relative px-3 py-2 rounded-lg border transition-all duration-200 hover:scale-105 ${
+            className={`group relative  rounded-lg border transition-all duration-200 hover:scale-105 ${
               isActive
                 ? "bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 border-inherit shadow-lg shadow-gray-200 dark:shadow-gray-800/50"
                 : "bg-light dark:bg-gray-800 text-gray-600 dark:text-gray-400  border-inherit hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500"
             }`}
           >
             <div
-              className={`text-sm transition-transform duration-200 ${
+              className={` transition-transform duration-200 ${
                 isActive ? "scale-110" : "group-hover:scale-110"
               }`}
             >

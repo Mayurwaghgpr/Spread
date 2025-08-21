@@ -147,10 +147,10 @@ function SideBar() {
             <LinkBtn
               key={link.id}
               stub={link.stub}
-              className={`group flex lg:justify-start  justify-start sm:justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 ${
+              className={`group flex lg:justify-start justify-start sm:justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white ${
                 isActiveLink(link.stub)
-                  ? ""
-                  : "hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white  "
+                  ? "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-slate-800/40 dark:to-slate-700/40"
+                  : "  "
               }`}
               to={link.stub}
               onClick={() => dispatch(setManuOpen())}

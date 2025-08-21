@@ -141,8 +141,8 @@ function PostView() {
   }
 
   return (
-    <div className="relative flex justify-center items-start w-full h-full px-2 border-inherit transition-all duration-500 dark:*:border-[#383838]">
-      <article className="relative animate-fedin1s max-w-4xl w-full px-4 flex flex-col justify-center items-center border-inherit">
+    <div className="relative flex justify-center items-start w-full h-screen overflow-auto px-2  border-inherit transition-all duration-500 dark:*:border-[#383838]">
+      <article className="relative animate-fedin1s max-w-4xl w-full px-4 flex flex-col justify-center items-center gap-5 border-inherit mb-40">
         <PostHeader
           postView={postView}
           userImageurl={userImageurl}

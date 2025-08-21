@@ -62,7 +62,8 @@ function useAuthApi() {
       const result = await axiosInstance.delete(`/auth/logout`);
       return result.data;
     } catch (error) {
-      throw error.response;
+      console.log({ error });
+      throw error;
     }
   };
   return {

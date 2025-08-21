@@ -18,7 +18,7 @@ function Aside({ className, handleTopicClick }) {
             {topics?.map(({ topic }, index) => (
               <li
                 key={index}
-                className="rounded-full dark:bg-gray-600 bg-gray-100 px-3 py-1"
+                className="rounded-full bg-[#e6e6e6] dark:bg-[#434242] px-3 py-1"
               >
                 <button
                   className="t-btn"

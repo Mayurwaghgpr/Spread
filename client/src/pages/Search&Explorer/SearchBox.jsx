@@ -106,19 +106,18 @@ function SearchBox({ className, scrollDirection }) {
 
   return (
     <div
-      className="flex flex-col w-full items-center h-screen border-inherit mt-20 "
+      className="flex flex-col w-full items-center h-screen border-inherit p-10 "
       role="dialog"
       aria-modal="true"
       aria-labelledby="search-title"
     >
-      <header className="w-full  text-2xl px-20">
+      <header className="flex   max-w-4xl w-full  text-2xl  mx-auto">
         <Ibutton action={handleContainerClick}>{icons["arrowL"]}</Ibutton>
-      </header>
-      <div className="relative flex flex-col justify-start items-center gap-3 w-full max-w-2xl rounded-lg p-6 bg-[#fff9f3] dark:bg-black border-inherit mt-20 mx-4">
-        <h1 id="search-title" className="text-3xl font-semibold">
+        <h1 id="search-title" className="text-3xl font-semibold mx-auto">
           Search & Explore
         </h1>
-
+      </header>
+      <div className="relative flex flex-col justify-start items-center gap-3 w-full max-w-2xl rounded-lg p-6 bg-[#fff9f3] dark:bg-black border-inherit mt-20 mx-4">
         <div className="w-full dark:bg-black border-inherit">
           <SearchBar
             ref={searchRef}

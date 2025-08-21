@@ -219,15 +219,16 @@ function MessageSection() {
         <div className="w-full min-h-16 border-inherit">
           {isUsersTyping && (
             <div className="flex gap-1 my-4 border-inherit">
-              {typingUsers
-                .filter((u) => u.senderId !== user?.id && u.typing)
-                .map((u) => (
-                  <ProfileImage
-                    key={u.senderId}
-                    className="w-6 h-6"
-                    image={u.image}
-                  />
-                ))}
+              {conversationData.conversationType !== "private" &&
+                typingUsers
+                  .filter((u) => u.senderId !== user?.id && u.typing)
+                  .map((u) => (
+                    <ProfileImage
+                      key={u.senderId}
+                      className="w-6 h-6"
+                      image={u.image}
+                    />
+                  ))}
               <div className="relative flex items-center justify-center w-fit p-2 text-sm mt-2 bg-light dark:bg-dark border border-inherit rounded-xl rounded-tl-none">
                 <span className="typingLoader"></span>
               </div>

@@ -146,7 +146,7 @@ function Home() {
 
   // Render loading/end state
   const renderListFooter = () => (
-    <div className="flex items-center justify-center w-full h-20">
+    <div className="flex items-center justify-center w-full h-32 p-5">
       {isFetchingNextPage && (
         <Spinner className="w-10 p-1 bg-black dark:bg-white" />
       )}
@@ -164,7 +164,7 @@ function Home() {
 
   return (
     <>
-      <div className="flex flex-col w-full h-full border-inherit  pb-10">
+      <div className="flex flex-col w-full h-full border-inherit  pb-20">
         <nav
           className="sticky top-0 z-10 w-full border-b border-inherit bg-gray-700/0 backdrop-blur-[20px]"
           role="navigation"

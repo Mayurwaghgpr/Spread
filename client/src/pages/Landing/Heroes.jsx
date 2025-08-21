@@ -9,7 +9,7 @@ function Heroes() {
 
   return (
     <main className="relative h-full w-full">
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 lg:px-20 py-3  flex justify-between items-center">
+      <header className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 lg:px-20 py-3  flex justify-between items-center">
         <div>
           {" "}
           <div
@@ -40,7 +40,7 @@ function Heroes() {
         {[...Array(200)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-[1px] h-[1px] rounded-full animate-pulse bg-white dark:bg-gradient-to-br dark:from-sky-300 dark:to-amber-200  z-20"
+            className="absolute w-[1.5px] h-[1.5px] rounded-full animate-ping bg-white dark:bg-gradient-to-br dark:from-sky-300 dark:to-amber-200  z-20"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,

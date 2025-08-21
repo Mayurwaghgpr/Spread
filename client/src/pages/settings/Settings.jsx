@@ -8,7 +8,7 @@ function Settings() {
   const icons = useIcons();
   const settingItem = [
     { name: "General", icon: icons["gearO"] || "G", stub: "" },
-    { name: "Sync Github", icon: icons["github"], stub: "githubSynch" },
+    // { name: "Sync Github", icon: icons["github"], stub: "githubSynch" },
   ];
 
   return (
@@ -20,35 +20,36 @@ function Settings() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className=" relative sm:w-[70%] sm:h-[40rem] h-full w-full flex flex-col  overflow-hidden items-center border bg-light dark:bg-dark  border-inherit sm:rounded-lg"
+        className=" relative sm:w-[50%] sm:h-[40rem] h-full w-full flex  overflow-hidden items-center border bg-light dark:bg-[#2f2f2f] border-inherit sm:rounded-lg"
       >
-        <header className="w-full text-4xl flex justify-between items-center p-5 border-b border-inherit">
-          <h1> Settings</h1>
-          <button
-            onClick={(e) => {
-              navigate(-1);
-            }}
-            className="sm:hidden block"
-          >
-            <i className="bi bi-x-lg"></i>
-          </button>
-        </header>
-        <div className="h-full py-3 flex justify-between text-sm w-full border-inherit">
-          <aside className=" h-full  px-6  min-w-fit flex flex-col gap-10 ">
-            <ul className=" flex flex-col gap-4">
-              {settingItem.map((setting) => (
-                <Link
-                  to={setting.stub}
-                  className="flex justify-start items-center gap-1 cursor-pointer"
-                  replace={true}
-                >
-                  <span>{setting.icon}</span>
-                  {setting.name}
-                </Link>
-              ))}
-            </ul>
-          </aside>
-          <div className=" w-full border-inherit">{<Outlet />}</div>
+        <aside className=" h-full  p-6  min-w-[30%] flex flex-col gap-10 border-e dark:bg-[#2a2a2a] border-inherit ">
+          <ul className=" flex flex-col gap-4 p">
+            {settingItem.map((setting) => (
+              <Link
+                to={setting.stub}
+                className="flex justify-start items-center gap-1 cursor-pointer p-2 rounded-xl transition-all duration-300 hover:bg-[#e6e6e6] dark:hover:bg-[#3c3c3c]"
+                replace={true}
+              >
+                <span>{setting.icon}</span>
+                {setting.name}
+              </Link>
+            ))}
+          </ul>
+        </aside>
+
+        <div className="h-full  flex flex-col justify-between text-sm w-full border-inherit">
+          <header className="w-full text-2xl h-fit flex justify-between items-center p-3 border-b border-inherit">
+            <h1> Settings</h1>
+            <button
+              onClick={(e) => {
+                navigate(-1);
+              }}
+              className="sm:hidden block"
+            >
+              <i className="bi bi-x-lg"></i>
+            </button>
+          </header>
+          <div className=" w-full border-inherit p-3 h-full">{<Outlet />}</div>
         </div>
       </div>
     </div>

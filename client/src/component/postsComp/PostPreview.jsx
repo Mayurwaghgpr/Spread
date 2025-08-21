@@ -87,12 +87,12 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           <div className="flex w-full flex-col gap-1 sm:gap-2 min-w-0 flex-grow">
             {post ? (
               <>
-                <h2 className="font-medium text-base sm:text-xl md:text-2xl leading-tight overflow-hidden">
+                <h2 className="font-medium text-base sm:text-lg md:text-xl leading-tight overflow-hidden">
                   <span className="line-clamp-2 sm:line-clamp-3">
                     {post?.title}
                   </span>
                 </h2>
-                <p className="text-xs sm:text-sm md:text-base opacity-60 font-normal overflow-hidden leading-relaxed">
+                <p className="text-xs sm:text-sm  opacity-60 font-normal overflow-hidden leading-relaxed">
                   <span className="line-clamp-2 sm:line-clamp-3">
                     {post?.subtitle}
                   </span>

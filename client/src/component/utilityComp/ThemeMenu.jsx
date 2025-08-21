@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setThemeMode } from "../../redux/slices/uiSlice";
 import { useLocation } from "react-router-dom";
+import { setThemeMode } from "../../store/slices/uiSlice";
 
 function ThemeMenu({ className }) {
   const [showThemeList, setShowThemeList] = useState(false);

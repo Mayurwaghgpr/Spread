@@ -163,13 +163,13 @@ function CommentSection() {
   return (
     <section
       onClick={handleCloseModal}
-      className="flex justify-end items-end lg:sticky lg:top-[4.3rem] fixed top-0 right-0 left-0 w-fit animate-fedin.2s lg:h-[90vh] h-full sm:z-0 z-30"
+      className="flex justify-end items-end lg:sticky lg:top-0 fixed top-0 right-0 left-0 w-fit animate-fedin.2s lg:h-[100vh] h-full sm:z-0 z-30"
       role="dialog"
       aria-label="Comments modal"
     >
       <div
         onClick={handleModalClick}
-        className="relative flex flex-col gap-0 max-w-[30rem] w-full sm:h-full h-[60%] border border-gray-200 dark:border-gray-700 sm:m-0 rounded-2xl m-1  backdrop-blur-xl sm:animate-none animate-slide-in-bottom overflow-hidden shadow-2xl shadow-black/10 dark:shadow-black/30"
+        className="relative flex flex-col gap-0 max-w-[30rem] w-full sm:h-full h-[60%] border border-gray-200 dark:border-gray-700 sm:m-0 rounded-2xl m-1  bg-light dark:bg-dark backdrop-blur-xl sm:animate-none animate-slide-in-bottom overflow-hidden shadow-2xl shadow-black/10 dark:shadow-black/30"
       >
         {/* Header */}
         <header className="flex items-center justify-between p-6 border-b border-inherit backdrop-blur-sm">

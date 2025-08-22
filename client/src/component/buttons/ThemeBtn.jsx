@@ -63,17 +63,15 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
   if (!separate) {
     // Single toggle button
     return (
-      <div className={className}>
-        <button
-          onClick={changeTheme}
-          aria-label={`Switch to ${Modes[(Modes.findIndex((mode) => mode.value === ThemeMode) + 1) % Modes.length]?.name}`}
-          className=" relative p-3 transition-all duration-200  "
-        >
-          <div className="text-gray-600 dark:text-gray-400 hover:text-gray-800   transition-transform duration-200">
-            {icons[currentMode?.icon || "sun"]}
-          </div>
-        </button>
-      </div>
+      <button
+        onClick={changeTheme}
+        aria-label={`Switch to ${Modes[(Modes.findIndex((mode) => mode.value === ThemeMode) + 1) % Modes.length]?.name}`}
+        className={`relative transition-all duration-200  ${className}`}
+      >
+        <div className="  transition-transform duration-200">
+          {icons[currentMode?.icon || "sun"]}
+        </div>
+      </button>
     );
   }
 

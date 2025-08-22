@@ -4,9 +4,27 @@ import Footer from "../../component/footer/Footer";
 import spreadLogo from "/spread_logo_03_robopus.png";
 import { motion } from "motion/react";
 import ProfileImage from "../../component/ProfileImage";
+import ThemeBtn from "../../component/buttons/ThemeBtn";
 function Heroes() {
   const navigate = useNavigate();
 
+  const Modes = [
+    {
+      name: "Dark mode",
+      value: "dark",
+      icon: "moonFi",
+    },
+    {
+      name: "Light mode",
+      value: "light",
+      icon: "sun",
+    },
+    {
+      name: "System",
+      value: "system",
+      icon: "desktopO",
+    },
+  ];
   return (
     <main className="relative h-full w-full">
       <header className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 lg:px-20 py-3  flex justify-between items-center">
@@ -26,10 +44,14 @@ function Heroes() {
             </span>
           </div>
         </div>{" "}
-        <div className=" flex justify-center items-center text-sm ">
+        <div className=" flex justify-center items-center text-sm  gap-5">
+          <ThemeBtn
+            className="text-white text-lg  rounded-full p-2 bg-black/30 "
+            Modes={Modes}
+          />
           <Link
             to="/auth/signin"
-            className="sm:flex hidden items-center gap-2 px-6 py-1 bg-white text-black rounded-full  transition-all duration-200"
+            className="flex  items-center gap-2 sm:px-8 px-3 sm:py-2 py-1 text-xs bg-white text-black rounded-full  transition-all duration-200"
           >
             Sign In
           </Link>
@@ -53,26 +75,13 @@ function Heroes() {
 
       {/* Main Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Layers */}
-        <motion.div className="box" />
-        <div className="absolute inset-0 ">
-          <div className="absolute inset-0">
-            <img
-              className="w-full h-full object-cover object-center "
-              src={coverImg2}
-              alt="cover"
-              loading="lazy"
-            />
-            {/* Overlay for better text readability */}
-            <div className="absolute inset-0 bg-black/30 dark:bg-black/50"></div>
-          </div>
-        </div>
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/90 to-blue-400/30"></div>
 
         {/* Content */}
-        <div className="relative z-20 max-w-7xl mx-auto py-20 px-6 sm:px-12 flex items-center min-h-screen text-white">
-          <div className="transform transition-all duration-700 mt-20 max-w-3xl">
+        <div className="relative z-20 flex sm:flex-row flex-col  items-center sm:text-start text-center gap-10 my-20  px-8 sm:px-12  text-white">
+          <div className="transform transition-all duration-700 max-w-3xl">
             {/* Headline */}
-            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-bold leading-tight mb-8 text-white">
+            <h1 className="text-xl sm:text-2xl xl:text-4xl font-bold leading-tight mb-8 text-white">
               <span className="bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
                 Unleash Your
               </span>
@@ -83,7 +92,7 @@ function Heroes() {
             </h1>
 
             {/* Description */}
-            <p className="text-lg sm:text-2xl leading-relaxed mb-8 max-w-2xl text-gray-100">
+            <p className="text-sm sm:text-lg leading-relaxed mb-8 max-w-2xl text-gray-100">
               Join a{" "}
               <span className="font-semibold text-white">
                 vibrant community
@@ -97,9 +106,9 @@ function Heroes() {
               .
             </p>
             {/* sign in button */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:mb-12 mb-2">
+            <div className="flex flex-col sm:flex-row gap-4 sm:mb-12 mb-4 sm:w-full w-fit mx-auto">
               <button
-                className="group relative sm:px-6 sm:py-3 px-3 py-2 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 rounded-full font-bold text-white dark:text-black sm:text-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/25 dark:hover:shadow-white/25 border border-gray-600 dark:border-gray-300"
+                className="group relative sm:px-6 sm:py-3 px-3 py-2  bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 rounded-full font-bold text-white dark:text-black sm:text-lg text-sm overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/25 dark:hover:shadow-white/25 border border-gray-600 dark:border-gray-300"
                 onClick={() => navigate("/auth/signin")}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-100 dark:to-gray-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
@@ -133,10 +142,17 @@ function Heroes() {
               </div>
             </div>
           </div>
+          <div className="relative max-w-[20rem] max-h-[20rem] sm:w-full sm:h-full w-1/2 rounded-full overflow-hidden ">
+            <img
+              class="max-w-full h-auto object-cover object-center"
+              src={coverImg2}
+              alt="cover"
+              loading="lazy"
+            />
+          </div>
         </div>
-
         {/* Scroll Indicator */}
-        <div className="absolute sm:right-1/3 left-1/2 transform -translate-x-1/2 sm:bottom-0 bottom-5 animate-bounce">
+        <div className="absolute sm:right-1/3 left-1/2 transform -translate-x-1/2 sm:bottom-0 bottom-0 animate-bounce">
           <div className="sm:w-6 sm:h-10 w-4 h-7 border-2 border-gray-300 dark:border-gray-200 rounded-full flex justify-center bg-white/10 backdrop-blur-sm">
             <div className="sm:w-1 sm:h-3 w-0.5 h-2 bg-gray-600 dark:bg-gray-200 rounded-full mt-2 animate-pulse"></div>
           </div>
@@ -146,7 +162,7 @@ function Heroes() {
       {/* Feature Section */}
       <section className="relative py-20 bg-gradient-to-b from-[#fff9f3] to-white dark:from-black dark:to-gray-900">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-12 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
+          <h2 className="text-xl sm:text-4xl font-bold mb-12 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
             Why Creators Choose Spread
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -180,10 +196,10 @@ function Heroes() {
                 <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-bold text-black dark:text-white mb-2">
+                <h3 className="sm:text-xl text-lg font-bold text-black dark:text-white mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                <p className="text-gray-600 sm:text-base text-sm dark:text-gray-400 mb-4">
                   {feature.desc}
                 </p>
                 <div
@@ -196,7 +212,7 @@ function Heroes() {
       </section>
 
       {/* Statistics Section */}
-      <section className="relative py-16 bg-gradient-to-r from-black to-gray-900 dark:from-gray-900 dark:to-black text-white">
+      {/* <section className="relative py-16 bg-gradient-to-r from-black to-gray-900 dark:from-gray-900 dark:to-black text-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
@@ -219,16 +235,16 @@ function Heroes() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* How It Works Section */}
       <section className="relative py-20 bg-[#fff9f3] dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
+            <h2 className="text-xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
               How It Works
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Get started in minutes and join thousands of creators sharing
               their passion
             </p>
@@ -267,10 +283,12 @@ function Heroes() {
                     {item.step}
                   </span>
                 </div>
-                <h3 className="text-xl font-bold text-black dark:text-white mb-3">
+                <h3 className="sm:text-xl text-lg font-bold text-black dark:text-white mb-3">
                   {item.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">{item.desc}</p>
+                <p className="text-gray-600 sm:text-base text-sm dark:text-gray-400">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -281,7 +299,7 @@ function Heroes() {
       <section className="relative py-20 bg-white dark:bg-black">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
+            <h2 className="text-xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
               What Creators Say
             </h2>
           </div>
@@ -315,14 +333,14 @@ function Heroes() {
                 className="p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300"
               >
                 <div className="text-4xl mb-4">{testimonial.avatar}</div>
-                <blockquote className="text-gray-700 dark:text-gray-300 mb-4 italic">
+                <blockquote className="text-gray-700 sm:text-base text-sm dark:text-gray-300 mb-4 italic">
                   "{testimonial.quote}"
                 </blockquote>
                 <div>
                   <div className="font-semibold text-black dark:text-white">
                     {testimonial.author}
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="sm:text-sm text-xs text-gray-500 dark:text-gray-400">
                     {testimonial.role}
                   </div>
                 </div>
@@ -336,10 +354,10 @@ function Heroes() {
       <section className="relative py-20 bg-gradient-to-b from-[#fff9f3] to-gray-100 dark:from-gray-900 dark:to-black">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
+            <h2 className="text-xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
               Powerful Tools for Creators
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            <p className="sm:text-lg text-sm text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Everything you need to create, share, and grow your creative
               journey
             </p>
@@ -412,17 +430,17 @@ function Heroes() {
       {/* Final CTA Section */}
       <section className="relative py-20 bg-gradient-to-br from-[#fff9f3] via-white to-gray-100 dark:from-black dark:via-gray-900 dark:to-gray-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
+          <h2 className="text-xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-black to-gray-700 bg-clip-text text-transparent dark:from-white dark:to-gray-300">
             Ready to Start Creating?
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+          <p className="sm:text-xl text-sm text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
             Join thousands of creators who are already sharing their passion and
             building amazing communities
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button
-              className="group px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold text-lg hover:scale-105 transition-all duration-300 hover:shadow-xl"
+              className="group px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold sm:text-lg text-sm hover:scale-105 transition-all duration-300 hover:shadow-xl"
               onClick={() => navigate("/auth/signin")}
             >
               Get Started Free
@@ -430,12 +448,12 @@ function Heroes() {
                 →
               </span>
             </button>
-            <button className="px-8 py-4 border-2 border-gray-400 dark:border-gray-500 text-gray-700 dark:text-gray-300 rounded-full font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300">
+            <button className="px-8 py-4 border-2 sm:text-base text-sm border-gray-400 dark:border-gray-500 text-gray-700 dark:text-gray-300 rounded-full font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300">
               Watch Demo
             </button>
           </div>
 
-          <div className="mt-8 flex justify-center items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <div className="mt-8 flex justify-center items-center gap-4 sm:text-sm text-xs text-gray-500 dark:text-gray-400">
             <span>✓ Free forever</span>
             <span>✓ No credit card required</span>
             <span>✓ Start creating in minutes</span>

@@ -10,9 +10,9 @@ const SignIn = lazy(() => import("../pages/auth/SignIn"));
 const ForgotPass = lazy(() => import("../pages/auth/ForgotPass"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 const Home = lazy(() => import("../pages/home/Home"));
-const Heroes = lazy(() => import("../pages/Landing/Heroes"));
 const PageError = lazy(() => import("../pages/ErrorPages/ErrorPage"));
 const Profile = lazy(() => import("../pages/userProfile/Profile"));
+const Heroes = lazy(() => import("../pages/Landing/Heroes"));
 const DynamicPostEditor = lazy(
   () => import("../pages/PostEditor/DynamicPostEditor")
 );
@@ -242,10 +242,9 @@ function Router() {
         />
 
         <Route path={ROUTES.SUGGESTIONS} element={<Suggestions />} />
-
-        {/* Catch-all route */}
-        <Route path="*" element={<PageError />} />
       </Route>
+      {/* Catch-all route */}
+      <Route path="*" element={<PageError />} />
     </Routes>
   );
 }

@@ -13,10 +13,10 @@ function Footer() {
       <div className="relative max-w-6xl mx-auto">
         {/* Main Footer Content */}
         <div className="text-center mb-12">
-          <h3 className="text-3xl sm:text-4xl font-bold mb-4 text-white bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+          <h3 className="text-xl sm:text-4xl font-bold mb-4 text-white bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
             Join the Creative Revolution
           </h3>
-          <p className="text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p className="text-gray-300 max-w-2xl mx-auto sm:text-lg text-sm leading-relaxed">
             Where ideas meet inspiration, and creativity knows no bounds.
           </p>
         </div>
@@ -60,8 +60,10 @@ function Footer() {
         {/* Quick Links */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 text-center">
           <div>
-            <h4 className="font-semibold text-white mb-3">Platform</h4>
-            <ul className="space-y-2 text-gray-400">
+            <h4 className="font-semibold text-white mb-3 sm:text-base text-sm">
+              Platform
+            </h4>
+            <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/features"
@@ -90,8 +92,10 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3">Community</h4>
-            <ul className="space-y-2 text-gray-400">
+            <h4 className="font-semibold text-white mb-3  sm:text-base text-sm">
+              Community
+            </h4>
+            <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/blog"
@@ -120,8 +124,10 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3">Support</h4>
-            <ul className="space-y-2 text-gray-400">
+            <h4 className="font-semibold text-white mb-3  sm:text-base text-sm">
+              Support
+            </h4>
+            <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/help"
@@ -142,8 +148,10 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3">Legal</h4>
-            <ul className="space-y-2 text-gray-400">
+            <h4 className="font-semibold text-white mb-3  sm:text-base text-sm">
+              Legal
+            </h4>
+            <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/privacy"
@@ -173,7 +181,7 @@ function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-700 pt-8">
+        <div className="border-t border-gray-700 pt-8  sm:text-base text-sm">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-center md:text-left">
               &copy; 2024 Spread. Empowering creators worldwide

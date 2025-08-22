@@ -82,13 +82,13 @@ const AIResponse = () => {
     };
   }, [postData?.title]);
   return (
-    <div className="flex items-center justify-center w-full my-16 border-inherit">
-      <div className="animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full overflow-hidden border-inherit">
+    <div className="flex items-start justify-center w-full h-screen overflow-auto border-inherit mb-20">
+      <div className="animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full border-inherit">
         {/* Header */}
         <header className="border-b border-inherit flex justify-between items-center p-4">
           {isAnalyzing ? (
             <h1 className="font-bold shimmer-effect dark:shimmer-effect-dark">
-              Analyzing post
+              Analyzing
             </h1>
           ) : (
             <h1 className="text-lg font-semibold tracking-wide">

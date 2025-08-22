@@ -14,7 +14,8 @@ function useAuthApi() {
       const result = await axiosInstance.get(`/auth/details`);
       return result.data;
     } catch (error) {
-      throw error.response || error;
+      console.error("Logout error:", error);
+      throw error.response || error; // normalize error
     }
   };
 
@@ -23,7 +24,8 @@ function useAuthApi() {
       const result = await axiosInstance.post(`/auth/signup`, signUpcofig);
       return result.data;
     } catch (error) {
-      throw error.response || error;
+      console.error("Logout error:", error);
+      throw error.response || error; // normalize error
     }
   };
 
@@ -32,7 +34,8 @@ function useAuthApi() {
       const result = await axiosInstance.post(`/auth/refresh-token`);
       return result.data;
     } catch (error) {
-      throw error.response || error;
+      console.error("Logout error:", error);
+      throw error.response || error; // normalize error
     }
   };
 
@@ -41,7 +44,8 @@ function useAuthApi() {
       const result = await axiosInstance.post(`/auth/forgotpassword`, email);
       return result.data;
     } catch (error) {
-      throw error.response;
+      console.error("Logout error:", error);
+      throw error.response || error; // normalize error
     }
   };
 
@@ -53,7 +57,8 @@ function useAuthApi() {
       );
       return result.data;
     } catch (error) {
-      throw error.response;
+      console.error("Logout error:", error);
+      throw error.response || error; // normalize error
     }
   };
 
@@ -62,8 +67,8 @@ function useAuthApi() {
       const result = await axiosInstance.delete(`/auth/logout`);
       return result.data;
     } catch (error) {
-      console.log({ error });
-      throw error;
+      console.error("Logout error:", error);
+      throw error.response || error; // normalize error
     }
   };
   return {

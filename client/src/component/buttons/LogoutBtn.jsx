@@ -1,16 +1,13 @@
-import React from "react";
-import { LuLogOut } from "react-icons/lu";
 import { useMutation } from "react-query";
 import { setIsLogin, setloginPop, setUser } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import SomthingWentWrong from "../Errors/SomethingWentWrong";
-import useAuthApi from "../../services/useAuthApi";
 import { useDispatch } from "react-redux";
-import LoaderScreen from "../loaders/loaderScreen";
 import useSocket from "../../hooks/useSocket";
 import useIcons from "../../hooks/useIcons";
-import LinkBtn from "../LinkBtn";
+
 import Ibutton from "./Ibutton";
+import { setToast } from "../../store/slices/uiSlice";
+import useAuthApi from "../../services/useAuthApi";
 
 function LogoutBtn({ className }) {
   const { socket, disconnectSocket } = useSocket();
@@ -21,23 +18,21 @@ function LogoutBtn({ className }) {
 
   const { mutate, isLoading } = useMutation({
     mutationFn: logout,
+
     onSuccess: () => {
       localStorage.removeItem("AccessToken"); //if it is stored in localStorage
       localStorage.removeItem("userAccount"); //if it is stored in localStorage
       dispatch(setIsLogin(false));
       dispatch(setUser(null));
       dispatch(setloginPop(true));
-      navigate("/");
+      navigate("/heroes");
       disconnectSocket();
     },
-    onError: () => {
-      <SomthingWentWrong />;
+    onError: (error) => {
+      console.error("Logout failed:", error);
+      dispatch(setToast({ message: "Logout failed:", type: "error" }));
     },
   });
-
-  if (isLoading) {
-    return <LoaderScreen message={"logging out..."} />;
-  }
   return (
     <Ibutton
       action={mutate}

@@ -1,31 +1,19 @@
-import React, { useEffect, lazy, useState, useMemo } from "react";
+import React, { useEffect, lazy, useState, useMemo, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import Router from "./router/Router";
-
+import LoaderScreen from "./component/loaders/loaderScreen";
+import ToastContainer from "./component/utilityComp/ToastContainer";
+import ConfirmationBox from "./component/utilityComp/ConfirmationBox";
+import ImageInBigFrame from "./component/utilityComp/ImageInBigFrame";
+import NotificationBox from "./component/notification/NotificationBox";
 // Lazy load components with better error boundaries
-
-const ConfirmationBox = lazy(
-  () => import("./component/utilityComp/ConfirmationBox")
-);
-
-const ToastContainer = lazy(
-  () => import("./component/utilityComp/ToastContainer")
-);
 
 const WelcomeLoginBox = lazy(
   () => import("./component/utilityComp/WelcomeLoginBox")
-);
-
-const ImageInBigFrame = lazy(
-  () => import("./component/utilityComp/ImageInBigFrame")
-);
-
-const NotificationBox = lazy(
-  () => import("./component/notification/NotificationBox")
 );
 // Constants for better maintainability
 const THEME_STORAGE_KEY = "ThemeMode";
@@ -96,12 +84,17 @@ function App() {
 
   return (
     <>
-      <NotificationBox />
-      <PersistentUser />
-      <ConfirmationBox />
-      {loginPop && <WelcomeLoginBox />}
       <ToastContainer />
+      <NotificationBox />
+      <ConfirmationBox />
       <ImageInBigFrame />
+
+      <PersistentUser />
+      {loginPop && (
+        <Suspense fallback={<LoaderScreen />}>
+          <WelcomeLoginBox />
+        </Suspense>
+      )}
       <Router />
     </>
   );

@@ -146,9 +146,9 @@ function Home() {
 
   // Render loading/end state
   const renderListFooter = () => (
-    <div className="flex items-center justify-center w-full h-32 p-5">
+    <div className="flex items-center justify-center w-full  sm:pb-16 pb-20">
       {isFetchingNextPage && (
-        <Spinner className="w-10 p-1 bg-black dark:bg-white" />
+        <Spinner className="w-10 my-8 p-1 bg-black dark:bg-white" />
       )}
 
       {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
@@ -164,9 +164,9 @@ function Home() {
 
   return (
     <>
-      <div className="flex flex-col w-full h-full border-inherit  pb-20">
+      <div className="relative flex flex-col w-full h-full border-inherit mt-10  ">
         <nav
-          className="sticky top-0 z-10 w-full border-b border-inherit bg-gray-700/0 backdrop-blur-[20px]"
+          className="fixed top-12  z-10 w-full border-b border-inherit bg-gray-700/0 backdrop-blur-[20px]"
           role="navigation"
           aria-label="Feed navigation"
         >
@@ -200,7 +200,7 @@ function Home() {
       {!isDeviceSize && (
         <Aside
           handleTopicClick={handleTopicClick}
-          className=" sticky top-0 flex flex-col gap-5 p-6 text-xs border-inherit border-l w-1/2"
+          className=" sticky top-0 z-20 bg-light dark:bg-dark flex flex-col gap-5 p-6 text-xs border-inherit border-l w-1/2"
         />
       )}
     </>

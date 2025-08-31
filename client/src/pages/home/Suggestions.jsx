@@ -77,23 +77,23 @@ function Suggestions() {
   );
 
   // Empty state component
-  // const EmptyState = () => (
-  //   <div className="flex flex-col items-center justify-center py-12 text-center">
-  //     <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-  //       <Users className="w-8 h-8 text-gray-400" />
-  //     </div>
-  //     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-  //       No suggestions available
-  //     </h3>
-  //     <p className="text-gray-600 dark:text-gray-400 max-w-sm">
-  //       We couldn't find any people to suggest right now. Check back later for
-  //       new recommendations.
-  //     </p>
-  //   </div>
-  // );
+  const EmptyState = () => (
+    <div className="flex flex-col items-center justify-center py-12 text-center">
+      <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+        <Users className="w-8 h-8 text-gray-400" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        No suggestions available
+      </h3>
+      <p className="text-gray-600 dark:text-gray-400 max-w-sm">
+        We couldn't find any people to suggest right now. Check back later for
+        new recommendations.
+      </p>
+    </div>
+  );
 
   return (
-    <div className="h-screen bg-light dark:bg-dark w-full overflow-scroll border-inherit">
+    <div className="h-screen bg-light dark:bg-dark w-full overflow-scroll border-inherit ">
       {/* Container with better responsive breakpoints */}
       <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 border-inherit">
         {/* Header Section - Improved sticky behavior and responsive design */}
@@ -115,7 +115,7 @@ function Suggestions() {
             </div>
 
             {/* Navigation tabs - Better mobile design */}
-            <nav className="flex items-center">
+            <nav className="flex items-center border-inherit">
               <div className="flex items-center gap-2  p-1">
                 <NavLink
                   to="/suggestions/find_peoples"
@@ -175,7 +175,7 @@ function Suggestions() {
           {isLoading ? (
             <ProfileListItemLoadingSkeleton count={10} />
           ) : (
-            <ul className="space-y-3 border-inherit">
+            <ul className="space-y-3 border-inherit pb-24">
               {peoples.map((person, idx, arr) => {
                 const { userImageurl } = userImageSrc(person);
                 return (
@@ -184,7 +184,7 @@ function Suggestions() {
                     ref={idx === arr.length - 1 ? lastItemRef : null}
                     className="flex items-center justify-between bg-light dark:bg-dark rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md dark:shadow-gray-900/10 border border-inherit transition-all "
                   >
-                    <div className="flex items-center justify-start gap-5 w-full">
+                    <div className="flex items-center justify-start gap-5 w-full border-inherit">
                       <ProfileImage
                         className={`w-8 h-8 rounded-full transition-opacity duration-200`}
                         image={person && userImageurl}

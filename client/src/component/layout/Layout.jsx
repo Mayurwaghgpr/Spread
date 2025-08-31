@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useSearchParams } from "react-router-dom";
 import MainNavBar from "../header/MainNavBar";
@@ -8,13 +8,12 @@ import LoaderScreen from "../loaders/loaderScreen";
 import { useQuery } from "react-query";
 import usePublicApis from "../../services/publicApis";
 import useDeviceSize from "../../hooks/useDeviceSize";
-import Aside from "./Aside";
+
 import {
   setLoadingHome,
   setTopiclist,
   setUserSuggestions,
 } from "../../store/slices/commonSlice";
-import { setIsLogin } from "../../store/slices/authSlice";
 
 function Layout() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,20 +63,21 @@ function Layout() {
 
   return (
     <main className="relative flex flex-col h-screen max-h-screen bg-inherit border-inherit overflow-hidden">
-      {/* Navigation Bar */}
-      {/* {showNavBar && <MainNavBar />} */}
-
       {/* Main Content Area */}
-      <div className="flex flex-1 w-full h-full border-inherit  lg:pl-10">
+      <div className="flex flex-1 relative w-full h-full border-inherit">
         {/* Sidebar */}
         {pathChecks.showSidebar && <SideBar />}
 
         {/* Main Content */}
-        <section className="flex border-inherit w-full h-full overflow-y-auto">
-          <Suspense fallback={<LoaderScreen />}>
-            <Outlet />
-          </Suspense>
-        </section>
+        <div className="w-full border-inherit">
+          {/* Navigation Bar */}
+          {showNavBar && <MainNavBar />}
+          <section className="  flex border-inherit w-full h-full overflow-y-auto">
+            <Suspense fallback={<LoaderScreen />}>
+              <Outlet />
+            </Suspense>
+          </section>
+        </div>
 
         {/* TaskBar - Only on desktop, positioned as sidebar */}
         {showTaskBar && <TaskBar />}

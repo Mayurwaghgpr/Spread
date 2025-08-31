@@ -58,22 +58,21 @@ function MainNavBar() {
   }, [location.pathname, userProfile?.id, user?.id]);
 
   return (
-    <header className="  z-50 px-4 sm:px-8 lg:px-20 py-1 bg-light dark:bg-dark backdrop-blur-xl border-b border-inherit ">
-      <nav className="max-w-7xl mx-auto border-inherit">
+    <header className=" sticky  z-10 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl border-b border-inherit ">
+      <nav className=" border-inherit">
         <div className="flex items-center justify-between border-inherit">
           {/* Logo Section */}
-          <div
-            onClick={() => navigate("/")}
-            className="flex items-center gap-3 cursor-pointer group transition-all duration-200 hover:opacity-80"
-          >
-            <ProfileImage
-              image={spreadLogo}
-              className="w-10 h-10 scale-110 transition-all duration-200"
-              alt="Spread Logo"
-            />
-            <span className="sm:block hidden text-xl font-bold bg-gradient-to-r from-gray-600 to-gray-400 dark:from-gray-700 dark:to-gray-400 bg-clip-text text-transparent">
-              Spread
-            </span>
+          <div className="flex items-center gap-3 cursor-pointer group transition-all duration-200 hover:opacity-80">
+            {/* <button onClick={() => navigate("/")}>
+              <ProfileImage
+                image={spreadLogo}
+                className="w-10 h-10 scale-110 transition-all duration-200"
+                alt="Spread Logo"
+              />
+              <span className="sm:block hidden text-xl font-bold bg-gradient-to-r from-gray-600 to-gray-400 dark:from-gray-700 dark:to-gray-400 bg-clip-text text-transparent">
+                Spread
+              </span>
+            </button> */}
           </div>
 
           {/* Right Section */}

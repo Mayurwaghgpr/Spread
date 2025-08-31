@@ -163,7 +163,7 @@ function CommentSection() {
   return (
     <section
       onClick={handleCloseModal}
-      className="flex justify-end items-end lg:sticky lg:top-0 fixed top-0 right-0 left-0 w-fit animate-fedin.2s lg:h-[100vh] h-full sm:z-0 z-30"
+      className="flex justify-end items-end lg:sticky lg:top-0 fixed top-0 right-0 left-0 w-fit animate-fedin.2s lg:h- h-full sm:z-0 z-30 pb-16 pt-5"
       role="dialog"
       aria-label="Comments modal"
     >

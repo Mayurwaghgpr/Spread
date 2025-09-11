@@ -95,7 +95,7 @@ function MessageInputSection({ conversationId, conversationData }) {
   }, []);
 
   return (
-    <div className=" sticky bottom-0 z-20 flex justify-center items-center col-span-full w-full h-fit border-t sm:px-5 px-2 pt-2 pb-5 border-inherit bg-inherit">
+    <div className=" sticky bottom-0 z-20 bg-light dark:bg-dark flex justify-center items-center col-span-full w-full h-fit border-t sm:px-5 px-2 pt-2 pb-5 border-inherit">
       <div className="relative flex justify-center items-baseline gap-3 p-2 w-4/5 rounded-lg bg-white border dark:bg-opacity-10 border-inherit">
         <div className="flex justify-start items-center sm:gap-3 w-full border-inherit">
           <div className="flex justify-start items-center gap-2 w-fit border-inherit">

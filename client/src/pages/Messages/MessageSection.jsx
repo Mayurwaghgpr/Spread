@@ -180,7 +180,7 @@ function MessageSection() {
             image={conversationData.image}
           />
           <div className="flex flex-col items-start justify-center gap-1 overflow-hidden">
-            <h1 className="truncate font-semibold">
+            <h1 className="truncate font-medium text-sm">
               {conversationData.groupName}
             </h1>
             {conversationData.members.length > 0 &&

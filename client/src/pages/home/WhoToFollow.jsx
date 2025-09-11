@@ -48,11 +48,11 @@ function WhoToFollow({ className }) {
                           {person?.displayName || "Unknown User"}
                         </Heading>
                       </Link>
-                      <UserPopover
+                      {/* <UserPopover
                         // ref={}
-                        className="absolute z-40 left-0 right-0 bottom-10 min-w-fit p-3 text-nowrap bg-light dark:bg-dark opacity-0 pointer-events-none group-hover:pointer-events-auto  transition-all duration-300 delay-500 group-hover:opacity-100 text-red-600"
+                        className="absolute z-50 left-0 right-0 bottom-10 min-w-fit p-3 text-nowrap bg-light dark:bg-dark opacity-0 pointer-events-none group-hover:pointer-events-auto  transition-all duration-300 delay-500 group-hover:opacity-100 text-red-600"
                         person={person}
-                      />
+                      /> */}
                     </div>
                     {/* Username */}
                     <SubHeading className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">

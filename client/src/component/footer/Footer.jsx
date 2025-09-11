@@ -5,7 +5,7 @@ function Footer() {
   const icons = useIcons();
 
   return (
-    <footer className="relative bg-gradient-to-r from-black via-gray-900 to-black dark:from-gray-900 dark:via-black dark:to-gray-900 py-16 px-4 overflow-hidden">
+    <footer className="relative bg-gradient-to-r from-transparent via-gray-200/40 to-transparent dark:from-transparent dark:via-gray-900 dark:to-transparent py-16 px-4 overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.05)_0%,transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.05)_0%,transparent_50%)] dark:bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.03)_0%,transparent_50%)]"></div>
@@ -13,10 +13,10 @@ function Footer() {
       <div className="relative max-w-6xl mx-auto">
         {/* Main Footer Content */}
         <div className="text-center mb-12">
-          <h3 className="text-xl sm:text-4xl font-bold mb-4 text-white bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+          <h3 className="text-xl sm:text-4xl font-bold mb-4  bg-gradient-to-r from-white to-gray-200 bg-clip-text ">
             Join the Creative Revolution
           </h3>
-          <p className="text-gray-300 max-w-2xl mx-auto sm:text-lg text-sm leading-relaxed">
+          <p className=" max-w-2xl mx-auto sm:text-lg text-sm leading-relaxed">
             Where ideas meet inspiration, and creativity knows no bounds.
           </p>
         </div>
@@ -29,7 +29,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span className="text-white group-hover:text-gray-200 text-xl transition-colors duration-200">
+            <span className=" group-hover:text-gray-200 text-xl transition-colors duration-200">
               {icons["github"]}
             </span>
           </Link>
@@ -40,7 +40,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span className="text-white group-hover:text-gray-200 text-xl transition-colors duration-200">
+            <span className=" group-hover:text-gray-200 text-xl transition-colors duration-200">
               {icons["linkedLine"]}
             </span>
           </Link>
@@ -51,7 +51,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span className="text-white group-hover:text-gray-200 text-xl transition-colors duration-200">
+            <span className=" group-hover:text-gray-200 text-xl transition-colors duration-200">
               {icons["XCom"]}
             </span>
           </Link>
@@ -60,14 +60,14 @@ function Footer() {
         {/* Quick Links */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 text-center">
           <div>
-            <h4 className="font-semibold text-white mb-3 sm:text-base text-sm">
+            <h4 className="font-semibold  mb-3 sm:text-base text-sm">
               Platform
             </h4>
             <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/features"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Features
                 </Link>
@@ -75,7 +75,7 @@ function Footer() {
               {/* <li>
                 <Link
                   to="/pricing"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Pricing
                 </Link>
@@ -83,7 +83,7 @@ function Footer() {
               <li>
                 <Link
                   to="/creators"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   For Creators
                 </Link>
@@ -92,14 +92,14 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3  sm:text-base text-sm">
+            <h4 className="font-semibold  mb-3  sm:text-base text-sm">
               Community
             </h4>
             <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/blog"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Blog
                 </Link>
@@ -107,7 +107,7 @@ function Footer() {
               <li>
                 <Link
                   to="/events"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Events
                 </Link>
@@ -115,7 +115,7 @@ function Footer() {
               <li>
                 <Link
                   to="/showcase"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Showcase
                 </Link>
@@ -124,14 +124,14 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3  sm:text-base text-sm">
+            <h4 className="font-semibold  mb-3  sm:text-base text-sm">
               Support
             </h4>
             <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/help"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Help Center
                 </Link>
@@ -139,7 +139,7 @@ function Footer() {
               <li>
                 <Link
                   to="/contact"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Contact
                 </Link>
@@ -148,14 +148,12 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3  sm:text-base text-sm">
-              Legal
-            </h4>
+            <h4 className="font-semibold  mb-3  sm:text-base text-sm">Legal</h4>
             <ul className="space-y-2 text-gray-400 sm:text-sm text-xs">
               <li>
                 <Link
                   to="/privacy"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Privacy
                 </Link>
@@ -163,7 +161,7 @@ function Footer() {
               <li>
                 <Link
                   to="/terms"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Terms
                 </Link>
@@ -171,7 +169,7 @@ function Footer() {
               <li>
                 <Link
                   to="/cookies"
-                  className="hover:text-white transition-colors duration-200"
+                  className="hover: transition-colors duration-200"
                 >
                   Cookies
                 </Link>
@@ -195,7 +193,7 @@ function Footer() {
                 to="https://github.com/Mayurwaghgpr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-gray-200 font-semibold transition-colors duration-200"
+                className=" hover:text-gray-200 font-semibold transition-colors duration-200"
               >
                 Mayur Wagh
               </Link>
@@ -205,7 +203,7 @@ function Footer() {
       </div>
 
       {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent animate-fedin2s"></div>
     </footer>
   );
 }

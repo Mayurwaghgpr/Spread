@@ -22,6 +22,7 @@ import {
   BsPen,
   BsPenFill,
   BsPeople,
+  BsPerson,
   BsSendFill,
   BsThreeDotsVertical,
   BsTwitterX,
@@ -30,6 +31,8 @@ import {
   MdCelebration,
   MdDone,
   MdErrorOutline,
+  MdHandshake,
+  MdOutlineDeveloperMode,
   MdOutlineKeyboardDoubleArrowLeft,
   MdOutlineKeyboardDoubleArrowRight,
 } from "react-icons/md";
@@ -37,6 +40,7 @@ import {
   IoArrowDown,
   IoAttach,
   IoCallOutline,
+  IoEarth,
   IoHappyOutline,
   IoHomeOutline,
   IoHomeSharp,
@@ -50,12 +54,19 @@ import {
 import {
   PiHandsClappingFill,
   PiImageThin,
+  PiPerson,
   PiPlus,
   PiTrashSimpleLight,
 } from "react-icons/pi";
 import { MdAutoAwesome } from "react-icons/md";
 
-import { FaCode, FaHandHoldingHeart, FaRegComment } from "react-icons/fa6";
+import {
+  FaCode,
+  FaCreativeCommons,
+  FaHandHoldingHeart,
+  FaHandshake,
+  FaRegComment,
+} from "react-icons/fa6";
 import {
   RiQuillPenFill,
   RiQuillPenLine,
@@ -68,8 +79,17 @@ import { BiCalendarAlt, BiRepost, BiShare, BiTrash } from "react-icons/bi";
 import { GrGoogle, GrSystem } from "react-icons/gr";
 import { IoCloseOutline } from "react-icons/io5";
 import { AiOutlineMessage, AiOutlineSend } from "react-icons/ai";
-import { LuGithub, LuLogOut, LuMonitorSmartphone } from "react-icons/lu";
-import { TbMessageCircle, TbMessageCircleFilled } from "react-icons/tb";
+import {
+  LuGithub,
+  LuHandshake,
+  LuLogOut,
+  LuMonitorSmartphone,
+} from "react-icons/lu";
+import {
+  TbMessageCircle,
+  TbMessageCircleFilled,
+  TbTrendingUp,
+} from "react-icons/tb";
 import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
@@ -99,7 +119,7 @@ function useIcons() {
     close: <IoCloseOutline />,
     code1: <FaCode />,
     comment: <FaRegComment />,
-
+    creative: <MdOutlineDeveloperMode />,
     // D
     desktopO: <LuMonitorSmartphone />,
     done: <MdDone color="green" />,
@@ -110,7 +130,7 @@ function useIcons() {
     doubleArrowL: <MdOutlineKeyboardDoubleArrowLeft />,
     // E
     error: <MdErrorOutline color="red" />,
-
+    earth: <IoEarth />,
     // F
     follow: <RiUserFollowLine />,
     fetherFi: <RiQuillPenFill />,
@@ -121,6 +141,7 @@ function useIcons() {
     glitter: <WiStars className="" />,
     github: <LuGithub />,
     google: <GrGoogle />,
+    grow: <TbTrendingUp />,
 
     // H
     helpfull: <FaHandHoldingHeart />,
@@ -129,6 +150,7 @@ function useIcons() {
     redHeartFi: <BsHeartFill color="red" />,
     heartFi: <BsHeartFill className="text-gray-600" />,
     heartO: <BsHeart />,
+    handshack: <LuHandshake />,
 
     // I
     image1: <PiImageThin />,
@@ -169,6 +191,7 @@ function useIcons() {
     people: <BsPeople />,
     pin: <TiPin />,
     plus: <PiPlus />,
+    person: <BsPerson />,
 
     // Q
     // Placeholder for future grouping

@@ -177,19 +177,19 @@ function ProfileEditor() {
   const hasChanges = JSON.stringify(newInfo) !== JSON.stringify(user);
 
   return (
-    <div className=" mx-auto h-full pb-20">
+    <div className=" mx-auto h-full sm:my-20 my-10 text-sm px-5">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           Edit Profile
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-600 text-sm dark:text-gray-400">
           Update your personal information and profile settings
         </p>
       </div>
 
       {/* Profile Image Section */}
-      <div className=" p-8">
+      <div className=" ">
         <div className="flex flex-col sm:flex-row items-center gap-8">
           {/* Profile Image */}
           <div className="relative group">
@@ -201,7 +201,9 @@ function ProfileEditor() {
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                <Camera className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                <span className=" text-white opacity-0 group-hover:opacity-100 transition-all text-2xl duration-300">
+                  {icons["pCamera"]}
+                </span>
               </div>
             </div>
 
@@ -374,7 +376,7 @@ function ProfileEditor() {
       </div>
 
       {/* Footer with Save Button */}
-      <div className="bg-gray-50 dark:bg-gray-700 px-8 py-6 border-t  border-gray-200 dark:border-gray-600 ">
+      <div className=" px-8 py-6 border-t  border-gray-200 dark:border-gray-600 ">
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {hasChanges ? (
@@ -393,7 +395,7 @@ function ProfileEditor() {
           <button
             disabled={isUpdating || isError || !hasChanges}
             onClick={handleSubmit}
-            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg flex items-center gap-2 min-w-32 justify-center"
+            className="px-8 py-3 bg-gray-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg flex items-center gap-2 min-w-32 justify-center"
             aria-busy={isUpdating}
           >
             {isUpdating ? (
@@ -402,10 +404,7 @@ function ProfileEditor() {
                 Saving...
               </>
             ) : (
-              <>
-                <CheckCircle className="w-4 h-4" />
-                Save Changes
-              </>
+              <>Save Changes</>
             )}
           </button>
         </div>

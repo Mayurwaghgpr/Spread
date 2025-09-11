@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import usePublicApis from "../../services/publicApis";
@@ -47,7 +47,9 @@ function Follow({ className, person }) {
   // Don't render if it's the current user
   if (person?.id === user?.id) {
     return (
-      <button className={`${className} font-semibold border border-inherit`}>
+      <button
+        className={`${className} py-4 font-semibold border border-inherit`}
+      >
         You
       </button>
     );
@@ -57,20 +59,10 @@ function Follow({ className, person }) {
   if (isLoading) {
     return (
       <div
-        className={`${className} py-4 text-white dark:text-black bg-black dark:bg-white hover:bg-black/60 dark:hover:bg-white/60 rounded-full transition-all duration-200 hover:scale-105 `}
+        className={`${className} p-2 text-white dark:text-black bg-black dark:bg-white hover:bg-black/60 dark:hover:bg-white/60 rounded-full transition-all duration-200 hover:scale-105 `}
       >
         <div className="dotloader"></div>
       </div>
-    );
-  }
-
-  // Skeleton loading state when person data is not available
-  if (!person?.id && isLoading) {
-    return (
-      <button
-        className={`${className} dark:bg-white bg-black bg-opacity-30 dark:bg-opacity-30 animate-pulse p-4 px-5 w-20 rounded-full`}
-        disabled
-      />
     );
   }
 

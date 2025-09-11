@@ -15,7 +15,7 @@ const UserPopover = forwardRef(
       return (
         <div
           ref={ref}
-          className={`${className} bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 animate-pulse`}
+          className={`${className} z-50 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 animate-pulse`}
         >
           <div className="flex items-center gap-3">
             <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
@@ -31,7 +31,7 @@ const UserPopover = forwardRef(
     return (
       <div
         ref={ref}
-        className={`${className} z-20  rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-light dark:bg-dark w-full`}
+        className={`${className} z-50  rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-light dark:bg-dark w-full`}
         role="dialog"
         aria-label={`${person?.username}'s profile information`}
         style={styles?.popper}

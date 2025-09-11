@@ -52,6 +52,14 @@ function Suggestions() {
     () => peopleData?.pages.flatMap((page) => page) || [],
     [peopleData?.pages]
   );
+  // Define links array
+  const navLinks = [
+    { to: "/suggestions/find_peoples", label: "People", icon: Users },
+    // { to: "/suggestions/publication", label: "Publication", icon: Users },
+  ];
+
+  const navLinkBase =
+    "text-xs font-medium transition-all duration-200 border-b rounded-br-xl px-4 py-1 gap-5  before:border-r before:absolute before:w-8 before:h-8 before:-right-[12px] before:-top-4 before:rotate-[36deg] before:-z-10";
 
   // Error state component
   const ErrorState = () => (
@@ -76,83 +84,57 @@ function Suggestions() {
     </div>
   );
 
-  // Empty state component
-  const EmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-12 text-center">
-      <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-        <Users className="w-8 h-8 text-gray-400" />
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-        No suggestions available
-      </h3>
-      <p className="text-gray-600 dark:text-gray-400 max-w-sm">
-        We couldn't find any people to suggest right now. Check back later for
-        new recommendations.
-      </p>
-    </div>
-  );
-
   return (
     <div className="h-screen bg-light dark:bg-dark w-full overflow-scroll border-inherit ">
       {/* Container with better responsive breakpoints */}
-      <div className="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 border-inherit">
-        {/* Header Section - Improved sticky behavior and responsive design */}
-        <div className="sticky top-0 z-20 bg-light/80 dark:bg-dark/80 backdrop-blur-md border-b dark:border-gray-800 py-4 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            {/* Title with icon */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-yellow-300 to-amber-600 rounded-xl flex items-center justify-center">
-                <Users className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
-                  Discover People
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 hidden sm:block">
-                  Find and connect with interesting people
-                </p>
+      <div className="max-w-7xl h-full mx-auto border-inherit">
+        <div className="mb-6 border-inherit">
+          {/* Header Section - Improved sticky behavior and responsive design */}
+          <div className="sticky top-0 z-20 bg-light/80 dark:bg-dark/80 backdrop-blur-md border-b dark:border-gray-800 py-4 px-6 ">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              {/* Title with icon */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-yellow-300 to-amber-600 rounded-xl flex items-center justify-center">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                    Discover People
+                  </h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 hidden sm:block">
+                    Find and connect with interesting people
+                  </p>
+                </div>
               </div>
             </div>
-
-            {/* Navigation tabs - Better mobile design */}
-            <nav className="flex items-center border-inherit">
-              <div className="flex items-center gap-2  p-1">
+          </div>
+          {/* Navigation tabs - Better mobile design */}
+          <nav className="flex items-center w-fit border-inherit">
+            {navLinks.map(({ to, label, icon: Icon }) => (
+              <div
+                key={to}
+                className="relative flex z-10 items-center border-inherit"
+              >
                 <NavLink
-                  to="/suggestions/find_peoples"
+                  to={to}
                   className={({ isActive }) =>
-                    `text-sm font-medium transition-all duration-200 ${
-                      isActive || location.pathname.includes("find_peoples")
-                        ? "border-b pb-1"
+                    `${navLinkBase} ${
+                      isActive ||
+                      location.pathname.includes(to.split("/").pop())
+                        ? ""
                         : ""
                     }`
                   }
                 >
                   <span className="flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    <span className="hidden sm:inline">People</span>
+                    <Icon className="w-4 h-4" />
+                    <span className="hidden sm:inline">{label}</span>
                   </span>
                 </NavLink>
-                {/* <NavLink
-                  to="/suggestions/publication"
-                  className={({ isActive }) =>
-                    `text-sm font-medium transition-all duration-200 ${
-                      isActive || location.pathname.includes("find_peoples")
-                        ? "border-b pb-1"
-                        : ""
-                    }`
-                  }
-                >
-                  <span className="flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    <span className="hidden sm:inline">Publication</span>
-                  </span>
-                </NavLink> */}
-                {/* Add more nav items here if needed */}
               </div>
-            </nav>
-          </div>
+            ))}
+          </nav>
         </div>
-
         {/* Main Content Area */}
         <div className="max-w-4xl mx-auto border-inherit">
           {/* Stats/Info Bar */}

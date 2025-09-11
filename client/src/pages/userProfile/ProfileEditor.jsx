@@ -17,18 +17,7 @@ import CommonInput from "../../component/inputComponents/CommonInput";
 import Selector from "../../component/utilityComp/Selector";
 import Spinner from "../../component/loaders/Spinner";
 import useIcons from "../../hooks/useIcons";
-import FedInBtn from "../../component/buttons/FedInBtn";
-import {
-  User,
-  Camera,
-  Trash2,
-  CheckCircle,
-  AlertCircle,
-  Edit3,
-} from "lucide-react";
-
-// Import profile icon with a consistent approach
-import profileIcon from "/ProfOutlook.png";
+import { Trash2, CheckCircle, AlertCircle, Edit3 } from "lucide-react";
 
 function ProfileEditor() {
   const dispatch = useDispatch();
@@ -36,7 +25,7 @@ function ProfileEditor() {
   const { editUserProfile, searchUsername } = useProfileApi();
   const uNameRef = useRef();
   const [newInfo, setNewInfo] = useState();
-  const [profileImage, setProfileImage] = useState(profileIcon);
+  const [profileImage, setProfileImage] = useState();
 
   const { userImageurl, IsUserFromOAth } = userImageSrc(newInfo);
   const icons = useIcons();

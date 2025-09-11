@@ -8,7 +8,7 @@ const userImageSrc = (user) => {
       IsUserFromOAth = true;
     } else if (user.userImage.includes("cloudinary")) {
       userImageurl = user.userImage;
-    }else{
+    } else {
       userImageurl = `${import.meta.env.VITE_BASE_URL}/${user.userImage.replace(/^\//, "")}`;
     }
   }

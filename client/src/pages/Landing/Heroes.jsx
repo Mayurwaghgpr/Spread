@@ -87,7 +87,7 @@ function Heroes() {
         </div>{" "}
         <div className=" flex justify-center items-center text-sm  gap-5">
           <ThemeBtn
-            className=" text-lg  rounded-full p-2 bg-black/30 "
+            className=" text-lg  rounded-full p-2 bg-black/30 text-white  "
             Modes={Modes}
           />
           <Link

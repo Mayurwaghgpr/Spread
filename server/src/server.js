@@ -1,0 +1,22 @@
+import redisClient from "./utils/redisClient.js";
+
+import db from "./config/database.js";
+import dotenv from "dotenv";
+import { server } from "./app.js";
+dotenv.config();
+const port = process.env.PORT || 3000;
+
+// Start the server after DB & Redis setup
+db.sync()
+  .then(async () => {
+    await redisClient.connect();
+    console.log("Redis client connected.");
+    server.listen(port, () => {
+      console.log(`API is running at http://localhost:${port}`);
+    });
+    console.log("Database connected and synchronized successfully.");
+  })
+  .catch((error) => {
+    console.error("Database connection error:", error);
+    process.exit(1);
+  });

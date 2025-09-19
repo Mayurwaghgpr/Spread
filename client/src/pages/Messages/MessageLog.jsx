@@ -132,7 +132,7 @@ function MessageLog() {
         ))}
         {isLoading && (
           <div className="flex justify-center items-center w-full h-full ">
-            <Spinner className={"w-10 h-10 bg-black p-1 dark:bg-white"} />
+            <Spinner className={"w-5 h-5 bg-black p-0.5 dark:bg-white"} />
           </div>
         )}
       </main>

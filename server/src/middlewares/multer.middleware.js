@@ -1,7 +1,6 @@
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
-import fs from "fs";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -12,8 +11,6 @@ const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // console.log(__filename)
-    console.log({ file });
     if (file.fieldname === "NewImageFile") {
       cb(null, path.join(__dirname, "../images/userImages"));
     } else {

@@ -123,10 +123,8 @@ export const getPostPreview = async (req, res, next) => {
     // Checking Cache
     const cachedPostData = await redisClient.get(cacheKey);
     if (cachedPostData !== null) {
-      console.log("cach hit");
       return res.status(200).json(JSON.parse(cachedPostData)); // Send cached data
     }
-    console.log("cach miss");
 
     // Fetch posts from DB if not in redis cache
     const posts = await Post.findAll({
@@ -184,20 +182,15 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
     // Try to fetch from Redis cache
     const cached = await redisClient.get(cacheKey);
     if (cached) {
-      console.log("cache hit");
       return res.status(200).json(JSON.parse(cached));
     }
-
-    console.log("cache miss");
 
     const followCacheKey = `user_followings:${currentUserId}`;
     const followedCached = await redisClient.get(followCacheKey);
 
     if (followedCached) {
-      console.log("following cache hit");
       followedIds = JSON.parse(followedCached);
     } else {
-      console.log("following cache miss");
       //  Get followed user IDs
       const followedUsers = await Follow.findAll({
         where: { followerId: currentUserId },
@@ -267,14 +260,12 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
 export const getPostView = async (req, res, next) => {
   const id = req.params.id;
 
-  // console.log("first")
   try {
     const cachedData = await redisClient.get(id);
     if (cachedData !== null) {
-      console.log("cach hit");
       return res.status(200).json(JSON.parse(cachedData));
     }
-    console.log("cach miss");
+
     const post = await Post.findOne({
       where: { id },
       include: [

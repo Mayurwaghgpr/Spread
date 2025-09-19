@@ -36,7 +36,6 @@ export const createGroupConversation = async (req, res, next) => {
         },
       }
     );
-    console.log(JSON.parse(JSON.stringify(newGroupConversation)));
     res
       .status(201)
       .json({ message: "Group created successfully", newGroupConversation });

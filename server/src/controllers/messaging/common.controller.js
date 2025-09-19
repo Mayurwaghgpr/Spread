@@ -15,7 +15,6 @@ export const getConversationsByUserId = async (req, res, next) => {
     const cachedConvData = await redisClient.get(cacheKey);
 
     if (cachedConvData !== null) {
-      console.log("cach hit");
       return res.status(200).json(JSON.parse(cachedConvData)); // Send cached data
     }
 
@@ -69,7 +68,6 @@ export const getMembers = async (req, res, next) => {
     const cacheKey = `Members_Log_${lastTimestamp}_${userId}_${limit}`;
     const cachedMemberData = await redisClient.get(cacheKey);
     if (cachedMemberData !== null) {
-      console.log("cach hit");
       return res.status(200).json(JSON.parse(cachedMemberData)); // Send cached data
     }
     const members = await User.findAll({

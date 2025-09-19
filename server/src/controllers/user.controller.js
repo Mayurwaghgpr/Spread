@@ -17,14 +17,10 @@ export const getUserProfile = async (req, res, next) => {
   try {
     const cachedUserData = await redisClient.get(id);
     if (cachedUserData !== null) {
-      console.log("cach hit");
       return res.status(200).json(JSON.parse(cachedUserData));
     }
 
-    console.log("cach miss");
-
     const userInfo = await fetchProfile({ id });
-    // console.log("dsds",userInfo)
 
     if (userInfo) {
       await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));

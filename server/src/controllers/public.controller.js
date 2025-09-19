@@ -58,7 +58,7 @@ export const getPeoples = async (req, res, next) => {
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   const currentUserId = req.authUser.id;
   const searchQuery = req.query.q || "";
-  console.log("peoples");
+
   try {
     // const cacheKey = `find_peoples_${currentUserId}_${searchQuery}_${lastTimestamp}_${limit}`;
 
@@ -114,7 +114,6 @@ export const searchData = async (req, res, next) => {
   try {
     const cachedSearchData = await redisClient.get(searchQuery);
     if (cachedSearchData !== null) {
-      console.log("cach hit");
       return res
         .status(200)
         .json({ key: searchQuery, data: JSON.parse(cachedSearchData) }); // Send cached data
@@ -169,7 +168,6 @@ export const getAllUser = async (req, res, next) => {
     // Checking Cache
     const cachedData = await redisClient.get(cacheKey);
     if (cachedData !== null) {
-      console.log("cach hit");
       return res.status(200).json(JSON.parse(cachedData)); // Send cached data
     }
     const users = await User.findAll({
@@ -198,7 +196,6 @@ export const LikePost = async (req, res, next) => {
       return res.status(400).json({ message: "postId is required" });
     }
     const cachedData = JSON.parse(await redisClient.get(postId));
-    console.log({ cachedData });
     // Check if the like already exists
     const existingLike = await Likes.findOne({ where: { likedBy, postId } });
 

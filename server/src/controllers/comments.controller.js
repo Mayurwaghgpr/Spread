@@ -11,7 +11,6 @@ import { EXPIRATION } from "../config/constants.js";
 export const createComment = async (req, res, next) => {
   const userId = req.authUser.id;
   const { postId, replyTo, content, topCommentId } = req.body;
-  console.log(postId, replyTo, content, topCommentId, userId);
 
   try {
     const post = JSON.parse(await redisClient.get(postId));
@@ -146,7 +145,6 @@ export const getCommentReply = async (req, res, next) => {
       limit,
       offset: (page - 1) * limit,
     });
-    console.log(totalPosts, replys);
     res.status(200).json({
       comments: replys,
       meta: {

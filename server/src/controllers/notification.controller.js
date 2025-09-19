@@ -7,7 +7,6 @@ export const getNotifications = async (req, res, next) => {
     const cacheKey = `notifications:${req.authUser.id}`;
     const cachedNotifications = await redisClient.get(cacheKey);
     if (cachedNotifications) {
-      console.log("Returning cached notifications");
       return res.status(200).json(JSON.parse(cachedNotifications));
     }
     const notifications = await Notify.findAll({
@@ -22,8 +21,6 @@ export const getNotifications = async (req, res, next) => {
     });
     // Cache the notifications for 1 hour
     await redisClient.setEx(cacheKey, 3600, JSON.stringify(notifications));
-    console.log("Fetched notifications from database");
-    console.log("Fetched notifications:", notifications);
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error fetching notifications:", error);
@@ -37,7 +34,6 @@ export const getUnreadCount = async (req, res, next) => {
     const cacheKey = `unreadCount:${req.authUser.id}`;
     const cachedCount = await redisClient.get(cacheKey);
     if (cachedCount) {
-      console.log("Returning cached unread count");
       return res.status(200).json({ count: JSON.parse(cachedCount) });
     }
     const unreadCount = await Notify.count({
@@ -45,8 +41,7 @@ export const getUnreadCount = async (req, res, next) => {
     });
     // Cache the unread count for 1 hour
     await redisClient.setEx(cacheKey, 3600, JSON.stringify(unreadCount));
-    console.log("Fetched unread count from database");
-    console.log("Unread notifications count:", unreadCount);
+
     res.status(200).json({ count: unreadCount });
   } catch (error) {
     console.error("Error fetching unread count:", error);

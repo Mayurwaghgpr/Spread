@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+import db from "../../config/database.js";
 
 const Subscriptions = db.define("subscriptions", {
   id: {

@@ -17,13 +17,11 @@ export const generateAIAnalysis = async (req, res, next) => {
     res.setHeader("Cache-Control", "no-cache");
     res.flushHeaders(); // flush the headers to establish SSE with client
     const { post } = req.body;
-    console.log(post);
     const response = await genAI.models.generateContentStream({
       model: "gemini-2.5-flash",
       contents: `${promptP1}\n\nPost:\n${JSON.stringify(post)}`,
     });
     for await (const chunk of response) {
-      console.log(chunk.text);
       res.write(`${chunk.text}\n\n`);
     }
     res.end();

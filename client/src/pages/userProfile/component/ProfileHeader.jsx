@@ -37,7 +37,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
         <div className=" flex  flex-col  items-center justify-center text-center gap-3 ">
           <ProfileImage
             onClick={handleBigFrame}
-            className={"sm:w-32 sm:h-32 w-20 h-20"}
+            className={"sm:w-24 sm:h-24 w-20 h-20"}
             image={userImageurl}
             alt={userProfile?.username}
             title={"user profile"}

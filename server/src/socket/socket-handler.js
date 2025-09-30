@@ -1,7 +1,7 @@
 import Messages from "../models/messaging/messages.model.js";
 import redisClient from "../utils/redisClient.js";
 import Conversation from "../models/messaging/conversation.model.js";
-import { io } from "../app.js";
+import { io } from "../server.js";
 
 export default function socketHandlers() {
   io.on("connection", async (socket) => {

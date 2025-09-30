@@ -4,9 +4,11 @@ import PostPreview from "../component/postsComp/PostPreview";
 import Spinner from "../component/loaders/Spinner";
 import { useLastItemObserver } from "../hooks/useLastItemObserver";
 import useProfileApi from "../services/ProfileApis";
+import useIcons from "../hooks/useIcons";
 
 const ReadList = () => {
   const { getArchivedPosts } = useProfileApi();
+  const icons = useIcons();
   const {
     data,
     isFetching,
@@ -43,8 +45,14 @@ const ReadList = () => {
   return (
     <div className=" flex flex-col justify-start items-start w-full h-full  xl:items-center dark:*:border-[#383838]  ">
       <div className=" sticky top-0 flex  justify-end items-center gap-4 w-full z-10  border-inherit  ">
-        <div className="w-full h-full p-7 bg-light dark:bg-dark text-3xl  border-b border-inherit">
-          <h1>Read list </h1>
+        <div className=" flex justify-start items-center gap-4 w-full h-full p-7 bg-light dark:bg-dark  border-b border-inherit">
+          <span className="border rounded-lg p-2 border-inherit">
+            {icons["book"]}
+          </span>
+          <div>
+            <h1 className="text-3xl ">Read list </h1>
+            <p className="text-sm opacity-50">Read posts you have saved</p>
+          </div>
         </div>
       </div>
       <div className="pb-20 max-w-2xl w-full">

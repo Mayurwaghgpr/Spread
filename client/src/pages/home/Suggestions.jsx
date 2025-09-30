@@ -55,34 +55,11 @@ function Suggestions() {
   // Define links array
   const navLinks = [
     { to: "/suggestions/find_peoples", label: "People", icon: Users },
-    // { to: "/suggestions/publication", label: "Publication", icon: Users },
+    { to: "/suggestions/publication", label: "Publication", icon: Users },
   ];
 
   const navLinkBase =
-    "text-xs font-medium transition-all duration-200 border-b rounded-br-xl px-4 py-1 gap-5  before:border-r before:absolute before:w-8 before:h-8 before:-right-[12px] before:-top-4 before:rotate-[36deg] before:-z-10";
-
-  // Error state component
-  const ErrorState = () => (
-    <div className="flex flex-col items-center justify-center py-12 text-center">
-      <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-4">
-        <RefreshCw className="w-8 h-8 text-red-500" />
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-        Unable to load suggestions
-      </h3>
-      <p className="text-gray-600 dark:text-gray-400 mb-4 max-w-sm">
-        Something went wrong while fetching people suggestions. Please try
-        again.
-      </p>
-      <button
-        onClick={() => refetch()}
-        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors duration-200 flex items-center gap-2"
-      >
-        <RefreshCw className="w-4 h-4" />
-        Try Again
-      </button>
-    </div>
-  );
+    "text-xs font-medium transition-all duration-200 border-b  border-inherit before:border-inherit  rounded-br-xl px-4 py-1 gap-5  before:border-r before:absolute before:w-8 before:h-8 before:-right-[8px] before:-top-4 before:rotate-[36deg] before:-z-10";
 
   return (
     <div className="h-screen bg-light dark:bg-dark w-full overflow-scroll border-inherit ">
@@ -90,18 +67,18 @@ function Suggestions() {
       <div className="max-w-7xl h-full mx-auto border-inherit">
         <div className="mb-6 border-inherit">
           {/* Header Section - Improved sticky behavior and responsive design */}
-          <div className="sticky top-0 z-20 bg-light/80 dark:bg-dark/80 backdrop-blur-md border-b dark:border-gray-800 py-4 px-6 ">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="sticky top-0 z-20 bg-light/80 dark:bg-dark/80 backdrop-blur-md border-b border-inherit  py-4 px-6 ">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-inherit ">
               {/* Title with icon */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-yellow-300 to-amber-600 rounded-xl flex items-center justify-center">
-                  <Users className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-3 border-inherit ">
+                <div className="w-10 h-10 rounded-xl border border-inherit  flex items-center justify-center">
+                  <Users className="w-5 h-5" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
                     Discover People
                   </h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 hidden sm:block">
+                  <p className="text-sm opacity-50 mt-1 hidden sm:block">
                     Find and connect with interesting people
                   </p>
                 </div>
@@ -109,7 +86,7 @@ function Suggestions() {
             </div>
           </div>
           {/* Navigation tabs - Better mobile design */}
-          <nav className="flex items-center w-fit border-inherit">
+          <nav className="flex items-center w-fit border-inherit ">
             {navLinks.map(({ to, label, icon: Icon }) => (
               <div
                 key={to}
@@ -123,10 +100,11 @@ function Suggestions() {
                       location.pathname.includes(to.split("/").pop())
                         ? ""
                         : ""
-                    }`
+                    }
+                    `
                   }
                 >
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2 border-inherit ">
                     <Icon className="w-4 h-4" />
                     <span className="hidden sm:inline">{label}</span>
                   </span>
@@ -209,7 +187,6 @@ function Suggestions() {
                   </div>
                 </div>
               )}
-              {isPeoplesError && !isLoading && <ErrorState />}
               {peoples.length === 0 && !isLoading && (
                 <EmptyState
                   Icon={Users}

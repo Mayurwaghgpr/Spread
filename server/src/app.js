@@ -24,14 +24,11 @@ import aiRoutes from "./routes/aI.route.js";
 import messagingRoutes from "./routes/messaging/messaging.route.js";
 import initMessageChangeListener from "./db/triggers/messages.js";
 import notificationRoutes from "./routes/notification.route.js";
-import socketHandlers from "./socket/socket-handler.js";
-import sockIo from "./socket.js";
 
 dotenv.config();
 export const app = express();
 
 export const server = createServer(app);
-export const io = sockIo.init(server);
 // Constants
 const __dirname = path.resolve();
 
@@ -45,8 +42,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS setup
-const allowedOrigins = process.env.WHITLIST_ORIGINS
-  ? process.env.WHITLIST_ORIGINS.split(",").map((origin) => origin.trim())
+const allowedOrigins = process.env.WHITELIST_ORIGINS
+  ? process.env.WHITELIST_ORIGINS.split(",").map((origin) => origin.trim())
   : [];
 app.use(
   cors({
@@ -94,7 +91,6 @@ DataBaseAssociations();
 //DB changes listener
 initMessageChangeListener();
 
-socketHandlers();
 // Healthcheck route
 app.get("/health", async (req, res) => {
   const dbStatus = await Database.authenticate()

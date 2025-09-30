@@ -61,6 +61,7 @@ import {
 import { MdAutoAwesome } from "react-icons/md";
 
 import {
+  FaBookOpen,
   FaCode,
   FaCreativeCommons,
   FaHandHoldingHeart,
@@ -110,6 +111,7 @@ function useIcons() {
     bellO: <BsBell />,
     bookmarkFi: <BsFillBookmarkFill />,
     bookmarkO: <BsBookmark />,
+    book: <FaBookOpen />,
 
     // C
     calender: <BiCalendarAlt />,

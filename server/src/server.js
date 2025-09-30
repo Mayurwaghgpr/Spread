@@ -3,8 +3,13 @@ import redisClient from "./utils/redisClient.js";
 import db from "./config/database.js";
 import dotenv from "dotenv";
 import { server } from "./app.js";
+import sockIo from "./socket.js";
+import socketHandlers from "./socket/socket-handler.js";
 dotenv.config();
 const port = process.env.PORT || 3000;
+export const io = sockIo.init(server);
+
+socketHandlers();
 
 // Start the server after DB & Redis setup
 db.sync()

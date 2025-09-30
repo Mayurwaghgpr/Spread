@@ -1,21 +1,20 @@
-import React, { memo, useCallback, useRef, useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 import { PopupBox } from "../../component/utilityComp/PopupBox";
 import SearchBar from "../../component/inputComponents/SearchBar";
 import PeoplesList from "../../component/PeoplesList";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Ibutton from "../../component/buttons/Ibutton";
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import usePublicApis from "../../services/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-// import ChatApi from "../../Apis/ChatApi";
 import { useNavigate } from "react-router-dom";
-// import { setToast } from "../../redux/slices/uiSlice";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 import { BsPlus } from "react-icons/bs";
 import GroupCreation from "./components/GroupCreation";
 import SelectedGroupMemberList from "./components/SelectedGroupMemberList";
 import Spinner from "../../component/loaders/Spinner";
 import usePrivateChatMutation from "../../hooks/usePrivateChatMutation";
+import useIcons from "../../hooks/useIcons";
 
 const NewConversation = () => {
   const [search, setSearch] = useState("");
@@ -28,9 +27,10 @@ const NewConversation = () => {
   const containerRef = useRef(null);
 
   //Api functions providers
-  const { fetchPeopels, fetchAllUsers } = usePublicApis();
+  const { fetchPeopel } = usePublicApis();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const icons = useIcons();
 
   const { PrivateMutaion, isPrivateLoading } = usePrivateChatMutation();
   const {
@@ -41,9 +41,9 @@ const NewConversation = () => {
     hasNextPage,
     isLoading,
   } = useInfiniteQuery(
-    ["UsersList"],
+    ["UsersList", search],
     ({ pageParam = new Date().toISOString() }) =>
-      fetchPeopels({ pageParam, username: search }),
+      fetchPeopel({ pageParam, username: search }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
@@ -95,8 +95,8 @@ const NewConversation = () => {
       }
       action={() => navigate(-1)}
     >
-      <header className="sticky bg-inherit z-10 top-0 flex flex-col h-full justify-start items-center gap-3 w-full p-4 border-b border-inherit">
-        <div className="flex justify-between items-center w-full gap-2">
+      <header className="sticky bg-inherit z-10 top-0 flex flex-col h-fit justify-start items-center gap-3 w-full p-4 border-b border-inherit">
+        <div className="flex justify-between items-center w-full h-fit gap-2">
           {isCreatingGroup && (
             <Ibutton
               action={() => (!next ? handelCancelGroup() : setNext(false))}
@@ -128,16 +128,17 @@ const NewConversation = () => {
               users={users}
             />
           )}
-          <div className="flex justify-center items-center text-sm gap-1">
-            {!isCreatingGroup && (
-              <Ibutton
-                action={() => setCreatingGroup(true)}
-                className={"p-1 rounded-full"}
-              >
-                <BsPlus />
-                New group
-              </Ibutton>
-            )}
+          <div className="flex justify-center items-center text-sm gap-1 h-fit">
+            {!isCreatingGroup ||
+              (!canProceedToNext && (
+                <Ibutton
+                  action={() => setCreatingGroup(true)}
+                  className={"p-1 rounded-full"}
+                >
+                  {icons["plus"]}
+                  New group
+                </Ibutton>
+              ))}
           </div>
         </div>
       </header>
@@ -145,7 +146,7 @@ const NewConversation = () => {
       {!next ? (
         <div
           ref={containerRef}
-          className="flex flex-col justify-start items-start h-full gap-3 w-full no-scrollbar p-4 "
+          className="flex flex-col justify-start items-start h-fit gap-3 w-full no-scrollbar p-4 "
         >
           {users?.map((Usr, idx, arr) => (
             <PeoplesList

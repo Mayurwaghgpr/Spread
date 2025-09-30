@@ -1,6 +1,4 @@
-import React from "react";
 import { BsCheck2All } from "react-icons/bs";
-import FormatedTime from "../../../component/utilityComp/FormatedTime";
 import TimeAgo from "../../../component/utilityComp/TimeAgo";
 
 const MessageBubble = ({ message, userId, readReceipt }) => {

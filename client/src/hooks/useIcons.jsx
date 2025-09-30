@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BsAlphabetUppercase,
   BsArrowLeft,
@@ -7,6 +6,7 @@ import {
   BsBookmark,
   BsCamera,
   BsCameraVideo,
+  BsCheck2Circle,
   BsClockHistory,
   BsFillBookmarkFill,
   BsFillMoonStarsFill,
@@ -37,7 +37,6 @@ import {
   MdOutlineKeyboardDoubleArrowRight,
 } from "react-icons/md";
 import {
-  IoArrowDown,
   IoAttach,
   IoCallOutline,
   IoEarth,
@@ -54,7 +53,6 @@ import {
 import {
   PiHandsClappingFill,
   PiImageThin,
-  PiPerson,
   PiPlus,
   PiTrashSimpleLight,
 } from "react-icons/pi";
@@ -95,6 +93,7 @@ import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
+import { FiEdit3 } from "react-icons/fi";
 function useIcons() {
   return {
     // A
@@ -122,6 +121,7 @@ function useIcons() {
     code1: <FaCode />,
     comment: <FaRegComment />,
     creative: <MdOutlineDeveloperMode />,
+    check: <BsCheck2Circle />,
     // D
     desktopO: <LuMonitorSmartphone />,
     done: <MdDone color="green" />,
@@ -133,6 +133,7 @@ function useIcons() {
     // E
     error: <MdErrorOutline color="red" />,
     earth: <IoEarth />,
+    edit: <FiEdit3 />,
     // F
     follow: <RiUserFollowLine />,
     fetherFi: <RiQuillPenFill />,
@@ -223,7 +224,7 @@ function useIcons() {
     vCamera: <BsCameraVideo />,
 
     // W
-    warning: <CiWarning color="yellow" />,
+    warning: <CiWarning />,
 
     // X
     XCom: <BsTwitterX />,

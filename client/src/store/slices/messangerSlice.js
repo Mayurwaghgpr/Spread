@@ -5,7 +5,7 @@ const initialState = {
   conversations: [],
   messages: [],
   selectedConversation: converstaioMeta,
-  messageLogData: [],
+  conversationLogData: [],
 };
 
 const messangerSlice = createSlice({
@@ -27,16 +27,16 @@ const messangerSlice = createSlice({
     selectConversation: (state, action) => {
       state.selectedConversation = action.payload;
     },
-    setMessageLogData: (state, action) => {
-      state.messageLogData = action.payload;
-    }
+    setConversationLogData: (state, action) => {
+      state.conversationLogData = action.payload;
+    },
   },
 });
 
 export const {
   setConversations,
   selectConversation,
-  setMessageLogData,
+  setConversationLogData,
   pushMessage,
   addMessage,
   popMessage,

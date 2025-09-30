@@ -1,11 +1,11 @@
 import React, { memo, useCallback, useEffect } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
-import MessageLog from "./MessageLog";
+import ConversationLog from "./ConversationLog";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addMessage,
   pushMessage,
-  setMessageLogData,
+  setConversationLogData,
 } from "../../store/slices/messangerSlice";
 import useSocket from "../../hooks/useSocket";
 
@@ -31,7 +31,7 @@ function Messenger() {
       }
       if (!logWithNewMessage) return;
       dispatch(
-        setMessageLogData([
+        setConversationLogData([
           ...(logWithNewMessage
             ? [{ ...logWithNewMessage, lastMessage: msg.content }]
             : []),
@@ -56,7 +56,7 @@ function Messenger() {
   return (
     <main className=" h-screen w-full border-inherit p-3">
       <div className="flex h-full w-full  border rounded-lg border-inherit overflow-hidden">
-        <MessageLog />
+        <ConversationLog />
         {/* This Outlet will render the chat window or conversation details */}
         <div className="flex-1 overflow-y-auto border-inherit">
           <Outlet />

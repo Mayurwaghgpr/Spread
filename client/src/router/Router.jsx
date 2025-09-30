@@ -25,36 +25,29 @@ const About = lazy(() => import("../pages/About"));
 const ReadList = lazy(() => import("../pages/ReadList"));
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const General = lazy(() => import("../pages/settings/General"));
-const ConfirmationBox = lazy(
-  () => import("../component/utilityComp/ConfirmationBox")
+const Conversations = lazy(() => import("../pages/Conversation/Conversations"));
+const ConversationSection = lazy(
+  () => import("../pages/Conversation/ConversationSection")
 );
-const Messenger = lazy(() => import("../pages/Messages/Messenger"));
-const MessageSection = lazy(() => import("../pages/Messages/MessageSection"));
 const SearchBox = lazy(() => import("../pages/Search&Explorer/SearchBox"));
 const CommentSection = lazy(() => import("../pages/Comment/CommentSection"));
-const ToastContainer = lazy(
-  () => import("../component/utilityComp/ToastContainer")
-);
+
 const Suggestions = lazy(() => import("../pages/home/Suggestions"));
 const ConversationInfo = lazy(
-  () => import("../pages/Messages/ConversationInfo")
+  () => import("../pages/Conversation/ConversationInfo")
 );
 const InfoSection = lazy(
-  () => import("../pages/Messages/components/InfoSection")
-);
-const WelcomeLoginBox = lazy(
-  () => import("../component/utilityComp/WelcomeLoginBox")
+  () => import("../pages/Conversation/components/InfoSection")
 );
 const SomethingWentWrong = lazy(
   () => import("../component/Errors/SomethingWentWrong")
 );
-const NewConversation = lazy(() => import("../pages/Messages/NewConversation"));
-const ImageInBigFrame = lazy(
-  () => import("../component/utilityComp/ImageInBigFrame")
+const NewConversation = lazy(
+  () => import("../pages/Conversation/NewConversation")
 );
 const AIResponse = lazy(() => import("../component/aiComp/AiResponse"));
-const MessageFallBack = lazy(
-  () => import("../pages/Messages/components/MessageFallBack")
+const ConversationFallBack = lazy(
+  () => import("../pages/Conversation/components/ConversationFallBack")
 );
 
 const ROUTES = {
@@ -203,13 +196,13 @@ function Router() {
           path={ROUTES.MESSAGES}
           element={
             <ProtectedRoutes>
-              <Messenger />
+              <Conversations />
             </ProtectedRoutes>
           }
         >
-          <Route path="" element={<MessageFallBack />} />
+          <Route path="" element={<ConversationFallBack />} />
           <Route path="new/c" element={<NewConversation />} />
-          <Route path="c" element={<MessageSection />}>
+          <Route path="c" element={<ConversationSection />}>
             <Route path="info" element={<ConversationInfo />}>
               <Route index element={<InfoSection />} />
             </Route>

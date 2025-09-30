@@ -1,9 +1,10 @@
 import { useDispatch } from "react-redux";
 import axiosInstance from "./axios";
 import { setLoadingHome } from "../store/slices/commonSlice";
+
 function usePublicApis() {
   const dispatch = useDispatch();
-  const fetchPeopels = async ({ pageParam, username }) => {
+  const fetchPeopel = async ({ pageParam, username }) => {
     try {
       const result = await axiosInstance.get(`/public/h/peoples`, {
         params: {
@@ -126,7 +127,7 @@ function usePublicApis() {
     ArchivePost,
     followUser,
     fetchAllUsers,
-    fetchPeopels,
+    fetchPeopel,
   };
 }
 

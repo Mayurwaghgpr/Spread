@@ -23,7 +23,7 @@ import {
   pushMessage,
 } from "../../store/slices/messangerSlice";
 
-function MessageSection() {
+function ConversationSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { messages, selectedConversation } = useSelector(
     (state) => state.messanger
@@ -267,4 +267,4 @@ function MessageSection() {
   );
 }
 
-export default memo(MessageSection);
+export default memo(ConversationSection);

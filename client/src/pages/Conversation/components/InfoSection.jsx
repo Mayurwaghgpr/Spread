@@ -8,47 +8,63 @@ import { useMutation } from "react-query";
 import ChatApi from "../../../services/ChatApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../store/slices/uiSlice";
+import { selectConversation } from "../../../store/slices/messangerSlice";
 
 function InfoSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const [isMute, setIsMute] = useState(false);
   const [isOptMute, setIsOptMute] = useState(false);
   const icons = useIcons();
   const dispatch = useDispatch();
   const { selectedConversation } = useSelector((state) => state.messanger);
 
-  const { isGroup, conversationData } = useOutletContext();
   const { setMessageToMute } = ChatApi();
-  const currentUser = useMemo(() => {
-    const userInfo = selectedConversation?.members?.find(
-      (member) => member.id === user.id
-    );
-    setIsMute(userInfo?.Members?.isMuteMessage);
-    return userInfo;
-  }, [selectedConversation?.members, user?.id]);
 
   const { mutate } = useMutation({
     mutationFn: (config) => setMessageToMute(config),
     onSuccess: (data) => {
-      setIsMute(data.updatedMember.isMuteMessage);
+      const updatedConversetion = {
+        ...selectedConversation,
+        members: selectedConversation.members.map((member) =>
+          member.id == data.updatedMember.memberId
+            ? {
+                ...member,
+                Members: {
+                  ...member.Members,
+                  isMuteMessage: data.updatedMember.isMuteMessage,
+                },
+              }
+            : member
+        ),
+      };
+      dispatch(selectConversation(updatedConversetion));
+      sessionStorage.setItem(
+        "conversationMeta",
+        JSON.stringify(updatedConversetion)
+      );
       dispatch(setToast({ message: data.message, type: "success" }));
     },
     onError: () => {
-      setIsOptMute(false);
       dispatch(setToast({ messge: "Fail to mute messages", type: "error" }));
     },
+    onSettled: () => {
+      setIsOptMute(false);
+    },
   });
-  const convarsationInfo = useMemo(
-    () => selectedConversation?.members.find((member) => member.id !== user.id),
+
+  const conversationInfo = useMemo(
+    () => selectedConversation?.members.find((member) => member.id === user.id),
     [selectedConversation?.members]
   );
+
+  console.log({ conversationInfo });
   const handleMuteToggleMutation = () => {
     setIsOptMute((prev) => !prev);
     mutate({
-      isMuteMessage: isMute,
-      conversationId: conversationData.id,
+      isMuteMessage: conversationInfo?.Members?.isMuteMessage,
+      conversationId: selectedConversation.id,
     });
   };
+
   return (
     <section className="p-4 w-full overflow-y-auto h-full">
       <header>
@@ -61,9 +77,9 @@ function InfoSection() {
       <div className="flex flex-col justify-center items-center gap-2 w-full p-5 ">
         <ProfileImage
           className={"w-20 h-20 border-2 rounded-full"}
-          image={selectedConversation.image || convarsationInfo.userImage}
+          image={selectedConversation.image || conversationInfo.userImage}
         ></ProfileImage>
-        <h2>{selectedConversation?.groupName || convarsationInfo.username}</h2>
+        <h2>{selectedConversation?.groupName || conversationInfo.username}</h2>
         <small className=" opacity-30">
           {selectedConversation?.members?.length} ⁠members{" "}
         </small>
@@ -73,7 +89,7 @@ function InfoSection() {
           <Ibutton className={"flex justify-start  p-2 rounded-lg"}>
             {icons["bell"]} Mute
             <ToggleCheckbox
-              checked={isOptMute || isMute}
+              checked={isOptMute || conversationInfo?.Members?.isMuteMessage}
               onChange={handleMuteToggleMutation}
             />
           </Ibutton>

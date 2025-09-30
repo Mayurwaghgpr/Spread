@@ -88,6 +88,7 @@ export const getPeoples = async (req, res, next) => {
       ],
       attributes: ["id", "displayName", "username", "userImage", "createdAt"],
       where: {
+        id: { [Op.ne]: currentUserId },
         username: {
           [Op.or]: [
             { [Op.iLike]: `${searchQuery}%` },

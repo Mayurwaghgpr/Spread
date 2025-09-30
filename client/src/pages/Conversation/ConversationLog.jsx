@@ -1,13 +1,12 @@
 import React, { memo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import FormatedTime from "../../component/utilityComp/FormatedTime";
 import { useInfiniteQuery } from "react-query";
 import ChatApi from "../../services/ChatApi";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import {
   selectConversation,
-  setMessageLogData,
+  setConversationLogData,
 } from "../../store/slices/messangerSlice";
 import Spinner from "../../component/loaders/Spinner";
 import SearchBar from "../../component/inputComponents/SearchBar";
@@ -18,7 +17,7 @@ import TimeAgo from "../../component/utilityComp/TimeAgo";
 
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);
-  const { messageLogData } = useSelector((state) => state.messanger);
+  const { conversationLogData } = useSelector((state) => state.messanger);
   const { getConversations } = ChatApi();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
@@ -38,7 +37,7 @@ function MessageLog() {
       getConversations({ pageParam }),
     {
       onSuccess: (data) => {
-        dispatch(setMessageLogData(data?.pages?.flatMap((page) => page)));
+        dispatch(setConversationLogData(data?.pages?.flatMap((page) => page)));
       },
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
@@ -75,7 +74,7 @@ function MessageLog() {
         </div>
         <div className="flex text-lg font-bold justify-between border-inherit">
           {" "}
-          <h1>Messages</h1>
+          <h1>Conversation</h1>
           <Ibutton
             className={"p-2 rounded-lg"}
             action={() => navigate("new/c")}
@@ -90,7 +89,7 @@ function MessageLog() {
         />
       </header>
       <main className=" space-y-4 border-inherit w-full p-5 px-7  text-sm font-light ">
-        {messageLogData?.map((conv, idx, arr) => (
+        {conversationLogData?.map((conv, idx, arr) => (
           <Link
             onClick={() => haldelSelectConversation(conv)}
             ref={arr.length % 10 === 0 ? lastItemRef : null}

@@ -43,8 +43,11 @@ function ConversationInfo() {
   );
 
   return (
-    <PopupBox action={() => navigate(-1)} className={"flex w-[60%] h-[70%] "}>
-      <aside className="border-e w-1/3 p-4">
+    <PopupBox
+      action={() => navigate(-1)}
+      className={"flex w-[60%] h-[70%] border-inherit "}
+    >
+      <aside className="border-e border-inherit w-1/3 p-4">
         <ul className="flex flex-col justify-start items-start gap-1">
           {sideNav.map((conf) => {
             // console.log(conf.id);
@@ -61,7 +64,7 @@ function ConversationInfo() {
           })}
         </ul>
       </aside>
-      <Outlet context={{ isGroup, conversationData }} />
+      <Outlet />
     </PopupBox>
   );
 }

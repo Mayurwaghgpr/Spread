@@ -49,7 +49,7 @@ const LoginMenuLinks = [
   },
   {
     id: uuidv4(),
-    lkname: "messages",
+    lkname: "Conversation",
     icon1: "message",
     icon2: "messageFi",
     stub: "/messages",

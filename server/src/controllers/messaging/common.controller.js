@@ -13,7 +13,7 @@ export const getConversationsByUserId = async (req, res, next) => {
   try {
     const cacheKey = `Conversation_Log_${lastTimestamp}_${userId}_${limit}`;
     const cachedConvData = await redisClient.get(cacheKey);
-
+    console.log("hit", JSON.parse(JSON.stringify(cachedConvData)));
     if (cachedConvData !== null) {
       return res.status(200).json(JSON.parse(cachedConvData)); // Send cached data
     }
@@ -52,6 +52,7 @@ export const getConversationsByUserId = async (req, res, next) => {
       EXPIRATION,
       JSON.stringify(conversations)
     );
+    console.log("miss", JSON.parse(JSON.stringify(conversations)));
     res.status(200).json(conversations);
   } catch (error) {
     console.error("Error fetching conversations:", error);
@@ -116,16 +117,16 @@ export const setIsMuteMessage = async (req, res, next) => {
 
 export const getMessagesByConversationId = async (req, res, next) => {
   const { conversationId } = req.query;
-  // const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
-  // const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
+  const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
+  const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   try {
     const messages = await Messages.findAll({
       where: {
-        // createdAt: { [Op.lt]: lastTimestamp },
+        createdAt: { [Op.lt]: lastTimestamp },
         conversationId: conversationId,
       },
-      // order: [["createdAt", "ASC"]],
-      // limit
+      order: [["createdAt", "ASC"]],
+      limit,
     });
     if (!messages) {
       res

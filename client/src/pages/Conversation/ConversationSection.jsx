@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 import ChatApi from "../../services/ChatApi";
 import useSocket from "../../hooks/useSocket";
@@ -22,6 +22,8 @@ import {
   popMessage,
   pushMessage,
 } from "../../store/slices/messangerSlice";
+import { useLastItemObserver } from "../../hooks/useLastItemObserver";
+import TimeAgo from "../../component/utilityComp/TimeAgo";
 
 function ConversationSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
@@ -31,7 +33,6 @@ function ConversationSection() {
 
   const [typingUsers, setTypingUsers] = useState([]);
   const containerRef = useRef(null);
-  const prevMessagesCount = useRef(0);
 
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
@@ -40,6 +41,7 @@ function ConversationSection() {
   const navigate = useNavigate();
   const { getMessage } = ChatApi();
   const { socket } = useSocket();
+  const prevMessagesCount = useRef(0);
 
   // Memoized conversation data
   const conversationData = useMemo(() => {
@@ -69,13 +71,39 @@ function ConversationSection() {
   }, [selectedConversation, user?.id]);
 
   // Fetch messages
-  const { isLoading, error } = useQuery(["messages", conversationId], {
-    queryFn: () => getMessage({ conversationId }),
-    onSuccess: (data) => dispatch(addMessage(data)),
-    enabled: !!conversationId && !!user?.id,
-    refetchOnWindowFocus: false,
-    retry: 2,
-  });
+  const {
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    error,
+  } = useInfiniteQuery(
+    ["messages", conversationId],
+    ({ pageParam = new Date().toISOString() }) =>
+      getMessage({ conversationId, pageParam }),
+    {
+      onSuccess: (data) => {
+        dispatch(addMessage(data?.pages?.flatMap((page) => page)));
+      },
+
+      getNextPageParam: (lastPage) => {
+        return lastPage.length !== 0
+          ? lastPage[lastPage.length - 1].createdAt
+          : undefined; // Use last item timestamp as cursor
+      },
+      refetchOnWindowFocus: false,
+      retry: 2,
+    }
+  );
+
+  const { lastItemRef } = useLastItemObserver(
+    fetchNextPage,
+    isFetchingNextPage,
+    isFetching,
+    hasNextPage
+    // containerRef
+  );
 
   // Handle typing status
   const handleUserTyping = useCallback(
@@ -134,9 +162,9 @@ function ConversationSection() {
     handleError,
   ]);
 
-  // Auto-scroll to bottom on new messages
+  // auto scroll to bottom on new messages
   useEffect(() => {
-    if (prevMessagesCount.current !== messages.length && containerRef.current) {
+    if (containerRef.current) {
       requestAnimationFrame(() => {
         containerRef.current?.scrollTo({
           top: containerRef.current.scrollHeight,
@@ -167,12 +195,10 @@ function ConversationSection() {
 
   return (
     <div
-      className={`relative ${
-        conversationId ? "sm:visible" : "hidden"
-      } grid grid-cols-10 grid-rows-12 w-full h-screen border-inherit bg-inherit`}
+      className={`relative w-full h-full border-inherit bg-inherit ${conversationId ? "sm:visible" : " hidden"} overflow-y-auto`}
     >
       {/* Header */}
-      <header className="sticky top-0 border-b border-inherit flex justify-between col-span-full bg-light dark:bg-dark z-20 w-full h-fit py-2 px-7">
+      <header className="sticky top-0 border-b border-inherit flex justify-between  bg-light dark:bg-dark z-20 w-full h-fit py-2 px-7">
         <div className="flex items-center gap-3 w-[80%]">
           <ProfileImage
             onClick={() => navigate(`info?Id=${conversationId}`)}
@@ -206,15 +232,28 @@ function ConversationSection() {
       </header>
 
       {/* Messages */}
-      <main
+      <section
         ref={containerRef}
-        className="sm:flex flex-col w-full h-full col-span-full row-start-2 row-span-full scroll-smooth p-5 border-inherit no-scroll overflow-y-auto"
+        className="flex flex-col-reverse w-full  px-5 border-inherit py-5 " // message col is revers to get old message from top scrolling
       >
-        {!isLoading &&
-          messages?.map((msg) => (
-            <MessageBubble key={msg.id} message={msg} userId={user?.id} />
-          ))}
-
+        {isLoading && (
+          <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
+        )}
+        {/* Empty or loading states */}
+        {messages?.length === 0 && !isLoading && (
+          <div className="flex items-center justify-center w-full h-full">
+            <p className="opacity-50">
+              No messages yet. Start the conversation!
+            </p>
+          </div>
+        )}
+        {isFetchingNextPage && hasNextPage && (
+          <div className="p-4 w-full">
+            <Spinner
+              className={"w-10 h-10 bg-black p-1 dark:bg-white m-auto"}
+            />
+          </div>
+        )}
         {/* Typing indicator */}
         <div className="w-full min-h-16 border-inherit">
           {isUsersTyping && (
@@ -235,22 +274,38 @@ function ConversationSection() {
             </div>
           )}
         </div>
+        {!isLoading &&
+          messages?.map((msg, idx, arr) => {
+            const msgDate = new Date(msg.createdAt);
 
-        {/* Empty or loading states */}
-        {messages?.length === 0 && !isLoading && (
-          <div className="flex items-center justify-center w-full h-full">
-            <p className="opacity-50">
-              No messages yet. Start the conversation!
-            </p>
-          </div>
-        )}
-        {isLoading && (
-          <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
-        )}
-      </main>
+            // Since it's descending, the "previous" message is actually the next index
+            const prevDate =
+              idx < arr.length - 1 ? new Date(arr[idx + 1].createdAt) : null;
+            const showDate =
+              !prevDate || msgDate.toDateString() !== prevDate.toDateString();
+
+            return (
+              <React.Fragment key={msg.id}>
+                <MessageBubble
+                  ref={idx === arr.length - 1 ? lastItemRef : null}
+                  message={msg}
+                  userId={user?.id}
+                />
+                {showDate && (
+                  <div className=" flex justify-center text-xs">
+                    <TimeAgo
+                      className={" opacity-95"}
+                      grouped={true}
+                      date={msgDate}
+                    />
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })}
+      </section>
 
       {/* Input Section */}
-
       <MessageInputSection
         conversationId={conversationId}
         conversationData={conversationData}

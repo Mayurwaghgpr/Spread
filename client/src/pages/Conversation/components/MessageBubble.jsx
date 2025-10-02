@@ -1,12 +1,14 @@
 import { BsCheck2All } from "react-icons/bs";
 import TimeAgo from "../../../component/utilityComp/TimeAgo";
+import { forwardRef } from "react";
 
-const MessageBubble = ({ message, userId, readReceipt }) => {
+const MessageBubble = forwardRef(({ message, userId, readReceipt }, ref) => {
   const isSender = message.senderId === userId;
   const isRead = readReceipt?.includes(message.id);
 
   return (
     <div
+      ref={ref}
       className={` border-inherit max-w-[50%] w-fit  my-5 
         z-0  
       ${isSender ? "ml-auto text-end" : "mr-auto   "}
@@ -39,6 +41,6 @@ const MessageBubble = ({ message, userId, readReceipt }) => {
       />
     </div>
   );
-};
+});
 
 export default MessageBubble;

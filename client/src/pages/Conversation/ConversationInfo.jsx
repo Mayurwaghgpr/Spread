@@ -28,7 +28,7 @@ function ConversationInfo() {
       }, //default to
       {
         id: uuidv4(),
-        linkName: "Attachments",
+        linkName: "media and doc",
         stub: `attach?Id=${conversationId}`,
         icon: "image1",
       },
@@ -45,20 +45,20 @@ function ConversationInfo() {
   return (
     <PopupBox
       action={() => navigate(-1)}
-      className={"flex w-[60%] h-[70%] border-inherit "}
+      className={"flex sm:w-[60%] sm:h-[70%] h-full w-full border-inherit  "}
     >
-      <aside className="border-e border-inherit w-1/3 p-4">
+      <aside className="border-e border-inherit sm:w-1/3 p-4">
         <ul className="flex flex-col justify-start items-start gap-1">
           {sideNav.map((conf) => {
             // console.log(conf.id);
             return (
               <Link
-                className="flex justify-start items-center gap-2 w-full rounded-lg p-2 hover:bg-black dark:hover:bg-opacity-50 dark:hover:bg-white hover:bg-opacity-[0.06]"
+                className="flex justify-start items-center gap-4  sm:text-sm text-xs w-full rounded-lg p-2 hover:bg-black dark:hover:bg-opacity-10 dark:hover:bg-white hover:bg-opacity-[0.06]"
                 key={conf.id}
                 to={conf.stub}
               >
                 {icons[conf.icon]}
-                {conf.linkName}
+                <span className="sm:block hidden">{conf.linkName}</span>
               </Link>
             );
           })}

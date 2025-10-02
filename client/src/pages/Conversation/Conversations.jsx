@@ -54,13 +54,12 @@ function Messenger() {
     }
   }, [isLogin, user?.id, socket, handleNewMessage]);
   return (
-    <main className=" h-screen w-full border-inherit p-3">
-      <div className="flex h-full w-full  border rounded-lg border-inherit overflow-hidden">
+    <main className=" h-screen w-full border-inherit sm:p-3">
+      <div className="flex h-full w-full  border sm:rounded-lg border-inherit overflow-hidden">
         <ConversationLog />
         {/* This Outlet will render the chat window or conversation details */}
-        <div className="flex-1 overflow-y-auto border-inherit">
-          <Outlet />
-        </div>
+
+        <Outlet />
       </div>
     </main>
   );

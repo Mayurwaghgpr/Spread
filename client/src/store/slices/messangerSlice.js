@@ -19,10 +19,10 @@ const messangerSlice = createSlice({
       state.messages = action.payload;
     },
     pushMessage: (state, action) => {
-      state.messages.push(action.payload);
+      state.messages.unshift(action.payload);
     },
     popMessage: (state, action) => {
-      state.messages.pop();
+      state.messages.shift();
     },
     selectConversation: (state, action) => {
       state.selectedConversation = action.payload;

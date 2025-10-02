@@ -125,7 +125,7 @@ export const getMessagesByConversationId = async (req, res, next) => {
         createdAt: { [Op.lt]: lastTimestamp },
         conversationId: conversationId,
       },
-      order: [["createdAt", "ASC"]],
+      order: [["createdAt", "DESC"]],
       limit,
     });
     if (!messages) {

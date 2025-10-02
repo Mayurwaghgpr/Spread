@@ -22,7 +22,9 @@ export function useLastItemObserver(
             fetchNextPage();
           }
         },
-        { threshold }
+        {
+          threshold,
+        }
       );
 
       if (post) intObserver.current.observe(post);

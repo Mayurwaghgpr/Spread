@@ -61,7 +61,7 @@ function MessageLog() {
 
   return (
     <aside
-      className={`${conversationId ? "sm:block hidden" : "  block"} border-r lg:max-w-[30%] sm:max-w-[50%] w-full overflow-y-auto   border-inherit `}
+      className={`${conversationId ? "sm:block hidden" : "block"} border-r lg:max-w-[30%] sm:max-w-[50%] w-full overflow-y-auto   border-inherit `}
     >
       <header className="sticky top-0 flex flex-col gap-7 w-full h-fit p-5 z-10 border-b border-inherit bg-light dark:bg-dark ">
         <div className="flex justify-start items-center h-full w-full">

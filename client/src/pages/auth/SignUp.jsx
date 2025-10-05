@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { setIsLogin } from "../../store/slices/authSlice.js";
 import { setToast } from "../../store/slices/uiSlice.js";
 import { useMutation, useQueryClient } from "react-query";
@@ -11,7 +11,6 @@ import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";
 import EyeBtn from "../../component/buttons/EyeBtn.jsx";
 import AuthFormWrapper from "./AuthFormWrapper.jsx";
-import Ibutton from "../../component/buttons/Ibutton.jsx";
 import Divider from "./components/Divider.jsx";
 import CommenAuthBtn from "./components/CommenAuthBtn.jsx";
 
@@ -63,7 +62,6 @@ function SignUp() {
       type: "text",
       Iname: "displayName",
       labelname: "Name",
-      className: "mb-3 w-full flex flex-col gap-2 border-inherit",
     },
     {
       id: uuidv4(),
@@ -76,9 +74,9 @@ function SignUp() {
       type: "password",
       Iname: "password",
       labelname: "Password",
-
-      className: "mb-3 w-full flex flex-col gap-2 border-inherit",
+      className: "pr-2",
       autocomplete: "new-password",
+      placeholder: "Enter password",
       comp: <EyeBtn />,
     },
   ];
@@ -109,10 +107,11 @@ function SignUp() {
       {signUpInputs.map((input) => (
         <CommonInput
           key={input.id}
-          className="mb-3 w-full flex flex-col gap-2 border  border-inherit bg-inherit "
+          className={`mb-3 w-full flex rounded-lg  gap-2 border  border-inherit bg-inherit ${input.className} `}
           type={input.type}
           label={input.labelname}
           name={input.Iname}
+          placeholder={input.placeholder}
           disabled={isLoading}
         >
           {input.comp}

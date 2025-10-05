@@ -3,7 +3,6 @@ import Post from "../models/posts.model.js"; // Ensure Post is imported
 import { Op } from "sequelize";
 
 export const fetchProfile = async (...args) => {
-  console.log(...args);
   try {
     // Validate the input
     if (!args) throw new Error("User ID is required");

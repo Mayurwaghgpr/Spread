@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
+import genUniqueUserName from "../utils/UserNameGenerator.js";
 
 const User = db.define("user", {
   id: {
@@ -14,7 +15,6 @@ const User = db.define("user", {
   userImage: {
     type: DataTypes.STRING,
     defaultValue: `https://res.cloudinary.com/dvjs0twtc/image/upload/zjhgm5fjuyz1rcp3ahqz`,
-    allowNull: false,
   },
   username: {
     type: DataTypes.STRING,
@@ -57,11 +57,16 @@ const User = db.define("user", {
     allowNull: true,
   },
 });
+
 function generateProfileLink(user) {
   return `${process.env.FRONT_END_URL}/profile/${user.username}/${user.id}`;
 }
+//Set unique username and generate profile link
 User.afterCreate(async (user) => {
-  user.profileLink = generateProfileLink(user);
+  const username = await genUniqueUserName(user.email); //generate unique username
+  user.username = username;
+
+  user.profileLink = generateProfileLink(user); //generate link
   await user.save();
 });
 

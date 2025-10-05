@@ -1,6 +1,6 @@
-import React, { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setIsLogin } from "../../store/slices/authSlice.js";
 import { useMutation, useQueryClient } from "react-query";
 import useAuthApi from "../../services/useAuthApi.jsx";
@@ -17,9 +17,7 @@ import Divider from "./components/Divider.jsx";
 function SignIn() {
   const [passVisible, setPassVisible] = useState(false);
   const [currentInputValue, setCurrentInputValue] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
-  const { isLogin } = useSelector((state) => state.auth);
   const userRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -102,7 +100,7 @@ function SignIn() {
       {/* Email Input */}
       <CommonInput
         ref={userRef}
-        className="flex justify-start items-start gap-2 border w-full p-1 bg-inherit"
+        className="flex justify-start items-start gap-2 border rounded-lg w-full p-1 bg-inherit"
         type="email"
         name="email"
         label="Email address"
@@ -114,8 +112,7 @@ function SignIn() {
       {/* Password Input */}
       {passVisible && (
         <CommonInput
-          className="flex justify-center items-start gap-2 w-full p-1 border bg-inherit "
-          type={showPassword ? "text" : "password"}
+          className="flex justify-center items-start gap-2 w-full pr-2 border rounded-lg bg-inherit "
           name="password"
           label="Password"
           disabled={isLoading}

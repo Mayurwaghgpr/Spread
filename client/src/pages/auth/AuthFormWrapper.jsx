@@ -19,15 +19,6 @@ function AuthFormWrapper({
 
   return (
     <section className="fixed left-0 right-0 bottom-0 top-0 z-50 flex flex-col sm:flex-row justify-between items-center h-screen  w-full font-light sm:text-sm text-xs bg-light dark:bg-dark overflow-hidden animate-fedin1s border-inherit">
-      {/* Error/Validation Banner */}
-      {(isError || validation) && (
-        <div className="absolute top-0 left-0 right-0 z-10 flex justify-center w-full bg-red-100 py-3 text-red-600 border-b-2 border-red-300">
-          <span className="text-sm font-medium">
-            {error?.response?.data?.message || validation}
-          </span>
-        </div>
-      )}
-
       {/* Close Button */}
       <button
         onClick={() => navigate(-1)}
@@ -42,7 +33,15 @@ function AuthFormWrapper({
         {/* Left Side - Form */}
         <div className="flex flex-col justify-center items-center w-full sm:w-1/2 px-6 py-8 sm:px-12 border-inherit">
           {/* Header */}
-          <header className="flex flex-col items-center mb-8 text-center">
+          <header className="flex flex-col items-center gap-4 mb-8 text-center">
+            {/* Error/Validation Banner */}
+            {(isError || validation) && (
+              <div className="  z-10 flex justify-center w-full bg-red-100 p-4 text-red-600 border-s-2 rounded-lg  border-red-300">
+                <span className="text-sm font-medium">
+                  {error?.response?.data?.message || validation}
+                </span>
+              </div>
+            )}
             <ProfileImage
               image={spreadLogo}
               className="w-20 h-20 mb-4 rounded-full shadow-lg hover:scale-105 transition-transform duration-300"
@@ -71,7 +70,7 @@ function AuthFormWrapper({
                   <Link
                     to={`/auth/${formType === "signup" ? "signin" : "signup"}`}
                     replace={true}
-                    className="ml-1 dark:text-slate-400 dark:hover:text-slate-600 text-gray-800 hover:text-gray-950 font-normal transition-colors duration-200"
+                    className="ml-1 dark:text-blue-400 dark:hover:text-blue-600 text-blue-800 hover:text-blue-600 font-normal transition-colors duration-200"
                   >
                     {formType === "signup" ? "Sign In" : "Sign Up"}
                   </Link>

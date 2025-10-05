@@ -10,8 +10,6 @@ const allowedOrigins = process.env.WHITELIST_ORIGINS
 
 const sockIo = {
   init: (httpServer) => {
-    console.log({ allowedOrigins });
-
     if (io) return io; // prevent multiple inits
 
     io = new Server(httpServer, {

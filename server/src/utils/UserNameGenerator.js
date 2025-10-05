@@ -2,28 +2,22 @@ import { generateFromEmail } from "unique-username-generator";
 import User from "../models/user.model.js"; // Sequelize User model
 
 const genUniqueUserName = async (email) => {
-  let prev = "";
-  const maxAttempts = 10; // Safety limit to avoid infinite loops
-  let attempts = 0;
+  const tried = new Set();
 
-  while (attempts < maxAttempts) {
+  const maxAttempts = 10; // Safety limit to avoid infinite loops
+  for (let i = 0; i < maxAttempts; i++) {
     // Generate a username from the email
     const username = generateFromEmail(email, 4);
 
     // Avoid duplicate checks
-    if (username !== prev) {
-      prev = username;
+    if (tried.has(username)) continue; // Skip duplicates
+    tried.add(username);
 
-      // Check if the username already exists in the database
-      const exist = await User.findOne({ where: { username } });
+    // Check if the username already exists in the database
+    const exist = await User.findOne({ where: { username } });
 
-      // If it doesn't exist, return it
-      if (!exist) {
-        return username;
-      }
-    }
-
-    attempts++;
+    // If it doesn't exist, return it
+    if (!exist) return username;
   }
 
   throw new Error(

@@ -8,6 +8,8 @@ import {
   BsCameraVideo,
   BsCheck2Circle,
   BsClockHistory,
+  BsEye,
+  BsEyeSlash,
   BsFillBookmarkFill,
   BsFillMoonStarsFill,
   BsGear,
@@ -134,6 +136,8 @@ function useIcons() {
     error: <MdErrorOutline color="red" />,
     earth: <IoEarth />,
     edit: <FiEdit3 />,
+    eye: <BsEye />,
+    eyeSlash: <BsEyeSlash />,
     // F
     follow: <RiUserFollowLine />,
     fetherFi: <RiQuillPenFill />,

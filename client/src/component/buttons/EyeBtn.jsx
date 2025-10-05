@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-// import useIcons from "../../hooks/useIcons";
+import useIcons from "../../hooks/useIcons";
 function EyeBtn() {
   const [showPass, setShowPass] = useState(false);
-  // const icons = useIcons();
+  const icons = useIcons();
   return (
     <button
       onClick={(e) => {
@@ -12,10 +12,10 @@ function EyeBtn() {
           ? (input.type = "text")
           : (input.type = "password");
       }}
-      className="p-1"
+      className=" text-inherit"
       type="button"
     >
-      <i className={`bi bi-${showPass ? "eye-slash" : "eye"} `}></i>
+      {icons[showPass ? "eyeSlash" : "eye"]}
     </button>
   );
 }

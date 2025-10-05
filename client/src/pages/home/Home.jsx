@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery, useQuery } from "react-query";
-import usePublicApis from "../../services/publicApis";
 import PostPreview from "../../component/postsComp/PostPreview";
 import Spinner from "../../component/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
@@ -44,7 +43,7 @@ function Home() {
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
+          ? lastPage[lastPage.length - 1]?.createdAt
           : undefined;
       },
       refetchOnWindowFocus: false,

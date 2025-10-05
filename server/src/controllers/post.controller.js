@@ -263,8 +263,10 @@ export const getPostView = async (req, res, next) => {
   try {
     const cachedData = await redisClient.get(id);
     if (cachedData !== null) {
+      console.log("cache hit");
       return res.status(200).json(JSON.parse(cachedData));
     }
+    console.log("cache miss");
 
     const post = await Post.findOne({
       where: { id },

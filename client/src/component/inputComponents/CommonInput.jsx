@@ -27,7 +27,9 @@ const CommonInput = forwardRef(
             {label}
           </label>
         )}
-        <div className="relative flex items-center border-inherit bg-inherit">
+        <div
+          className={`relative flex items-center justify-between border-inherit bg-inherit  ${className}`}
+        >
           <input
             ref={ref}
             id={name}
@@ -38,7 +40,7 @@ const CommonInput = forwardRef(
             placeholder={placeholder}
             required={required}
             disabled={disabled}
-            className={`px-3 py-2 border border-inherit rounded-lg shadow-sm  disabled:bg-gray-100 disabled:cursor-not-allowed ${children ? "pr-10" : ""} ${className}`}
+            className={`px-3 py-2 w-full border-inherit bg-inherit outline-none `}
             {...props}
           />
           {children}

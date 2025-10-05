@@ -1,17 +1,16 @@
 import User from "../models/user.model.js";
-import Sequelize, { where } from "sequelize";
+
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenerator.js";
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
-import genUniqueUserName from "../utils/UserNameGenerator.js";
 import redisClient from "../utils/redisClient.js";
 import { fetchProfile } from "../utils/data-fetching.js";
+import userService from "../services/user.service.js";
 
 dotenv.config();
-const saltRounds = 10;
 
 // Sign up a new user
 export const signUp = async (req, res, next) => {
@@ -22,26 +21,6 @@ export const signUp = async (req, res, next) => {
   }
 
   try {
-    // Check if user already exists
-    const existingUser = await User.findOne({
-      where: {
-        [Sequelize.Op.or]: [{ email }],
-      },
-    });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    // Hash the password and create a new user
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const username = await genUniqueUserName(email);
-    const newAddedUser = await User.create({
-      username,
-      displayName,
-      email,
-      password: hashedPassword,
-    });
-
     // Generate access and refresh tokens
     const { AccessToken, RefreshToken } = AccessAndRefreshTokenGenerator({
       id: newAddedUser.id,
@@ -82,19 +61,8 @@ export const signIn = async (req, res, next) => {
 
   try {
     // Find user by username
-    const user = await fetchProfile({ email });
-
-    if (!user) {
-      return res.status(400).json({ message: "User does not exist" });
-    }
-
-    // Compare provided password with hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
+    const user = await userService.login({ email, password });
+    // console.log({ user });
     // Generate access and refresh tokens
     const { AccessToken, RefreshToken } = AccessAndRefreshTokenGenerator({
       id: user.id,
@@ -114,7 +82,6 @@ export const signIn = async (req, res, next) => {
   } catch (err) {
     console.error("Error during login:", err);
     next(err);
-    // res.status(500).json({ message: err.message });
   }
 };
 

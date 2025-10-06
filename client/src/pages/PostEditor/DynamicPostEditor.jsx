@@ -35,13 +35,13 @@ function DynamicPostEditor() {
 
   return (
     <>
-      <section className="relative flex flex-col justify-between mb-32 p-5 w-full border-inherit ">
+      <section className="relative flex flex-col justify-between w-full border-inherit  ">
         <PostBtn
           className={`fixed  xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
           disabled={elements.length > 3 ? false : true}
         />
         <div
-          className={`flex flex-col justify-center items-center border-inherit mx-auto gap-2`}
+          className={`flex flex-col justify-center items-center border-inherit mx-auto gap-2 pt-5 pb-32`}
         >
           {elements.map((element, index) => (
             <div

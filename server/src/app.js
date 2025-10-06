@@ -24,6 +24,7 @@ import aiRoutes from "./routes/aI.route.js";
 import messagingRoutes from "./routes/messaging/messaging.route.js";
 import initMessageChangeListener from "./db/triggers/messages.js";
 import notificationRoutes from "./routes/notification.route.js";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 export const app = express();

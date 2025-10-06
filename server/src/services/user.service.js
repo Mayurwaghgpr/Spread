@@ -62,6 +62,7 @@ class UserService {
       displayName,
       email,
       password: hashedPassword,
+      signedWith: "manual",
     });
 
     // Remove password before returning
@@ -76,7 +77,7 @@ class UserService {
     const user = await User.findOne({ where: { email } });
     if (!user) throw new Error("User not found");
     // If user signed up via OAuth
-    if (user.signedWith !== "") {
+    if (user.signedWith !== "manual" || user.signedWith !== null) {
       throw new Error(
         `This account is registered using ${user.signedWith}. Please login with ${user.signedWith} instead.`
       );

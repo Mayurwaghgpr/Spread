@@ -7,14 +7,15 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// const imagesBasePath = path.resolve(__dirname, "../images");
+// Go one level up from src -> to project root, then into images/
+const imagesBasePath = path.resolve(__dirname, "../../images");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === "NewImageFile") {
-      cb(null, path.join(__dirname, "../images/userImages"));
+      cb(null, path.join(imagesBasePath, "userImages"));
     } else {
-      cb(null, path.join(__dirname, "../images"));
+      cb(null, path.join(imagesBasePath));
     }
   },
   filename: (req, file, cb) => {

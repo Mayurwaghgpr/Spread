@@ -44,7 +44,7 @@ function Layout() {
   const pathChecks = useMemo(
     () => ({
       isMessagesPath: pathname.startsWith("/messages"),
-      isWritePath: pathname.startsWith("/write"),
+      // isWritePath: pathname.startsWith("/write"),
       isSearchPath: pathname.startsWith("/search"),
       isAnalysisPath: pathname.startsWith("/analysis"),
       isViewPath: pathname.startsWith("/view"),

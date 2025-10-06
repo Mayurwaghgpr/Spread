@@ -10,10 +10,7 @@ const PostContent = memo(({ postContent, onImageClick }) => {
   return (
     <>
       {postContent?.map((item) => (
-        <section
-          key={item.id}
-          className="mb-6 w-full border-inherit sm:text-lg text-sm"
-        >
+        <section key={item.id} className=" w-full border-inherit sm:text-base">
           {item.type === "image" && item.content && (
             <ImageFigure
               onClick={() => onImageClick(item.content)}

@@ -21,6 +21,11 @@ export const signUp = async (req, res, next) => {
   }
 
   try {
+    const newAddedUser = await userService.register({
+      email,
+      password,
+      displayName,
+    });
     // Generate access and refresh tokens
     const { AccessToken, RefreshToken } = AccessAndRefreshTokenGenerator({
       id: newAddedUser.id,

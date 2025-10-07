@@ -22,8 +22,9 @@
     "Times New Roman",
     Times,
     serif;
-  /* font-family: 'Fira Code', Menlo, Monaco, Consolas, monospace; */
+
 }
+
 code,
 pre {
   font-family: 'Fira Code', Menlo, Monaco, Consolas, monospace;

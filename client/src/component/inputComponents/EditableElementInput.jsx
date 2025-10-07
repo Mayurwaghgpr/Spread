@@ -14,7 +14,7 @@ const EditableElementInput = React.forwardRef(
       maxWidth = "70%",
       className = "",
       textClassName = "",
-      borderColor = "border-black dark:border-white",
+      borderColor = "",
     },
     ref
   ) => {
@@ -112,7 +112,7 @@ const EditableElementInput = React.forwardRef(
             onInput={(e) => handleInput(e.currentTarget)}
           />
           <div
-            className={`absolute w-full bottom-0 transition-transform duration-300 border-inherit border-t ${borderColor} scale-0 peer-focus:scale-100`}
+            className={`absolute w-full bottom-0 transition-transform duration-300 -black dark:border-inherit border-t ${borderColor} scale-0 peer-focus:scale-100`}
           />
         </div>
       </>

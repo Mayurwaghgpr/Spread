@@ -151,7 +151,7 @@ function useIcons() {
     grow: <TbTrendingUp />,
 
     // H
-    helpfull: <FaHandHoldingHeart />,
+    helpful: <FaHandHoldingHeart />,
     homeFi: <IoHomeSharp />,
     homeO: <IoHomeOutline />,
     redHeartFi: <BsHeartFill color="red" />,

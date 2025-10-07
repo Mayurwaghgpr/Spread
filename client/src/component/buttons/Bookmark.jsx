@@ -8,7 +8,7 @@ import useIcons from "../../hooks/useIcons";
 import FedInBtn from "./FedInBtn";
 import { setUser } from "../../store/slices/authSlice";
 
-function Bookmark({ className, post }) {
+function Bookmark({ className, post, children }) {
   const [optimisticId, setOptimisticId] = useState(false);
   const { isLogin, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -75,6 +75,7 @@ function Bookmark({ className, post }) {
       disabled={ArchiveMutation.isLoading}
     >
       {icon}
+      {children}
     </FedInBtn>
   );
 }

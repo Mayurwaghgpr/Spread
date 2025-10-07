@@ -24,10 +24,10 @@ const CommentBox = forwardRef(
     const [optimisticLike, setOptimisticLike] = useState("");
 
     const { user } = useSelector((state) => state.auth);
-    const { commentCred } = useSelector((state) => state.posts);
+    const { commentCred, postViewData } = useSelector((state) => state.posts);
     const { hitLike, getReplies, deleteComtApi, pinComment } = PostsApis();
     const dispatch = useDispatch();
-    const postdata = useOutletContext();
+
     const { COMMENT_MENU } = useMenuConstant(comt, "comment");
     const icons = useIcons();
     const menuRef = useRef(null);
@@ -48,8 +48,10 @@ const CommentBox = forwardRef(
     );
     const isPostOwnerLiked = useMemo(
       () =>
-        comt?.commentLikes?.find((like) => like.likedBy === postdata.user?.id),
-      [comt?.commentLikes, postdata.user?.id]
+        comt?.commentLikes?.find(
+          (like) => like.likedBy === postViewData.user?.id
+        ),
+      [comt?.commentLikes, postViewData.user?.id]
     );
 
     const memoLike = useMemo(() => {
@@ -202,7 +204,7 @@ const CommentBox = forwardRef(
                     }`}
                     formate={"dd/MMM/yyyy"}
                   />
-                  {comt.commenter?.id === postdata?.user?.id && (
+                  {comt.commenter?.id === postViewData?.user?.id && (
                     <small className="opacity-20">author</small>
                   )}
                   {isPostOwnerLiked && (
@@ -210,7 +212,7 @@ const CommentBox = forwardRef(
                       {icons["heartFi"]}
                       <ProfileImage
                         className="w-5 h-5"
-                        image={postdata.user.userImage}
+                        image={postViewData.user.userImage}
                       />
                     </div>
                   )}
@@ -247,7 +249,7 @@ const CommentBox = forwardRef(
                 <Ibutton className="p-1 rounded-full" action={handleReplyClick}>
                   Reply
                 </Ibutton>
-                {!comt.topCommentId && postdata.user?.id === user?.id && (
+                {!comt.topCommentId && postViewData.user?.id === user?.id && (
                   <Ibutton className="opacity-30" action={handlePinClick}>
                     {icons["pin"]}
                   </Ibutton>

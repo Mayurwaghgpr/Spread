@@ -1,13 +1,14 @@
 import React, { memo, useCallback } from "react";
 import useIcons from "../../../hooks/useIcons";
+import { getReactionColour } from "./getReactionColour";
 
 // Configuration for reaction buttons
 const REACTIONS = [
   { name: "like", label: "Like" },
   { name: "cheer", label: "Cheer" },
   { name: "celebration", label: "Celebration" },
-  { name: "appreciate", label: "Appreciate" }, // Fixed typo
-  { name: "helpfull", label: "Helpful" }, // Fixed typo and name consistency
+  { name: "appreciate", label: "Appreciate" },
+  { name: "helpful", label: "Helpful" },
   { name: "smile", label: "Smile" },
 ];
 
@@ -30,7 +31,7 @@ const ReactionButton = memo(({ reaction, icon, onReact }) => {
       name={reaction.name}
       onClick={handleClick}
       onMouseOut={handleMouseOut}
-      className="group/button relative bg-white dark:bg-[#191818] rounded-full p-2 cursor-pointer transition-all duration-300 hover:-translate-y-5 hover:scale-150"
+      className={`group/button relative  rounded-full p-2 cursor-pointer transition-all duration-300 hover:-translate-y-5 hover:scale-150 ${getReactionColour(reaction.name, true)}`}
       aria-label={`React with ${reaction.label}`}
       title={reaction.label}
     >

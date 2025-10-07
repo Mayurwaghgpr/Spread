@@ -29,7 +29,6 @@ function Follow({ className, person }) {
       dispatch(setToast({ message: data.message, type: "success" }));
     },
     onError: (data) => {
-      console.log(data);
       dispatch(setToast({ message: data.data.message, type: "success" }));
     },
   });
@@ -42,34 +41,12 @@ function Follow({ className, person }) {
 
     if (!user?.id || !person?.id) return;
     mutate({ followerId: user.id, followedId: person.id });
-  }, [user?.id, person?.id, isFollowing]);
-
-  // Don't render if it's the current user
-  if (person?.id === user?.id) {
-    return (
-      <button
-        className={`${className} py-4 font-semibold border border-inherit`}
-      >
-        You
-      </button>
-    );
-  }
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <div
-        className={`${className} p-2 text-white dark:text-black bg-black dark:bg-white hover:bg-black/60 dark:hover:bg-white/60 rounded-full transition-all duration-200 hover:scale-105 `}
-      >
-        <div className="dotloader"></div>
-      </div>
-    );
-  }
+  }, [isLogin, user?.id, person?.id, mutate, navigate]);
 
   return (
     <button
       onClick={handleFollowToggle}
-      className={`relative group text-xs sm:text-sm font-semibold text-white dark:text-black  rounded-full transition-all duration-200 hover:scale-105  p-2  ${className} ${
+      className={`relative flex justify-center items-center  group text-xs  sm:text-sm font-semibold text-white dark:text-black  rounded-full transition-all duration-200 hover:scale-105 sm:h-8 sm:min-w-28 w-20 h-8  ${className} ${
         isFollowing
           ? "hover:border-red-400 bg-black dark:bg-white  hover:border hover:bg-white dark:hover:bg-black/60"
           : "bg-black dark:bg-white  hover:bg-black/60 dark:hover:bg-white/90"
@@ -81,7 +58,11 @@ function Follow({ className, person }) {
           : `Follow ${person?.username || "user"}`
       }
     >
-      {isFollowing ? (
+      {isLoading ? (
+        <div className="dotloader"></div>
+      ) : person?.id === user?.id ? (
+        <span>You</span>
+      ) : isFollowing ? (
         <div>
           <span className="opacity-100 group-hover:opacity-0">Following</span>
           <span className="absolute left-0 right-0 opacity-0 bg-transparent group-hover:opacity-100 text-red-600">
@@ -89,7 +70,7 @@ function Follow({ className, person }) {
           </span>
         </div>
       ) : (
-        "Follow"
+        <span className="w-full">Follow</span>
       )}
     </button>
   );

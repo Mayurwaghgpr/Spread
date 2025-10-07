@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState, useCallback } from "react";
+import { memo, useMemo, useState, useCallback } from "react";
 import usePublicApis from "../../../services/publicApis";
 import { useMutation, useQueryClient } from "react-query";
 import { setToast } from "../../../store/slices/uiSlice";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LikesList from "./LikesList";
 import useIcons from "../../../hooks/useIcons";
 import AbbreviateNumber from "../../../utils/AbbreviateNumber";
-import FedInBtn from "../FedInBtn";
+import { getReactionColour } from "./getReactionColour";
 
 function Like({ post, className }) {
   const icons = useIcons();
@@ -78,22 +78,22 @@ function Like({ post, className }) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`relative flex items-end cursor-pointer group ${
-        isLiked ? "dark:text-white text-inherit" : ""
+      className={`relative flex items-end cursor-pointer group  border-inherit ${getReactionColour(optimistIcon)}  ${
+        isLiked ? "" : ""
       } ${className}`}
     >
       {/* Likes list when hovered */}
       <LikesList mutate={handleLike} post={post} />
       {/* Like button */}
-      <FedInBtn
+      <button
         name=""
         onClick={isLiked ? handleLike : null}
-        className="flex items-center justify-center gap-1 text-inherit"
+        className="flex items-center justify-center gap-1  "
       >
         {/* Icon rendering */}
         <span className="">{icons[optimistIcon || "likeO"]}</span>
         <span className="">{likeCount}</span>
-      </FedInBtn>
+      </button>
     </div>
   );
 }

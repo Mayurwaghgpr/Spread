@@ -112,9 +112,9 @@ function Home() {
       if (shouldInsertWhoToFollow) {
         return (
           <React.Fragment key={`fragment-${post.id}`}>
-            <WhoToFollow className="w-full border-b border-inherit p-5 text-sm" />
+            <WhoToFollow className="w-full  border-inherit p-5 text-sm" />
             <PostPreview
-              className="w-full border-b border-inherit pt-2"
+              className="w-full border rounded-lg  border-inherit pt-2"
               ref={isLastItem ? lastItemRef : null}
               key={post?.id}
               post={post}
@@ -125,7 +125,7 @@ function Home() {
 
       return (
         <PostPreview
-          className="w-full border-b border-inherit pt-2"
+          className="w-full border rounded-lg  border-inherit pt-2  "
           ref={isLastItem ? lastItemRef : null}
           key={post?.id}
           post={post}
@@ -139,7 +139,7 @@ function Home() {
     Array.from({ length: 10 }, (_, idx) => (
       <PostPreview
         key={`skeleton-${idx}`}
-        className="w-full border-b border-inherit"
+        className="w-full border rounded-lg border-inherit"
       />
     ));
 
@@ -163,9 +163,9 @@ function Home() {
 
   return (
     <>
-      <div className="relative flex flex-col w-full h-full border-inherit mt-10  ">
+      <div className="flex flex-col w-full h-full border-inherit  ">
         <nav
-          className="fixed top-12  z-10 w-full border-b border-inherit bg-gray-700/0 backdrop-blur-[20px]"
+          className="absolute top-14  z-10 sm:mx-5 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
           role="navigation"
           aria-label="Feed navigation"
         >
@@ -190,10 +190,11 @@ function Home() {
             </ul>
           </div>
         </nav>
-
-        {/* Posts Container */}
-        {isLoading ? renderLoadingSkeletons() : renderPosts()}
-        {renderListFooter()}
+        <div className="sm:px-5 px-2.5 space-y-5 border-inherit py-20 ">
+          {/* Posts Container */}
+          {isLoading ? renderLoadingSkeletons() : renderPosts()}
+          {renderListFooter()}
+        </div>
       </div>
       {/* Sidebar - Desktop Only */}
       {!isDeviceSize && (

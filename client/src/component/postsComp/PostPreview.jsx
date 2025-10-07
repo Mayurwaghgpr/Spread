@@ -49,7 +49,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   return (
     <article
       ref={ref}
-      className={`${className} border-inherit flex w-full flex-col max-h-[20rem]`}
+      className={`${className} border-inherit flex w-full flex-col max-h-[20rem]  rounded-lg`}
     >
       <div className="p-3 sm:p-4 md:p-6 flex leading-0 border-inherit flex-col justify-center gap-3 sm:gap-4 w-full">
         {/* Header with user profile */}
@@ -87,12 +87,12 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           <div className="flex w-full flex-col gap-1 sm:gap-2 min-w-0 flex-grow">
             {post ? (
               <>
-                <h2 className="font-medium text-base sm:text-lg md:text-xl leading-tight overflow-hidden">
+                <h2 className=" text-base sm:text-lg md:text-2xl font-bold leading-tight overflow-hidden">
                   <span className="line-clamp-2 sm:line-clamp-3">
                     {post?.title}
                   </span>
                 </h2>
-                <p className="text-xs sm:text-sm  opacity-60 font-normal overflow-hidden leading-relaxed">
+                <p className="text-sm sm:text-lg  opacity-60 font-normal overflow-hidden leading-relaxed">
                   <span className="line-clamp-2 sm:line-clamp-3">
                     {post?.subtitle}
                   </span>

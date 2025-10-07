@@ -32,21 +32,22 @@ import useSocket from "../../hooks/useSocket";
 // Utility imports
 import userImageSrc from "../../utils/userImageSrc";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
-import { setCommentCred } from "../../store/slices/postSlice";
+import { setCommentCred, setPostViewData } from "../../store/slices/postSlice";
 import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import AIBtn from "../../component/buttons/AIBtn";
 import PostContent from "./components/PostContent";
 import PostHeader from "./components/PostHeader";
+import ProfileImage from "../../component/ProfileImage";
+import Follow from "../../component/buttons/follow";
+import FormatedTime from "../../component/utilityComp/FormatedTime";
+import CommentSection from "../Comment/CommentSection";
 
 // Memoized sub-components for better performance
 
 function PostView() {
   // Redux state
-  const { commentCred } = useSelector((state) => state.posts);
+  const { commentCred, postViewData } = useSelector((state) => state.posts);
   // const { user } = useSelector((state) => state.auth);
-
-  // Local state
-  const [postView, setPostView] = useState({});
 
   // Hooks
   const { fetchDataById } = usePublicApis();
@@ -60,14 +61,16 @@ function PostView() {
 
   // Socket event handler for real-time comment updates
   useEffect(() => {
-    if (!socket || !postView?.id) return;
+    if (!socket || !postViewData?.id) return;
 
     const handleUpdateComment = (newComment) => {
-      if (newComment?.postId === postView?.id) {
-        setPostView((prev) => ({
-          ...prev,
-          comments: [...(prev.comments || []), newComment],
-        }));
+      if (newComment?.postId === postViewData?.id) {
+        dispatch(
+          setPostViewData({
+            ...postViewData,
+            comments: [...(postViewData.comments || []), newComment],
+          })
+        );
       }
     };
 
@@ -76,14 +79,14 @@ function PostView() {
     return () => {
       socket.off("update_comment", handleUpdateComment);
     };
-  }, [socket, postView?.id]);
+  }, [socket, postViewData?.id]);
 
   // Fetch Post Full View with React Query
   const { isLoading, isError, error } = useQuery({
     queryKey: ["fullpostData", id],
     queryFn: () => fetchDataById(id),
     onSuccess: (data) => {
-      setPostView(data);
+      dispatch(setPostViewData(data));
       dispatch(
         setCommentCred({
           ...commentCred,
@@ -95,18 +98,19 @@ function PostView() {
   });
 
   // Memoized values
-  const { POST_MENU } = useMenuConstant(postView, "post");
+  const { POST_MENU } = useMenuConstant(postViewData, "post");
 
   const { userImageurl } = useMemo(
-    () => userImageSrc(postView?.user),
-    [postView?.user]
+    () => userImageSrc(postViewData?.user),
+    [postViewData?.user]
   );
 
   const comments = useMemo(
     () =>
-      postView?.comments?.filter((comment) => comment.topCommentId === null) ||
-      [],
-    [postView?.comments]
+      postViewData?.comments?.filter(
+        (comment) => comment.topCommentId === null
+      ) || [],
+    [postViewData?.comments]
   );
 
   // Event handlers
@@ -119,11 +123,11 @@ function PostView() {
       dispatch(
         setOpenBigFrame({
           src,
-          alt: postView.title,
+          alt: postViewData.title,
         })
       );
     },
-    [dispatch, postView.title]
+    [dispatch, postViewData.title]
   );
 
   // Error and loading states
@@ -139,27 +143,32 @@ function PostView() {
   if (isLoading) {
     return <LoaderScreen message="Loading post..." />;
   }
-
+  console.log(postViewData);
   return (
-    <div className="relative flex justify-center items-start w-full h-screen overflow-auto px-2  border-inherit transition-all duration-500 dark:*:border-[#383838]">
-      <article className="relative animate-fedin1s max-w-4xl w-full px-4 flex flex-col justify-center items-center gap-5 border-inherit mb-40">
+    <div className="relative flex justify-end items-start w-full h-screen overflow-auto px-2 sm:py-10 py-5  border-inherit transition-all duration-500 ">
+      <article className="relative animate-fedin1s max-w-4xl w-full sm:px-4 px-2 flex flex-col justify-center items-center gap-5 border-inherit mb-40">
         <PostHeader
-          postView={postView}
+          postView={postViewData}
           userImageurl={userImageurl}
           onImageClick={handleBigFrame}
         />
 
-        <div className="flex justify-between items-center font-light sm:text-base text-xs py-3 w-full">
-          <div className="flex items-center gap-4">
-            <Like className="min-w-10" post={postView} />
+        <div className="flex justify-between items-center  sm:text-lg text-sm py-3 w-full border rounded-lg border-inherit px-5">
+          <div className="flex items-center gap-4  border-inherit">
+            <Like post={postViewData} />
             <FedInBtn
               action={handleComment}
-              className="flex items-center gap-1 min-w-10"
+              className="flex items-center gap-2 "
             >
               {icons["comment"]}
+              <span className=" sm:block hidden ">Comment</span>
               <AbbreviateNumber rawNumber={comments?.length} />
             </FedInBtn>
-            <Bookmark post={postView} />
+            <div className=" flex justify-center items-center gap-2">
+              <Bookmark post={postViewData}>
+                <span className="sm:block hidden ">Bookmark </span>
+              </Bookmark>
+            </div>
           </div>
           <div className="flex gap-7 justify-between">
             <Menu
@@ -168,30 +177,62 @@ function PostView() {
               setMenuId={setMenuId}
               items={POST_MENU}
               className="w-full max-h-1/2"
-              content={postView}
+              content={postViewData}
             />
           </div>
         </div>
 
-        {postView?.previewImage && (
+        {postViewData?.previewImage && (
           <ImageFigure
-            onClick={() => handleBigFrame(postView?.previewImage)}
-            imageUrl={postView?.previewImage}
+            onClick={() => handleBigFrame(postViewData?.previewImage)}
+            imageUrl={postViewData?.previewImage}
             objectFit="fill"
           />
         )}
 
         <PostContent
-          postContent={postView?.postContent}
+          postContent={postViewData?.postContent}
           onImageClick={handleBigFrame}
         />
       </article>
+      {/* Author profile */}
+      <div className="relative sm:flex hidden items-center sm:text-base text-xs justify-between gap-5  p-5 w-full max-w-sm  border rounded-lg border-inherit">
+        <div className="flex items-center gap-5">
+          <div className=" flex justify-center items-start flex-col gap-3">
+            <ProfileImage
+              className="sm:w-10 sm:h-10 w-8 h-8"
+              image={userImageurl}
+              alt={postViewData?.user?.display}
+              title="author profile"
+            />
+            <Link
+              className="w-full text-nowrap hover:underline underline-offset-4"
+              to={`/profile/@${postViewData?.user?.username
+                ?.split(" ")
+                .slice(0, -1)
+                .join("")}/${postViewData?.user?.id}`}
+            >
+              {postViewData?.user?.displayName}
+            </Link>
+            <FormatedTime
+              className="text-black dark:text-white sm:text-xs text-[.7em]"
+              date={postViewData?.createdAt}
+            />
+          </div>
+          <div className="flex gap-4 items-center w-full">
+            <Follow
+              person={postViewData?.user}
+              className="relative sm:px-4 sm:py-2 bg-none hover:underline underline-offset-4 border-none text-blue-500"
+            />
+          </div>
+        </div>
+      </div>
 
       <AIBtn
-        state={{ postData: postView }}
+        state={{ postData: postViewData }}
         className="fixed bottom-20 right-10 rounded-xl p-2 transition-colors duration-200"
       />
-      <Outlet context={{ postData: postView }} />
+      <Outlet />
     </div>
   );
 }

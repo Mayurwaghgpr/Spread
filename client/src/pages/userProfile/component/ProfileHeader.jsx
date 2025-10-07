@@ -32,7 +32,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
     );
   };
   return (
-    <div className="relative select-none flex flex-col border-b p-2 w-full justify-start  items-basline gap-10 dark:bg-inherit border-inherit px-4">
+    <div className="relative select-none flex flex-col border rounded-lg p-6 w-full justify-start  items-basline gap-10 dark:bg-inherit border-inherit px-4">
       <div className="flex justify-start items-start gap-9 border-inherit">
         <div className=" flex  flex-col  items-center justify-center text-center gap-3 ">
           <ProfileImage
@@ -121,7 +121,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
             />
             <Ibutton
               action={() => PrivateMutaion(userProfile?.id)}
-              className="w-full bg-white px-3 py-2.5 rounded-xl border  "
+              className=" bg-white px-3 py-2.5 rounded-xl border  "
             >
               <LuMessagesSquare />
             </Ibutton>

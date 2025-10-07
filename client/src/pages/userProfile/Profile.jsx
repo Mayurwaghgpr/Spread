@@ -82,7 +82,7 @@ function Profile() {
   const renderedPosts = useMemo(() => {
     return posts.map((post, idx, arr) => (
       <PostPreview
-        className="border-b w-full"
+        className="border-b w-full border"
         ref={arr.length % 3 === 0 ? lastItemRef : null}
         key={post.id}
         post={post}
@@ -181,7 +181,7 @@ function Profile() {
               [...Array(3)].map((_, idx) => (
                 <PostPreview
                   key={`skeleton-${idx}`}
-                  className="border-inherit px-2"
+                  className="border-inherit px-2 border"
                 />
               ))}
 

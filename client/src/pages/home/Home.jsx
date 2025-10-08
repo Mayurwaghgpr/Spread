@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import PostPreview from "../../component/postsComp/PostPreview";
 import Spinner from "../../component/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
@@ -114,7 +114,7 @@ function Home() {
           <React.Fragment key={`fragment-${post.id}`}>
             <WhoToFollow className="w-full  border-inherit p-5 text-sm" />
             <PostPreview
-              className="w-full border rounded-lg  border-inherit pt-2"
+              className="w-full border  pt-2"
               ref={isLastItem ? lastItemRef : null}
               key={post?.id}
               post={post}
@@ -125,7 +125,7 @@ function Home() {
 
       return (
         <PostPreview
-          className="w-full border rounded-lg  border-inherit pt-2  "
+          className="w-full border pt-2  "
           ref={isLastItem ? lastItemRef : null}
           key={post?.id}
           post={post}
@@ -147,12 +147,12 @@ function Home() {
   const renderListFooter = () => (
     <div className="flex items-center justify-center w-full  sm:pb-16 pb-20">
       {isFetchingNextPage && (
-        <Spinner className="w-10 my-8 p-1 bg-black dark:bg-white" />
+        <Spinner className="w-7 p-1 bg-black dark:bg-white" />
       )}
 
       {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
-        <div className="text-center py-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 sm:px-4 sm:py-2 py-1 px-2 sm:text-sm text-xs  rounded-full bg-gray-50 dark:bg-white text-gray-500 dark:text-black ">
             <BsPostcard className="w-4 h-4" />
             <span>You've seen all suggestions</span>
           </div>
@@ -165,7 +165,7 @@ function Home() {
     <>
       <div className="flex flex-col w-full h-full border-inherit  ">
         <nav
-          className="absolute top-14  z-10 sm:mx-5 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
+          className="absolute top-14  z-10 sm:mx-3 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
           role="navigation"
           aria-label="Feed navigation"
         >
@@ -192,7 +192,7 @@ function Home() {
         </nav>
         <div className="sm:px-5 px-2.5 space-y-5 border-inherit py-20 ">
           {/* Posts Container */}
-          {isLoading ? renderLoadingSkeletons() : renderPosts()}
+          {!isLoading ? renderLoadingSkeletons() : renderPosts()}
           {renderListFooter()}
         </div>
       </div>

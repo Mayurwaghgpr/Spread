@@ -7,10 +7,10 @@ const ProfileImage = ({ className, image, children, alt, title, ...props }) => {
       name="profileBtn"
       className={` ${className} rounded-full cursor-pointer flex justify-center items-center hover:opacity-90  ${
         !image ? "bg-gray-300 dark:bg-gray-700 animate-pulse" : ""
-      } `}
+      } rounded-full`}
     >
       <img
-        className=" w-full h-full  object-cover object-top rounded-full "
+        className=" w-full h-full object-cover object-top rounded-full "
         src={image}
         title={title}
         alt={alt}

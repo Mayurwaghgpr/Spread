@@ -158,7 +158,7 @@ function CommentSection({
           )}
 
           {/* Empty state */}
-          {(!isLoading || !isFetching || comments.length == 0) && (
+          {!isLoading && !isFetching && comments.length == 0 && (
             <EmptyState
               Icon={icons["messageDoted"]}
               heading={"          No comments yet"}

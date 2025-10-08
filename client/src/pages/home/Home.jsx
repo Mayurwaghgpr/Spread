@@ -192,7 +192,7 @@ function Home() {
         </nav>
         <div className="sm:px-5 px-2.5 space-y-5 border-inherit py-20 ">
           {/* Posts Container */}
-          {!isLoading ? renderLoadingSkeletons() : renderPosts()}
+          {isLoading ? renderLoadingSkeletons() : renderPosts()}
           {renderListFooter()}
         </div>
       </div>

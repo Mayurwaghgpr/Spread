@@ -1,31 +1,33 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useMutation } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
+
 import ProfileImage from "../../../component/ProfileImage";
 import Ibutton from "../../../component/buttons/Ibutton";
-import useIcons from "../../../hooks/useIcons";
-import { useOutletContext } from "react-router-dom";
 import ToggleCheckbox from "../../../component/inputComponents/ToggleCheckBox";
-import { useMutation } from "react-query";
+import useIcons from "../../../hooks/useIcons";
 import ChatApi from "../../../services/ChatApi";
-import { useDispatch, useSelector } from "react-redux";
+
 import { setToast } from "../../../store/slices/uiSlice";
 import { selectConversation } from "../../../store/slices/messangerSlice";
 
 function InfoSection() {
-  const { isLogin, user } = useSelector((state) => state.auth);
-  const [isOptMute, setIsOptMute] = useState(false);
-  const icons = useIcons();
   const dispatch = useDispatch();
+  const icons = useIcons();
+  const { user } = useSelector((state) => state.auth);
   const { selectedConversation } = useSelector((state) => state.messanger);
+  const [isOptMute, setIsOptMute] = useState(false);
 
   const { setMessageToMute } = ChatApi();
 
+  // Mutation for toggling mute
   const { mutate } = useMutation({
     mutationFn: (config) => setMessageToMute(config),
     onSuccess: (data) => {
-      const updatedConversetion = {
+      const updatedConversation = {
         ...selectedConversation,
         members: selectedConversation.members.map((member) =>
-          member.id == data.updatedMember.memberId
+          member.id === data.updatedMember.memberId
             ? {
                 ...member,
                 Members: {
@@ -36,75 +38,98 @@ function InfoSection() {
             : member
         ),
       };
-      dispatch(selectConversation(updatedConversetion));
+
+      dispatch(selectConversation(updatedConversation));
       sessionStorage.setItem(
         "conversationMeta",
-        JSON.stringify(updatedConversetion)
+        JSON.stringify(updatedConversation)
       );
+
       dispatch(setToast({ message: data.message, type: "success" }));
     },
     onError: () => {
-      dispatch(setToast({ messge: "Fail to mute messages", type: "error" }));
+      dispatch(setToast({ message: "Failed to mute messages", type: "error" }));
     },
     onSettled: () => {
       setIsOptMute(false);
     },
   });
 
-  const conversationInfo = useMemo(
+  const loggedInMemberInfo = useMemo(
     () => selectedConversation?.members.find((member) => member.id === user.id),
-    [selectedConversation?.members]
+    [selectedConversation?.members, user.id]
   );
 
-  console.log({ selectedConversation });
-  const handleMuteToggleMutation = () => {
+  const handleMuteToggle = () => {
     setIsOptMute((prev) => !prev);
     mutate({
-      isMuteMessage: conversationInfo?.Members?.isMuteMessage,
+      isMuteMessage: loggedInMemberInfo?.Members?.isMuteMessage,
       conversationId: selectedConversation.id,
     });
   };
+
+  // use apposite member image and name to group image and group name for private conversation
+  const currentConversationProfileInfo = useMemo(() => {
+    if (selectedConversation?.conversationType === "private") {
+      const oppositeMember = selectedConversation.members.find(
+        (member) => member.id !== user.id
+      );
+      return {
+        ...selectedConversation,
+        image: oppositeMember.userImage,
+        groupName: oppositeMember.displayName,
+      };
+    }
+    return selectedConversation;
+  }, [selectedConversation, user.id]);
 
   return (
     <section className="p-4 w-full overflow-y-auto h-full">
       <header>
         <h1 className="text-xl font-medium">
-          {selectedConversation.conversationType == "group"
+          {selectedConversation?.conversationType === "group"
             ? "Group Info"
             : "User Info"}
         </h1>
       </header>
-      <div className="flex flex-col justify-center items-center gap-2 w-full p-5 ">
+
+      {/* Profile Section */}
+      <div className="flex flex-col justify-center items-center gap-2 w-full p-5">
         <ProfileImage
-          className={"sm:w-20 sm:h-20 h-10 w-10 border-2 rounded-full"}
-          image={selectedConversation.image || conversationInfo.userImage}
-        ></ProfileImage>
+          className="sm:w-20 sm:h-20 h-10 w-10 border-2 rounded-full"
+          image={currentConversationProfileInfo?.image}
+        />
         <h2 className="sm:text-base text-sm">
-          {selectedConversation?.groupName || conversationInfo.username}
+          {currentConversationProfileInfo?.groupName}
         </h2>
-        {selectedConversation.conversationType === "group" && (
+        {currentConversationProfileInfo?.conversationType === "group" && (
           <small className="sm:text-sm text-xs opacity-30">
-            {selectedConversation?.members?.length} members ⁠
+            {currentConversationProfileInfo?.members?.length} members
           </small>
         )}
       </div>
-      <div className=" space-y-1 w-full p-5 text-black ">
+
+      {/* Actions */}
+      <div className="space-y-2 w-full p-5 text-black">
+        {/* Mute Toggle */}
         <div className="flex items-center justify-between border p-2 rounded-lg bg-white gap-2 w-full">
-          <span className=" inline-flex items-center justify-start gap-1">
-            {" "}
+          <span className="inline-flex items-center gap-1">
             {icons["bellO"]} Mute
           </span>
           <ToggleCheckbox
-            checked={isOptMute || conversationInfo?.Members?.isMuteMessage}
-            onChange={handleMuteToggleMutation}
+            checked={isOptMute || loggedInMemberInfo?.Members?.isMuteMessage}
+            onChange={handleMuteToggle}
           />
         </div>
+
+        {/* Clear Conversation */}
         <div className="flex items-center justify-between border p-2 rounded-lg bg-white gap-2 w-full">
-          <Ibutton className={"text-red-500 "}>clear conversation</Ibutton>
-          {/* <Ibutton className={"text-red-500 "}></Ibutton> */}
+          <Ibutton className="text-red-500">Clear Conversation</Ibutton>
         </div>
+
+        {/* Block Conversation */}
         <div className="flex items-center justify-between border p-2 rounded-lg bg-white gap-2 w-full">
-          <Ibutton className={"text-red-500 "}>Block this conversation</Ibutton>
+          <Ibutton className="text-red-500">Block This Conversation</Ibutton>
         </div>
       </div>
     </section>

@@ -1,22 +1,13 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { PopupBox } from "../../component/utilityComp/PopupBox";
-import {
-  Link,
-  Outlet,
-  useNavigate,
-  useOutletContext,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import useIcons from "../../hooks/useIcons";
-import { useSelector } from "react-redux";
 
 function ConversationInfo() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
-  const { selectedConversation } = useSelector((state) => state.messanger);
-  const { isGroup, conversationData } = useOutletContext();
   const icons = useIcons();
   const sideNav = useMemo(
     () => [

@@ -106,7 +106,6 @@ export const getPostPreview = async (req, res, next) => {
   const type = req.query.type?.toLowerCase().trim() || "all";
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
-  const currentUserId = req.authUser.id;
   const topicFilter =
     type !== "all"
       ? {

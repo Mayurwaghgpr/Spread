@@ -82,9 +82,6 @@ app.use(
 passportStrategies();
 app.use(passport.initialize());
 
-// Serve static files
-app.use(express.static(path.join(__dirname, "/client/dist")));
-
 // Database associations
 DataBaseAssociations();
 
@@ -115,11 +112,6 @@ app.use("/api/comment", commentRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/messaging", messagingRoutes);
 app.use("/api/notifications", notificationRoutes);
-
-// Fallback for client-side routing
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
-});
 
 // Fallback for unmatched API route
 app.use("/api/*", (req, res) => {

@@ -1,14 +1,12 @@
-import React from "react";
-
 import ElementsProvider from "./component/ElementsProvider";
 
 import { usePostCreator } from "./hooks/usePostCreator";
-import { useDispatch, useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import InputTypeSelector from "./component/InputTypeSelector";
-import PostBtn from "../../component/buttons/PostBtn";
 import useIcons from "../../hooks/useIcons";
+import Ibutton from "../../component/buttons/Ibutton";
 
 function DynamicPostEditor() {
   const {
@@ -27,6 +25,8 @@ function DynamicPostEditor() {
 
   const { elements } = useSelector((state) => state.posts);
   const icons = useIcons();
+  const navigate = useNavigate();
+
   const checkAllMatch = elements.every(
     (obj, i, arr) =>
       (arr.length > 3 && obj.data !== undefined && obj.data !== "") ||
@@ -36,10 +36,13 @@ function DynamicPostEditor() {
   return (
     <>
       <section className="relative flex flex-col justify-between w-full border-inherit  ">
-        <PostBtn
-          className={`fixed  xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-4xl ${checkAllMatch ? "text-sky-400 animate-bounce" : "text-sky-200 "} rounded-full flex justify-center items-center`}
+        <Ibutton
+          action={() => navigate("/write/publish")}
+          className={`fixed  xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-sm flex justify-center items-center border rounded-full px-2  p-1 ${checkAllMatch ? "text-gray-600" : "text-gray-400 "} rounded-full flex justify-center items-center`}
           disabled={elements.length > 3 ? false : true}
-        />
+        >
+          continue {icons["sendO"]}
+        </Ibutton>
         <div
           className={`flex flex-col justify-center items-center border-inherit mx-auto gap-2 pt-5 pb-32`}
         >

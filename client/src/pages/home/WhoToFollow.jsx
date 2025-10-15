@@ -1,15 +1,15 @@
 import Follow from "../../component/buttons/follow";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ProfileListItemLoadingSkeleton from "../../component/loaders/ProfileListItemLoadingSkeleton";
 import SubHeading from "../../component/texts/SubHeading";
 import Paragraph from "../../component/texts/Paragraph";
 import ProfileImage from "../../component/ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import Heading from "../../component/texts/Heading";
-import UserPopover from "../../component/utilityComp/UserPopover";
+// import UserPopover from "../../component/utilityComp/UserPopover";
 import { useSelector } from "react-redux";
 function WhoToFollow({ className }) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { userSuggestions, isLoadingHome } = useSelector(
     (state) => state.common
   );
@@ -37,7 +37,7 @@ function WhoToFollow({ className }) {
                     />
                   </Link>
                   {/* Profile Details */}
-                  <div className="flex-1 min-w-0 space-y-1 sm:space-y-2 w-full">
+                  <div className="flex-1 min-w-0 w-full">
                     <div className=" relative group flex items-center justify-between w-full">
                       <Link
                         className=" cursor-pointer  hover:underline"

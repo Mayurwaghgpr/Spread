@@ -30,26 +30,26 @@ function Heroes() {
       icon: "handshack",
     },
   ];
-  const features = [
-    {
-      icon: "creative",
-      title: "Creative Freedom",
-      desc: "Express yourself without limits",
-      gradient: "from-gray-600 to-black dark:from-gray-300 dark:to-white",
-    },
-    {
-      icon: "earth",
-      title: "Global Community",
-      desc: "Connect with creators worldwide",
-      gradient: "from-black to-gray-700 dark:from-white dark:to-gray-200",
-    },
-    {
-      icon: "grow",
-      title: "Grow Together",
-      desc: "Build your audience and impact",
-      gradient: "from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400",
-    },
-  ];
+  // const features = [
+  //   {
+  //     icon: "creative",
+  //     title: "Creative Freedom",
+  //     desc: "Express yourself without limits",
+  //     gradient: "from-gray-600 to-black dark:from-gray-300 dark:to-white",
+  //   },
+  //   {
+  //     icon: "earth",
+  //     title: "Global Community",
+  //     desc: "Connect with creators worldwide",
+  //     gradient: "from-black to-gray-700 dark:from-white dark:to-gray-200",
+  //   },
+  //   {
+  //     icon: "grow",
+  //     title: "Grow Together",
+  //     desc: "Build your audience and impact",
+  //     gradient: "from-gray-700 to-gray-900 dark:from-gray-200 dark:to-gray-400",
+  //   },
+  // ];
   const Modes = [
     {
       name: "Dark mode",
@@ -90,7 +90,7 @@ function Heroes() {
         </div>{" "}
         <div className=" flex justify-center items-center text-sm  gap-5">
           <ThemeBtn
-            className=" text-lg  rounded-full p-2 bg-black/30 text-white  "
+            className=" text-lg  rounded-full p-2 bg-white/30 backdrop-blur-md   "
             Modes={Modes}
           />
           <Link

@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { setElements } from "../../../store/slices/postSlice";
 import { setToast } from "../../../store/slices/uiSlice";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import PostsApis from "../../../services/PostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../component/loaders/Spinner";
@@ -19,7 +19,6 @@ function PostPreviewEditor() {
 
   const [Topic, setTopic] = useState();
   const { elements } = useSelector((state) => state.posts);
-  const { user } = useSelector((state) => state.auth);
   const { AddNewPost } = PostsApis();
 
   const mutation = useMutation((NewPosts) => AddNewPost(NewPosts), {
@@ -102,11 +101,8 @@ function PostPreviewEditor() {
       <article className="  w-full max-w-[60rem] flex sm:flex-row flex-col sm:gap-5 justify-center items-center border-inherit  ">
         <div className="w-full flex flex-col justify-center items-start bg-inherit">
           <h1 className="">Post Preview</h1>
-          <div className="flex justify-center items-center bg-inherit">
-            <label
-              className="relative flex max-h-[10rem] w-full  sm:max-h-[20rem] h-full"
-              htmlFor="titleimage"
-            >
+          <div className="flex justify-center h-full w-full items-center bg-inherit">
+            <label className="relative flex h-80 w-full" htmlFor="titleimage">
               {imageElements?.length ? (
                 <img
                   className=" object-fill object-top "
@@ -114,7 +110,11 @@ function PostPreviewEditor() {
                   alt="title image"
                   loading="lazy"
                 />
-              ) : null}
+              ) : (
+                <div className=" w-full h-full flex justify-center items-center hover:bg-gray-100 border-2 border-dashed border-inherit rounded-lg ">
+                  <p>Add Title Image</p>
+                </div>
+              )}
             </label>
             <input
               className=""
@@ -137,7 +137,7 @@ function PostPreviewEditor() {
           <div className="w-full h-full gap-1  flex flex-col justify-start items-center border-inherit">
             <CommonInput
               label={"Title"}
-              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              className=" p-2 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
               type="text"
               name="title"
               defaultValue={elements[0]?.data}
@@ -151,7 +151,7 @@ function PostPreviewEditor() {
               type="text"
               label={"Subetitle"}
               name={"subtitle"}
-              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              className=" p-2 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
               defaultValue={elements[1]?.data}
               placeholder=" Write Preview Subtitle"
               onChange={(e) =>
@@ -159,7 +159,7 @@ function PostPreviewEditor() {
               }
             />
             <CommonInput
-              className=" p-2 w-full border rounded-md placeholder:text-sm  outline-none focus:border-black bg-inherit"
+              className=" p-2 w-full border rounded-lg  placeholder:text-sm  outline-none focus:border-black bg-inherit"
               label={"Topic"}
               type="text"
               name={"Topics"}

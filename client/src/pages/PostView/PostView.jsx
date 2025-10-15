@@ -143,7 +143,6 @@ function PostView() {
   if (isLoading) {
     return <LoaderScreen message="Loading post..." />;
   }
-  console.log(postViewData);
   return (
     <div className="relative flex justify-end items-start w-full h-screen overflow-auto px-2 sm:py-10 py-5  border-inherit transition-all duration-500 ">
       <article className="relative animate-fedin1s max-w-4xl w-full sm:px-4 px-2 flex flex-col justify-center items-center gap-5 border-inherit mb-40">
@@ -153,7 +152,7 @@ function PostView() {
           onImageClick={handleBigFrame}
         />
 
-        <div className="flex justify-between items-center  sm:text-lg text-sm py-3 w-full border rounded-lg border-inherit px-5">
+        <div className="flex justify-between items-center  sm:text-sm text-xs py-3 w-full border rounded-lg border-inherit px-5">
           <div className="flex items-center gap-4  border-inherit">
             <Like post={postViewData} />
             <FedInBtn
@@ -197,8 +196,8 @@ function PostView() {
       </article>
       {/* Author profile */}
       <div className="relative sm:flex hidden items-center sm:text-base text-xs justify-between gap-5  p-5 w-full max-w-sm  border rounded-lg border-inherit">
-        <div className="flex items-center gap-5">
-          <div className=" flex justify-center items-start flex-col gap-3">
+        <div className="flex items-start gap-5 h-full w-full">
+          <div className=" flex justify-center items-start flex-col h-full w-full ">
             <ProfileImage
               className="sm:w-10 sm:h-10 w-8 h-8"
               image={userImageurl}
@@ -219,7 +218,7 @@ function PostView() {
               date={postViewData?.createdAt}
             />
           </div>
-          <div className="flex gap-4 items-center w-full">
+          <div className="flex justify-center items-start h-full w-full">
             <Follow
               person={postViewData?.user}
               className="relative sm:px-4 sm:py-2 bg-none hover:underline underline-offset-4 border-none text-blue-500"

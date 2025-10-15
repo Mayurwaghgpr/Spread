@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import Ibutton from "../../../component/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 
@@ -26,7 +26,6 @@ const TextTools = ({ position, applyStyle }) => {
       anchor.href = url.trim();
       anchor.target = "_blank"; // Open in new tab
       anchor.rel = "noopener noreferrer";
-      console.log(url);
 
       // Prevent contentEditable from interfering
       anchor.setAttribute("contenteditable", "false");
@@ -48,28 +47,32 @@ const TextTools = ({ position, applyStyle }) => {
     }
   };
 
-  const options = [
-    {
-      action: () => applyStyle("Bold", null),
-      icon: "B",
-      className: "flex justify-center items-center border-black w-full",
-    },
-    {
-      action: () => applyStyle("Underline", null),
-      icon: "U",
-      className: "flex justify-center items-center border-black w-full",
-    },
-    {
-      action: handleShowInput, // Show input field when clicking the link button
-      icon: icons["link"],
-      className: "flex justify-center items-center border-black w-full text-xl",
-    },
-    {
-      action: () => applyStyle("Italic", null),
-      icon: "I",
-      className: "flex justify-center items-center border-black w-full ",
-    },
-  ];
+  const options = useMemo(
+    () => [
+      {
+        action: () => applyStyle("Bold", null),
+        icon: "B",
+        className: "flex justify-center items-center border-black w-full",
+      },
+      {
+        action: () => applyStyle("Underline", null),
+        icon: "U",
+        className: "flex justify-center items-center border-black w-full",
+      },
+      {
+        action: handleShowInput, // Show input field when clicking the link button
+        icon: icons["link"],
+        className:
+          "flex justify-center items-center border-black w-full text-xl",
+      },
+      {
+        action: () => applyStyle("Italic", null),
+        icon: "I",
+        className: "flex justify-center items-center border-black w-full ",
+      },
+    ],
+    [applyStyle]
+  );
 
   return isInputVisible ? (
     <div
@@ -90,9 +93,7 @@ const TextTools = ({ position, applyStyle }) => {
         onChange={(e) => setUrl(e.target.value)}
         onKeyDown={handleCreateLink}
       />
-      <button onClick={() => setInputVisible(false)}>
-        <i className="bi bi-x-lg"></i>
-      </button>
+      <button onClick={() => setInputVisible(false)}>{icons["close"]}</button>
     </div>
   ) : (
     <div
@@ -107,7 +108,7 @@ const TextTools = ({ position, applyStyle }) => {
       <div className="flex w-full items-center gap-3 justify-between">
         {options.map((option, idx) => (
           <span key={idx} className={option.className}>
-            <Ibutton action={option.action} innerText={option.icon} />
+            <Ibutton action={option.action}>{option.icon}</Ibutton>
           </span>
         ))}
       </div>

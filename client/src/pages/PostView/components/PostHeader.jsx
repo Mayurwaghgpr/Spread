@@ -4,7 +4,7 @@ import Follow from "../../../component/buttons/follow";
 import FormatedTime from "../../../component/utilityComp/FormatedTime";
 import { memo, useMemo } from "react";
 
-const PostHeader = memo(({ postView, userImageurl, onImageClick }) => {
+const PostHeader = memo(({ postView, userImageurl }) => {
   const usernameSlug = useMemo(() => {
     const username = postView?.user?.username || "";
     const parts = username.trim().split(" ");
@@ -16,14 +16,14 @@ const PostHeader = memo(({ postView, userImageurl, onImageClick }) => {
       <div className="flex flex-col gap-5 border-inherit w-full">
         <div className="relative flex items-center sm:text-base text-xs justify-between gap-5  w-full">
           <div className="flex justify-center items-start gap-4 ">
-            <div>
+            <Link to={`/profile/@${usernameSlug}/${postView?.user?.id}`}>
               <ProfileImage
                 className="sm:w-10 sm:h-10 w-8 h-8"
                 image={userImageurl}
                 alt={postView?.user?.username}
                 title="author profile"
               />
-            </div>
+            </Link>
             <div className="flex sm:items-start items-center  sm:flex-col sm:text-nowrap w-full  gap-1 dark:text-slate-400">
               {postView?.user && (
                 <div className="flex items-center justify-center gap-2">

@@ -209,6 +209,7 @@ export const LikePost = async (req, res, next) => {
     } else {
       await Likes.create({ likedBy, postId, type });
     }
+    await redisClient.del(postId);
 
     // Send response
     res.status(201).json({

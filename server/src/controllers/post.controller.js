@@ -3,7 +3,6 @@ import { Op } from "sequelize";
 import User from "../models/user.model.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import PostContent from "../models/postContent.model.js";
-import formatPostData from "../utils/dataFormater.js";
 import Likes from "../models/likes.model.js";
 import Comments from "../models/comments.model.js";
 import cloudinary from "../config/cloudinary.js";

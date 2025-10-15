@@ -97,6 +97,16 @@ export default {
           "0%": { transform: "rotateY(0deg)" },
           "100%": { transform: "rotateY(180deg)" },
         },
+        backAndForth: {
+          "0%, 100%": {
+            transform: "translateX(-25%)",
+            animationTimingFunction: "cubic-bezier(0.8,0,1,1)",
+          },
+          "50%": {
+            transform: "none",
+            animationTimingFunction: "cubic-bezier(0,0,0.2,1)",
+          },
+        },
       },
       animation: {
         "slide-in-left": "fromLeft .5s ease-in-out forwards",
@@ -120,6 +130,7 @@ export default {
         "fed-out": "fedOut .3s ease-in-out",
         pop: "pop 0.3s ease-out",
         "animate-typewriter": "typewriter 2s steps(30) infinite",
+        backAndForth: "backAndForth 1.5s infinite ease-in-out",
       },
     },
   },

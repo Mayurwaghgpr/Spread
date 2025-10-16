@@ -31,7 +31,7 @@ const ReactionButton = memo(({ reaction, icon, onReact }) => {
       name={reaction.name}
       onClick={handleClick}
       onMouseOut={handleMouseOut}
-      className={`group/button relative  rounded-full p-2 cursor-pointer transition-all duration-300 hover:-translate-y-5 hover:scale-150 ${getReactionColour(reaction.name, true)}`}
+      className={`group/button relative rounded-full p-2 cursor-pointer transition-all duration-300 hover:-translate-y-5 hover:scale-150 text-xs ${getReactionColour(reaction.name, true)}`}
       aria-label={`React with ${reaction.label}`}
       title={reaction.label}
     >
@@ -67,7 +67,7 @@ function LikesList({ mutate, post }) {
 
   return (
     <div
-      className="absolute hidden group-hover:flex justify-start items-center shadow-xl z-10 -top-12 -left-1/2 bg-[#e8e4df] dark:bg-[#191818] gap-2 p-2 rounded-full"
+      className="absolute hidden group-hover:flex justify-start items-center shadow-xl z-10 -top-12 -left-1/2 bg-white  gap-2 p-2 rounded-full"
       role="toolbar"
       aria-label="Reaction options"
     >

@@ -78,7 +78,7 @@ function Like({ post, className }) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`relative flex items-end cursor-pointer group  border-inherit ${getReactionColour(optimistIcon)}  ${
+      className={`relative flex items-end cursor-pointer group  border-inherit  ${
         isLiked ? "" : ""
       } ${className}`}
     >
@@ -88,10 +88,12 @@ function Like({ post, className }) {
       <button
         name=""
         onClick={isLiked ? handleLike : null}
-        className="flex items-center justify-center gap-1  "
+        className={`flex items-center justify-center gap-1 `}
       >
         {/* Icon rendering */}
-        <span className="">{icons[optimistIcon || "likeO"]}</span>
+        <span className={` ${getReactionColour(optimistIcon)}`}>
+          {icons[optimistIcon || "likeO"]}
+        </span>
         <span className="">{likeCount}</span>
       </button>
     </div>

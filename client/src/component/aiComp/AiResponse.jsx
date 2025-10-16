@@ -16,7 +16,6 @@ const AIResponse = () => {
   const {
     state: { postData },
   } = useLocation();
-  // const { id } = useParams();
   const userImage = useMemo(
     () => userImageSrc(postData?.User),
     [postData?.User]
@@ -27,7 +26,7 @@ const AIResponse = () => {
     setAiStreamText("");
     setError(null);
     setIsStreaming(true);
-    // Create a new AbortController for this request
+
     const controller = new AbortController();
     controllerRef.current = controller; // Store the controller in a ref for later use
     try {
@@ -81,11 +80,12 @@ const AIResponse = () => {
       }
     };
   }, [postData?.title]);
+
   return (
-    <div className="flex items-start justify-center w-full h-screen overflow-auto border-inherit mb-20">
+    <div className="flex items-start justify-center w-full h-screen overflow-auto border-inherit mb-20 mt-5">
       <div className="animate-fedin1s bg-light dark:bg-dark w-full max-w-4xl h-full border-inherit">
         {/* Header */}
-        <header className="border-b border-inherit flex justify-between items-center p-4">
+        <header className="border rounded-lg border-inherit flex justify-between items-center p-4">
           {isAnalyzing ? (
             <h1 className="font-bold shimmer-effect dark:shimmer-effect-dark">
               Analyzing
@@ -162,13 +162,6 @@ const AIResponse = () => {
             </div>
           </div>
         </div>
-        {/* AI Explanation Points */}
-        {/* <ul className="flex animate-fedin1s flex-col items-start  gap-4 px-6 py-4 min-h-screen typewriter"> */}
-        {/* {isAnalyzing && (
-          <div className=" flex justify-center bg-white p-2 w-[3rem] shadow-sm rounded-lg rounded-tl-sm">
-            <div className="dotloader "></div>
-          </div>
-        )} */}
         {!error ? (
           <div className="w-full  transition-all duration-1000 ease-linear animate-typewriter text-sm ">
             {" "}

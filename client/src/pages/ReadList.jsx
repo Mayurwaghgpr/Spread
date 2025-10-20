@@ -55,7 +55,7 @@ const ReadList = () => {
           </div>
         </div>
       </div>
-      <div className="pb-20 pt-10 max-w-2xl w-full border-inherit">
+      <div className="pb-20 pt-10 max-w-2xl w-full border-inherit space-y-5">
         {(!isLoading ? pages : [...Array(3)])?.map((page, idx) => (
           <PostPreview
             className={" w-full  border"}

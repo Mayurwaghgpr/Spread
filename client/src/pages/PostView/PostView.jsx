@@ -83,7 +83,7 @@ function PostView() {
 
   // Fetch Post Full View with React Query
   const { isLoading, isError, error } = useQuery({
-    queryKey: ["fullpostData", id],
+    queryKey: ["FullPostData", id],
     queryFn: () => fetchDataById(id),
     onSuccess: (data) => {
       dispatch(setPostViewData(data));
@@ -194,6 +194,7 @@ function PostView() {
           onImageClick={handleBigFrame}
         />
       </article>
+
       {/* Author profile */}
       <div className="relative sm:flex hidden items-center sm:text-base text-xs justify-between gap-5  p-5 w-full max-w-sm  border rounded-lg border-inherit">
         <div className="flex items-start gap-5 h-full w-full">

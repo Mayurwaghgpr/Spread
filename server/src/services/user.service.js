@@ -6,16 +6,10 @@ import Post from "../models/posts.model.js";
 dotenv.config();
 const saltRounds = process.env.SALT_ROUNDS || 10;
 class UserService {
-  async finduser({ username, email, signedWith }) {
-    const conditions = [];
-
-    if (email) conditions.push({ email });
-    if (username) conditions.push({ username });
-    if (signedWith) conditions.push({ signedWith });
-
+  async finduser(...args) {
     // Fetch user profile information
     const userInfo = await User.findOne({
-      where: { [Op.and]: conditions },
+      where: { [Op.and]: args },
       include: [
         {
           model: User,

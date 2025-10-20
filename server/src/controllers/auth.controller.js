@@ -7,7 +7,6 @@ import AccessAndRefreshTokenGenerator from "../utils/AccessAndRefreshTokenGenera
 import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
-import { fetchProfile } from "../utils/data-fetching.js";
 import userService from "../services/user.service.js";
 
 dotenv.config();
@@ -97,7 +96,9 @@ export const getLoginUser = async (req, res, next) => {
     if (userInfo) {
       return res.status(200).json(userInfo);
     }
-    const userInfoFromDatabase = await fetchProfile({ id: req.authUser.id });
+    const userInfoFromDatabase = await userService.finduser({
+      id: req.authUser.id,
+    });
     await redisClient.set(
       req.authUser.id,
       JSON.stringify(userInfoFromDatabase)

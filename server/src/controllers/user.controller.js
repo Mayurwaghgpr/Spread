@@ -3,13 +3,12 @@ import User from "../models/user.model.js";
 import Post from "../models/posts.model.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import Likes from "../models/likes.model.js";
-import { fetchProfile } from "../utils/data-fetching.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import Comments from "../models/comments.model.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
-import { CookieOptions } from "../utils/cookie-options.js";
+import userService from "../services/user.service.js";
 
 // Get user profile
 export const getUserProfile = async (req, res, next) => {
@@ -20,14 +19,10 @@ export const getUserProfile = async (req, res, next) => {
       return res.status(200).json(JSON.parse(cachedUserData));
     }
 
-    const userInfo = await fetchProfile({ id });
+    const userInfo = await userService.finduser({ id });
 
-    if (userInfo) {
-      await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
-      return res.status(200).json(userInfo);
-    } else {
-      return res.status(404).json({ message: "User not found" });
-    }
+    await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
+    return res.status(200).json(userInfo);
   } catch (error) {
     console.error("Error fetching user profile:", error);
     next(error);
@@ -40,7 +35,6 @@ export const getUserPostsById = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
 
-  // console.log("getUserPostsById...")
   try {
     const { count: totalPosts, rows: posts } = await Post.findAndCountAll({
       where: { authorId: userId, createdAt: { [Op.lt]: lastTimestamp } },

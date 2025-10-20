@@ -8,9 +8,10 @@ import Comments from "../models/comments.model.js";
 import cloudinary from "../config/cloudinary.js";
 import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import redisClient from "../utils/redisClient.js";
-import { EXPIRATION } from "../config/constants.js";
 import Archive from "../models/archive.model.js";
 import Follow from "../models/follow.model.js";
+import postService from "../services/post.service.js";
+
 export const AddNewPost = async (req, res, next) => {
   // Parse and extract required data
   const parsedBlogData = JSON.parse(req.body.blog);
@@ -114,53 +115,15 @@ export const getPostPreview = async (req, res, next) => {
           },
         }
       : {};
-
+  const cacheKey = `post_preview_${lastTimestamp}_${type}_${limit}`;
   try {
-    const cacheKey = `post_preview_${lastTimestamp}_${type}_${limit}`;
-    // Unique cache key for this combination
-    // Checking Cache
-    const cachedPostData = await redisClient.get(cacheKey);
-    if (cachedPostData !== null) {
-      return res.status(200).json(JSON.parse(cachedPostData)); // Send cached data
-    }
-
-    // Fetch posts from DB if not in redis cache
-    const posts = await Post.findAll({
-      attributes: [
-        "id",
-        "title",
-        "subtitle",
-        "topic",
-        "cloudinaryPubId",
-        "publicationId",
-        "previewImage",
-        "publishedAt",
-        "createdAt",
-        "updatedAt",
-      ],
-      include: [
-        { model: User, attributes: ["id", "username", "userImage"] },
-        {
-          model: Likes,
-          as: "Likes",
-          attributes: ["id", "type", "likedBy", "createdAt", "updatedAt"],
-        },
-        {
-          model: Comments,
-          as: "comments",
-          attributes: ["id", "userId", "topCommentId", "replyTo"],
-        },
-      ],
-      where: {
-        createdAt: { [Op.lt]: lastTimestamp },
-        ...topicFilter,
-      },
-      order: [["createdAt", "DESC"]],
+    const posts = await postService.getPaginatedPosts({
+      lastTimestamp,
       limit,
+      topicFilter,
+      cacheKey,
     });
 
-    // Caching the result to redis with expiration time
-    await redisClient.setEx(cacheKey, 300, JSON.stringify(posts));
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error.message);
@@ -240,8 +203,8 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
       },
       order: [["createdAt", "DESC"]],
       limit,
-      raw: false, // Needed to include nested models properly
-      nest: true,
+      // raw: false, // Needed to include nested models properly
+      // nest: true,
     });
 
     //  Cache the result for 5 minutes
@@ -259,58 +222,17 @@ export const getPostView = async (req, res, next) => {
   const id = req.params.id;
 
   try {
-    const cachedData = await redisClient.get(id);
-    if (cachedData !== null) {
-      console.log("cache hit");
-      return res.status(200).json(JSON.parse(cachedData));
-    }
-    console.log("cache miss");
-
-    const post = await Post.findOne({
-      where: { id },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "username", "userImage", "displayName"],
-        },
-        {
-          model: Likes, // Include likes
-          as: "Likes",
-          required: false,
-          attributes: ["id", "type", "likedBy", "createdAt", "updatedAt"],
-        },
-        {
-          model: PostContent,
-          as: "postContent",
-          required: false,
-        },
-        {
-          model: Comments,
-          as: "comments",
-          attributes: [
-            "id",
-            "userId",
-            "postId",
-            "topCommentId",
-            "replyTo",
-            "content",
-            "pind",
-          ],
-        },
-      ],
-    });
-    if (post) {
-      await redisClient.setEx(id, EXPIRATION, JSON.stringify(post));
-      res.status(200).json(post);
-    } else {
+    const post = await postService.findPostById({ id });
+    if (!post) {
       return res.status(404).json({ message: "post not found" });
     }
+    res.status(200).json(post);
   } catch (error) {
     console.error("Error fetching post:", error);
-    // res.status(500).send('Server error');
     next(error);
   }
 };
+
 export const getArchivedPosts = async (req, res, next) => {
   const userId = req.authUser.id;
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
@@ -349,7 +271,6 @@ export const getArchivedPosts = async (req, res, next) => {
     });
 
     const posts = savedPosts.map((archive) => archive.post);
-    // const postData = formatPostData(JSON.parse(JSON.stringify(posts)));
 
     res.status(200).json(posts);
   } catch (error) {
@@ -376,7 +297,6 @@ export const EditPost = async (req, res, next) => {
     res.json(post);
   } catch (error) {
     console.error("Error editing post:", error);
-    // res.status(500).send('Server error');
     next(error);
   }
 };

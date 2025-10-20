@@ -60,9 +60,13 @@ function WhoToFollow({ className }) {
                     </SubHeading>
 
                     {/* Bio */}
-                    <Paragraph className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <Paragraph className=" sm:text-xs text-xs/4 text-gray-700 dark:text-gray-300 leading-relaxed">
                       <span className="line-clamp-1 sm:line-clamp-2">
-                        {person?.bio}
+                        {person?.bio} Lorem ipsum dolor sit, amet consectetur
+                        adipisicing elit. Quibusdam magni alias natus ex quae.
+                        Natus culpa error magnam dicta? In sunt, voluptatum
+                        dignissimos consectetur veritatis reiciendis maiores
+                        fugiat. Aliquam, veniam.
                       </span>
                     </Paragraph>
                   </div>

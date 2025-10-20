@@ -20,7 +20,7 @@ export const startedFollowing = async () => {
 
     if (existing) {
       await existing.update({
-        message: "started following you", // or updated timestamp, etc.
+        message: "started following you",
         read: false,
       });
     } else {

@@ -7,7 +7,7 @@ dotenv.config();
 await redisClient.connect();
 
 async function processMessages() {
-  console.log("worker running");
+  console.log("meesage worker running...");
 
   let lastId = "0"; // Change to "$" if you only want new messages
 

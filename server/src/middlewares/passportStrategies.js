@@ -2,10 +2,8 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import User from "../models/user.model.js"; // Adjust the path as necessary
 import dotenv from "dotenv";
-import Post from "../models/posts.model.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
-import Sequelize from "sequelize";
-import { fetchProfile } from "../utils/data-fetching.js";
+
 import passport from "passport";
 import userService from "../services/user.service.js";
 

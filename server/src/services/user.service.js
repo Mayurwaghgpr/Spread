@@ -30,7 +30,7 @@ class UserService {
         },
         {
           model: Post,
-          as: "savedPosts",
+          as: "savedPost",
           through: { attributes: [] }, // Fetch only related posts
           attributes: ["id"],
         },

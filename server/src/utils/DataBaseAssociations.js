@@ -32,7 +32,7 @@ const DataBaseAssociations = () => {
   // User and Post SavedPost association
   User.belongsToMany(Post, {
     through: SavedPost,
-    as: "savedPosts",
+    as: "savedPost",
     foreignKey: "userId",
     otherKey: "postId", // Define the other key to be used in the junction table
   });

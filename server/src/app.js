@@ -30,7 +30,7 @@ export const app = express();
 
 export const server = createServer(app);
 // Constants
-const __dirname = path.resolve();
+// const __dirname = path.resolve();
 
 // Morgan for logging
 app.use(morgan("dev"));

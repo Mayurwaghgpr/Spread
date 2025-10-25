@@ -6,7 +6,7 @@ import Likes from "../models/likes.model.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 import { startedFollowing } from "../workers/follows.worker.js";
-import SavedPost from "../models/SavedPost.model.js";
+import SavedPost from "../models/savedPost.model.js";
 // Fetch all users except the current user and distinct topics
 export const getHomeContent = async (req, res, next) => {
   try {

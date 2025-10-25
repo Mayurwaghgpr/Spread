@@ -11,7 +11,7 @@ import Follow from "../models/follow.model.js";
 import postService from "../services/post.service.js";
 import cloudinaryService from "../services/cloudinary.service.js";
 import db from "../config/database.js";
-import SavedPost from "../models/SavedPost.model.js";
+import SavedPost from "../models/savedPost.model.js";
 
 export const AddNewPost = async (req, res, next) => {
   const imageFileArray = req.files || [];

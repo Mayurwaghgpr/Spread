@@ -1,5 +1,5 @@
-import React, { memo, useCallback, useMemo, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { memo, useCallback, useMemo, useState } from "react";
+import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../store/slices/uiSlice";
 import usePublicApis from "../../services/publicApis";
@@ -14,16 +14,15 @@ function Bookmark({ className, post, children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { ArchivePost } = usePublicApis();
-  const queryClient = useQueryClient();
   const icons = useIcons();
   const isBookmarked = useMemo(
-    () => user?.savedPosts?.some((savedPost) => savedPost?.id === post?.id),
-    [user?.savedPosts, post?.id]
+    () => user?.savedPostsList?.some((savedPost) => savedPost?.id === post?.id),
+    [user?.savedPostsList, post?.id]
   );
 
   const ArchiveMutation = useMutation((id) => ArchivePost(id), {
     onSuccess: (data) => {
-      dispatch(setUser({ ...user, savedPosts: data.archived }));
+      dispatch(setUser({ ...user, savedPostsList: data.savedPostsList }));
       // queryClient.invalidateQueries(["loggedInUser"]);
       dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
     },

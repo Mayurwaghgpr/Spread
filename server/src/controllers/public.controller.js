@@ -277,16 +277,15 @@ export const AddPostToSavedPost = async (req, res, next) => {
   const userId = req.authUser.id;
 
   const userInfo = JSON.parse(await redisClient.get(userId));
-  console.log({ userInfo });
   try {
     let updatedUserInfo;
     let message;
     const exist = await SavedPost.findOne({ where: { postId, userId } });
     if (exist) {
       const filterSavedPost =
-        userInfo?.savedPost?.filter((post) => post.id !== postId) || [];
+        userInfo?.savedPostsList?.filter((post) => post.id !== postId) || [];
       if (Array.isArray(filterSavedPost)) {
-        updatedUserInfo = { ...userInfo, savedPost: filterSavedPost };
+        updatedUserInfo = { ...userInfo, savedPostsList: filterSavedPost };
       }
       await exist.destroy();
       message = "Removed from SavedPost";
@@ -294,14 +293,14 @@ export const AddPostToSavedPost = async (req, res, next) => {
       await SavedPost.create({ postId, userId });
       updatedUserInfo = {
         ...userInfo,
-        savedPost: [...userInfo?.savedPost, { id: postId }],
+        savedPostsList: [...userInfo?.savedPostsList, { id: postId }],
       };
       message = "Post SavedPostd successfully";
     }
     await redisClient.setEx(userId, 3600, JSON.stringify(updatedUserInfo));
     res.status(200).json({
       message,
-      SavedPost: updatedUserInfo.savedPost,
+      SavedPost: updatedUserInfo.savedPostsList,
     });
   } catch (error) {
     console.error("Error saving post:", error);

@@ -5,7 +5,7 @@ import PostPreview from "../../component/postsComp/PostPreview";
 import Spinner from "../../component/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import Aside from "../../component/layout/Aside";
-import PostsApis from "../../services/PostsApis";
+import usePostsApis from "../../services/usePostsApis";
 import WhoToFollow from "./WhoToFollow";
 import useDeviceSize from "../../hooks/useDeviceSize";
 import useIcons from "../../hooks/useIcons";
@@ -17,7 +17,7 @@ import { BsPostcard } from "react-icons/bs";
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isDeviceSize = useDeviceSize("1023");
-  const { fetchPostsFeed } = PostsApis();
+  const { fetchPostsFeed } = usePostsApis();
   const selectedTopic = searchParams.get("topic") || "All";
   const selectedFeed = searchParams.get("feed");
   const Icons = useIcons();

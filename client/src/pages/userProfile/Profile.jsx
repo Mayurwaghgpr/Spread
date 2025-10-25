@@ -8,7 +8,7 @@ import { useInfiniteQuery, useQuery } from "react-query";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileinfoCard from "../../component/ProfileinfoCard";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import useProfileApi from "../../services/ProfileApis";
+import useProfileApi from "../../services/useProfileApis";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import LoaderScreen from "../../component/loaders/loaderScreen";
 import { BsPostcard } from "react-icons/bs";
@@ -77,18 +77,6 @@ function Profile() {
     () => postsData?.pages.flatMap((page) => page) || [],
     [postsData]
   );
-
-  // Memoize rendered posts for performance
-  const renderedPosts = useMemo(() => {
-    return posts.map((post, idx, arr) => (
-      <PostPreview
-        className="border-b w-full border"
-        ref={arr.length % 3 === 0 ? lastItemRef : null}
-        key={post.id}
-        post={post}
-      />
-    ));
-  }, [posts, lastItemRef]);
 
   // Handle navigation tab clicks
   const handleTabClick = useCallback((tab) => {
@@ -169,21 +157,19 @@ function Profile() {
           </div>
 
           {/* Posts Content */}
-          <div className="py-20 w-full flex justify-center items-center flex-col border-inherit pt-5">
+          <div className="py-20 w-full flex justify-center items-center flex-col  gap-5 border-inherit pt-5">
             {/*posts if they exist */}
-            {posts.length > 0 && renderedPosts}
-
-            {/* empty state if no posts and not loading */}
-            {posts.length === 0 && !isPostsLoading && <EmptyPostsState />}
-
-            {/* loading skeletons for initial posts load */}
-            {isPostsLoading &&
-              [...Array(3)].map((_, idx) => (
-                <PostPreview
-                  key={`skeleton-${idx}`}
-                  className="border-inherit px-2 border"
-                />
-              ))}
+            {posts.length > 0 &&
+              (!isPostsLoading ? [...Array(3)] : posts).map(
+                (post, idx, arr) => (
+                  <PostPreview
+                    className="border-b w-full border"
+                    ref={arr.length % 3 === 0 ? lastItemRef : null}
+                    key={post?.id || idx}
+                    post={post}
+                  />
+                )
+              )}
 
             {/* loading spinner for infinite scroll */}
             {isFetchingNextPage && (
@@ -191,6 +177,8 @@ function Profile() {
                 <Spinner className="w-10 h-10 border-t-black dark:border-t-white" />
               </div>
             )}
+            {/* empty state if no posts and not loading */}
+            {posts.length === 0 && !isPostsLoading && <EmptyPostsState />}
 
             {/* End of list indicator */}
             {!hasNextPage &&

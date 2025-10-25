@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from "react-query";
-import PostsApis from "../services/PostsApis";
+import usePostsApis from "../services/usePostsApis";
 import audio from "../assets/audio/paper-rip-fast-252617.mp3";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setConfirmBox, setToast } from "../store/slices/uiSlice";
 import { useDispatch } from "react-redux";
 function useDeleteHandlers() {
-  const { DeletePostApi, deleteComtApi } = PostsApis();
+  const { DeletePostApi, deleteComtApi } = usePostsApis();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const location = useLocation();

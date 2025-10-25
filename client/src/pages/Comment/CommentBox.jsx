@@ -2,7 +2,7 @@ import React, { forwardRef, memo, useMemo, useRef, useState } from "react";
 import userImageSrc from "../../utils/userImageSrc";
 import { useInfiniteQuery, useMutation } from "react-query";
 
-import PostsApis from "../../services/PostsApis";
+import PostsApis from "../../services/usePostsApis";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentCred } from "../../store/slices/postSlice";
 import { setToast } from "../../store/slices/uiSlice";

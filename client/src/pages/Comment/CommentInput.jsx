@@ -12,7 +12,7 @@ import userImageSrc from "../../utils/userImageSrc";
 import { useMutation, useQueryClient } from "react-query";
 import { setCommentCred } from "../../store/slices/postSlice";
 
-import PostsApis from "../../services/PostsApis";
+import PostsApis from "../../services/usePostsApis";
 import { setToast } from "../../store/slices/uiSlice";
 import Spinner from "../../component/loaders/Spinner";
 import ProfileImage from "../../component/ProfileImage";

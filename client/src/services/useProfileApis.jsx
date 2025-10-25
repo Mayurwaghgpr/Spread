@@ -24,10 +24,11 @@ function useProfileApi() {
     }
   };
 
-  const getArchivedPosts = async ({ pageParam }) => {
+  const getArchivedPosts = async ({ pageParam, group }) => {
     try {
-      const result = await axiosInstance.get(`/posts/archived`, {
+      const result = await axiosInstance.get(`/posts/saved`, {
         params: {
+          group,
           lastTimestamp: pageParam,
           limit: 3,
         },

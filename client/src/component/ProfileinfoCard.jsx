@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFollowInfo } from "../store/slices/profileSlice";
 import { createPortal } from "react-dom";
 import { useQuery } from "react-query";
-import useProfileApi from "../services/ProfileApis";
+import useProfileApi from "../services/useProfileApis";
 import Follow from "./buttons/follow";
 import { useNavigate } from "react-router-dom";
 import ProfileListItemLoadingSkeleton from "./loaders/ProfileListItemLoadingSkeleton";

@@ -1,7 +1,7 @@
 import axios from "axios";
 import axiosInstance from "./axios";
 
-function PostsApis() {
+function usePostsApis() {
   // Fetch all posts with pagination and filtering by topic
   const fetchPostsFeed = async ({ pageParam, topic, endpoint }) => {
     try {
@@ -16,7 +16,16 @@ function PostsApis() {
           withCredentials: true,
         }
       );
-      console.log("res", response.data);
+      return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+  const fetchSavedPostsGroup = async () => {
+    try {
+      const response = await axiosInstance.get(`/posts/saved/groups`, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       throw error.response || error;
@@ -148,6 +157,7 @@ function PostsApis() {
     DeletePostApi,
     AddNewPost,
     fetchPostsFeed,
+    fetchSavedPostsGroup,
     getComments,
     Comments,
     hitLike,
@@ -159,4 +169,4 @@ function PostsApis() {
   };
 }
 
-export default PostsApis;
+export default usePostsApis;

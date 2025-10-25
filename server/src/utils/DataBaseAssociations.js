@@ -29,19 +29,18 @@ const DataBaseAssociations = () => {
   Follow.belongsTo(User, { as: "Follower", foreignKey: "followerId" });
   Follow.belongsTo(User, { as: "Followed", foreignKey: "followedId" });
 
-  // User and Post SavedPost association
   User.belongsToMany(Post, {
     through: SavedPost,
-    as: "savedPost",
     foreignKey: "userId",
     otherKey: "postId", // Define the other key to be used in the junction table
+    as: "savedPostsList",
   });
 
   Post.belongsToMany(User, {
     through: SavedPost,
-    as: "usersSaved",
     foreignKey: "postId",
     otherKey: "userId", // Define the other key to be used in the junction table
+    as: "savedByUsers",
   });
 
   SavedPost.belongsTo(User, {

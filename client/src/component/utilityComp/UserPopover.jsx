@@ -30,7 +30,8 @@ const UserPopover = forwardRef(
     return (
       <div
         ref={ref}
-        className={`${className} rounded-2xl shadow-xl border border-inherit overflow-hidden bg-light dark:bg-dark w-full`}
+        className={`${className} rounded-2xl shadow-lg
+         border border-inherit overflow-hidden bg-light dark:bg-dark w-full`}
         role="dialog"
         aria-label={`${person?.username}'s profile information`}
         style={styles?.popper}

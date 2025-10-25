@@ -1,5 +1,5 @@
 import Post from "../models/posts.model.js";
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import User from "../models/user.model.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import PostContent from "../models/postContent.model.js";
@@ -115,6 +115,7 @@ export const AddNewPost = async (req, res, next) => {
       .json({ newPost, message: "Post created successfully" });
   } catch (error) {
     await transaction.rollback();
+    await deletePostImage(imageFileArray);
     await cloudinaryService.deleteImages(uploadedPublicIds);
     console.error("Error adding new post:", error);
     next(error);
@@ -250,16 +251,60 @@ export const getPostView = async (req, res, next) => {
   }
 };
 
+export const addSavedPostToGroup = async (req, res, next) => {
+  const { postId, groupName, userId } = req.body;
+  // const userId = req.authUser.id;
+
+  try {
+    const exist = await SavedPost.findOne({ where: { postId, userId } });
+    if (!exist) {
+      return res.status(400).json({ message: " Not found any saved post" });
+    }
+    exist.update({ groupName });
+    await exist.save();
+    res.status(200).json({
+      SavedPost: exist,
+    });
+  } catch (error) {
+    console.error("Error grouping saved post:", error);
+    next(error);
+  }
+};
+
+export const getSavedPostsGroups = async (req, res, next) => {
+  const userId = req.authUser.id;
+
+  try {
+    const groups = await SavedPost.findAll({
+      where: { userId, groupName: { [Op.ne]: null } },
+      attributes: [
+        "groupName",
+        [Sequelize.fn("COUNT", Sequelize.col("SavedPost.id")), "postCount"],
+      ],
+      group: ["SavedPost.groupName"],
+      order: [["groupName", "ASC"]],
+    });
+
+    res.status(200).json({
+      message: "Fetched grouped saved posts successfully",
+      groups,
+    });
+  } catch (error) {
+    console.error("Error fetching saved posts:", error);
+    next(error);
+  }
+};
 export const getSavedPost = async (req, res, next) => {
   const userId = req.authUser.id;
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
-
+  const group = req.query.group !== "all" ? { groupName: req.query.group } : {};
   try {
     const savedPosts = await SavedPost.findAll({
       where: {
         createdAt: { [Op.lt]: lastTimestamp },
         userId,
+        ...group,
       },
       attributes: ["createdAt"],
       include: [
@@ -291,7 +336,7 @@ export const getSavedPost = async (req, res, next) => {
 
     res.status(200).json(posts);
   } catch (error) {
-    console.error("Error fetching SavedPostd posts:", error);
+    console.error("Error fetching saved posts:", error);
     next(error);
   }
 };

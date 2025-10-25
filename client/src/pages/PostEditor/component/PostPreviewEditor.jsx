@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setElements } from "../../../store/slices/postSlice";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useMutation } from "react-query";
-import PostsApis from "../../../services/PostsApis";
+import PostsApis from "../../../services/usePostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../component/loaders/Spinner";
 import { createPortal } from "react-dom";

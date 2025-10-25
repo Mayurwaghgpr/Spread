@@ -2,7 +2,7 @@ import React, { memo, useCallback, useMemo } from "react";
 import { lazy } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import PostsApis from "../../services/PostsApis";
+import PostsApis from "../../services/usePostsApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import Spinner from "../../component/loaders/Spinner";
 import { setCommentCred } from "../../store/slices/postSlice";

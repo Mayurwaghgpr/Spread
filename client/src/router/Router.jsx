@@ -1,9 +1,10 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "../component/layout/Layout";
 import { useSelector } from "react-redux";
 import ProtectedRoutes from "../utils/ProtectedRoutes";
 import LoaderScreen from "../component/loaders/loaderScreen";
+import GroupBoard from "../pages/savedPosts/GroupBoard";
 // Lazy load components with better error boundaries
 const SignUp = lazy(() => import("../pages/auth/SignUp"));
 const SignIn = lazy(() => import("../pages/auth/SignIn"));
@@ -22,7 +23,7 @@ const PostPreviewEditor = lazy(
 const PostView = lazy(() => import("../pages/PostView/PostView"));
 const ProfileEditor = lazy(() => import("../pages/userProfile/ProfileEditor"));
 const About = lazy(() => import("../pages/About"));
-const ReadList = lazy(() => import("../pages/ReadList"));
+const ReadList = lazy(() => import("../pages/savedPosts/ReadList"));
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const General = lazy(() => import("../pages/settings/General"));
 const Conversations = lazy(() => import("../pages/Conversation/Conversations"));
@@ -61,7 +62,7 @@ const ROUTES = {
   POST_VIEW: "/view/:username/:id",
   SEARCH: "/search",
   SUGGESTIONS: "/suggestions/find_peoples",
-  READ: "/Read",
+  SAVED: { main: "/saved", read: "read/:group" },
   AUTH_SIGNIN: "/auth/signin",
   AUTH_SIGNUP: "/auth/signup",
   ABOUT: "/about",
@@ -70,7 +71,7 @@ const ROUTES = {
   ERROR: "/error",
 };
 function Router() {
-  const { isLogin, loginPop, user } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
   return (
     <Routes>
       {/* Public Routes */}
@@ -225,14 +226,24 @@ function Router() {
           }
         />
 
-        <Route
-          path={ROUTES.READ}
-          element={
-            <ProtectedRoutes>
-              <ReadList />
-            </ProtectedRoutes>
-          }
-        />
+        <Route path={ROUTES.SAVED.main}>
+          <Route
+            path={""}
+            element={
+              <ProtectedRoutes>
+                <GroupBoard />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path={ROUTES.SAVED.read}
+            element={
+              <ProtectedRoutes>
+                <ReadList />
+              </ProtectedRoutes>
+            }
+          />
+        </Route>
 
         <Route path={ROUTES.SUGGESTIONS} element={<Suggestions />} />
       </Route>

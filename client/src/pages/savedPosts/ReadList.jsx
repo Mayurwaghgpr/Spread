@@ -1,13 +1,15 @@
 import { useMemo } from "react";
 import { useInfiniteQuery } from "react-query";
-import PostPreview from "../component/postsComp/PostPreview";
-import Spinner from "../component/loaders/Spinner";
-import { useLastItemObserver } from "../hooks/useLastItemObserver";
-import useProfileApi from "../services/ProfileApis";
-import useIcons from "../hooks/useIcons";
+import PostPreview from "../../component/postsComp/PostPreview";
+import Spinner from "../../component/loaders/Spinner";
+import { useLastItemObserver } from "../../hooks/useLastItemObserver";
+import useProfileApi from "../../services/useProfileApis";
+import useIcons from "../../hooks/useIcons";
+import { useParams } from "react-router-dom";
 
 const ReadList = () => {
   const { getArchivedPosts } = useProfileApi();
+  const { group } = useParams();
   const icons = useIcons();
   const {
     data,
@@ -17,9 +19,9 @@ const ReadList = () => {
     isLoading,
     hasNextPage,
   } = useInfiniteQuery(
-    ["posts"],
+    ["posts", group],
     ({ pageParam = new Date().toISOString() }) =>
-      getArchivedPosts({ pageParam }),
+      getArchivedPosts({ pageParam, group }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0

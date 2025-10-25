@@ -102,7 +102,7 @@ function usePublicApis() {
 
   const ArchivePost = async (postId) => {
     try {
-      const result = await axiosInstance.put(`/public/archive`, { postId });
+      const result = await axiosInstance.put(`/public/save`, { postId });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -110,7 +110,7 @@ function usePublicApis() {
   };
   const removePostFromArchive = async (id) => {
     try {
-      const result = await axiosInstance.delete(`/public/archive?id=${id}`);
+      const result = await axiosInstance.delete(`/public/save?id=${id}`);
       return result.data;
     } catch (error) {
       throw error.response || error;

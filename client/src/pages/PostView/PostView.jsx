@@ -1,13 +1,5 @@
-import React, {
-  lazy,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useQuery } from "react-query";
@@ -37,10 +29,7 @@ import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import AIBtn from "../../component/buttons/AIBtn";
 import PostContent from "./components/PostContent";
 import PostHeader from "./components/PostHeader";
-import ProfileImage from "../../component/ProfileImage";
-import Follow from "../../component/buttons/follow";
-import FormatedTime from "../../component/utilityComp/FormatedTime";
-import useProfileApi from "../../services/ProfileApis";
+import useProfileApi from "../../services/useProfileApis";
 import UserPopover from "../../component/utilityComp/UserPopover";
 // import CommentSection from "../Comment/CommentSection";
 
@@ -205,7 +194,6 @@ function PostView() {
       </article>
 
       {/* Author profile */}
-
       <UserPopover
         person={authorData}
         className="relative sm:flex hidden items-center sm:text-base text-xs justify-between gap-5 shadow-none  p-5 w-full max-w-sm  border rounded-lg border-inherit"

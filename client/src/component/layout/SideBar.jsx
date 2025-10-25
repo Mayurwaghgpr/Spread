@@ -42,10 +42,10 @@ const LoginMenuLinks = [
   },
   {
     id: uuidv4(),
-    lkname: "read",
+    lkname: "Saved",
     icon1: "libraryO",
     icon2: "libraryFi",
-    stub: "/read",
+    stub: "/saved",
   },
   {
     id: uuidv4(),

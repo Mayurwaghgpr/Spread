@@ -11,7 +11,7 @@ import { setUser } from "../../store/slices/authSlice";
 import { useMutation } from "react-query";
 import { setToast } from "../../store/slices/uiSlice";
 import { debounce } from "../../utils/debounce";
-import useProfileApi from "../../services/ProfileApis";
+import useProfileApi from "../../services/useProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
 import CommonInput from "../../component/inputComponents/CommonInput";
 import Selector from "../../component/utilityComp/Selector";

@@ -27,6 +27,6 @@ router.get("/search", IsAuth, searchData);
 // Put Routes
 router.put("/like/", IsAuth, LikePost);
 router.put("/follow", IsAuth, FollowUser);
-router.put("/archive", IsAuth, AddPostToSavedPost); // Changed route to 'archive' for consistency
+router.put("/save", IsAuth, AddPostToSavedPost); // Changed route to 'archive' for consistency
 
 export default router;

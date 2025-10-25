@@ -176,7 +176,9 @@ function PostPreviewEditor() {
               } dark:bg-sky-400 bg-sky-400  px-4 py-2 rounded-lg`}
               disabled={mutation.isLoading}
             >
-              {mutation.isLoading && <Spinner className={" w-5 h-5"} />}
+              {mutation.isLoading && (
+                <Spinner className={" w-5 h-5 p-0.5 bg-black dark:bg-white"} />
+              )}
               {mutation.isLoading ? `Submitting...` : "Submit"}
             </button>
 

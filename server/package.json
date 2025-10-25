@@ -7,7 +7,8 @@
   "scripts": {
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "dev:workers": "nodemon src/workers/message.worker.js"
   },
   "keywords": [],
   "author": "",
@@ -44,8 +45,8 @@
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
     "redis": "^4.7.0",
-    "sequelize": "^6.37.5",
-    "sequelize-cli": "^6.6.2",
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3",
     "socket.io": "^4.7.5",
     "unique-username-generator": "^1.4.0",
     "uuid": "^9.0.1"

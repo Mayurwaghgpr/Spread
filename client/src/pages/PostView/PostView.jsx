@@ -40,7 +40,9 @@ import PostHeader from "./components/PostHeader";
 import ProfileImage from "../../component/ProfileImage";
 import Follow from "../../component/buttons/follow";
 import FormatedTime from "../../component/utilityComp/FormatedTime";
-import CommentSection from "../Comment/CommentSection";
+import useProfileApi from "../../services/ProfileApis";
+import UserPopover from "../../component/utilityComp/UserPopover";
+// import CommentSection from "../Comment/CommentSection";
 
 // Memoized sub-components for better performance
 
@@ -51,6 +53,7 @@ function PostView() {
 
   // Hooks
   const { fetchDataById } = usePublicApis();
+  const { fetchUserProfile } = useProfileApi();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -96,7 +99,12 @@ function PostView() {
     },
     refetchOnWindowFocus: false,
   });
+  const { data: authorData } = useQuery({
+    queryKey: ["author_details", postViewData?.user?.id],
+    queryFn: () => fetchUserProfile(postViewData?.user?.id),
 
+    refetchOnWindowFocus: false,
+  });
   // Memoized values
   const { POST_MENU } = useMenuConstant(postViewData, "post");
 
@@ -143,6 +151,7 @@ function PostView() {
   if (isLoading) {
     return <LoaderScreen message="Loading post..." />;
   }
+
   return (
     <div className="relative flex justify-end items-start w-full h-screen overflow-auto px-2 sm:py-10 py-5  border-inherit transition-all duration-500 ">
       <article className="relative animate-fedin1s max-w-4xl w-full sm:px-4 px-2 flex flex-col justify-center items-center gap-5 border-inherit mb-40">
@@ -196,37 +205,11 @@ function PostView() {
       </article>
 
       {/* Author profile */}
-      <div className="relative sm:flex hidden items-center sm:text-base text-xs justify-between gap-5  p-5 w-full max-w-sm  border rounded-lg border-inherit">
-        <div className="flex items-start gap-5 h-full w-full">
-          <div className=" flex justify-center items-start flex-col h-full w-full ">
-            <ProfileImage
-              className="sm:w-10 sm:h-10 w-8 h-8"
-              image={userImageurl}
-              alt={postViewData?.user?.display}
-              title="author profile"
-            />
-            <Link
-              className="w-full text-nowrap hover:underline underline-offset-4"
-              to={`/profile/@${postViewData?.user?.username
-                ?.split(" ")
-                .slice(0, -1)
-                .join("")}/${postViewData?.user?.id}`}
-            >
-              {postViewData?.user?.displayName}
-            </Link>
-            <FormatedTime
-              className="text-black dark:text-white sm:text-xs text-[.7em]"
-              date={postViewData?.createdAt}
-            />
-          </div>
-          <div className="flex justify-center items-start h-full w-full">
-            <Follow
-              person={postViewData?.user}
-              className="relative sm:px-4 sm:py-2 bg-none hover:underline underline-offset-4 border-none text-blue-500"
-            />
-          </div>
-        </div>
-      </div>
+
+      <UserPopover
+        person={authorData}
+        className="relative sm:flex hidden items-center sm:text-base text-xs justify-between gap-5 shadow-none  p-5 w-full max-w-sm  border rounded-lg border-inherit"
+      />
 
       <AIBtn
         state={{ postData: postViewData }}

@@ -12,7 +12,7 @@ import passport from "passport";
 import Database from "./config/database.js";
 import redisClient from "./utils/redisClient.js";
 import DataBaseAssociations from "./utils/DataBaseAssociations.js";
-import { passportStrategies } from "./middlewares/passportStrategies.js";
+import { passportStrategies } from "./middlewares/passport.middleware.js";
 import { createServer } from "http";
 // Routes
 import authRoutes from "./routes/auth.route.js";

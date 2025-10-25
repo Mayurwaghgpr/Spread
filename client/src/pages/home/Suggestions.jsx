@@ -1,10 +1,10 @@
-import React, { memo, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import { useInfiniteQuery } from "react-query";
 import usePublicApis from "../../services/publicApis";
 import Follow from "../../component/buttons/follow";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Search, Users, Loader2, RefreshCw } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
+import { Users } from "lucide-react";
 import ProfileImage from "../../component/ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import Heading from "../../component/texts/Heading";
@@ -14,7 +14,7 @@ import Spinner from "../../component/loaders/Spinner";
 import ProfileListItemLoadingSkeleton from "../../component/loaders/ProfileListItemLoadingSkeleton";
 import EmptyState from "../../component/utilityComp/EmptyState";
 function Suggestions() {
-  const { fetchPeopels } = usePublicApis();
+  const { fetchPeopel } = usePublicApis();
   const location = useLocation();
 
   const {
@@ -29,7 +29,7 @@ function Suggestions() {
     refetch,
   } = useInfiniteQuery(
     ["find_people"],
-    ({ pageParam }) => fetchPeopels({ pageParam }),
+    ({ pageParam }) => fetchPeopel({ pageParam }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
@@ -149,7 +149,7 @@ function Suggestions() {
                         className={`w-8 h-8 rounded-full transition-opacity duration-200`}
                         image={person && userImageurl}
                       />
-                      <div className=" text-nowrap w-full space-y-2">
+                      <div className=" text-nowrap w-full">
                         <Heading className="w-[30%] text-sm">
                           {person?.displayName}
                         </Heading>

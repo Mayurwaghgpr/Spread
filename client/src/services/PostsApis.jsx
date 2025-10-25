@@ -3,7 +3,7 @@ import axiosInstance from "./axios";
 
 function PostsApis() {
   // Fetch all posts with pagination and filtering by topic
-  const fetchDataAll = async ({ pageParam, topic, endpoint }) => {
+  const fetchPostsFeed = async ({ pageParam, topic, endpoint }) => {
     try {
       const response = await axiosInstance.get(
         `/posts/feed/${endpoint || ""}`,
@@ -16,6 +16,7 @@ function PostsApis() {
           withCredentials: true,
         }
       );
+      console.log("res", response.data);
       return response.data;
     } catch (error) {
       throw error.response || error;
@@ -146,7 +147,7 @@ function PostsApis() {
   return {
     DeletePostApi,
     AddNewPost,
-    fetchDataAll,
+    fetchPostsFeed,
     getComments,
     Comments,
     hitLike,

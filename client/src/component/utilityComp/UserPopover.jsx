@@ -1,21 +1,20 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import { CheckCircle, MapPin, Calendar, ExternalLink } from "lucide-react";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
-
-// Mock Follow component for demo
-const Follow = ({ person, className }) => (
-  <button className={className}>
-    {person?.isFollowing ? "Following" : "Follow"}
-  </button>
-);
+import Follow from "../buttons/follow";
+import FormatedTime from "./FormatedTime";
+import useIcons from "../../hooks/useIcons";
+import DisplayUsername from "../texts/DisplayUsername";
+import { Link } from "react-router-dom";
 
 const UserPopover = forwardRef(
   ({ person, styles, attributes, className }, ref) => {
+    const icons = useIcons();
     if (!person) {
       return (
         <div
           ref={ref}
-          className={`${className} z-50 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-6 animate-pulse`}
+          className={`${className} bg-white dark:bg-dark rounded-2xl shadow-xl border border-inherit p-6 animate-pulse`}
         >
           <div className="flex items-center gap-3">
             <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
@@ -31,7 +30,7 @@ const UserPopover = forwardRef(
     return (
       <div
         ref={ref}
-        className={`${className} z-50  rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-light dark:bg-dark w-full`}
+        className={`${className} rounded-2xl shadow-xl border border-inherit overflow-hidden bg-light dark:bg-dark w-full`}
         role="dialog"
         aria-label={`${person?.username}'s profile information`}
         style={styles?.popper}
@@ -40,38 +39,45 @@ const UserPopover = forwardRef(
         {/* Main content */}
         <div className=" flex flex-col gap-3 items-start p-3  relative w-full">
           {/* Avatar and basic info */}
-          <div className="flex items-start justify-between gap-3 w-full">
-            <div className="flex items-center gap-4">
+          <div className="flex items-start justify-between gap-2 w-full">
+            <div className="flex items-center gap-4 w-full">
               <div className="relative">
                 <img
-                  className="w-16 h-16 rounded-full object-cover border-4 border-white shadow-lg ring-2 ring-gray-100 dark:border-gray-900 dark:ring-gray-800  object-top"
+                  className="w-16 h-16 rounded-full object-cover  object-top"
                   src={person?.userImage || "/api/placeholder/64/64"}
                   alt={`${person?.username}'s profile picture`}
                   loading="lazy"
                 />
                 {person?.isVerified && (
-                  <CheckCircle className="absolute -bottom-1 -right-1 w-5 h-5 text-blue-500 fill-current bg-white rounded-full" />
+                  <span className="absolute -bottom-1 flex items-center justify-center -right-1 w-5 h-5 text-blue-500 fill-current rounded-full">
+                    {icons["circleCheck"]}
+                  </span>
                 )}
                 {person?.isOnline && (
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                 )}
               </div>
 
-              <div className="flex-1 min-w-0 max-w-20">
-                <a
-                  href={`/profile/@${person?.username}/${person?.id}`}
+              <div className="flex-1 min-w-0 max-w-32">
+                <Link
+                  to={`/profile/@${person?.username}/${person?.id}`}
                   className="group block"
                 >
                   <div className="flex items-center gap-2">
-                    <h2 className="font-bold text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                    <h2 className="font-bold text-sm  group-hover:text-blue-600 dark:group-hover:text-blue-400 hover:underline transition-colors  overflow-hidden text-ellipsis whitespace-nowrap">
                       {person?.displayName || person?.username}
                     </h2>
-                    <ExternalLink className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <p className="text-gray-500 text-nowrap dark:text-gray-400 text-sm">
-                    @{person?.username}
-                  </p>
-                </a>
+                </Link>
+                <Link
+                  to={`/profile/@${person?.username}/${person?.id}`}
+                  className="group block"
+                >
+                  <DisplayUsername
+                    className=" opacity-50 font-thin"
+                    username={`@${person?.username}`}
+                  />
+                </Link>
               </div>
             </div>
 
@@ -92,41 +98,42 @@ const UserPopover = forwardRef(
 
           {/* Additional info */}
           <div className="flex flex-wrap gap-3 mb-4 text-xs text-gray-500 dark:text-gray-400">
-            {person?.location && (
+            {/* {person?.location && (
               <div className="flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
                 <span>{person.location}</span>
               </div>
-            )}
+            )} */}
             {person?.createdAt && (
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                <span>Joined {person.createdAt}</span>
+              <div className="flex items-center justify-start  gap-2">
+                <div className="flex items-center justify-start  gap-1">
+                  {" "}
+                  {icons["calender"]}
+                  <span>Joined </span>{" "}
+                </div>
+
+                <FormatedTime date={person.createdAt} formate={"d LLL yyy"} />
               </div>
             )}
           </div>
 
           {/* Stats */}
-          <div className="flex gap-6 pt-4 border-t border-gray-100 dark:border-gray-800 w-full">
-            <div className="text-center">
-              <div className="font-bold text-lg text-gray-900 dark:text-white">
+          <div className="flex gap-6 pt-4 sm:text-sm text-xs  border-t border-gray-100 dark:border-gray-800 w-full">
+            <div className=" flex items-center justify-start gap-1 text-center">
+              <div className="">
                 {<AbbreviateNumber rawNumber={person?.Followers?.length} />}
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                Followers
-              </div>
+              <div className="  tracking-wide">Followers</div>
             </div>
-            <div className="text-center">
-              <div className="font-bold text-lg text-gray-900 dark:text-white">
+            <div className=" flex items-center justify-start gap-1 text-center">
+              <div className=" ">
                 {<AbbreviateNumber rawNumber={person?.Following?.length} />}
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                Following
-              </div>
+              <div className=" tracking-wide">Following</div>
             </div>
             {person?.postsCount && (
               <div className="text-center">
-                <div className="font-bold text-lg text-gray-900 dark:text-white">
+                <div className="font-bold text-lg">
                   {<AbbreviateNumber rawNumber={person.postsCount} />}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">

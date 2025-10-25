@@ -7,7 +7,7 @@ import {
   getFollowing,
   searchForUsername,
 } from "../controllers/user.controller.js";
-import IsAuth from "../middlewares/isAuth.js";
+import IsAuth from "../middlewares/isAuth.middleware.js";
 import { multerFileUpload } from "../middlewares/multer.middleware.js";
 
 const router = express.Router();
@@ -21,6 +21,6 @@ router.get("/following/:userId", IsAuth, getFollowing);
 
 // Post Routes
 router.post("/profile/edit", IsAuth, multerFileUpload, EditUserProfile);
-router.post('/search/username',searchForUsername)
+router.post("/search/username", searchForUsername);
 
 export default router;

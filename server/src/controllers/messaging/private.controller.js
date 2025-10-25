@@ -14,9 +14,11 @@ export const createPrivateConversation = async (req, res, next) => {
         newPrivateConversation: exist,
       });
     }
+
     const conversation = await Conversation.create({
       conversationType: "private",
     });
+
     const members = [
       {
         memberId: currentUserId,

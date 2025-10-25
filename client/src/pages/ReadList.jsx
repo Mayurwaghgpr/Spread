@@ -43,7 +43,7 @@ const ReadList = () => {
   );
 
   return (
-    <div className=" flex flex-col justify-start items-start w-full h-full  xl:items-center border-inherit ">
+    <div className=" flex flex-col justify-start items-start w-full h-full  xl:items-center border-inherit overflow-scroll ">
       <div className=" sticky top-0 flex  justify-end items-center gap-4 w-full z-10  border-inherit  ">
         <div className=" flex justify-start items-center gap-4 w-full h-full p-7 bg-light dark:bg-dark  border-b border-inherit">
           <span className="border rounded-lg p-2 border-inherit">
@@ -56,7 +56,7 @@ const ReadList = () => {
         </div>
       </div>
       <div className="pb-20 pt-10 max-w-2xl w-full border-inherit space-y-5">
-        {(!isLoading ? pages : [...Array(3)])?.map((page, idx) => (
+        {(!isLoading ? pages : [...Array(10)])?.map((page, idx) => (
           <PostPreview
             className={" w-full  border"}
             ref={pages?.length % 3 === 0 ? lastItemRef : null}
@@ -67,7 +67,7 @@ const ReadList = () => {
         ))}
 
         {isFetchingNextPage && (
-          <div className="w-full flex justify-center items-center h-full p-5">
+          <div className="w-full flex justify-center items-center  p-5">
             <Spinner
               className={"w-8 h-8 p-1 border-t-black dark:border-t-white"}
             />

@@ -6,78 +6,95 @@ import PostContent from "../models/postContent.model.js";
 import Likes from "../models/likes.model.js";
 import Comments from "../models/comments.model.js";
 import cloudinary from "../config/cloudinary.js";
-import { deleteCloudinaryImage } from "../utils/cloudinaryDeleteImage.js";
 import redisClient from "../utils/redisClient.js";
-import Archive from "../models/archive.model.js";
 import Follow from "../models/follow.model.js";
 import postService from "../services/post.service.js";
+import cloudinaryService from "../services/cloudinary.service.js";
+import db from "../config/database.js";
+import SavedPost from "../models/SavedPost.model.js";
 
 export const AddNewPost = async (req, res, next) => {
-  // Parse and extract required data
-  const parsedBlogData = JSON.parse(req.body.blog);
-  const topic = req.body.Topic.toLowerCase();
-  const postTitle = parsedBlogData.find((p) => p.index === 0)?.data;
-  const subtitle = parsedBlogData.at(1)?.data;
   const imageFileArray = req.files || [];
-
+  const uploadedPublicIds = [];
+  // Validate incoming request
+  if (!req.body.blog || !req.body.Topic) {
+    return res.status(400).json({ error: "Blog data or topic is missing" });
+  }
+  let postContent;
   try {
-    // Validate incoming request
-    if (!req.body.blog || !req.body.Topic) {
-      return res.status(400).json({ error: "Blog data or topic is missing" });
-    }
+    postContent = JSON.parse(req.body.blog);
+  } catch {
+    return res.status(400).json({ error: "Invalid blog JSON format" });
+  }
+  const topic = req.body.Topic.toLowerCase();
+  const postTitle = postContent.find((p) => p.index === 0)?.data;
+  const subtitle = postContent.at(1)?.data;
 
-    if (!postTitle || !subtitle) {
-      return res
-        .status(400)
-        .json({ error: "Invalid title or subtitle data provided" });
-    }
-    // Handle title image
+  if (!postTitle || !subtitle) {
+    return res
+      .status(400)
+      .json({ error: "Invalid title or subtitle data provided" });
+  }
+  // Handle title image
+  const previewImage = imageFileArray.at(0);
+  if (!previewImage) {
+    return res.status(400).json({ error: "Preview image is required" });
+  }
 
-    const previewImage = imageFileArray.at(0);
-    const previewImageUrl = await cloudinary.uploader.upload(
-      previewImage?.path
-    );
+  const transaction = await db.transaction();
+  try {
+    if (!previewImage) {
+      return res.status(400).json({ error: "Preview image is required" });
+    }
+    const previewUpload = await cloudinary.uploader.upload(previewImage?.path);
+    uploadedPublicIds.push(previewUpload.public_id);
     // Create a new post
-    const newPost = await Post.create({
-      title: postTitle,
-      subtitle: subtitle,
-      previewImage: previewImageUrl.secure_url,
-      cloudinaryPubId: previewImageUrl.public_id,
-      topic,
-      authorId: req.authUser.id,
-    });
-
-    // Filter additional images (skipping the first one, which is the title image)
-    const imageFiles = imageFileArray.slice(1);
+    const newPost = await Post.create(
+      {
+        title: postTitle,
+        subtitle,
+        previewImage: previewUpload.secure_url,
+        cloudinaryPubId: previewUpload.public_id,
+        topic,
+        authorId: req.authUser.id,
+      },
+      { transaction }
+    );
 
     // Map additional images
     const imageMap = new Map();
-    const publicIdMap = new Map();
 
-    // Upload additional images in parallel
-    const imageUploads = imageFiles.map(async (img) => {
-      const key = Number(img?.fieldname.split("-")[1]);
-      if (!isNaN(key)) {
-        const { secure_url, public_id } = await cloudinary.uploader.upload(
-          img.path
-        );
-        return { index: key, imageUrl: secure_url, cloudinaryPubId: public_id };
+    // Filter additional images ,skipping the first one, which is the title image
+    const imageFiles = imageFileArray.slice(1);
+
+    const uploadResults = await Promise.allSettled(
+      imageFiles.map(async (img) => {
+        const key = Number(img?.fieldname.split("-")[1]);
+        if (!isNaN(key)) {
+          const { secure_url, public_id } = await cloudinary.uploader.upload(
+            img.path
+          );
+          uploadedPublicIds.push(public_id);
+          return { index: key, imageUrl: secure_url, public_id };
+        }
+      })
+    );
+
+    for (const r of uploadResults) {
+      if (r.status === "fulfilled" && r.value) {
+        console.log({ r });
+        imageMap.set(r.value.index, r.value);
       }
-    });
-
-    const uploadedImages = (await Promise.all(imageUploads)).filter(Boolean); // Remove undefined values
-    for (const img of uploadedImages) {
-      imageMap.set(img.index, img.imageUrl);
-      publicIdMap.set(img.index, img.cloudinaryPubId);
     }
     // Arrange post content
-    const postData = parsedBlogData
+    const postData = postContent
       .filter((p) => p.index > 1) // Skip title and subtitle
       .map((p) => ({
         type: p.type,
-        content: p.type === "image" ? imageMap.get(p.index) || null : p.data,
+        content: p.type === "image" ? imageMap.get(p.index)?.imageUrl : p.data,
         otherInfo: p.type === "image" ? p.data : "",
-        cloudinaryPubId: p.type === "image" ? publicIdMap.get(p.index) : "",
+        cloudinaryPubId:
+          p.type === "image" ? imageMap.get(p.index)?.public_id : "",
         index: p.index,
         postId: newPost.id,
       }))
@@ -85,19 +102,20 @@ export const AddNewPost = async (req, res, next) => {
 
     // Bulk insert all post content in one go
     if (postData.length) {
-      await PostContent.bulkCreate(postData);
+      await PostContent.bulkCreate(postData, { transaction });
     }
 
-    // Delete temp uploaded images if any
-    if (imageFileArray.length) {
-      await deletePostImage(imageFileArray);
-    }
+    // Delete temp uploaded images
+    await deletePostImage(imageFileArray);
 
+    await transaction.commit();
     // Send success response
     return res
       .status(201)
       .json({ newPost, message: "Post created successfully" });
   } catch (error) {
+    await transaction.rollback();
+    await cloudinaryService.deleteImages(uploadedPublicIds);
     console.error("Error adding new post:", error);
     next(error);
   }
@@ -137,15 +155,16 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   const currentUserId = req.authUser.id;
 
-  const cacheKey = `post_preview_by_followings:${currentUserId}:${type}:${limit}:${lastTimestamp}`;
+  const postsCacheKey = `post_preview_by_followings:${currentUserId}:${type}:${limit}:${lastTimestamp}`;
   let followedIds = "";
   try {
     // Try to fetch from Redis cache
-    const cached = await redisClient.get(cacheKey);
-    if (cached) {
-      return res.status(200).json(JSON.parse(cached));
+    const cachedPosts = await redisClient.get(postsCacheKey);
+    if (cachedPosts) {
+      console.log("cache hit");
+      return res.status(200).json(JSON.parse(cachedPosts));
     }
-
+    console.log("cache miss");
     const followCacheKey = `user_followings:${currentUserId}`;
     const followedCached = await redisClient.get(followCacheKey);
 
@@ -164,7 +183,7 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
     }
 
     if (!followedIds.length) {
-      return res.status(200).json({ posts: [] });
+      return res.status(200).json([]);
     }
 
     //  Fetch posts from followed users
@@ -203,13 +222,11 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
       },
       order: [["createdAt", "DESC"]],
       limit,
-      // raw: false, // Needed to include nested models properly
-      // nest: true,
     });
 
     //  Cache the result for 5 minutes
     await redisClient.setEx(cacheKey, 300, JSON.stringify(posts));
-
+    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error fetching posts from followed users:", error);
@@ -233,13 +250,13 @@ export const getPostView = async (req, res, next) => {
   }
 };
 
-export const getArchivedPosts = async (req, res, next) => {
+export const getSavedPost = async (req, res, next) => {
   const userId = req.authUser.id;
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
 
   try {
-    const savedPosts = await Archive.findAll({
+    const savedPosts = await SavedPost.findAll({
       where: {
         createdAt: { [Op.lt]: lastTimestamp },
         userId,
@@ -270,11 +287,11 @@ export const getArchivedPosts = async (req, res, next) => {
       limit,
     });
 
-    const posts = savedPosts.map((archive) => archive.post);
+    const posts = savedPosts.map((SavedPost) => SavedPost.post);
 
     res.status(200).json(posts);
   } catch (error) {
-    console.error("Error fetching archived posts:", error);
+    console.error("Error fetching SavedPostd posts:", error);
     next(error);
   }
 };
@@ -335,18 +352,15 @@ export const DeletePost = async (req, res, next) => {
     }
 
     // Extract Cloudinary image IDs title image and content images
-    const imagePubIdArry = [
+    const uploadedPublicIds = [
       post.cloudinaryPubId,
       ...post.postContent.flatMap(
         ({ cloudinaryPubId }) => cloudinaryPubId || []
       ),
     ].filter(Boolean);
-
+    console.log(uploadedPublicIds);
     // Delete images in parallel if there are any
-    if (imagePubIdArry.length) {
-      await Promise.all(imagePubIdArry.map(deleteCloudinaryImage));
-    }
-
+    await cloudinaryService.deleteImages(uploadedPublicIds);
     // Delete comments & post in parallel
     await Promise.all([
       Comments.destroy({ where: { postId } }),

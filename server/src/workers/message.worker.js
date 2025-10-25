@@ -1,13 +1,13 @@
-import Conversation from "../../models/messaging/Conversation.js";
-import Messages from "../../models/messaging/Messages.js";
-import redisClient from "../../utils/redisClient.js";
-import Database from "../../db/database.js";
+import redisClient from "../utils/redisClient.js";
 import dotenv from "dotenv";
+import Conversation from "../models/messaging/conversation.model.js";
+import Messages from "../models/messaging/messages.model.js";
+import db from "../config/database.js";
 dotenv.config();
 await redisClient.connect();
 
 async function processMessages() {
-  console.log("meesage worker running...");
+  console.log("meesage worker running...🎉");
 
   let lastId = "0"; // Change to "$" if you only want new messages
 
@@ -30,7 +30,7 @@ async function processMessages() {
           senderId,
           replyedTo,
         });
-        await Database.transaction(async (t) => {
+        await db.transaction(async (t) => {
           await Messages.create(
             {
               content,

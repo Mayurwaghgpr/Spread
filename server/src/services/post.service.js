@@ -101,6 +101,7 @@ class PostService {
     await redisClient.setEx(cacheKey, 300, JSON.stringify(posts));
     return posts;
   }
+  async deletPost() {}
 }
 
 export default new PostService();

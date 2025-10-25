@@ -84,7 +84,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           to={`/view/@${post?.user?.username}/${post?.id}`}
           className={`relative  ${post ? "cursor-pointer" : "cursor-not-allowed"} h-full border-inherit flex items-start justify-between gap-3 sm:gap-4`}
         >
-          <div className="flex w-full flex-col  min-w-0 flex-grow">
+          <div className="flex w-full flex-col space-y-3 min-w-0 flex-grow">
             {post ? (
               <>
                 <h2 className=" text-base sm:text-lg md:text-2xl font-bold leading-tight overflow-hidden">
@@ -100,7 +100,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <>
-                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-6 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
+                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-5 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
                 <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
                 <div className="rounded-full w-[75%] sm:w-[80%] h-3 sm:h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
               </>

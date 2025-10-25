@@ -5,33 +5,29 @@ import {
   AddNewPost,
   EditPost,
   DeletePost,
-  getArchivedPosts,
+  getSavedPost,
   getPostPreviewByUserFollowings,
 } from "../controllers/post.controller.js";
-import IsAuth from "../middlewares/isAuth.js";
+import IsAuth from "../middlewares/isAuth.middleware.js";
 import { multerFileUpload } from "../middlewares/multer.middleware.js";
 
 const router = express.Router();
 
-// Route to get all posts (authenticated users only)
+// Route to get all posts
 router.get("/feed", IsAuth, getPostPreview);
 router.get("/feed/following", IsAuth, getPostPreviewByUserFollowings);
 
 // Route to get a single post by ID
-// Requires authentication middleware
-router.get("/archived", IsAuth, getArchivedPosts);
+router.get("/archived", IsAuth, getSavedPost);
 router.get("/:id", getPostView);
 
 // Route to add a new post
-// Requires authentication middleware
 router.post("/add", IsAuth, multerFileUpload, AddNewPost);
 
 // Route to edit an existing post by ID
-// Requires authentication middleware
 router.patch("/:id", IsAuth, multerFileUpload, EditPost);
 
 // Route to delete a post by ID
-// Requires authentication middleware
 router.delete("/delete/:postId", IsAuth, DeletePost);
 
 export default router;

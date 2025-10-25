@@ -1,13 +1,14 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
 
-const Archive = db.define(
-  "Archive",
+const SavedPost = db.define(
+  "SavedPost",
   {
     postId: {
       type: DataTypes.STRING,
       allowNull: true,
     },
+
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -34,4 +35,4 @@ const Archive = db.define(
   }
 );
 
-export default Archive;
+export default SavedPost;

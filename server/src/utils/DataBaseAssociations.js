@@ -1,4 +1,4 @@
-import Archive from "../models/archive.model.js";
+import SavedPost from "../models/savedPost.model.js";
 import Comments from "../models/comments.model.js";
 import Follow from "../models/follow.model.js";
 import Attachments from "../models/messaging/attachments.model.js";
@@ -29,27 +29,27 @@ const DataBaseAssociations = () => {
   Follow.belongsTo(User, { as: "Follower", foreignKey: "followerId" });
   Follow.belongsTo(User, { as: "Followed", foreignKey: "followedId" });
 
-  // User and Post Archive association
+  // User and Post SavedPost association
   User.belongsToMany(Post, {
-    through: Archive,
+    through: SavedPost,
     as: "savedPosts",
     foreignKey: "userId",
     otherKey: "postId", // Define the other key to be used in the junction table
   });
 
   Post.belongsToMany(User, {
-    through: Archive,
+    through: SavedPost,
     as: "usersSaved",
     foreignKey: "postId",
     otherKey: "userId", // Define the other key to be used in the junction table
   });
 
-  Archive.belongsTo(User, {
+  SavedPost.belongsTo(User, {
     as: "user",
     foreignKey: "userId",
   });
 
-  Archive.belongsTo(Post, {
+  SavedPost.belongsTo(Post, {
     as: "post",
     foreignKey: "postId",
   });

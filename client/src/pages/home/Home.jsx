@@ -17,7 +17,7 @@ import { BsPostcard } from "react-icons/bs";
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isDeviceSize = useDeviceSize("1023");
-  const { fetchDataAll } = PostsApis();
+  const { fetchPostsFeed } = PostsApis();
   const selectedTopic = searchParams.get("topic") || "All";
   const selectedFeed = searchParams.get("feed");
   const Icons = useIcons();
@@ -39,7 +39,11 @@ function Home() {
   } = useInfiniteQuery(
     ["Allposts", selectedTopic, selectedFeed],
     ({ pageParam = new Date().toISOString() }) =>
-      fetchDataAll({ pageParam, topic: selectedTopic, endpoint: selectedFeed }),
+      fetchPostsFeed({
+        pageParam,
+        topic: selectedTopic,
+        endpoint: selectedFeed,
+      }),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length !== 0
@@ -93,11 +97,12 @@ function Home() {
 
   // Helper function to render posts with WhoToFollow insertion
   const renderPosts = () => {
+    console.log({ posts });
     if (posts.length === 0 && !isLoading) {
       return (
         <div className="flex items-center justify-center flex-1 p-8">
           <EmptyState
-            Icon={BsPostcard}
+            Icon={Icons["post"]}
             heading="No Posts Available"
             description="There are no posts found right now. Check back later for new recommendations."
           />
@@ -111,7 +116,7 @@ function Home() {
 
       if (shouldInsertWhoToFollow) {
         return (
-          <React.Fragment key={`fragment-${post.id}`}>
+          <React.Fragment key={`fragment-${post.id}` || idx}>
             <WhoToFollow className="w-full  border-inherit p-5 text-sm" />
             <PostPreview
               className="w-full border  pt-2"
@@ -127,7 +132,7 @@ function Home() {
         <PostPreview
           className="w-full border pt-2  "
           ref={isLastItem ? lastItemRef : null}
-          key={post?.id}
+          key={post?.id || idx}
           post={post}
         />
       );

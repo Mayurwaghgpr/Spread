@@ -25,6 +25,7 @@ import {
   BsPenFill,
   BsPeople,
   BsPerson,
+  BsPostcard,
   BsSendFill,
   BsThreeDotsVertical,
   BsTwitterX,
@@ -62,6 +63,7 @@ import { MdAutoAwesome } from "react-icons/md";
 
 import {
   FaBookOpen,
+  FaCircleCheck,
   FaCode,
   FaCreativeCommons,
   FaHandHoldingHeart,
@@ -91,11 +93,12 @@ import {
   TbMessageCircleFilled,
   TbTrendingUp,
 } from "react-icons/tb";
-import { CiWarning } from "react-icons/ci";
+import { CiCircleCheck, CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
-import { FiEdit3 } from "react-icons/fi";
+import { FiEdit3, FiExternalLink } from "react-icons/fi";
+import { CircleCheck } from "lucide-react";
 function useIcons() {
   return {
     // A
@@ -124,6 +127,7 @@ function useIcons() {
     comment: <FaRegComment />,
     creative: <MdOutlineDeveloperMode />,
     check: <BsCheck2Circle />,
+    circleCheck: <FaCircleCheck />,
     // D
     desktopO: <LuMonitorSmartphone />,
     done: <MdDone color="green" />,
@@ -138,6 +142,7 @@ function useIcons() {
     edit: <FiEdit3 />,
     eye: <BsEye />,
     eyeSlash: <BsEyeSlash />,
+    exLink: <FiExternalLink />,
     // F
     follow: <RiUserFollowLine />,
     fetherFi: <RiQuillPenFill />,
@@ -199,6 +204,7 @@ function useIcons() {
     pin: <TiPin />,
     plus: <PiPlus />,
     person: <BsPerson />,
+    post: <BsPostcard />,
 
     // Q
     // Placeholder for future grouping

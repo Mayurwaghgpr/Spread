@@ -3,7 +3,7 @@ import {
   getNotifications,
   getUnreadCount,
 } from "../controllers/notification.controller.js";
-import IsAuth from "../middlewares/isAuth.js";
+import IsAuth from "../middlewares/isAuth.middleware.js";
 
 const router = express.Router();
 

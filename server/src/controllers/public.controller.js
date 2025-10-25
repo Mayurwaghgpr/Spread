@@ -2,11 +2,11 @@ import sequelize, { Op } from "sequelize";
 import User from "../models/user.model.js";
 import Post from "../models/posts.model.js";
 import Follow from "../models/follow.model.js";
-import Archive from "../models/archive.model.js";
 import Likes from "../models/likes.model.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 import { startedFollowing } from "../workers/follows.worker.js";
+import SavedPost from "../models/SavedPost.model.js";
 // Fetch all users except the current user and distinct topics
 export const getHomeContent = async (req, res, next) => {
   try {
@@ -271,8 +271,8 @@ export const FollowUser = async (req, res, next) => {
   }
 };
 
-// Add a post to the user's archive
-export const AddPostToArchive = async (req, res, next) => {
+// Add a post to the user's SavedPost
+export const AddPostToSavedPost = async (req, res, next) => {
   const { postId } = req.body;
   const userId = req.authUser.id;
 
@@ -280,7 +280,7 @@ export const AddPostToArchive = async (req, res, next) => {
   try {
     let updatedUserInfo;
     let message;
-    const exist = await Archive.findOne({ where: { postId, userId } });
+    const exist = await SavedPost.findOne({ where: { postId, userId } });
     if (exist) {
       const filterSavedPost = userInfo?.savedPosts?.filter(
         (post) => post.id !== postId
@@ -289,19 +289,19 @@ export const AddPostToArchive = async (req, res, next) => {
         updatedUserInfo = { ...userInfo, savedPosts: filterSavedPost };
       }
       await exist.destroy();
-      message = "Removed from archive";
+      message = "Removed from SavedPost";
     } else {
-      await Archive.create({ postId, userId });
+      await SavedPost.create({ postId, userId });
       updatedUserInfo = {
         ...userInfo,
         savedPosts: [...userInfo.savedPosts, { id: postId }],
       };
-      message = "Post archived successfully";
+      message = "Post SavedPostd successfully";
     }
     await redisClient.setEx(userId, 3600, JSON.stringify(updatedUserInfo));
     res.status(200).json({
       message,
-      archived: updatedUserInfo.savedPosts,
+      SavedPostd: updatedUserInfo.savedPosts,
     });
   } catch (error) {
     console.error("Error archiving post:", error);

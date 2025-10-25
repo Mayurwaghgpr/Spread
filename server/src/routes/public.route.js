@@ -2,13 +2,13 @@ import express from "express";
 import {
   searchData,
   FollowUser,
-  AddPostToArchive,
+  AddPostToSavedPost,
   LikePost,
   getHomeContent,
   getAllUser,
   getPeoples,
 } from "../controllers/public.controller.js";
-import IsAuth from "../middlewares/isAuth.js"; // Import the authentication middleware
+import IsAuth from "../middlewares/isAuth.middleware.js"; // Import the authentication middleware
 
 const router = express.Router();
 
@@ -27,6 +27,6 @@ router.get("/search", IsAuth, searchData);
 // Put Routes
 router.put("/like/", IsAuth, LikePost);
 router.put("/follow", IsAuth, FollowUser);
-router.put("/archive", IsAuth, AddPostToArchive); // Changed route to 'archive' for consistency
+router.put("/archive", IsAuth, AddPostToSavedPost); // Changed route to 'archive' for consistency
 
 export default router;

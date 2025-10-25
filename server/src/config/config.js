@@ -1,8 +1,8 @@
-import { configDotenv } from "dotenv";
+import dotenv from "dotenv";
 
-configDotenv()
+dotenv.config();
 
- export default {
+export default {
   development: {
     use_env_variable: "DATABASE_URL",
     dialect: "postgres",
@@ -10,8 +10,8 @@ configDotenv()
       ssl: {
         require: true,
         rejectUnauthorized: false,
-      }
-    }
+      },
+    },
   },
   test: {
     username: "postgres",

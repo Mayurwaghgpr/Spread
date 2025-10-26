@@ -160,16 +160,14 @@ function Profile() {
           <div className="py-20 w-full flex justify-center items-center flex-col  gap-5 border-inherit pt-5">
             {/*posts if they exist */}
             {posts.length > 0 &&
-              (!isPostsLoading ? [...Array(3)] : posts).map(
-                (post, idx, arr) => (
-                  <PostPreview
-                    className="border-b w-full border"
-                    ref={arr.length % 3 === 0 ? lastItemRef : null}
-                    key={post?.id || idx}
-                    post={post}
-                  />
-                )
-              )}
+              (isPostsLoading ? [...Array(3)] : posts).map((post, idx, arr) => (
+                <PostPreview
+                  className="border-b w-full border"
+                  ref={arr.length % 3 === 0 ? lastItemRef : null}
+                  key={post?.id || idx}
+                  post={post}
+                />
+              ))}
 
             {/* loading spinner for infinite scroll */}
             {isFetchingNextPage && (

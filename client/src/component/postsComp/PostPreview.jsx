@@ -10,7 +10,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // Dynamically load components to optimize performance
-import Bookmark from "../buttons/Bookmark";
+import Bookmark from "../buttons/bookmark/Bookmark";
 import Like from "../buttons/Like/Like";
 import Menu from "../Menus/Menu";
 import { setCommentCred } from "../../store/slices/postSlice";

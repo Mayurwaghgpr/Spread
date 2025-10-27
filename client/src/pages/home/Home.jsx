@@ -97,7 +97,6 @@ function Home() {
 
   // Helper function to render posts with WhoToFollow insertion
   const renderPosts = () => {
-    console.log({ posts });
     if (posts.length === 0 && !isLoading) {
       return (
         <div className="flex items-center justify-center flex-1 p-8">

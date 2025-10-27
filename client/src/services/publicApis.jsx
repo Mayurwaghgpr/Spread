@@ -100,9 +100,13 @@ function usePublicApis() {
     }
   };
 
-  const ArchivePost = async (postId) => {
+  const savePost = async ({ postId, groupName }) => {
+    console.log({ postId, groupName });
     try {
-      const result = await axiosInstance.put(`/public/save`, { postId });
+      const result = await axiosInstance.put(`/public/save`, {
+        postId,
+        groupName,
+      });
       return result.data;
     } catch (error) {
       throw error.response || error;
@@ -124,7 +128,7 @@ function usePublicApis() {
     LikePost,
     removePostFromArchive,
     unfollowUser,
-    ArchivePost,
+    savePost,
     followUser,
     fetchAllUsers,
     fetchPeopel,

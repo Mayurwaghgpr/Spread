@@ -1,16 +1,17 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 
-function GroupCard({ heading, stub, className, count, imageArry }) {
+function GroupCard({ onClick, heading, stub, className, count, imageArry }) {
   return (
     <Link
       to={stub}
-      className={`container p-5 border rounded-xl space-y-3 ${className} min-h-[10rem] `}
+      onClick={onClick}
+      className={` border rounded-xl space-y-3 ${className} border-inherit  `}
     >
       {" "}
       <div className="flex justify-between items-center">
-        <h1 className="text-xl">{heading}</h1>
-        <span>{count}</span>
+        <h1 className="">{heading}</h1>
+        <span className="opacity-50">{count && count}</span>
       </div>
       {/* <div className=" grid grid-cols-2 gap-2 ">
         {imageArry?.map((data) => (

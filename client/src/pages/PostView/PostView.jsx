@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 
 // Component imports
-import Bookmark from "../../component/buttons/Bookmark";
+import Bookmark from "../../component/buttons/bookmark/Bookmark";
 import Like from "../../component/buttons/Like/Like";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import Menu from "../../component/Menus/Menu";

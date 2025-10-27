@@ -272,16 +272,19 @@ export const FollowUser = async (req, res, next) => {
 };
 
 // Add a post to the user's SavedPost
-export const AddPostToSavedPost = async (req, res, next) => {
+export const addPostToSavedPost = async (req, res, next) => {
   const { postId } = req.body;
   const userId = req.authUser.id;
 
   const userInfo = JSON.parse(await redisClient.get(userId));
+  const groupName = req.body.groupName ? req.body.groupName : null;
   try {
-    let updatedUserInfo;
+    let updatedUserInfo = userInfo;
     let message;
     const exist = await SavedPost.findOne({ where: { postId, userId } });
-    if (exist) {
+    const normalizeExist = JSON.parse(JSON.stringify(exist));
+    // check if exist and group name is null to remove
+    if (exist && !groupName) {
       const filterSavedPost =
         userInfo?.savedPostsList?.filter((post) => post.id !== postId) || [];
       if (Array.isArray(filterSavedPost)) {
@@ -289,8 +292,12 @@ export const AddPostToSavedPost = async (req, res, next) => {
       }
       await exist.destroy();
       message = "Removed from SavedPost";
+    } else if (exist && groupName && normalizeExist.groupName === null) {
+      await SavedPost.update({ groupName }, { where: { postId, userId } });
+    } else if (exist && groupName && normalizeExist.groupName) {
+      message = " It already exist in a group";
     } else {
-      await SavedPost.create({ postId, userId });
+      await SavedPost.create({ postId, userId, groupName });
       updatedUserInfo = {
         ...userInfo,
         savedPostsList: [...userInfo?.savedPostsList, { id: postId }],
@@ -300,7 +307,7 @@ export const AddPostToSavedPost = async (req, res, next) => {
     await redisClient.setEx(userId, 3600, JSON.stringify(updatedUserInfo));
     res.status(200).json({
       message,
-      SavedPost: updatedUserInfo.savedPostsList,
+      savedPostsList: updatedUserInfo.savedPostsList,
     });
   } catch (error) {
     console.error("Error saving post:", error);

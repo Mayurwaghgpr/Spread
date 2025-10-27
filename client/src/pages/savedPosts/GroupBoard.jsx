@@ -28,8 +28,9 @@ function GroupBoard() {
           </div>
         </div>
       </div>
-      <div className="p-5 w-full grid grid-cols-4 gap-3">
+      <div className="p-5 w-full grid grid-cols-4 gap-3 border-inherit">
         <GroupCard
+          className={" min-h-[10rem]  p-5 text-xl"}
           heading={"All posts"}
           stub={"read/all"}
           count={user?.savedPostsList?.length}
@@ -37,13 +38,14 @@ function GroupBoard() {
 
         {data?.groups?.map((group) => (
           <GroupCard
+            className={" min-h-[10rem]  p-5 text-xl"}
             stub={`read/${group?.groupName}`}
             heading={group?.groupName}
             count={group?.postCount}
           />
         ))}
-        <div className="flex justify-center items-center bg-black/5 border rounded-lg ">
-          <div className="flex justify-center items-center p-3 rounded-full border-black/40 border-dashed border-2 ">
+        <div className="flex justify-center items-center bg-black/5 border border-inherit rounded-lg ">
+          <div className="flex justify-center items-center p-3 rounded-full border-black/40 dark:border-white/50 border-dashed border-2 ">
             {" "}
             {icons["plus"]}
           </div>

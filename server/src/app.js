@@ -86,7 +86,7 @@ app.use(passport.initialize());
 DataBaseAssociations();
 
 //DB changes listener
-initMessageChangeListener();
+// initMessageChangeListener();
 
 // Healthcheck route
 app.get("/health", async (req, res) => {

@@ -8,20 +8,18 @@
 :root{
   --dark-color:black;
   --light-color:#fff9f3;
+  --opposite-light:#2f3a47;
   /* --dark-color: rgb(17 24 39 / 0.95);
     --light-color: rgb(255 255 255 / 0.95); */
+}
+html{
+    scroll-behavior: smooth;
 }
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  scroll-behavior: smooth;
-  font-family: ui-serif,
-    Georgia,
-    Cambria,
-    "Times New Roman",
-    Times,
-    serif;
+
 
 }
 

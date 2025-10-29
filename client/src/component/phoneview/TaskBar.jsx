@@ -55,9 +55,6 @@ function TaskBar() {
           return (
             <NavLink
               key={link.id}
-              isActive={(match, location) =>
-                location.pathname.startsWith(link.stub)
-              }
               className={({ isActive }) =>
                 `flex ${link.className} ${isActive ? " text-opacity-100  dark:bg-opacity-100" : " text-opacity-20  dark:bg-opacity-20"} text-black dark:text-white`
               }

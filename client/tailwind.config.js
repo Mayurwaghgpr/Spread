@@ -7,6 +7,7 @@ export default {
       colors: {
         dark: "var(--dark-color)",
         light: "var(--light-color)",
+        oplight: "var(--opposite-light)",
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],

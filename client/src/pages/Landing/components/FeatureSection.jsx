@@ -9,6 +9,7 @@ export default function FeatureSection() {
       title: "Dynamic Post Editor",
       description:
         "Write and format your posts effortlessly with our rich text editor that supports code blocks, markdown, and inline styling for a seamless writing experience.",
+      image: "/dynamic_editor.png",
     },
     // {
     //   title: "Smart Recommendations",
@@ -24,26 +25,31 @@ export default function FeatureSection() {
       title: "AI Post Analytics",
       description:
         "Analize post using AI, Get point by point analysis for each post reparatly",
+      image: "",
     },
     {
       title: "Secure Authentication",
       description:
         "Keep your account safe with multi-layered authentication, including OAuth with Google and GitHub, plus encrypted token-based login.",
+      image: "",
     },
     {
       title: "Custom Themes",
       description:
         "Personalize your experience with light, dark, and system-based themes that adapt to your device settings automatically.",
+      image: "",
     },
     {
       title: "Save for Later",
       description:
         "Bookmark and organize your favorite posts in custom group so you can easily revisit and read them later.",
+      image: "",
     },
     {
       title: "Community Interaction",
       description:
         "Like, comment,mention and follow your favorite creators to stay updated and be part of an engaging, growth driven community.",
+      image: "/comunity_Interact.png",
     },
   ];
 
@@ -108,8 +114,8 @@ export default function FeatureSection() {
                     <div className="absolute inset-0 rounded-2xl blur-2xl opacity-30 animate-pulse" />
                     <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-5  w-full h-80 sm:h-96 flex items-center justify-center overflow-hidden">
                       <img
-                        className="relative w-full h-full object-fill rounded-xl"
-                        src="/octbot.png"
+                        className="relative w-full h-full object-cover object-center rounded-xl"
+                        src={feature.image || "/octbot.png"}
                         alt={feature.title}
                       />
                     </div>

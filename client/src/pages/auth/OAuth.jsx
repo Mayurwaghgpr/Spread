@@ -1,6 +1,5 @@
 import useIcons from "../../hooks/useIcons";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-import React from "react";
 
 function OAuth({ service, className, ...props }) {
   const icons = useIcons();
@@ -18,7 +17,7 @@ function OAuth({ service, className, ...props }) {
     <button
       type="button"
       onClick={handleOAuth}
-      className={`flex items-center p-2 w-full justify-center gap-3 rounded-full ${className}`}
+      className={`flex bg-oplight items-center p-2 w-full justify-center gap-3 rounded-full ${className}`}
       {...props}
     >
       {icons[service]}

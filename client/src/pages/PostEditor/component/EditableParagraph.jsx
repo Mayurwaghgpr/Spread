@@ -56,7 +56,7 @@ const EditableParagraph = ({
           <TextTools position={showToolbar} applyStyle={applyStyle} />
         )}
         <input
-          className={`border-l-2 rounded-lg border-inherit bg-inherit dark:bg-inherit border-gray-300 dark:border-white p-2 w-full min-h-10 z-10 dark:placeholder:text-white placeholder:text-black placeholder:opacity-50 outline-none cursor-text ${index === 0 ? "text-4xl font-semibold " : "text-2xl"}`}
+          className={` rounded-lg border-inherit bg-inherit dark:bg-inherit border-gray-300 dark:border-white p-2 w-full min-h-10 z-10 dark:placeholder:text-white placeholder:text-black placeholder:opacity-50 outline-none cursor-text ${index === 0 ? "text-4xl font-semibold " : "text-2xl"}`}
           ref={(el) => (inputRefs.current[index] = el)}
           onChange={(e) => handleTextChange(element.id, e.currentTarget.value)}
           onMouseUp={handleSelectedText}
@@ -92,7 +92,7 @@ const EditableParagraph = ({
         onFocus={handleFocus}
         onMouseUp={handleSelectedText}
         onKeyUp={handleSelectedText}
-        className="border-l-2 border-inherit border-gray-300 dark:border-white rounded-lg p-2 w-full min-h-10 z-10 outline-none cursor-text"
+        className=" border-inherit border-gray-300 dark:border-white rounded-lg p-2 w-full min-h-10 z-10 outline-none cursor-text"
         role="textbox"
         aria-placeholder="Editable paragraph"
       ></p>

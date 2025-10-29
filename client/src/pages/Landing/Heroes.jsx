@@ -49,7 +49,7 @@ function Heroes() {
     },
   ];
   return (
-    <main className="relative w-full min-h-screen bg-light dark:bg-black overflow-y-auto">
+    <main className="relative w-full min-h-screen bg-light dark:bg-black overflow-y-auto border-inherit">
       {/* Animated background particles */}
       <ParticalAnimation />
       <header className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 lg:px-20 py-3  flex justify-between items-center">
@@ -76,32 +76,32 @@ function Heroes() {
           />
           <Link
             to="/auth/signin"
-            className="flex  items-center gap-2 sm:px-8 px-3 sm:py-2 py-1 text-xs bg-white text-black rounded-full  transition-all duration-200"
+            className="flex  items-center gap-2 sm:px-8 px-3 sm:py-2 py-1 text-xs bg-oplight text-white dark:bg-white dark:text-oplight rounded-full  transition-all duration-200"
           >
             Sign In
           </Link>
         </div>
       </header>
-      <div className="flex flex-col bg-inherit">
+      <div className="flex flex-col bg-inherit border-inherit">
         {/* Main Hero Section */}
-        <section className="relative h-screen flex items-center justify-center overflow-hidden ">
+        <section className="relative h-screen flex items-center justify-center overflow-hidden border-inherit ">
           <div className="absolute inset-0 z-5 bg-gradient-to-tr from-transparent via-transparent  dark:to-blue-400/30 "></div>
           {/* Content */}
           <div className="relative z-20 flex sm:flex-row flex-col  sm:items-center items-start text-start gap-10 px-8 sm:px-12  ">
             <div className="transform transition-all duration-700 max-w-3xl">
               {/* Headline */}
               <h1 className="text-xl sm:text-2xl xl:text-4xl font-bold leading-tight mb-8 ">
-                <span className="bg-gradient-to-r from-white to-gray-200 bg-clip-text dark:text-transparent">
+                <span className=" text-oplight dark:text-inherit">
                   Unleash Your
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-gray-100 to-white bg-clip-text dark:text-transparent">
+                <span className="text-oplight dark:text-inherit">
                   Creative Genius
                 </span>
               </h1>
 
               {/* Description */}
-              <p className="text-sm sm:text-lg leading-relaxed mb-8 max-w-2xl dark:text-gray-100">
+              <p className="text-sm sm:text-lg leading-relaxed mb-8 max-w-2xl text-oplight dark:text-gray-100">
                 Join a <span className="font-semibold ">vibrant community</span>{" "}
                 of creators, innovators, and dreamers. Share your vision,
                 discover inspiration, and
@@ -114,7 +114,7 @@ function Heroes() {
               {/* sign in button */}
               <div className="flex flex-col sm:flex-row gap-4 sm:mb-12  sm:w-full w-fit ">
                 <button
-                  className="group relative  px-3 py-2  bg-gradient-to-r text-white from-black to-gray-800 dark:from-white dark:to-gray-200 rounded-full font-bold  dark:text-black  sm:text-sm text-xs overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/25 dark:hover:shadow-white/25 border border-gray-600 dark:border-gray-300"
+                  className="group relative  px-3 py-2  bg-gradient-to-r text-white bg-oplight dark:from-white dark:to-gray-200 rounded-full font-bold  dark:text-black  sm:text-sm text-xs overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/25 dark:hover:shadow-white/25 border border-gray-600 dark:border-gray-300"
                   onClick={() => navigate("/auth/signin")}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-100 dark:to-gray-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
@@ -146,42 +146,48 @@ function Heroes() {
         <FeatureSection />
 
         {/* How It Works Section */}
-        <section className="relative py-20 bg-oplight dark:bg-transparent text-white ">
+        <section className="relative py-20 bg-oplight dark:bg-transparent text-white border-inherit ">
           <div className=" absolute inset-0 z-5 dark:bg-gradient-to-tl  dark:from-transparent dark:via-transparent dark:to-gray-800 "></div>
 
-          <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-6xl mx-auto px-6 border-inherit">
             <Heading
               title={"How It Works"}
               subtitle={
                 "Get started in minutes and join thousands of creators sharing their passion"
               }
             />
+            <div className="relative flex flex-col lg:flex-row items-center justify-between gap-16 mt-16 border-inherit">
+              {/* Steps Section */}
+              <div className="flex-1 relative">
+                <div className="grid gap-8 relative">
+                  <div className="hidden md:block absolute top-0 left-2 right-1/4 w-0.5 h-full bg-gradient-to-b from-gray-300 via-gray-400 to-transparent dark:from-gray-600 dark:via-gray-500 dark:to-transparent"></div>
 
-            <div className="grid md:grid-row-3 gap-8 relative m-20">
-              <div className="hidden md:block absolute top-10 left-5 right-1/4 w-0.5 h-full bg-gradient-to-b from-gray-300 via-gray-400 to-transparent dark:from-gray-600 dark:via-gray-500 dark:to-transparent"></div>
-              {howItWorks.map((item, i) => (
-                <div
-                  key={i}
-                  className=" flex items-start justify-start gap-4 relative"
-                >
-                  <div className="relative">
-                    <div className="p-2  bg-gradient-to-br text-black  from-gray-100 to-white dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center shadow-lg border border-gray-200 dark:border-gray-600">
-                      <span className="text-xl">{icons[item.icon]}</span>
+                  {howItWorks.map((item, i) => (
+                    <div key={i} className="flex items-start gap-4 relative">
+                      <div className="p-2 bg-gradient-to-br text-black from-gray-100 to-white dark:from-gray-700 dark:to-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-600"></div>
+                      <div>
+                        <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                        <p className="text-sm opacity-90">{item.desc}</p>
+                      </div>
                     </div>
-                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 p-1 bg-gray-200 dark:bg-white rounded-full flex items-center justify-center">
-                      <span className="text-[9px] font-bold text-black">
-                        {item.step}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="sm:text-lg text-sm font-bold  mb-3">
-                      {item.title}
-                    </h3>
-                    <p className=" sm:text-sm text-xs ">{item.desc}</p>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Video Section */}
+              <div className="flex-1 flex justify-center border-inherit">
+                <video
+                  className="rounded-2xl shadow-2xl w-full max-w-md border border-inherit"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                >
+                  <source src="/mascot_video_2.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             </div>
           </div>
         </section>

@@ -46,10 +46,10 @@ function Follow({ className, person }) {
   return (
     <button
       onClick={handleFollowToggle}
-      className={`relative flex justify-center items-center  group text-xs  sm:text-sm font-semibold text-white dark:text-black  rounded-full transition-all duration-200 hover:scale-105 sm:h-8 sm:min-w-28 w-20 h-8  ${className} ${
+      className={`relative flex justify-center items-center  group text-xs  sm:text-sm font-semibold text-white dark:text-oplight  rounded-full transition-all duration-200 hover:scale-105 sm:h-8 sm:min-w-28 w-20 h-8  ${className} ${
         isFollowing
-          ? "hover:border-red-400 bg-black dark:bg-white  hover:border hover:bg-white dark:hover:bg-black/60"
-          : "bg-black dark:bg-white  hover:bg-black/60 dark:hover:bg-white/90"
+          ? "hover:border-red-400 bg-oplight dark:bg-white  hover:border hover:bg-white dark:hover:bg-black/60"
+          : "bg-oplight dark:bg-white  hover:bg-black/60 dark:hover:bg-white/90"
       }`}
       disabled={isLoading}
       aria-label={

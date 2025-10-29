@@ -94,9 +94,9 @@ function SideBar() {
         onClick={(e) => e.stopPropagation()}
         className="flex flex-col justify-between items h-full w-fit sm:m-0 me-16 lg:me-16 px-6 pb-10  sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-lg sm:text-sm shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none "
       >
-        <div className="flex flex-col justify-center items-center gap-4 sm:mt-8 w-fit">
+        <div className="flex flex-col justify-center items-center gap-4 pt-2 w-fit">
           {/* Profile Link */}
-          <div className="flex flex-col items-start gap-2 h-fit w-fit">
+          <div className="flex  items-center justify-start gap-2 h-fit w-fit">
             <Link
               to={user?.profileLin || manulProfileLink}
               className="group flex justify-center sm:justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
@@ -104,50 +104,31 @@ function SideBar() {
             >
               <div className="relative">
                 <ProfileImage
-                  className=" h-10 w-10 ring-2 rounded-full ring-gray-200 dark:ring-slate-700 group-hover:ring-blue-300 dark:group-hover:ring-blue-600 transition-all duration-200"
+                  className=" h-5 w-5 ring-2 rounded-full ring-gray-200 dark:ring-slate-700 group-hover:ring-blue-300 dark:group-hover:ring-blue-600 transition-all duration-200"
                   image={userImageurl}
                   alt={user?.username}
                   title="user profile"
                   disabled
-                />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-slate-900 xl:block hidden"></div>
+                />{" "}
               </div>
-              <div className="xl:block sm:hidden block text-nowrap">
-                <h1 className="font-medium  transition-colors duration-200">
+              <div className="xl:block sm:hidden block text-nowrap text-xs">
+                <h1 className=" transition-colors duration-200">
                   {user?.displayName}
                 </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 xl:block hidden">
+                <p className=" text-gray-500 dark:text-gray-400 xl:block hidden">
                   @{user?.username}
                 </p>
               </div>
             </Link>
-            {/* 
-            <div className="xl:flex justify-center items-center sm:hidden flex gap-6 text-sm  dark:from-slate-800/30 dark:to-slate-700/30 rounded-xl px-4 py-3 backdrop-blur-sm">
-              <div className="flex flex-col items-center gap-1">
-                <span className="font-bold text-gray-900 dark:text-white">
-                  <AbbreviateNumber rawNumber={user?.Followers?.length || 0} />
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Followers
-                </span>
-              </div>
-              <div className="w-px h-8 bg-gray-300 dark:bg-slate-600"></div>
-              <div className="flex flex-col items-center gap-1">
-                <span className="font-bold text-gray-900 dark:text-white">
-                  <AbbreviateNumber rawNumber={user?.Following?.length || 0} />
-                </span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Following
-                </span>
-              </div>
-            </div> */}
+
+            <div>{icons["doubleArrowL"]}</div>
           </div>
 
           {LoginMenuLinks.map((link) => (
             <LinkBtn
               key={link.id}
               stub={link.stub}
-              className={`group flex lg:justify-start justify-start sm:justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white ${
+              className={`group flex lg:justify-start text-sm justify-start sm:justify-center items-center gap-4 rounded-2xl w-full px-4 py-3 no-underline capitalize transition-all duration-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white ${
                 isActiveLink(link.stub)
                   ? "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-slate-800/40 dark:to-slate-700/40"
                   : "  "
@@ -156,7 +137,7 @@ function SideBar() {
               onClick={() => dispatch(setManuOpen())}
             >
               <div
-                className={`text-xl transition-all duration-200 ${
+                className={` transition-all duration-200 ${
                   isActiveLink(link.stub)
                     ? " scale-110"
                     : "group-hover:scale-110 group-hover:text-blue-500 dark:group-hover:text-blue-400"
@@ -166,7 +147,7 @@ function SideBar() {
               </div>
               <div className="xl:block sm:hidden block">
                 <span
-                  className={`font-medium transition-all duration-200 ${
+                  className={` transition-all duration-200 ${
                     isActiveLink(link.stub) ? " font-semibold" : ""
                   }`}
                 >
@@ -179,7 +160,7 @@ function SideBar() {
 
         {/* Logout Button */}
 
-        <LogoutBtn className="group flex justify-center items-center gap-4 px-4 py-3 w-fit sm:w-full lg:w-fit no-underline rounded-2xl transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:scale-[1.02] hover:shadow-md" />
+        <LogoutBtn className="group text-sm flex justify-center items-center gap-4 px-4 py-3 w-fit sm:w-full lg:w-fit no-underline rounded-2xl transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:scale-[1.02] hover:shadow-md" />
       </div>
     </aside>
   );

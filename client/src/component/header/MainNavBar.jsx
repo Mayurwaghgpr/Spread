@@ -58,7 +58,7 @@ function MainNavBar() {
   }, [location.pathname, userProfile?.id, user?.id]);
 
   return (
-    <header className=" sticky  z-40 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl border-b border-inherit ">
+    <header className=" sticky  z-40 px-4 sm:px-8 lg:px-20 py-3 bg-light dark:bg-dark backdrop-blur-xl  border-inherit ">
       <nav className=" border-inherit">
         <div className="flex items-center justify-between border-inherit">
           {/* Logo Section */}

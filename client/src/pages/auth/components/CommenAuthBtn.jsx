@@ -5,7 +5,7 @@ function CommenAuthBtn({ children, className, onClick, ...props }) {
     <button
       onClick={onClick}
       type="button"
-      className={`bg-black text-white dark:bg-white dark:text-black p-2 w-full rounded-full transition-opacity ${
+      className={`bg-oplight text-white dark:bg-white dark:text-black p-2 w-full rounded-full transition-opacity ${
         className
       }`}
       {...props}

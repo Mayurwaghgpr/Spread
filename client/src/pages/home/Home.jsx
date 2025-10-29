@@ -169,11 +169,11 @@ function Home() {
     <>
       <div className="flex flex-col w-full h-full border-inherit  ">
         <nav
-          className="absolute top-14  z-10 sm:mx-3 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
+          className="absolute top-  z-10 sm:mx-3 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
           role="navigation"
           aria-label="Feed navigation"
         >
-          <div className="flex items-center justify-start p-3">
+          <div className="flex items-center justify-start p-3 text-sm">
             <ul className="flex items-center gap-4 px-4 w-full">
               {navigationItems.map((item) => (
                 <li key={item.id} className="flex items-center justify-center">
@@ -204,7 +204,7 @@ function Home() {
       {!isDeviceSize && (
         <Aside
           handleTopicClick={handleTopicClick}
-          className=" sticky top-0 z-20 bg-light dark:bg-dark flex flex-col gap-5 p-6 text-xs border-inherit border-l w-1/2"
+          className=" sticky top-0 z-20 bg-light dark:bg-dark h-screen flex flex-col gap-5 p-6 text-xs border-inherit border rounded-2xl w-1/2 mx-5"
         />
       )}
     </>

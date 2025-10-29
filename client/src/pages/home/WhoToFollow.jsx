@@ -16,7 +16,7 @@ function WhoToFollow({ className }) {
   );
   return (
     <div className={className}>
-      <h1 className=" text-start  text-xl font-medium"> Follow people </h1>
+      <h1 className=" text-start text-lg font-medium"> Follow people </h1>
       {isLoadingHome ? (
         <ProfileListItemLoadingSkeleton count={5} />
       ) : (
@@ -48,7 +48,7 @@ function WhoToFollow({ className }) {
                         to={`/profile/@${person?.username}/${person?.id}`}
                       >
                         {/* Display Name */}
-                        <Heading className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
+                        <Heading className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
                           {person?.displayName || "Unknown User"}
                         </Heading>
                       </Link>
@@ -58,7 +58,7 @@ function WhoToFollow({ className }) {
                       />
                     </div>
                     {/* Username */}
-                    <SubHeading className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">
+                    <SubHeading className="text-xs text-gray-600 dark:text-gray-400 truncate">
                       @{person?.username || "username"}
                     </SubHeading>
 
@@ -85,7 +85,7 @@ function WhoToFollow({ className }) {
       )}
       <Link
         to={"/suggestions/find_peoples"}
-        className="w-full text-blue-500 self-center p-1 transition-all ease-in-out duration-300"
+        className="w-full text-xs  text-blue-500  p-1 transition-all ease-in-out duration-300"
       >
         See More
       </Link>

@@ -90,6 +90,7 @@ function SignIn() {
   return (
     //
     <AuthFormWrapper
+      isLoading={isLoading}
       onSubmit={handleLogin}
       heading="SignIn to your account"
       error={error}

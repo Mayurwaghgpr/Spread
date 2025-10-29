@@ -73,7 +73,7 @@ function Bookmark({ className, post, children }) {
   return (
     <div className="relative group">
       <FedInBtn
-        className={` ${isBookmarked ? "text-black dark:text-white" : ""} ${className}`}
+        className={` ${isBookmarked ? "text-oplight dark:text-white" : ""} ${className}`}
         id="bookmark"
         onClick={handleBookmark}
         aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}

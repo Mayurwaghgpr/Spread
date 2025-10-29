@@ -12,6 +12,7 @@ function AuthFormWrapper({
   isError,
   error,
   heading,
+  isLoading,
   onChange,
 }) {
   const navigate = useNavigate();
@@ -81,13 +82,14 @@ function AuthFormWrapper({
         </div>
 
         {/* Right Side - Decorative Image */}
-        <div className="hidden sm:block w-1/2 h-full min-h-screen relative overflow-hidden">
+        <div className="hidden sm:block w-1/2 h-full min-h-screen relative overflow-hidden bg-black">
           <img
             className="w-full h-full object-cover object-center"
             src={octbot}
             alt="Decorative illustration"
             loading="lazy"
           />
+
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
         </div>
       </div>

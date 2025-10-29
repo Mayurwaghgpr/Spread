@@ -6,7 +6,7 @@ import ProfileImage from "../../component/ProfileImage";
 import ThemeBtn from "../../component/buttons/ThemeBtn";
 import useIcons from "../../hooks/useIcons";
 import ParticalAnimation from "../../component/utilityComp/ParticalAnimation";
-import FeatureSection from "./components/featureSection";
+import FeatureSection from "./components/FeatureSection";
 import Heading from "./components/Heading";
 function Heroes() {
   const navigate = useNavigate();

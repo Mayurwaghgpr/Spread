@@ -55,7 +55,7 @@ function Suggestions() {
   // Define links array
   const navLinks = [
     { to: "/suggestions/find_peoples", label: "People", icon: Users },
-    { to: "/suggestions/publication", label: "Publication", icon: Users },
+    // { to: "/suggestions/publication", label: "Publication", icon: Users },
   ];
 
   const navLinkBase =

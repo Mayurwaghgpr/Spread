@@ -82,7 +82,6 @@ export const AddNewPost = async (req, res, next) => {
 
     for (const r of uploadResults) {
       if (r.status === "fulfilled" && r.value) {
-        console.log({ r });
         imageMap.set(r.value.index, r.value);
       }
     }
@@ -226,8 +225,7 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
     });
 
     //  Cache the result for 5 minutes
-    await redisClient.setEx(cacheKey, 300, JSON.stringify(posts));
-    console.log(posts);
+    await redisClient.setEx(postsCacheKey, 300, JSON.stringify(posts));
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error fetching posts from followed users:", error);
@@ -403,7 +401,6 @@ export const DeletePost = async (req, res, next) => {
         ({ cloudinaryPubId }) => cloudinaryPubId || []
       ),
     ].filter(Boolean);
-    console.log(uploadedPublicIds);
     // Delete images in parallel if there are any
     await cloudinaryService.deleteImages(uploadedPublicIds);
     // Delete comments & post in parallel

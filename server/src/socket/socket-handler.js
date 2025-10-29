@@ -7,7 +7,7 @@ export default function socketHandlers() {
   io.on("connection", async (socket) => {
     // console.log(socket.handshake.query)
     const { connectedUserId, activeConversationId } = socket.handshake.query;
-    console.log(`Connected user: ${connectedUserId} (${socket.id})`);
+    // console.log(`Connected user: ${connectedUserId} (${socket.id})`);
 
     // Check and create room if server has restared and client is still in conversation
     const roomExists = io.sockets.adapter.rooms
@@ -21,23 +21,23 @@ export default function socketHandlers() {
     socket.on("register", async (userId) => {
       const cacheKey = `sockets:user:${userId}`;
       await redisClient.set(cacheKey, socket.id);
-      console.log(`User ${userId} registered with socket ID ${socket.id}`);
+      // console.log(`User ${userId} registered with socket ID ${socket.id}`);
     });
 
     // Join a conversation room
     socket.on("joinConversation", (conversationId) => {
       socket.join(conversationId);
-      console.log(`User joined conversation: ${conversationId}`);
+      // console.log(`User joined conversation: ${conversationId}`);
     });
 
     // Leave a conversation room
     socket.on("leaveConversation", (conversationId) => {
       socket.leave(conversationId);
-      console.log(`User left conversation: ${conversationId}`);
+      // console.log(`User left conversation: ${conversationId}`);
     });
 
     socket.on("IamTyping", ({ conversationId, senderId, image, typing }) => {
-      console.log("userIsTyping", { conversationId, senderId });
+      // console.log("userIsTyping", { conversationId, senderId });
       io.to(conversationId).emit("userIsTyping", {
         conversationId,
         senderId,
@@ -107,7 +107,7 @@ export default function socketHandlers() {
 
     // Handle user disconnect
     socket.on("disconnect", async () => {
-      console.log("User disconnected:", socket.id);
+      // console.log("User disconnected:", socket.id);
       await redisClient.del(`sockets:user:${connectedUserId}`);
     });
   });

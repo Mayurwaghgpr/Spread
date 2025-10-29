@@ -7,7 +7,6 @@ dotenv.config();
 const saltRounds = process.env.SALT_ROUNDS || 10;
 class UserService {
   async finduser(...args) {
-    console.log(args);
     // Fetch user profile information
     const userInfo = await User.findOne({
       where: { [Op.and]: args },

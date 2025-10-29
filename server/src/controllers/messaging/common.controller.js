@@ -13,11 +13,9 @@ export const getConversationsByUserId = async (req, res, next) => {
   try {
     const cacheKey = `Conversation_Log_${lastTimestamp}_${userId}_${limit}`;
     const cachedConvData = await redisClient.get(cacheKey);
-    console.log("hit", JSON.parse(JSON.stringify(cachedConvData)));
     if (cachedConvData !== null) {
       return res.status(200).json(JSON.parse(cachedConvData)); // Send cached data
     }
-
     const conversations = await Conversation.findAll({
       attributes: [
         "id",
@@ -52,7 +50,6 @@ export const getConversationsByUserId = async (req, res, next) => {
       EXPIRATION,
       JSON.stringify(conversations)
     );
-    console.log("miss", JSON.parse(JSON.stringify(conversations)));
     res.status(200).json(conversations);
   } catch (error) {
     console.error("Error fetching conversations:", error);

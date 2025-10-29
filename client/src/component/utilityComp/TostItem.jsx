@@ -29,7 +29,7 @@ function ToastItem({ ToastContent, arr, ...props }) {
   return (
     <div
       {...props}
-      className={` flex flex-col items-center justify-center shadow-lg animate-slide-in-bottom p-4 bg-white dark:text-black transition-all duration-300 ease-in-out pointer-events-auto rounded-lg`}
+      className={` flex flex-col items-center justify-center shadow-lg animate-slide-in-bottom p-4 bg-white text-oplight dark:text-black transition-all duration-300 ease-in-out pointer-events-auto rounded-lg`}
     >
       <div className="flex justify-between items-center gap-4 text-nowrap  w-full">
         <div className="flex justify-center items-center gap-2 text-sm">

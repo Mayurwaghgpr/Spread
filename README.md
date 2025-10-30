@@ -10,7 +10,7 @@
 
 ## 📷 Live Demo
 
-🔗 [https://spread-45xk.onrender.com](https://spread-45xk.onrender.com)
+🔗 [https://spread.com]((https://spread-one.vercel.app/))
 
 ---
 

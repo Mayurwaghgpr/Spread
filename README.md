@@ -10,7 +10,7 @@
 
 ## 📷 Live Demo
 
-🔗 [https://spread.com]((https://spread-one.vercel.app/))
+🔗 [https://spread.com](https://spread-one.vercel.app/)
 
 ---
 

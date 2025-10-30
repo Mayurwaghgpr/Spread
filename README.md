@@ -83,6 +83,7 @@ npm run dev
 ```
 ---
 ## .env
+```
 DATABASE_URL =""
 DATABASE_URL=""
 GEMINI_API_KEY=''
@@ -112,7 +113,7 @@ CLOUDINERY_CLOUD_NAME=''
 CLOUDINERY_API_KEY =""
 CLOUDINERY_SECRETE_KEY=""
 CLOUDINARY_URL=""
-
+```
 ---
 ## 🤝 Contributing
   Contributions are welcome and appreciated!

@@ -14,7 +14,7 @@ export const io = sockIo.init(server);
 socketHandlers();
 
 // Start the server after DB & Redis setup
-db.sync({ alter: true })
+db.sync()
   .then(async () => {
     await redisClient.connect();
     console.log("Redis client connected.");

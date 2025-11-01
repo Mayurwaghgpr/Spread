@@ -70,7 +70,7 @@ export const getTopComments = async (req, res, next) => {
           },
           {
             model: Comments,
-            as: "reply",
+            as: "replies",
             attributes: ["id"],
           },
         ],
@@ -112,41 +112,43 @@ export const getCommentReply = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 5, 1);
   const page = Math.max(parseInt(req.query.page?.trim()) || 1, 1);
   try {
-    const { count: totalPosts, rows: replys } = await Comments.findAndCountAll({
-      where: { postId, topCommentId },
-      attributes: [
-        "id",
-        "content", // Example attributes from the Comments table
-        "replyTo",
-        "topCommentId",
-        "postId",
-        "pind",
-        "updatedAt",
-        "createdAt",
-        // [
-        //   Database.fn("COUNT", Database.col("commentLikes.id")),
-        //   "likeCount", // Alias for the count column
-        // ],
-      ],
-      include: [
-        {
-          model: User,
-          as: "commenter",
-          attributes: ["id", "username", "userImage"],
-        }, // Include commenter info
-        {
-          model: LikeComment,
-          as: "commentLikes",
-        },
-      ],
-      // group: ["Comments.id", "commenter.id"],
-      // order: [[Database.literal("likeCount"), "DESC"]], // Order by like count in descending order
-      order: [[Database.literal("pind")]],
-      limit,
-      offset: (page - 1) * limit,
-    });
+    const { count: totalPosts, rows: replies } = await Comments.findAndCountAll(
+      {
+        where: { postId, topCommentId },
+        attributes: [
+          "id",
+          "content", // Example attributes from the Comments table
+          "replyTo",
+          "topCommentId",
+          "postId",
+          "pind",
+          "updatedAt",
+          "createdAt",
+          // [
+          //   Database.fn("COUNT", Database.col("commentLikes.id")),
+          //   "likeCount", // Alias for the count column
+          // ],
+        ],
+        include: [
+          {
+            model: User,
+            as: "commenter",
+            attributes: ["id", "username", "userImage"],
+          }, // Include commenter info
+          {
+            model: LikeComment,
+            as: "commentLikes",
+          },
+        ],
+        // group: ["Comments.id", "commenter.id"],
+        // order: [[Database.literal("likeCount"), "DESC"]], // Order by like count in descending order
+        order: [[Database.literal("pind")]],
+        limit,
+        offset: (page - 1) * limit,
+      }
+    );
     res.status(200).json({
-      comments: replys,
+      replies,
       meta: {
         currentPage: page,
         totalPages: Math.ceil(totalPosts / limit),

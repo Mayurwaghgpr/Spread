@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { lazy } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -89,7 +89,7 @@ function CommentSection({
     e.stopPropagation();
   }, []);
 
-  // // Render error state
+  // Render error state
   const renderErrorState = useCallback(() => {
     if (!errorPosts) return null;
 
@@ -158,10 +158,10 @@ function CommentSection({
           )}
 
           {/* Empty state */}
-          {!isLoading && !isFetching && comments.length == 0 && (
+          {!isLoading && !isFetching && !errorPosts && comments.length == 0 && (
             <EmptyState
               Icon={icons["messageDoted"]}
-              heading={"          No comments yet"}
+              heading={"No comments yet"}
               description={
                 isLogin
                   ? "Be the first to share your thoughts and start the conversation!"

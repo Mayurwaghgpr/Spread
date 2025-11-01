@@ -38,10 +38,12 @@ const CommentBox = forwardRef(
       () => userImageSrc(comt?.commenter),
       [comt?.commenter]
     );
+
     const isLiked = useMemo(
       () => comt?.commentLikes?.some((like) => like.likedBy === user.id),
       [comt?.commentLikes, user.id]
     );
+
     const isTopComment = useMemo(
       () => comt?.topCommentId === null,
       [comt?.topCommentId]
@@ -68,7 +70,6 @@ const CommentBox = forwardRef(
     const { mutate: pinMutation } = useMutation({
       mutationFn: (data) => pinComment(data),
       onSuccess: (data) => {
-        console.log({ data });
         comt.pind = data.pind;
         dispatch(setToast({ message: "Comment pinned!", type: "success" }));
         setOptimisticLike("");
@@ -112,28 +113,24 @@ const CommentBox = forwardRef(
     });
 
     // Infinite query for replies
-    const {
-      data,
-      fetchNextPage,
-      hasNextPage,
-      isFetching,
-      isLoading,
-      isFetchingNextPage,
-    } = useInfiniteQuery(
-      ["replies", comt?.id],
-      ({ pageParam = 1 }) =>
-        getReplies({
-          postId: comt.postId,
-          pageParam,
-          topCommentId: comt?.id,
-        }),
-      {
-        enabled: comt?.reply?.length > 0 && openReplies === comt?.id,
-        getNextPageParam: (lastPage) =>
-          lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
-        refetchOnWindowFocus: false,
-      }
-    );
+    const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+      useInfiniteQuery(
+        ["replies", comt?.id],
+        ({ pageParam = 1 }) =>
+          getReplies({
+            postId: comt.postId,
+            pageParam,
+            topCommentId: comt?.id,
+          }),
+        {
+          enabled: comt?.replies?.length > 0 && openReplies === comt?.id,
+          getNextPageParam: (lastPage) =>
+            lastPage.meta.hasNextPage
+              ? lastPage.meta.currentPage + 1
+              : undefined,
+          refetchOnWindowFocus: false,
+        }
+      );
 
     // Event handlers
     const handleRepliesClick = () => {
@@ -160,7 +157,7 @@ const CommentBox = forwardRef(
       pinMutation({ pin: !comt.pind, commentId: comt.id });
     };
 
-    const Comments = data?.pages.flatMap((page) => page.comments) || [];
+    const replies = data?.pages.flatMap((page) => page.replies) || [];
 
     // Loading state
     if (!comt) {
@@ -263,18 +260,18 @@ const CommentBox = forwardRef(
               action={handleRepliesClick}
             >
               {openReplies !== comt.id ? icons["arrowDown"] : icons["arrowUp"]}
-              Replies <AbbreviateNumber rawNumber={comt.reply?.length} />
+              Replies <AbbreviateNumber rawNumber={comt.replies?.length} />
               {isLoading && <Spinner className="w-3 h-3 bg-black p-0.5" />}
             </Ibutton>
           )}
         </article>
-        {openReplies === comt.id && Comments?.length > 0 && (
+        {openReplies === comt.id && replies?.length > 0 && (
           <>
-            {Comments.map((reply) => (
+            {replies.map((replies) => (
               <CommentBox
-                key={reply?.id}
+                key={replies?.id}
                 className="animate-fedin.2s ml-3 flex px-3 justify-center items-start gap-2 text-xs w-[90%]"
-                comt={reply}
+                comt={replies}
                 topCommentId={comt.id}
               />
             ))}

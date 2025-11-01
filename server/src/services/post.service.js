@@ -6,7 +6,6 @@ import PostBlock from "../models/posts/postBlock.model.js";
 import Post from "../models/posts/posts.model.js";
 import User from "../models/user.model.js";
 import redisClient from "../utils/redisClient.js";
-import Follow from "../models/follow.model.js";
 import Tag from "../models/tags.model.js";
 
 class PostService {

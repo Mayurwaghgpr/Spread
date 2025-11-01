@@ -79,7 +79,7 @@ Post.hasMany(Comments, {
   onDelete: "CASCADE",
 });
 
-// Self-referencing for replies
+// Self referencing for replies
 Comments.hasMany(Comments, {
   foreignKey: "topCommentId",
   as: "replies",

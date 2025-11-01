@@ -1,6 +1,5 @@
 import { DataTypes, ENUM } from "sequelize";
 import db from "../../config/database.js";
-
 import Post from "./posts.model.js";
 
 const PostBlock = db.define("PostBlock", {
@@ -11,6 +10,7 @@ const PostBlock = db.define("PostBlock", {
   },
   type: {
     type: ENUM([
+      "text",
       "heading",
       "paragraph",
       "image",

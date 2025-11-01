@@ -1,12 +1,13 @@
 import sequelize, { Op } from "sequelize";
 import User from "../models/user.model.js";
-import Post from "../models/posts.model.js";
+import Post from "../models/posts/posts.model.js";
 import Follow from "../models/follow.model.js";
 import Likes from "../models/likes.model.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 import { startedFollowing } from "../workers/follows.worker.js";
 import SavedPost from "../models/savedPost.model.js";
+import Tag from "../models/tags.model.js";
 // Fetch all users except the current user and distinct topics
 export const getHomeContent = async (req, res, next) => {
   try {
@@ -41,13 +42,11 @@ export const getHomeContent = async (req, res, next) => {
     });
 
     // Fetch distinct topics
-    const topics = await Post.findAll({
-      attributes: [[sequelize.fn("DISTINCT", sequelize.col("topic")), "topic"]],
-      order: [["topic", "ASC"]],
+    const tags = await Tag.findAll({
       limit: 7,
     });
 
-    res.status(200).json({ topics, userSuggetion });
+    res.status(200).json({ tags, userSuggetion });
   } catch (error) {
     console.error("Error fetching home data:", error);
     next(error);
@@ -122,15 +121,6 @@ export const searchData = async (req, res, next) => {
     const searchResult = await Post.findAll({
       where: {
         [Op.or]: [
-          {
-            topic: {
-              [Op.or]: [
-                { [Op.like]: `${searchQuery}%` },
-                { [Op.like]: `%${searchQuery}%` },
-                { [Op.like]: `${searchQuery}` },
-              ],
-            },
-          },
           {
             title: {
               [Op.or]: [

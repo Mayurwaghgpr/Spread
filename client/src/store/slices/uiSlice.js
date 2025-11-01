@@ -1,30 +1,26 @@
-import { createSlice,nanoid } from "@reduxjs/toolkit";
-const Theme=localStorage.getItem("ThemeMode")
+import { createSlice, nanoid } from "@reduxjs/toolkit";
+const Theme = localStorage.getItem("ThemeMode");
 
 const initialState = {
-
   confirmBox: {
     message: "",
-    title:'',
+    title: "",
     status: false,
-    id:'',
+    id: "",
   },
   isConfirm: {
     status: false,
   },
   ToastState: [],
-  ThemeMode:Theme,
+  ThemeMode: Theme,
   isScale: false,
-  menuOpen: false,
-  openBigFrame:null,
+  menuOpen: true,
+  openBigFrame: null,
   openNotification: false,
-
 };
 
-
-
 const uiSlice = createSlice({
-  name: 'ui',
+  name: "ui",
   initialState,
   reducers: {
     setConfirmBox: (state, action) => {
@@ -35,32 +31,39 @@ const uiSlice = createSlice({
     },
 
     setToast: (state, action) => {
-      const existingToast = state.ToastState.find(toast => toast.type === action.payload.type);
-      
+      const existingToast = state.ToastState.find(
+        (toast) => toast.type === action.payload.type
+      );
+
       if (existingToast) {
         existingToast.count = (existingToast.count || 1) + 1; // Increase count if already present
-         existingToast.message=action.payload.message
+        existingToast.message = action.payload.message;
       } else {
-    state.ToastState = [...state.ToastState, { id: nanoid(), count:1,...action.payload }].slice(-3);
+        state.ToastState = [
+          ...state.ToastState,
+          { id: nanoid(), count: 1, ...action.payload },
+        ].slice(-3);
       }
     },
     removeToast: (state, action) => {
-      state.ToastState = state.ToastState.filter(el => el.id !== action.payload);
+      state.ToastState = state.ToastState.filter(
+        (el) => el.id !== action.payload
+      );
     },
-    removeAllToast: (state,action) => {
-       state.ToastState=[]
+    removeAllToast: (state, action) => {
+      state.ToastState = [];
     },
-    setThemeMode: (state,action) => {
-      state.ThemeMode =action.payload
+    setThemeMode: (state, action) => {
+      state.ThemeMode = action.payload;
     },
-    setIsScale: (state,action) => {
-      state.isScale = !state.isScale
+    setIsScale: (state, action) => {
+      state.isScale = !state.isScale;
     },
-    setManuOpen: (state) => {
-      state.menuOpen = !state.menuOpen
+    setMenuOpen: (state) => {
+      state.menuOpen = !state.menuOpen;
     },
     setOpenNotification: (state) => {
-      state.openNotification = !state.openNotification
+      state.openNotification = !state.openNotification;
     },
     // setFocusedIndex: (state,action) => {
     //   state.focusedIndex= action.payload
@@ -79,9 +82,9 @@ export const {
   setThemeMode,
   setIsScale,
   removeAllToast,
-  setManuOpen,
+  setMenuOpen,
   setOpenNotification,
-  setOpenBigFrame
+  setOpenBigFrame,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

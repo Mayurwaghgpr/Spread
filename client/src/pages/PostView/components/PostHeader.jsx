@@ -6,39 +6,39 @@ import { memo, useMemo } from "react";
 
 const PostHeader = memo(({ postView, userImageurl }) => {
   const usernameSlug = useMemo(() => {
-    const username = postView?.user?.username || "";
+    const username = postView?.author?.username || "";
     const parts = username.trim().split(" ");
     return parts.length > 1 ? parts.slice(0, -1).join("") : username;
-  }, [postView?.user?.username]);
+  }, [postView?.author?.username]);
 
   return (
     <header className=" border-inherit w-full">
       <div className="flex flex-col gap-5 border-inherit w-full">
         <div className="relative flex items-center sm:text-base text-xs justify-between gap-5  w-full">
           <div className="flex justify-center items-start gap-4 ">
-            <Link to={`/profile/@${usernameSlug}/${postView?.user?.id}`}>
+            <Link to={`/profile/@${usernameSlug}/${postView?.author?.id}`}>
               <ProfileImage
                 className="sm:w-10 sm:h-10 w-8 h-8"
                 image={userImageurl}
-                alt={postView?.user?.username}
+                alt={postView?.author?.username}
                 title="author profile"
               />
             </Link>
             <div className="flex sm:items-start items-center  sm:flex-col sm:text-nowrap w-full  gap-1 dark:text-slate-400">
-              {postView?.user && (
+              {postView?.author && (
                 <div className="flex items-center justify-center gap-2">
                   <Link
-                    to={`/profile/@${usernameSlug}/${postView?.user?.id}`}
+                    to={`/profile/@${usernameSlug}/${postView?.author?.id}`}
                     className="truncate font-medium  w-16 sm:w-fit  hover:underline underline-offset-4"
                   >
-                    {postView?.user?.displayName || "Unknown User"}
+                    {postView?.author?.displayName || "Unknown User"}
                   </Link>
-                  {postView?.user?.username && (
+                  {postView?.author?.username && (
                     <Link
-                      to={`/profile/@${usernameSlug}/${postView?.user?.id}`}
+                      to={`/profile/@${usernameSlug}/${postView?.author?.id}`}
                       className="truncate w-16 sm:w-fit text-sm opacity-50"
                     >
-                      @{postView?.user?.username}
+                      @{postView?.author?.username}
                     </Link>
                   )}
                 </div>
@@ -53,7 +53,7 @@ const PostHeader = memo(({ postView, userImageurl }) => {
 
           <div className="flex sm:hidden  items-center justify-between gap-2 w-full">
             <Follow
-              person={postView?.user}
+              person={postView?.author}
               className="relative px-5 py-2 hover:underline underline-offset-4 border-none text-blue-500"
             />
           </div>

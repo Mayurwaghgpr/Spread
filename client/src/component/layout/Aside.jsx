@@ -1,11 +1,10 @@
-import React from "react";
 import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
 import { Link } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
 import { useSelector } from "react-redux";
 
 function Aside({ className, handleTopicClick }) {
-  const { topics, isLoadingHome } = useSelector((state) => state.common);
+  const { Tags, isLoadingHome } = useSelector((state) => state.common);
 
   return (
     <aside className={`${className}`}>
@@ -15,17 +14,17 @@ function Aside({ className, handleTopicClick }) {
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
           <ul className="flex justify-start flex-wrap gap-2">
-            {topics?.map(({ topic }, index) => (
+            {Tags?.map(({ tagName }, index) => (
               <li
                 key={index}
                 className="rounded-full  border-gray-200 bg-gray-300 dark:bg-sky-300/50 px-2 py-0.5  dark:border-sky-500/50 "
               >
                 <button
                   className="t-btn"
-                  onClick={() => handleTopicClick(topic)}
-                  aria-label={`Select topic ${topic}`}
+                  onClick={() => handleTopicClick(tagName)}
+                  aria-label={`Select topic ${tagName}`}
                 >
-                  <span>{topic}</span>
+                  <span>{tagName}</span>
                 </button>
               </li>
             ))}

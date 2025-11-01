@@ -2,7 +2,7 @@ import Sequelize, { Op } from "sequelize";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import User from "../models/user.model.js";
-import Post from "../models/posts.model.js";
+import Post from "../models/posts/posts.model.js";
 dotenv.config();
 const saltRounds = process.env.SALT_ROUNDS || 10;
 class UserService {

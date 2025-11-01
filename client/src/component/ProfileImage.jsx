@@ -2,7 +2,7 @@ import React, { memo } from "react";
 
 const ProfileImage = ({ className, image, children, alt, title, ...props }) => {
   return (
-    <div
+    <button
       {...props}
       name="profileBtn"
       className={` ${className} rounded-full cursor-pointer flex justify-center items-center hover:opacity-90  `}
@@ -15,7 +15,7 @@ const ProfileImage = ({ className, image, children, alt, title, ...props }) => {
         loading="lazy"
       />
       {children}
-    </div>
+    </button>
   );
 };
 

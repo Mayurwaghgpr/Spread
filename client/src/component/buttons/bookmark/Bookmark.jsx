@@ -85,7 +85,7 @@ function Bookmark({ className, post, children }) {
 
       <BookmarkBox
         postId={post.id}
-        userId={post.user.id}
+        userId={post.author.id}
         mutation={savePostMutation.mutate}
       />
     </div>

@@ -8,6 +8,8 @@ export default {
         dark: "var(--dark-color)",
         light: "var(--light-color)",
         oplight: "var(--opposite-light)",
+        laccent: "var(--l-accent-color)",
+        daccent: "var(--d-accent-color)",
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],

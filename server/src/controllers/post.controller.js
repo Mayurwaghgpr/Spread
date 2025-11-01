@@ -1,8 +1,8 @@
-import Post from "../models/posts.model.js";
+import Post from "../models/posts/posts.model.js";
 import { Op, Sequelize } from "sequelize";
 import User from "../models/user.model.js";
 import { deletePostImage } from "../utils/deleteImages.js";
-import PostContent from "../models/postContent.model.js";
+import PostBlock from "../models/posts/postBlock.model.js";
 import Likes from "../models/likes.model.js";
 import Comments from "../models/comments.model.js";
 import cloudinary from "../config/cloudinary.js";
@@ -20,15 +20,15 @@ export const AddNewPost = async (req, res, next) => {
   if (!req.body.blog || !req.body.Topic) {
     return res.status(400).json({ error: "Blog data or topic is missing" });
   }
-  let postContent;
+  let PostBlock;
   try {
-    postContent = JSON.parse(req.body.blog);
+    PostBlock = JSON.parse(req.body.blog);
   } catch {
     return res.status(400).json({ error: "Invalid blog JSON format" });
   }
   const topic = req.body.Topic.toLowerCase();
-  const postTitle = postContent.find((p) => p.index === 0)?.data;
-  const subtitle = postContent.at(1)?.data;
+  const postTitle = PostBlock.find((p) => p.index === 0)?.data;
+  const subtitle = PostBlock.at(1)?.data;
 
   if (!postTitle || !subtitle) {
     return res
@@ -64,7 +64,7 @@ export const AddNewPost = async (req, res, next) => {
     // Map additional images
     const imageMap = new Map();
 
-    // Filter additional images ,skipping the first one, which is the title image
+    // Filter additional images, skipping the first one, which is the title image
     const imageFiles = imageFileArray.slice(1);
 
     const uploadResults = await Promise.allSettled(
@@ -86,8 +86,7 @@ export const AddNewPost = async (req, res, next) => {
       }
     }
     // Arrange post content
-    const postData = postContent
-      .filter((p) => p.index > 1) // Skip title and subtitle
+    const postData = PostBlock.filter((p) => p.index > 1) // Skip title and subtitle
       .map((p) => ({
         type: p.type,
         content: p.type === "image" ? imageMap.get(p.index)?.imageUrl : p.data,
@@ -101,19 +100,23 @@ export const AddNewPost = async (req, res, next) => {
 
     // Bulk insert all post content in one go
     if (postData.length) {
-      await PostContent.bulkCreate(postData, { transaction });
+      await PostBlock.bulkCreate(postData, { transaction });
     }
 
     // Delete temp uploaded images
     await deletePostImage(imageFileArray);
 
+    // Save Post & postBlocks data by commiting transaction
     await transaction.commit();
+
     // Send success response
     return res
       .status(201)
       .json({ newPost, message: "Post created successfully" });
   } catch (error) {
+    // Rollbacks post & postBlocks saved data transaction on error occurs
     await transaction.rollback();
+    //
     await deletePostImage(imageFileArray);
     await cloudinaryService.deleteImages(uploadedPublicIds);
     console.error("Error adding new post:", error);
@@ -125,23 +128,13 @@ export const getPostPreview = async (req, res, next) => {
   const type = req.query.type?.toLowerCase().trim() || "all";
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
-  const topicFilter =
-    type !== "all"
-      ? {
-          topic: {
-            [Op.iLike]: `%${type}%`, // Optimized LIKE query
-          },
-        }
-      : {};
   const cacheKey = `post_preview_${lastTimestamp}_${type}_${limit}`;
   try {
     const posts = await postService.getPaginatedPosts({
       lastTimestamp,
       limit,
-      topicFilter,
       cacheKey,
     });
-
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error.message);
@@ -203,6 +196,7 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
       include: [
         {
           model: User,
+          as: "author",
           attributes: ["id", "username", "userImage", "displayName"],
         },
         {
@@ -372,8 +366,8 @@ export const DeletePost = async (req, res, next) => {
       where: { id: postId, authorId: userId },
       include: [
         {
-          model: PostContent,
-          as: "postContent",
+          model: PostBlock,
+          as: "PostBlock",
           where: { type: "image" },
           attributes: ["cloudinaryPubId"],
           required: false,
@@ -397,9 +391,7 @@ export const DeletePost = async (req, res, next) => {
     // Extract Cloudinary image IDs title image and content images
     const uploadedPublicIds = [
       post.cloudinaryPubId,
-      ...post.postContent.flatMap(
-        ({ cloudinaryPubId }) => cloudinaryPubId || []
-      ),
+      ...post.PostBlock.flatMap(({ cloudinaryPubId }) => cloudinaryPubId || []),
     ].filter(Boolean);
     // Delete images in parallel if there are any
     await cloudinaryService.deleteImages(uploadedPublicIds);

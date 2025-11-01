@@ -1,9 +1,7 @@
 import ElementsProvider from "./component/ElementsProvider";
-
 import { usePostCreator } from "./hooks/usePostCreator";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-
 import InputTypeSelector from "./component/InputTypeSelector";
 import useIcons from "../../hooks/useIcons";
 import Ibutton from "../../component/buttons/Ibutton";
@@ -51,22 +49,6 @@ function DynamicPostEditor() {
               key={element.id}
               className="flex relative justify-start items-center gap-2 xl:w-[50rem] w-full px-2 border-inherit "
             >
-              {/* <div
-                className={`flex w-[2.5rem] justify-between  items-center  transition-transform duration-100 sm:overflow-hidden`}
-              >
-                {focusedIndex === index && element.data === "" && (
-                  <span
-                    onClick={() => dispatch(setIsScale())}
-                    title="more inputs"
-                    className={`w-full z-10 rounded-full border text-3xl font-extralight flex justify-center items-center cursor-pointer transition-transform duration-100 ${
-                      isScale ? "rotate-0" : " rotate-45"
-                    }`}
-                  >
-                    {icons["close"]}
-                  </span>
-                )}
-              </div> */}
-
               <div className="flex w-full min-h-10 border-inherit">
                 <ElementsProvider
                   element={element}

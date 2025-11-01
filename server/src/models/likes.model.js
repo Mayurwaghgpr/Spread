@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
-import Post from "./posts.model.js";
+import Post from "./posts/posts.model.js";
 
 const Likes = db.define(
   "Like",

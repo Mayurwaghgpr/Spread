@@ -4,7 +4,7 @@ const commonSlice = createSlice({
   name: "common",
   initialState: {
     userSuggestions: [],
-    topics: [],
+    Tags: [],
     isLoadingHome: false,
     error: null,
     isError: false,
@@ -36,8 +36,8 @@ const commonSlice = createSlice({
     setUserSuggestions: (state, action) => {
       state.userSuggestions = action.payload;
     },
-    setTopiclist: (state, action) => {
-      state.topics = action.payload;
+    setTagslist: (state, action) => {
+      state.Tags = action.payload;
     },
   },
 });
@@ -49,6 +49,6 @@ export const {
   setSearchPath,
   setShowSidebar,
   setUserSuggestions,
-  setTopiclist,
+  setTagslist,
 } = commonSlice.actions;
 export default commonSlice.reducer;

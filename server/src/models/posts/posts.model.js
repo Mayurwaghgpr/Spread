@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+import db from "../../config/database.js";
 
 const Post = db.define("post", {
   id: {
@@ -11,6 +11,10 @@ const Post = db.define("post", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  slug: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   subtitle: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -19,14 +23,9 @@ const Post = db.define("post", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  status: {
+  state: {
     type: DataTypes.ENUM("draft", "published"),
-    default: "draft",
-  },
-  topic: {
-    type: DataTypes.STRING,
-    defaultValue: "general",
-    allowNull: false,
+    defaultValue: "draft",
   },
   cloudinaryPubId: {
     type: DataTypes.STRING,
@@ -43,6 +42,9 @@ const Post = db.define("post", {
   publishedAt: {
     type: DataTypes.DATE,
   },
+});
+Post.beforeCreate((post) => {
+  post.slug = post.title.toLowerCase().replace(/\s+/g, "-");
 });
 
 export default Post;

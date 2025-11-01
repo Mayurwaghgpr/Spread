@@ -27,10 +27,10 @@ import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import { setCommentCred, setPostViewData } from "../../store/slices/postSlice";
 import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import AIBtn from "../../component/buttons/AIBtn";
-import PostContent from "./components/PostContent";
 import PostHeader from "./components/PostHeader";
 import useProfileApi from "../../services/useProfileApis";
 import UserPopover from "../../component/utilityComp/UserPopover";
+import PostBlocks from "./components/PostBlocks";
 // import CommentSection from "../Comment/CommentSection";
 
 // Memoized sub-components for better performance
@@ -41,7 +41,7 @@ function PostView() {
   // const { user } = useSelector((state) => state.auth);
 
   // Hooks
-  const { fetchDataById } = usePublicApis();
+  const { fetchPostById } = usePublicApis();
   const { fetchUserProfile } = useProfileApi();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ function PostView() {
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
   const { socket } = useSocket();
-
+  console.log(id);
   // Socket event handler for real-time comment updates
   useEffect(() => {
     if (!socket || !postViewData?.id) return;
@@ -76,7 +76,7 @@ function PostView() {
   // Fetch Post Full View with React Query
   const { isLoading, isError, error } = useQuery({
     queryKey: ["FullPostData", id],
-    queryFn: () => fetchDataById(id),
+    queryFn: () => fetchPostById(id),
     onSuccess: (data) => {
       dispatch(setPostViewData(data));
       dispatch(
@@ -87,19 +87,21 @@ function PostView() {
       );
     },
     refetchOnWindowFocus: false,
+    retry: false,
   });
   const { data: authorData } = useQuery({
-    queryKey: ["author_details", postViewData?.user?.id],
-    queryFn: () => fetchUserProfile(postViewData?.user?.id),
-
+    queryKey: ["author_details", postViewData?.author?.id],
+    queryFn: () => fetchUserProfile(postViewData?.author?.id),
+    enabled: !!postViewData?.author?.id,
     refetchOnWindowFocus: false,
   });
+
   // Memoized values
   const { POST_MENU } = useMenuConstant(postViewData, "post");
 
   const { userImageurl } = useMemo(
-    () => userImageSrc(postViewData?.user),
-    [postViewData?.user]
+    () => userImageSrc(postViewData?.author),
+    [postViewData?.author]
   );
 
   const comments = useMemo(
@@ -140,7 +142,6 @@ function PostView() {
   if (isLoading) {
     return <LoaderScreen message="Loading post..." />;
   }
-
   return (
     <div className="relative flex justify-end items-start w-full h-screen overflow-auto px-2 sm:py-10 py-5  border-inherit transition-all duration-500 ">
       <article className="relative animate-fedin1s max-w-4xl w-full sm:px-4 px-2 flex flex-col justify-center items-center gap-5 border-inherit mb-40">
@@ -187,8 +188,8 @@ function PostView() {
           />
         )}
 
-        <PostContent
-          postContent={postViewData?.postContent}
+        <PostBlocks
+          postBlocks={postViewData?.postBlocks}
           onImageClick={handleBigFrame}
         />
       </article>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { setElements } from "../../../store/slices/postSlice";
@@ -9,6 +9,7 @@ import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../component/loaders/Spinner";
 import { createPortal } from "react-dom";
 import CommonInput from "../../../component/inputComponents/CommonInput";
+import useIcons from "../../../hooks/useIcons";
 
 const DEFAULT_ELEMENT = { type: "text", data: "", id: uuidv4(), index: 0 };
 
@@ -16,8 +17,9 @@ function PostPreviewEditor() {
   const [imageFiles, setImageFiles, handleTextChange] = useOutletContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const icons = useIcons();
 
-  const [Topic, setTopic] = useState();
+  // const [Topic, setTopic] = useState();
   const { elements } = useSelector((state) => state.posts);
   const { AddNewPost } = PostsApis();
 
@@ -56,56 +58,50 @@ function PostPreviewEditor() {
     [dispatch, elements, imageFiles]
   );
 
-  const handeSubmit = useCallback(
-    (e) => {
-      // console.log(elements);
-      if (elements.some((el) => el.data === "" && !el.file)) {
-        return;
-      }
+  const handeSubmit = useCallback((e) => {
+    if (elements.some((el) => el.data === "" && !el.file)) {
+      return;
+    }
 
-      const formData = new FormData();
-      // const textElements = elements.filter((el) => el.type == "image");
-      formData.append("blog", JSON.stringify(elements));
-      formData.append("Topic", Topic);
-      // console.log({ imageFiles });
-      imageFiles?.forEach((el, idx) => {
-        console.log({ el });
-        formData.append(`image-${el.index}`, el.file);
-        formData.append(`description-${el.index}`, el.data);
-      });
-      console.log(formData);
-      if (e === "fetch") {
-        mutation.mutate(formData);
-      }
-    },
-    [Topic]
-  );
+    const formData = new FormData();
+    formData.append("blog", JSON.stringify(elements));
+    imageFiles?.forEach((el, idx) => {
+      console.log({ el });
+      formData.append(`image-${el.index}`, el.file);
+      formData.append(`description-${el.index}`, el.data);
+    });
+    console.log(formData);
+    if (e === "fetch") {
+      mutation.mutate(formData);
+    }
+  }, []);
 
   const imageElements = elements?.filter((el) => el.type === "image");
 
   return createPortal(
-    <main className=" fixed top-0 right-0 z-50 bg-[#fff9f3] px-10  dark:bg-black w-full flex justify-center min-h-screen h-full flex-col gap-10 m-auto items-center overflow-y-auto border-inherit">
-      <div className="w-full  text-center ">
-        <Link className=" absolute right-5 text-xl top-5" to={-1}>
-          <i className="bi bi-x-lg"></i>
+    <main className=" fixed top-0 right-0 z-50  px-10 bg-black/10   w-full flex justify-center min-h-screen h-full flex-col gap-10 m-auto items-center overflow-y-auto border-inherit">
+      <div className="w-full  ">
+        <Link
+          className=" absolute right-5 text-xl top-5"
+          to={-1}
+          replace={true}
+        >
+          {icons["close"]}
         </Link>
-        <hgroup>
-          <h1 className="text-xl">Define your Preview</h1>
-          <p className="text-[.6rem] sm:text-lg px-10  dark:text-white  text-black dark:opacity-50 text-opacity-20">
-            Define your posts preview and Add topice to know whats your post
-            content about
-          </p>
-        </hgroup>
       </div>
-
-      <article className="  w-full max-w-[60rem] flex sm:flex-row flex-col sm:gap-5 justify-center items-center border-inherit  ">
-        <div className="w-full flex flex-col justify-center items-start bg-inherit">
+      <div className="flex flex-col justify-center items-center gap-10 bg-light h-fit max-w-3xl min-w-[36rem] dark:bg-black p-10 rounded-xl">
+        {" "}
+        <hgroup className="text-center ">
+          <h1 className="text-lg">Define your Preview</h1>
+          <p className="text-[.6rem] sm:text-sm px-10  dark:text-white  text-black dark:opacity-50 text-opacity-20"></p>
+        </hgroup>
+        <div className="  w-full  h-full flex flex-col  justify-center items-start gap-5 text-start border-inherit  ">
           <h1 className="">Post Preview</h1>
-          <div className="flex justify-center h-full w-full items-center bg-inherit">
-            <label className="relative flex h-80 w-full" htmlFor="titleimage">
+          <div className="flex justify-center h-20 w-full items-center bg-inherit">
+            <label className="relative flex h-full w-full" htmlFor="titleimage">
               {imageElements?.length ? (
                 <img
-                  className=" object-fill object-top "
+                  className=" object-cover object-center "
                   src={imageElements[0]?.file}
                   alt="title image"
                   loading="lazy"
@@ -132,65 +128,54 @@ function PostPreviewEditor() {
               }
             />
           </div>
-        </div>
-        <div className=" w-full flex my-7 gap-5 flex-col border-inherit">
-          <div className="w-full h-full gap-1  flex flex-col justify-start items-center border-inherit">
-            <CommonInput
-              label={"Title"}
-              className=" p-2 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
-              type="text"
-              name="title"
-              defaultValue={elements[0]?.data}
-              title=""
-              placeholder="Write Preview title"
-              onChange={(e) =>
-                handleTextChange(elements[0]?.id, e.target.value)
-              }
-            />
-            <CommonInput
-              type="text"
-              label={"Subetitle"}
-              name={"subtitle"}
-              className=" p-2 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
-              defaultValue={elements[1]?.data}
-              placeholder=" Write Preview Subtitle"
-              onChange={(e) =>
-                handleTextChange(elements[1]?.id, e.target.value)
-              }
-            />
-            <CommonInput
-              className=" p-2 w-full border rounded-lg  placeholder:text-sm  outline-none focus:border-black bg-inherit"
-              label={"Topic"}
-              type="text"
-              name={"Topics"}
-              placeholder="Add Topics..."
-              onChange={(e) => setTopic(e.target.value)}
-            />
-            {/* <input  /> */}
-          </div>
-          <div className="h-full flex gap-3 items-start border-inherit">
-            <button
-              onClick={() => handeSubmit("fetch")}
-              className={`flex gap-2 text-white ${
-                mutation.isLoading && "bg-sky-100 "
-              } dark:bg-sky-400 bg-sky-400  px-4 py-2 rounded-lg`}
-              disabled={mutation.isLoading}
-            >
-              {mutation.isLoading && (
-                <Spinner className={" w-5 h-5 p-0.5 bg-black dark:bg-white"} />
-              )}
-              {mutation.isLoading ? `Submitting...` : "Submit"}
-            </button>
 
-            <Link
-              className=" border px-4 py-2 rounded-lg border-inherit"
-              to={-1}
-            >
-              Cancel
-            </Link>
+          <CommonInput
+            label={"Title"}
+            className=" p-1 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
+            type="text"
+            name="title"
+            defaultValue={elements[0]?.data}
+            title=""
+            placeholder="Write Preview title"
+            onChange={(e) => handleTextChange(elements[0]?.id, e.target.value)}
+          />
+          <CommonInput
+            type="text"
+            label={"Subetitle"}
+            name={"subtitle"}
+            className=" p-2 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
+            defaultValue={elements[1]?.data}
+            placeholder=" Write Preview Subtitle"
+            onChange={(e) => handleTextChange(elements[1]?.id, e.target.value)}
+          />
+
+          <div className=" w-full flex my-7 gap-5 flex-col border-inherit">
+            <div className="h-full flex gap-3 items-start border-inherit">
+              <button
+                onClick={() => handeSubmit("fetch")}
+                className={`flex gap-2 ${
+                  mutation.isLoading && " opacity-50 "
+                } dark:bg-white dark:text-black text-white bg-oplight px-4 py-2 rounded-full`}
+                disabled={mutation.isLoading}
+              >
+                {mutation.isLoading && (
+                  <Spinner
+                    className={" w-5 h-5 p-0.5 bg-black dark:bg-white"}
+                  />
+                )}
+                {mutation.isLoading ? `Submitting...` : "Submit"}
+              </button>
+
+              <Link
+                className=" border px-4 py-2 rounded-full border-inherit"
+                to={-1}
+              >
+                Cancel
+              </Link>
+            </div>
           </div>
         </div>
-      </article>
+      </div>
     </main>,
     document.getElementById("portal")
   );

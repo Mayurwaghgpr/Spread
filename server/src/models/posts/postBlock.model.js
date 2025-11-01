@@ -1,23 +1,32 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+import { DataTypes, ENUM } from "sequelize";
+import db from "../../config/database.js";
 
 import Post from "./posts.model.js";
 
-const PostContent = db.define("PostContent", {
+const PostBlock = db.define("PostBlock", {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   type: {
-    type: DataTypes.TEXT,
+    type: ENUM([
+      "heading",
+      "paragraph",
+      "image",
+      "code_snippet",
+      "link",
+      "url",
+      "list",
+      "quote",
+    ]),
     allowNull: false,
   },
   content: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  otherInfo: {
+  description: {
     type: DataTypes.STRING,
     defaultValue: "text content",
   },
@@ -36,12 +45,9 @@ const PostContent = db.define("PostContent", {
       model: Post,
       key: "id",
     },
-    onDelete: "CASCADE", // Ensures deletion of related content on post deletion
-    onUpdate: "CASCADE", // Ensures cascading updates on postId changes
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   },
 });
 
-PostContent.belongsTo(Post, { as: "post", foreignKey: "postId" });
-Post.hasMany(PostContent, { as: "postContent", foreignKey: "postId" });
-
-export default PostContent;
+export default PostBlock;

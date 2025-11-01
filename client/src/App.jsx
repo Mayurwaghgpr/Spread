@@ -1,6 +1,6 @@
-import React, { useEffect, lazy, useState, useMemo, Suspense } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, lazy, useState, useMemo, Suspense } from "react";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
@@ -19,8 +19,8 @@ const WelcomeLoginBox = lazy(
 const THEME_STORAGE_KEY = "ThemeMode";
 
 function App() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);

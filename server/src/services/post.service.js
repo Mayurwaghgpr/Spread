@@ -2,10 +2,12 @@ import { Op } from "sequelize";
 import { EXPIRATION } from "../config/constants.js";
 import Comments from "../models/comments.model.js";
 import Likes from "../models/likes.model.js";
-import PostContent from "../models/postContent.model.js";
-import Post from "../models/posts.model.js";
+import PostBlock from "../models/posts/postBlock.model.js";
+import Post from "../models/posts/posts.model.js";
 import User from "../models/user.model.js";
 import redisClient from "../utils/redisClient.js";
+import Follow from "../models/follow.model.js";
+import Tag from "../models/tags.model.js";
 
 class PostService {
   async findPostById({ id }) {
@@ -19,7 +21,22 @@ class PostService {
       include: [
         {
           model: User,
+          as: "author",
           attributes: ["id", "username", "userImage", "displayName"],
+          include: [
+            {
+              model: User,
+              as: "Followers",
+              through: { attributes: [] }, // Exclude through table attributes
+              attributes: ["id"], // Fetch only necessary fields
+            },
+            {
+              model: User,
+              as: "Following",
+              through: { attributes: [] }, // Exclude through table attributes
+              attributes: ["id"], // Fetch only necessary fields
+            },
+          ],
         },
         {
           model: Likes, // Include likes
@@ -28,8 +45,8 @@ class PostService {
           attributes: ["id", "type", "likedBy", "createdAt", "updatedAt"],
         },
         {
-          model: PostContent,
-          as: "postContent",
+          model: PostBlock,
+          as: "postBlocks",
           required: false,
         },
         {
@@ -51,12 +68,7 @@ class PostService {
     await redisClient.setEx(id, EXPIRATION, JSON.stringify(post));
     return post;
   }
-  async getPaginatedPosts({
-    lastTimestamp,
-    limit,
-    topicFilter = {},
-    cacheKey,
-  }) {
+  async getPaginatedPosts({ lastTimestamp, limit, cacheKey }) {
     // Unique cache key for this combination
     // Checking Cache
     const cachedPostData = await redisClient.get(cacheKey);
@@ -69,7 +81,6 @@ class PostService {
         "id",
         "title",
         "subtitle",
-        "topic",
         "cloudinaryPubId",
         "publicationId",
         "previewImage",
@@ -78,7 +89,11 @@ class PostService {
         "updatedAt",
       ],
       include: [
-        { model: User, attributes: ["id", "username", "userImage"] },
+        {
+          model: User,
+          as: "author",
+          attributes: ["id", "username", "userImage"],
+        },
         {
           model: Likes,
           as: "Likes",
@@ -89,10 +104,14 @@ class PostService {
           as: "comments",
           attributes: ["id", "userId", "topCommentId", "replyTo"],
         },
+        {
+          model: Tag,
+          as: "tags",
+          through: { attributes: [] },
+        },
       ],
       where: {
         createdAt: { [Op.lt]: lastTimestamp },
-        ...topicFilter,
       },
       order: [["createdAt", "DESC"]],
       limit,

@@ -93,7 +93,7 @@ import {
   TbMessageCircleFilled,
   TbTrendingUp,
 } from "react-icons/tb";
-import { CiCircleCheck, CiWarning } from "react-icons/ci";
+import { CiCircleCheck, CiMenuBurger, CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiPin } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
@@ -189,6 +189,7 @@ function useIcons() {
     messageFi: <TbMessageCircleFilled />,
     messageDoted: <AiOutlineMessage />,
     moonFi: <BsFillMoonStarsFill />,
+    menu: <CiMenuBurger />,
 
     // N
     // Placeholder for future grouping

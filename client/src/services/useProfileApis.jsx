@@ -10,7 +10,6 @@ function useProfileApi() {
     }
   };
   const fetchUserData = async (profileId, pageParam) => {
-    // console.log(profileId, pageParam);
     try {
       const response = await axiosInstance.get(`/user/posts/${profileId}`, {
         params: {

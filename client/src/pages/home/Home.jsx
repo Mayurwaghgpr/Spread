@@ -169,7 +169,7 @@ function Home() {
     <>
       <div className="flex flex-col w-full h-full border-inherit  ">
         <nav
-          className="absolute top-  z-10 sm:mx-3 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
+          className="absolute top-  z-10 sm:mx-5 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
           role="navigation"
           aria-label="Feed navigation"
         >

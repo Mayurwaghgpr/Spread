@@ -31,9 +31,9 @@ function usePublicApis() {
   };
 
   // Fetch data by post ID
-  const fetchDataById = async (id) => {
+  const fetchPostById = async (id) => {
     try {
-      const response = await axiosInstance.get(`/posts/${id}`, {});
+      const response = await axiosInstance.get(`/posts/${id}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching post by ID:", error);
@@ -123,7 +123,7 @@ function usePublicApis() {
 
   return {
     fetchHomeContent,
-    fetchDataById,
+    fetchPostById,
     fetchSearchData,
     LikePost,
     removePostFromArchive,

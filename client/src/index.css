@@ -7,7 +7,9 @@
 
 :root{
   --dark-color:black;
+  --d-accent-color: rgb(18, 18, 18);
   --light-color:#fff9f3;
+  --l-accent-color:#f5f1ec;
   --opposite-light:#2f3a47;
   /* --dark-color: rgb(17 24 39 / 0.95);
     --light-color: rgb(255 255 255 / 0.95); */

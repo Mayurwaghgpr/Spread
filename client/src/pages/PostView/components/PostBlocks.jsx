@@ -6,10 +6,10 @@ const CopyToClipboardInput = lazy(
   () => import("../../../component/CopyToClipboardInput")
 );
 
-const PostContent = memo(({ postContent, onImageClick }) => {
+const PostBlocks = memo(({ postBlocks, onImageClick }) => {
   return (
     <>
-      {postContent?.map((item) => (
+      {postBlocks?.map((item) => (
         <section
           key={item.id}
           className=" w-full border-inherit sm:text-base text-xs"
@@ -39,4 +39,4 @@ const PostContent = memo(({ postContent, onImageClick }) => {
   );
 });
 
-export default PostContent;
+export default PostBlocks;

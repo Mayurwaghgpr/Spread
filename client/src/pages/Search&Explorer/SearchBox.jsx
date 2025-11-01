@@ -50,19 +50,19 @@ function SearchBox({ className, scrollDirection }) {
     [searchDebounce]
   );
 
-  // Handle topic selection
-  const handleTopicSelect = useCallback(
-    (topic) => {
-      navigate(`/?topic=${encodeURIComponent(topic)}`);
+  // Handle tag selection
+  const handleTagSelect = useCallback(
+    (tag) => {
+      navigate(`/?tag=${encodeURIComponent(tag)}`);
     },
     [navigate]
   );
 
   // Handle search button action
   const handleSearchAction = useCallback(() => {
-    const topic = searchParams.get("topic");
-    if (topic) {
-      navigate(`/?topic=${topic}`);
+    const tag = searchParams.get("tag");
+    if (tag) {
+      navigate(`/?tag=${tag}`);
     }
   }, [navigate, searchParams]);
 
@@ -127,8 +127,8 @@ function SearchBox({ className, scrollDirection }) {
             inputAction={handleInputChange}
             btnAction={handleSearchAction}
             value={searchQuery}
-            placeholder="Search topics..."
-            aria-label="Search topics"
+            placeholder="Search tags..."
+            aria-label="Search tags"
             aria-expanded={showResults}
             aria-haspopup="listbox"
           />
@@ -156,19 +156,19 @@ function SearchBox({ className, scrollDirection }) {
                     key={searchres?.id || idx}
                     role="option"
                     className="cursor-pointer p-2 px-3 flex justify-start items-center gap-3 rounded-lg hover:bg-gray-300 hover:bg-opacity-30 duration-200 focus:bg-gray-300 focus:bg-opacity-30"
-                    onMouseDown={() => handleTopicSelect(searchres?.topic)}
+                    onMouseDown={() => handleTagSelect(searchres?.tag)}
                     tabIndex={0}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
-                        handleTopicSelect(searchres?.topic);
+                        handleTagSelect(searchres?.tag);
                       }
                     }}
                   >
                     <span className="font-thin text-lg" aria-hidden="true">
                       {icons["search"]}
                     </span>
-                    <span className="font-medium">{searchres?.topic}</span>
+                    <span className="font-medium">{searchres?.tag}</span>
                   </li>
                 ))}
               </ul>

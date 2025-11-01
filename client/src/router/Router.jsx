@@ -54,7 +54,7 @@ const ConversationFallBack = lazy(
 const ROUTES = {
   HOME: "/",
   HEROES: "/heroes",
-  PROFILE: "/profile/:username/:id",
+  PROFILE: "/profile/:username/:profileId",
   PROFILE_EDITOR: "/profileEditor",
   WRITE: "/write",
   SETTINGS: "/setting",

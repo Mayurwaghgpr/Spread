@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import { server } from "./app.js";
 import sockIo from "./socket.js";
 import socketHandlers from "./socket/socket-handler.js";
+import * as models from "./models/index.js";
+
 dotenv.config();
 const port = process.env.PORT || 3000;
 export const io = sockIo.init(server);
@@ -12,7 +14,7 @@ export const io = sockIo.init(server);
 socketHandlers();
 
 // Start the server after DB & Redis setup
-db.sync()
+db.sync({})
   .then(async () => {
     await redisClient.connect();
     console.log("Redis client connected.");

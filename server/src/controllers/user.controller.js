@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 import User from "../models/user.model.js";
-import Post from "../models/posts.model.js";
+import Post from "../models/posts/posts.model.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import Likes from "../models/likes.model.js";
 import cloudinary from "../config/cloudinary.js";
@@ -41,6 +41,7 @@ export const getUserPostsById = async (req, res, next) => {
       include: [
         {
           model: User,
+          as: "author",
           attributes: ["id", "username", "userImage", "displayName"],
         },
         {
@@ -54,7 +55,7 @@ export const getUserPostsById = async (req, res, next) => {
         },
       ],
       limit,
-      order: [["createdAt", "DESC"]], // Optional: Order posts by creation date
+      order: [["createdAt", "DESC"]], // Order posts by creation date
     });
     res.status(200).json(posts);
   } catch (error) {

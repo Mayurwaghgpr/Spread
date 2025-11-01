@@ -11,7 +11,7 @@ import useDeviceSize from "../../hooks/useDeviceSize";
 
 import {
   setLoadingHome,
-  setTopiclist,
+  setTagslist,
   setUserSuggestions,
 } from "../../store/slices/commonSlice";
 
@@ -28,7 +28,7 @@ function Layout() {
   useQuery("homeContent", fetchHomeContent, {
     onSuccess: (data) => {
       dispatch(setUserSuggestions(data.userSuggetion));
-      dispatch(setTopiclist(data.topics));
+      dispatch(setTagslist(data.tags));
     },
     onSettled: (data) => {
       dispatch(setLoadingHome(false));
@@ -51,8 +51,8 @@ function Layout() {
       showSidebar:
         isLogin &&
         !pathname.startsWith("/search") &&
-        !pathname.startsWith("/analysis") &&
-        !pathname.startsWith("/view"),
+        !pathname.startsWith("/analysis"),
+      // !pathname.startsWith("/view"),
     }),
     [pathname, isLogin]
   );
@@ -63,12 +63,12 @@ function Layout() {
   return (
     <main className="relative flex flex-col h-screen max-h-screen bg-inherit border-inherit overflow-hidden">
       {/* Main Content Area */}
-      <div className="flex flex-1 relative w-full h-full border-inherit">
+      <div className="relative flex justify-start h-full border-inherit">
         {/* Sidebar */}
         {pathChecks.showSidebar && <SideBar />}
 
         {/* Main Content */}
-        <div className="w-full border-inherit">
+        <div className=" w-full flex-grow border-inherit">
           {/* Navigation Bar */}
           {showNavBar && <MainNavBar />}
           <section className="  flex border-inherit w-full h-full overflow-y-auto">

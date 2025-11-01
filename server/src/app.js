@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import path from "path";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
@@ -11,7 +10,6 @@ import passport from "passport";
 // Custom Imports
 import Database from "./config/database.js";
 import redisClient from "./utils/redisClient.js";
-import DataBaseAssociations from "./utils/DataBaseAssociations.js";
 import { passportStrategies } from "./middlewares/passport.middleware.js";
 import { createServer } from "http";
 // Routes
@@ -22,7 +20,6 @@ import userRoutes from "./routes/user.route.js";
 import commentRoutes from "./routes/comments.route.js";
 import aiRoutes from "./routes/aI.route.js";
 import messagingRoutes from "./routes/messaging/messaging.route.js";
-import initMessageChangeListener from "./db/triggers/messages.js";
 import notificationRoutes from "./routes/notification.route.js";
 
 dotenv.config();
@@ -81,9 +78,6 @@ app.use(
 // Passport setup
 passportStrategies();
 app.use(passport.initialize());
-
-// Database associations
-DataBaseAssociations();
 
 //DB changes listener
 // initMessageChangeListener();

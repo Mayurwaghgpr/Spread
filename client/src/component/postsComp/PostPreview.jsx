@@ -27,7 +27,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userImageurl } = userImageSrc(post?.user);
+  const { userImageurl } = userImageSrc(post?.author);
   const menuRef = useRef(null);
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
@@ -42,10 +42,10 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   }, [post?.id, dispatch]);
 
   const handelComment = useCallback(() => {
-    if (post?.user?.username && post?.id) {
-      navigate(`/view/@${post?.user?.username}/${post?.id}/comments`);
+    if (post?.author?.username && post?.id) {
+      navigate(`/view/@${post?.author?.username}/${post?.id}/comments`);
     }
-  }, [navigate, post?.user?.username, post?.id]);
+  }, [navigate, post?.author?.username, post?.id]);
   return (
     <article
       ref={ref}
@@ -55,7 +55,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
         {/* Header with user profile */}
         <header className="flex justify-start items-center border-inherit gap-2 sm:gap-3 text-xs sm:text-sm">
           <Link
-            to={`/profile/@${post?.user?.username}/${post?.user?.id}`}
+            to={`/profile/@${post?.author?.username}/${post?.author?.id}`}
             className="flex items-center justify-center gap-2 sm:gap-3 min-w-0 flex-shrink-0"
           >
             <ProfileImage
@@ -65,7 +65,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
             <div className="text-xs sm:text-sm rounded-lg flex min-w-0">
               {post ? (
                 <p className="capitalize underline-offset-4 hover:underline">
-                  {post?.user?.username}
+                  {post?.author?.username}
                 </p>
               ) : (
                 <span className="w-16 sm:w-20 h-3 animate-pulse bg-gray-300 dark:bg-gray-700 bg-inherit rounded-xl"></span>
@@ -81,7 +81,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
 
         {/* Post content */}
         <Link
-          to={`/view/@${post?.user?.username}/${post?.id}`}
+          to={`/view/@${post?.author?.username}/${post?.id}`}
           className={`relative  ${post ? "cursor-pointer" : "cursor-not-allowed"} h-full border-inherit flex items-start justify-between gap-3 sm:gap-4`}
         >
           <div className="flex w-full flex-col min-w-0 flex-grow">

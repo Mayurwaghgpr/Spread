@@ -15,13 +15,11 @@ import { BsPostcard } from "react-icons/bs";
 
 function Profile() {
   const dispatch = useDispatch();
-  const params = useParams();
+  const { profileId } = useParams();
   const { fetchUserProfile, fetchUserData } = useProfileApi();
 
   const { isLogin, user } = useSelector((state) => state.auth);
-  const { userProfile, FollowInfo } = useSelector((state) => state.profile);
-  const profileId = params.id || user?.id;
-  const isOwnProfile = profileId === user?.id;
+  const { FollowInfo } = useSelector((state) => state.profile);
 
   // Profile data query
   const {
@@ -51,7 +49,7 @@ function Profile() {
     hasNextPage,
     error: postError,
   } = useInfiniteQuery(
-    ["Userposts", profileId],
+    ["UserPosts", profileId],
     ({ pageParam = new Date().toISOString() }) =>
       fetchUserData(profileId, pageParam),
     {
@@ -78,12 +76,6 @@ function Profile() {
     [postsData]
   );
 
-  // Handle navigation tab clicks
-  const handleTabClick = useCallback((tab) => {
-    // Implement tab functionality here
-    console.log(`Clicked on ${tab} tab`);
-  }, []);
-
   // Error handling - separate profile and post errors
   if (isProfileError) {
     const errorMessage = profileError?.data?.message || "Profile not found";
@@ -104,7 +96,7 @@ function Profile() {
 
   // Empty state component
   const EmptyPostsState = () => {
-    if (isOwnProfile) {
+    if (profileId === user.id) {
       return (
         <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center sm:text-3xl border-dashed border-2 rounded-lg max-h-[38rem] h-full min-h-[13rem] border-inherit mx-5">
           <p className="text-gray-600 dark:text-gray-400 mb-4">No posts yet</p>

@@ -1,13 +1,12 @@
 import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { setManuOpen } from "../../store/slices/uiSlice";
+import { setMenuOpen } from "../../store/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
 import useIcons from "../../hooks/useIcons";
 import LogoutBtn from "../buttons/LogoutBtn";
 import ProfileImage from "../ProfileImage";
 import { v4 as uuidv4 } from "uuid";
-import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import LinkBtn from "../LinkBtn";
 
 const LoginMenuLinks = [
@@ -85,22 +84,27 @@ function SideBar() {
 
   return (
     <aside
-      onClick={() => dispatch(setManuOpen())}
-      className={`z-50 sm:static fixed left-0 top-0 w-full sm:block h-full sm:w-fit transition-all duration-300 ease-in-out border-r sm:z-30  lg:animate-none animate-fedin.2s overflow-hidden ${
-        !menuOpen && "hidden"
-      } ${pathname.startsWith("/view") && "sm:hidden"} border-inherit bg-dark/40 backdrop-blur-[1px]`}
+      onClick={() => dispatch(setMenuOpen())}
+      className={`fixed sm:static left-0 top-0 h-full w-full sm:w-auto z-50 xl:z-30
+    transition-all duration-500  ease-in-out
+    border-r border-inherit bg-dark/40 backdrop-blur-[1px]
+    ${menuOpen ? "opacity-100  pointer-events-auto" : "opacity-0 pointer-events-none sm:opacity-100 sm:pointer-events-auto"}
+  `}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col justify-between items h-full w-fit sm:m-0 me-16 lg:me-16 px-6 pb-10  sm:dark:bg-transparent bg-light dark:bg-dark xl:bg-inherit animate-slide-in-left sm:animate-none xl:text-lg sm:text-sm shadow-2xl sm:shadow-none dark:shadow-black/20 backdrop-blur-sm sm:backdrop-blur-none "
+        className={`flex flex-col justify-between items-center h-full bg-laccent dark:bg-daccent 
+      transition-all duration-500 z-30 delay-0 opacity-100 ease-in-out sm:rounded-none rounded-r-2xl overflow-hidden xl:p-0 sm:px-3 pr-10 pl-5
+      pb-10
+      ${menuOpen ? " animate-slide-in-left sm:animate-none w-fit xl:w-[280px]" : " animate-slide-out-left sm:animate-none w-fit xl:w-[0px]"}
+    `}
       >
         <div className="flex flex-col justify-center items-center gap-4 pt-2 w-fit">
           {/* Profile Link */}
           <div className="flex  items-center justify-start gap-2 h-fit w-fit">
             <Link
-              to={user?.profileLin || manulProfileLink}
+              to={user?.profileLink || manulProfileLink}
               className="group flex justify-center sm:justify-center items-center gap-3 w-full px-4 py-3 hover:bg-gradient-to-r  rounded-2xl transition-all duration-200 "
-              onClick={() => dispatch(setManuOpen())}
             >
               <div className="relative">
                 <ProfileImage
@@ -121,7 +125,12 @@ function SideBar() {
               </div>
             </Link>
 
-            <div>{icons["doubleArrowL"]}</div>
+            <button
+              className="xl:block hidden text-xl"
+              onClick={() => dispatch(setMenuOpen())}
+            >
+              {icons["doubleArrowL"]}
+            </button>
           </div>
 
           {LoginMenuLinks.map((link) => (
@@ -134,7 +143,6 @@ function SideBar() {
                   : "  "
               }`}
               to={link.stub}
-              onClick={() => dispatch(setManuOpen())}
             >
               <div
                 className={` transition-all duration-200 ${
@@ -156,11 +164,10 @@ function SideBar() {
               </div>
             </LinkBtn>
           ))}
+          <LogoutBtn className="group text-sm flex justify-start items-center gap-4 px-4 py-3 w-full  text-nowrap no-underline rounded-2xl transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:scale-[1.02] hover:shadow-md" />
         </div>
 
         {/* Logout Button */}
-
-        <LogoutBtn className="group text-sm flex justify-center items-center gap-4 px-4 py-3 w-fit sm:w-full lg:w-fit no-underline rounded-2xl transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:scale-[1.02] hover:shadow-md" />
       </div>
     </aside>
   );

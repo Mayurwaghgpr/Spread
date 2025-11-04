@@ -4,19 +4,23 @@ import {
   FollowUser,
   addPostToSavedPost,
   LikePost,
-  getHomeContent,
+  getQuickUserSuggestion,
   getAllUser,
-  getPeoples,
+  getAllSuggestedUsers,
+  getQuickTrendingTags,
 } from "../controllers/public.controller.js";
 import IsAuth from "../middlewares/isAuth.middleware.js"; // Import the authentication middleware
 
 const router = express.Router();
 
-// Route to get preparation data for posts (authenticated users only)
-router.get("/h/content", IsAuth, getHomeContent);
+// Route to get quick suggested users
+router.get("/h/q/suggest/user", IsAuth, getQuickUserSuggestion);
+
+// Route to get quick trending tags
+router.get("/h/q/tags", IsAuth, getQuickTrendingTags);
 
 // Route to get all platform users
-router.get("/h/peoples", IsAuth, getPeoples);
+router.get("/h/all/users", IsAuth, getAllSuggestedUsers);
 
 // Route to get platform users
 router.get("/users/all", IsAuth, getAllUser);

@@ -6,20 +6,30 @@ import Paragraph from "../../component/texts/Paragraph";
 import ProfileImage from "../../component/ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import Heading from "../../component/texts/Heading";
-import { useSelector } from "react-redux";
 import UserPopover from "../../component/utilityComp/UserPopover";
+import usePublicApis from "../../services/publicApis";
+import { useQuery } from "react-query";
 function WhoToFollow({ className }) {
-  const { userSuggestions, isLoadingHome } = useSelector(
-    (state) => state.common
+  const { fetchQuickUserSuggestion } = usePublicApis();
+
+  const { data: userSuggetion, isLoading } = useQuery(
+    "user_suggestion",
+    fetchQuickUserSuggestion,
+    {
+      refetchOnMount: false,
+      staleTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+    }
   );
+
   return (
     <div className={className}>
       <h1 className=" text-start text-lg font-medium"> Follow people </h1>
-      {userSuggestions === 0 && isLoadingHome ? (
+      {userSuggetion === 0 && isLoading ? (
         <ProfileListItemLoadingSkeleton count={5} />
       ) : (
         <ul className="flex flex-wrap gap-5 py-3 w-full  border-inherit">
-          {userSuggestions?.map((person, idx, arr) => {
+          {userSuggetion?.map((person, idx, arr) => {
             const { userImageurl } = userImageSrc(person);
             return (
               <li

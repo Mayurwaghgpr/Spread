@@ -1,12 +1,11 @@
 import { useDispatch } from "react-redux";
 import axiosInstance from "./axios";
-import { setLoadingHome } from "../store/slices/commonSlice";
 
 function usePublicApis() {
   const dispatch = useDispatch();
   const fetchPeopel = async ({ pageParam, username }) => {
     try {
-      const result = await axiosInstance.get(`/public/h/peoples`, {
+      const result = await axiosInstance.get(`/public/h/all/users`, {
         params: {
           lastTimestamp: pageParam,
           q: username?.trim(),
@@ -19,10 +18,19 @@ function usePublicApis() {
     }
   };
   // Fetch user preferences data
-  const fetchHomeContent = async () => {
-    dispatch(setLoadingHome(true));
+  const fetchQuickUserSuggestion = async () => {
     try {
-      const result = await axiosInstance.get(`/public/h/content`, {});
+      const result = await axiosInstance.get(`/public/h/q/suggest/user`);
+      return result.data;
+    } catch (error) {
+      console.error("Error fetching user preferences data:", error);
+      throw error.response || error;
+    }
+  };
+  // Fetch user preferences data
+  const fetchQuickTags = async () => {
+    try {
+      const result = await axiosInstance.get(`/public/h/q/tags`);
       return result.data;
     } catch (error) {
       console.error("Error fetching user preferences data:", error);
@@ -76,7 +84,6 @@ function usePublicApis() {
   };
 
   const LikePost = async ({ postId, liketype }) => {
-    console.log(postId, liketype);
     try {
       const result = await axiosInstance.put(`/public/like`, {
         postId,
@@ -101,7 +108,6 @@ function usePublicApis() {
   };
 
   const savePost = async ({ postId, groupName }) => {
-    console.log({ postId, groupName });
     try {
       const result = await axiosInstance.put(`/public/save`, {
         postId,
@@ -122,7 +128,8 @@ function usePublicApis() {
   };
 
   return {
-    fetchHomeContent,
+    fetchQuickUserSuggestion,
+    fetchQuickTags,
     fetchPostById,
     fetchSearchData,
     LikePost,

@@ -30,7 +30,7 @@ const UserPopover = forwardRef(
     return (
       <div
         ref={ref}
-        className={`${className} rounded-2xl shadow-lg
+        className={`${className} rounded-2xl
          border border-inherit overflow-hidden bg-light dark:bg-dark w-full`}
         role="dialog"
         aria-label={`${person?.username}'s profile information`}
@@ -84,7 +84,7 @@ const UserPopover = forwardRef(
 
             <Follow
               person={person}
-              className="px-3 py-1 bg-black dark:bg-white text-white dark:text-black font-semibold rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200 text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="px-3 py-1 bg-black dark:bg-white text-white dark:text-black font-semibold rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200 text-sm  transform hover:scale-105"
             />
           </div>
 

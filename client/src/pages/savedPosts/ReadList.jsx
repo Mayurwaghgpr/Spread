@@ -43,7 +43,7 @@ const ReadList = () => {
     () => data?.pages.flatMap((page) => page) || [],
     [data?.pages]
   );
-
+  console.log(pages);
   return (
     <div className=" flex flex-col justify-start items-start w-full h-full  xl:items-center border-inherit overflow-scroll ">
       <div className=" sticky top-0 flex  justify-end items-center gap-4 w-full z-10  border-inherit  ">

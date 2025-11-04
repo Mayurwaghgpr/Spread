@@ -1,11 +1,9 @@
-import React from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { PopupBox } from "./PopupBox";
 import { setloginPop } from "../../store/slices/authSlice";
 
 function WelcomeLoginBox() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
     <PopupBox

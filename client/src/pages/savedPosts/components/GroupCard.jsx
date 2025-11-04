@@ -10,7 +10,7 @@ function GroupCard({ onClick, heading, stub, className, count, imageArry }) {
     >
       {" "}
       <div className="flex justify-between items-center">
-        <h1 className="">{heading}</h1>
+        <h1 className=" sm:text-lg text-sm">{heading}</h1>
         <span className="opacity-50">{count && count}</span>
       </div>
       {/* <div className=" grid grid-cols-2 gap-2 ">

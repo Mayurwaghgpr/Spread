@@ -1,11 +1,24 @@
 import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
 import { Link } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
-import { useSelector } from "react-redux";
+import usePublicApis from "../../services/publicApis";
+import { useQuery } from "react-query";
+// import { useSelector } from "react-redux";
 
 function Aside({ className, handleTopicClick }) {
-  const { tags, isLoadingHome } = useSelector((state) => state.common);
+  const { fetchQuickTags } = usePublicApis();
 
+  // Fetch tags
+  const { data: tags, isLoading } = useQuery(
+    "tranding_q_tags",
+    fetchQuickTags,
+    {
+      refetchOnMount: false,
+      staleTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+    }
+  );
+  console.log(tags);
   return (
     <aside className={`${className}`}>
       <div className="  flex flex-col w-full items-center text-start gap-2 border-inherit ">
@@ -14,7 +27,7 @@ function Aside({ className, handleTopicClick }) {
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
           <ul className="flex justify-start flex-wrap gap-2">
-            {tags.length > 0 &&
+            {tags?.length > 0 &&
               tags?.map(({ tagName }, index) => (
                 <li
                   key={index}
@@ -29,7 +42,7 @@ function Aside({ className, handleTopicClick }) {
                   </button>
                 </li>
               ))}
-            {tags.length === 0 && isLoadingHome && (
+            {tags?.length === 0 && isLoading && (
               <TopicsSkeletonLoader count={10} />
             )}
           </ul>

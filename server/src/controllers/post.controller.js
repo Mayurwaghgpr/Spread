@@ -14,21 +14,22 @@ import db from "../config/database.js";
 import SavedPost from "../models/savedPost.model.js";
 
 export const AddNewPost = async (req, res, next) => {
+  const body = req.body;
   const imageFileArray = req.files || [];
   const uploadedPublicIds = [];
+
   // Validate incoming request
-  if (!req.body.blog || !req.body.Topic) {
-    return res.status(400).json({ error: "Blog data or topic is missing" });
+  if (!body.blocks) {
+    return res.status(400).json({ error: "Blog data is missing" });
   }
   let PostBlock;
   try {
-    PostBlock = JSON.parse(req.body.blog);
+    PostBlock = JSON.parse(body.blocks);
   } catch {
     return res.status(400).json({ error: "Invalid blog JSON format" });
   }
-  const topic = req.body.Topic.toLowerCase();
-  const postTitle = PostBlock.find((p) => p.index === 0)?.data;
-  const subtitle = PostBlock.at(1)?.data;
+  const postTitle = body.title?.data;
+  const subtitle = body.subtitle?.data;
 
   if (!postTitle || !subtitle) {
     return res
@@ -304,9 +305,12 @@ export const getSavedPost = async (req, res, next) => {
           model: Post,
           as: "post",
           required: true,
-
           include: [
-            { model: User, attributes: ["id", "username", "userImage"] },
+            {
+              model: User,
+              as: "author",
+              attributes: ["id", "username", "userImage"],
+            },
             {
               model: Likes,
               as: "Likes",

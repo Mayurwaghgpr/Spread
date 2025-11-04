@@ -14,7 +14,7 @@ function GroupBoard() {
   });
   const icons = useIcons();
   return (
-    <div className=" flex flex-col justify-start items-start w-full h-full  xl:items-center border-inherit overflow-scroll ">
+    <div className="flex flex-col justify-start items-center w-full h-full  xl:items-center border-inherit overflow-scroll ">
       <div className=" sticky top-0 flex  justify-end items-center gap-4 w-full z-10  border-inherit  ">
         <div className=" flex justify-start items-center gap-4 w-full h-full p-7 bg-light dark:bg-dark  border-b border-inherit">
           <span className="border rounded-lg p-2 border-inherit">
@@ -28,7 +28,7 @@ function GroupBoard() {
           </div>
         </div>
       </div>
-      <div className="p-5 w-full grid grid-cols-4 gap-3 border-inherit">
+      <div className="p-5 w-full grid sm:grid-cols-4 grid-cols-2 gap-3 border-inherit">
         <GroupCard
           className={" min-h-[10rem]  p-5 text-xl"}
           heading={"All posts"}
@@ -44,7 +44,7 @@ function GroupBoard() {
             count={group?.postCount}
           />
         ))}
-        <div className="flex justify-center items-center bg-black/5 border border-inherit rounded-lg ">
+        <div className="flex justify-center items-center bg-black/5 dark:bg-white/10 border border-inherit rounded-lg  min-h-[10rem]">
           <div className="flex justify-center items-center p-3 rounded-full border-black/40 dark:border-white/50 border-dashed border-2 ">
             {" "}
             {icons["plus"]}

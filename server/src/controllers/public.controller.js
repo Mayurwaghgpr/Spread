@@ -8,8 +8,10 @@ import { EXPIRATION } from "../config/constants.js";
 import { startedFollowing } from "../workers/follows.worker.js";
 import SavedPost from "../models/savedPost.model.js";
 import Tag from "../models/tags.model.js";
-// Fetch all users except the current user and distinct topics
-export const getHomeContent = async (req, res, next) => {
+import tagsService from "../services/tags.service.js";
+
+// Fetch quick users suggestion
+export const getQuickUserSuggestion = async (req, res, next) => {
   try {
     // Fetch users excluding the current user
     const userSuggetion = await User.findAll({
@@ -46,13 +48,14 @@ export const getHomeContent = async (req, res, next) => {
       limit: 7,
     });
 
-    res.status(200).json({ tags, userSuggetion });
+    res.status(200).json(userSuggetion);
   } catch (error) {
     console.error("Error fetching home data:", error);
     next(error);
   }
 };
-export const getPeoples = async (req, res, next) => {
+
+export const getAllSuggestedUsers = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   const currentUserId = req.authUser.id;
@@ -107,6 +110,18 @@ export const getPeoples = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getQuickTrendingTags = async (req, res, next) => {
+  try {
+    const tags = await tagsService.fetchQuickTrendingTags();
+
+    res.status(200).json(tags);
+  } catch (error) {
+    console.error("Error fetching quick tranding tags data:", error);
+    next(error);
+  }
+};
+
 // Search for posts based on a query string
 export const searchData = async (req, res, next) => {
   const searchQuery = req.query.q;

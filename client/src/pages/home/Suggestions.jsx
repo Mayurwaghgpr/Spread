@@ -18,28 +18,24 @@ function Suggestions() {
   const location = useLocation();
 
   const {
-    data: peopleData,
-    error: errorPeoples,
-    isError: isPeoplesError,
+    data,
+    isError,
     isFetching,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
     isLoading,
-    refetch,
-  } = useInfiniteQuery(
-    ["find_people"],
-    ({ pageParam }) => fetchPeopel({ pageParam }),
-    {
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
-          : undefined;
-      },
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    }
-  );
+  } = useInfiniteQuery({
+    queryKey: ["find_people"],
+    queryFn: ({ pageParam }) => fetchPeopel({ pageParam }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.length !== 0
+        ? lastPage[lastPage.length - 1].createdAt
+        : undefined;
+    },
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
@@ -47,10 +43,9 @@ function Suggestions() {
     isFetching,
     hasNextPage
   );
-  console.log(lastItemRef);
   const peoples = useMemo(
-    () => peopleData?.pages.flatMap((page) => page) || [],
-    [peopleData?.pages]
+    () => data?.pages.flatMap((page) => page) || [],
+    [data?.pages]
   );
   // Define links array
   const navLinks = [
@@ -116,7 +111,7 @@ function Suggestions() {
         {/* Main Content Area */}
         <div className="max-w-4xl mx-auto border-inherit">
           {/* Stats/Info Bar */}
-          {!isLoading && !isPeoplesError && peoples.length > 0 && (
+          {!isLoading && !isError && peoples.length > 0 && (
             <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 mb-6">
               <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                 <Users className="w-4 h-4" />

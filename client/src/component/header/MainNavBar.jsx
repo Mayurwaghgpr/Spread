@@ -67,7 +67,7 @@ function MainNavBar() {
             {deviceSize > 720 && (
               <button
                 onClick={() => dispatch(setMenuOpen())}
-                className={` ${menuOpen ? " hidden" : "xl:block hidden"} border border-inherit rounded-lg p-1 `}
+                className={`border border-inherit rounded-lg  ${menuOpen ? " hidden" : "xl:block hidden"}  p-1 `}
               >
                 {icons["menu"]}
               </button>

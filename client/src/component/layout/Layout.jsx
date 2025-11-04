@@ -29,12 +29,14 @@ function Layout() {
     onSuccess: (data) => {
       dispatch(setUserSuggestions(data.userSuggetion));
       dispatch(setTagslist(data.tags));
+      dispatch(setLoadingHome(false));
     },
     onSettled: (data) => {
       dispatch(setLoadingHome(false));
     },
     onError: (error) => {
       console.error("Error fetching home content:", error);
+      dispatch(setLoadingHome(false));
     },
     refetchOnMount: false,
     staleTime: 10 * 60 * 1000,

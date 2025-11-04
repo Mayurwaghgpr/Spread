@@ -9,7 +9,6 @@ import usePublicApis from "../../services/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import { useNavigate } from "react-router-dom";
 import LoaderScreen from "../../component/loaders/loaderScreen";
-import { BsPlus } from "react-icons/bs";
 import GroupCreation from "./components/GroupCreation";
 import SelectedGroupMemberList from "./components/SelectedGroupMemberList";
 import Spinner from "../../component/loaders/Spinner";
@@ -18,21 +17,19 @@ import useIcons from "../../hooks/useIcons";
 
 const NewConversation = () => {
   const [search, setSearch] = useState("");
-  const { user } = useSelector((state) => state.auth);
-  const [isCreatingGroup, setCreatingGroup] = useState(false);
+  const [isCreatingGroup, setIsCreatingGroup] = useState(false);
   const [next, setNext] = useState(false);
-  const [hashMap, setHashMap] = useState({
+  const { user } = useSelector((state) => state.auth);
+  const [selectedMembers, setSelectedMembers] = useState({
     [user.id]: { memberId: user.id, memberType: "admin" },
   });
+
   const containerRef = useRef(null);
-
-  //Api functions providers
-  const { fetchPeopel } = usePublicApis();
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
   const icons = useIcons();
+  const { fetchPeopel } = usePublicApis();
+  const { privateChatMutaion, isPrivateChatLoading } = usePrivateChatMutation();
 
-  const { PrivateMutaion, isPrivateLoading } = usePrivateChatMutation();
   const {
     data,
     fetchNextPage,
@@ -45,17 +42,13 @@ const NewConversation = () => {
     ({ pageParam = new Date().toISOString() }) =>
       fetchPeopel({ pageParam, username: search }),
     {
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
-          : undefined; // Use last item timestamp as cursor
-      },
+      getNextPageParam: (lastPage) =>
+        lastPage.length ? lastPage[lastPage.length - 1].createdAt : undefined,
       refetchOnWindowFocus: false,
     }
   );
-  console.log(data);
+
   const users = data?.pages?.flatMap((page) => page) || [];
-  console.log({ users });
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
@@ -63,31 +56,31 @@ const NewConversation = () => {
     hasNextPage
   );
 
-  if (isPrivateLoading) {
-    return <LoaderScreen message={"Creating conversation"} />;
-  }
-
+  // Toggle user selection for group creation
   const handleGroupConfig = useCallback((id) => {
-    setHashMap((prev) => {
-      const newMap = { ...prev };
-      if (newMap[id]) {
-        delete newMap[id];
-      } else {
-        newMap[id] = { memberId: id };
-      }
-      return newMap;
+    setSelectedMembers((prev) => {
+      const updated = { ...prev };
+      if (updated[id]) delete updated[id];
+      else updated[id] = { memberId: id };
+      return updated;
     });
   }, []);
 
-  const handelCancelGroup = useCallback(() => {
-    setNext(false);
-    setHashMap({ [user.id]: { memberId: user.id, memberType: "admin" } });
-    setCreatingGroup(false);
+  /** Cancel group creation process */
+  const handleCancelGroup = useCallback(() => {
+    setIsNextStep(false);
+    setSelectedMembers({
+      [user.id]: { memberId: user.id, memberType: "admin" },
+    });
+    setIsCreatingGroup(false);
   }, [user.id]);
 
   // Helper function to check if user can proceed to next step
-  const canProceedToNext = Object.entries(hashMap).length > 1;
+  const canProceedToNext = Object.entries(selectedMembers).length > 1;
 
+  if (isPrivateChatLoading) {
+    return <LoaderScreen message={"Creating conversation"} />;
+  }
   return (
     <PopupBox
       className={
@@ -99,7 +92,7 @@ const NewConversation = () => {
         <div className="flex justify-between items-center w-full h-fit gap-2">
           {isCreatingGroup && (
             <Ibutton
-              action={() => (!next ? handelCancelGroup() : setNext(false))}
+              action={() => (!next ? handleCancelGroup() : setNext(false))}
               className={"p-1 rounded-lg"}
             >
               Back
@@ -124,7 +117,7 @@ const NewConversation = () => {
           {isCreatingGroup && canProceedToNext && (
             <SelectedGroupMemberList
               handleGroupConfig={handleGroupConfig}
-              hashMap={hashMap}
+              selectedMembers={selectedMembers}
               users={users}
             />
           )}
@@ -132,7 +125,7 @@ const NewConversation = () => {
             {!isCreatingGroup ||
               (!canProceedToNext && (
                 <Ibutton
-                  action={() => setCreatingGroup(true)}
+                  action={() => setIsCreatingGroup(true)}
                   className={"p-1 rounded-full"}
                 >
                   {icons["plus"]}
@@ -158,7 +151,7 @@ const NewConversation = () => {
               action={() =>
                 isCreatingGroup
                   ? handleGroupConfig(Usr.id) // Removed unused parameter
-                  : PrivateMutaion(Usr?.id)
+                  : privateChatMutaion(Usr?.id)
               }
             >
               {isCreatingGroup && (
@@ -166,7 +159,7 @@ const NewConversation = () => {
                   className="block shadow-inner rounded-full animate-fedin.2s cursor-pointer"
                   onChange={() => handleGroupConfig(Usr.id)} // Removed unused parameter
                   type="checkbox"
-                  checked={!!hashMap[Usr.id]}
+                  checked={!!selectedMembers[Usr.id]}
                   name="userId"
                   id={Usr.id}
                 />
@@ -189,7 +182,7 @@ const NewConversation = () => {
       ) : (
         <GroupCreation
           setNext={setNext}
-          hashMap={hashMap}
+          selectedMembers={selectedMembers}
           handleGroupConfig={handleGroupConfig}
           users={users}
         />

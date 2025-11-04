@@ -18,7 +18,7 @@ const DynamicPostEditor = lazy(
   () => import("../pages/PostEditor/DynamicPostEditor")
 );
 const PostPreviewEditor = lazy(
-  () => import("../pages/PostEditor/component/PostPreviewEditor")
+  () => import("../pages/PostEditor/components/PostPreviewEditor")
 );
 const PostView = lazy(() => import("../pages/PostView/PostView"));
 const ProfileEditor = lazy(() => import("../pages/userProfile/ProfileEditor"));

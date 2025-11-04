@@ -14,7 +14,9 @@ function WelcomeLoginBox() {
         "flex flex-col justify-center gap-4 text-center  items-center p-10 border-inherit max-w-[25rem] min-h-[50%] shadow-lg"
       }
     >
-      <h1 className="text-3xl font-semibold">Hey there!</h1>
+      <h1 className="text-3xl font-semibold text-oplight dark:text-inherit">
+        Hey there!
+      </h1>
       <p className="opacity-50 font-light">
         Let start exploring and sharing,Sign In or Sign Up,learn,analyze and
         more
@@ -25,7 +27,7 @@ function WelcomeLoginBox() {
         }}
         replace
         className={
-          "text-white bg-black dark:bg-white dark:text-black py-2 text-center border-2 hover:opacity-60 border-inherit w-full rounded-full "
+          "text-white bg-oplight dark:bg-white dark:text-black py-2 text-center border-2 hover:opacity-60 border-inherit w-full rounded-full "
         }
         to={"/auth/signIn"}
       >

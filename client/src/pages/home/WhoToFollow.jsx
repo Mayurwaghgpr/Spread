@@ -6,18 +6,16 @@ import Paragraph from "../../component/texts/Paragraph";
 import ProfileImage from "../../component/ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
 import Heading from "../../component/texts/Heading";
-// import UserPopover from "../../component/utilityComp/UserPopover";
 import { useSelector } from "react-redux";
 import UserPopover from "../../component/utilityComp/UserPopover";
 function WhoToFollow({ className }) {
-  // const navigate = useNavigate();
   const { userSuggestions, isLoadingHome } = useSelector(
     (state) => state.common
   );
   return (
     <div className={className}>
       <h1 className=" text-start text-lg font-medium"> Follow people </h1>
-      {isLoadingHome ? (
+      {userSuggestions === 0 && isLoadingHome ? (
         <ProfileListItemLoadingSkeleton count={5} />
       ) : (
         <ul className="flex flex-wrap gap-5 py-3 w-full  border-inherit">

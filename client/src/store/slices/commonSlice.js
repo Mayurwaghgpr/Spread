@@ -4,7 +4,7 @@ const commonSlice = createSlice({
   name: "common",
   initialState: {
     userSuggestions: [],
-    Tags: [],
+    tags: [],
     isLoadingHome: false,
     error: null,
     isError: false,
@@ -37,7 +37,7 @@ const commonSlice = createSlice({
       state.userSuggestions = action.payload;
     },
     setTagslist: (state, action) => {
-      state.Tags = action.payload;
+      state.tags = action.payload;
     },
   },
 });

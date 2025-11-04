@@ -4,7 +4,7 @@ import WhoToFollow from "../../pages/home/WhoToFollow";
 import { useSelector } from "react-redux";
 
 function Aside({ className, handleTopicClick }) {
-  const { Tags, isLoadingHome } = useSelector((state) => state.common);
+  const { tags, isLoadingHome } = useSelector((state) => state.common);
 
   return (
     <aside className={`${className}`}>
@@ -14,21 +14,24 @@ function Aside({ className, handleTopicClick }) {
         </h1>
         <div className="flex justify-center items-start w-full flex-col">
           <ul className="flex justify-start flex-wrap gap-2">
-            {Tags?.map(({ tagName }, index) => (
-              <li
-                key={index}
-                className="rounded-full  border-gray-200 bg-gray-300 dark:bg-sky-300/50 px-2 py-0.5  dark:border-sky-500/50 "
-              >
-                <button
-                  className="t-btn"
-                  onClick={() => handleTopicClick(tagName)}
-                  aria-label={`Select topic ${tagName}`}
+            {tags.length > 0 &&
+              tags?.map(({ tagName }, index) => (
+                <li
+                  key={index}
+                  className="rounded-full  border-gray-200 bg-gray-300  "
                 >
-                  <span>{tagName}</span>
-                </button>
-              </li>
-            ))}
-            {isLoadingHome && <TopicsSkeletonLoader count={10} />}
+                  <button
+                    className="t-btn"
+                    onClick={() => handleTopicClick(tagName)}
+                    aria-label={`Select topic ${tagName}`}
+                  >
+                    <span>{tagName}</span>
+                  </button>
+                </li>
+              ))}
+            {tags.length === 0 && isLoadingHome && (
+              <TopicsSkeletonLoader count={10} />
+            )}
           </ul>
         </div>
       </div>

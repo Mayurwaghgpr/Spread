@@ -3,7 +3,11 @@ import ProfileImage from "../../../component/ProfileImage";
 import Ibutton from "../../../component/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 
-const SelectedGroupMemberList = ({ users, handleGroupConfig, hashMap }) => {
+const SelectedGroupMemberList = ({
+  users,
+  handleGroupConfig,
+  selectedMembers,
+}) => {
   const icons = useIcons();
   return (
     <div className="text-start w-full border-inherit h-fit">
@@ -12,7 +16,7 @@ const SelectedGroupMemberList = ({ users, handleGroupConfig, hashMap }) => {
       <div className="flex justify-start border border-inherit p-5  transition-all duration-200 rounded-lg items-center drop-shadow-lg gap-3 w-full h-fit px-5 overflow-auto scroll-smooth">
         {users?.map((user) => {
           return (
-            hashMap[user.id] && (
+            selectedMembers[user.id] && (
               <ProfileImage
                 className={"relative w-10 h-10 animate-fedin.2s"}
                 image={user.userImage}

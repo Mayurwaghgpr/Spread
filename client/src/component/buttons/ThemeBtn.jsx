@@ -7,56 +7,56 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
   const dispatch = useDispatch();
   const { ThemeMode } = useSelector((state) => state.ui);
   const icons = useIcons();
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("ThemeMode") || "system";
+    dispatch(setThemeMode(savedTheme));
+  }, [dispatch]);
 
   // Apply theme changes
   const applyTheme = useCallback((theme) => {
-    // Remove all theme classes first
-    document.documentElement.classList.remove("dark", "light", "system");
+    document.documentElement.classList.remove("dark", "light");
 
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("ThemeMode", "dark");
     } else if (theme === "light") {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("ThemeMode", "light");
     } else if (theme === "system") {
       const isDarkMode = window.matchMedia(
         "(prefers-color-scheme: dark)"
       ).matches;
-      if (isDarkMode) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-      localStorage.setItem("ThemeMode", "system");
+      if (isDarkMode) document.documentElement.classList.add("dark");
     }
+
+    localStorage.setItem("ThemeMode", theme);
   }, []);
 
   // Handle theme changes
-  useEffect(() => {
-    applyTheme(ThemeMode);
-  }, [ThemeMode, applyTheme]);
+  // useEffect(() => {
+  //   applyTheme(ThemeMode);
+  // }, [ThemeMode, applyTheme]);
 
   // Listen for system theme changes when in system mode
   useEffect(() => {
-    if (ThemeMode === "system") {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleChange = () => applyTheme("system");
+    if (ThemeMode !== "system") return;
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => applyTheme("system");
 
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
-    }
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [ThemeMode, applyTheme]);
 
-  const changeTheme = () => {
-    const currentIndex = Modes.findIndex((mode) => mode.value === ThemeMode);
-    const nextTheme = Modes[(currentIndex + 1) % Modes.length];
-    dispatch(setThemeMode(nextTheme.value));
-  };
+  // Cycle through available modes
+  const changeTheme = useCallback(() => {
+    const currentIndex = Modes.findIndex((m) => m.value === ThemeMode);
+    const nextTheme = Modes[(currentIndex + 1) % Modes.length].value;
+    dispatch(setThemeMode(nextTheme));
+  }, [ThemeMode, Modes, dispatch]);
 
-  const handleThemeSelect = (themeValue) => {
-    dispatch(setThemeMode(themeValue));
-  };
+  // Manual theme select
+  const handleThemeSelect = useCallback(
+    (themeValue) => dispatch(setThemeMode(themeValue)),
+    [dispatch]
+  );
 
   const currentMode = Modes?.find((mode) => mode.value === ThemeMode);
 
@@ -69,7 +69,7 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
         className={`relative transition-all duration-200  ${className}`}
       >
         <div className="  transition-transform duration-200">
-          {icons[currentMode?.icon || "sun"]}
+          {icons?.[currentMode?.icon] ?? icons?.sun}
         </div>
       </button>
     );
@@ -98,7 +98,7 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
                 isActive ? "scale-110" : "group-hover:scale-110"
               }`}
             >
-              {icons[mode?.icon || "sun"]}
+              {icons?.[currentMode?.icon] ?? icons?.sun}
             </div>
           </button>
         );

@@ -1,8 +1,8 @@
-import ElementsProvider from "./component/ElementsProvider";
+import ElementsProvider from "./components/ElementsProvider";
 import { usePostCreator } from "./hooks/usePostCreator";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-import InputTypeSelector from "./component/InputTypeSelector";
+import InputTypeSelector from "./components/InputTypeSelector";
 import useIcons from "../../hooks/useIcons";
 import Ibutton from "../../component/buttons/Ibutton";
 

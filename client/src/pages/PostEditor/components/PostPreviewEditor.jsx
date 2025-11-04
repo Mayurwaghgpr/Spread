@@ -64,9 +64,8 @@ function PostPreviewEditor() {
     }
 
     const formData = new FormData();
-    formData.append("blog", JSON.stringify(elements));
+    formData.append("blocks", JSON.stringify(elements));
     imageFiles?.forEach((el, idx) => {
-      console.log({ el });
       formData.append(`image-${el.index}`, el.file);
       formData.append(`description-${el.index}`, el.data);
     });

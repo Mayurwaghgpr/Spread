@@ -1,7 +1,7 @@
 import axiosInstance from "./axios";
 
 function ChatApi() {
-  const startPrivateChate = async (chatUserId) => {
+  const startPrivateChat = async (chatUserId) => {
     try {
       const result = await axiosInstance.post(`/messaging/p/create`, {
         chatUserId,
@@ -64,7 +64,7 @@ function ChatApi() {
   return {
     getMessage,
     getConversations,
-    startPrivateChate,
+    startPrivateChat,
     createGroup,
     setMessageToMute,
   };

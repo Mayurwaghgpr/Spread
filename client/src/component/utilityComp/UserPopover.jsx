@@ -14,7 +14,7 @@ const UserPopover = forwardRef(
       return (
         <div
           ref={ref}
-          className={`${className} bg-white dark:bg-dark rounded-2xl shadow-xl border border-inherit p-6 animate-pulse`}
+          className={`${className} bg-light dark:bg-dark rounded-2xl shadow-xl border border-inherit p-6 animate-pulse`}
         >
           <div className="flex items-center gap-3">
             <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>

@@ -20,9 +20,9 @@ function Settings() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className=" relative sm:w-[50%] sm:h-[40rem] h-full w-full flex  overflow-hidden items-center border bg-light dark:bg-[#2f2f2f] border-inherit sm:rounded-lg"
+        className=" relative sm:w-[50%] sm:h-[40rem] h-full w-full flex  overflow-hidden items-center border bg-light dark:bg-dark border-inherit sm:rounded-lg"
       >
-        <aside className=" h-full  p-6  min-w-[30%] flex flex-col gap-10 border-e dark:bg-[#2a2a2a] border-inherit ">
+        <aside className=" h-full  p-6  min-w-[30%] flex flex-col gap-10 border-e dark:bg-daccent bg-laccent border-inherit ">
           <ul className=" flex flex-col gap-4 p">
             {settingItem.map((setting) => (
               <Link

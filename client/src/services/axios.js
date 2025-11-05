@@ -17,18 +17,16 @@ axiosInstance.interceptors.response.use(
 
     if (status === 401) {
       localStorage.removeItem("AccessToken");
-      // Unauthorized – maybe token expired
       console.error("Unauthorized. Logging out...");
-      // Optionally clear tokens, redirect to login
     }
 
     if (status === 403) {
       console.error("Forbidden");
     }
 
-    // if (status === 404) {
-    //   console.error("Not Found");
-    // }
+    if (status === 404) {
+      console.error("Not Found");
+    }
 
     if (status >= 500) {
       console.error("Server Error");

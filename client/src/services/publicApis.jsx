@@ -52,10 +52,7 @@ function usePublicApis() {
   // fetch data search by user
 
   const fetchSearchData = async (search) => {
-    const searchResult = await axiosInstance.get(
-      `/public/search?q=${search}`,
-      {}
-    );
+    const searchResult = await axiosInstance.get(`/public/search?q=${search}`);
     return searchResult.data;
   };
   const followUser = async ({ followerId, followedId }) => {

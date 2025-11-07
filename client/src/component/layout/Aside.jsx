@@ -18,7 +18,6 @@ function Aside({ className, handleTopicClick }) {
       refetchOnWindowFocus: false,
     }
   );
-  console.log(tags);
   return (
     <aside className={`${className}`}>
       <div className="  flex flex-col w-full items-center text-start gap-2 border-inherit ">
@@ -42,9 +41,7 @@ function Aside({ className, handleTopicClick }) {
                   </button>
                 </li>
               ))}
-            {tags?.length === 0 && isLoading && (
-              <TopicsSkeletonLoader count={10} />
-            )}
+            {isLoading && <TopicsSkeletonLoader count={10} />}
           </ul>
         </div>
       </div>

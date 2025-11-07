@@ -13,7 +13,7 @@ import { multerFileUpload } from "../middlewares/multer.middleware.js";
 const router = express.Router();
 
 // Get Routes
-router.get("/profile/:id", IsAuth, getUserProfile);
+router.get("/profile/:id", getUserProfile);
 
 router.get("/posts/:userId", IsAuth, getUserPostsById);
 router.get("/followers/:userId", IsAuth, getFollowers);

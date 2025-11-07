@@ -1,6 +1,6 @@
-import React, { Suspense, useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation, useSearchParams } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import MainNavBar from "../header/MainNavBar";
 import SideBar from "./SideBar";
 import TaskBar from "../phoneview/TaskBar";
@@ -16,7 +16,7 @@ import {
 } from "../../store/slices/commonSlice";
 
 function Layout() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
 
   const { pathname } = useLocation();
   const { isLogin } = useSelector((state) => state.auth);

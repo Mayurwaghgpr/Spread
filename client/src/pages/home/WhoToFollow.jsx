@@ -9,6 +9,7 @@ import Heading from "../../component/texts/Heading";
 import UserPopover from "../../component/utilityComp/UserPopover";
 import usePublicApis from "../../services/publicApis";
 import { useQuery } from "react-query";
+
 function WhoToFollow({ className }) {
   const { fetchQuickUserSuggestion } = usePublicApis();
 
@@ -25,7 +26,7 @@ function WhoToFollow({ className }) {
   return (
     <div className={className}>
       <h1 className=" text-start text-lg font-medium"> Follow people </h1>
-      {userSuggetion === 0 && isLoading ? (
+      {isLoading ? (
         <ProfileListItemLoadingSkeleton count={5} />
       ) : (
         <ul className="flex flex-wrap gap-5 py-3 w-full  border-inherit">

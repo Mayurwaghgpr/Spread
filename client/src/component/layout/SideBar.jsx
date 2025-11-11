@@ -98,7 +98,7 @@ function SideBar() {
               className="group flex items-center gap-3 w-full px-4 py-3 rounded-2xl transition-all duration-200 hover:bg-gradient-to-r"
             >
               <div
-                className={`relative ${!userImageurl && "bg-gray-200 h-5 w-5 rounded-full"}`}
+                className={`relative ${!userImageurl && "bg-gray-300  dark:bg-gray-300/50 h-5 w-5 rounded-full"}`}
               >
                 {userImageurl && (
                   <ProfileImage
@@ -115,7 +115,7 @@ function SideBar() {
                 className={`${
                   user?.displayName
                     ? ""
-                    : "w-[7rem] bg-gray-200 h-4 rounded-lg animate-pulse"
+                    : "w-[7rem] bg-gray-300  dark:bg-gray-300/50   h-4 rounded-lg animate-pulse"
                 } xl:block sm:hidden block text-nowrap text-xs`}
               >
                 {user?.displayName && <h1>{user.displayName}</h1>}

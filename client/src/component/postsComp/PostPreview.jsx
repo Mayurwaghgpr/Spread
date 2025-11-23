@@ -68,7 +68,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                   {post?.author?.username}
                 </p>
               ) : (
-                <span className="w-16 sm:w-20 h-3 animate-pulse bg-gray-300 dark:bg-gray-700 bg-inherit rounded-xl"></span>
+                <span className="w-16 sm:w-20 h-3 animate-pulse bg-gray-300  dark:bg-gray-300/50  bg-inherit rounded-xl"></span>
               )}
             </div>
           </Link>
@@ -100,9 +100,9 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <div className="space-y-3">
-                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-5 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-                <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
-                <div className="rounded-full w-[75%] sm:w-[80%] h-3 sm:h-4 bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
+                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-5 bg-gray-300  dark:bg-gray-300/50  animate-pulse"></div>
+                <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 bg-gray-300  dark:bg-gray-300/50  animate-pulse"></div>
+                <div className="rounded-full w-[75%] sm:w-[80%] h-3 sm:h-4 bg-gray-300  dark:bg-gray-300/50  animate-pulse"></div>
               </div>
             )}
           </div>
@@ -111,7 +111,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           <div
             className={`relative ${
               !post && "animate-pulse"
-            } border border-inherit z-0 w-20 h-16 sm:w-24 sm:h-20 md:w-28 md:h-24 lg:w-40 lg:h-28 rounded flex-shrink-0 bg-gray-300 dark:bg-gray-700`}
+            } border border-inherit z-0 w-20 h-16 sm:w-24 sm:h-20 md:w-28 md:h-24 lg:w-40 lg:h-28 rounded flex-shrink-0 bg-gray-300  dark:bg-gray-300/50 `}
           >
             {post && post?.previewImage && (
               <img

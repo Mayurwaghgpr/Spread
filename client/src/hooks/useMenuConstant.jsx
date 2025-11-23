@@ -9,9 +9,8 @@ function useMenuConstant(parent, kind) {
   const navigate = useNavigate();
   const icons = useIcons();
   const postdata = useOutletContext();
-
   const { user } = useSelector((state) => state.auth);
-
+  console.log(parent);
   const basePostMenu = [
     {
       id: "copy-link",
@@ -88,18 +87,18 @@ function useMenuConstant(parent, kind) {
   ];
 
   const POST_MENU = React.useMemo(() => {
-    if (!parent?.user?.id || parent.user.id === user?.id) {
+    if (!parent?.author?.id || parent.author.id === user?.id) {
       return basePostMenu;
     }
     // If not the owner, hide 'delete' and 'edit'
     return basePostMenu.filter(
       (item) => item.id !== "delete-post" && item.id !== "edit-post"
     );
-  }, [parent?.user?.id, user?.id, icons]);
+  }, [parent?.author?.id, user?.id, icons]);
 
   const COMMENT_MENU = React.useMemo(() => {
     if (parent?.commenter?.id === user?.id) {
-      return postdata?.User?.id === user?.id
+      return parent?.user?.id === user?.id
         ? baseCommentMenu[0]
         : baseCommentMenu;
     }

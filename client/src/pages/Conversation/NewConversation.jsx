@@ -68,11 +68,11 @@ const NewConversation = () => {
 
   /** Cancel group creation process */
   const handleCancelGroup = useCallback(() => {
+    setIsCreatingGroup(false);
     setIsNextStep(false);
     setSelectedMembers({
       [user.id]: { memberId: user.id, memberType: "admin" },
     });
-    setIsCreatingGroup(false);
   }, [user.id]);
 
   // Helper function to check if user can proceed to next step
@@ -122,16 +122,15 @@ const NewConversation = () => {
             />
           )}
           <div className="flex justify-center items-center text-sm gap-1 h-fit">
-            {!isCreatingGroup ||
-              (!canProceedToNext && (
-                <Ibutton
-                  action={() => setIsCreatingGroup(true)}
-                  className={"p-1 rounded-full"}
-                >
-                  {icons["plus"]}
-                  New group
-                </Ibutton>
-              ))}
+            {(!isCreatingGroup || !canProceedToNext) && (
+              <Ibutton
+                action={() => setIsCreatingGroup(true)}
+                className={"p-1 rounded-full"}
+              >
+                {icons["plus"]}
+                New group
+              </Ibutton>
+            )}
           </div>
         </div>
       </header>

@@ -13,6 +13,9 @@ import AbbreviateNumber from "../../../utils/AbbreviateNumber";
 import Ibutton from "../../../component/buttons/Ibutton";
 import FedInBtn from "../../../component/buttons/FedInBtn";
 import { setOpenBigFrame } from "../../../store/slices/uiSlice";
+import Spinner from "../../../component/loaders/Spinner";
+import { FaSpinner } from "react-icons/fa6";
+import { PiSpinner } from "react-icons/pi";
 
 const ProfileHeader = React.memo(({ profileId }) => {
   const dispatch = useDispatch();
@@ -20,7 +23,7 @@ const ProfileHeader = React.memo(({ profileId }) => {
   const { userProfile } = useSelector((state) => state.profile);
   const { userImageurl } = userImageSrc(userProfile);
   const icons = useIcons();
-  const { PrivateMutaion, isPrivateLoading } = usePrivateChatMutation();
+  const { privateChatMutaion, isPrivateLoading } = usePrivateChatMutation();
 
   const handleBigFrame = () => {
     dispatch(
@@ -120,10 +123,14 @@ const ProfileHeader = React.memo(({ profileId }) => {
               className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-2 border border-inherit  rounded-xl `}
             />
             <Ibutton
-              action={() => PrivateMutaion(userProfile?.id)}
+              action={() => privateChatMutaion(userProfile?.id)}
               className=" bg-white px-3 py-2.5 rounded-xl border  "
             >
-              <LuMessagesSquare />
+              {isPrivateLoading ? (
+                <PiSpinner className=" animate-spin" />
+              ) : (
+                <LuMessagesSquare />
+              )}
             </Ibutton>
           </div>
         ) : (

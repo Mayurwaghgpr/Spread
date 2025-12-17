@@ -37,6 +37,27 @@ function ChatApi() {
       throw error.response || error;
     }
   };
+  const sendMessage = async ({
+    conversationId,
+    senderId,
+    content,
+    replyedTo,
+    createdAt,
+  }) => {
+    try {
+      const result = await axiosInstance.post(`/messaging/c/send/message`, {
+        conversationId,
+        senderId,
+        content,
+        replyedTo,
+        createdAt,
+      });
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
   const getConversations = async ({ pageParam }) => {
     try {
       const result = await axiosInstance.get(`/messaging/c/all`, {
@@ -67,6 +88,7 @@ function ChatApi() {
     startPrivateChat,
     createGroup,
     setMessageToMute,
+    sendMessage,
   };
 }
 

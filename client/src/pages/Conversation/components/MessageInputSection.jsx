@@ -13,11 +13,14 @@ import useSocket from "../../../hooks/useSocket";
 import { pushMessage } from "../../../store/slices/messangerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import ChatApi from "../../../services/ChatApi";
+import { useMutation } from "react-query";
 
 function MessageInputSection({ conversationId, conversationData }) {
   const [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
   const typingTimeoutRef = useRef(null);
+  const { sendMessage } = ChatApi();
 
   const dispatch = useDispatch();
   const icons = useIcons();
@@ -69,8 +72,26 @@ function MessageInputSection({ conversationId, conversationData }) {
     },
     [sendTypingStatus]
   );
+
+  const { mutate } = useMutation({
+    mutationKey: "sendMessage",
+    mutationFn: (messageObj) =>
+      sendMessage({
+        conversationId: messageObj.conversationId,
+        senderId: messageObj.senderId,
+        content: messageObj.content,
+        replyedTo: messageObj.replyedTo,
+        createdAt: messageObj.createdAt,
+      }),
+    onSettled: () => {
+      sendTypingStatus(false);
+    },
+    onError: (error) => {
+      console.error("Error sending message:", error);
+    },
+  });
   // Improved message sending with validation
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback(async () => {
     const trimmedMessage = message.trim();
     if (!trimmedMessage || !user?.id || !conversationId || !socket) return;
 
@@ -83,7 +104,7 @@ function MessageInputSection({ conversationId, conversationData }) {
     };
 
     dispatch(pushMessage(messageObj));
-    socket.emit("sendMessage", messageObj);
+    mutate(messageObj);
     setMessage("");
   }, [message, socket, user?.id, conversationId, dispatch]);
 

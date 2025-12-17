@@ -234,7 +234,7 @@ function ConversationSection() {
       {/* Messages */}
       <section
         ref={containerRef}
-        className="flex flex-col-reverse w-full  px-5 border-inherit py-5 h-full " // message col is revers to get old message from top scrolling
+        className="flex flex-col-reverse w-full  px-5 border-inherit py-5 h-full "
       >
         {isLoading && (
           <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />

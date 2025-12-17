@@ -15,7 +15,7 @@ const AIBtn = memo(({ className, state }) => {
       }}
       tabIndex={-1}
       role="button"
-      className={`border-inherit border  sm:text-xl text-lg flex justify-center  cursor-pointer ${className}`}
+      className={`border-inherit  sm:text-xl text-lg flex justify-center  cursor-pointer ${className}`}
     >
       AI
       {icons["glitter"]}

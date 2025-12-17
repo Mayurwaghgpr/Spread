@@ -119,7 +119,7 @@ function MessageLog() {
                     ? conv?.members?.find((m) => m.id != user.id)?.displayName
                     : conv?.groupName}
                 </h2>
-                <TimeAgo className={"text-xs"} date={conv?.createdAt} />
+                <TimeAgo className={"text-xs"} date={conv?.updatedAt} />
               </div>
               <div className="flex justify-start items-start gap-2 w-3/4 max-h-14 text-sm  text-ellipsis overflow-hidden opacity-20 ">
                 {" "}

@@ -5,6 +5,7 @@ import Members from "../../models/messaging/members.model.js";
 import Messages from "../../models/messaging/messages.model.js";
 import User from "../../models/user.model.js";
 import redisClient from "../../utils/redisClient.js";
+import { io } from "../../server.js";
 
 export const getConversationsByUserId = async (req, res, next) => {
   const userId = req.authUser.id;
@@ -132,6 +133,36 @@ export const getMessagesByConversationId = async (req, res, next) => {
     }
     res.status(200).json(messages);
   } catch (error) {
+    next(error);
+  }
+};
+
+export const postMessage = async (req, res, next) => {
+  const { conversationId, senderId, content, replyedTo, createdAt } = req.body;
+  try {
+    const newMessage = await Messages.create({
+      conversationId,
+      senderId,
+      content,
+      replyedTo,
+      createdAt,
+    });
+
+    // Update the lastMessage and updatedAt fields in Conversation
+    await Conversation.update(
+      { lastMessage: content, updatedAt: createdAt },
+      { where: { id: conversationId } }
+    );
+    io.to(conversationId).emit("newMessage", {
+      conversationId,
+      senderId,
+      content,
+      replyedTo: replyedTo ? replyedTo : "",
+      createdAt: createdAt,
+    });
+    res.status(201).json(newMessage);
+  } catch (error) {
+    console.error("Error posting message:", error);
     next(error);
   }
 };

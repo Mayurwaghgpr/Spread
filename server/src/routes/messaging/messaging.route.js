@@ -5,6 +5,7 @@ import {
   getConversationsByUserId,
   getMembers,
   getMessagesByConversationId,
+  postMessage,
   setIsMuteMessage,
 } from "../../controllers/messaging/common.controller.js";
 import {
@@ -19,7 +20,7 @@ const router = express.Router();
 router.get("/c/all", IsAuth, getConversationsByUserId);
 router.get("/c/messages", IsAuth, getMessagesByConversationId);
 router.get("/c/members", IsAuth, getMembers);
-// router.post('/c/message/add')
+router.post("/c/send/message", postMessage);
 //Put
 router.put("/c/message/mute", IsAuth, setIsMuteMessage);
 

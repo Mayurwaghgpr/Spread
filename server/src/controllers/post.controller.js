@@ -186,7 +186,6 @@ export const getPostPreviewByUserFollowings = async (req, res, next) => {
         "id",
         "title",
         "subtitle",
-        "topic",
         "cloudinaryPubId",
         "publicationId",
         "previewImage",
@@ -251,7 +250,7 @@ export const addSavedPostToGroup = async (req, res, next) => {
   try {
     const exist = await SavedPost.findOne({ where: { postId, userId } });
     if (!exist) {
-      return res.status(400).json({ message: " Not found any saved post" });
+      return res.status(400).json({ message: "Not found any saved post" });
     }
     exist.update({ groupName });
     await exist.save();
@@ -371,7 +370,7 @@ export const DeletePost = async (req, res, next) => {
       include: [
         {
           model: PostBlock,
-          as: "PostBlock",
+          as: "postBlocks",
           where: { type: "image" },
           attributes: ["cloudinaryPubId"],
           required: false,
@@ -395,7 +394,9 @@ export const DeletePost = async (req, res, next) => {
     // Extract Cloudinary image IDs title image and content images
     const uploadedPublicIds = [
       post.cloudinaryPubId,
-      ...post.PostBlock.flatMap(({ cloudinaryPubId }) => cloudinaryPubId || []),
+      ...post.postBlocks.flatMap(
+        ({ cloudinaryPubId }) => cloudinaryPubId || []
+      ),
     ].filter(Boolean);
     // Delete images in parallel if there are any
     await cloudinaryService.deleteImages(uploadedPublicIds);

@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-import GroupCard from "../../../pages/savedPosts/components/GroupCard";
 import usePostsApis from "../../../services/usePostsApis";
 
 function BookmarkBox({ postId, mutation }) {
@@ -36,16 +35,17 @@ function BookmarkBox({ postId, mutation }) {
           <div className=" flex w-full">
             {data?.groups ? (
               data?.groups?.map((group, idx) => (
-                <GroupCard
+                <button
                   key={idx}
-                  className={" h-full text-xs text-black p-1"}
+                  className={"border rounded-lg h-full text-xs text-black p-1"}
                   onClick={() => {
                     console.log(group?.groupName);
                     mutation({ postId, groupName: group?.groupName });
                   }}
-                  heading={group?.groupName}
                   //   count={group?.postCount}
-                />
+                >
+                  {group?.groupName}
+                </button>
               ))
             ) : (
               <div className="text-sm text-gray-600">No groups yet</div>

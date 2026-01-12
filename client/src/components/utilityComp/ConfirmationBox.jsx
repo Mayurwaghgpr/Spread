@@ -2,22 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox } from "../../store/slices/uiSlice";
 import { createPortal } from "react-dom";
 import { useCallback } from "react";
-import Spinner from "../../component/loaders/Spinner";
-import useDeleteHandlers from "../../hooks/useDeleteHandlers";
+import Spinner from "../../components/loaders/Spinner";
 import Ibutton from "../buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 
 function ConfirmationBox() {
   const { confirmBox } = useSelector((state) => state.ui);
-  const { delPost, delComment, isPostDeleting, isCommentDeleting } =
-    useDeleteHandlers();
+
   const dispatch = useDispatch();
   const icons = useIcons();
   // handles confirmation
   const handleConfirm = useCallback(() => {
-    confirmBox.content === "comment" && delComment(confirmBox.id);
-    confirmBox.content === "post" && delPost(confirmBox.id);
-    // Logic for confirming action
+    if (!confirmBox.status) return;
+    dispatch(setConfirmBox({ ...confirmBox, isConfirm: true }));
   }, [confirmBox.status]);
 
   const handleCancel = useCallback(() => {
@@ -58,10 +55,10 @@ function ConfirmationBox() {
               onClick={handleConfirm}
               name={confirmBox.type}
               className="p-2 px-5 rounded-3xl  bg-white text-black"
-              disabled={isPostDeleting || isCommentDeleting}
+              disabled={confirmBox.isConfirm}
             >
-              {isPostDeleting || isCommentDeleting ? (
-                <Spinner className={"w-5 h-5 bg-black dark:bg-white"} />
+              {confirmBox.isConfirm ? (
+                <Spinner className={"w-5 h-5 p-0.5"} />
               ) : (
                 confirmBox?.type
               )}

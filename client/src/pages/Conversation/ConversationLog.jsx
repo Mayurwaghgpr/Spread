@@ -8,12 +8,12 @@ import {
   selectConversation,
   setConversationLogData,
 } from "../../store/slices/messangerSlice";
-import Spinner from "../../component/loaders/Spinner";
-import SearchBar from "../../component/inputComponents/SearchBar";
-import Ibutton from "../../component/buttons/Ibutton";
+import Spinner from "../../components/loaders/Spinner";
+import SearchBar from "../../components/inputComponents/SearchBar";
+import Ibutton from "../../components/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
-import ProfileImage from "../../component/ProfileImage";
-import TimeAgo from "../../component/utilityComp/TimeAgo";
+import ProfileImage from "../../components/ProfileImage";
+import TimeAgo from "../../components/utilityComp/TimeAgo";
 
 function MessageLog() {
   const { user } = useSelector((state) => state.auth);

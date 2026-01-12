@@ -1,17 +1,17 @@
 import React, { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery } from "react-query";
-import PostPreview from "../../component/postsComp/PostPreview";
-import Spinner from "../../component/loaders/Spinner";
+import PostPreview from "../../components/postsComp/PostPreview";
+import Spinner from "../../components/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import Aside from "../../component/layout/Aside";
+import Aside from "../../components/layout/Aside";
 import usePostsApis from "../../services/usePostsApis";
 import WhoToFollow from "./WhoToFollow";
 import useDeviceSize from "../../hooks/useDeviceSize";
 import useIcons from "../../hooks/useIcons";
-import Ibutton from "../../component/buttons/Ibutton";
+import Ibutton from "../../components/buttons/Ibutton";
 import ErrorPage from "../ErrorPages/ErrorPage";
-import EmptyState from "../../component/utilityComp/EmptyState";
+import EmptyState from "../../components/utilityComp/EmptyState";
 import { BsPostcard } from "react-icons/bs";
 
 function Home() {
@@ -36,23 +36,21 @@ function Home() {
     fetchNextPage,
     hasNextPage,
     isLoading,
-  } = useInfiniteQuery(
-    ["Allposts", selectedTopic, selectedFeed],
-    ({ pageParam = new Date().toISOString() }) =>
+  } = useInfiniteQuery({
+    queryKey: ["postsFeed", selectedTopic, selectedFeed],
+    queryFn: ({ pageParam = new Date().toISOString() }) =>
       fetchPostsFeed({
         pageParam,
         topic: selectedTopic,
         endpoint: selectedFeed,
       }),
-    {
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1]?.createdAt
-          : undefined;
-      },
-      refetchOnWindowFocus: false,
-    }
-  );
+    getNextPageParam: (lastPage) => {
+      return lastPage.length !== 0
+        ? lastPage[lastPage.length - 1]?.createdAt
+        : undefined;
+    },
+    refetchOnWindowFocus: false,
+  });
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,

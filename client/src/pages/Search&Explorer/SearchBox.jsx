@@ -3,10 +3,10 @@ import { useMutation } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { debounce } from "../../utils/debounce";
 import usePublicApis from "../../services/publicApis";
-import Spinner from "../../component/loaders/Spinner";
-import SearchBar from "../../component/inputComponents/SearchBar";
+import Spinner from "../../components/loaders/Spinner";
+import SearchBar from "../../components/inputComponents/SearchBar";
 import useIcons from "../../hooks/useIcons";
-import Ibutton from "../../component/buttons/Ibutton";
+import Ibutton from "../../components/buttons/Ibutton";
 
 function SearchBox({ className, scrollDirection }) {
   const [isFocused, setIsFocused] = useState(false);

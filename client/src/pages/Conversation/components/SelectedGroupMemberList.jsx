@@ -1,6 +1,6 @@
 import React from "react";
-import ProfileImage from "../../../component/ProfileImage";
-import Ibutton from "../../../component/buttons/Ibutton";
+import ProfileImage from "../../../components/ProfileImage";
+import Ibutton from "../../../components/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 
 const SelectedGroupMemberList = ({

@@ -3,10 +3,12 @@ import usePostsApis from "../../services/usePostsApis";
 import useIcons from "../../hooks/useIcons";
 import GroupCard from "./components/GroupCard";
 import { useSelector } from "react-redux";
-import { memo } from "react";
+import { memo, useState } from "react";
+import CreateNewGroupForm from "./components/CreateNewGroupForm";
 
 function GroupBoard() {
   const { user } = useSelector((state) => state.auth);
+  const [isCreateGroupFormOpen, setIsCreateGroupFormOpen] = useState(false);
   const { fetchSavedPostsGroup } = usePostsApis();
   const { data } = useQuery({
     queryKey: "SavedPostGroups",
@@ -28,7 +30,7 @@ function GroupBoard() {
           </div>
         </div>
       </div>
-      <div className="p-5 w-full grid sm:grid-cols-4 grid-cols-2 gap-3 border-inherit">
+      <button className="p-5 w-full grid sm:grid-cols-4 grid-cols-2 gap-3 border-inherit">
         <GroupCard
           className={" min-h-[10rem]  p-5 text-xl"}
           heading={"All posts"}
@@ -44,13 +46,19 @@ function GroupBoard() {
             count={group?.postCount}
           />
         ))}
-        <div className="flex justify-center items-center bg-black/5 dark:bg-white/10 border border-inherit rounded-lg  min-h-[10rem]">
-          <div className="flex justify-center items-center p-3 rounded-full border-black/40 dark:border-white/50 border-dashed border-2 ">
+        <button
+          onClick={() => setIsCreateGroupFormOpen(true)}
+          className="flex justify-center items-center bg-black/5 dark:bg-white/10 border border-inherit rounded-lg  min-h-[10rem]"
+        >
+          <span className="flex justify-center items-center p-3 rounded-full border-black/40 dark:border-white/50 border-dashed border-2 ">
             {" "}
             {icons["plus"]}
-          </div>
-        </div>
-      </div>
+          </span>
+        </button>
+      </button>
+      {isCreateGroupFormOpen && (
+        <CreateNewGroupForm action={() => setIsCreateGroupFormOpen(false)} />
+      )}
     </div>
   );
 }

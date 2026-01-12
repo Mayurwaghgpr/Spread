@@ -1,17 +1,17 @@
 import { memo, useCallback, useRef, useState } from "react";
-import { PopupBox } from "../../component/utilityComp/PopupBox";
-import SearchBar from "../../component/inputComponents/SearchBar";
-import PeoplesList from "../../component/PeoplesList";
+import { PopupBox } from "../../components/utilityComp/PopupBox";
+import SearchBar from "../../components/inputComponents/SearchBar";
+import PeoplesList from "../../components/PeoplesList";
 import { useSelector } from "react-redux";
-import Ibutton from "../../component/buttons/Ibutton";
+import Ibutton from "../../components/buttons/Ibutton";
 import { useInfiniteQuery } from "react-query";
 import usePublicApis from "../../services/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import { useNavigate } from "react-router-dom";
-import LoaderScreen from "../../component/loaders/loaderScreen";
+import LoaderScreen from "../../components/loaders/loaderScreen";
 import GroupCreation from "./components/GroupCreation";
 import SelectedGroupMemberList from "./components/SelectedGroupMemberList";
-import Spinner from "../../component/loaders/Spinner";
+import Spinner from "../../components/loaders/Spinner";
 import usePrivateChatMutation from "../../hooks/usePrivateChatMutation";
 import useIcons from "../../hooks/useIcons";
 

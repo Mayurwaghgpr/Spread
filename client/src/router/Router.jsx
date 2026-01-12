@@ -1,9 +1,9 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Layout from "../component/layout/Layout";
+import Layout from "../components/layout/Layout";
 import { useSelector } from "react-redux";
 import ProtectedRoutes from "../utils/ProtectedRoutes";
-import LoaderScreen from "../component/loaders/loaderScreen";
+import LoaderScreen from "../components/loaders/loaderScreen";
 import GroupBoard from "../pages/savedPosts/GroupBoard";
 // Lazy load components with better error boundaries
 const SignUp = lazy(() => import("../pages/auth/SignUp"));
@@ -41,12 +41,12 @@ const InfoSection = lazy(
   () => import("../pages/Conversation/components/InfoSection")
 );
 const SomethingWentWrong = lazy(
-  () => import("../component/Errors/SomethingWentWrong")
+  () => import("../components/errors/SomethingWentWrong")
 );
 const NewConversation = lazy(
   () => import("../pages/Conversation/NewConversation")
 );
-const AIResponse = lazy(() => import("../component/aiComp/AiResponse"));
+const AIResponse = lazy(() => import("../components/aiComp/AiResponse"));
 const ConversationFallBack = lazy(
   () => import("../pages/Conversation/components/ConversationFallBack")
 );

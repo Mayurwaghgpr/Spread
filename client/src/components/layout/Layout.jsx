@@ -7,7 +7,7 @@ import TaskBar from "../phoneview/TaskBar";
 import LoaderScreen from "../loaders/loaderScreen";
 import { useQuery } from "react-query";
 import usePublicApis from "../../services/publicApis";
-import useDeviceSize from "../../hooks/useDeviceSize";
+// import useDeviceSize from "../../hooks/useDeviceSize";
 
 import {
   setLoadingHome,
@@ -21,11 +21,13 @@ function Layout() {
   const { pathname } = useLocation();
   const { isLogin } = useSelector((state) => state.auth);
   const { fetchHomeContent } = usePublicApis();
-  const isDeviceSize = useDeviceSize("1023");
+  // const isDeviceSize = useDeviceSize("1023");
   const dispatch = useDispatch();
 
   // Fetch home content data
-  useQuery("homeContent", fetchHomeContent, {
+  useQuery({
+    queryKey: ["homeContent"],
+    queryFn: fetchHomeContent,
     onSuccess: (data) => {
       dispatch(setUserSuggestions(data.userSuggetion));
       dispatch(setTagslist(data.tags));

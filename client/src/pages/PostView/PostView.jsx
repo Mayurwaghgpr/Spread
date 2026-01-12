@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
 
 // Component imports
-import Bookmark from "../../component/buttons/bookmark/Bookmark";
-import Like from "../../component/buttons/Like/Like";
+import Bookmark from "../../components/buttons/bookmark/Bookmark";
+import Like from "../../components/buttons/Like/Like";
 import ErrorPage from "../ErrorPages/ErrorPage";
-import Menu from "../../component/Menus/Menu";
+import Menu from "../../components/menus/Menu";
 
-import ImageFigure from "../../component/utilityComp/ImageFigure";
-import FedInBtn from "../../component/buttons/FedInBtn";
-import LoaderScreen from "../../component/loaders/loaderScreen";
+import ImageFigure from "../../components/utilityComp/ImageFigure";
+import FedInBtn from "../../components/buttons/FedInBtn";
+import LoaderScreen from "../../components/loaders/loaderScreen";
 
 // Hook imports
 import usePublicApis from "../../services/publicApis";
@@ -26,10 +26,10 @@ import userImageSrc from "../../utils/userImageSrc";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
 import { setCommentCred, setPostViewData } from "../../store/slices/postSlice";
 import { setOpenBigFrame } from "../../store/slices/uiSlice";
-import AIBtn from "../../component/buttons/AIBtn";
+import AIBtn from "../../components/buttons/AIBtn";
 import PostHeader from "./components/PostHeader";
 import useProfileApi from "../../services/useProfileApis";
-import UserPopover from "../../component/utilityComp/UserPopover";
+import UserPopover from "../../components/utilityComp/UserPopover";
 import PostBlocks from "./components/PostBlocks";
 // import CommentSection from "../Comment/CommentSection";
 

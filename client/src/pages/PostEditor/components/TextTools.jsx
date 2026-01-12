@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useState } from "react";
-import Ibutton from "../../../component/buttons/Ibutton";
+import Ibutton from "../../../components/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 
 const TextTools = ({ position, applyStyle }) => {

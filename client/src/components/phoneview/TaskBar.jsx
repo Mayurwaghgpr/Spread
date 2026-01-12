@@ -8,11 +8,11 @@ import {
 } from "react-icons/io5";
 
 import { RiQuillPenFill, RiQuillPenLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 function TaskBar() {
-  const { user, isLogin } = useSelector((state) => state.auth);
+  // const { user, isLogin } = useSelector((state) => state.auth);
   const location = useLocation();
   const LoginMenuLinks = [
     {

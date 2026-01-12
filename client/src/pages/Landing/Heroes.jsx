@@ -1,11 +1,11 @@
 import coverImg2 from "/OctoCoverImage.png";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../../component/footer/Footer";
+import Footer from "../../components/footer/Footer";
 import spreadLogo from "/spread_logo_03_robopus.png";
-import ProfileImage from "../../component/ProfileImage";
-import ThemeBtn from "../../component/buttons/ThemeBtn";
+import ProfileImage from "../../components/ProfileImage";
+import ThemeBtn from "../../components/buttons/ThemeBtn";
 import useIcons from "../../hooks/useIcons";
-import ParticalAnimation from "../../component/utilityComp/ParticalAnimation";
+import ParticalAnimation from "../../components/utilityComp/ParticalAnimation";
 import FeatureSection from "./components/FeatureSection";
 import Heading from "./components/Heading";
 function Heroes() {

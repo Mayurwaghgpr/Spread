@@ -1,4 +1,3 @@
-import React from "react";
 import FormatedTime from "../utilityComp/FormatedTime";
 import useIcons from "../../hooks/useIcons";
 import ProfileImage from "../ProfileImage";

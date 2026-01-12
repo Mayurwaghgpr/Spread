@@ -9,15 +9,13 @@ function Aside({ className, handleTopicClick }) {
   const { fetchQuickTags } = usePublicApis();
 
   // Fetch tags
-  const { data: tags, isLoading } = useQuery(
-    "tranding_q_tags",
-    fetchQuickTags,
-    {
-      refetchOnMount: false,
-      staleTime: 10 * 60 * 1000,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data: tags, isLoading } = useQuery({
+    queryKey: ["quick_tags"],
+    queryFn: fetchQuickTags,
+    refetchOnMount: false,
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
   return (
     <aside className={`${className}`}>
       <div className="  flex flex-col w-full items-center text-start gap-2 border-inherit ">

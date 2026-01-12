@@ -1,5 +1,3 @@
-import React from "react";
-
 function DisplayUsername({ username, className = "" }) {
   return (
     <span

@@ -1,6 +1,6 @@
 import React, { lazy } from "react";
 import EditableParagraph from "./EditableParagraph";
-import Ibutton from "../../../component/buttons/Ibutton";
+import Ibutton from "../../../components/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 const CodeEditor = lazy(() => import("./codeEditor"));
 const ImageFigure = lazy(

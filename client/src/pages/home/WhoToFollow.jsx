@@ -1,12 +1,12 @@
-import Follow from "../../component/buttons/follow";
+import Follow from "../../components/buttons/follow";
 import { Link } from "react-router-dom";
-import ProfileListItemLoadingSkeleton from "../../component/loaders/ProfileListItemLoadingSkeleton";
-import SubHeading from "../../component/texts/SubHeading";
-import Paragraph from "../../component/texts/Paragraph";
-import ProfileImage from "../../component/ProfileImage";
+import ProfileListItemLoadingSkeleton from "../../components/loaders/ProfileListItemLoadingSkeleton";
+import SubHeading from "../../components/texts/SubHeading";
+import Paragraph from "../../components/texts/Paragraph";
+import ProfileImage from "../../components/ProfileImage";
 import userImageSrc from "../../utils/userImageSrc";
-import Heading from "../../component/texts/Heading";
-import UserPopover from "../../component/utilityComp/UserPopover";
+import Heading from "../../components/texts/Heading";
+import UserPopover from "../../components/utilityComp/UserPopover";
 import usePublicApis from "../../services/publicApis";
 import { useQuery } from "react-query";
 

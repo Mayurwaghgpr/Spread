@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 // Dynamically load components to optimize performance
 import Bookmark from "../buttons/bookmark/Bookmark";
 import Like from "../buttons/Like/Like";
-import Menu from "../Menus/Menu";
+import Menu from "../menus/Menu";
 import { setCommentCred } from "../../store/slices/postSlice";
 
 import ProfileImage from "../ProfileImage";

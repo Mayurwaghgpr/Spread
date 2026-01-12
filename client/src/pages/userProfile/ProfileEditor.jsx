@@ -13,13 +13,13 @@ import { setToast } from "../../store/slices/uiSlice";
 import { debounce } from "../../utils/debounce";
 import useProfileApi from "../../services/useProfileApis";
 import userImageSrc from "../../utils/userImageSrc";
-import CommonInput from "../../component/inputComponents/CommonInput";
-import Selector from "../../component/utilityComp/Selector";
-import Spinner from "../../component/loaders/Spinner";
+import CommonInput from "../../components/inputComponents/CommonInput";
+import Selector from "../../components/utilityComp/Selector";
+import Spinner from "../../components/loaders/Spinner";
 import useIcons from "../../hooks/useIcons";
 import { CheckCircle, AlertCircle } from "lucide-react";
 import profileOutlook from "/ProfOutlook.png";
-import Paragraph from "../../component/texts/Paragraph";
+import Paragraph from "../../components/texts/Paragraph";
 function ProfileEditor() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);

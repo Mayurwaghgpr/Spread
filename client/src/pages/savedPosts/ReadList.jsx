@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useInfiniteQuery } from "react-query";
-import PostPreview from "../../component/postsComp/PostPreview";
-import Spinner from "../../component/loaders/Spinner";
+import PostPreview from "../../components/postsComp/PostPreview";
+import Spinner from "../../components/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import useProfileApi from "../../services/useProfileApis";
 import useIcons from "../../hooks/useIcons";

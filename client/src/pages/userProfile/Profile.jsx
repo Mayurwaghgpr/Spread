@@ -1,16 +1,16 @@
-import React, { useEffect, useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import PostPreview from "../../component/postsComp/PostPreview";
+import PostPreview from "../../components/postsComp/PostPreview";
 import { setuserProfile } from "../../store/slices/profileSlice";
-import ProfileHeader from "./component/ProfileHeader";
+import ProfileHeader from "./components/ProfileHeader";
 import { useInfiniteQuery, useQuery } from "react-query";
-import Spinner from "../../component/loaders/Spinner";
-import ProfileinfoCard from "../../component/ProfileinfoCard";
+import Spinner from "../../components/loaders/Spinner";
+import ProfileinfoCard from "../../components/ProfileinfoCard";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import useProfileApi from "../../services/useProfileApis";
 import ErrorPage from "../ErrorPages/ErrorPage";
-import LoaderScreen from "../../component/loaders/loaderScreen";
+import LoaderScreen from "../../components/loaders/loaderScreen";
 import { BsPostcard } from "react-icons/bs";
 
 function Profile() {

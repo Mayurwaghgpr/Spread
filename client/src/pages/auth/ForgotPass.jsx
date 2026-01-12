@@ -3,11 +3,11 @@ import { useMutation } from "react-query";
 import useAuthApi from "../../services/useAuthApi.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
-import CommonInput from "../../component/inputComponents/CommonInput.jsx";
+import CommonInput from "../../components/inputComponents/CommonInput.jsx";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../store/slices/uiSlice.js";
 import AuthFormWrapper from "./AuthFormWrapper";
-import LoaderScreen from "../../component/loaders/loaderScreen";
+import LoaderScreen from "../../components/loaders/loaderScreen";
 
 function ForgotPass() {
   const location = useLocation();

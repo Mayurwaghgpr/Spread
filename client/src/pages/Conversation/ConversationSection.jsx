@@ -13,8 +13,8 @@ import { useInfiniteQuery } from "react-query";
 import ChatApi from "../../services/ChatApi";
 import useSocket from "../../hooks/useSocket";
 import MessageBubble from "./components/MessageBubble";
-import Spinner from "../../component/loaders/Spinner";
-import ProfileImage from "../../component/ProfileImage";
+import Spinner from "../../components/loaders/Spinner";
+import ProfileImage from "../../components/ProfileImage";
 import MessageInputSection from "./components/MessageInputSection";
 
 import {
@@ -23,7 +23,7 @@ import {
   pushMessage,
 } from "../../store/slices/messangerSlice";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import TimeAgo from "../../component/utilityComp/TimeAgo";
+import TimeAgo from "../../components/utilityComp/TimeAgo";
 
 function ConversationSection() {
   const { isLogin, user } = useSelector((state) => state.auth);

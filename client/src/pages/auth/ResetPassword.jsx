@@ -2,10 +2,10 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthApi from "../../services/useAuthApi.jsx";
 import { useMutation } from "react-query";
-import CommonInput from "../../component/inputComponents/CommonInput.jsx";
+import CommonInput from "../../components/inputComponents/CommonInput.jsx";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../store/slices/uiSlice.js";
-import EyeBtn from "../../component/buttons/EyeBtn";
+import EyeBtn from "../../components/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 function ResetPassword() {
   const param = useParams();

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import ProfileImage from "../../../component/ProfileImage";
-import Follow from "../../../component/buttons/follow";
-import FormatedTime from "../../../component/utilityComp/FormatedTime";
+import ProfileImage from "../../../components/ProfileImage";
+import Follow from "../../../components/buttons/follow";
+import FormatedTime from "../../../components/utilityComp/FormatedTime";
 import { memo, useMemo } from "react";
 
 const PostHeader = memo(({ postView, userImageurl }) => {

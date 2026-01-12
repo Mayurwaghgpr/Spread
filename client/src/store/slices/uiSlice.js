@@ -1,13 +1,17 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 const Theme = localStorage.getItem("ThemeMode");
-
+const defaultConfirmBox = {
+  message: "",
+  title: "",
+  status: false,
+  isConfirm: false,
+  content: "",
+  type: "",
+  event: "",
+  contentId: "",
+};
 const initialState = {
-  confirmBox: {
-    message: "",
-    title: "",
-    status: false,
-    id: "",
-  },
+  confirmBox: defaultConfirmBox,
   isConfirm: {
     status: false,
   },
@@ -25,6 +29,9 @@ const uiSlice = createSlice({
   reducers: {
     setConfirmBox: (state, action) => {
       state.confirmBox = action.payload;
+    },
+    resetConfirmBox: (state) => {
+      state.confirmBox = defaultConfirmBox;
     },
     setIsConfirm: (state, action) => {
       state.isConfirm = action.payload;
@@ -76,6 +83,7 @@ const uiSlice = createSlice({
 
 export const {
   setConfirmBox,
+  resetConfirmBox,
   setIsConfirm,
   setToast,
   removeToast,

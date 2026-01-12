@@ -6,9 +6,9 @@ import { setToast } from "../../../store/slices/uiSlice";
 import { useMutation } from "react-query";
 import PostsApis from "../../../services/usePostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import Spinner from "../../../component/loaders/Spinner";
+import Spinner from "../../../components/loaders/Spinner";
 import { createPortal } from "react-dom";
-import CommonInput from "../../../component/inputComponents/CommonInput";
+import CommonInput from "../../../components/inputComponents/CommonInput";
 import useIcons from "../../../hooks/useIcons";
 
 const DEFAULT_ELEMENT = { type: "text", data: "", id: uuidv4(), index: 0 };

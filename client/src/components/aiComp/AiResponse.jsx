@@ -20,7 +20,6 @@ const AIResponse = () => {
     () => userImageSrc(postData?.User),
     [postData?.User]
   );
-  // Reference for cancellation
   const fetchStream = useCallback(async () => {
     setIsAnalyzing(true);
     setAiStreamText("");
@@ -28,7 +27,7 @@ const AIResponse = () => {
     setIsStreaming(true);
 
     const controller = new AbortController();
-    controllerRef.current = controller; // Store the controller in a ref for later use
+    controllerRef.current = controller;
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BASE_URL}/api/ai/analysis`,

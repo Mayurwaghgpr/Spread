@@ -1,16 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setConfirmBox, setToast } from "../store/slices/uiSlice";
-import { useNavigate, useOutletContext } from "react-router-dom";
+// import { useNavigate, useOutletContext } from "react-router-dom";
 import useIcons from "./useIcons";
 
 function useMenuConstant(parent, kind) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const icons = useIcons();
-  const postdata = useOutletContext();
+  // const postdata = useOutletContext();
   const { user } = useSelector((state) => state.auth);
-  console.log(parent);
   const basePostMenu = [
     {
       id: "copy-link",
@@ -47,7 +46,8 @@ function useMenuConstant(parent, kind) {
             status: true,
             content: "post",
             type: "delete",
-            id,
+            event: "DELETE_POST",
+            contentId: id,
           })
         );
       },
@@ -73,7 +73,8 @@ function useMenuConstant(parent, kind) {
             status: true,
             content: "comment",
             type: "delete",
-            id,
+            event: "DELETE_COMMENT",
+            contentId: id,
           })
         );
       },

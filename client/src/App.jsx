@@ -1,19 +1,20 @@
-import { useEffect, lazy, useState, useMemo, Suspense } from "react";
+import { useEffect, lazy, useState, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import PersistentUser from "./utils/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import Router from "./router/Router";
-import LoaderScreen from "./component/loaders/loaderScreen";
-import ToastContainer from "./component/utilityComp/ToastContainer";
-import ConfirmationBox from "./component/utilityComp/ConfirmationBox";
-import ImageInBigFrame from "./component/utilityComp/ImageInBigFrame";
-import NotificationBox from "./component/notification/NotificationBox";
+import LoaderScreen from "./components/loaders/loaderScreen";
+import ToastContainer from "./components/utilityComp/ToastContainer";
+import ImageInBigFrame from "./components/utilityComp/ImageInBigFrame";
+import NotificationBox from "./components/notification/NotificationBox";
+import ConfirmationBox from "./components/utilityComp/ConfirmationBox";
+import ConfimationActionListener from "./components/utilityComp/ConfimationActionListener";
 // Lazy load components with better error boundaries
 
 const WelcomeLoginBox = lazy(
-  () => import("./component/utilityComp/WelcomeLoginBox")
+  () => import("./components/utilityComp/WelcomeLoginBox")
 );
 // Constants for better maintainability
 const THEME_STORAGE_KEY = "ThemeMode";
@@ -31,21 +32,21 @@ function App() {
   );
 
   // Memoize path checks for better performance
-  const pathChecks = useMemo(
-    () => ({
-      isMessagesPath: pathname.startsWith("/messages"),
-      isWritePath: pathname.startsWith("/write"),
-      isSearchPath: pathname.startsWith("/search"),
-      showSidebar:
-        isLogin &&
-        !pathname.startsWith("/write") &&
-        // !pathname.startsWith("/messages") &&
-        !pathname.startsWith("/search") &&
-        !pathname.startsWith("/analysis") &&
-        !pathname.startsWith("/view"),
-    }),
-    [pathname, isLogin]
-  );
+  // const pathChecks = useMemo(
+  //   () => ({
+  //     isMessagesPath: pathname.startsWith("/messages"),
+  //     isWritePath: pathname.startsWith("/write"),
+  //     isSearchPath: pathname.startsWith("/search"),
+  //     showSidebar:
+  //       isLogin &&
+  //       !pathname.startsWith("/write") &&
+  //       // !pathname.startsWith("/messages") &&
+  //       !pathname.startsWith("/search") &&
+  //       !pathname.startsWith("/analysis") &&
+  //       !pathname.startsWith("/view"),
+  //   }),
+  //   [pathname, isLogin]
+  // );
 
   // Handle system theme changes
   useEffect(() => {
@@ -88,6 +89,7 @@ function App() {
       <NotificationBox />
       <ConfirmationBox />
       <ImageInBigFrame />
+      <ConfimationActionListener />
 
       <PersistentUser />
       {loginPop && (

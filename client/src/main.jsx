@@ -11,7 +11,7 @@ import {
   QueryErrorResetBoundary,
 } from "react-query";
 import { ErrorBoundary } from "react-error-boundary";
-import ErrorBoundaryFallback from "./component/Errors/ErrorBoundaryFallback.jsx";
+import ErrorBoundaryFallback from "./components/errors/ErrorBoundaryFallback.jsx";
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

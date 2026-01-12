@@ -1,5 +1,3 @@
-import React from "react";
-
 function ContentBoxSection({
   children,
   className = "max-w-[1000px]",

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import spreadLogo from "/spread_logo_03_robopus.png";
-import ProfileImage from "../../component/ProfileImage";
+import ProfileImage from "../../components/ProfileImage";
 import octbot from "/octbot.png";
 import useIcons from "../../hooks/useIcons";
 

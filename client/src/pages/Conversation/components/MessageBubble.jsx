@@ -1,5 +1,5 @@
 import { BsCheck2All } from "react-icons/bs";
-import TimeAgo from "../../../component/utilityComp/TimeAgo";
+import TimeAgo from "../../../components/utilityComp/TimeAgo";
 import { forwardRef } from "react";
 
 const MessageBubble = forwardRef(({ message, userId, readReceipt }, ref) => {

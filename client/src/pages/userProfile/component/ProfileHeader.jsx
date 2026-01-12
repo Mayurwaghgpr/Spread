@@ -1,20 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Follow from "../../../component/buttons/follow";
+import Follow from "../../../components/buttons/follow";
 import { useDispatch, useSelector } from "react-redux";
 import { setFollowInfo } from "../../../store/slices/profileSlice";
 import userImageSrc from "../../../utils/userImageSrc";
 import { LuMessagesSquare } from "react-icons/lu";
-import FormatedTime from "../../../component/utilityComp/FormatedTime";
-import ProfileImage from "../../../component/ProfileImage";
+import FormatedTime from "../../../components/utilityComp/FormatedTime";
+import ProfileImage from "../../../components/ProfileImage";
 import useIcons from "../../../hooks/useIcons";
 import usePrivateChatMutation from "../../../hooks/usePrivateChatMutation";
 import AbbreviateNumber from "../../../utils/AbbreviateNumber";
-import Ibutton from "../../../component/buttons/Ibutton";
-import FedInBtn from "../../../component/buttons/FedInBtn";
+import Ibutton from "../../../components/buttons/Ibutton";
+import FedInBtn from "../../../components/buttons/FedInBtn";
 import { setOpenBigFrame } from "../../../store/slices/uiSlice";
-import Spinner from "../../../component/loaders/Spinner";
-import { FaSpinner } from "react-icons/fa6";
 import { PiSpinner } from "react-icons/pi";
 
 const ProfileHeader = React.memo(({ profileId }) => {

@@ -1,4 +1,4 @@
-import ThemeBtn from "../../component/buttons/ThemeBtn";
+import ThemeBtn from "../../components/buttons/ThemeBtn";
 const Modes = [
   {
     name: "Dark mode",

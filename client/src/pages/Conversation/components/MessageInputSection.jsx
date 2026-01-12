@@ -5,8 +5,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import FedInBtn from "../../../component/buttons/FedInBtn";
-import CommonInput from "../../../component/inputComponents/CommonInput";
+import FedInBtn from "../../../components/buttons/FedInBtn";
+import CommonInput from "../../../components/inputComponents/CommonInput";
 import useIcons from "../../../hooks/useIcons";
 import { debounce } from "../../../utils/debounce";
 import useSocket from "../../../hooks/useSocket";

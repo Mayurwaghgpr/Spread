@@ -2,9 +2,9 @@ import { useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 
-import ProfileImage from "../../../component/ProfileImage";
-import Ibutton from "../../../component/buttons/Ibutton";
-import ToggleCheckbox from "../../../component/inputComponents/ToggleCheckBox";
+import ProfileImage from "../../../components/ProfileImage";
+import Ibutton from "../../../components/buttons/Ibutton";
+import ToggleCheckbox from "../../../components/inputComponents/ToggleCheckBox";
 import useIcons from "../../../hooks/useIcons";
 import ChatApi from "../../../services/ChatApi";
 

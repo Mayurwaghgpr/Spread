@@ -6,9 +6,9 @@ import useIcons from "../../hooks/useIcons";
 import Ibutton from "../buttons/Ibutton";
 import { useQuery } from "react-query";
 import notificationApi from "../../services/notificationApi";
-const NotifictionItem = lazy(() => import("./NotificationItem"));
+const NotificationItem = lazy(() => import("./NotificationItem"));
 import { setNotificationState } from "../../store/slices/notificationSlice";
-import NotificationItem from "./NotificationItem";
+// import NotificationItem from "./NotificationItem";
 import Spinner from "../loaders/Spinner";
 
 function NotificationBox() {
@@ -26,8 +26,6 @@ function NotificationBox() {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
-    refetchInterval: 10000,
-    retry: 1,
   });
 
   const handeClick = useCallback((e) => {

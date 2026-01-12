@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import InputTypeSelector from "./components/InputTypeSelector";
 import useIcons from "../../hooks/useIcons";
-import Ibutton from "../../component/buttons/Ibutton";
+import Ibutton from "../../components/buttons/Ibutton";
 
 function DynamicPostEditor() {
   const {

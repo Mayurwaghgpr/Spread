@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import CommonInput from "../../../component/inputComponents/CommonInput.jsx";
+import { useEffect, useState } from "react";
+import CommonInput from "../../../components/inputComponents/CommonInput.jsx";
 import SelectedGroupMemberList from "./SelectedGroupMemberList.jsx";
-import Ibutton from "../../../component/buttons/Ibutton.jsx";
+import Ibutton from "../../../components/buttons/Ibutton.jsx";
 import { useMutation } from "react-query";
 import ChatApi from "../../../services/ChatApi.jsx";
 import { useDispatch, useSelector } from "react-redux";

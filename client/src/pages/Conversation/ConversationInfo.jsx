@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { PopupBox } from "../../component/utilityComp/PopupBox";
+import { PopupBox } from "../../components/utilityComp/PopupBox";
 import { Link, Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import useIcons from "../../hooks/useIcons";

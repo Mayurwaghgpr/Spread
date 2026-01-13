@@ -13,10 +13,9 @@ const SavedPost = db.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    groupName: {
-      type: DataTypes.STRING,
+    groups: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true,
-      unique: true,
     },
     userId: {
       type: DataTypes.UUID,

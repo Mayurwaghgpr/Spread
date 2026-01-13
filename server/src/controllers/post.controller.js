@@ -12,6 +12,7 @@ import postService from "../services/post.service.js";
 import cloudinaryService from "../services/cloudinary.service.js";
 import db from "../config/database.js";
 import SavedPost from "../models/savedPost.model.js";
+import SavedPostGroup from "../models/savedPostGroup.model.js";
 
 export const AddNewPost = async (req, res, next) => {
   const body = req.body;
@@ -252,7 +253,21 @@ export const addSavedPostToGroup = async (req, res, next) => {
     if (!exist) {
       return res.status(400).json({ message: "Not found any saved post" });
     }
-    exist.update({ groupName });
+    const groupExist = await SavedPostGroup.findOne({
+      where: { groupName, userId },
+    });
+    if (!groupExist) {
+      const newGroup = await SavedPostGroup.create({ groupName, userId });
+      const updatedGroups = Array.from(
+        new Set([...(exist.groups || []), newGroup.id])
+      );
+      exist.update({ groups: updatedGroups });
+    } else {
+      const updatedGroups = Array.from(
+        new Set([...(exist.groups || []), groupExist.id])
+      );
+      exist.update({ groups: updatedGroups });
+    }
     await exist.save();
     res.status(200).json({
       SavedPost: exist,
@@ -267,19 +282,30 @@ export const getSavedPostsGroups = async (req, res, next) => {
   const userId = req.authUser.id;
 
   try {
-    const groups = await SavedPost.findAll({
-      where: { userId, groupName: { [Op.ne]: null } },
-      attributes: [
-        "groupName",
-        [Sequelize.fn("COUNT", Sequelize.col("SavedPost.id")), "postCount"],
-      ],
-      group: ["SavedPost.groupName"],
+    const groups = await SavedPostGroup.findAll({
+      where: { createdBy: userId, groupName: { [Op.ne]: null } },
+      attributes: ["id", "groupName"],
       order: [["groupName", "ASC"]],
     });
-
+    const groupWithCounts = await Promise.all(
+      groups.map(async (group) => {
+        const count = await SavedPost.count({
+          where: {
+            userId,
+            groups: { [Op.contains]: [group.id] },
+          },
+        });
+        return {
+          id: group.id,
+          groupName: group.groupName,
+          postCount: count,
+        };
+      })
+    );
+    console.log(groupWithCounts);
     res.status(200).json({
       message: "Fetched grouped saved posts successfully",
-      groups,
+      groups: groupWithCounts,
     });
   } catch (error) {
     console.error("Error fetching saved posts:", error);

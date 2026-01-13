@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ErrorPage({ message, statusCode, action }) {
   const navigate = useNavigate();

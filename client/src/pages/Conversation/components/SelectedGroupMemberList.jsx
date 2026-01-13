@@ -1,4 +1,3 @@
-import React from "react";
 import ProfileImage from "../../../components/ProfileImage";
 import Ibutton from "../../../components/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";

@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import useIcons from "../../hooks/useIcons";

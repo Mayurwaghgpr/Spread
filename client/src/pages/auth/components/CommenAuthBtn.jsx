@@ -1,5 +1,3 @@
-import React from "react";
-
 function CommenAuthBtn({ children, className, onClick, ...props }) {
   return (
     <button

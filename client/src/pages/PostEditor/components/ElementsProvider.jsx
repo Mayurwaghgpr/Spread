@@ -1,10 +1,10 @@
-import React, { lazy } from "react";
+import { lazy } from "react";
 import EditableParagraph from "./EditableParagraph";
 import Ibutton from "../../../components/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 const CodeEditor = lazy(() => import("./codeEditor"));
 const ImageFigure = lazy(
-  () => import("../../../component/utilityComp/ImageFigure")
+  () => import("../../../components/utilityComp/ImageFigure")
 );
 const ElementsProvider = ({
   element,

@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import Ibutton from "../../../components/buttons/Ibutton";
 import useIcons from "../../../hooks/useIcons";
 

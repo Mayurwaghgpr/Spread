@@ -14,13 +14,13 @@ import { setCommentCred } from "../../store/slices/postSlice";
 
 import PostsApis from "../../services/usePostsApis";
 import { setToast } from "../../store/slices/uiSlice";
-import Spinner from "../../component/loaders/Spinner";
-import ProfileImage from "../../component/ProfileImage";
-import Ibutton from "../../component/buttons/Ibutton";
+import Spinner from "../../components/loaders/Spinner";
+import ProfileImage from "../../components/ProfileImage";
+import Ibutton from "../../components/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import data from "@emoji-mart/data";
 const Picker = lazy(() => import("@emoji-mart/react"));
-import EditableElementInput from "../../component/inputComponents/EditableElementInput";
+import EditableElementInput from "../../components/inputComponents/EditableElementInput";
 import { useNavigate } from "react-router-dom";
 
 function CommentInput({ className }) {

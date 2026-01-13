@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FedInBtn from "../../../components/buttons/FedInBtn";
 import CommonInput from "../../../components/inputComponents/CommonInput";
 import useIcons from "../../../hooks/useIcons";

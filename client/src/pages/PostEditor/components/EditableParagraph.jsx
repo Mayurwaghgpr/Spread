@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef } from "react";
+import { memo, useCallback, useRef } from "react";
 import TextTools from "./TextTools";
 import useClickOutside from "../../../hooks/useClickOutside";
 

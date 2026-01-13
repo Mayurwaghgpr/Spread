@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useMemo, useRef, useState } from "react";
+import { forwardRef, memo, useMemo, useRef, useState } from "react";
 import userImageSrc from "../../utils/userImageSrc";
 import { useInfiniteQuery, useMutation } from "react-query";
 
@@ -6,15 +6,14 @@ import PostsApis from "../../services/usePostsApis";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentCred } from "../../store/slices/postSlice";
 import { setToast } from "../../store/slices/uiSlice";
-import { useOutletContext } from "react-router-dom";
-import FormatedTime from "../../component/utilityComp/FormatedTime";
-import Menu from "../../component/Menus/Menu";
+import FormatedTime from "../../components/utilityComp/FormatedTime";
+import Menu from "../../components/menus/Menu";
 import useMenuConstant from "../../hooks/useMenuConstant";
-import ProfileImage from "../../component/ProfileImage";
-import Ibutton from "../../component/buttons/Ibutton";
+import ProfileImage from "../../components/ProfileImage";
+import Ibutton from "../../components/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import AbbreviateNumber from "../../utils/AbbreviateNumber";
-import Spinner from "../../component/loaders/Spinner";
+import Spinner from "../../components/loaders/Spinner";
 import DOMPurify from "dompurify";
 import useClickOutside from "../../hooks/useClickOutside";
 

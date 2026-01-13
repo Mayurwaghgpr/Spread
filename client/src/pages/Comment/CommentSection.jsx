@@ -4,13 +4,13 @@ import { useInfiniteQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import PostsApis from "../../services/usePostsApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import Spinner from "../../component/loaders/Spinner";
+import Spinner from "../../components/loaders/Spinner";
 import { setCommentCred } from "../../store/slices/postSlice";
 import { useNavigate } from "react-router-dom";
-import Ibutton from "../../component/buttons/Ibutton";
+import Ibutton from "../../components/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import CommentBox from "./CommentBox";
-import EmptyState from "../../component/utilityComp/EmptyState";
+import EmptyState from "../../components/utilityComp/EmptyState";
 
 const CommentInput = lazy(() => import("./CommentInput"));
 

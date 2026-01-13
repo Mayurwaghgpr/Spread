@@ -1,9 +1,8 @@
-import React, { memo, useCallback, useEffect } from "react";
-import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
+import { memo, useCallback, useEffect } from "react";
+import { Outlet, useSearchParams } from "react-router-dom";
 import ConversationLog from "./ConversationLog";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addMessage,
   pushMessage,
   setConversationLogData,
 } from "../../store/slices/messangerSlice";

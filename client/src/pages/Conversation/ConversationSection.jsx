@@ -195,7 +195,7 @@ function ConversationSection() {
 
   return (
     <div
-      className={`relative w-full h-full border-inherit bg-inherit ${conversationId ? "sm:visible" : " hidden"} overflow-y-auto`}
+      className={`relative w-full h-full border-inherit bg-inherit ${conversationId ? "sm:visible" : " hidden"} ${messages?.length > 0 ? "overflow-y-auto" : ""}`}
     >
       {/* Header */}
       <header className="sticky top-0 border-b border-inherit flex justify-between  bg-light dark:bg-dark z-20 w-full h-fit py-2 px-7">
@@ -230,87 +230,88 @@ function ConversationSection() {
           </div>
         </div>
       </header>
-
-      {/* Messages */}
-      <section
-        ref={containerRef}
-        className="flex flex-col-reverse w-full  px-5 border-inherit py-5 h-full "
-      >
-        {isLoading && (
-          <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
-        )}
-        {/* Empty or loading states */}
-        {messages?.length === 0 && !isLoading && (
-          <div className="flex items-center justify-center w-full h-full">
+      {/* Empty or loading states */}
+      {messages?.length === 0 && (
+        <div className="flex items-center justify-center w-full h-full">
+          {!isLoading ? (
             <p className="opacity-50">
               No messages yet. Start the conversation!
             </p>
-          </div>
-        )}
-        {isFetchingNextPage && hasNextPage && (
-          <div className="p-4 w-full">
-            <Spinner
-              className={"w-10 h-10 bg-black p-1 dark:bg-white m-auto"}
-            />
-          </div>
-        )}
-        {/* Typing indicator */}
-        <div className="w-full min-h-16 border-inherit">
-          {isUsersTyping && (
-            <div className="flex gap-1 my-4 border-inherit">
-              {conversationData.conversationType !== "private" &&
-                typingUsers
-                  .filter((u) => u.senderId !== user?.id && u.typing)
-                  .map((u) => (
-                    <ProfileImage
-                      key={u.senderId}
-                      className="w-6 h-6"
-                      image={u.image}
-                    />
-                  ))}
-              <div className="relative flex items-center justify-center w-fit p-2 text-sm mt-2 bg-light dark:bg-dark border border-inherit rounded-xl rounded-tl-none">
-                <span className="typingLoader"></span>
-              </div>
-            </div>
+          ) : (
+            <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
           )}
         </div>
-        {!isLoading &&
-          messages?.map((msg, idx, arr) => {
-            const msgDate = new Date(msg.createdAt);
+      )}
 
-            // Since it's descending, the "previous" message is actually the next index
-            const prevDate =
-              idx < arr.length - 1 ? new Date(arr[idx + 1].createdAt) : null;
-            const showDate =
-              !prevDate || msgDate.toDateString() !== prevDate.toDateString();
+      {/* Messages */}
+      {messages?.length > 0 && (
+        <section
+          ref={containerRef}
+          className="flex flex-col-reverse w-full  px-5 border-inherit py-5 h-full "
+        >
+          {isFetchingNextPage && hasNextPage && (
+            <div className="p-4 w-full">
+              <Spinner
+                className={"w-10 h-10 bg-black p-1 dark:bg-white m-auto"}
+              />
+            </div>
+          )}
+          {/* Typing indicator */}
+          <div className="w-full min-h-16 border-inherit">
+            {isUsersTyping && (
+              <div className="flex gap-1 my-4 border-inherit">
+                {conversationData.conversationType !== "private" &&
+                  typingUsers
+                    .filter((u) => u.senderId !== user?.id && u.typing)
+                    .map((u) => (
+                      <ProfileImage
+                        key={u.senderId}
+                        className="w-6 h-6"
+                        image={u.image}
+                      />
+                    ))}
+                <div className="relative flex items-center justify-center w-fit p-2 text-sm mt-2 bg-light dark:bg-dark border border-inherit rounded-xl rounded-tl-none">
+                  <span className="typingLoader"></span>
+                </div>
+              </div>
+            )}
+          </div>
+          {!isLoading &&
+            messages?.map((msg, idx, arr) => {
+              const msgDate = new Date(msg.createdAt);
 
-            return (
-              <React.Fragment key={msg.id}>
-                <MessageBubble
-                  ref={idx === arr.length - 1 ? lastItemRef : null}
-                  message={msg}
-                  userId={user?.id}
-                />
-                {showDate && (
-                  <div className=" flex justify-center text-xs">
-                    <TimeAgo
-                      className={" opacity-95"}
-                      grouped={true}
-                      date={msgDate}
-                    />
-                  </div>
-                )}
-              </React.Fragment>
-            );
-          })}
-      </section>
+              // Since it's descending, the "previous" message is actually the next index
+              const prevDate =
+                idx < arr.length - 1 ? new Date(arr[idx + 1].createdAt) : null;
+              const showDate =
+                !prevDate || msgDate.toDateString() !== prevDate.toDateString();
 
+              return (
+                <React.Fragment key={msg.id}>
+                  <MessageBubble
+                    ref={idx === arr.length - 1 ? lastItemRef : null}
+                    message={msg}
+                    userId={user?.id}
+                  />
+                  {showDate && (
+                    <div className=" flex justify-center text-xs">
+                      <TimeAgo
+                        className={" opacity-95"}
+                        grouped={true}
+                        date={msgDate}
+                      />
+                    </div>
+                  )}
+                </React.Fragment>
+              );
+            })}
+        </section>
+      )}
       {/* Input Section */}
       <MessageInputSection
         conversationId={conversationId}
         conversationData={conversationData}
       />
-
       {/* Outlet for sidebar/info panel */}
       <Outlet
         context={{

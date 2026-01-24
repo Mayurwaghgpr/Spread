@@ -31,6 +31,20 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
+  const createNewGroup = async (groupName) => {
+    try {
+      const response = await axiosInstance.post(
+        `/posts/saved/new/group`,
+        { groupName },
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
   const AddNewPost = async (newPost, signal) => {
     try {
       const result = await axiosInstance.post(`/posts/add`, newPost, {
@@ -166,6 +180,7 @@ function usePostsApis() {
     deleteComtApi,
     getAiGenTags,
     getAiGenAnalysis,
+    createNewGroup,
   };
 }
 

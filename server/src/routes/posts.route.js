@@ -9,6 +9,7 @@ import {
   getPostPreviewByUserFollowings,
   addSavedPostToGroup,
   getSavedPostsGroups,
+  createGroup,
 } from "../controllers/post.controller.js";
 import IsAuth from "../middlewares/isAuth.middleware.js";
 import { multerFileUpload } from "../middlewares/multer.middleware.js";
@@ -26,6 +27,7 @@ router.get("/:id", getPostView);
 
 // Route to add a new post
 router.post("/add", IsAuth, multerFileUpload, AddNewPost);
+router.post("/saved/new/group", IsAuth, createGroup);
 
 // Route to edit an existing post by ID
 router.patch("/:id", IsAuth, multerFileUpload, EditPost);

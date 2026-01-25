@@ -57,17 +57,10 @@ function SideBar() {
   const { userImageurl } = userImageSrc(user);
   const icons = useIcons();
 
-  // Memoized profile link (avoids recalculating)
-  const manualProfileLink = useMemo(
-    () =>
-      user?.username && user?.id ? `profile/@${user.username}/${user.id}` : "#",
-    [user?.username, user?.id]
-  );
-
   //Efficient active link checker
   const isActiveLink = useCallback(
     (stub) => (stub === "/" ? pathname === "/" : pathname.startsWith(stub)),
-    [pathname]
+    [pathname],
   );
 
   // Close menu on overlay click
@@ -95,7 +88,9 @@ function SideBar() {
             {/* Profile Link */}
             <div className="flex items-center justify-start gap-2 h-fit w-fit">
               <Link
-                to={user?.profileLink || manualProfileLink}
+                to={
+                  user?.profileLink || `/profile/@${user.username}/${user.id}`
+                }
                 className="group flex items-center gap-3 w-full px-4 py-3 rounded-2xl transition-all duration-200 hover:bg-gradient-to-r"
               >
                 <div

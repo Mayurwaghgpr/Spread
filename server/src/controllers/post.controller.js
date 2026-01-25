@@ -1,5 +1,5 @@
 import Post from "../models/posts/posts.model.js";
-import { Op, Sequelize } from "sequelize";
+import { Op } from "sequelize";
 import User from "../models/user.model.js";
 import { deletePostImage } from "../utils/deleteImages.js";
 import PostBlock from "../models/posts/postBlock.model.js";
@@ -243,10 +243,33 @@ export const getPostView = async (req, res, next) => {
     next(error);
   }
 };
+export const createGroup = async (req, res, next) => {
+  const { groupName } = req.body;
+  const userId = req.authUser.id;
 
+  try {
+    const exist = await SavedPostGroup.findOne({
+      where: { groupName, createdBy: userId },
+    });
+    if (exist) {
+      return res.status(400).json({ message: "Group name already exists" });
+    }
+    const newGroup = await SavedPostGroup.create({
+      groupName,
+      createdBy: userId,
+    });
+    res.status(201).json({
+      message: "Saved post group created successfully",
+      group: newGroup,
+    });
+  } catch (error) {
+    console.error("Error creating saved post group:", error);
+    next(error);
+  }
+};
 export const addSavedPostToGroup = async (req, res, next) => {
-  const { postId, groupName, userId } = req.body;
-  // const userId = req.authUser.id;
+  const { postId, groupName } = req.body;
+  const userId = req.authUser.id;
 
   try {
     const exist = await SavedPost.findOne({ where: { postId, userId } });
@@ -254,10 +277,13 @@ export const addSavedPostToGroup = async (req, res, next) => {
       return res.status(400).json({ message: "Not found any saved post" });
     }
     const groupExist = await SavedPostGroup.findOne({
-      where: { groupName, userId },
+      where: { groupName, createdBy: userId },
     });
     if (!groupExist) {
-      const newGroup = await SavedPostGroup.create({ groupName, userId });
+      const newGroup = await SavedPostGroup.create({
+        groupName,
+        createdBy: userId,
+      });
       const updatedGroups = Array.from(
         new Set([...(exist.groups || []), newGroup.id])
       );
@@ -302,7 +328,6 @@ export const getSavedPostsGroups = async (req, res, next) => {
         };
       })
     );
-    console.log(groupWithCounts);
     res.status(200).json({
       message: "Fetched grouped saved posts successfully",
       groups: groupWithCounts,
@@ -316,7 +341,10 @@ export const getSavedPost = async (req, res, next) => {
   const userId = req.authUser.id;
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 3, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
-  const group = req.query.group !== "all" ? { groupName: req.query.group } : {};
+  const group =
+    req.query.group !== "all"
+      ? { groups: { [Op.contains]: [req.query.group] } }
+      : {};
   try {
     const savedPosts = await SavedPost.findAll({
       where: {

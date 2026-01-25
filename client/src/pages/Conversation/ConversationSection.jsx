@@ -28,7 +28,7 @@ import TimeAgo from "../../components/utilityComp/TimeAgo";
 function ConversationSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { messages, selectedConversation } = useSelector(
-    (state) => state.messanger
+    (state) => state.messanger,
   );
 
   const [typingUsers, setTypingUsers] = useState([]);
@@ -51,7 +51,7 @@ function ConversationSection() {
 
     if (selectedConversation.conversationType === "private") {
       const oppositeMember = selectedConversation.members?.find(
-        (m) => m.id !== user?.id
+        (m) => m.id !== user?.id,
       );
       return {
         id: selectedConversation.id,
@@ -94,14 +94,14 @@ function ConversationSection() {
       },
       refetchOnWindowFocus: false,
       retry: 2,
-    }
+    },
   );
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
-    hasNextPage
+    hasNextPage,
     // containerRef
   );
 
@@ -117,20 +117,21 @@ function ConversationSection() {
           : filteredUsers;
       });
     },
-    [conversationId]
+    [conversationId],
   );
 
   // Handle incoming new message
   const handleNewMessage = useCallback(
     (msg) => {
+      console.log({ msg });
       if (msg.conversationId === conversationId && msg.senderId !== user?.id) {
         dispatch(pushMessage(msg));
         setTypingUsers((prev) =>
-          prev.filter((user) => user.senderId !== msg.senderId)
+          prev.filter((user) => user.senderId !== msg.senderId),
         );
       }
     },
-    [dispatch, user?.id, conversationId]
+    [dispatch, user?.id, conversationId],
   );
 
   // Handle sending error
@@ -165,11 +166,9 @@ function ConversationSection() {
   // auto scroll to bottom on new messages
   useEffect(() => {
     if (containerRef.current) {
-      requestAnimationFrame(() => {
-        containerRef.current?.scrollTo({
-          top: containerRef.current.scrollHeight,
-          behavior: "smooth",
-        });
+      containerRef.current?.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: "smooth",
       });
       prevMessagesCount.current = messages.length;
     }
@@ -178,9 +177,9 @@ function ConversationSection() {
   const isUsersTyping = useMemo(
     () =>
       typingUsers.some(
-        (typingUser) => typingUser.senderId !== user?.id && typingUser.typing
+        (typingUser) => typingUser.senderId !== user?.id && typingUser.typing,
       ),
-    [typingUsers, user?.id]
+    [typingUsers, user?.id],
   );
 
   if (error) {
@@ -195,7 +194,8 @@ function ConversationSection() {
 
   return (
     <div
-      className={`relative w-full h-full border-inherit bg-inherit ${conversationId ? "sm:visible" : " hidden"} ${messages?.length > 0 ? "overflow-y-auto" : ""}`}
+      ref={containerRef}
+      className={` w-full h-full border-inherit bg-inherit ${conversationId ? "sm:visible" : " hidden"} ${messages?.length > 0 ? "overflow-y-auto" : ""}`}
     >
       {/* Header */}
       <header className="sticky top-0 border-b border-inherit flex justify-between  bg-light dark:bg-dark z-20 w-full h-fit py-2 px-7">
@@ -230,25 +230,20 @@ function ConversationSection() {
           </div>
         </div>
       </header>
-      {/* Empty or loading states */}
-      {messages?.length === 0 && (
-        <div className="flex items-center justify-center w-full h-full">
-          {!isLoading ? (
-            <p className="opacity-50">
-              No messages yet. Start the conversation!
-            </p>
-          ) : (
-            <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
-          )}
-        </div>
-      )}
-
-      {/* Messages */}
-      {messages?.length > 0 && (
-        <section
-          ref={containerRef}
-          className="flex flex-col-reverse w-full  px-5 border-inherit py-5 h-full "
-        >
+      <div className=" relative h-full  border-inherit">
+        {/* Messages */}
+        {messages.length === 0 && (
+          <div className="h-full w-full absolute top-0 left-0 flex justify-center items-center">
+            {!isLoading ? (
+              <p className="opacity-50">
+                No messages yet. Start the conversation!
+              </p>
+            ) : (
+              <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
+            )}
+          </div>
+        )}
+        <section className="absolute top-0 left-0 flex flex-col-reverse w-full  px-5 border-inherit py-10 h-full ">
           {isFetchingNextPage && hasNextPage && (
             <div className="p-4 w-full">
               <Spinner
@@ -256,8 +251,9 @@ function ConversationSection() {
               />
             </div>
           )}
+
           {/* Typing indicator */}
-          <div className="w-full min-h-16 border-inherit">
+          <div className="w-full min-h-16 border-inherit flex justify-start items-center">
             {isUsersTyping && (
               <div className="flex gap-1 my-4 border-inherit">
                 {conversationData.conversationType !== "private" &&
@@ -306,7 +302,7 @@ function ConversationSection() {
               );
             })}
         </section>
-      )}
+      </div>
       {/* Input Section */}
       <MessageInputSection
         conversationId={conversationId}

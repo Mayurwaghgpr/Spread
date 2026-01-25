@@ -62,11 +62,11 @@ const User = db.define(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 function generateProfileLink(user) {
-  return `${process.env.FRONT_END_URL}/profile/${user.username}/${user.id}`;
+  return `${process.env.FRONT_END_URL}/profile/@${user.username}/${user.id}`;
 }
 
 // beforeCreate — single DB insert

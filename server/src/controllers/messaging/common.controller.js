@@ -5,8 +5,8 @@ import Members from "../../models/messaging/members.model.js";
 import Messages from "../../models/messaging/messages.model.js";
 import User from "../../models/user.model.js";
 import redisClient from "../../utils/redisClient.js";
-import { io } from "../../server.js";
-
+import db from "../../config/database.js";
+import sockIo from "../../socket.js";
 export const getConversationsByUserId = async (req, res, next) => {
   const userId = req.authUser.id;
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
@@ -64,7 +64,7 @@ export const getMembers = async (req, res, next) => {
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   try {
-    const cacheKey = `Members_Log_${lastTimestamp}_${userId}_${limit}`;
+    const cacheKey = `Members_Log_${conversationId}_${lastTimestamp}_${userId}_${limit}`;
     const cachedMemberData = await redisClient.get(cacheKey);
     if (cachedMemberData !== null) {
       return res.status(200).json(JSON.parse(cachedMemberData)); // Send cached data
@@ -115,9 +115,19 @@ export const setIsMuteMessage = async (req, res, next) => {
 
 export const getMessagesByConversationId = async (req, res, next) => {
   const { conversationId } = req.query;
+  const userId = req.authUser.id;
   const limit = Math.max(parseInt(req.query.limit?.trim()) || 10, 1);
   const lastTimestamp = req.query.lastTimestamp || new Date().toISOString();
   try {
+    // Verify membership
+    const isMember = await Members.findOne({
+      where: { conversationId, memberId: userId },
+    });
+
+    if (!isMember) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
     const messages = await Messages.findAll({
       where: {
         createdAt: { [Op.lt]: lastTimestamp },
@@ -138,28 +148,65 @@ export const getMessagesByConversationId = async (req, res, next) => {
 };
 
 export const postMessage = async (req, res, next) => {
-  const { conversationId, senderId, content, replyedTo, createdAt } = req.body;
+  const { conversationId, content, replyedTo } = req.body;
+  const senderId = req.authUser.id;
+  const createdAt = new Date();
+  const io = sockIo.getIo();
+
   try {
-    const newMessage = await Messages.create({
+    if (!conversationId || !content?.trim()) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const isMember = await Members.findOne({
+      where: { conversationId, memberId: senderId },
+    });
+
+    if (!isMember) {
+      return res
+        .status(403)
+        .json({ message: "You are not a member of this conversation" });
+    }
+
+    const conversation = await Conversation.findByPk(conversationId);
+    if (!conversation) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+
+    if (replyedTo) {
+      const replyMessage = await Messages.findOne({
+        where: { id: replyedTo, conversationId },
+      });
+      if (!replyMessage) {
+        return res.status(400).json({ message: "Invalid reply message" });
+      }
+    }
+
+    io?.to(conversationId).emit("newMessage", {
       conversationId,
       senderId,
-      content,
-      replyedTo,
+      content: content.trim(),
+      replyedTo: replyedTo || null,
       createdAt,
     });
 
-    // Update the lastMessage and updatedAt fields in Conversation
-    await Conversation.update(
-      { lastMessage: content, updatedAt: createdAt },
-      { where: { id: conversationId } }
-    );
-    io.to(conversationId).emit("newMessage", {
+    const newMessage = await Messages.create({
       conversationId,
       senderId,
-      content,
-      replyedTo: replyedTo ? replyedTo : "",
-      createdAt: createdAt,
+      content: content.trim(),
+      replyedTo: replyedTo || null,
+      createdAt,
     });
+
+    await Conversation.update(
+      { lastMessage: content.trim(), updatedAt: createdAt },
+      { where: { id: conversationId } }
+    );
+    console.log(`📤 Message sent to room ${conversationId}`);
+    console.log(
+      `👥 Users in room:`,
+      io.sockets.adapter.rooms.get(conversationId)?.size || 0
+    );
     res.status(201).json(newMessage);
   } catch (error) {
     console.error("Error posting message:", error);

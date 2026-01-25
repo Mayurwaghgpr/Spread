@@ -1,33 +1,40 @@
 import Messages from "../models/messaging/messages.model.js";
 import redisClient from "../utils/redisClient.js";
 import Conversation from "../models/messaging/conversation.model.js";
-import { io } from "../server.js";
+import sockIo from "../socket.js";
 
 export default function socketHandlers() {
+  const io = sockIo.getIo();
   io.on("connection", async (socket) => {
     // console.log(socket.handshake.query)
     const { connectedUserId, activeConversationId } = socket.handshake.query;
-    // console.log(`Connected user: ${connectedUserId} (${socket.id})`);
-
+    console.log(`Connected user: ${connectedUserId} (${socket.id})`);
+    console.log(`active conv: `, activeConversationId);
     // Check and create room if server has restared and client is still in conversation
     const roomExists = io.sockets.adapter.rooms
       .get(activeConversationId)
       ?.has(socket.id);
     if (activeConversationId && !roomExists) {
       socket.join(activeConversationId);
+      socket.emit("reconnected", {
+        conversationId: activeConversationId,
+        socketId: socket.id,
+      });
     }
 
     // Register user with socket ID
     socket.on("register", async (userId) => {
       const cacheKey = `sockets:user:${userId}`;
       await redisClient.set(cacheKey, socket.id);
-      // console.log(`User ${userId} registered with socket ID ${socket.id}`);
+      console.log(`User ${userId} registered with socket ID ${socket.id}`);
     });
 
     // Join a conversation room
     socket.on("joinConversation", (conversationId) => {
       socket.join(conversationId);
-      // console.log(`User joined conversation: ${conversationId}`);
+      console.log(
+        `User ${connectedUserId} joined conversation: ${conversationId}`,
+      );
     });
 
     // Leave a conversation room
@@ -84,7 +91,7 @@ export default function socketHandlers() {
           });
           await Conversation.update(
             { lastMessage: content },
-            { where: { id: conversationId } }
+            { where: { id: conversationId } },
           );
         } catch (error) {
           console.error("Error sending message:", error);
@@ -92,7 +99,7 @@ export default function socketHandlers() {
             message: "Failed to send message" + error,
           });
         }
-      }
+      },
     );
 
     // Mark message as read

@@ -22,7 +22,7 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
       document.documentElement.classList.remove("dark");
     } else if (theme === "system") {
       const isDarkMode = window.matchMedia(
-        "(prefers-color-scheme: dark)"
+        "(prefers-color-scheme: dark)",
       ).matches;
       if (isDarkMode) document.documentElement.classList.add("dark");
     }
@@ -55,7 +55,7 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
   // Manual theme select
   const handleThemeSelect = useCallback(
     (themeValue) => dispatch(setThemeMode(themeValue)),
-    [dispatch]
+    [dispatch],
   );
 
   const currentMode = Modes?.find((mode) => mode.value === ThemeMode);
@@ -98,7 +98,7 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
                 isActive ? "scale-110" : "group-hover:scale-110"
               }`}
             >
-              {icons?.[currentMode?.icon] ?? icons?.sun}
+              {icons?.[mode?.icon] ?? icons?.sun}
             </div>
           </button>
         );

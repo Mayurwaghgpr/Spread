@@ -9,8 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import ChatApi from "../../../services/ChatApi";
 import { useMutation } from "react-query";
+import { use } from "react";
 
-function MessageInputSection({ conversationId, conversationData }) {
+function MessageInputSection({
+  conversationId,
+  conversationData,
+  containerRef,
+}) {
   const [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
   const typingTimeoutRef = useRef(null);
@@ -20,29 +25,24 @@ function MessageInputSection({ conversationId, conversationData }) {
   const icons = useIcons();
   const { socket } = useSocket();
 
-  const sendTypingStatus = useMemo(
-    () =>
-      debounce((isTyping) => {
-        if (!socket || !conversationId || !user?.id) return;
+  const sendTypingStatus = debounce(() => {
+    if (!socket || !conversationId || !user?.id) return;
 
-        socket.emit("IamTyping", {
-          conversationId,
-          senderId: user.id,
-          image:
-            conversationData.conversationType === "group"
-              ? user.userImage
-              : null,
-          typing: isTyping,
-        });
-      }, 500),
-    [
-      socket,
+    socket.emit("isTyping", {
       conversationId,
-      user?.id,
-      user?.userImage,
-      conversationData.conversationType,
-    ]
-  );
+      senderId: user.id,
+      image:
+        conversationData.conversationType === "group" ? user.userImage : null,
+    });
+  }, 500);
+
+  const sendStopTying = useCallback(() => {
+    if (!socket || !conversationId || !user?.id) return;
+    socket.emit("isStopedTyping", {
+      conversationId,
+      senderId: user.id,
+    });
+  }, [socket, conversationId, user?.id]);
   // Handle input changes with debounced typing status
   const handleInput = useCallback(
     (e) => {
@@ -51,7 +51,7 @@ function MessageInputSection({ conversationId, conversationData }) {
 
       // Only send typing status if there's actual content
       if (value.trim()) {
-        sendTypingStatus(true);
+        sendTypingStatus();
       }
 
       // Clear existing timeout
@@ -61,22 +61,27 @@ function MessageInputSection({ conversationId, conversationData }) {
 
       // Set new timeout to stop typing
       typingTimeoutRef.current = setTimeout(() => {
-        sendTypingStatus(false);
+        sendStopTying();
       }, 2000);
     },
-    [sendTypingStatus]
+    [sendStopTying],
   );
 
   const { mutate } = useMutation({
     mutationKey: "sendMessage",
-    mutationFn: (messageObj) =>
+    mutationFn: (messageObj) => {
       sendMessage({
         conversationId: messageObj.conversationId,
         senderId: messageObj.senderId,
         content: messageObj.content,
         replyedTo: messageObj.replyedTo,
         createdAt: messageObj.createdAt,
-      }),
+      });
+      containerRef.current?.scrollTo({
+        top: containerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    },
     onSettled: () => {
       sendTypingStatus(false);
     },

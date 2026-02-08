@@ -151,7 +151,7 @@ body {
 
 /* HTML: <div class="loader"></div> */
 .typingLoader {
-  height: 15px;
+  height: 11px;
   aspect-ratio: 2.5;
   --_g: no-repeat radial-gradient(farthest-side, #d3d2d2 90%, #0000);
   background: var(--_g), var(--_g), var(--_g);

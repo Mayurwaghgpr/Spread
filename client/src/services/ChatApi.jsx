@@ -28,6 +28,7 @@ function ChatApi() {
       const result = await axiosInstance.get(`/messaging/c/messages`, {
         withCredentials: true,
         params: {
+          limit: 2,
           conversationId,
           lastTimestamp: pageParam,
         },

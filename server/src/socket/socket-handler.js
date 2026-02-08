@@ -43,16 +43,19 @@ export default function socketHandlers() {
       // console.log(`User left conversation: ${conversationId}`);
     });
 
-    socket.on("IamTyping", ({ conversationId, senderId, image, typing }) => {
-      // console.log("userIsTyping", { conversationId, senderId });
-      io.to(conversationId).emit("userIsTyping", {
+    socket.on("isTyping", ({ conversationId, senderId, image }) => {
+      io.to(conversationId).emit("isTyping", {
         conversationId,
         senderId,
         image,
-        typing,
       });
     });
-
+    socket.on("isStopedTyping", ({ conversationId, senderId }) => {
+      io.to(conversationId).emit("isStopedTyping", {
+        conversationId,
+        senderId,
+      });
+    });
     // Send message and broadcast to conversation
     socket.on(
       "sendMessage",

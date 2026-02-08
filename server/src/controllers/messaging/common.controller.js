@@ -5,7 +5,6 @@ import Members from "../../models/messaging/members.model.js";
 import Messages from "../../models/messaging/messages.model.js";
 import User from "../../models/user.model.js";
 import redisClient from "../../utils/redisClient.js";
-import db from "../../config/database.js";
 import sockIo from "../../socket.js";
 export const getConversationsByUserId = async (req, res, next) => {
   const userId = req.authUser.id;
@@ -49,7 +48,7 @@ export const getConversationsByUserId = async (req, res, next) => {
     await redisClient.setEx(
       cacheKey,
       EXPIRATION,
-      JSON.stringify(conversations)
+      JSON.stringify(conversations),
     );
     res.status(200).json(conversations);
   } catch (error) {
@@ -100,7 +99,7 @@ export const setIsMuteMessage = async (req, res, next) => {
           [Op.and]: [{ memberId: userId }, { conversationId }],
         },
         returning: true,
-      }
+      },
     );
 
     res.status(200).json({
@@ -200,12 +199,12 @@ export const postMessage = async (req, res, next) => {
 
     await Conversation.update(
       { lastMessage: content.trim(), updatedAt: createdAt },
-      { where: { id: conversationId } }
+      { where: { id: conversationId } },
     );
     console.log(`📤 Message sent to room ${conversationId}`);
     console.log(
       `👥 Users in room:`,
-      io.sockets.adapter.rooms.get(conversationId)?.size || 0
+      io.sockets.adapter.rooms.get(conversationId)?.size || 0,
     );
     res.status(201).json(newMessage);
   } catch (error) {

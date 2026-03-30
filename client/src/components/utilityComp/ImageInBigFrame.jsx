@@ -29,14 +29,14 @@ function ImageInBigFrame({ className, ...props }) {
       <div className="w-full h-full flex  justify-center items-center ">
         <img
           onClick={(e) => e.stopPropagation()}
-          className={`${openBigFrame.className} ${className} ${openBigFrame["profile"] ? "rounded-full w-1/4 mb-10" : " w-[80%] h-3/4"}`}
+          className={`${openBigFrame.className} ${className} ${openBigFrame["profile"] ? "rounded-full m-auto w-96 h-96 object-cover object-top " : " w-[80%] h-3/4"}`}
           src={openBigFrame.src}
           alt={openBigFrame.alt}
           {...props}
         />
       </div>
     </div>,
-    document.getElementById("portal")
+    document.getElementById("portal"),
   );
 }
 

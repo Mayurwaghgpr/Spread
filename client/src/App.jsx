@@ -11,10 +11,11 @@ import ImageInBigFrame from "./components/utilityComp/ImageInBigFrame";
 import NotificationBox from "./components/notification/NotificationBox";
 import ConfirmationBox from "./components/utilityComp/ConfirmationBox";
 import ConfimationActionListener from "./components/utilityComp/ConfimationActionListener";
+import ShareToMediaBox from "./components/utilityComp/ShareToMediaBox";
 // Lazy load components with better error boundaries
 
 const WelcomeLoginBox = lazy(
-  () => import("./components/utilityComp/WelcomeLoginBox")
+  () => import("./components/utilityComp/WelcomeLoginBox"),
 );
 // Constants for better maintainability
 const THEME_STORAGE_KEY = "ThemeMode";
@@ -28,7 +29,7 @@ function App() {
   const { socket } = useSocket();
 
   const [systemTheme, setSystemTheme] = useState(
-    () => window.matchMedia("(prefers-color-scheme: dark)").matches
+    () => window.matchMedia("(prefers-color-scheme: dark)").matches,
   );
 
   // Memoize path checks for better performance
@@ -89,6 +90,7 @@ function App() {
       <NotificationBox />
       <ConfirmationBox />
       <ImageInBigFrame />
+      <ShareToMediaBox />
       <ConfimationActionListener />
 
       <PersistentUser />

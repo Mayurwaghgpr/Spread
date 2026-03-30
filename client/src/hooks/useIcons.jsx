@@ -10,6 +10,7 @@ import {
   BsClockHistory,
   BsEye,
   BsEyeSlash,
+  BsFacebook,
   BsFillBookmarkFill,
   BsFillMoonStarsFill,
   BsGear,
@@ -26,13 +27,16 @@ import {
   BsPeople,
   BsPerson,
   BsPostcard,
+  BsReddit,
   BsSendFill,
   BsThreeDotsVertical,
   BsTwitterX,
+  BsWhatsapp,
 } from "react-icons/bs";
 import {
   MdCelebration,
   MdDone,
+  MdEmail,
   MdErrorOutline,
   MdHandshake,
   MdOutlineDeveloperMode,
@@ -143,10 +147,12 @@ function useIcons() {
     eye: <BsEye />,
     eyeSlash: <BsEyeSlash />,
     exLink: <FiExternalLink />,
+    email: <MdEmail />,
     // F
     follow: <RiUserFollowLine />,
     fetherFi: <RiQuillPenFill />,
     fetherO: <RiQuillPenLine />,
+    facebook: <BsFacebook />,
     // G
     gearFi: <BsGearFill />,
     gearO: <BsGear />,
@@ -181,7 +187,7 @@ function useIcons() {
     logout: <LuLogOut />,
     like: <BsHandThumbsUpFill />,
     likeO: <BsHandThumbsUp />,
-    linkedLine: <BsLinkedin />,
+    linkedin: <BsLinkedin />,
 
     // M
     mention: <VscMention />,
@@ -213,7 +219,7 @@ function useIcons() {
     // R
     reminder: <PiAlarm />,
     repost: <BiRepost />,
-
+    reddit: <BsReddit />,
     // S
     search: <IoSearch />,
     searchO: <IoSearchOutline />,
@@ -236,6 +242,7 @@ function useIcons() {
 
     // W
     warning: <CiWarning />,
+    whatsapp: <BsWhatsapp />,
 
     // X
     XCom: <BsTwitterX />,

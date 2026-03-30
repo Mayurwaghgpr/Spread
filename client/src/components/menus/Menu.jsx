@@ -1,11 +1,10 @@
 import { forwardRef, memo } from "react";
 import useIcons from "../../hooks/useIcons";
-import Ibutton from "../buttons/Ibutton";
 import FedInBtn from "../buttons/FedInBtn";
 
 const Menu = forwardRef(function (
   { content, items, className, menuId, setMenuId },
-  ref
+  ref,
 ) {
   const icons = useIcons();
   if (!content || !items.length || items.length === 0) return null;

@@ -26,10 +26,20 @@ function Follow({ className, person }) {
   const { mutate, isLoading: isLoading } = useMutation(followUser, {
     onSuccess: (data) => {
       invalidateQueries();
-      dispatch(setToast({ message: data.message, type: "success" }));
+      dispatch(
+        setToast({
+          message: data.message + ` ${person?.displayName || "user"} ✨`,
+          type: "success",
+        }),
+      );
     },
     onError: (data) => {
-      dispatch(setToast({ message: data.data.message, type: "success" }));
+      dispatch(
+        setToast({
+          message: data.data.message + ` ${person?.displayName || "user"} ✨`,
+          type: "success",
+        }),
+      );
     },
   });
 

@@ -61,7 +61,7 @@ function PostView() {
           setPostViewData({
             ...postViewData,
             comments: [...(postViewData.comments || []), newComment],
-          })
+          }),
         );
       }
     };
@@ -83,7 +83,7 @@ function PostView() {
         setCommentCred({
           ...commentCred,
           postId: data?.id,
-        })
+        }),
       );
     },
     refetchOnWindowFocus: false,
@@ -101,15 +101,15 @@ function PostView() {
 
   const { userImageurl } = useMemo(
     () => userImageSrc(postViewData?.author),
-    [postViewData?.author]
+    [postViewData?.author],
   );
 
   const comments = useMemo(
     () =>
       postViewData?.comments?.filter(
-        (comment) => comment.topCommentId === null
+        (comment) => comment.topCommentId === null,
       ) || [],
-    [postViewData?.comments]
+    [postViewData?.comments],
   );
 
   // Event handlers
@@ -123,10 +123,10 @@ function PostView() {
         setOpenBigFrame({
           src,
           alt: postViewData.title,
-        })
+        }),
       );
     },
-    [dispatch, postViewData.title]
+    [dispatch, postViewData.title],
   );
 
   // Error and loading states
@@ -168,7 +168,7 @@ function PostView() {
               </Bookmark>
             </div>
           </div>
-          <div className="flex gap-7 justify-between">
+          <div className="flex gap-7 justify-between border-inherit">
             <Menu
               ref={menuRef}
               menuId={menuId}

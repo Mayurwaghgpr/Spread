@@ -21,6 +21,10 @@ const initialState = {
   menuOpen: true,
   openBigFrame: null,
   openNotification: false,
+  shareTomedia: {
+    status: false,
+    link: "",
+  },
 };
 
 const uiSlice = createSlice({
@@ -39,7 +43,7 @@ const uiSlice = createSlice({
 
     setToast: (state, action) => {
       const existingToast = state.ToastState.find(
-        (toast) => toast.type === action.payload.type
+        (toast) => toast.type === action.payload.type,
       );
 
       if (existingToast) {
@@ -54,7 +58,7 @@ const uiSlice = createSlice({
     },
     removeToast: (state, action) => {
       state.ToastState = state.ToastState.filter(
-        (el) => el.id !== action.payload
+        (el) => el.id !== action.payload,
       );
     },
     removeAllToast: (state, action) => {
@@ -78,6 +82,9 @@ const uiSlice = createSlice({
     setOpenBigFrame: (state, action) => {
       state.openBigFrame = action.payload;
     },
+    setShareToMedia: (state, action) => {
+      state.shareTomedia = action.payload;
+    },
   },
 });
 
@@ -93,6 +100,7 @@ export const {
   setMenuOpen,
   setOpenNotification,
   setOpenBigFrame,
+  setShareToMedia,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

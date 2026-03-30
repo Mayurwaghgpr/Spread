@@ -1,10 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setConfirmBox, setToast } from "../store/slices/uiSlice";
+import {
+  setConfirmBox,
+  setShareToMedia,
+  setToast,
+} from "../store/slices/uiSlice";
 // import { useNavigate, useOutletContext } from "react-router-dom";
 import useIcons from "./useIcons";
 
-function useMenuConstant(parent, kind) {
+function useMenuConstant(parent, kind, link) {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
   const icons = useIcons();
@@ -17,10 +21,10 @@ function useMenuConstant(parent, kind) {
       icon: "link",
       action: () => {
         navigator.clipboard
-          .writeText(window.location.href)
+          .writeText(link || window.location.href)
           .then(() => {
             dispatch(
-              setToast({ message: "Copied to clipboard", type: "success" })
+              setToast({ message: "Copied to clipboard", type: "success" }),
             );
           })
           .catch((err) => {
@@ -32,7 +36,10 @@ function useMenuConstant(parent, kind) {
       id: "share",
       itemName: "Share",
       icon: "share",
-      action: () => console.log("Share action triggered"),
+      action: () =>
+        dispatch(
+          setShareToMedia({ status: true, link: link || window.location.href }),
+        ),
     },
     {
       id: "delete-post",
@@ -48,7 +55,7 @@ function useMenuConstant(parent, kind) {
             type: "delete",
             event: "DELETE_POST",
             contentId: id,
-          })
+          }),
         );
       },
     },
@@ -75,7 +82,7 @@ function useMenuConstant(parent, kind) {
             type: "delete",
             event: "DELETE_COMMENT",
             contentId: id,
-          })
+          }),
         );
       },
     },
@@ -93,7 +100,7 @@ function useMenuConstant(parent, kind) {
     }
     // If not the owner, hide 'delete' and 'edit'
     return basePostMenu.filter(
-      (item) => item.id !== "delete-post" && item.id !== "edit-post"
+      (item) => item.id !== "delete-post" && item.id !== "edit-post",
     );
   }, [parent?.author?.id, user?.id, icons]);
 
@@ -104,7 +111,7 @@ function useMenuConstant(parent, kind) {
         : baseCommentMenu;
     }
     return baseCommentMenu.filter(
-      (item) => item.id !== "delete-comment" && item.id !== "edit-comment"
+      (item) => item.id !== "delete-comment" && item.id !== "edit-comment",
     );
   }, [parent?.commenter?.id, user?.id, icons]);
 

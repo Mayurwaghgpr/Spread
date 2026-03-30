@@ -154,7 +154,7 @@ export const searchData = async (req, res, next) => {
       await redisClient.setEx(
         searchQuery,
         EXPIRATION,
-        JSON.stringify(searchResult)
+        JSON.stringify(searchResult),
       );
     }
     res.status(200).json({ key: searchQuery, data: searchResult });
@@ -267,8 +267,8 @@ export const FollowUser = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       message: existingFollow
-        ? "Unfollowed successfully"
-        : "Followed successfully",
+        ? "You have unfollowed "
+        : "You started following",
     });
   } catch (error) {
     console.error("Error in FollowUser:", error);
@@ -296,7 +296,7 @@ export const addPostToSavedPost = async (req, res, next) => {
         updatedUserInfo = { ...userInfo, savedPostsList: filterSavedPost };
       }
       await exist.destroy();
-      message = "Removed from SavedPost";
+      message = "Removed from saved post";
     } else if (exist && groupName && normalizeExist.groupName === null) {
       await SavedPost.update({ groupName }, { where: { postId, userId } });
     } else if (exist && groupName && normalizeExist.groupName) {
@@ -307,7 +307,7 @@ export const addPostToSavedPost = async (req, res, next) => {
         ...userInfo,
         savedPostsList: [...userInfo?.savedPostsList, { id: postId }],
       };
-      message = "Post SavedPostd successfully";
+      message = "Saved post successfully";
     }
     await redisClient.setEx(userId, 3600, JSON.stringify(updatedUserInfo));
     res.status(200).json({

@@ -31,7 +31,11 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   const menuRef = useRef(null);
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
-  const { POST_MENU } = useMenuConstant(post, "post");
+  const { POST_MENU } = useMenuConstant(
+    post,
+    "post",
+    `${window.location.origin}/view/@${post?.author?.username}/${post?.id}`,
+  );
 
   const Comments = useMemo(() => {
     return post?.comments?.filter((comment) => comment.topCommentId === null);

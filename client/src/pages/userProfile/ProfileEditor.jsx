@@ -1,11 +1,4 @@
-import React, {
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/slices/authSlice";
 import { useMutation } from "react-query";
@@ -59,7 +52,7 @@ function ProfileEditor() {
           setToast({
             message: "Profile updated successfully!",
             type: "success",
-          })
+          }),
         );
       },
       onError: (error) => {
@@ -68,10 +61,10 @@ function ProfileEditor() {
           setToast({
             message: error?.data?.message || "Profile update failed.",
             type: "error",
-          })
+          }),
         );
       },
-    }
+    },
   );
 
   // Debounced input handlers
@@ -91,7 +84,7 @@ function ProfileEditor() {
         }));
       }
     },
-    [IsUserFromOAth]
+    [IsUserFromOAth],
   );
 
   const debouncedUsernameCheck = useMemo(
@@ -101,7 +94,7 @@ function ProfileEditor() {
           nameMutate({ username });
         }
       }, 500),
-    [user.username]
+    [user.username],
   );
 
   const handleUsernameChange = useCallback(
@@ -110,7 +103,7 @@ function ProfileEditor() {
       setNewInfo((prev) => ({ ...prev, username }));
       debouncedUsernameCheck(username);
     },
-    [debouncedUsernameCheck]
+    [debouncedUsernameCheck],
   );
 
   // Handle profile image removal
@@ -185,7 +178,7 @@ function ProfileEditor() {
           <div className="relative group">
             <div className="relative w-32 h-32 rounded-full border-4  shadow-xl overflow-hidden ">
               <img
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-top"
                 src={profileImage}
                 alt="Profile"
                 loading="lazy"

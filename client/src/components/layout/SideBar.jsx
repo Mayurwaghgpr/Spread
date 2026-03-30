@@ -84,7 +84,7 @@ function SideBar() {
       >
         {/* Top Section - Profile + Nav */}
         <div className="flex flex-col justify-between h-full mb-10 items-center gap-4 pt-2 w-fit">
-          <div className="w-full h-full">
+          <div className="flex flex-col w-full h-full gap-4">
             {/* Profile Link */}
             <div className="flex items-center justify-start gap-2 h-fit w-fit">
               <Link

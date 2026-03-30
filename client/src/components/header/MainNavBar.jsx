@@ -63,7 +63,7 @@ function MainNavBar() {
     <header className=" sticky  z-40 px-5 sm:pr-8 lg:pr-20 py-3 bg-light dark:bg-dark backdrop-blur-xl  border-inherit ">
       <nav className=" border-inherit">
         <div className="flex items-center justify-between border-inherit">
-          <div className="w-full">
+          <div className="w-full border-inherit">
             {deviceSize > 720 && (
               <button
                 onClick={() => dispatch(setMenuOpen())}

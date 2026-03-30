@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import fs from "fs";
 
 dotenv.config();
 
@@ -13,7 +14,12 @@ const imagesBasePath = path.resolve(__dirname, "../../images");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === "NewImageFile") {
-      cb(null, path.join(imagesBasePath, "userImages"));
+      const userImagesPath = path.join(imagesBasePath, "userImages");
+      // Create directory if it doesn't exist
+      if (!fs.existsSync(userImagesPath)) {
+        fs.mkdirSync(userImagesPath, { recursive: true });
+      }
+      cb(null, userImagesPath);
     } else {
       cb(null, path.join(imagesBasePath));
     }
@@ -21,7 +27,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const prefix = file.fieldname === "NewImageFile" ? "userImage" : "Images";
     const fileName = `${prefix}-${Date.now()}${path.extname(
-      file.originalname
+      file.originalname,
     )}`;
     // console.log(file)
     cb(null, fileName);
@@ -40,9 +46,9 @@ const fileFilter = (req, file, cb) => {
   } else {
     cb(
       new Error(
-        "Invalid file type. Only JPG, JPEG, PNG, and WEBP are allowed."
+        "Invalid file type. Only JPG, JPEG, PNG, and WEBP are allowed.",
       ),
-      false
+      false,
     );
   }
 };

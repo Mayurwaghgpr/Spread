@@ -104,17 +104,6 @@ function usePublicApis() {
     }
   };
 
-  const savePost = async ({ postId, groupName }) => {
-    try {
-      const result = await axiosInstance.put(`/public/save`, {
-        postId,
-        groupName,
-      });
-      return result.data;
-    } catch (error) {
-      throw error.response || error;
-    }
-  };
   const removePostFromArchive = async (id) => {
     try {
       const result = await axiosInstance.delete(`/public/save?id=${id}`);
@@ -132,7 +121,6 @@ function usePublicApis() {
     LikePost,
     removePostFromArchive,
     unfollowUser,
-    savePost,
     followUser,
     fetchAllUsers,
     fetchPeopel,

@@ -10,6 +10,8 @@ import {
   addSavedPostToGroup,
   getSavedPostsGroups,
   createGroup,
+  deleteSavedPostGroup,
+  deleteSavedPostFromGroup,
 } from "../controllers/post.controller.js";
 import IsAuth from "../middlewares/isAuth.middleware.js";
 import { multerFileUpload } from "../middlewares/multer.middleware.js";
@@ -32,9 +34,11 @@ router.post("/saved/new/group", IsAuth, createGroup);
 // Route to edit an existing post by ID
 router.patch("/:id", IsAuth, multerFileUpload, EditPost);
 
-router.put("/saved/group", addSavedPostToGroup);
+router.put("/saved/group", IsAuth, addSavedPostToGroup);
 
 // Route to delete a post by ID
 router.delete("/delete/:postId", IsAuth, DeletePost);
+router.delete("/saved/group", IsAuth, deleteSavedPostGroup);
+router.delete("/saved/group/post", IsAuth, deleteSavedPostFromGroup);
 
 export default router;

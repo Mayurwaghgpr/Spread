@@ -1,53 +1,67 @@
 import { memo, useCallback, useMemo, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../store/slices/uiSlice";
-import usePublicApis from "../../../services/publicApis";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../../hooks/useIcons";
 import FedInBtn from "../FedInBtn";
 import { setUser } from "../../../store/slices/authSlice";
 import BookmarkBox from "./BookmarkBox";
+import usePostsApis from "../../../services/usePostsApis";
 
 function Bookmark({ className, post, children }) {
   const [optimisticId, setOptimisticId] = useState(false);
   const { isLogin, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { savePost } = usePublicApis();
+  const queryClient = useQueryClient();
+  const { savePost, addSavedPostToGroup } = usePostsApis();
   const icons = useIcons();
   const isBookmarked = useMemo(
     () => user?.savedPostsList?.some((savedPost) => savedPost?.id === post?.id),
-    [user?.savedPostsList, post?.id]
+    [user?.savedPostsList, post?.id],
   );
 
-  const savePostMutation = useMutation(
-    ({ postId, groupName }) => savePost({ postId, groupName }),
+  const savePostMutation = useMutation(({ postId }) => savePost({ postId }), {
+    onSuccess: (data) => {
+      // dispatch(setUser({ ...user, savedPostsList: data.savedPostsList }));
+      queryClient.invalidateQueries(["loggedInUser"]);
+      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
+    },
+    onError: (error) => {
+      setOptimisticId(false); // Revert optimistic update on error
+      dispatch(
+        setToast({
+          message: error.response?.data?.message || "Failed to update bookmark",
+          type: "error",
+        }),
+      );
+    },
+    onMutate: () => {
+      setOptimisticId(true); // Optimistic update
+    },
+    onSettled: () => {
+      setOptimisticId(false); // Revert optimistic update on error
+    },
+  });
+  const addtoGroupMutation = useMutation(
+    ({ postId, groupName }) => addSavedPostToGroup({ postId, groupName }),
     {
       onSuccess: (data) => {
-        dispatch(setUser({ ...user, savedPostsList: data.savedPostsList }));
-        // queryClient.invalidateQueries(["loggedInUser"]);
+        queryClient.invalidateQueries(["loggedInUser"]);
         dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
       },
       onError: (error) => {
         setOptimisticId(false); // Revert optimistic update on error
         dispatch(
           setToast({
-            message:
-              error.response?.data?.message || "Failed to update bookmark",
+            message: error.data?.message || "Failed to update bookmark",
             type: "error",
-          })
+          }),
         );
       },
-      onMutate: () => {
-        setOptimisticId(true); // Optimistic update
-      },
-      onSettled: () => {
-        setOptimisticId(false); // Revert optimistic update on error
-      },
-    }
+    },
   );
-
   const handleBookmark = useCallback(
     (e) => {
       e.stopPropagation();
@@ -57,7 +71,7 @@ function Bookmark({ className, post, children }) {
       }
       savePostMutation.mutate({ postId: post?.id });
     },
-    [isLogin, navigate, savePostMutation, post?.id]
+    [isLogin, navigate, savePostMutation, post?.id],
   );
 
   const icon = useMemo(() => {
@@ -71,7 +85,7 @@ function Bookmark({ className, post, children }) {
   }, [isBookmarked, optimisticId, icons]);
 
   return (
-    <div className="relative group">
+    <div className="relative group border-inherit">
       <FedInBtn
         className={` ${isBookmarked ? "text-oplight dark:text-white" : ""} ${className}`}
         id="bookmark"
@@ -86,7 +100,7 @@ function Bookmark({ className, post, children }) {
       <BookmarkBox
         postId={post.id}
         userId={post.author.id}
-        mutation={savePostMutation.mutate}
+        mutation={addtoGroupMutation.mutate}
       />
     </div>
   );

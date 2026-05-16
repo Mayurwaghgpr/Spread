@@ -14,9 +14,20 @@ function usePostsApis() {
             type: topic,
           },
           withCredentials: true,
-        }
+        },
       );
       return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+  const savePost = async ({ postId, groupName }) => {
+    try {
+      const result = await axiosInstance.put(`/public/save`, {
+        postId,
+        groupName,
+      });
+      return result.data;
     } catch (error) {
       throw error.response || error;
     }
@@ -38,7 +49,21 @@ function usePostsApis() {
         { groupName },
         {
           withCredentials: true,
-        }
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+  const addSavedPostToGroup = async ({ postId, groupName }) => {
+    try {
+      const response = await axiosInstance.put(
+        `/posts/saved/group`,
+        { postId, groupName },
+        {
+          withCredentials: true,
+        },
       );
       return response.data;
     } catch (error) {
@@ -144,7 +169,7 @@ function usePostsApis() {
         `/comment/delete/${commentId}`,
         {
           withCredentials: true,
-        }
+        },
       );
       return result.data;
     } catch (error) {
@@ -181,6 +206,8 @@ function usePostsApis() {
     getAiGenTags,
     getAiGenAnalysis,
     createNewGroup,
+    addSavedPostToGroup,
+    savePost,
   };
 }
 

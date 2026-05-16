@@ -60,7 +60,7 @@ export const AddNewPost = async (req, res, next) => {
         topic,
         authorId: req.authUser.id,
       },
-      { transaction }
+      { transaction },
     );
 
     // Map additional images
@@ -74,12 +74,12 @@ export const AddNewPost = async (req, res, next) => {
         const key = Number(img?.fieldname.split("-")[1]);
         if (!isNaN(key)) {
           const { secure_url, public_id } = await cloudinary.uploader.upload(
-            img.path
+            img.path,
           );
           uploadedPublicIds.push(public_id);
           return { index: key, imageUrl: secure_url, public_id };
         }
-      })
+      }),
     );
 
     for (const r of uploadResults) {
@@ -270,11 +270,40 @@ export const createGroup = async (req, res, next) => {
 export const addSavedPostToGroup = async (req, res, next) => {
   const { postId, groupName } = req.body;
   const userId = req.authUser.id;
-
+  const userInfo = JSON.parse(await redisClient.get(userId));
   try {
     const exist = await SavedPost.findOne({ where: { postId, userId } });
     if (!exist) {
-      return res.status(400).json({ message: "Not found any saved post" });
+      const newSavedPost = await SavedPost.create({ postId, userId });
+      const groupExist = await SavedPostGroup.findOne({
+        where: { groupName, createdBy: userId },
+      });
+      if (!groupExist) {
+        const newGroup = await SavedPostGroup.create({
+          groupName,
+          createdBy: userId,
+        });
+        const updatedGroups = Array.from(
+          new Set([...(newSavedPost.groups || []), newGroup.id]),
+        );
+        newSavedPost.update({ groups: updatedGroups });
+      } else {
+        const updatedGroups = Array.from(
+          new Set([...(newSavedPost.groups || []), groupExist.id]),
+        );
+        newSavedPost.update({ groups: updatedGroups });
+      }
+
+      await newSavedPost.save();
+      let updatedUserInfo = {
+        ...userInfo,
+        savedPostsList: [...userInfo?.savedPostsList, { id: postId }],
+      };
+      await redisClient.setEx(userId, 3600, JSON.stringify(updatedUserInfo));
+      return res.status(200).json({
+        SavedPost: newSavedPost,
+        message: `Saved post to ${groupName} successfully`,
+      });
     }
     const groupExist = await SavedPostGroup.findOne({
       where: { groupName, createdBy: userId },
@@ -285,18 +314,19 @@ export const addSavedPostToGroup = async (req, res, next) => {
         createdBy: userId,
       });
       const updatedGroups = Array.from(
-        new Set([...(exist.groups || []), newGroup.id])
+        new Set([...(exist.groups || []), newGroup.id]),
       );
       exist.update({ groups: updatedGroups });
     } else {
       const updatedGroups = Array.from(
-        new Set([...(exist.groups || []), groupExist.id])
+        new Set([...(exist.groups || []), groupExist.id]),
       );
       exist.update({ groups: updatedGroups });
     }
     await exist.save();
     res.status(200).json({
       SavedPost: exist,
+      message: `Saved post to ${groupName} successfully`,
     });
   } catch (error) {
     console.error("Error grouping saved post:", error);
@@ -326,7 +356,7 @@ export const getSavedPostsGroups = async (req, res, next) => {
           groupName: group.groupName,
           postCount: count,
         };
-      })
+      }),
     );
     res.status(200).json({
       message: "Fetched grouped saved posts successfully",
@@ -390,6 +420,58 @@ export const getSavedPost = async (req, res, next) => {
   }
 };
 
+export const deleteSavedPostFromGroup = async (req, res, next) => {
+  const userId = req.authUser.id;
+  const { postId, groupId } = req.body;
+
+  try {
+    const savedPost = await SavedPost.findOne({
+      where: { postId, userId },
+    });
+    if (!savedPost) {
+      return res.status(404).json({ message: "Saved post not found" });
+    }
+    const updatedGroups = (savedPost.groups || []).filter(
+      (id) => id !== groupId,
+    );
+    savedPost.groups = updatedGroups;
+    await savedPost.save();
+    res.status(200).json({
+      message: "Saved post removed from group successfully",
+      SavedPost: savedPost,
+    });
+  } catch (error) {
+    console.error("Error removing saved post from group:", error);
+    next(error);
+  }
+};
+
+export const deleteSavedPostGroup = async (req, res, next) => {
+  const userId = req.authUser.id;
+  const { groupId } = req.body;
+
+  try {
+    const group = await SavedPostGroup.findOne({
+      where: { id: groupId, createdBy: userId },
+    });
+    if (!group) {
+      return res.status(404).json({ message: "Saved post group not found" });
+    }
+    await group.destroy();
+    // Remove the deleted group from all saved posts that contain it
+    await SavedPost.update(
+      { groups: db.literal(`array_remove("groups", ${groupId})`) },
+      { where: { groups: { [Op.contains]: [groupId] } } },
+    );
+    res.status(200).json({
+      message: "Saved post group deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting saved post group:", error);
+    next(error);
+  }
+};
+
 // Edit an existing post by its ID
 export const EditPost = async (req, res, next) => {
   try {
@@ -449,7 +531,7 @@ export const DeletePost = async (req, res, next) => {
     const uploadedPublicIds = [
       post.cloudinaryPubId,
       ...post.postBlocks.flatMap(
-        ({ cloudinaryPubId }) => cloudinaryPubId || []
+        ({ cloudinaryPubId }) => cloudinaryPubId || [],
       ),
     ].filter(Boolean);
     // Delete images in parallel if there are any

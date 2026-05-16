@@ -282,14 +282,12 @@ export const addPostToSavedPost = async (req, res, next) => {
   const userId = req.authUser.id;
 
   const userInfo = JSON.parse(await redisClient.get(userId));
-  const groupName = req.body.groupName ? req.body.groupName : null;
   try {
     let updatedUserInfo = userInfo;
     let message;
     const exist = await SavedPost.findOne({ where: { postId, userId } });
-    const normalizeExist = JSON.parse(JSON.stringify(exist));
-    // check if exist and group name is null to remove
-    if (exist && !groupName) {
+
+    if (exist) {
       const filterSavedPost =
         userInfo?.savedPostsList?.filter((post) => post.id !== postId) || [];
       if (Array.isArray(filterSavedPost)) {
@@ -297,12 +295,8 @@ export const addPostToSavedPost = async (req, res, next) => {
       }
       await exist.destroy();
       message = "Removed from saved post";
-    } else if (exist && groupName && normalizeExist.groupName === null) {
-      await SavedPost.update({ groupName }, { where: { postId, userId } });
-    } else if (exist && groupName && normalizeExist.groupName) {
-      message = " It already exist in a group";
     } else {
-      await SavedPost.create({ postId, userId, groupName });
+      await SavedPost.create({ postId, userId });
       updatedUserInfo = {
         ...userInfo,
         savedPostsList: [...userInfo?.savedPostsList, { id: postId }],

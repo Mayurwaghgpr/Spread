@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import usePublicApis from "../../services/publicApis";
 import Follow from "../../components/buttons/follow";
 import { NavLink, useLocation } from "react-router-dom";

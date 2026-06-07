@@ -18,15 +18,29 @@ export const passportStrategies = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
+          console.log("Google OAuth Profile received:", profile);
+          
           if (!profile) {
-            return;
+            console.error("No profile received from Google");
+            return done(new Error("No profile received from Google"));
           }
+          
           const { email, provider, displayName, picture, id } = profile;
+          
+          if (!email) {
+            console.error("No email in Google profile");
+            return done(new Error("Email not provided by Google"));
+          }
+          
+          console.log(`Looking for user with email: ${email}, provider: ${provider}`);
+          
           let user = await userService.finduser({
             email,
             signedWith: provider,
           });
+          
           if (!user) {
+            console.log("User not found, creating new user");
             const username = await genUniqueUserName(profile.email);
             user = await User.create({
               username: username,
@@ -36,9 +50,14 @@ export const passportStrategies = () => {
               password: id,
               signedWith: provider,
             });
+            console.log("New user created:", user.id);
+          } else {
+            console.log("Existing user found:", user.id);
           }
+          
           done(null, user);
         } catch (error) {
+          console.error("Error in Google OAuth strategy:", error);
           done(error);
         }
       }
@@ -55,8 +74,17 @@ export const passportStrategies = () => {
       async (accessToken, refreshToken, profile, done) => {
         try {
           if (!profile) {
-            return;
+            return done(new Error("No profile provided by GitHub"));
           }
+          
+          // Extract email and provider from profile
+          const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+          const provider = profile.provider;
+          
+          if (!email) {
+            return done(new Error("Email not provided by GitHub"));
+          }
+          
           let user = await userService.finduser({
             email,
             signedWith: provider,

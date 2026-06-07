@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setIsLogin } from "../../store/slices/authSlice.js";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuthApi from "../../services/useAuthApi.jsx";
 import CommonInput from "../../components/inputComponents/CommonInput.jsx";
 import OAuth from "./OAuth";
@@ -10,7 +10,7 @@ import EyeBtn from "../../components/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 import LoaderScreen from "../../components/loaders/loaderScreen";
 import { setToast } from "../../store/slices/uiSlice.js";
-import { emailRegex } from "../../utils/regex.js";
+import { emailRegex } from "../../utils/functions/regex.js";
 import CommenAuthBtn from "./components/CommenAuthBtn.jsx";
 import Divider from "./components/Divider.jsx";
 
@@ -25,28 +25,29 @@ function SignIn() {
   const { loginUser } = useAuthApi();
 
   // Mutation for login
-  const { isLoading, isError, mutate, error } = useMutation(
-    (loginInfo) => loginUser(loginInfo),
-    {
-      onSuccess: (response) => {
-        const { AccessToken, user } = response;
-        if (AccessToken) {
-          dispatch(
-            setToast({ message: "Sign in successful", type: "success" })
-          );
-          dispatch(setIsLogin(true));
-          localStorage.setItem("AccessToken", AccessToken); // Store actual token, not boolean
-          queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
-          navigate("/", { replace: true });
-        }
-      },
-      onError: (error) => {
-        const errorMessage =
-          error?.response?.data?.message || "Sign in failed. Please try again.";
-        dispatch(setToast({ message: errorMessage, type: "error" })); // Fixed: was showing success on error
-      },
-    }
-  );
+  const {
+    isPending: isLoading,
+    isError,
+    mutate,
+    error,
+  } = useMutation({
+    mutationFn: (loginInfo) => loginUser(loginInfo),
+    onSuccess: (response) => {
+      const { AccessToken, user } = response;
+      if (AccessToken) {
+        dispatch(setToast({ message: "Sign in successful", type: "success" }));
+        dispatch(setIsLogin(true));
+        localStorage.setItem("AccessToken", AccessToken); // Store actual token, not boolean
+        queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
+        navigate("/", { replace: true });
+      }
+    },
+    onError: (error) => {
+      const errorMessage =
+        error?.response?.data?.message || "Sign in failed. Please try again.";
+      dispatch(setToast({ message: errorMessage, type: "error" })); // Fixed: was showing success on error
+    },
+  });
   // handleLogin function to manage form submission
   const handleLogin = useCallback(
     (e) => {
@@ -57,14 +58,14 @@ function SignIn() {
       // Basic validation
       if (!credentials.email || !credentials.password) {
         dispatch(
-          setToast({ message: "Please fill in all fields", type: "error" })
+          setToast({ message: "Please fill in all fields", type: "error" }),
         );
         return;
       }
 
       mutate(credentials);
     },
-    [mutate, dispatch]
+    [mutate, dispatch],
   );
   // handleFormChanges function to manage input changes
   const handleFormChanges = useCallback((e) => {
@@ -79,7 +80,7 @@ function SignIn() {
         setPassVisible(true);
       }
     },
-    [currentInputValue]
+    [currentInputValue],
   );
 
   // Early returns for different states

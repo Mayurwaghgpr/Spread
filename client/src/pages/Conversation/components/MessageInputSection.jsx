@@ -8,7 +8,7 @@ import { pushMessage } from "../../../store/slices/messangerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import ChatApi from "../../../services/ChatApi";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { use } from "react";
 
 function MessageInputSection({

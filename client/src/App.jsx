@@ -2,7 +2,7 @@ import { useEffect, lazy, useState, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import PersistentUser from "./utils/PersistentUser";
+import PersistentUser from "./utils/components/PersistentUser";
 import useSocket from "./hooks/useSocket";
 import Router from "./router/Router";
 import LoaderScreen from "./components/loaders/loaderScreen";

@@ -7,7 +7,7 @@ import { setMenuOpen } from "../../store/slices/uiSlice";
 
 import NotifictionBell from "../notification/NotificationBell";
 import ProfileImage from "../ProfileImage";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import DesktopTooltip from "./DesktopTooltip";
 import useIcons from "../../hooks/useIcons";
 

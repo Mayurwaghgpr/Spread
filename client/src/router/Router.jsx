@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import { useSelector } from "react-redux";
-import ProtectedRoutes from "../utils/ProtectedRoutes";
+import ProtectedRoutes from "../utils/components/ProtectedRoutes";
 import LoaderScreen from "../components/loaders/loaderScreen";
 import GroupBoard from "../pages/savedPosts/GroupBoard";
 // Lazy load components with better error boundaries
@@ -15,10 +15,10 @@ const PageError = lazy(() => import("../pages/ErrorPages/ErrorPage"));
 const Profile = lazy(() => import("../pages/userProfile/Profile"));
 const Heroes = lazy(() => import("../pages/Landing/Heroes"));
 const DynamicPostEditor = lazy(
-  () => import("../pages/PostEditor/DynamicPostEditor")
+  () => import("../pages/PostEditor/DynamicPostEditor"),
 );
 const PostPreviewEditor = lazy(
-  () => import("../pages/PostEditor/components/PostPreviewEditor")
+  () => import("../pages/PostEditor/components/PostPreviewEditor"),
 );
 const PostView = lazy(() => import("../pages/PostView/PostView"));
 const ProfileEditor = lazy(() => import("../pages/userProfile/ProfileEditor"));
@@ -28,27 +28,27 @@ const Settings = lazy(() => import("../pages/settings/Settings"));
 const General = lazy(() => import("../pages/settings/General"));
 const Conversations = lazy(() => import("../pages/Conversation/Conversations"));
 const ConversationSection = lazy(
-  () => import("../pages/Conversation/ConversationSection")
+  () => import("../pages/Conversation/ConversationSection"),
 );
 const SearchBox = lazy(() => import("../pages/Search&Explorer/SearchBox"));
 const CommentSection = lazy(() => import("../pages/Comment/CommentSection"));
 
 const Suggestions = lazy(() => import("../pages/home/Suggestions"));
 const ConversationInfo = lazy(
-  () => import("../pages/Conversation/ConversationInfo")
+  () => import("../pages/Conversation/ConversationInfo"),
 );
 const InfoSection = lazy(
-  () => import("../pages/Conversation/components/InfoSection")
+  () => import("../pages/Conversation/components/InfoSection"),
 );
 const SomethingWentWrong = lazy(
-  () => import("../components/errors/SomethingWentWrong")
+  () => import("../components/errors/SomethingWentWrong"),
 );
 const NewConversation = lazy(
-  () => import("../pages/Conversation/NewConversation")
+  () => import("../pages/Conversation/NewConversation"),
 );
 const AIResponse = lazy(() => import("../components/aiComp/AiResponse"));
 const ConversationFallBack = lazy(
-  () => import("../pages/Conversation/components/ConversationFallBack")
+  () => import("../pages/Conversation/components/ConversationFallBack"),
 );
 
 const ROUTES = {

@@ -4,7 +4,7 @@ import { setOpenNotification } from "../../store/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
 
 import Ibutton from "../buttons/Ibutton";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import notificationApi from "../../services/notificationApi";
 const NotificationItem = lazy(() => import("./NotificationItem"));
 import { setNotificationState } from "../../store/slices/notificationSlice";

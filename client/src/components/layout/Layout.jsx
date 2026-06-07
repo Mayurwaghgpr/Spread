@@ -1,11 +1,11 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
 import MainNavBar from "../header/MainNavBar";
 import SideBar from "./SideBar";
 import TaskBar from "../phoneview/TaskBar";
 import LoaderScreen from "../loaders/loaderScreen";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import usePublicApis from "../../services/publicApis";
 // import useDeviceSize from "../../hooks/useDeviceSize";
 
@@ -25,25 +25,29 @@ function Layout() {
   const dispatch = useDispatch();
 
   // Fetch home content data
-  useQuery({
+  const { data, isSuccess, isError, error } = useQuery({
     queryKey: ["homeContent"],
     queryFn: fetchHomeContent,
-    onSuccess: (data) => {
-      dispatch(setUserSuggestions(data.userSuggetion));
-      dispatch(setTagslist(data.tags));
-      dispatch(setLoadingHome(false));
-    },
-    onSettled: (data) => {
-      dispatch(setLoadingHome(false));
-    },
-    onError: (error) => {
-      console.error("Error fetching home content:", error);
-      dispatch(setLoadingHome(false));
-    },
     refetchOnMount: false,
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
+
+  // Handle query success/error with useEffect
+  useEffect(() => {
+    if (isSuccess && data) {
+      dispatch(setUserSuggestions(data.userSuggetion));
+      dispatch(setTagslist(data.tags));
+      dispatch(setLoadingHome(false));
+    }
+  }, [isSuccess, data, dispatch]);
+
+  useEffect(() => {
+    if (isError) {
+      console.error("Error fetching home content:", error);
+      dispatch(setLoadingHome(false));
+    }
+  }, [isError, error, dispatch]);
   // Memoize path checks for better performance
   const pathChecks = useMemo(
     () => ({

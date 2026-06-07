@@ -1,5 +1,5 @@
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import useAuthApi from "../../services/useAuthApi.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { motion } from "framer-motion";
@@ -15,17 +15,15 @@ function ForgotPass() {
   const dispatch = useDispatch();
   const { forgotPassword } = useAuthApi();
 
-  const { data, mutate, isError, error, isLoading } = useMutation(
-    (email) => forgotPassword(email),
-    {
-      onSuccess: (data) => {
-        dispatch(setToast({ message: data.success, type: "success" }));
-      },
-      onError: (error) => {
-        dispatch(setToast({ message: error.data, type: "error" }));
-      },
-    }
-  );
+  const { data, mutate, isError, error, isPending: isLoading } = useMutation({
+    mutationFn: (email) => forgotPassword(email),
+    onSuccess: (data) => {
+      dispatch(setToast({ message: data.success, type: "success" }));
+    },
+    onError: (error) => {
+      dispatch(setToast({ message: error.data, type: "error" }));
+    },
+  });
 
   const handlerforgot = (e) => {
     e.preventDefault();

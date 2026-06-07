@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/slices/authSlice";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { setToast } from "../../store/slices/uiSlice";
 import { debounce } from "../../utils/debounce";
 import useProfileApi from "../../services/useProfileApis";
@@ -27,11 +27,12 @@ function ProfileEditor() {
   // Username check mutation
   const {
     mutate: nameMutate,
-    isLoading: nameLoading,
+    isPending: nameLoading,
     isSuccess,
     isError,
     error,
-  } = useMutation((username) => searchUsername(username), {
+  } = useMutation({
+    mutationFn: (username) => searchUsername(username),
     onSuccess: (data) => {
       uNameRef.current?.focus();
       setNewInfo((prev) => ({ ...prev, ...data }));
@@ -42,30 +43,28 @@ function ProfileEditor() {
   });
 
   // Profile update mutation
-  const { mutate: updateProfile, isLoading: isUpdating } = useMutation(
-    editUserProfile,
-    {
-      onSuccess: (data) => {
-        uNameRef.current?.blur();
-        dispatch(setUser(data));
-        dispatch(
-          setToast({
-            message: "Profile updated successfully!",
-            type: "success",
-          }),
-        );
-      },
-      onError: (error) => {
-        uNameRef.current?.blur();
-        dispatch(
-          setToast({
-            message: error?.data?.message || "Profile update failed.",
-            type: "error",
-          }),
-        );
-      },
+  const { mutate: updateProfile, isPending: isUpdating } = useMutation({
+    mutationFn: editUserProfile,
+    onSuccess: (data) => {
+      uNameRef.current?.blur();
+      dispatch(setUser(data));
+      dispatch(
+        setToast({
+          message: "Profile updated successfully!",
+          type: "success",
+        }),
+      );
     },
-  );
+    onError: (error) => {
+      uNameRef.current?.blur();
+      dispatch(
+        setToast({
+          message: error?.data?.message || "Profile update failed.",
+          type: "error",
+        }),
+      );
+    },
+  });
 
   // Debounced input handlers
   const handleInputChange = useCallback(

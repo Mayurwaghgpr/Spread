@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import usePostsApis from "../../services/usePostsApis";
 import useIcons from "../../hooks/useIcons";
 import GroupCard from "./components/GroupCard";
@@ -11,7 +11,7 @@ function GroupBoard() {
   const { user } = useSelector((state) => state.auth);
   const [isCreateGroupFormOpen, setIsCreateGroupFormOpen] = useState(false);
   const dispatch = useDispatch();
-
+  const queryClient = useQueryClient();
   const icons = useIcons();
   const { fetchSavedPostsGroup } = usePostsApis();
   const { createNewGroup } = usePostsApis();
@@ -24,6 +24,7 @@ function GroupBoard() {
   const { mutate } = useMutation({
     mutationFn: createNewGroup,
     onSuccess: () => {
+      queryClient.invalidateQueries("SavedPostGroups");
       dispatch(
         setToast({ type: "success", message: "Group created successfully" }),
       );
@@ -60,6 +61,7 @@ function GroupBoard() {
 
         {data?.groups?.map((group) => (
           <GroupCard
+            key={group.id}
             className={" min-h-[10rem]  p-5 text-xl"}
             stub={`read/${group?.id}`}
             groupId={group?.id}

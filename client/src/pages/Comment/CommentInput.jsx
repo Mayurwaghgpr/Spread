@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/userImageSrc";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { setCommentCred } from "../../store/slices/postSlice";
 
 import PostsApis from "../../services/usePostsApis";

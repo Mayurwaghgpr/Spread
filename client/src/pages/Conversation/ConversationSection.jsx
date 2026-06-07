@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import ChatApi from "../../services/ChatApi";
 import useSocket from "../../hooks/useSocket";
@@ -77,24 +77,26 @@ function ConversationSection() {
     hasNextPage,
     isLoading,
     error,
-  } = useInfiniteQuery(
-    ["messages", conversationId],
-    ({ pageParam = new Date().toISOString() }) =>
+    data: messagesData,
+  } = useInfiniteQuery({
+    queryKey: ["messages", conversationId],
+    queryFn: ({ pageParam = new Date().toISOString() }) =>
       getMessage({ conversationId, pageParam }),
-    {
-      onSuccess: (data) => {
-        dispatch(addMessage(data?.pages?.flatMap((page) => page)));
-      },
-
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
-          : undefined; // Use last item timestamp as cursor
-      },
-      refetchOnWindowFocus: false,
-      retry: 2,
+    getNextPageParam: (lastPage) => {
+      return lastPage.length !== 0
+        ? lastPage[lastPage.length - 1].createdAt
+        : undefined; // Use last item timestamp as cursor
     },
-  );
+    refetchOnWindowFocus: false,
+    retry: 2,
+  });
+
+  // Handle messages data with useEffect instead of deprecated onSuccess
+  useEffect(() => {
+    if (messagesData) {
+      dispatch(addMessage(messagesData?.pages?.flatMap((page) => page)));
+    }
+  }, [messagesData, dispatch]);
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,

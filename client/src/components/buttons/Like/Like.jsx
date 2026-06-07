@@ -1,12 +1,12 @@
 import { memo, useMemo, useState, useCallback } from "react";
 import usePublicApis from "../../../services/publicApis";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LikesList from "./LikesList";
 import useIcons from "../../../hooks/useIcons";
-import AbbreviateNumber from "../../../utils/AbbreviateNumber";
+import AbbreviateNumber from "../../../utils/components/AbbreviateNumber";
 import { getReactionColour } from "./getReactionColour";
 
 function Like({ post, className }) {
@@ -42,7 +42,7 @@ function Like({ post, className }) {
         setToast({
           message: `${error.response?.data?.message || "An error occurred"} ✨`,
           type: "error",
-        })
+        }),
       );
     },
   });
@@ -61,7 +61,7 @@ function Like({ post, className }) {
       setOptimistIcon(likeType); // Optimistic UI update
       mutate({ postId: post.id, liketype: likeType });
     },
-    [isLogin, navigate, mutate, post.id]
+    [isLogin, navigate, mutate, post.id],
   );
 
   // Memoized like count calculation

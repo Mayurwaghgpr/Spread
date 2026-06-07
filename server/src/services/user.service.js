@@ -3,10 +3,13 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import User from "../models/user.model.js";
 import Post from "../models/posts/posts.model.js";
+import { SALT_ROUNDS } from "../config/constants.js";
+
 dotenv.config();
-const saltRounds = process.env.SALT_ROUNDS || 10;
 class UserService {
   async finduser(...args) {
+    console.log("finduser called with args:", JSON.stringify(args));
+    
     // Fetch user profile information
     const userInfo = await User.findOne({
       where: { [Op.and]: args },
@@ -37,6 +40,7 @@ class UserService {
       ],
     });
 
+    console.log("finduser result:", userInfo ? `User found: ${userInfo.id}` : "No user found");
     return userInfo || null;
   }
   async register({ email, password, displayName }) {
@@ -47,11 +51,11 @@ class UserService {
       },
     });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      throw new Error("User already exists");
     }
 
     // Hash the password and create a new user
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     const newUser = await User.create({
       displayName,
       email,
@@ -71,7 +75,7 @@ class UserService {
     const user = await User.findOne({ where: { email } });
     if (!user) throw new Error("User not found");
     // If user signed up via OAuth
-    if (user.signedWith !== "manual" || user.signedWith !== null) {
+    if (user.signedWith && user.signedWith !== "manual") {
       throw new Error(
         `This account is registered using ${user.signedWith}. Please login with ${user.signedWith} instead.`
       );

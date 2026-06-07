@@ -8,7 +8,7 @@ import { mailTransporter } from "../utils/sendMail.js";
 import { CookieOptions } from "../utils/cookie-options.js";
 import redisClient from "../utils/redisClient.js";
 import userService from "../services/user.service.js";
-import { EXPIRATION } from "../config/constants.js";
+import { EXPIRATION, SALT_ROUNDS } from "../config/constants.js";
 
 dotenv.config();
 
@@ -102,7 +102,7 @@ export const getLoginUser = async (req, res, next) => {
     });
     await redisClient.set(
       req.authUser.id,
-      JSON.stringify(userInfoFromDatabase)
+      JSON.stringify(userInfoFromDatabase),
     );
     res.status(200).json(userInfoFromDatabase);
   } catch (error) {
@@ -126,7 +126,7 @@ export const refreshToken = async (req, res, next) => {
     // Verify refresh token
     const decodedToken = jwt.verify(
       clientRefreshToken,
-      process.env.REFRESH_TOKEN_SECRET
+      process.env.REFRESH_TOKEN_SECRET,
     );
     const { dataValues: user } = await User.findByPk(decodedToken.id);
     // console.log(user)
@@ -135,8 +135,8 @@ export const refreshToken = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid refresh token" });
     }
 
-    // Check if the refresh token matches the one stored in the database
-    if (decodedToken.exp < new Date.now()) {
+    // Check if the refresh token is expired
+    if (decodedToken.exp * 1000 < Date.now()) {
       return res
         .status(401)
         .json({ message: "Refresh token is expired or used" });
@@ -176,7 +176,7 @@ export const logout = async (req, res, next) => {
     // Clear refresh token from user record
     await User.update(
       { refreshToken: null },
-      { where: { id: req.authUser.id } }
+      { where: { id: req.authUser.id } },
     );
     await redisClient.del(req.authUser.id);
     res
@@ -233,10 +233,10 @@ export const resetPassword = async (req, res, next) => {
         .json({ message: "token has expired ,cannot Reset password" });
     }
     const email = decodeToken.email;
-    const hashedPassword = await bcrypt.hash(newpassword, saltRounds);
+    const hashedPassword = await bcrypt.hash(newpassword, SALT_ROUNDS);
     await User.update(
       { password: hashedPassword },
-      { where: { email: email } }
+      { where: { email: email } },
     );
     res.status(200).json({ success: "Password updated successfuly" });
   } catch (error) {

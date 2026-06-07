@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthApi from "../../services/useAuthApi.jsx";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import CommonInput from "../../components/inputComponents/CommonInput.jsx";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../store/slices/uiSlice.js";
@@ -13,15 +13,13 @@ function ResetPassword() {
   const dispatch = useDispatch();
   const { resetPasswordApi } = useAuthApi();
   console.log("param" + param.token);
-  const { data, mutate, isError, error, isLoading } = useMutation(
-    (newPassword) => resetPasswordApi(newPassword, param.token),
-    {
-      onSuccess: (data) => {
-        dispatch(setToast({ message: data.success, type: "success" }));
-        navigate("/auth/signin", { replace: true });
-      },
-    }
-  );
+  const { data, mutate, isError, error, isPending: isLoading } = useMutation({
+    mutationFn: (newPassword) => resetPasswordApi(newPassword, param.token),
+    onSuccess: (data) => {
+      dispatch(setToast({ message: data.success, type: "success" }));
+      navigate("/auth/signin", { replace: true });
+    },
+  });
 
   const handlerResetPass = (e) => {
     e.preventDefault();

@@ -13,7 +13,7 @@ export const createComment = async (req, res, next) => {
   const { postId, replyTo, content, topCommentId } = req.body;
 
   try {
-    const post = JSON.parse(await redisClient.get(postId));
+    // Create the comment first
     const respons = await Comments.create({
       postId,
       userId,
@@ -21,14 +21,21 @@ export const createComment = async (req, res, next) => {
       topCommentId,
       replyTo,
     });
-    const newComment = JSON.parse(JSON.stringify(respons));
-    const newCommentsArray = [...post.comments, newComment];
-    const postWithNewComment = { ...post, comments: newCommentsArray };
-    await redisClient.setEx(
-      postId,
-      EXPIRATION,
-      JSON.stringify(postWithNewComment)
-    );
+    
+    // Try to update cache if post exists in cache
+    const cachedPost = await redisClient.get(postId);
+    if (cachedPost) {
+      const post = JSON.parse(cachedPost);
+      const newComment = JSON.parse(JSON.stringify(respons));
+      const newCommentsArray = [...(post.comments || []), newComment];
+      const postWithNewComment = { ...post, comments: newCommentsArray };
+      await redisClient.setEx(
+        postId,
+        EXPIRATION,
+        JSON.stringify(postWithNewComment)
+      );
+    }
+    
     // io.emit("update_comment", newComment);
     res.status(200).json({ message: "commented successfuly " });
   } catch (error) {

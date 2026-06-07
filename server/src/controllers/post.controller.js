@@ -14,7 +14,7 @@ import db from "../config/database.js";
 import SavedPost from "../models/savedPost.model.js";
 import SavedPostGroup from "../models/savedPostGroup.model.js";
 
-export const AddNewPost = async (req, res, next) => {
+export const addNewPost = async (req, res, next) => {
   const body = req.body;
   const imageFileArray = req.files || [];
   const uploadedPublicIds = [];
@@ -50,18 +50,23 @@ export const AddNewPost = async (req, res, next) => {
     }
     const previewUpload = await cloudinary.uploader.upload(previewImage?.path);
     uploadedPublicIds.push(previewUpload.public_id);
+
+    // Extract topic from body if provided, otherwise let database handle default
+    const newPostData = {
+      title: postTitle,
+      subtitle,
+      previewImage: previewUpload.secure_url,
+      cloudinaryPubId: previewUpload.public_id,
+      authorId: req.authUser.id,
+    };
+
+    // Only add topic if it's provided in the request
+    if (body.topic) {
+      newPostData.topic = body.topic;
+    }
+
     // Create a new post
-    const newPost = await Post.create(
-      {
-        title: postTitle,
-        subtitle,
-        previewImage: previewUpload.secure_url,
-        cloudinaryPubId: previewUpload.public_id,
-        topic,
-        authorId: req.authUser.id,
-      },
-      { transaction },
-    );
+    const newPost = await Post.create(newPostData, { transaction });
 
     // Map additional images
     const imageMap = new Map();
@@ -422,7 +427,7 @@ export const getSavedPost = async (req, res, next) => {
 
 export const deleteSavedPostFromGroup = async (req, res, next) => {
   const userId = req.authUser.id;
-  const { postId, groupId } = req.body;
+  const { postId, groupId } = req.params;
 
   try {
     const savedPost = await SavedPost.findOne({
@@ -448,7 +453,7 @@ export const deleteSavedPostFromGroup = async (req, res, next) => {
 
 export const deleteSavedPostGroup = async (req, res, next) => {
   const userId = req.authUser.id;
-  const { groupId } = req.body;
+  const { groupId } = req.params;
 
   try {
     const group = await SavedPostGroup.findOne({
@@ -460,7 +465,7 @@ export const deleteSavedPostGroup = async (req, res, next) => {
     await group.destroy();
     // Remove the deleted group from all saved posts that contain it
     await SavedPost.update(
-      { groups: db.literal(`array_remove("groups", ${groupId})`) },
+      { groups: db.fn("array_remove", db.col("groups"), groupId) },
       { where: { groups: { [Op.contains]: [groupId] } } },
     );
     res.status(200).json({
@@ -473,7 +478,7 @@ export const deleteSavedPostGroup = async (req, res, next) => {
 };
 
 // Edit an existing post by its ID
-export const EditPost = async (req, res, next) => {
+export const editPost = async (req, res, next) => {
   try {
     const post = await Post.findByPk(req.params.id);
     if (!post) {
@@ -495,7 +500,7 @@ export const EditPost = async (req, res, next) => {
 };
 
 /// Delete a post by its ID and associated images
-export const DeletePost = async (req, res, next) => {
+export const deletePost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const userId = req.authUser.id;

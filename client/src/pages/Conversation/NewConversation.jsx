@@ -4,7 +4,7 @@ import SearchBar from "../../components/inputComponents/SearchBar";
 import PeoplesList from "../../components/PeoplesList";
 import { useSelector } from "react-redux";
 import Ibutton from "../../components/buttons/Ibutton";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import usePublicApis from "../../services/publicApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import { useNavigate } from "react-router-dom";
@@ -37,16 +37,14 @@ const NewConversation = () => {
     isFetching,
     hasNextPage,
     isLoading,
-  } = useInfiniteQuery(
-    ["UsersList", search],
-    ({ pageParam = new Date().toISOString() }) =>
+  } = useInfiniteQuery({
+    queryKey: ["UsersList", search],
+    queryFn: ({ pageParam = new Date().toISOString() }) =>
       fetchPeopel({ pageParam, username: search }),
-    {
-      getNextPageParam: (lastPage) =>
-        lastPage.length ? lastPage[lastPage.length - 1].createdAt : undefined,
-      refetchOnWindowFocus: false,
-    }
-  );
+    getNextPageParam: (lastPage) =>
+      lastPage.length ? lastPage[lastPage.length - 1].createdAt : undefined,
+    refetchOnWindowFocus: false,
+  });
 
   const users = data?.pages?.flatMap((page) => page) || [];
   const { lastItemRef } = useLastItemObserver(

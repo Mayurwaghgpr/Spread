@@ -129,7 +129,7 @@ function Heroes() {
             </div>
             <div className="relative max-w-[20rem] max-h-[20rem] sm:w-full sm:h-full w-1/2 rounded-full overflow-hidden ">
               <img
-                class="max-w-full h-auto object-cover object-center"
+                className="max-w-full h-auto object-cover object-center"
                 src={coverImg2}
                 alt="cover"
                 loading="lazy"

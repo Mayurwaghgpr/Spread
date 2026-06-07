@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 // Component imports
 import Bookmark from "../../components/buttons/bookmark/Bookmark";

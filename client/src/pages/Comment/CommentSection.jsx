@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from "react";
 import { lazy } from "react";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import PostsApis from "../../services/usePostsApis";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
@@ -48,17 +48,15 @@ function CommentSection({
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery(
-    ["TopComments", postViewData?.id],
-    ({ pageParam = 1 }) => getComments({ postId: postViewData?.id, pageParam }),
-    {
-      enabled: !!postViewData?.id,
-      getNextPageParam: (lastPage) =>
-        lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
-      refetchOnWindowFocus: false,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    }
-  );
+  } = useInfiniteQuery({
+    queryKey: ["TopComments", postViewData?.id],
+    queryFn: ({ pageParam = 1 }) => getComments({ postId: postViewData?.id, pageParam }),
+    enabled: !!postViewData?.id,
+    getNextPageParam: (lastPage) =>
+      lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 
   // Observer for infinite scroll
   const { lastItemRef } = useLastItemObserver(

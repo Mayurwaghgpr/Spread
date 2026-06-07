@@ -3,7 +3,7 @@ import ThemeBtn from "../buttons/ThemeBtn";
 import { useSelector } from "react-redux";
 import LogoutBtn from "../buttons/LogoutBtn";
 import ProfileImage from "../ProfileImage";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 
 const Modes = [
   {

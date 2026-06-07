@@ -1,10 +1,10 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import PostPreview from "../../components/postsComp/PostPreview";
 import { setuserProfile } from "../../store/slices/profileSlice";
 import ProfileHeader from "./components/ProfileHeader";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Spinner from "../../components/loaders/Spinner";
 import ProfileinfoCard from "../../components/ProfileinfoCard";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
@@ -27,17 +27,20 @@ function Profile() {
     error: profileError,
     isFetching: isProfileFetching,
     isLoading: isProfileLoading,
-  } = useQuery(
-    ["userProfile", profileId],
-    async () => fetchUserProfile(profileId),
-    {
-      onSuccess: (data) => {
-        dispatch(setuserProfile(data));
-      },
-      refetchOnWindowFocus: false,
-      enabled: !!profileId, // Only fetch if profileId exists
+    data: profileData,
+  } = useQuery({
+    queryKey: ["userProfile", profileId],
+    queryFn: async () => fetchUserProfile(profileId),
+    refetchOnWindowFocus: false,
+    enabled: !!profileId, // Only fetch if profileId exists
+  });
+
+  // Handle profile data with useEffect instead of deprecated onSuccess
+  useEffect(() => {
+    if (profileData) {
+      dispatch(setuserProfile(profileData));
     }
-  );
+  }, [profileData, dispatch]);
 
   // Posts data query
   const {
@@ -48,20 +51,18 @@ function Profile() {
     fetchNextPage,
     hasNextPage,
     error: postError,
-  } = useInfiniteQuery(
-    ["UserPosts", profileId],
-    ({ pageParam = new Date().toISOString() }) =>
+  } = useInfiniteQuery({
+    queryKey: ["UserPosts", profileId],
+    queryFn: ({ pageParam = new Date().toISOString() }) =>
       fetchUserData(profileId, pageParam),
-    {
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
-          : undefined;
-      },
-      refetchOnWindowFocus: false,
-      enabled: !!profileId && !isProfileError, // Only fetch posts if profile exists
-    }
-  );
+    getNextPageParam: (lastPage) => {
+      return lastPage.length !== 0
+        ? lastPage[lastPage.length - 1].createdAt
+        : undefined;
+    },
+    refetchOnWindowFocus: false,
+    enabled: !!profileId && !isProfileError, // Only fetch posts if profile exists
+  });
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,

@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setIsLogin } from "../../store/slices/authSlice.js";
 import { setToast } from "../../store/slices/uiSlice.js";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuthApi from "../../services/useAuthApi.jsx";
 import CommonInput from "../../components/inputComponents/CommonInput.jsx";
-import { passwordRegex, emailRegex } from "../../utils/regex.js";
+import { passwordRegex, emailRegex } from "../../utils/functions/regex.js";
 import OAuth from "./OAuth.jsx";
 import { v4 as uuidv4 } from "uuid";
 import EyeBtn from "../../components/buttons/EyeBtn.jsx";
@@ -21,7 +21,13 @@ function SignUp() {
   const queryClient = useQueryClient();
 
   const { registerUser } = useAuthApi();
-  const { isLoading, isError, error, mutate } = useMutation(registerUser, {
+  const {
+    isPending: isLoading,
+    isError,
+    error,
+    mutate,
+  } = useMutation({
+    mutationFn: registerUser,
     onSuccess: (response) => {
       const { AccessToken } = response;
       dispatch(setIsLogin(true));
@@ -45,7 +51,7 @@ function SignUp() {
 
     if (!passwordRegex.test(password)) {
       setValidation(
-        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
       );
       return;
     }

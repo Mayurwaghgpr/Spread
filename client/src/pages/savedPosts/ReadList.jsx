@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import PostPreview from "../../components/postsComp/PostPreview";
 import Spinner from "../../components/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
@@ -18,19 +18,17 @@ const ReadList = () => {
     isFetchingNextPage,
     isLoading,
     hasNextPage,
-  } = useInfiniteQuery(
-    ["posts", group],
-    ({ pageParam = new Date().toISOString() }) =>
+  } = useInfiniteQuery({
+    queryKey: ["posts", group],
+    queryFn: ({ pageParam = new Date().toISOString() }) =>
       getArchivedPosts({ pageParam, group }),
-    {
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
-          : undefined; // Use last post's timestamp as cursor
-      },
-      refetchOnWindowFocus: false,
-    }
-  );
+    getNextPageParam: (lastPage) => {
+      return lastPage.length !== 0
+        ? lastPage[lastPage.length - 1].createdAt
+        : undefined; // Use last post's timestamp as cursor
+    },
+    refetchOnWindowFocus: false,
+  });
   // console.log({ pages });
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import usePostsApis from "../../../services/usePostsApis";
 import CreateNewGroupForm from "../../../pages/savedPosts/components/CreateNewGroupForm";
 import { useState } from "react";
@@ -17,26 +17,24 @@ function BookmarkBox({ postId, mutation }) {
   });
 
   // Mutation for creating a new group and adding the post to it
-  const { mutate: mutateWithNewGroup } = useMutation(
-    (groupName) => addSavedPostToGroup({ postId, groupName }),
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries(["loggedInUser"]);
-        dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
-      },
-      onError: (error) => {
-        dispatch(
-          setToast({
-            message: error.data?.message || "Failed to update bookmark",
-            type: "error",
-          }),
-        );
-      },
-      onSettled: () => {
-        setIsCreateGroupFormOpen(false);
-      },
+  const { mutate: mutateWithNewGroup } = useMutation({
+    mutationFn: (groupName) => addSavedPostToGroup({ postId, groupName }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["loggedInUser"]);
+      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
     },
-  );
+    onError: (error) => {
+      dispatch(
+        setToast({
+          message: error.data?.message || "Failed to update bookmark",
+          type: "error",
+        }),
+      );
+    },
+    onSettled: () => {
+      setIsCreateGroupFormOpen(false);
+    },
+  });
 
   return (
     <>

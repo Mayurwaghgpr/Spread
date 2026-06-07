@@ -1,6 +1,6 @@
 import { forwardRef, memo, useMemo, useRef, useState } from "react";
 import userImageSrc from "../../utils/userImageSrc";
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 
 import PostsApis from "../../services/usePostsApis";
 import { useDispatch, useSelector } from "react-redux";
@@ -113,21 +113,20 @@ const CommentBox = forwardRef(
 
     // Infinite query for replies
     const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
-      useInfiniteQuery(
-        ["replies", comt?.id],
-        ({ pageParam = 1 }) =>
+      useInfiniteQuery({
+        queryKey: ["replies", comt?.id],
+        queryFn: ({ pageParam = 1 }) =>
           getReplies({
             postId: comt.postId,
             pageParam,
             topCommentId: comt?.id,
           }),
-        {
-          enabled: comt?.replies?.length > 0 && openReplies === comt?.id,
-          getNextPageParam: (lastPage) =>
-            lastPage.meta.hasNextPage
-              ? lastPage.meta.currentPage + 1
-              : undefined,
-          refetchOnWindowFocus: false,
+        enabled: comt?.replies?.length > 0 && openReplies === comt?.id,
+        getNextPageParam: (lastPage) =>
+          lastPage.meta.hasNextPage
+            ? lastPage.meta.currentPage + 1
+            : undefined,
+        refetchOnWindowFocus: false,
         }
       );
 

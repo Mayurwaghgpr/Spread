@@ -2,7 +2,7 @@ import TopicsSkeletonLoader from "../loaders/TopicsSkeletonLoader";
 import { Link } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
 import usePublicApis from "../../services/publicApis";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 // import { useSelector } from "react-redux";
 
 function Aside({ className, handleTopicClick }) {

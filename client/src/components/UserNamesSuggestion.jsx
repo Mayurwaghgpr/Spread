@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import PeoplesList from "./PeoplesList";
-import { useInfiniteQuery, useMutation } from "react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import usePublicApis from "../services/publicApis";
 import { useLastItemObserver } from "../hooks/useLastItemObserver";
 import ProfileImage from "./ProfileImage";
@@ -19,19 +19,17 @@ function UserNamesSuggestion({
     isFetching,
     hasNextPage,
     error,
-  } = useInfiniteQuery(
-    ["people_to_mention", mentionedUsername],
-    ({ pageParam = new Date().toISOString() }) =>
+  } = useInfiniteQuery({
+    queryKey: ["people_to_mention", mentionedUsername],
+    queryFn: ({ pageParam = new Date().toISOString() }) =>
       fetchPeopels({ pageParam, username: mentionedUsername }),
-    {
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
-          : undefined; // Use last data id as cursor
-      },
-      refetchOnWindowFocus: false,
-    }
-  );
+    getNextPageParam: (lastPage) => {
+      return lastPage.length !== 0
+        ? lastPage[lastPage.length - 1].createdAt
+        : undefined; // Use last data id as cursor
+    },
+    refetchOnWindowFocus: false,
+  });
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,

@@ -1,8 +1,6 @@
-import axios from "axios";
 import axiosInstance from "./axios";
 
 function usePostsApis() {
-  // Fetch all posts with pagination and filtering by topic
   const fetchPostsFeed = async ({ pageParam, topic, endpoint }) => {
     try {
       const response = await axiosInstance.get(
@@ -21,6 +19,34 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
+
+  const addNewPost = async (newPost, signal) => {
+    try {
+      const result = await axiosInstance.post(`/posts/add`, newPost, {
+        withCredentials: true,
+        signal,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
+  const deletePostApi = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/posts/delete/${id.trim()}`);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem("AccessToken");
+      }
+      throw error.response || error;
+    }
+  };
+
   const savePost = async ({ postId, groupName }) => {
     try {
       const result = await axiosInstance.put(`/public/save`, {
@@ -32,6 +58,7 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
+
   const fetchSavedPostsGroup = async () => {
     try {
       const response = await axiosInstance.get(`/posts/saved/groups`, {
@@ -42,6 +69,7 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
+
   const createNewGroup = async (groupName) => {
     try {
       const response = await axiosInstance.post(
@@ -56,6 +84,7 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
+
   const addSavedPostToGroup = async ({ postId, groupName }) => {
     try {
       const response = await axiosInstance.put(
@@ -70,21 +99,36 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
-  const AddNewPost = async (newPost, signal) => {
+
+  const deleteSavedPostGroup = async (groupId) => {
     try {
-      const result = await axiosInstance.post(`/posts/add`, newPost, {
-        withCredentials: true,
-        signal: signal,
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const response = await axiosInstance.delete(
+        `/posts/saved/group/${groupId}`,
+        {
+          withCredentials: true,
         },
-      });
-      return result.data; // Return the actual data
+      );
+      return response.data;
     } catch (error) {
       throw error.response || error;
     }
   };
-  const Comments = async (comment) => {
+
+  const deleteSavedPostFromGroup = async ({ postId, groupId }) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/posts/saved/group/post/${postId}/${groupId}`,
+        {
+          withCredentials: true,
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
+  const comments = async (comment) => {
     try {
       const result = await axiosInstance.post(`/comment/new`, comment, {
         withCredentials: true,
@@ -94,8 +138,8 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
+
   const getComments = async ({ postId, pageParam }) => {
-    // console.log("fetch", postId);
     try {
       const result = await axiosInstance.get(`/comment/top/all`, {
         params: {
@@ -105,21 +149,12 @@ function usePostsApis() {
         },
         withCredentials: true,
       });
-      return result.data; // Return the actual data
+      return result.data;
     } catch (error) {
       throw error.response || error;
     }
   };
-  const hitLike = async (comtId) => {
-    try {
-      const result = await axiosInstance.get(`/comment/like/${comtId}`, {
-        withCredentials: true,
-      });
-      return result.data; // Return the actual data
-    } catch (error) {
-      throw error.response || error;
-    }
-  };
+
   const getReplies = async ({ topCommentId, postId, pageParam }) => {
     try {
       const result = await axiosInstance.get(`/comment/replys/all`, {
@@ -136,6 +171,18 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
+
+  const hitLike = async (comtId) => {
+    try {
+      const result = await axiosInstance.get(`/comment/like/${comtId}`, {
+        withCredentials: true,
+      });
+      return result.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
   const pinComment = async (data) => {
     try {
       const result = await axiosInstance.put(`/comment/pin`, data);
@@ -144,25 +191,7 @@ function usePostsApis() {
       throw error.response || error;
     }
   };
-  const getAiGenAnalysis = async (data) => {
-    try {
-      const result = await axiosInstance.post(`/ai/analysis`, data, {
-        headers: { "Content-Type": "application/json" },
-      });
-      return result.data;
-    } catch (error) {
-      throw error.response || error;
-    }
-  };
-  const getAiGenTags = async (data) => {
-    try {
-      const result = await axiosInstance.post(`/ai/tags`, data);
 
-      return result.data;
-    } catch (error) {
-      throw error.response || error;
-    }
-  };
   const deleteComtApi = async (commentId) => {
     try {
       const result = await axiosInstance.delete(
@@ -177,37 +206,44 @@ function usePostsApis() {
     }
   };
 
-  const DeletePostApi = async (id) => {
+  const getAiGenAnalysis = async (data) => {
     try {
-      const response = await axiosInstance.delete(`/posts/delete/${id.trim()}`);
-
-      // console.log("DeletePostApi response:", response);
-      return response.data; // Return the actual data
+      const result = await axiosInstance.post(`/ai/analysis`, data, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return result.data;
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        // localStorage.removeItem("userAccount");
-        localStorage.removeItem("AccessToken");
-      }
+      throw error.response || error;
+    }
+  };
+
+  const getAiGenTags = async (data) => {
+    try {
+      const result = await axiosInstance.post(`/ai/tags`, data);
+      return result.data;
+    } catch (error) {
       throw error.response || error;
     }
   };
 
   return {
-    DeletePostApi,
-    AddNewPost,
     fetchPostsFeed,
+    addNewPost,
+    deletePostApi,
+    savePost,
     fetchSavedPostsGroup,
-    getComments,
-    Comments,
-    hitLike,
-    getReplies,
-    pinComment,
-    deleteComtApi,
-    getAiGenTags,
-    getAiGenAnalysis,
     createNewGroup,
     addSavedPostToGroup,
-    savePost,
+    deleteSavedPostGroup,
+    deleteSavedPostFromGroup,
+    comments,
+    getComments,
+    getReplies,
+    hitLike,
+    pinComment,
+    deleteComtApi,
+    getAiGenAnalysis,
+    getAiGenTags,
   };
 }
 

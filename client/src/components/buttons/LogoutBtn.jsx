@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { setIsLogin, setloginPop, setUser } from "../../store/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";

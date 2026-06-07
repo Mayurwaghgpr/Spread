@@ -9,7 +9,7 @@ import {
   QueryClient,
   QueryClientProvider,
   QueryErrorResetBoundary,
-} from "react-query";
+} from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorBoundaryFallback from "./components/errors/ErrorBoundaryFallback.jsx";
 const queryClient = new QueryClient();
@@ -36,5 +36,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

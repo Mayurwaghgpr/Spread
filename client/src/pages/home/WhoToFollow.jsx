@@ -4,24 +4,22 @@ import ProfileListItemLoadingSkeleton from "../../components/loaders/ProfileList
 import SubHeading from "../../components/texts/SubHeading";
 import Paragraph from "../../components/texts/Paragraph";
 import ProfileImage from "../../components/ProfileImage";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import Heading from "../../components/texts/Heading";
 import UserPopover from "../../components/utilityComp/UserPopover";
 import usePublicApis from "../../services/publicApis";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 function WhoToFollow({ className }) {
   const { fetchQuickUserSuggestion } = usePublicApis();
 
-  const { data: userSuggetion, isLoading } = useQuery(
-    "user_suggestion",
-    fetchQuickUserSuggestion,
-    {
-      refetchOnMount: false,
-      staleTime: 10 * 60 * 1000,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const { data: userSuggetion, isLoading } = useQuery({
+    queryKey: ["user_suggestion"],
+    queryFn: fetchQuickUserSuggestion,
+    refetchOnMount: false,
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <div className={className}>

@@ -2,9 +2,9 @@ import express from "express";
 import {
   getPostPreview,
   getPostView,
-  AddNewPost,
-  EditPost,
-  DeletePost,
+  addNewPost,
+  editPost,
+  deletePost,
   getSavedPost,
   getPostPreviewByUserFollowings,
   addSavedPostToGroup,
@@ -28,17 +28,21 @@ router.get("/saved", IsAuth, getSavedPost);
 router.get("/:id", getPostView);
 
 // Route to add a new post
-router.post("/add", IsAuth, multerFileUpload, AddNewPost);
+router.post("/add", IsAuth, multerFileUpload, addNewPost);
 router.post("/saved/new/group", IsAuth, createGroup);
 
 // Route to edit an existing post by ID
-router.patch("/:id", IsAuth, multerFileUpload, EditPost);
+router.patch("/:id", IsAuth, multerFileUpload, editPost);
 
 router.put("/saved/group", IsAuth, addSavedPostToGroup);
 
 // Route to delete a post by ID
-router.delete("/delete/:postId", IsAuth, DeletePost);
-router.delete("/saved/group", IsAuth, deleteSavedPostGroup);
-router.delete("/saved/group/post", IsAuth, deleteSavedPostFromGroup);
+router.delete("/delete/:postId", IsAuth, deletePost);
+router.delete("/saved/group/:groupId", IsAuth, deleteSavedPostGroup);
+router.delete(
+  "/saved/group/post/:postId/:groupId",
+  IsAuth,
+  deleteSavedPostFromGroup,
+);
 
 export default router;

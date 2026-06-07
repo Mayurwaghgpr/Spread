@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import usePublicApis from "../../services/publicApis";
 import { setToast } from "../../store/slices/uiSlice";
@@ -23,7 +23,8 @@ function Follow({ className, person }) {
   }, [user, person?.id]);
 
   // Follow mutation
-  const { mutate, isLoading: isLoading } = useMutation(followUser, {
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationFn: followUser,
     onSuccess: (data) => {
       invalidateQueries();
       dispatch(

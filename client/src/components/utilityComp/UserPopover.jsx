@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { CheckCircle, MapPin, Calendar, ExternalLink } from "lucide-react";
-import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import Follow from "../buttons/follow";
 import FormatedTime from "./FormatedTime";
 import useIcons from "../../hooks/useIcons";
@@ -169,7 +169,7 @@ const UserPopover = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 UserPopover.displayName = "UserPopover";

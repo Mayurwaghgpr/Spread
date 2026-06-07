@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { setElements } from "../../../store/slices/postSlice";
 import { setToast } from "../../../store/slices/uiSlice";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import PostsApis from "../../../services/usePostsApis";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import Spinner from "../../../components/loaders/Spinner";
@@ -23,7 +23,8 @@ function PostPreviewEditor() {
   const { elements } = useSelector((state) => state.posts);
   const { AddNewPost } = PostsApis();
 
-  const mutation = useMutation((NewPosts) => AddNewPost(NewPosts), {
+  const mutation = useMutation({
+    mutationFn: (NewPosts) => AddNewPost(NewPosts),
     onSuccess: (response) => {
       // queryClient.invalidateQueries(["posts"]);
       dispatch(
@@ -153,16 +154,16 @@ function PostPreviewEditor() {
               <button
                 onClick={() => handeSubmit("fetch")}
                 className={`flex gap-2 ${
-                  mutation.isLoading && " opacity-50 "
+                  mutation.isPending && " opacity-50 "
                 } dark:bg-white dark:text-black text-white bg-oplight px-4 py-2 rounded-full`}
-                disabled={mutation.isLoading}
+                disabled={mutation.isPending}
               >
-                {mutation.isLoading && (
+                {mutation.isPending && (
                   <Spinner
                     className={" w-5 h-5 p-0.5 bg-black dark:bg-white"}
                   />
                 )}
-                {mutation.isLoading ? `Submitting...` : "Submit"}
+                {mutation.isPending ? `Submitting...` : "Submit"}
               </button>
 
               <Link

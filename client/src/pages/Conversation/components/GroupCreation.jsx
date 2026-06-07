@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CommonInput from "../../../components/inputComponents/CommonInput.jsx";
 import SelectedGroupMemberList from "./SelectedGroupMemberList.jsx";
 import Ibutton from "../../../components/buttons/Ibutton.jsx";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import ChatApi from "../../../services/ChatApi.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../store/slices/uiSlice.js";
@@ -19,25 +19,22 @@ function GroupCreation({ handleGroupConfig, hashMap, users }) {
     membersArr: [],
   });
   const { createGroup } = ChatApi();
-  const { mutate } = useMutation(
-    ["GroupCreation"],
-    () => createGroup(groupConfig),
-    {
-      onSuccess: (data) => {
-        sessionStorage.setItem(
-          "conversationMeta",
-          JSON.stringify(data.newGroupConversation)
-        );
-        // console.log(first);
-        dispatch(selectConversation(data.newGroupConversation));
-        navigate(`c?Id=${data.newGroupConversation.id}`, { replace: true });
-        dispatch(setToast({ message: data.message, type: "success" }));
-      },
-      onError: (error) => {
-        dispatch(setToast({ message: error.data.message, type: "error" }));
-      },
-    }
-  );
+  const { mutate } = useMutation({
+    mutationFn: () => createGroup(groupConfig),
+    onSuccess: (data) => {
+      sessionStorage.setItem(
+        "conversationMeta",
+        JSON.stringify(data.newGroupConversation)
+      );
+      // console.log(first);
+      dispatch(selectConversation(data.newGroupConversation));
+      navigate(`c?Id=${data.newGroupConversation.id}`, { replace: true });
+      dispatch(setToast({ message: data.message, type: "success" }));
+    },
+    onError: (error) => {
+      dispatch(setToast({ message: error.data.message, type: "error" }));
+    },
+  });
   useEffect(() => {
     const usersObjArry = users
       ?.map((userInMap) => hashMap[userInMap.id])

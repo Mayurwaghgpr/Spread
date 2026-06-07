@@ -5,7 +5,7 @@ import { setOpenNotification } from "../../store/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
 import FedInBtn from "../buttons/FedInBtn";
 import notificationApi from "../../services/notificationApi";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useSocket from "../../hooks/useSocket";
 import { useEffect } from "react";
 

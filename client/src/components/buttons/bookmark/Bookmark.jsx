@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +22,8 @@ function Bookmark({ className, post, children }) {
     [user?.savedPostsList, post?.id],
   );
 
-  const savePostMutation = useMutation(({ postId }) => savePost({ postId }), {
+  const savePostMutation = useMutation({
+    mutationFn: ({ postId }) => savePost({ postId }),
     onSuccess: (data) => {
       // dispatch(setUser({ ...user, savedPostsList: data.savedPostsList }));
       queryClient.invalidateQueries(["loggedInUser"]);
@@ -44,24 +45,22 @@ function Bookmark({ className, post, children }) {
       setOptimisticId(false); // Revert optimistic update on error
     },
   });
-  const addtoGroupMutation = useMutation(
-    ({ postId, groupName }) => addSavedPostToGroup({ postId, groupName }),
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries(["loggedInUser"]);
-        dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
-      },
-      onError: (error) => {
-        setOptimisticId(false); // Revert optimistic update on error
-        dispatch(
-          setToast({
-            message: error.data?.message || "Failed to update bookmark",
-            type: "error",
-          }),
-        );
-      },
+  const addtoGroupMutation = useMutation({
+    mutationFn: ({ postId, groupName }) => addSavedPostToGroup({ postId, groupName }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["loggedInUser"]);
+      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
     },
-  );
+    onError: (error) => {
+      setOptimisticId(false); // Revert optimistic update on error
+      dispatch(
+        setToast({
+          message: error.data?.message || "Failed to update bookmark",
+          type: "error",
+        }),
+      );
+    },
+  });
   const handleBookmark = useCallback(
     (e) => {
       e.stopPropagation();
@@ -91,7 +90,7 @@ function Bookmark({ className, post, children }) {
         id="bookmark"
         onClick={handleBookmark}
         aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-        disabled={savePostMutation.isLoading}
+        disabled={savePostMutation.isPending}
       >
         {icon}
         {children}

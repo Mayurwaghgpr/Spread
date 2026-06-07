@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 
 import ProfileImage from "../../../components/ProfileImage";

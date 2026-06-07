@@ -2,6 +2,11 @@ import { memo, useRef } from "react";
 import { Link } from "react-router-dom";
 import Menu from "../../../components/menus/Menu";
 import useClickOutside from "../../../hooks/useClickOutside";
+import { useMutation } from "@tanstack/react-query";
+import usePostsApis from "../../../services/usePostsApis";
+import { useQueryClient } from "@tanstack/react-query";
+import { setToast } from "../../../store/slices/uiSlice";
+import { useDispatch } from "react-redux";
 
 function GroupCard({
   onClick,
@@ -13,7 +18,24 @@ function GroupCard({
   groupId,
 }) {
   const menuRef = useRef(null);
+  const dispatch = useDispatch();
   const { menuId, setMenuId } = useClickOutside(menuRef);
+  const { deleteSavedPostGroup } = usePostsApis();
+  const queryClient = useQueryClient();
+  const { mutate: deleteGroupMutate } = useMutation({
+    mutationFn: deleteSavedPostGroup,
+    onSuccess: () => {
+      queryClient.invalidateQueries("SavedPostGroups");
+      dispatch(
+        setToast({ type: "success", message: "Group deleted successfully" }),
+      );
+      setMenuId(null);
+    },
+    onError: (error) => {
+      console.error("Error deleting group:", error);
+    },
+  });
+
   return (
     <div
       className={` border rounded-xl space-y-3 ${className} border-inherit  `}
@@ -33,7 +55,7 @@ function GroupCard({
               {
                 id: "delete",
                 icon: "delete",
-                action: () => {},
+                action: () => deleteGroupMutate(groupId),
                 itemName: "Delete Group",
               },
             ]}

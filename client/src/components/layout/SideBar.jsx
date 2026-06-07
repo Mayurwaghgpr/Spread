@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { setMenuOpen } from "../../store/slices/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import useIcons from "../../hooks/useIcons";
 import LogoutBtn from "../buttons/LogoutBtn";
 import ProfileImage from "../ProfileImage";

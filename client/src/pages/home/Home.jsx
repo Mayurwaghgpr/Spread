@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import PostPreview from "../../components/postsComp/PostPreview";
 import Spinner from "../../components/loaders/Spinner";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";

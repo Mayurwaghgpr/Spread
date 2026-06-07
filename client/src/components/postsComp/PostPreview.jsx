@@ -16,11 +16,11 @@ import Menu from "../menus/Menu";
 import { setCommentCred } from "../../store/slices/postSlice";
 
 import ProfileImage from "../ProfileImage";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import useIcons from "../../hooks/useIcons";
 import useClickOutside from "../../hooks/useClickOutside";
 import useMenuConstant from "../../hooks/useMenuConstant";
-import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import FedInBtn from "../buttons/FedInBtn";
 
 const PostPreview = forwardRef(({ post, className, Saved }, ref) => {

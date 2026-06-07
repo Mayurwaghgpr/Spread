@@ -1,5 +1,5 @@
 import React, { memo, useState, useCallback, useRef, useEffect } from "react";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { debounce } from "../../utils/debounce";
 import usePublicApis from "../../services/publicApis";

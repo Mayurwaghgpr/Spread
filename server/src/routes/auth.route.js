@@ -22,7 +22,6 @@ router.get(
     scope: ["profile", "email"],
     session: false,
     prompt: "select_account",
-    successRedirect: process.env.FRONT_END_URL,
   })
 );
 
@@ -31,7 +30,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: process.env.FRONT_END_URL + "signin",
+    failureRedirect: process.env.FRONT_END_URL + "/heroes",
   }),
   googleAuth
 );
@@ -51,7 +50,7 @@ router.get(
   "/github/callback",
   passport.authenticate("github", {
     session: false,
-    failureRedirect: process.env.FRONT_END_URL + "signin",
+    failureRedirect: process.env.FRONT_END_URL + "/heroes",
   }),
   gitHubAuth
 );

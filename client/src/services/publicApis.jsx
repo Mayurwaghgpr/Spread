@@ -38,6 +38,20 @@ function usePublicApis() {
     }
   };
 
+  // Fetch home content (user suggestions and tags combined)
+  const fetchHomeContent = async () => {
+    try {
+      const [userSuggetion, tags] = await Promise.all([
+        fetchQuickUserSuggestion(),
+        fetchQuickTags(),
+      ]);
+      return { userSuggetion, tags };
+    } catch (error) {
+      console.error("Error fetching home content:", error);
+      throw error.response || error;
+    }
+  };
+
   // Fetch data by post ID
   const fetchPostById = async (id) => {
     try {
@@ -114,6 +128,7 @@ function usePublicApis() {
   };
 
   return {
+    fetchHomeContent,
     fetchQuickUserSuggestion,
     fetchQuickTags,
     fetchPostById,

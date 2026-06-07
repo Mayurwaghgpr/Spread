@@ -1,7 +1,7 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import ChatApi from "../../services/ChatApi";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import {
@@ -31,22 +31,25 @@ function MessageLog() {
     fetchNextPage,
     hasNextPage,
     isLoading,
-  } = useInfiniteQuery(
-    ["convesationsLog"],
-    ({ pageParam = new Date().toISOString() }) =>
+    data: conversationsData,
+  } = useInfiniteQuery({
+    queryKey: ["convesationsLog"],
+    queryFn: ({ pageParam = new Date().toISOString() }) =>
       getConversations({ pageParam }),
-    {
-      onSuccess: (data) => {
-        dispatch(setConversationLogData(data?.pages?.flatMap((page) => page)));
-      },
-      getNextPageParam: (lastPage) => {
-        return lastPage.length !== 0
-          ? lastPage[lastPage.length - 1].createdAt
-          : undefined; // Use last item timestamp as cursor
-      },
-      refetchOnWindowFocus: false,
+    getNextPageParam: (lastPage) => {
+      return lastPage.length !== 0
+        ? lastPage[lastPage.length - 1].createdAt
+        : undefined; // Use last item timestamp as cursor
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  // Handle data with useEffect instead of deprecated onSuccess
+  useEffect(() => {
+    if (conversationsData) {
+      dispatch(setConversationLogData(conversationsData?.pages?.flatMap((page) => page)));
     }
-  );
+  }, [conversationsData, dispatch]);
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,

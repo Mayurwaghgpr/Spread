@@ -38,7 +38,7 @@ function Footer() {
                 rel="noopener noreferrer"
               >
                 <span className="  text-xs transition-colors duration-200">
-                  {icons["linkedLine"]}
+                  {icons["linkedin"]}
                 </span>
               </Link>
 

@@ -1,11 +1,12 @@
 import Comments from "../models/comments.model.js";
 import LikeComment from "../models/likeComment.model.js";
 import User from "../models/user.model.js";
+import Post from "../models/posts/posts.model.js";
 import Database from "../config/database.js";
 import sequelize from "sequelize";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
-// import { io } from "../app.js";
+import { createNotification } from "../services/notification.service.js";
 
 //Create Comment
 export const createComment = async (req, res, next) => {
@@ -13,6 +14,10 @@ export const createComment = async (req, res, next) => {
   const { postId, replyTo, content, topCommentId } = req.body;
 
   try {
+    if (!postId || !content || !content.trim()) {
+      return res.status(400).json({ message: "Post ID and content are required." });
+    }
+
     // Create the comment first
     const respons = await Comments.create({
       postId,
@@ -21,6 +26,19 @@ export const createComment = async (req, res, next) => {
       topCommentId,
       replyTo,
     });
+
+    // Notify post author or reply target author
+    const targetPost = await Post.findByPk(postId, { attributes: ["authorId"] });
+    if (targetPost?.authorId) {
+      createNotification({
+        receiverId: targetPost.authorId,
+        actorId: userId,
+        type: "comment",
+        entityId: postId,
+        entityType: "post",
+        message: `${req.authUser.displayName} commented on your post.`,
+      });
+    }
     
     // Try to update cache if post exists in cache
     const cachedPost = await redisClient.get(postId);
@@ -187,11 +205,21 @@ export const likeComment = async (req, res, next) => {
         likedBy: req.authUser.id,
         commentId,
       });
+      const targetComment = await Comments.findByPk(commentId, { attributes: ["userId", "postId"] });
+      if (targetComment?.userId) {
+        createNotification({
+          receiverId: targetComment.userId,
+          actorId: req.authUser.id,
+          type: "like",
+          entityId: targetComment.postId,
+          entityType: "comment",
+          message: `${req.authUser.displayName} liked your comment.`,
+        });
+      }
       const updtCommentLikes = await LikeComment.findAll({
         where: { commentId },
         attributes: ["likedBy", "commentId"],
       });
-      // console.log('like',result);
       res.status(201).json({ message: "Liked", updtCommentLikes });
     }
   } catch (error) {

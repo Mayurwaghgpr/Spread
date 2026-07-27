@@ -49,20 +49,28 @@ function App() {
   //   [pathname, isLogin]
   // );
 
-  // Handle system theme changes
+  // Unified theme management
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
-    const handleSystemThemeChange = (e) => {
-      setSystemTheme(e.matches);
+    const applyTheme = () => {
+      const activeMode = ThemeMode || "system";
+      const isDarkMode =
+        activeMode === "dark" ||
+        (activeMode === "system" && mediaQuery.matches);
+
+      if (isDarkMode) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     };
 
-    mediaQuery.addEventListener("change", handleSystemThemeChange);
+    applyTheme();
 
-    return () => {
-      mediaQuery.removeEventListener("change", handleSystemThemeChange);
-    };
-  }, []);
+    mediaQuery.addEventListener("change", applyTheme);
+    return () => mediaQuery.removeEventListener("change", applyTheme);
+  }, [ThemeMode]);
 
   // Handle socket registration
   useEffect(() => {
@@ -70,19 +78,6 @@ function App() {
       socket.emit("register", user.id);
     }
   }, [socket, user?.id]);
-
-  // Handle theme changes
-  useEffect(() => {
-    const isDarkMode =
-      ThemeMode === "dark" || (ThemeMode === "system" && systemTheme);
-    document.documentElement.classList.toggle("dark", isDarkMode);
-
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, ThemeMode);
-    } catch (error) {
-      console.warn("Failed to save theme preference:", error);
-    }
-  }, [ThemeMode, systemTheme]);
 
   return (
     <>

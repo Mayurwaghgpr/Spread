@@ -5,24 +5,47 @@
 @tailwind utilities;
 
 
-:root{
-  --dark-color:black;
-  --d-accent-color: rgb(18, 18, 18);
-  --light-color:#fff9f3;
-  --l-accent-color:#f5f1ec;
-  --opposite-light:#2f3a47;
-  /* --dark-color: rgb(17 24 39 / 0.95);
-    --light-color: rgb(255 255 255 / 0.95); */
+:root {
+  --dark-color: #080808;
+  --d-accent-color: #121212;
+  --light-color: #fff9f3;
+  --l-accent-color: #f5f1ec;
+  --opposite-light: #2f3a47;
+
+  --bg-primary: var(--light-color);
+  --bg-secondary: var(--l-accent-color);
+  --text-primary: #1c1917;
+  --text-secondary: #78716c;
+  --border-color: #d8cebe;
 }
-html{
-    scroll-behavior: smooth;
+
+.dark {
+  --bg-primary: var(--dark-color);
+  --bg-secondary: var(--d-accent-color);
+  --text-primary: #f5f1ec;
+  --text-secondary: #a8a29e;
+  --border-color: #2a2a2a;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition-property: background-color, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
 
+.focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900;
+}
 
+.skeleton-shimmer {
+  @apply animate-pulse bg-gray-200/80 dark:bg-gray-800/80 rounded-md;
 }
 
 code,
@@ -30,7 +53,7 @@ pre {
   font-family: 'Fira Code', Menlo, Monaco, Consolas, monospace;
 }
 .nunito {
-  font-family: "Nunito", serif;
+  font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -41,9 +64,11 @@ pre {
   font-style: normal;
 }
 body {
-  background-color: #fff9f3;
-  color: black;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
   scroll-behavior: smooth;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .popover-container {

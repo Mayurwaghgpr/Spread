@@ -71,14 +71,14 @@ function SideBar() {
       onClick={closeMenu}
       className={`fixed sm:static left-0 top-0 h-full w-full sm:w-auto sm:bg-laccent sm:dark:bg-daccent z-50 xl:z-30
         border-r border-inherit bg-dark/40 backdrop-blur-[1px]
-        transition-all duration-500 ease-in-out
+        transition-opacity duration-300 ease-in-out
         ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none sm:opacity-100 sm:pointer-events-auto"}
       `}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className={`flex flex-col justify-between items-center h-full bg-laccent dark:bg-daccent 
-          transition-all duration-500 ease-in-out sm:rounded-none rounded-r-2xl overflow-hidden xl:p-0 sm:px-3 pr-10 pl-5 pb-10
+          transition-transform duration-300 ease-in-out sm:rounded-none rounded-r-2xl overflow-hidden xl:p-0 sm:px-3 pr-10 pl-5 pb-10
           ${menuOpen ? "animate-slide-in-left sm:animate-none w-fit xl:w-[280px]" : "animate-slide-out-left sm:animate-none w-fit xl:w-0"}
         `}
       >
@@ -91,14 +91,14 @@ function SideBar() {
                 to={
                   user?.profileLink || `/profile/@${user.username}/${user.id}`
                 }
-                className="group flex items-center gap-3 w-full px-4 py-3 rounded-2xl transition-all duration-200 hover:bg-gradient-to-r"
+                className="group flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-200 hover:bg-gray-200/50 dark:hover:bg-gray-800/50 focus-ring"
               >
                 <div
-                  className={`relative ${!userImageurl && "bg-gray-300  dark:bg-gray-300/50 h-5 w-5 rounded-full"}`}
+                  className={`relative ${!userImageurl && "bg-gray-300 dark:bg-gray-700 h-6 w-6 rounded-full"}`}
                 >
                   {userImageurl && (
                     <ProfileImage
-                      className="h-5 w-5 ring-2 rounded-full ring-gray-200 dark:ring-slate-700 group-hover:ring-blue-300 dark:group-hover:ring-blue-600 transition-all duration-200"
+                      className="h-6 w-6 rounded-full border border-gray-200 dark:border-gray-700 object-cover"
                       image={userImageurl}
                       alt={user?.username}
                       title="user profile"
@@ -111,12 +111,12 @@ function SideBar() {
                   className={`${
                     user?.displayName
                       ? ""
-                      : "w-[7rem] bg-gray-300  dark:bg-gray-300/50   h-4 rounded-lg animate-pulse"
+                      : "w-[7rem] bg-gray-300 dark:bg-gray-700 h-4 rounded-lg animate-pulse"
                   } xl:block sm:hidden block text-nowrap text-xs`}
                 >
-                  {user?.displayName && <h1>{user.displayName}</h1>}
+                  {user?.displayName && <h1 className="font-semibold text-gray-900 dark:text-gray-100">{user.displayName}</h1>}
                   {user?.username && (
-                    <p className="text-gray-500 dark:text-gray-400 xl:block hidden">
+                    <p className="text-gray-500 dark:text-gray-400 text-[11px] xl:block hidden">
                       @{user.username}
                     </p>
                   )}
@@ -125,7 +125,7 @@ function SideBar() {
 
               {/* Collapse Button */}
               <button
-                className="xl:block hidden text-xl"
+                className="xl:block hidden text-lg text-gray-500 hover:text-gray-900 dark:hover:text-white p-1 rounded-lg focus-ring"
                 onClick={() => dispatch(setMenuOpen())}
                 aria-label="Close sidebar"
               >
@@ -141,17 +141,17 @@ function SideBar() {
                 <LinkBtn
                   key={link.id}
                   stub={link.stub}
-                  className={`group flex items-center gap-4 rounded-2xl w-full px-4 py-3 text-sm capitalize transition-all duration-200
-                  hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-slate-800/50 dark:hover:to-slate-700/50
+                  className={`group flex items-center gap-4 rounded-xl w-full px-4 py-3 text-sm capitalize transition-all duration-200 focus-ring
+                  hover:bg-gray-200/60 dark:hover:bg-gray-800/60
                   text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white
-                  ${active ? "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-slate-800/40 dark:to-slate-700/40" : ""}
+                  ${active ? "bg-gray-200/80 dark:bg-gray-800/80 text-gray-900 dark:text-white font-semibold" : ""}
                 `}
                 >
                   <div
-                    className={`transition-all duration-200 ${
+                    className={`transition-all duration-200 flex justify-center items-center w-6 h-6 ${
                       active
-                        ? "scale-110"
-                        : "group-hover:scale-110 group-hover:text-oplight dark:group-hover:text-oplight"
+                        ? "scale-105"
+                        : "group-hover:scale-105"
                     }`}
                   >
                     {icons[active ? link.icon2 : link.icon1]}
@@ -167,7 +167,7 @@ function SideBar() {
             })}
           </div>
           {/* Logout Button */}
-          <LogoutBtn className="group text-sm flex items-center gap-4 px-4 py-3 w-full rounded-2xl text-gray-500 dark:text-gray-400 transition-all duration-200 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:scale-[1.02] hover:shadow-md" />
+          <LogoutBtn className="group text-sm flex items-center gap-4 px-4 py-3 w-full rounded-xl text-gray-500 dark:text-gray-400 transition-all duration-200 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 focus-ring" />
         </div>
       </div>
     </aside>

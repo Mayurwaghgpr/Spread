@@ -56,6 +56,7 @@ function usePublicApis() {
   const fetchPostById = async (id) => {
     try {
       const response = await axiosInstance.get(`/posts/${id}`);
+      console.log("response.data", response)
       return response.data;
     } catch (error) {
       console.error("Error fetching post by ID:", error);

@@ -12,7 +12,7 @@ function BookmarkBox({ postId, mutation }) {
   const { addSavedPostToGroup, fetchSavedPostsGroup } = usePostsApis();
 
   const { data } = useQuery({
-    queryKey: "SavedPostGroups",
+    queryKey: ["SavedPostGroups"],
     queryFn: fetchSavedPostsGroup,
   });
 

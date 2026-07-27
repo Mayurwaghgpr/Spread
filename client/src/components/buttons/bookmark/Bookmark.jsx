@@ -46,7 +46,8 @@ function Bookmark({ className, post, children }) {
     },
   });
   const addtoGroupMutation = useMutation({
-    mutationFn: ({ postId, groupName }) => addSavedPostToGroup({ postId, groupName }),
+    mutationFn: ({ postId, groupName }) =>
+      addSavedPostToGroup({ postId, groupName }),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["loggedInUser"]);
       dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
@@ -97,8 +98,8 @@ function Bookmark({ className, post, children }) {
       </FedInBtn>
 
       <BookmarkBox
-        postId={post.id}
-        userId={post.author.id}
+        postId={post?.id}
+        userId={post?.author?.id}
         mutation={addtoGroupMutation.mutate}
       />
     </div>

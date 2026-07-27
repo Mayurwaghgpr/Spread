@@ -8,27 +8,29 @@ import React, {
   useEffect,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { setCommentCred } from "../../store/slices/postSlice";
 
 import PostsApis from "../../services/usePostsApis";
 import { setToast } from "../../store/slices/uiSlice";
 import Spinner from "../../components/loaders/Spinner";
+import ButtonSpinner from "../../components/loaders/ButtonSpinner";
 import ProfileImage from "../../components/ProfileImage";
 import Ibutton from "../../components/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
 import data from "@emoji-mart/data";
 const Picker = lazy(() => import("@emoji-mart/react"));
 import EditableElementInput from "../../components/inputComponents/EditableElementInput";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function CommentInput({ className }) {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const { commentCred } = useSelector((state) => state.posts);
+  const { commentCred, postViewData } = useSelector((state) => state.posts);
   const { ThemeMode } = useSelector((state) => state.ui);
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-  const { Comments } = PostsApis();
+  const { comments: commentsApi, Comments: CommentsApi } = PostsApis();
+  const sendCommentApi = commentsApi || CommentsApi;
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const userImage = userImageSrc(user);
@@ -37,11 +39,10 @@ function CommentInput({ className }) {
   const inputRef = useRef();
   const icons = useIcons();
   const navigate = useNavigate();
+  const { id: routePostId } = useParams();
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: () => {
-      Comments(commentCred);
-    },
+    mutationFn: (payload) => sendCommentApi(payload || commentCred),
     onSuccess: () => {
       dispatch(
         setCommentCred({
@@ -51,11 +52,20 @@ function CommentInput({ className }) {
           replyTo: null,
         })
       );
-      inputRef.current.innerText = "";
+      if (inputRef.current) inputRef.current.innerText = "";
       dispatch(
         setToast({ message: "You commented on this post", type: "success" })
       );
       queryClient.invalidateQueries(["TopComments"]);
+    },
+    onError: (error) => {
+      dispatch(
+        setToast({
+          message:
+            error?.data?.message || error?.message || "Failed to send comment",
+          type: "error",
+        })
+      );
     },
   });
 
@@ -75,8 +85,23 @@ function CommentInput({ className }) {
     if (!isLogin) {
       return navigate("/auth/signin");
     }
-    mutate();
-  }, []);
+    const targetPostId = commentCred.postId || postViewData?.id || routePostId;
+    if (!targetPostId) {
+      dispatch(setToast({ message: "Post ID is missing", type: "error" }));
+      return;
+    }
+    if (!commentCred.content || !commentCred.content.trim()) {
+      dispatch(
+        setToast({ message: "Comment content cannot be empty", type: "error" })
+      );
+      return;
+    }
+    mutate({
+      ...commentCred,
+      postId: targetPostId,
+      content: commentCred.content.trim(),
+    });
+  }, [isLogin, commentCred, postViewData, routePostId, mutate, navigate, dispatch]);
 
   const handleEmojiSelect = (emoji) => {
     // Insert emoji at cursor position or append to end
@@ -159,13 +184,14 @@ function CommentInput({ className }) {
             )}
           </Suspense>
         </div>
+
         <Ibutton
           action={handleSend}
           disabled={isLoading || !commentCred.content.trim()}
           className={`${!commentCred.content.trim() && "text-gray-300"} text-2xl rounded-full p-2`}
         >
           {isLoading ? (
-            <Spinner className={"w-5 h-5 dark:bg-white bg-black"} />
+            <ButtonSpinner className="w-5 h-5 text-gray-700 dark:text-white" />
           ) : (
             icons["sendO"]
           )}

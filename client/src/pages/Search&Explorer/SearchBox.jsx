@@ -1,7 +1,7 @@
 import React, { memo, useState, useCallback, useRef, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { debounce } from "../../utils/debounce";
+import { debounce } from "../../utils/functions/debounce";
 import usePublicApis from "../../services/publicApis";
 import Spinner from "../../components/loaders/Spinner";
 import SearchBar from "../../components/inputComponents/SearchBar";

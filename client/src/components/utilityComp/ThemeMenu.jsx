@@ -10,34 +10,8 @@ function ThemeMenu({ className }) {
   const { ThemeMode } = useSelector((state) => state.ui);
 
   const handeltheme = (mode) => {
-    document.documentElement.classList.add(mode);
-    localStorage.setItem("ThemeMode", mode);
     dispatch(setThemeMode(mode));
   };
-
-  useEffect(() => {
-    document.body.classList.add("overflow-hidden");
-    return () => {
-      document.body.classList.remove("overflow-hidden");
-    };
-  }, [dispatch]);
-
-  // Handle dark mode based on ThemeMode
-  useMemo(() => {
-    if (ThemeMode === "dark") {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("ThemeMode", "dark");
-    } else if (ThemeMode === "light") {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("ThemeMode", "light");
-    } else if (ThemeMode === "system") {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    }
-  }, [ThemeMode]);
 
   const Modes = [
     {

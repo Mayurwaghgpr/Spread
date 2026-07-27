@@ -49,17 +49,19 @@ const Notify = db.define("Notification", {
     defaultValue: "unread",
   },
 });
-Notify.afterCreate(async (notification, options) => {
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const oldNotifications = await Notify.destroy({
-    where: {
-      createdAt: {
-        [Op.gt]: thirtyDaysAgo,
+Notify.afterCreate(async (notification) => {
+  try {
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    await Notify.destroy({
+      where: {
+        createdAt: {
+          [Op.lt]: thirtyDaysAgo,
+        },
+        read: true,
       },
-      read: true,
-    },
-  });
-
-  oldNotifications;
+    });
+  } catch (error) {
+    console.error("Error in notification cleanup hook:", error);
+  }
 });
 export default Notify;

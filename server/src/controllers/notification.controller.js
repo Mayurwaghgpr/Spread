@@ -18,6 +18,7 @@ export const getNotifications = async (req, res, next) => {
           attributes: ["id", "displayName", "userImage"],
         },
       ],
+      order: [["createdAt", "DESC"]],
     });
     // Cache the notifications for 1 hour
     await redisClient.setEx(cacheKey, 3600, JSON.stringify(notifications));
@@ -46,6 +47,37 @@ export const getUnreadCount = async (req, res, next) => {
   } catch (error) {
     console.error("Error fetching unread count:", error);
     error.statusCode = 500; // Set a default status code
+    next(error);
+  }
+};
+
+export const markAsRead = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    await Notify.update(
+      { read: true, status: "read" },
+      { where: { id, receiverId: req.authUser.id } }
+    );
+    await redisClient.del(`notifications:${req.authUser.id}`);
+    await redisClient.del(`unreadCount:${req.authUser.id}`);
+    res.status(200).json({ success: true, message: "Marked as read" });
+  } catch (error) {
+    console.error("Error marking notification as read:", error);
+    next(error);
+  }
+};
+
+export const markAllAsRead = async (req, res, next) => {
+  try {
+    await Notify.update(
+      { read: true, status: "read" },
+      { where: { receiverId: req.authUser.id, read: false } }
+    );
+    await redisClient.del(`notifications:${req.authUser.id}`);
+    await redisClient.del(`unreadCount:${req.authUser.id}`);
+    res.status(200).json({ success: true, message: "All notifications marked as read" });
+  } catch (error) {
+    console.error("Error marking all notifications as read:", error);
     next(error);
   }
 };

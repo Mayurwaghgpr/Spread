@@ -17,14 +17,14 @@ function GroupBoard() {
   const { createNewGroup } = usePostsApis();
 
   const { data } = useQuery({
-    queryKey: "SavedPostGroups",
+    queryKey: ["SavedPostGroups"],
     queryFn: fetchSavedPostsGroup,
   });
 
   const { mutate } = useMutation({
     mutationFn: createNewGroup,
     onSuccess: () => {
-      queryClient.invalidateQueries("SavedPostGroups");
+      queryClient.invalidateQueries({ queryKey: ["SavedPostGroups"] });
       dispatch(
         setToast({ type: "success", message: "Group created successfully" }),
       );

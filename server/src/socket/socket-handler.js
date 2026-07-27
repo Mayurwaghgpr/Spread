@@ -10,6 +10,10 @@ export default function socketHandlers() {
     const { connectedUserId, activeConversationId } = socket.handshake.query;
     console.log(`Connected user: ${connectedUserId} (${socket.id})`);
     console.log(`active conv: `, activeConversationId);
+
+    if (connectedUserId) {
+      socket.join(`user:${connectedUserId}`);
+    }
     // Check and create room if server has restared and client is still in conversation
     const roomExists = io.sockets.adapter.rooms
       .get(activeConversationId)

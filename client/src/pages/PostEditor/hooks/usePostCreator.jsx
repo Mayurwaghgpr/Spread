@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector, useDispatch } from "react-redux";
 import { setElements } from "../../../store/slices/postSlice";
-import { debounce } from "../../../utils/debounce";
+import { debounce } from "../../../utils/functions/debounce";
 
 export const usePostCreator = () => {
   const { elements } = useSelector((state) => state.posts);

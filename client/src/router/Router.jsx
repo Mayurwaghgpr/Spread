@@ -214,6 +214,10 @@ function Router() {
         <Route path={ROUTES.POST_VIEW} element={<PostView />}>
           <Route path="comments" element={<CommentSection />} />
         </Route>
+        <Route path="/post/:id" element={<PostView />}>
+          <Route path="comments" element={<CommentSection />} />
+        </Route>
+        <Route path="/profile/:profileId" element={<Profile />} />
         <Route path="/analysis" element={<AIResponse />} />
 
         {/* Other Protected Routes */}

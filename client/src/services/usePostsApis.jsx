@@ -237,6 +237,7 @@ function usePostsApis() {
     deleteSavedPostGroup,
     deleteSavedPostFromGroup,
     comments,
+    Comments: comments,
     getComments,
     getReplies,
     hitLike,

@@ -13,6 +13,7 @@ import Menu from "../../components/menus/Menu";
 import ImageFigure from "../../components/utilityComp/ImageFigure";
 import FedInBtn from "../../components/buttons/FedInBtn";
 import LoaderScreen from "../../components/loaders/loaderScreen";
+import PostViewSkeleton from "../../components/loaders/PostViewSkeleton";
 
 // Hook imports
 import usePublicApis from "../../services/publicApis";
@@ -22,8 +23,8 @@ import useClickOutside from "../../hooks/useClickOutside";
 import useSocket from "../../hooks/useSocket";
 
 // Utility imports
-import userImageSrc from "../../utils/userImageSrc";
-import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import userImageSrc from "../../utils/functions/userImageSrc";
+import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import { setCommentCred, setPostViewData } from "../../store/slices/postSlice";
 import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import AIBtn from "../../components/buttons/AIBtn";
@@ -50,7 +51,6 @@ function PostView() {
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
   const { socket } = useSocket();
-  console.log(id);
   // Socket event handler for real-time comment updates
   useEffect(() => {
     if (!socket || !postViewData?.id) return;
@@ -74,21 +74,24 @@ function PostView() {
   }, [socket, postViewData?.id]);
 
   // Fetch Post Full View with React Query
-  const { isLoading, isError, error } = useQuery({
+  const { data: fetchedPostData, isLoading, isError, error } = useQuery({
     queryKey: ["FullPostData", id],
     queryFn: () => fetchPostById(id),
-    onSuccess: (data) => {
-      dispatch(setPostViewData(data));
-      dispatch(
-        setCommentCred({
-          ...commentCred,
-          postId: data?.id,
-        }),
-      );
-    },
     refetchOnWindowFocus: false,
     retry: false,
   });
+
+  useEffect(() => {
+    if (fetchedPostData) {
+      dispatch(setPostViewData(fetchedPostData));
+      dispatch(
+        setCommentCred({
+          ...commentCred,
+          postId: fetchedPostData?.id,
+        }),
+      );
+    }
+  }, [fetchedPostData, dispatch]);
   const { data: authorData } = useQuery({
     queryKey: ["author_details", postViewData?.author?.id],
     queryFn: () => fetchUserProfile(postViewData?.author?.id),
@@ -128,7 +131,6 @@ function PostView() {
     },
     [dispatch, postViewData.title],
   );
-
   // Error and loading states
   if (isError) {
     return (
@@ -140,10 +142,12 @@ function PostView() {
   }
 
   if (isLoading) {
-    return <LoaderScreen message="Loading post..." />;
+    return <>
+      <PostViewSkeleton />
+    </>
   }
   return (
-    <div className="relative flex justify-end items-start w-full h-screen overflow-auto px-2 sm:py-10 py-5  border-inherit transition-all duration-500 ">
+    <div className="relative flex justify-end items-start w-full h-screen overflow-auto px-2 sm:py-10 py-5 border-inherit">
       <article className="relative animate-fedin1s max-w-4xl w-full sm:px-4 px-2 flex flex-col justify-center items-center gap-5 border-inherit mb-40">
         <PostHeader
           postView={postViewData}

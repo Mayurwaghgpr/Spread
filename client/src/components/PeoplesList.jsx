@@ -1,6 +1,6 @@
 import { forwardRef, memo } from "react";
 // import { usePopper } from "react-popper";
-import userImageSrc from "../utils/userImageSrc";
+import userImageSrc from "../utils/functions/userImageSrc";
 import UserPopover from "./utilityComp/UserPopover";
 import ProfileImage from "./ProfileImage";
 

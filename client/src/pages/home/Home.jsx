@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import PostPreview from "../../components/postsComp/PostPreview";
 import Spinner from "../../components/loaders/Spinner";
+import PostCardSkeleton from "../../components/loaders/PostCardSkeleton";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import Aside from "../../components/layout/Aside";
 import usePostsApis from "../../services/usePostsApis";
@@ -138,11 +139,8 @@ function Home() {
 
   // Render loading skeletons
   const renderLoadingSkeletons = () =>
-    Array.from({ length: 10 }, (_, idx) => (
-      <PostPreview
-        key={`skeleton-${idx}`}
-        className="w-full border rounded-lg border-inherit"
-      />
+    Array.from({ length: 6 }, (_, idx) => (
+      <PostCardSkeleton key={`skeleton-${idx}`} />
     ));
 
   // Render loading/end state

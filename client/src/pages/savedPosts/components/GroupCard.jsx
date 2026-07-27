@@ -25,7 +25,7 @@ function GroupCard({
   const { mutate: deleteGroupMutate } = useMutation({
     mutationFn: deleteSavedPostGroup,
     onSuccess: () => {
-      queryClient.invalidateQueries("SavedPostGroups");
+      queryClient.invalidateQueries({ queryKey: ["SavedPostGroups"] });
       dispatch(
         setToast({ type: "success", message: "Group deleted successfully" }),
       );

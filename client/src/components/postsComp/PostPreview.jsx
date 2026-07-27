@@ -53,73 +53,76 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
   return (
     <article
       ref={ref}
-      className={`${className} border-inherit flex w-full flex-col max-h-[20rem]  rounded-lg`}
+      className={`${className} border border-[#d8cebe] dark:border-[#2a2a2a] bg-laccent/30 dark:bg-daccent/30 flex w-full flex-col max-h-[22rem] rounded-xl transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-700`}
     >
-      <div className="p-3 sm:p-4 md:p-6 flex leading-0 border-inherit flex-col justify-center gap-3 sm:gap-4 w-full">
+      <div className="p-4 sm:p-5 md:p-6 flex leading-0 flex-col justify-center gap-3 sm:gap-4 w-full">
         {/* Header with user profile */}
-        <header className="flex justify-start items-center border-inherit gap-2 sm:gap-3 text-xs sm:text-sm">
+        <header className="flex justify-between items-center gap-2 sm:gap-3 text-xs sm:text-sm">
           <Link
             to={`/profile/@${post?.author?.username}/${post?.author?.id}`}
-            className="flex items-center justify-center gap-2 sm:gap-3 min-w-0 flex-shrink-0"
+            className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 focus-ring rounded-lg"
           >
             <ProfileImage
-              className={` h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 hover:opacity-75 rounded-full `}
+              className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 hover:opacity-80 rounded-full border border-gray-200 dark:border-gray-700 object-cover"
               image={post && userImageurl}
             />
-            <div className="text-xs sm:text-sm rounded-lg flex min-w-0">
+            <div className="text-xs sm:text-sm flex flex-col min-w-0">
               {post ? (
-                <p className="capitalize underline-offset-4 hover:underline">
+                <p className="font-semibold text-gray-900 dark:text-gray-100 capitalize hover:underline">
                   {post?.author?.username}
                 </p>
               ) : (
-                <span className="w-16 sm:w-20 h-3 animate-pulse bg-gray-300  dark:bg-gray-300/50  bg-inherit rounded-xl"></span>
+                <span className="w-16 sm:w-20 h-3 animate-pulse bg-gray-300 dark:bg-gray-700 rounded-xl" />
               )}
             </div>
           </Link>
 
           {/* Topic - hide on very small screens */}
-          <h1 className="text-opacity-30 opacity-30 rounded-lg text-xs sm:text-sm truncate hidden xs:block">
-            {post?.topic}
-          </h1>
+          {post?.topic && (
+            <span className="px-2.5 py-1 text-[11px] font-medium rounded-full bg-gray-200/70 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 truncate">
+              {post?.topic}
+            </span>
+          )}
         </header>
 
         {/* Post content */}
         <Link
           to={`/view/@${post?.author?.username}/${post?.id}`}
-          className={`relative  ${post ? "cursor-pointer" : "cursor-not-allowed"} h-full border-inherit flex items-start justify-between gap-3 sm:gap-4`}
+          className={`relative ${
+            post ? "cursor-pointer" : "cursor-not-allowed"
+          } h-full flex items-start justify-between gap-3 sm:gap-4 focus-ring rounded-lg`}
         >
-          <div className="flex w-full flex-col min-w-0 flex-grow">
+          <div className="flex w-full flex-col min-w-0 flex-grow gap-1.5">
             {post ? (
               <>
-                <h2 className=" text-base sm:text-lg md:text-2xl font-bold leading-tight overflow-hidden">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-snug overflow-hidden">
                   <span className="line-clamp-2 sm:line-clamp-3">
                     {post?.title}
                   </span>
                 </h2>
-                <p className="text-xs sm:text-sm lg:text-base opacity-60 font-normal overflow-hidden leading-relaxed">
-                  <span className="line-clamp-2 sm:line-clamp-3">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-normal overflow-hidden leading-relaxed">
+                  <span className="line-clamp-2">
                     {post?.subtitle}
                   </span>
                 </p>
               </>
             ) : (
               <div className="space-y-3">
-                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-5 bg-gray-300  dark:bg-gray-300/50  animate-pulse"></div>
-                <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 bg-gray-300  dark:bg-gray-300/50  animate-pulse"></div>
-                <div className="rounded-full w-[75%] sm:w-[80%] h-3 sm:h-4 bg-gray-300  dark:bg-gray-300/50  animate-pulse"></div>
+                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-5 bg-gray-300 dark:bg-gray-700 animate-pulse" />
+                <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 bg-gray-300 dark:bg-gray-700 animate-pulse" />
               </div>
             )}
           </div>
 
-          {/* Preview Image - responsive sizing */}
+          {/* Preview Image */}
           <div
             className={`relative ${
               !post && "animate-pulse"
-            } border border-inherit z-0 w-20 h-16 sm:w-24 sm:h-20 md:w-28 md:h-24 lg:w-40 lg:h-28 rounded flex-shrink-0 bg-gray-300  dark:bg-gray-300/50 `}
+            } border border-gray-200/50 dark:border-gray-800/50 z-0 w-20 h-16 sm:w-24 sm:h-20 md:w-28 md:h-24 lg:w-36 lg:h-24 rounded-lg flex-shrink-0 bg-gray-200 dark:bg-gray-800 overflow-hidden`}
           >
             {post && post?.previewImage && (
               <img
-                className="w-full h-full object-cover object-center rounded"
+                className="w-full h-full object-cover object-center rounded-lg"
                 src={post.previewImage}
                 alt="Post preview"
                 loading="lazy"
@@ -130,21 +133,21 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
 
         {/* Footer with actions */}
         {post && (
-          <footer className="flex justify-between items-center w-full text-sm sm:text-base border-inherit px-0 sm:px-3 font-light">
-            <div className="flex justify-start items-center gap-2 sm:gap-3 min-w-0">
+          <footer className="flex justify-between items-center w-full text-xs sm:text-sm pt-2 border-t border-gray-200/40 dark:border-gray-800/40">
+            <div className="flex justify-start items-center gap-3 min-w-0">
               <Like className="min-w-8 sm:min-w-10 flex-shrink-0" post={post} />
               <FedInBtn
-                className="opacity-50 hover:opacity-100 flex items-center gap-1 sm:gap-2 min-w-0"
+                className="opacity-70 hover:opacity-100 flex items-center gap-1.5 focus-ring rounded-lg px-1.5 py-1"
                 action={handelComment}
               >
-                <span className="flex-shrink-0">{icons["comment"]}</span>
-                <span className="text-xs sm:text-sm">
+                <span className="flex-shrink-0 text-base">{icons["comment"]}</span>
+                <span className="text-xs font-medium">
                   <AbbreviateNumber rawNumber={Comments?.length} />
                 </span>
               </FedInBtn>
             </div>
 
-            <div className="flex justify-end gap-3 sm:gap-5 items-center border-inherit">
+            <div className="flex justify-end gap-3 sm:gap-4 items-center">
               <Bookmark className="flex-shrink-0" post={post || null} />
               <Menu
                 ref={menuRef}
@@ -152,7 +155,7 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
                 menuId={menuId}
                 setMenuId={setMenuId}
                 content={post}
-                className="w-full flex-shrink-0 "
+                className="flex-shrink-0"
               />
             </div>
           </footer>

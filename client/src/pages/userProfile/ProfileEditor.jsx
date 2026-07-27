@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../store/slices/authSlice";
 import { useMutation } from "@tanstack/react-query";
 import { setToast } from "../../store/slices/uiSlice";
-import { debounce } from "../../utils/debounce";
+import { debounce } from "../../utils/functions/debounce";
 import useProfileApi from "../../services/useProfileApis";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import CommonInput from "../../components/inputComponents/CommonInput";
 import Selector from "../../components/utilityComp/Selector";
 import Spinner from "../../components/loaders/Spinner";
@@ -247,13 +247,12 @@ function ProfileEditor() {
           <div className="relative border-inherit">
             <CommonInput
               ref={uNameRef}
-              className={`w-full px-4 py-3 bg-inherit border-2 rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900 ${
-                isError
+              className={`w-full px-4 py-3 bg-inherit border-2 rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900 ${isError
                   ? "border-red-500 focus:border-red-500"
                   : isSuccess
                     ? "border-green-500 focus:border-green-500"
                     : "border-inherit focus:border-blue-500"
-              }`}
+                }`}
               type="text"
               name="username"
               disabled={isUpdating}

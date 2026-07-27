@@ -1,5 +1,5 @@
 import { forwardRef, memo, useMemo, useRef, useState } from "react";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 
 import PostsApis from "../../services/usePostsApis";
@@ -12,7 +12,7 @@ import useMenuConstant from "../../hooks/useMenuConstant";
 import ProfileImage from "../../components/ProfileImage";
 import Ibutton from "../../components/buttons/Ibutton";
 import useIcons from "../../hooks/useIcons";
-import AbbreviateNumber from "../../utils/AbbreviateNumber";
+import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import Spinner from "../../components/loaders/Spinner";
 import DOMPurify from "dompurify";
 import useClickOutside from "../../hooks/useClickOutside";

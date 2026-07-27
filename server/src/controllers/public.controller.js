@@ -9,6 +9,7 @@ import { startedFollowing } from "../workers/follows.worker.js";
 import SavedPost from "../models/savedPost.model.js";
 import Tag from "../models/tags.model.js";
 import tagsService from "../services/tags.service.js";
+import { createNotification } from "../services/notification.service.js";
 
 // Fetch quick users suggestion
 export const getQuickUserSuggestion = async (req, res, next) => {
@@ -213,6 +214,17 @@ export const LikePost = async (req, res, next) => {
       }
     } else {
       await Likes.create({ likedBy, postId, type });
+      const targetPost = await Post.findByPk(postId, { attributes: ["authorId"] });
+      if (targetPost?.authorId) {
+        createNotification({
+          receiverId: targetPost.authorId,
+          actorId: likedBy,
+          type: "like",
+          entityId: postId,
+          entityType: "post",
+          message: `${req.authUser.displayName} liked your post.`,
+        });
+      }
     }
     await redisClient.del(postId);
 
@@ -262,6 +274,14 @@ export const FollowUser = async (req, res, next) => {
       userInfo.Following = [...userInfo?.Following, { id: followedId }];
       // console.log({ followedId, followerId });
       startedFollowing(followedId, followerId);
+      createNotification({
+        receiverId: followedId,
+        actorId: followerId,
+        type: "follow",
+        entityId: followerId,
+        entityType: "user",
+        message: `${req.authUser.displayName} started following you.`,
+      });
     }
     await redisClient.setEx(followerId, EXPIRATION, JSON.stringify(userInfo));
     res.status(201).json({

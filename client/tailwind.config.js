@@ -10,6 +10,11 @@ export default {
         oplight: "var(--opposite-light)",
         laccent: "var(--l-accent-color)",
         daccent: "var(--d-accent-color)",
+        bgprimary: "var(--bg-primary)",
+        bgsecondary: "var(--bg-secondary)",
+        txtprimary: "var(--text-primary)",
+        txtsecondary: "var(--text-secondary)",
+        brdprimary: "var(--border-color)",
       },
       fontFamily: {
         roboto: ["Roboto", "sans-serif"],

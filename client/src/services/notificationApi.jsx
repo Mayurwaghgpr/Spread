@@ -33,9 +33,21 @@ const notificationApi = () => {
     }
   };
 
+  const markAllRead = async () => {
+    try {
+      const response = await axiosInstance.patch("/notifications/mark-all-read");
+      return response.data;
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+      throw error;
+    }
+  };
+
   return {
     fetchNotifications,
     fetchUnreadCount,
+    markRead,
+    markAllRead,
   };
 };
 

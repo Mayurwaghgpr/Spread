@@ -6,7 +6,7 @@ import Follow from "../../components/buttons/follow";
 import { NavLink, useLocation } from "react-router-dom";
 import { Users } from "lucide-react";
 import ProfileImage from "../../components/ProfileImage";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 import Heading from "../../components/texts/Heading";
 import SubHeading from "../../components/texts/SubHeading";
 import Paragraph from "../../components/texts/Paragraph";

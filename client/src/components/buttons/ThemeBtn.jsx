@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setThemeMode } from "../../store/slices/uiSlice";
 import useIcons from "../../hooks/useIcons";
@@ -7,50 +7,16 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
   const dispatch = useDispatch();
   const { ThemeMode } = useSelector((state) => state.ui);
   const icons = useIcons();
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("ThemeMode") || "system";
-    dispatch(setThemeMode(savedTheme));
-  }, [dispatch]);
 
-  // Apply theme changes
-  const applyTheme = useCallback((theme) => {
-    document.documentElement.classList.remove("dark", "light");
-
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else if (theme === "light") {
-      document.documentElement.classList.remove("dark");
-    } else if (theme === "system") {
-      const isDarkMode = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
-      if (isDarkMode) document.documentElement.classList.add("dark");
-    }
-
-    localStorage.setItem("ThemeMode", theme);
-  }, []);
-
-  // Handle theme changes
-  // useEffect(() => {
-  //   applyTheme(ThemeMode);
-  // }, [ThemeMode, applyTheme]);
-
-  // Listen for system theme changes when in system mode
-  useEffect(() => {
-    if (ThemeMode !== "system") return;
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => applyTheme("system");
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [ThemeMode, applyTheme]);
+  const activeMode = ThemeMode || "system";
 
   // Cycle through available modes
   const changeTheme = useCallback(() => {
-    const currentIndex = Modes.findIndex((m) => m.value === ThemeMode);
-    const nextTheme = Modes[(currentIndex + 1) % Modes.length].value;
-    dispatch(setThemeMode(nextTheme));
-  }, [ThemeMode, Modes, dispatch]);
+    if (!Modes || Modes.length === 0) return;
+    const currentIndex = Modes.findIndex((m) => m.value === activeMode);
+    const nextIndex = (currentIndex + 1) % Modes.length;
+    dispatch(setThemeMode(Modes[nextIndex].value));
+  }, [activeMode, Modes, dispatch]);
 
   // Manual theme select
   const handleThemeSelect = useCallback(
@@ -58,17 +24,17 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
     [dispatch],
   );
 
-  const currentMode = Modes?.find((mode) => mode.value === ThemeMode);
+  const currentMode = Modes?.find((mode) => mode.value === activeMode);
 
   if (!separate) {
     // Single toggle button
     return (
       <button
         onClick={changeTheme}
-        aria-label={`Switch to ${Modes[(Modes.findIndex((mode) => mode.value === ThemeMode) + 1) % Modes.length]?.name}`}
-        className={`relative transition-all duration-200  ${className}`}
+        aria-label={`Switch to ${Modes?.[(Modes.findIndex((mode) => mode.value === activeMode) + 1) % Modes.length]?.name || "next mode"}`}
+        className={`relative transition-all duration-200 focus-ring rounded-lg p-1.5 ${className}`}
       >
-        <div className="  transition-transform duration-200">
+        <div className="transition-transform duration-200 hover:scale-110">
           {icons?.[currentMode?.icon] ?? icons?.sun}
         </div>
       </button>
@@ -77,9 +43,9 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
 
   // Separate buttons for each theme
   return (
-    <div className={`flex gap-1 ${className}`}>
-      {Modes.map((mode) => {
-        const isActive = mode.value === ThemeMode;
+    <div className={`flex gap-1.5 ${className}`}>
+      {Modes?.map((mode) => {
+        const isActive = mode.value === activeMode;
 
         return (
           <button
@@ -87,14 +53,14 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
             onClick={() => handleThemeSelect(mode.value)}
             aria-label={`Switch to ${mode.name}`}
             aria-pressed={isActive}
-            className={`group relative  rounded-lg border transition-all duration-200 hover:scale-105 ${
+            className={`group relative rounded-xl p-2 border transition-all duration-200 focus-ring ${
               isActive
-                ? "bg-gray-700 dark:bg-gray-300 text-white dark:text-gray-900 border-inherit shadow-lg shadow-gray-200 dark:shadow-gray-800/50"
-                : "bg-light dark:bg-gray-800 text-gray-600 dark:text-gray-400  border-inherit hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-500"
+                ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-sm"
+                : "bg-laccent dark:bg-daccent text-gray-600 dark:text-gray-400 border-[#d8cebe] dark:border-[#2a2a2a] hover:bg-gray-200/60 dark:hover:bg-gray-800/60"
             }`}
           >
             <div
-              className={` transition-transform duration-200 ${
+              className={`transition-transform duration-200 ${
                 isActive ? "scale-110" : "group-hover:scale-110"
               }`}
             >

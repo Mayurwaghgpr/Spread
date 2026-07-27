@@ -4,7 +4,7 @@ import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import usePublicApis from "../services/publicApis";
 import { useLastItemObserver } from "../hooks/useLastItemObserver";
 import ProfileImage from "./ProfileImage";
-import userImageSrc from "../utils/userImageSrc";
+import userImageSrc from "../utils/functions/userImageSrc";
 import Heading from "./texts/Heading";
 function UserNamesSuggestion({
   mentionedUsername,

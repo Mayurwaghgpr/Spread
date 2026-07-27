@@ -15,6 +15,7 @@ function ProfileinfoCard({ className }) {
   const { userProfile, FollowInfo } = useSelector((state) => state.profile);
   const navigate = useNavigate();
   const { data, isLoading } = useQuery({
+    queryKey: ["followInfo", userProfile?.id, FollowInfo?.Info],
     queryFn: () =>
       fetchFollowInfo({
         FollowInfo: FollowInfo.Info,

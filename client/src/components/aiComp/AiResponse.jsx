@@ -1,7 +1,7 @@
 import DOMPurify from "dompurify";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { TiArrowSync } from "react-icons/ti";
-import userImageSrc from "../../utils/userImageSrc";
+import userImageSrc from "../../utils/functions/userImageSrc";
 
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";

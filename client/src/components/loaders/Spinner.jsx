@@ -1,8 +1,8 @@
 import { memo } from "react";
 
-function Spinner({ className }) {
+function Spinner({ className = "w-6 h-6" }) {
   return (
-    <div className={`loader bg-black dark:bg-white ${className}`}>
+    <div className={`loader bg-oplight dark:bg-txtprimary ${className}`}>
       <div></div>
       <div></div>
       <div></div>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FedInBtn from "../../../components/buttons/FedInBtn";
 import CommonInput from "../../../components/inputComponents/CommonInput";
 import useIcons from "../../../hooks/useIcons";
-import { debounce } from "../../../utils/debounce";
+import { debounce } from "../../../utils/functions/debounce";
 import useSocket from "../../../hooks/useSocket";
 import { pushMessage } from "../../../store/slices/messangerSlice";
 import { useDispatch, useSelector } from "react-redux";

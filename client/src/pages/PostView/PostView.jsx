@@ -92,7 +92,7 @@ function PostView() {
       );
     }
   }, [fetchedPostData, dispatch]);
-  const { data: authorData } = useQuery({
+  const { data: authorData, isLoading: isAuthorLoading } = useQuery({
     queryKey: ["author_details", postViewData?.author?.id],
     queryFn: () => fetchUserProfile(postViewData?.author?.id),
     enabled: !!postViewData?.author?.id,

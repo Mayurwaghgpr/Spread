@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import WhoToFollow from "../../pages/home/WhoToFollow";
 import usePublicApis from "../../services/publicApis";
 import { useQuery } from "@tanstack/react-query";
-// import { useSelector } from "react-redux";
 
 function Aside({ className, handleTopicClick }) {
   const { fetchQuickTags } = usePublicApis();
@@ -16,49 +15,49 @@ function Aside({ className, handleTopicClick }) {
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
+
   return (
-    <aside className={`${className}`}>
-      <div className="  flex flex-col w-full items-center text-start gap-2 border-inherit ">
-        <h1 className=" text-start w-full text-lg font-medium">
+    <aside className={`space-y-6 text-stone-900 dark:text-stone-100 ${className}`}>
+      {/* Trending Topics Section */}
+      <div className="flex flex-col w-full items-start gap-3 border-inherit">
+        <h2 className="text-base font-bold text-stone-900 dark:text-stone-100">
           Trending topics
-        </h1>
-        <div className="flex justify-center items-start w-full flex-col">
-          <ul className="flex justify-start flex-wrap gap-2">
+        </h2>
+        <div className="flex items-start w-full flex-col">
+          <ul className="flex flex-wrap gap-2 w-full">
             {tags?.length > 0 &&
               tags?.map(({ tagName }, index) => (
-                <li
-                  key={index}
-                  className="rounded-full  border-gray-200 bg-gray-300  "
-                >
+                <li key={tagName || index}>
                   <button
-                    className="t-btn"
                     onClick={() => handleTopicClick(tagName)}
                     aria-label={`Select topic ${tagName}`}
+                    className="spread-pill text-xs font-semibold px-3 py-1 hover:scale-105 transition-transform cursor-pointer"
                   >
-                    <span>{tagName}</span>
+                    #{tagName}
                   </button>
                 </li>
               ))}
-            {isLoading && <TopicsSkeletonLoader count={10} />}
+            {isLoading && <TopicsSkeletonLoader count={8} />}
           </ul>
         </div>
       </div>
 
-      <WhoToFollow
-        className={
-          " flex flex-col justify-start items-start gap-5 text-sm  border-inherit "
-        }
-      />
-      <small className=" text-[#383838]">
-        <Link className="" to="">
+      {/* Divider */}
+      <hr className="border-stone-200 dark:border-stone-800" />
+
+      {/* Who To Follow Section */}
+      <WhoToFollow className="flex flex-col justify-start items-start gap-3 text-xs border-inherit" />
+
+      {/* Footer Legal & Copyright */}
+      <footer className="pt-4 border-t border-stone-200 dark:border-stone-800 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+        <Link to="#" className="hover:underline hover:text-stone-800 dark:hover:text-stone-200">
           Terms of Service
         </Link>
-        <Link className="" to="">
-          {" "}
+        <Link to="#" className="hover:underline hover:text-stone-800 dark:hover:text-stone-200">
           Privacy Policy
-        </Link>{" "}
-        © 2024 Spread
-      </small>
+        </Link>
+        <span>© 2024 Spread</span>
+      </footer>
     </aside>
   );
 }

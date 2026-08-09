@@ -1,13 +1,15 @@
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as GitHubStrategy } from "passport-github2";
-import User from "../models/user.model.js"; // Adjust the path as necessary
+import User from "../models/user.model.js";
 import dotenv from "dotenv";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
-
 import passport from "passport";
 import userService from "../services/user.service.js";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 
 dotenv.config();
+
 export const passportStrategies = () => {
   passport.use(
     new GoogleStrategy(
@@ -18,41 +20,33 @@ export const passportStrategies = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          console.log("Google OAuth Profile received:", profile);
-          
           if (!profile) {
-            console.error("No profile received from Google");
             return done(new Error("No profile received from Google"));
           }
           
-          const { email, provider, displayName, picture, id } = profile;
+          const { email, provider, displayName, picture } = profile;
           
           if (!email) {
-            console.error("No email in Google profile");
             return done(new Error("Email not provided by Google"));
           }
           
-          console.log(`Looking for user with email: ${email}, provider: ${provider}`);
-          
           let user = await userService.finduser({
             email,
-            signedWith: provider,
           });
           
           if (!user) {
-            console.log("User not found, creating new user");
-            const username = await genUniqueUserName(profile.email);
+            const username = await genUniqueUserName(email);
+            const randomPassword = crypto.randomBytes(32).toString("hex");
+            const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
             user = await User.create({
               username: username,
-              displayName: displayName,
+              displayName: displayName || username,
               email: email,
               userImage: picture,
-              password: id,
+              password: hashedPassword,
               signedWith: provider,
             });
-            console.log("New user created:", user.id);
-          } else {
-            console.log("Existing user found:", user.id);
           }
           
           done(null, user);
@@ -77,9 +71,8 @@ export const passportStrategies = () => {
             return done(new Error("No profile provided by GitHub"));
           }
           
-          // Extract email and provider from profile
           const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
-          const provider = profile.provider;
+          const provider = profile.provider || "github";
           
           if (!email) {
             return done(new Error("Email not provided by GitHub"));
@@ -87,21 +80,26 @@ export const passportStrategies = () => {
           
           let user = await userService.finduser({
             email,
-            signedWith: provider,
           });
+
           if (!user) {
+            const username = profile.username || (await genUniqueUserName(email));
+            const randomPassword = crypto.randomBytes(32).toString("hex");
+            const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
             user = await User.create({
-              username: profile.username,
-              displayName: profile.displayName,
-              email: profile.emails[0].value,
-              userImage: profile._json.avatar_url,
-              bio: profile._json.bio,
-              signedWith: profile.provider,
-              password: profile?.id,
+              username: username,
+              displayName: profile.displayName || username,
+              email: email,
+              userImage: profile._json?.avatar_url,
+              bio: profile._json?.bio,
+              signedWith: provider,
+              password: hashedPassword,
             });
           }
           done(null, user);
         } catch (error) {
+          console.error("Error in GitHub OAuth strategy:", error);
           done(error);
         }
       }

@@ -5,83 +5,74 @@ function Footer() {
   const icons = useIcons();
 
   return (
-    <footer className="relative bg-inherit dark:bg-inherit  bg-gradient-to-r  dark:from-transparent dark:via-gray-900 dark:to-transparent p-10 h-[20rem]  overflow-hidden">
-      <div className="relative max-w-6xl  mx-auto flex flex-col justify-center items-center gap-10 min-h-full">
-        <div className=" relative flex items-center justify-start gap-20 text-nowrap w-full">
-          <div className="flex flex-col  items-start justify-start gap-5 text-nowrap h-full ">
-            <div className="flex items-center justify-start ">
+    <footer className="relative bg-light dark:bg-dark text-stone-900 dark:text-stone-100 border-t border-inherit py-12 sm:py-16 px-4 sm:px-8 overflow-hidden">
+      <div className="relative max-w-6xl mx-auto flex flex-col gap-10 w-full">
+        {/* Main Footer Content */}
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 lg:gap-16 w-full">
+          {/* Logo & Social Links */}
+          <div className="flex flex-col items-start gap-4 shrink-0">
+            <div className="flex items-center gap-2.5">
               <img
-                className="w-16 h-16"
-                src="spread_logo_03_robopus.png"
-                alt=""
+                className="w-10 h-10 object-contain"
+                src="/spread_logo_03_robopus.png"
+                alt="Spread Logo"
               />
-              <span className="text-xl font-medium">Spread</span>
+              <span className="text-xl font-bold tracking-tight text-stone-900 dark:text-stone-100">
+                Spread
+              </span>
             </div>
+            <p className="text-xs text-stone-600 dark:text-stone-400 max-w-xs leading-relaxed">
+              Spread ideas, spark technical conversations, and analyze content with instant AI insights.
+            </p>
 
             {/* Social Links */}
-            <div className="flex justify-center items-center gap-6 w-fit">
+            <div className="flex items-center gap-3 pt-2">
               <Link
-                className="group p-2 bg-white/10 hover:bg-white/20 rounded-full border border-gray-600 hover:border-gray-400 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+                className="spread-pill p-2 rounded-full hover:scale-110 transition-transform"
                 to="https://github.com/Mayurwaghgpr/Spread"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub Repository"
               >
-                <span className="  text-xs transition-colors duration-200">
-                  {icons["github"]}
-                </span>
+                <span className="text-sm">{icons["github"]}</span>
               </Link>
 
               <Link
-                className="group p-2 bg-white/10 hover:bg-white/20 rounded-full border border-gray-600 hover:border-gray-400 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+                className="spread-pill p-2 rounded-full hover:scale-110 transition-transform"
                 to="https://www.linkedin.com/in/mayur-wagh-751b8a24b/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LinkedIn Profile"
               >
-                <span className="  text-xs transition-colors duration-200">
-                  {icons["linkedin"]}
-                </span>
+                <span className="text-sm">{icons["linkedin"]}</span>
               </Link>
 
               <Link
-                className="group p-2 bg-white/10 hover:bg-white/20 rounded-full border border-gray-600 hover:border-gray-400 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+                className="spread-pill p-2 rounded-full hover:scale-110 transition-transform"
                 to="https://x.com/mayurwagh152064"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="X Profile"
               >
-                <span className="  text-xs transition-colors duration-200">
-                  {icons["XCom"]}
-                </span>
+                <span className="text-sm">{icons["XCom"]}</span>
               </Link>
             </div>
           </div>
-          {/* Quick Links */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-28  text-start">
+
+          {/* Quick Links Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-12 w-full text-left">
             <div>
-              <h4 className="font-semibold  mb-3 sm:text-base text-sm">
+              <h4 className="font-bold mb-3 text-xs sm:text-sm uppercase tracking-wider text-stone-900 dark:text-stone-100">
                 Platform
               </h4>
-              <ul className="space-y-2  sm:text-sm text-xs">
+              <ul className="space-y-2 text-xs text-stone-600 dark:text-stone-400">
                 <li>
-                  <Link
-                    to="/features"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/features" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Features
                   </Link>
                 </li>
-                {/* <li>
-                <Link
-                  to="/pricing"
-                  className="hover: transition-colors duration-200"
-                >
-                  Pricing
-                </Link>
-              </li> */}
                 <li>
-                  <Link
-                    to="/creators"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/creators" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     For Creators
                   </Link>
                 </li>
@@ -89,31 +80,22 @@ function Footer() {
             </div>
 
             <div>
-              <h4 className="font-semibold  mb-3  sm:text-base text-sm">
+              <h4 className="font-bold mb-3 text-xs sm:text-sm uppercase tracking-wider text-stone-900 dark:text-stone-100">
                 Community
               </h4>
-              <ul className="space-y-2  sm:text-sm text-xs">
+              <ul className="space-y-2 text-xs text-stone-600 dark:text-stone-400">
                 <li>
-                  <Link
-                    to="/blog"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/blog" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Blog
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/events"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/events" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Events
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/showcase"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/showcase" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Showcase
                   </Link>
                 </li>
@@ -121,23 +103,17 @@ function Footer() {
             </div>
 
             <div>
-              <h4 className="font-semibold  mb-3  sm:text-base text-sm">
+              <h4 className="font-bold mb-3 text-xs sm:text-sm uppercase tracking-wider text-stone-900 dark:text-stone-100">
                 Support
               </h4>
-              <ul className="space-y-2  sm:text-sm text-xs">
+              <ul className="space-y-2 text-xs text-stone-600 dark:text-stone-400">
                 <li>
-                  <Link
-                    to="/help"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/help" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Help Center
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/contact"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/contact" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Contact
                   </Link>
                 </li>
@@ -145,46 +121,36 @@ function Footer() {
             </div>
 
             <div>
-              <h4 className="font-semibold  mb-3  sm:text-base text-sm">
+              <h4 className="font-bold mb-3 text-xs sm:text-sm uppercase tracking-wider text-stone-900 dark:text-stone-100">
                 Legal
               </h4>
-              <ul className="space-y-2  sm:text-sm text-xs">
+              <ul className="space-y-2 text-xs text-stone-600 dark:text-stone-400">
                 <li>
-                  <Link
-                    to="/privacy"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/privacy" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Privacy
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/terms"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/terms" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Terms
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/cookies"
-                    className="hover: transition-colors duration-200"
-                  >
+                  <Link to="/cookies" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
                     Cookies
                   </Link>
                 </li>
               </ul>
             </div>
-          </div>{" "}
+          </div>
         </div>
-        {/* Bottom Section */}
-        <div className=" border-gray-700  text-xs w-full">
-          <div className="flex md:flex-row flex-col justify-between items-start gap-4">
-            <p className=" text-center">
-              &copy; {new Date().getFullYear()} Spread.
-            </p>
 
-            <div className="flex items-center gap-2 text-xs ">
+        {/* Bottom Bar Section */}
+        <div className="pt-6 border-t border-inherit text-xs text-stone-500 dark:text-stone-400 w-full">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
+            <p>&copy; {new Date().getFullYear()} Spread. All rights reserved.</p>
+
+            <div className="flex items-center gap-1.5 text-xs">
               <span>Developed with</span>
               <span className="text-red-500 animate-pulse">❤️</span>
               <span>by</span>
@@ -192,7 +158,7 @@ function Footer() {
                 to="https://github.com/Mayurwaghgpr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="  font-semibold transition-colors duration-200"
+                className="font-semibold text-stone-900 dark:text-stone-100 hover:underline"
               >
                 Mayur Wagh
               </Link>
@@ -200,9 +166,6 @@ function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gray-600 to-transparent animate-fedin2s"></div>
     </footer>
   );
 }

@@ -47,32 +47,32 @@ function NotificationItem({ className = "", data, onClickItem }) {
   return (
     <div
       onClick={handleClick}
-      className={`flex items-start justify-between gap-3 w-full p-3.5 rounded-xl border border-[#e7dfd8] dark:border-[#262626] cursor-pointer transition-all duration-200 hover:bg-laccent dark:hover:bg-dark/90 hover:shadow-sm ${
+      className={`flex items-start justify-between gap-3 w-full p-3.5 rounded-xl border border-inherit cursor-pointer transition-all duration-200 hover:bg-[#f5f1ec] dark:hover:bg-[#121212] ${
         !data?.read
-          ? "bg-laccent dark:bg-daccent border-l-4 border-l-oplight"
-          : "bg-light/80 dark:bg-daccent/50"
+          ? "bg-[#f5f1ec] dark:bg-[#121212]"
+          : "bg-light dark:bg-dark"
       } ${className}`}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <div className="relative shrink-0 mt-0.5">
           {data?.actor?.userImage ? (
             <ProfileImage
-              className="w-9 h-9 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 object-cover"
+              className="w-9 h-9 rounded-full overflow-hidden border border-inherit object-cover"
               image={data?.actor?.userImage}
               alt={actorName}
             />
           ) : (
-            <div className="flex justify-center items-center w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 text-base">
+            <div className="flex justify-center items-center w-9 h-9 rounded-full bg-[#f5f1ec] dark:bg-[#121212] text-stone-800 dark:text-stone-200 text-base border border-inherit">
               {icons[data?.type] || icons["bellFi"]}
             </div>
           )}
-          <span className="absolute -bottom-1 -right-1 flex justify-center items-center w-4 h-4 rounded-full bg-white dark:bg-gray-900 shadow text-[10px]">
+          <span className="absolute -bottom-1 -right-1 flex justify-center items-center w-4 h-4 rounded-full bg-light dark:bg-dark border border-inherit text-[10px]">
             {icons[data?.type] || "🔔"}
           </span>
         </div>
         <div className="flex flex-col gap-0.5 flex-1 min-w-0">
-          <p className="text-xs text-gray-800 dark:text-gray-200 leading-snug break-words">
-            <span className="font-semibold text-gray-900 dark:text-white mr-1">
+          <p className="text-xs text-stone-800 dark:text-stone-200 leading-snug break-words">
+            <span className="font-bold text-stone-900 dark:text-stone-100 mr-1">
               {actorName}
             </span>
             {messageText.startsWith(actorName)
@@ -80,13 +80,13 @@ function NotificationItem({ className = "", data, onClickItem }) {
               : messageText}
           </p>
           <FormatedTime
-            className="text-[10px] text-gray-400 dark:text-gray-500 font-medium"
+            className="text-[10px] text-stone-500 dark:text-stone-400 font-medium"
             date={data?.createdAt || data?.timestamp}
           />
         </div>
       </div>
       {!data?.read && (
-        <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-2" />
+        <span className="w-2 h-2 rounded-full bg-stone-900 dark:bg-stone-100 shrink-0 mt-2" />
       )}
     </div>
   );

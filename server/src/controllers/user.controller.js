@@ -9,6 +9,7 @@ import Comments from "../models/comments.model.js";
 import redisClient from "../utils/redisClient.js";
 import { EXPIRATION } from "../config/constants.js";
 import userService from "../services/user.service.js";
+import { bloomFilter } from "../utils/BloomFilter.js";
 
 // Get user profile
 export const getUserProfile = async (req, res, next) => {
@@ -45,7 +46,7 @@ export const getUserPostsById = async (req, res, next) => {
           attributes: ["id", "username", "userImage", "displayName"],
         },
         {
-          model: Likes, // Include likes
+          model: Likes,
           as: "Likes",
           required: false,
         },
@@ -55,7 +56,7 @@ export const getUserPostsById = async (req, res, next) => {
         },
       ],
       limit,
-      order: [["createdAt", "DESC"]], // Order posts by creation date
+      order: [["createdAt", "DESC"]],
     });
     res.status(200).json(posts);
   } catch (error) {
@@ -74,7 +75,6 @@ export const getFollowers = async (req, res, next) => {
 
     res.status(200).json(user.Followers);
   } catch (error) {
-    // res.status(400).json({ error: error.message });
     next(error);
   }
 };
@@ -104,7 +104,6 @@ export const EditUserProfile = async (req, res, next) => {
   let updatedData = { ...data };
 
   try {
-    // If new image uploaded
     if (image.length > 0) {
       const result = await cloudinary.uploader.upload(image[0].path);
       updatedData.userImage = result.secure_url;
@@ -121,7 +120,6 @@ export const EditUserProfile = async (req, res, next) => {
       await deletePostImage(image);
     }
 
-    // If image needs to be removed
     if (data.removeImage && data.userImage && data.userImage.trim() !== "") {
       updatedData.userImage = "";
       updatedData.cloudinaryPubId = "";
@@ -136,6 +134,11 @@ export const EditUserProfile = async (req, res, next) => {
     }
 
     delete updatedData.userFromOAuth;
+
+    // Track username changes in Bloom Filter
+    if (updatedData.username) {
+      bloomFilter.add(updatedData.username);
+    }
 
     const [_, updatedUser] = await User.update(updatedData, {
       where: { id: req.authUser.id },
@@ -159,24 +162,33 @@ export const EditUserProfile = async (req, res, next) => {
   }
 };
 
-// Check if user name already exist
+// Sub-millisecond O(1) Bloom Filter backed username search
 export const searchForUsername = async (req, res, next) => {
-  const username = req.body.username;
+  const rawUsername = req.body.username;
+  const username = typeof rawUsername === "string" ? rawUsername.toLowerCase().trim() : "";
+
   try {
     if (!username) {
-      return res
-        .status(400)
-        .json({ message: "cannot set empty username,please provied username" });
+      return res.status(400).json({ message: "Username is required" });
     }
+
+    // Step 1: O(1) Bloom Filter Check
+    // If Bloom Filter says false, the username definitely DOES NOT exist!
+    if (!bloomFilter.contains(username)) {
+      return res.status(200).json({ username, available: true, fastCheck: true });
+    }
+
+    // Step 2: If Bloom Filter says true (might exist), query PostgreSQL to verify
     const exist = await User.findOne({ where: { username } });
     if (exist) {
       return res
         .status(409)
-        .json({ message: "username is already taken", exist });
+        .json({ message: "Username is already taken", exist: true });
     }
-    res.status(200).json({ username });
+
+    res.status(200).json({ username, available: true });
   } catch (error) {
-    console.log("Error while searching username", error.message);
+    console.error("Error while searching username:", error.message);
     next(error);
   }
 };

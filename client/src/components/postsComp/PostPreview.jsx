@@ -9,7 +9,6 @@ import React, {
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-// Dynamically load components to optimize performance
 import Bookmark from "../buttons/bookmark/Bookmark";
 import Like from "../buttons/Like/Like";
 import Menu from "../menus/Menu";
@@ -23,7 +22,7 @@ import useMenuConstant from "../../hooks/useMenuConstant";
 import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import FedInBtn from "../buttons/FedInBtn";
 
-const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
+const PostPreview = forwardRef(({ post, className = "", Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,36 +49,37 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
       navigate(`/view/@${post?.author?.username}/${post?.id}/comments`);
     }
   }, [navigate, post?.author?.username, post?.id]);
+
   return (
     <article
       ref={ref}
-      className={`${className} border border-[#d8cebe] dark:border-[#2a2a2a] bg-laccent/30 dark:bg-daccent/30 flex w-full flex-col max-h-[22rem] rounded-xl transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-700`}
+      className={`spread-card flex w-full flex-col rounded-2xl transition-all duration-200 hover:border-stone-400 dark:hover:border-stone-600 ${className}`}
     >
-      <div className="p-4 sm:p-5 md:p-6 flex leading-0 flex-col justify-center gap-3 sm:gap-4 w-full">
+      <div className="flex flex-col justify-between gap-3 sm:gap-4 w-full h-full">
         {/* Header with user profile */}
         <header className="flex justify-between items-center gap-2 sm:gap-3 text-xs sm:text-sm">
           <Link
             to={`/profile/@${post?.author?.username}/${post?.author?.id}`}
-            className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 focus-ring rounded-lg"
+            className="flex items-center gap-2.5 min-w-0 flex-shrink-0 focus-ring rounded-lg"
           >
             <ProfileImage
-              className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 hover:opacity-80 rounded-full border border-gray-200 dark:border-gray-700 object-cover"
+              className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 hover:opacity-80 rounded-full border border-inherit object-cover"
               image={post && userImageurl}
             />
             <div className="text-xs sm:text-sm flex flex-col min-w-0">
               {post ? (
-                <p className="font-semibold text-gray-900 dark:text-gray-100 capitalize hover:underline">
+                <p className="font-semibold text-stone-900 dark:text-stone-100 capitalize hover:underline truncate">
                   {post?.author?.username}
                 </p>
               ) : (
-                <span className="w-16 sm:w-20 h-3 animate-pulse bg-gray-300 dark:bg-gray-700 rounded-xl" />
+                <span className="w-16 sm:w-20 h-3 animate-pulse bg-stone-300 dark:bg-stone-700 rounded-xl" />
               )}
             </div>
           </Link>
 
-          {/* Topic - hide on very small screens */}
+          {/* Topic badge */}
           {post?.topic && (
-            <span className="px-2.5 py-1 text-[11px] font-medium rounded-full bg-gray-200/70 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 truncate">
+            <span className="spread-pill text-[11px] truncate max-w-[120px] sm:max-w-[180px]">
               {post?.topic}
             </span>
           )}
@@ -90,17 +90,17 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
           to={`/view/@${post?.author?.username}/${post?.id}`}
           className={`relative ${
             post ? "cursor-pointer" : "cursor-not-allowed"
-          } h-full flex items-start justify-between gap-3 sm:gap-4 focus-ring rounded-lg`}
+          } flex items-start justify-between gap-3 sm:gap-4 focus-ring rounded-lg flex-1 min-h-0`}
         >
           <div className="flex w-full flex-col min-w-0 flex-grow gap-1.5">
             {post ? (
               <>
-                <h2 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-snug overflow-hidden">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-stone-900 dark:text-stone-100 leading-snug">
                   <span className="line-clamp-2 sm:line-clamp-3">
                     {post?.title}
                   </span>
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-normal overflow-hidden leading-relaxed">
+                <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 font-normal leading-relaxed">
                   <span className="line-clamp-2">
                     {post?.subtitle}
                   </span>
@@ -108,36 +108,32 @@ const PostPreview = forwardRef(({ post, className, Saved }, ref) => {
               </>
             ) : (
               <div className="space-y-3">
-                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-5 bg-gray-300 dark:bg-gray-700 animate-pulse" />
-                <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 bg-gray-300 dark:bg-gray-700 animate-pulse" />
+                <div className="rounded-full w-[80%] sm:w-[60%] h-4 sm:h-5 bg-stone-300 dark:bg-stone-700 animate-pulse" />
+                <div className="rounded-full w-[90%] sm:w-[80%] h-3 sm:h-4 bg-stone-300 dark:bg-stone-700 animate-pulse" />
               </div>
             )}
           </div>
 
           {/* Preview Image */}
-          <div
-            className={`relative ${
-              !post && "animate-pulse"
-            } border border-gray-200/50 dark:border-gray-800/50 z-0 w-20 h-16 sm:w-24 sm:h-20 md:w-28 md:h-24 lg:w-36 lg:h-24 rounded-lg flex-shrink-0 bg-gray-200 dark:bg-gray-800 overflow-hidden`}
-          >
-            {post && post?.previewImage && (
+          {post && post?.previewImage && (
+            <div className="relative border border-inherit shrink-0 w-20 h-16 sm:w-28 sm:h-20 md:w-32 md:h-22 rounded-xl bg-stone-200 dark:bg-stone-800 overflow-hidden">
               <img
-                className="w-full h-full object-cover object-center rounded-lg"
+                className="w-full h-full object-cover object-center rounded-xl"
                 src={post.previewImage}
                 alt="Post preview"
                 loading="lazy"
               />
-            )}
-          </div>
+            </div>
+          )}
         </Link>
 
         {/* Footer with actions */}
         {post && (
-          <footer className="flex justify-between items-center w-full text-xs sm:text-sm pt-2 border-t border-gray-200/40 dark:border-gray-800/40">
+          <footer className="flex justify-between items-center w-full text-xs sm:text-sm pt-2.5 border-t border-inherit mt-1">
             <div className="flex justify-start items-center gap-3 min-w-0">
               <Like className="min-w-8 sm:min-w-10 flex-shrink-0" post={post} />
               <FedInBtn
-                className="opacity-70 hover:opacity-100 flex items-center gap-1.5 focus-ring rounded-lg px-1.5 py-1"
+                className="opacity-70 hover:opacity-100 flex items-center gap-1.5 focus-ring rounded-lg px-2 py-1 hover:bg-[#fff9f3] dark:hover:bg-[#080808] transition-colors"
                 action={handelComment}
               >
                 <span className="flex-shrink-0 text-base">{icons["comment"]}</span>

@@ -9,36 +9,32 @@ const MessageBubble = forwardRef(({ message, userId, readReceipt }, ref) => {
   return (
     <div
       ref={ref}
-      className={` border-inherit max-w-[50%] w-fit  my-5 
-        z-0  
-      ${isSender ? "ml-auto text-end" : "mr-auto   "}
-    `}
+      className={`border-inherit max-w-[70%] sm:max-w-[50%] w-fit my-3 
+        z-0 ${isSender ? "ml-auto text-end" : "mr-auto"}
+      `}
     >
       <div
-        className={`relative flex flex-col gap-1 text-xs sm:text-sm  break-words w-fit  border border-inherit rounded-lg px-5 p-2  text-black  bg-light dark:bg-white
-        ${isSender ? "ml-auto items-start text-start rounded-br-none " : "mr-auto items-end rounded-bl-none  "}`}
+        className={`relative flex flex-col gap-1 text-xs sm:text-sm break-words w-fit border border-inherit rounded-2xl px-4 py-2.5 ${
+          isSender
+            ? "ml-auto items-start text-start bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 rounded-br-none shadow-sm"
+            : "mr-auto items-end bg-[#f5f1ec] dark:bg-[#121212] text-stone-900 dark:text-stone-100 rounded-bl-none shadow-sm"
+        }`}
         key={message?.id}
       >
-        {/* Bubble Tail */}
-        <span
-          className={`absolute bottom-[-0.1rem] -z-[1] w-0 h-0 border-b-[10px]  border-b-transparent border-t-transparent
-          ${isSender ? "right-[-10px] border-l-[10px] border-l-light dark:border-l-white" : "left-[-10px] border-r-[10px] border-r-light dark:border-r-white"}`}
-        ></span>
+        <p className="w-full font-normal leading-relaxed">{message.content}</p>
 
-        <p className=" w-full">{message.content}</p>
-
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-1.5 self-end mt-0.5 opacity-80">
+          <TimeAgo
+            className="text-[10px] font-medium"
+            date={message.createdAt}
+          />
           {isSender && (
             <BsCheck2All
-              className={`text-[1rem] ${isRead ? "text-blue-500" : "text-gray-400"}`}
+              className={`text-sm ${isRead ? "text-emerald-500" : "text-stone-400"}`}
             />
           )}
         </div>
       </div>
-      <TimeAgo
-        className="text-[0.5rem] opacity-70 px-3"
-        date={message.createdAt}
-      />
     </div>
   );
 });

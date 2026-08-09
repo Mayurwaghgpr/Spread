@@ -116,11 +116,11 @@ function CommentSection({
       <div onClick={handleModalClick} className={BoxClassName}>
         {/* Header */}
         <header className="flex items-center justify-between p-6 border-b border-inherit backdrop-blur-sm">
-          <h1 className="lg:text-2xl sm:text-xl text-lg font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-tight">
+          <h1 className="lg:text-2xl sm:text-xl text-lg font-bold tracking-tight text-stone-900 dark:text-stone-100 leading-tight">
             Comments
           </h1>
           <Ibutton
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+            className="p-2 rounded-full hover:bg-[#f5f1ec] dark:hover:bg-[#121212] transition-colors duration-200"
             action={handleCloseModal}
             aria-label="Close comments"
           >
@@ -129,7 +129,7 @@ function CommentSection({
         </header>
 
         {/* Comments List */}
-        <main className="flex flex-col justify-start items-center gap-6 pb-12 pt-6 px-6 w-full h-[80%] overflow-y-auto border-inherit scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+        <main className="flex flex-col justify-start items-center gap-6 pb-12 pt-6 px-6 w-full h-[80%] overflow-y-auto border-inherit hide-scrollbar">
           {(isLoading
             ? Array(LOADING_SKELETON_COUNT).fill(null)
             : comments
@@ -139,7 +139,7 @@ function CommentSection({
             return (
               <CommentBox
                 ref={shouldAttachRef ? lastItemRef : null}
-                className="flex flex-col text-sm justify-center w-full items-start gap-3 border-inherit p-1 transition-all duration-300 ease-out hover:bg-gray-50/50 dark:hover:bg-gray-800/30 rounded-lg"
+                className="flex flex-col text-sm justify-center w-full items-start gap-3 border-inherit p-1 transition-all duration-300 ease-out hover:bg-[#f5f1ec]/50 dark:hover:bg-[#121212]/50 rounded-lg"
                 key={comment?.id || `skeleton-${idx}`}
                 comt={comment || null}
                 commentPins={commentPins || []}

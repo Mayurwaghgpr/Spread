@@ -1,4 +1,4 @@
-import { memo, useMemo, useState, useCallback } from "react";
+import { memo, useMemo, useState, useCallback, useRef, useEffect } from "react";
 import usePublicApis from "../../../services/publicApis";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { setToast } from "../../../store/slices/uiSlice";
@@ -16,60 +16,100 @@ function Like({ post, className }) {
   const navigate = useNavigate();
   const { isLogin, user } = useSelector((state) => state.auth);
   const queryClient = useQueryClient();
-  // State for optimistic UI updates
+
   const [optimistIcon, setOptimistIcon] = useState("");
+  const [isPopping, setIsPopping] = useState(false);
+  const [showPopover, setShowPopover] = useState(false);
+
+  const hoverTimerRef = useRef(null);
+  const leaveTimerRef = useRef(null);
+
   const invalidateQueries = useCallback(() => {
     queryClient.invalidateQueries(["userProfile"]);
     queryClient.invalidateQueries(["loggedInUser"]);
   }, [queryClient]);
 
-  // Memoized check if the post is liked by the user
   const isLiked = useMemo(() => {
     const like = post?.Likes?.find((like) => like.likedBy === user?.id);
-    setOptimistIcon(like?.type || "");
     return like;
   }, [post?.Likes, user?.id]);
 
-  // Mutation for liking the post
+  const currentReaction = optimistIcon || isLiked?.type || "";
+
   const { mutate } = useMutation({
     mutationFn: (likeConfig) => LikePost(likeConfig),
-    onSuccess: (data) => {
+    onSuccess: () => {
       invalidateQueries();
     },
     onError: (error) => {
-      setOptimistIcon(""); // Revert optimistic update on error
+      setOptimistIcon("");
       dispatch(
         setToast({
           message: `${error.response?.data?.message || "An error occurred"} ✨`,
           type: "error",
-        }),
+        })
       );
     },
   });
 
-  // Handle like button click
+  const handleMouseEnter = useCallback(() => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+    }
+    // Delay opening slightly (150ms) to prevent accidental popups when scrolling
+    hoverTimerRef.current = setTimeout(() => {
+      setShowPopover(true);
+    }, 150);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current);
+    }
+    // Grace period delay (350ms) before closing popover so movement is silky smooth
+    leaveTimerRef.current = setTimeout(() => {
+      setShowPopover(false);
+    }, 350);
+  }, []);
+
   const handleLike = useCallback(
     (e) => {
-      e.stopPropagation();
+      if (e?.stopPropagation) e.stopPropagation();
 
       if (!isLogin) {
         navigate("/auth/signin");
         return;
       }
 
-      const likeType = e.currentTarget.name || "";
-      setOptimistIcon(likeType); // Optimistic UI update
+      let likeType = e?.currentTarget?.name || e?.target?.name || "";
+      if (!likeType && e?.type === "click") {
+        likeType = isLiked ? "" : "like";
+      }
+
+      setOptimistIcon(likeType);
+      setShowPopover(false);
+
+      // Trigger tactile spring bounce
+      setIsPopping(true);
+      setTimeout(() => setIsPopping(false), 300);
+
       mutate({ postId: post.id, liketype: likeType });
     },
-    [isLogin, navigate, mutate, post.id],
+    [isLogin, navigate, mutate, post.id, isLiked]
   );
 
-  // Memoized like count calculation
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
+    };
+  }, []);
+
   const likeCount = useMemo(() => {
     const baseCount = post?.Likes?.length || 0;
     if (!isLiked && optimistIcon) {
       return <AbbreviateNumber rawNumber={baseCount + 1} />;
-    } else if (isLiked && !optimistIcon) {
+    } else if (isLiked && optimistIcon === "") {
       return <AbbreviateNumber rawNumber={baseCount - 1} />;
     }
     return <AbbreviateNumber rawNumber={baseCount} />;
@@ -78,23 +118,35 @@ function Like({ post, className }) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`relative flex items-end cursor-pointer group  border-inherit  ${
-        isLiked ? "" : ""
-      } ${className}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`relative flex items-center cursor-pointer border-inherit ${className}`}
     >
-      {/* Likes list when hovered */}
-      <LikesList mutate={handleLike} post={post} />
-      {/* Like button */}
+      {/* Reactions popover menu */}
+      <LikesList
+        mutate={handleLike}
+        isVisible={showPopover}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      />
+
+      {/* Like Button */}
       <button
-        name=""
-        onClick={isLiked ? handleLike : null}
-        className={`flex items-center justify-center gap-1 `}
+        onClick={handleLike}
+        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 hover:bg-[#f5f1ec] dark:hover:bg-[#121212] active:scale-95 ${
+          currentReaction
+            ? "text-stone-900 dark:text-stone-100"
+            : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"
+        }`}
       >
-        {/* Icon rendering */}
-        <span className={` ${getReactionColour(optimistIcon)}`}>
-          {icons[optimistIcon || "likeO"]}
+        <span
+          className={`text-base transition-transform duration-300 ${
+            isPopping ? "scale-140 -rotate-12" : "scale-100"
+          } ${getReactionColour(currentReaction)}`}
+        >
+          {icons[currentReaction || "likeO"]}
         </span>
-        <span className="">{likeCount}</span>
+        <span className="text-xs font-medium">{likeCount}</span>
       </button>
     </div>
   );

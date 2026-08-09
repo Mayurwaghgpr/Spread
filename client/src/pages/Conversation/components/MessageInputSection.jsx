@@ -115,19 +115,19 @@ function MessageInputSection({
   }, []);
 
   return (
-    <div className=" sticky bottom-0 z-20 bg-light dark:bg-dark flex justify-center items-center w-full h-fit border sm:px-5 px-2 pt-2 pb-5 border-inherit">
-      <div className="relative flex justify-center items-baseline gap-3 p-2 w-4/5 rounded-lg bg-white border dark:bg-opacity-10 border-inherit">
-        <div className="flex justify-start items-center sm:gap-3 w-full border-inherit">
-          <div className="flex justify-start items-center gap-2 w-fit border-inherit">
-            <FedInBtn className="sm:text-xl rounded-full p-2 border">
+    <div className="sticky bottom-0 z-20 bg-light dark:bg-dark flex justify-center items-center w-full h-fit border-t sm:px-5 px-2 pt-3 pb-5 border-inherit">
+      <div className="relative flex justify-center items-center gap-3 p-2 w-full max-w-2xl rounded-xl spread-card border border-inherit">
+        <div className="flex justify-start items-center sm:gap-2 w-full border-inherit">
+          <div className="flex justify-start items-center gap-1 w-fit border-inherit">
+            <FedInBtn className="sm:text-lg rounded-full p-2 hover:bg-light dark:hover:bg-dark text-stone-600 dark:text-stone-400 border border-inherit transition-colors">
               {icons["attachPin"]}
             </FedInBtn>
-            <FedInBtn className="sm:text-xl rounded-full p-2 border">
+            <FedInBtn className="sm:text-lg rounded-full p-2 hover:bg-light dark:hover:bg-dark text-stone-600 dark:text-stone-400 border border-inherit transition-colors">
               {icons["smile"]}
             </FedInBtn>
           </div>
           <CommonInput
-            className="relative px-2 w-full h-full border-inherit border-0 bg-inherit outline-none peer"
+            className="relative px-2 w-full h-full border-0 bg-transparent text-stone-900 dark:text-stone-100 placeholder-stone-400 outline-none"
             onChange={handleInput}
             value={message}
             onKeyDown={(e) => {
@@ -136,13 +136,11 @@ function MessageInputSection({
                 handleSend();
               }
             }}
-            placeholder="Start Writing..."
-          >
-            <div className="absolute w-full bottom-0 transition-transform duration-300 border-t border-black dark:border-inherit scale-0 peer-focus:scale-100"></div>
-          </CommonInput>
+            placeholder="Write a message..."
+          />
         </div>
         <FedInBtn
-          className="flex justify-center items-center text-xl min-w-fit rounded-full p-2"
+          className="flex justify-center items-center text-lg min-w-fit rounded-xl px-3 py-2 spread-btn-primary text-xs disabled:opacity-40"
           action={handleSend}
           disabled={!message.trim()}
         >

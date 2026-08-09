@@ -55,10 +55,11 @@ router.get(
   gitHubAuth
 );
 
-// Route to handle token refresh
+// Route to handle token refresh (supports POST & GET)
+router.post("/refresh-token", refreshToken);
 router.get("/refresh-token", refreshToken);
 
-//Route to Login user setails
+// Route to Login user details
 router.get("/details", IsAuth, getLoginUser);
 
 // Route to handle user sign up
@@ -72,7 +73,7 @@ router.delete("/logout", IsAuth, logout);
 
 router.post("/forgotpassword", forgotPass);
 
-//Route to handle reset password,
+// Route to handle reset password
 router.put("/resetpassword/:token", resetPassword);
 
 export default router;

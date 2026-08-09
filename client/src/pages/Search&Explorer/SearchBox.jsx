@@ -117,13 +117,13 @@ function SearchBox({ className, scrollDirection }) {
           Search & Explore
         </h1>
       </header>
-      <div className="relative flex flex-col justify-start items-center gap-3 w-full max-w-2xl rounded-lg p-6 bg-[#fff9f3] dark:bg-black border-inherit mt-20 mx-4">
-        <div className="w-full dark:bg-black border-inherit">
+      <div className="relative flex flex-col justify-start items-center gap-3 w-full max-w-2xl rounded-2xl p-6 spread-card mt-20 mx-4">
+        <div className="w-full border-inherit">
           <SearchBar
             ref={searchRef}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            className="flex justify-center px-3 p-2 w-full items-center gap-3 rounded-full border overflow-hidden border-inherit placeholder:text-inherit"
+            className="flex justify-center px-3 p-2 w-full items-center gap-3 rounded-xl border border-inherit bg-light dark:bg-dark placeholder:text-stone-400"
             inputAction={handleInputChange}
             btnAction={handleSearchAction}
             value={searchQuery}
@@ -138,7 +138,7 @@ function SearchBox({ className, scrollDirection }) {
           <div
             role="listbox"
             aria-live="polite"
-            className={`flex justify-center items-center w-full border rounded-sm shadow-sm transition-all duration-300 border-inherit ${
+            className={`flex justify-center items-center w-full border rounded-xl shadow-sm transition-all duration-300 border-inherit bg-light dark:bg-dark ${
               scrollDirection === "down"
                 ? "-translate-y-8 opacity-0"
                 : "translate-y-0 opacity-100"
@@ -146,7 +146,7 @@ function SearchBox({ className, scrollDirection }) {
           >
             {isLoading ? (
               <div className="flex justify-center p-4">
-                <Spinner className="w-5 h-5 dark:bg-white bg-black p-0.5" />
+                <Spinner className="w-5 h-5 dark:bg-stone-100 bg-stone-900 p-0.5" />
                 <span className="sr-only">Searching...</span>
               </div>
             ) : searchResult.length > 0 ? (
@@ -155,7 +155,7 @@ function SearchBox({ className, scrollDirection }) {
                   <li
                     key={searchres?.id || idx}
                     role="option"
-                    className="cursor-pointer p-2 px-3 flex justify-start items-center gap-3 rounded-lg hover:bg-gray-300 hover:bg-opacity-30 duration-200 focus:bg-gray-300 focus:bg-opacity-30"
+                    className="cursor-pointer p-2 px-3 flex justify-start items-center gap-3 rounded-lg hover:bg-[#f5f1ec] dark:hover:bg-[#121212] duration-200 text-stone-900 dark:text-stone-100"
                     onMouseDown={() => handleTagSelect(searchres?.tag)}
                     tabIndex={0}
                     onKeyDown={(e) => {
@@ -173,7 +173,7 @@ function SearchBox({ className, scrollDirection }) {
                 ))}
               </ul>
             ) : searchQuery.trim() ? (
-              <div className="w-full px-3 flex justify-start items-center gap-3 p-3 text-gray-500">
+              <div className="w-full px-3 flex justify-start items-center gap-3 p-3 text-stone-500 dark:text-stone-400">
                 <span className="font-thin text-lg" aria-hidden="true">
                   {icons["search"]}
                 </span>

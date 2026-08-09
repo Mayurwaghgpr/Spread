@@ -9,6 +9,7 @@ function useProfileApi() {
       throw error.response || error;
     }
   };
+
   const fetchUserData = async (profileId, pageParam) => {
     try {
       const response = await axiosInstance.get(`/user/posts/${profileId}`, {
@@ -52,7 +53,6 @@ function useProfileApi() {
   const editUserProfile = async (newData) => {
     const formData = new FormData();
 
-    // Append Image Data
     if (newData.NewImageFile || newData.removeImage) {
       formData.append("userImage", newData.userImage);
     }
@@ -63,7 +63,6 @@ function useProfileApi() {
       formData.append("removeImage", newData.removeImage);
     }
 
-    // Append Profile Details
     formData.append("username", newData.username);
     formData.append("email", newData.email);
     formData.append("pronouns", newData.pronouns);
@@ -78,7 +77,6 @@ function useProfileApi() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // ...(getToken() && { Authorization: `Bearer ${getToken()}` }),
           },
         }
       );
@@ -91,11 +89,13 @@ function useProfileApi() {
       throw error.response || error;
     }
   };
-  const searchUsername = async (username) => {
+
+  const searchUsername = async (payload) => {
     try {
+      const data = typeof payload === "string" ? { username: payload } : payload;
       const response = await axiosInstance.post(
         `/user/search/username`,
-        username
+        data
       );
       return response.data;
     } catch (error) {
@@ -112,4 +112,5 @@ function useProfileApi() {
     fetchFollowInfo,
   };
 }
+
 export default useProfileApi;

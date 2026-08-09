@@ -66,7 +66,7 @@ const EditableElementInput = React.forwardRef(
         return;
       }
       const currentText = ref.current.innerHTML;
-      const mentionLink = `<a href="/profile/@${selectedUser.username}/${selectedUser.id}" class="text-blue-500 hover:text-blue-600 cursor-pointer font-medium" data-mention="true">@${selectedUser.username}</a>`;
+      const mentionLink = `<a href="/profile/@${selectedUser.username}/${selectedUser.id}" class="text-stone-900 dark:text-stone-100 hover:opacity-80 cursor-pointer font-semibold underline decoration-stone-400" data-mention="true">@${selectedUser.username}</a>`;
       const updatedText = currentText.replace(
         `@${mentionedUsername}`,
         mentionLink

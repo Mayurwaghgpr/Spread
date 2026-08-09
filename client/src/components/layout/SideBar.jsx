@@ -91,14 +91,14 @@ function SideBar() {
                 to={
                   user?.profileLink || `/profile/@${user.username}/${user.id}`
                 }
-                className="group flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-200 hover:bg-gray-200/50 dark:hover:bg-gray-800/50 focus-ring"
+                className="group flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-200 hover:bg-[#e8dfd5]/60 dark:hover:bg-[#1f1f1f] focus-ring"
               >
                 <div
-                  className={`relative ${!userImageurl && "bg-gray-300 dark:bg-gray-700 h-6 w-6 rounded-full"}`}
+                  className={`relative ${!userImageurl && "bg-stone-300 dark:bg-stone-700 h-6 w-6 rounded-full"}`}
                 >
                   {userImageurl && (
                     <ProfileImage
-                      className="h-6 w-6 rounded-full border border-gray-200 dark:border-gray-700 object-cover"
+                      className="h-6 w-6 rounded-full border border-inherit object-cover"
                       image={userImageurl}
                       alt={user?.username}
                       title="user profile"
@@ -111,12 +111,12 @@ function SideBar() {
                   className={`${
                     user?.displayName
                       ? ""
-                      : "w-[7rem] bg-gray-300 dark:bg-gray-700 h-4 rounded-lg animate-pulse"
+                      : "w-[7rem] bg-stone-300 dark:bg-stone-700 h-4 rounded-lg animate-pulse"
                   } xl:block sm:hidden block text-nowrap text-xs`}
                 >
-                  {user?.displayName && <h1 className="font-semibold text-gray-900 dark:text-gray-100">{user.displayName}</h1>}
+                  {user?.displayName && <h1 className="font-semibold text-stone-900 dark:text-stone-100">{user.displayName}</h1>}
                   {user?.username && (
-                    <p className="text-gray-500 dark:text-gray-400 text-[11px] xl:block hidden">
+                    <p className="text-stone-500 dark:text-stone-400 text-[11px] xl:block hidden">
                       @{user.username}
                     </p>
                   )}
@@ -125,7 +125,7 @@ function SideBar() {
 
               {/* Collapse Button */}
               <button
-                className="xl:block hidden text-lg text-gray-500 hover:text-gray-900 dark:hover:text-white p-1 rounded-lg focus-ring"
+                className="xl:block hidden text-lg text-stone-500 hover:text-stone-900 dark:hover:text-white p-1 rounded-lg focus-ring"
                 onClick={() => dispatch(setMenuOpen())}
                 aria-label="Close sidebar"
               >
@@ -142,9 +142,9 @@ function SideBar() {
                   key={link.id}
                   stub={link.stub}
                   className={`group flex items-center gap-4 rounded-xl w-full px-4 py-3 text-sm capitalize transition-all duration-200 focus-ring
-                  hover:bg-gray-200/60 dark:hover:bg-gray-800/60
-                  text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white
-                  ${active ? "bg-gray-200/80 dark:bg-gray-800/80 text-gray-900 dark:text-white font-semibold" : ""}
+                  hover:bg-[#e8dfd5]/60 dark:hover:bg-[#1f1f1f]
+                  text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white
+                  ${active ? "bg-[#e8dfd5]/90 dark:bg-[#1f1f1f] text-stone-900 dark:text-white font-bold border border-inherit" : ""}
                 `}
                 >
                   <div
@@ -167,7 +167,7 @@ function SideBar() {
             })}
           </div>
           {/* Logout Button */}
-          <LogoutBtn className="group text-sm flex items-center gap-4 px-4 py-3 w-full rounded-xl text-gray-500 dark:text-gray-400 transition-all duration-200 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 focus-ring" />
+          <LogoutBtn className="group text-sm flex items-center gap-4 px-4 py-3 w-full rounded-xl text-stone-500 dark:text-stone-400 transition-all duration-200 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 focus-ring" />
         </div>
       </div>
     </aside>

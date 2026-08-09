@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-import { CheckCircle, MapPin, Calendar, ExternalLink } from "lucide-react";
 import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import Follow from "../buttons/follow";
 import FormatedTime from "./FormatedTime";
@@ -14,21 +13,20 @@ const UserPopover = forwardRef(
     return (
       <div
         ref={ref}
-        className={`${className} rounded-2xl
-         border border-inherit overflow-hidden bg-light dark:bg-dark w-full`}
+        className={`${className} rounded-2xl border border-inherit overflow-hidden bg-[#f5f1ec] dark:bg-[#121212] shadow-2xl backdrop-blur-md w-full max-w-sm`}
         role="dialog"
         aria-label={`${person?.username}'s profile information`}
         style={styles?.popper}
         {...attributes?.popper}
       >
         {/* Main content */}
-        <div className=" flex flex-col gap-3 items-start p-3  relative w-full">
+        <div className="flex flex-col gap-3 items-start p-4 relative w-full">
           {/* Avatar and basic info */}
-          <div className="flex items-start justify-between gap-2 w-full">
-            <div className="flex items-center gap-4 w-full">
-              <div className="relative">
+          <div className="flex items-start justify-between gap-3 w-full">
+            <div className="flex items-center gap-3 w-full">
+              <div className="relative shrink-0">
                 <img
-                  className="w-16 h-16 rounded-full object-cover  object-top"
+                  className="w-14 h-14 rounded-full object-cover object-top border border-inherit"
                   src={person?.userImage || "/api/placeholder/64/64"}
                   alt={`${person?.username}'s profile picture`}
                   loading="lazy"
@@ -39,27 +37,25 @@ const UserPopover = forwardRef(
                   </span>
                 )}
                 {person?.isOnline && (
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                  <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-black rounded-full"></div>
                 )}
               </div>
 
-              <div className="flex-1 min-w-0 max-w-32">
+              <div className="flex-1 min-w-0">
                 <Link
                   to={`/profile/@${person?.username}/${person?.id}`}
                   className="group block"
                 >
-                  <div className="flex items-center gap-2">
-                    <h2 className="font-bold text-sm  group-hover:text-blue-600 dark:group-hover:text-blue-400 hover:underline transition-colors  overflow-hidden text-ellipsis whitespace-nowrap">
-                      {person?.displayName || person?.username}
-                    </h2>
-                  </div>
+                  <h2 className="font-bold text-sm text-stone-900 dark:text-stone-100 group-hover:underline transition-colors truncate">
+                    {person?.displayName || person?.username}
+                  </h2>
                 </Link>
                 <Link
                   to={`/profile/@${person?.username}/${person?.id}`}
                   className="group block"
                 >
                   <DisplayUsername
-                    className=" opacity-50 font-thin"
+                    className="text-stone-500 dark:text-stone-400 font-medium text-xs truncate"
                     username={`@${person?.username}`}
                   />
                 </Link>
@@ -68,92 +64,55 @@ const UserPopover = forwardRef(
 
             <Follow
               person={person}
-              className="px-3 py-1 bg-black dark:bg-white text-white dark:text-black font-semibold rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-200 text-sm  transform hover:scale-105"
+              className="px-3.5 py-1.5 text-xs shrink-0"
             />
           </div>
 
           {/* Bio */}
           {person?.bio && (
-            <div className="">
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
+            <div>
+              <p className="text-stone-700 dark:text-stone-300 text-xs leading-relaxed line-clamp-3">
                 {person.bio}
               </p>
             </div>
           )}
 
           {/* Additional info */}
-          <div className="flex flex-wrap gap-3 mb-4 text-xs text-gray-500 dark:text-gray-400">
-            {/* {person?.location && (
-              <div className="flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                <span>{person.location}</span>
-              </div>
-            )} */}
-            {person?.createdAt && (
-              <div className="flex items-center justify-start  gap-2">
-                <div className="flex items-center justify-start  gap-1">
-                  {" "}
-                  {icons["calender"]}
-                  <span>Joined </span>{" "}
-                </div>
-
-                <FormatedTime date={person.createdAt} formate={"d LLL yyy"} />
-              </div>
-            )}
-          </div>
+          {person?.createdAt && (
+            <div className="flex items-center gap-1.5 text-[11px] text-stone-500 dark:text-stone-400">
+              <span className="w-3.5 h-3.5 flex items-center">{icons["calender"]}</span>
+              <span>Joined </span>
+              <FormatedTime date={person.createdAt} formate={"d LLL yyy"} />
+            </div>
+          )}
 
           {/* Stats */}
-          <div className="flex gap-6 pt-4 sm:text-sm text-xs  border-t border-gray-100 dark:border-gray-800 w-full">
-            <div className=" flex items-center justify-start gap-1 text-center">
-              <div className="">
-                {<AbbreviateNumber rawNumber={person?.Followers?.length} />}
-              </div>
-              <div className="  tracking-wide">Followers</div>
+          <div className="flex gap-5 pt-3 text-xs border-t border-inherit w-full text-stone-700 dark:text-stone-300">
+            <div className="flex items-center gap-1">
+              <span className="font-bold text-stone-900 dark:text-stone-100">
+                <AbbreviateNumber rawNumber={person?.Followers?.length || 0} />
+              </span>
+              <span className="text-stone-500 dark:text-stone-400">Followers</span>
             </div>
-            <div className=" flex items-center justify-start gap-1 text-center">
-              <div className=" ">
-                {<AbbreviateNumber rawNumber={person?.Following?.length} />}
-              </div>
-              <div className=" tracking-wide">Following</div>
+            <div className="flex items-center gap-1">
+              <span className="font-bold text-stone-900 dark:text-stone-100">
+                <AbbreviateNumber rawNumber={person?.Following?.length || 0} />
+              </span>
+              <span className="text-stone-500 dark:text-stone-400">Following</span>
             </div>
-            {person?.postsCount && (
-              <div className="text-center">
-                <div className="font-bold text-lg">
-                  {<AbbreviateNumber rawNumber={person.postsCount} />}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                  Posts
-                </div>
+            {person?.postsCount > 0 && (
+              <div className="flex items-center gap-1">
+                <span className="font-bold text-stone-900 dark:text-stone-100">
+                  <AbbreviateNumber rawNumber={person.postsCount} />
+                </span>
+                <span className="text-stone-500 dark:text-stone-400">Posts</span>
               </div>
             )}
           </div>
-
-          {/* Mutual connections */}
-          {/* {person?.mutualFollowers && person.mutualFollowers.length > 0 && (
-            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  {person.mutualFollowers.slice(0, 3).map((follower, index) => (
-                    <img
-                      key={index}
-                      className="w-6 h-6 rounded-full border-2 border-white object-cover"
-                      src={follower.avatar || "/api/placeholder/24/24"}
-                      alt={follower.username}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Followed by {person.mutualFollowers[0]?.username}
-                  {person.mutualFollowers.length > 1 &&
-                    ` and ${person.mutualFollowers.length - 1} other${person.mutualFollowers.length > 2 ? "s" : ""} you follow`}
-                </span>
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
     );
-  },
+  }
 );
 
 UserPopover.displayName = "UserPopover";

@@ -1,25 +1,22 @@
-import { Link } from "react-router-dom";
 import useIcons from "../../hooks/useIcons";
 import { memo } from "react";
 
-const AIBtn = memo(({ className, state }) => {
+const AIBtn = memo(({ className, onClick }) => {
   const icons = useIcons();
   return (
-    <Link
-      to="/analysis"
-      state={state}
+    <button
+      type="button"
       title="AI Analysis"
       aria-label="AI Analysis"
       onClick={(e) => {
         e.stopPropagation();
+        if (onClick) onClick(e);
       }}
-      tabIndex={-1}
-      role="button"
-      className={`border-inherit  sm:text-xl text-lg flex justify-center  cursor-pointer ${className}`}
+      className={`border border-inherit bg-light dark:bg-dark text-stone-900 dark:text-stone-100 hover:bg-[#f5f1ec] dark:hover:bg-[#121212] sm:text-base text-sm flex items-center justify-center gap-1.5 cursor-pointer font-semibold shadow-md transition-all duration-200 rounded-full px-4 py-2 ${className}`}
     >
-      AI
+      <span>AI</span>
       {icons["glitter"]}
-    </Link>
+    </button>
   );
 });
 

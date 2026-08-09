@@ -23,11 +23,12 @@ function Home() {
   const selectedFeed = searchParams.get("feed");
   const Icons = useIcons();
   const navigate = useNavigate();
+
   const handleTopicClick = useCallback(
     (topic) => setSearchParams({ topic }),
     [setSearchParams]
   );
-  // Fetch posts with infinite scrolling
+
   const {
     data: postsData,
     error: errorPosts,
@@ -61,15 +62,14 @@ function Home() {
     1
   );
 
-  // Handle errors
   if (isPostError) {
     const errorMessage = errorPosts?.data?.message;
     const statusCode = errorPosts?.status;
     return <ErrorPage message={errorMessage} statusCode={statusCode || 500} />;
   }
+
   const posts = postsData?.pages.flatMap((page) => page) || [];
 
-  // Navigation items configuration
   const navigationItems = [
     {
       id: "feed",
@@ -85,16 +85,8 @@ function Home() {
       onClick: () => navigate("?feed=following"),
       ariaLabel: "View Following",
     },
-    {
-      id: "topics",
-      label: Icons["plus"],
-      isActive: false,
-      onClick: () => {},
-      ariaLabel: "View specific topics",
-    },
   ];
 
-  // Helper function to render posts with WhoToFollow insertion
   const renderPosts = () => {
     if (posts.length === 0 && !isLoading) {
       return (
@@ -111,15 +103,15 @@ function Home() {
     return posts.map((post, idx, arr) => {
       const isLastItem = idx === arr.length - 1;
       const shouldInsertWhoToFollow = idx === 3 && isDeviceSize;
+      const itemKey = post?.id ? `post-${post.id}` : `post-idx-${idx}`;
 
       if (shouldInsertWhoToFollow) {
         return (
-          <React.Fragment key={`fragment-${post.id}` || idx}>
-            <WhoToFollow className="w-full  border-inherit p-5 text-sm" />
+          <React.Fragment key={`fragment-${itemKey}`}>
+            <WhoToFollow className="w-full spread-card p-5 text-sm my-4" />
             <PostPreview
-              className="w-full border  pt-2"
+              className="w-full my-4"
               ref={isLastItem ? lastItemRef : null}
-              key={post?.id}
               post={post}
             />
           </React.Fragment>
@@ -128,31 +120,29 @@ function Home() {
 
       return (
         <PostPreview
-          className="w-full border pt-2  "
+          className="w-full my-4"
           ref={isLastItem ? lastItemRef : null}
-          key={post?.id || idx}
+          key={itemKey}
           post={post}
         />
       );
     });
   };
 
-  // Render loading skeletons
   const renderLoadingSkeletons = () =>
     Array.from({ length: 6 }, (_, idx) => (
       <PostCardSkeleton key={`skeleton-${idx}`} />
     ));
 
-  // Render loading/end state
   const renderListFooter = () => (
-    <div className="flex items-center justify-center w-full  sm:pb-16 pb-20">
+    <div className="flex items-center justify-center w-full py-8">
       {isFetchingNextPage && (
-        <Spinner className="w-7 p-1 bg-black dark:bg-white" />
+        <Spinner className="w-7 p-1 bg-[#f5f1ec] dark:bg-[#121212] text-stone-900 dark:text-stone-100" />
       )}
 
       {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 sm:px-4 sm:py-2 py-1 px-2 sm:text-sm text-xs  rounded-full bg-gray-50 dark:bg-white text-gray-500 dark:text-black ">
+          <div className="inline-flex items-center gap-2 px-4 py-2 text-xs rounded-full spread-pill">
             <BsPostcard className="w-4 h-4" />
             <span>You've seen all suggestions</span>
           </div>
@@ -162,25 +152,27 @@ function Home() {
   );
 
   return (
-    <>
-      <div className="flex flex-col w-full h-full border-inherit  ">
+    <div className="flex flex-1 min-w-0 max-w-7xl mx-auto w-full gap-6 px-3 sm:px-6 py-6 items-start border-inherit">
+      {/* Main Feed Column */}
+      <div className="flex flex-col flex-1 min-w-0 border-inherit">
+        {/* Navigation Tabs Header */}
         <nav
-          className="absolute top-  z-10 sm:mx-5 sm:w-fit w-full border rounded-lg border-inherit bg-gray-700/0 backdrop-blur-[20px]"
+          className="sticky top-0 z-10 w-full spread-card p-2 rounded-2xl mb-4 backdrop-blur-md"
           role="navigation"
           aria-label="Feed navigation"
         >
-          <div className="flex items-center justify-start p-3 text-sm">
-            <ul className="flex items-center gap-4 px-4 w-full">
+          <div className="flex items-center justify-start text-sm">
+            <ul className="flex items-center gap-6 px-3 w-full">
               {navigationItems.map((item) => (
                 <li key={item.id} className="flex items-center justify-center">
                   <Ibutton
                     action={item.onClick}
                     aria-label={item.ariaLabel}
                     id={item.id}
-                    className={`capitalize transition-opacity duration-200 ${
+                    className={`capitalize font-bold text-xs sm:text-sm transition-all pb-1 ${
                       item.isActive
-                        ? "opacity-100 underline underline-offset-[1rem]"
-                        : "opacity-50 hover:opacity-75"
+                        ? "text-stone-900 dark:text-stone-100 border-b-2 border-stone-900 dark:border-stone-100"
+                        : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"
                     }`}
                   >
                     {item.label}
@@ -190,20 +182,37 @@ function Home() {
             </ul>
           </div>
         </nav>
-        <div className="sm:px-5 px-2.5 space-y-5 border-inherit py-20 ">
-          {/* Posts Container */}
+
+        {/* Selected Topic Tag Indicator */}
+        {selectedTopic && selectedTopic !== "All" && (
+          <div className="mb-3 flex items-center justify-between px-1">
+            <span className="text-xs font-semibold text-stone-600 dark:text-stone-400">
+              Filtered by topic: <strong className="text-stone-900 dark:text-stone-100">#{selectedTopic}</strong>
+            </span>
+            <button
+              onClick={() => handleTopicClick("All")}
+              className="text-xs text-stone-500 hover:underline cursor-pointer"
+            >
+              Clear filter
+            </button>
+          </div>
+        )}
+
+        {/* Posts List */}
+        <div className="w-full space-y-4 border-inherit">
           {isLoading ? renderLoadingSkeletons() : renderPosts()}
           {renderListFooter()}
         </div>
       </div>
-      {/* Sidebar - Desktop Only */}
+
+      {/* Aside Topic Sidebar - Sticky on desktop */}
       {!isDeviceSize && (
         <Aside
           handleTopicClick={handleTopicClick}
-          className=" sticky top-0 z-20 bg-light dark:bg-dark h-screen flex flex-col gap-5 p-6 text-xs border-inherit border rounded-2xl w-1/2 mx-5"
+          className="hidden lg:block w-80 lg:w-96 shrink-0 sticky top-4 self-start max-h-[calc(100vh-2rem)] overflow-y-auto scrollbar-none spread-card p-5 text-xs rounded-2xl"
         />
       )}
-    </>
+    </div>
   );
 }
 

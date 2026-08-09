@@ -7,7 +7,6 @@ import TaskBar from "../phoneview/TaskBar";
 import LoaderScreen from "../loaders/loaderScreen";
 import { useQuery } from "@tanstack/react-query";
 import usePublicApis from "../../services/publicApis";
-// import useDeviceSize from "../../hooks/useDeviceSize";
 
 import {
   setLoadingHome,
@@ -16,15 +15,11 @@ import {
 } from "../../store/slices/commonSlice";
 
 function Layout() {
-  // const [searchParams, setSearchParams] = useSearchParams();
-
   const { pathname } = useLocation();
   const { isLogin } = useSelector((state) => state.auth);
   const { fetchHomeContent } = usePublicApis();
-  // const isDeviceSize = useDeviceSize("1023");
   const dispatch = useDispatch();
 
-  // Fetch home content data
   const { data, isSuccess, isError, error } = useQuery({
     queryKey: ["homeContent"],
     queryFn: fetchHomeContent,
@@ -33,7 +28,6 @@ function Layout() {
     refetchOnWindowFocus: false,
   });
 
-  // Handle query success/error with useEffect
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(setUserSuggestions(data.userSuggetion));
@@ -48,11 +42,10 @@ function Layout() {
       dispatch(setLoadingHome(false));
     }
   }, [isError, error, dispatch]);
-  // Memoize path checks for better performance
+
   const pathChecks = useMemo(
     () => ({
       isMessagesPath: pathname.startsWith("/messages"),
-      // isWritePath: pathname.startsWith("/write"),
       isSearchPath: pathname.startsWith("/search"),
       isAnalysisPath: pathname.startsWith("/analysis"),
       isViewPath: pathname.startsWith("/view"),
@@ -60,7 +53,6 @@ function Layout() {
         isLogin &&
         !pathname.startsWith("/search") &&
         !pathname.startsWith("/analysis"),
-      // !pathname.startsWith("/view"),
     }),
     [pathname, isLogin]
   );
@@ -69,24 +61,26 @@ function Layout() {
   const showTaskBar = isLogin && !pathChecks.isMessagesPath;
 
   return (
-    <main className="relative flex flex-col h-screen max-h-screen bg-inherit border-inherit overflow-hidden">
+    <main className="relative flex flex-col h-screen max-h-screen bg-light dark:bg-dark text-stone-900 dark:text-stone-100 overflow-hidden border-inherit">
       {/* Main Content Area */}
-      <div className="relative flex justify-start h-full border-inherit">
+      <div className="relative flex flex-1 min-h-0 w-full border-inherit overflow-hidden">
         {/* Sidebar */}
         {pathChecks.showSidebar && <SideBar />}
 
-        {/* Main Content */}
-        <div className=" w-full flex-grow border-inherit">
+        {/* Main Content Column */}
+        <div className="flex flex-col flex-1 min-h-0 min-w-0 w-full border-inherit overflow-hidden">
           {/* Navigation Bar */}
           {showNavBar && <MainNavBar />}
-          <section className="  flex border-inherit w-full h-full overflow-y-auto">
+          
+          {/* Page Section */}
+          <section className="flex flex-1 min-h-0 min-w-0 w-full border-inherit overflow-y-auto pb-16 sm:pb-0">
             <Suspense fallback={<LoaderScreen />}>
               <Outlet />
             </Suspense>
           </section>
         </div>
 
-        {/* TaskBar - Only on desktop, positioned as sidebar */}
+        {/* Mobile TaskBar */}
         {showTaskBar && <TaskBar />}
       </div>
     </main>

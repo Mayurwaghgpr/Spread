@@ -1,121 +1,117 @@
 import { useEffect, useState } from "react";
 import Heading from "./Heading";
+import useIcons from "../../../hooks/useIcons";
 
 export default function FeatureSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const icons = useIcons();
 
   const features = [
     {
-      title: "Dynamic Post Editor",
+      badge: "AI Powered",
+      title: "AI Post Assistant & Analysis",
       description:
-        "Write and format your posts effortlessly with our rich text editor that supports code blocks, markdown, and inline styling for a seamless writing experience.",
+        "Get instant structured executive summaries, key concept breakdowns, community sentiment scores, and interactive Q&A follow-up chats for every post.",
+      image: "/octbot.png",
+      tag: "Gemini 2.5 Flash Engine",
+    },
+    {
+      badge: "Rich Editor",
+      title: "Dynamic Content & Code Editor",
+      description:
+        "Express your ideas with full markdown support, code blocks with syntax highlighting, inline figure embeds, and dynamic content formatting.",
       image: "/dynamic_editor.png",
-    },
-    // {
-    //   title: "Smart Recommendations",
-    //   description:
-    //     "Discover content tailored to your interests with our AI-powered recommendation system that learns from your reading and interaction patterns.",
-    // },
-    // {
-    //   title: "Real-Time Collaboration",
-    //   description:
-    //     "Work together with teammates or co-authors in real time. See live edits, comments, and discussions right inside the editor.",
-    // },
-    {
-      title: "AI Post Analytics",
-      description:
-        "Analize post using AI, Get point by point analysis for each post reparatly",
-      image: "",
+      tag: "Developer-First",
     },
     {
-      title: "Secure Authentication",
+      badge: "Security",
+      title: "OAuth 2.0 & Multi-Token Auth",
       description:
-        "Keep your account safe with multi-layered authentication, including OAuth with Google and GitHub, plus encrypted token-based login.",
-      image: "",
+        "Seamless login with Google, GitHub, or secure encrypted token-based email authentication for peace of mind.",
+      image: "/octbot.png",
+      tag: "Secure & Encrypted",
     },
     {
-      title: "Custom Themes",
+      badge: "Personalization",
+      title: "Obsidian & Warm Paper Themes",
       description:
-        "Personalize your experience with light, dark, and system-based themes that adapt to your device settings automatically.",
-      image: "",
-    },
-    {
-      title: "Save for Later",
-      description:
-        "Bookmark and organize your favorite posts in custom group so you can easily revisit and read them later.",
-      image: "",
-    },
-    {
-      title: "Community Interaction",
-      description:
-        "Like, comment,mention and follow your favorite creators to stay updated and be part of an engaging, growth driven community.",
+        "Experience Spread's signature warm paper (#fff9f3) light mode and sleek obsidian (#080808) dark mode tailored for reading comfort.",
       image: "/comunity_Interact.png",
+      tag: "Eye Friendly",
+    },
+    {
+      badge: "Organization",
+      title: "Smart Bookmarks & Tag Explorer",
+      description:
+        "Organize favorite articles, follow trending topics, and quickly search through indexed tags and creator discussions.",
+      image: "/dynamic_editor.png",
+      tag: "Instant Discovery",
+    },
+    {
+      badge: "Community",
+      title: "LinkedIn-Style Reactions & Follows",
+      description:
+        "React with Like, Cheer, Appreciate, and Celebration reactions, build your follower base, and engage with top creators.",
+      image: "/comunity_Interact.png",
+      tag: "Realtime Social",
     },
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % features.length);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [features.length]);
 
   return (
-    <section className="relative w-full min-h-screen bg-oplight dark:bg-inherit text-white py-20 px-6 overflow-hidden">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 opacity-20">
-        <div
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl transition-colors duration-1000"
-          style={{ backgroundColor: features[currentIndex].accent }}
-        />
-        <div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl transition-colors duration-1000"
-          style={{
-            backgroundColor:
-              features[(currentIndex + 3) % features.length].accent,
-          }}
-        />
-      </div>
-
-      <div className="relative space-y-10 max-w-7xl mx-auto">
-        {/* Header */}
+    <section className="relative w-full py-16 sm:py-24 px-4 sm:px-6 overflow-hidden bg-light dark:bg-dark border-y border-inherit">
+      <div className="relative space-y-8 sm:space-y-12 max-w-6xl mx-auto border-inherit">
+        {/* Section Header */}
         <Heading
-          title={"Powerful features"}
+          title={"Supercharged Features"}
           subtitle={
-            "Everything you need to create, share, and grow your creative journey"
+            "Everything you need to write, analyze, discover, and build your creative audience"
           }
         />
 
-        {/* Feature Display */}
-        <div className="relative min-h-[600px] flex items-center justify-center">
+        {/* Feature Display Container */}
+        <div className="relative min-h-[460px] sm:min-h-[480px] flex items-center justify-center border-inherit">
           {features.map((feature, index) => (
             <div
               key={index}
               className={`absolute inset-0 transition-all duration-700 ease-in-out ${
                 currentIndex === index
-                  ? "opacity-100 scale-100 translate-y-0"
+                  ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
                   : "opacity-0 scale-95 translate-y-4 pointer-events-none"
               }`}
             >
-              <div className="bg-[#fff9f3] text-black rounded-3xl shadow-2xl overflow-hidden h-full">
-                <div className="grid md:grid-cols-2 gap-8 p-8 sm:p-12 h-full items-center">
-                  {/* Content */}
-                  <div className="space-y-6 order-2 md:order-1">
-                    <h3 className="text-3xl sm:text-4xl font-bold leading-tight">
+              <div className="spread-card rounded-3xl border border-inherit shadow-2xl p-5 sm:p-8 md:p-12 h-full flex flex-col justify-between overflow-hidden">
+                <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center h-full">
+                  {/* Text Content */}
+                  <div className="space-y-3 sm:space-y-5 order-2 md:order-1">
+                    <div className="flex items-center gap-2">
+                      <span className="spread-pill text-[11px] sm:text-xs font-semibold">
+                        {feature.badge}
+                      </span>
+                      <span className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 font-medium">
+                        • {feature.tag}
+                      </span>
+                    </div>
+                    <h3 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-stone-900 dark:text-stone-100 leading-tight">
                       {feature.title}
                     </h3>
-                    <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
+                    <p className="text-xs sm:text-sm lg:text-base text-stone-600 dark:text-stone-300 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
 
-                  {/* Image Section */}
-                  <div className="relative order-1 md:order-2">
-                    <div className="absolute inset-0 rounded-2xl blur-2xl opacity-30 animate-pulse" />
-                    <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-5  w-full h-80 sm:h-96 flex items-center justify-center overflow-hidden">
+                  {/* Feature Preview Illustration */}
+                  <div className="relative order-1 md:order-2 flex justify-center items-center">
+                    <div className="relative w-full h-44 sm:h-64 md:h-72 rounded-2xl overflow-hidden spread-card border border-inherit flex items-center justify-center p-2 sm:p-4">
                       <img
-                        className="relative w-full h-full object-cover object-center rounded-xl"
-                        src={feature.image || "/octbot.png"}
+                        className="w-full h-full object-contain object-center rounded-xl"
+                        src={feature.image}
                         alt={feature.title}
                       />
                     </div>
@@ -126,22 +122,19 @@ export default function FeatureSection() {
           ))}
         </div>
 
-        {/* Progress Indicators */}
-        <div className="flex justify-center gap-2 mt-12">
+        {/* Progress Navigation Pills */}
+        <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 pt-2">
           {features.map((feature, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className="group relative"
+              className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold transition-all border border-inherit ${
+                currentIndex === index
+                  ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 scale-105"
+                  : "bg-light dark:bg-dark text-stone-600 dark:text-stone-400 hover:bg-[#f5f1ec] dark:hover:bg-[#121212]"
+              }`}
             >
-              <div className="w-12 h-2 bg-gray-800 rounded-full overflow-hidden">
-                <div
-                  className={`h-full transition-all duration-300 rounded-full ${currentIndex === index ? "bg-gray-500" : "0%"}`}
-                  style={{
-                    width: currentIndex === index ? "100%" : "0%",
-                  }}
-                />
-              </div>
+              {feature.badge}
             </button>
           ))}
         </div>

@@ -1,11 +1,11 @@
 import redisClient from "./utils/redisClient.js";
-
 import db from "./config/database.js";
 import dotenv from "dotenv";
 import { server } from "./app.js";
 import sockIo from "./socket.js";
 import socketHandlers from "./socket/socket-handler.js";
 import * as models from "./models/index.js";
+import { bloomFilter } from "./utils/BloomFilter.js";
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -13,11 +13,15 @@ const io = sockIo.init(server);
 
 socketHandlers();
 
-// Start the server after DB & Redis setup
+// Start the server after DB, Redis, & BloomFilter setup
 db.sync()
   .then(async () => {
     await redisClient.connect();
     console.log("Redis client connected.");
+
+    // Warmup BloomFilter with existing usernames for O(1) checks
+    await bloomFilter.warmup();
+
     server.listen(port, () => {
       console.log(`API is running at http://localhost:${port}`);
     });

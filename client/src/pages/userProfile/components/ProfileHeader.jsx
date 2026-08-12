@@ -115,17 +115,17 @@ const ProfileHeader = React.memo(({ profileId }) => {
         />
 
         {profileId !== user.id ? (
-          <div className="flex justify-start items-center gap-4 w-full sm:text-sm text-xs text-black border-inherit">
+          <div className="flex justify-start items-center gap-4 w-full sm:text-sm text-xs border-inherit">
             <Follow
               person={userProfile}
-              className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-2 border border-inherit  rounded-xl `}
+              className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-2 spread-btn-primary rounded-xl`}
             />
             <Ibutton
               action={() => privateChatMutaion(userProfile?.id)}
-              className=" bg-white px-3 py-2.5 rounded-xl border  "
+              className="spread-btn-secondary p-2.5 rounded-xl border border-inherit flex items-center justify-center"
             >
               {isPrivateLoading ? (
-                <PiSpinner className=" animate-spin" />
+                <PiSpinner className="animate-spin" />
               ) : (
                 <LuMessagesSquare />
               )}
@@ -135,9 +135,9 @@ const ProfileHeader = React.memo(({ profileId }) => {
           <div className="">
             <Link
               to="/profileEditor"
-              className="text-end text-xs w-fit rounded-lg transition-colors duration-300 text-blue-600  "
+              className="spread-pill text-xs hover:opacity-80 transition-opacity"
             >
-              Edite profile
+              Edit Profile
             </Link>
           </div>
         )}

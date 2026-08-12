@@ -99,10 +99,12 @@ import {
 } from "react-icons/tb";
 import { CiCircleCheck, CiMenuBurger, CiWarning } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { TiPin } from "react-icons/ti";
+import { TiPin, TiArrowSync } from "react-icons/ti";
 import { WiStars } from "react-icons/wi";
 import { FiEdit3, FiExternalLink } from "react-icons/fi";
 import { CircleCheck } from "lucide-react";
+import { HiOutlineBolt, HiOutlineDocumentText, HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
+import { IoCopyOutline } from "react-icons/io5";
 function useIcons() {
   return {
     // A
@@ -120,6 +122,7 @@ function useIcons() {
     bookmarkFi: <BsFillBookmarkFill />,
     bookmarkO: <BsBookmark />,
     book: <FaBookOpen />,
+    bolt: <HiOutlineBolt />,
 
     // C
     calender: <BiCalendarAlt />,
@@ -132,6 +135,8 @@ function useIcons() {
     creative: <MdOutlineDeveloperMode />,
     check: <BsCheck2Circle />,
     circleCheck: <FaCircleCheck />,
+    copy: <IoCopyOutline />,
+    chatTab: <HiOutlineChatBubbleLeftRight />,
     // D
     desktopO: <LuMonitorSmartphone />,
     done: <MdDone color="green" />,
@@ -140,6 +145,7 @@ function useIcons() {
     delete1: <PiTrashSimpleLight />,
     doubleArrowR: <MdOutlineKeyboardDoubleArrowRight />,
     doubleArrowL: <MdOutlineKeyboardDoubleArrowLeft />,
+    docTab: <HiOutlineDocumentText />,
     // E
     error: <MdErrorOutline color="red" />,
     earth: <IoEarth />,
@@ -220,6 +226,7 @@ function useIcons() {
     reminder: <PiAlarm />,
     repost: <BiRepost />,
     reddit: <BsReddit />,
+    refresh: <TiArrowSync />,
     // S
     search: <IoSearch />,
     searchO: <IoSearchOutline />,

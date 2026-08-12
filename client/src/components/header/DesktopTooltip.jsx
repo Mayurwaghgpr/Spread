@@ -1,66 +1,51 @@
 import React from "react";
-import ThemeBtn from "../buttons/ThemeBtn";
 import { useSelector } from "react-redux";
 import LogoutBtn from "../buttons/LogoutBtn";
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/functions/userImageSrc";
-
-const Modes = [
-  {
-    name: "Dark mode",
-    value: "dark",
-    icon: "moonFi",
-  },
-  {
-    name: "Light mode",
-    value: "light",
-    icon: "sun",
-  },
-  {
-    name: "System",
-    value: "system",
-    icon: "desktopO",
-  },
-];
+import { Link } from "react-router-dom";
 
 function DesktopTooltip() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { userImageurl } = userImageSrc(user);
+
   return (
-    <div className="absolute top-full border-inherit right-0 mt-1 w-64 opacity-0 group-hover:opacity-100  transition-all duration-300 ease-out transform translate-y-2 group-hover:translate-y-0 pointer-events-none group-hover:pointer-events-auto hidden lg:block">
-      <div className="bg-[#fff9f3] dark:bg-black border border-inherit rounded-2xl shadow-xl dark:shadow-2xl p-4 backdrop-blur-sm">
+    <div className="absolute top-full right-0 mt-2 w-64 opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out transform translate-y-1 group-hover:translate-y-0 pointer-events-none group-hover:pointer-events-auto hidden lg:block z-50">
+      <div className="bg-[#f5f1ec] dark:bg-[#121212] border border-inherit rounded-2xl shadow-2xl p-4 backdrop-blur-md">
         {/* User Info */}
-        <div className="flex items-center gap-3 mb-4 pb-3 border-b  border-inherit">
-          <ProfileImage
-            image={userImageurl}
-            className="w-12 h-12 border-2  rounded-full border-inherit"
-            alt={user?.displayName}
-            disabled
-          />
-          <div className="border-inherit">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm ">
-              {user?.displayName}
-            </h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-3 mb-3 pb-3 border-b border-inherit">
+          <Link to={`/profile/@${user?.username}/${user?.id}`}>
+            <ProfileImage
+              image={userImageurl}
+              className="w-11 h-11 border border-inherit rounded-full hover:opacity-90 transition-opacity"
+              alt={user?.displayName}
+            />
+          </Link>
+          <div className="border-inherit overflow-hidden">
+            <Link
+              to={`/profile/@${user?.username}/${user?.id}`}
+              className="font-bold text-stone-900 dark:text-stone-100 text-sm truncate hover:underline block"
+            >
+              {user?.displayName || user?.username}
+            </Link>
+            <p className="text-xs text-stone-500 dark:text-stone-400 truncate">
               @{user?.username}
             </p>
           </div>
         </div>
 
-        {/* Theme Selector */}
-        {/* <div className="mb-4 border-inherit">
-          <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Theme
-          </p>
-          <ThemeBtn
-            Modes={Modes}
-            separate={true}
-            className="flex gap-3 bg-gray-50 dark:bg-gray-900 rounded-lg p-2 px-5 w-fit border-inherit"
-          />
-        </div> */}
+        {/* View Profile Link */}
+        <div className="mb-3 pb-2 border-b border-inherit">
+          <Link
+            to={`/profile/@${user?.username}/${user?.id}`}
+            className="spread-pill block text-center text-xs hover:opacity-90 transition-opacity font-semibold"
+          >
+            View Profile
+          </Link>
+        </div>
 
         {/* Logout Button */}
-        <LogoutBtn className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border-inherit rounded-lg transition-all duration-200 font-medium" />
+        <LogoutBtn className="flex items-center gap-2 w-full px-3 py-2 text-xs text-red-600 dark:text-red-400 hover:bg-red-500/10 border border-inherit rounded-xl transition-all duration-200 font-medium" />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from "react";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Outlet, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useQuery } from "@tanstack/react-query";
@@ -28,6 +28,7 @@ import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import { setCommentCred, setPostViewData } from "../../store/slices/postSlice";
 import { setOpenBigFrame } from "../../store/slices/uiSlice";
 import AIBtn from "../../components/buttons/AIBtn";
+import AIDrawer from "../../components/aiComp/AIDrawer";
 import PostHeader from "./components/PostHeader";
 import useProfileApi from "../../services/useProfileApis";
 import UserPopover from "../../components/utilityComp/UserPopover";
@@ -47,6 +48,17 @@ function PostView() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isAIDrawerOpen, setIsAIDrawerOpen] = useState(
+    searchParams.get("ai") === "true"
+  );
+
+  useEffect(() => {
+    if (searchParams.get("ai") === "true") {
+      setIsAIDrawerOpen(true);
+    }
+  }, [searchParams]);
+
   const menuRef = useRef(null);
   const icons = useIcons();
   const { menuId, setMenuId } = useClickOutside(menuRef);
@@ -205,8 +217,20 @@ function PostView() {
       />
 
       <AIBtn
-        state={{ postData: postViewData }}
-        className="fixed bottom-20 right-10 rounded-xl p-2 transition-colors duration-200"
+        onClick={() => setIsAIDrawerOpen(true)}
+        className="fixed bottom-20 right-10 rounded-full px-4 py-2.5 shadow-xl z-40"
+      />
+
+      <AIDrawer
+        isOpen={isAIDrawerOpen}
+        onClose={() => {
+          setIsAIDrawerOpen(false);
+          if (searchParams.get("ai")) {
+            searchParams.delete("ai");
+            setSearchParams(searchParams, { replace: true });
+          }
+        }}
+        postData={postViewData}
       />
       <Outlet />
     </div>

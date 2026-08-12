@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setIsLogin } from "../../store/slices/authSlice.js";
@@ -10,21 +10,16 @@ import EyeBtn from "../../components/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
 import LoaderScreen from "../../components/loaders/loaderScreen";
 import { setToast } from "../../store/slices/uiSlice.js";
-import { emailRegex } from "../../utils/functions/regex.js";
 import CommenAuthBtn from "./components/CommenAuthBtn.jsx";
 import Divider from "./components/Divider.jsx";
 
 function SignIn() {
-  const [passVisible, setPassVisible] = useState(false);
-  const [currentInputValue, setCurrentInputValue] = useState("");
-
-  const userRef = useRef();
+  const [email, setEmail] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { loginUser } = useAuthApi();
 
-  // Mutation for login
   const {
     isPending: isLoading,
     isError,
@@ -33,11 +28,11 @@ function SignIn() {
   } = useMutation({
     mutationFn: (loginInfo) => loginUser(loginInfo),
     onSuccess: (response) => {
-      const { AccessToken, user } = response;
+      const { AccessToken } = response;
       if (AccessToken) {
-        dispatch(setToast({ message: "Sign in successful", type: "success" }));
+        dispatch(setToast({ message: "Sign in successful ✨", type: "success" }));
         dispatch(setIsLogin(true));
-        localStorage.setItem("AccessToken", AccessToken); // Store actual token, not boolean
+        localStorage.setItem("AccessToken", AccessToken);
         queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
         navigate("/", { replace: true });
       }
@@ -45,140 +40,100 @@ function SignIn() {
     onError: (error) => {
       const errorMessage =
         error?.response?.data?.message || "Sign in failed. Please try again.";
-      dispatch(setToast({ message: errorMessage, type: "error" })); // Fixed: was showing success on error
+      dispatch(setToast({ message: errorMessage, type: "error" }));
     },
   });
-  // handleLogin function to manage form submission
+
   const handleLogin = useCallback(
     (e) => {
       e.preventDefault();
       const formData = new FormData(e.target);
       const credentials = Object.fromEntries(formData);
 
-      // Basic validation
       if (!credentials.email || !credentials.password) {
         dispatch(
-          setToast({ message: "Please fill in all fields", type: "error" }),
+          setToast({ message: "Please fill in all fields", type: "error" })
         );
         return;
       }
 
       mutate(credentials);
     },
-    [mutate, dispatch],
-  );
-  // handleFormChanges function to manage input changes
-  const handleFormChanges = useCallback((e) => {
-    const value = e.target.value;
-    setCurrentInputValue(emailRegex.test(value) ? value : "");
-  }, []);
-  // handleContinue function to manage the continue button click
-  const handleContinue = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (currentInputValue) {
-        setPassVisible(true);
-      }
-    },
-    [currentInputValue],
+    [mutate, dispatch]
   );
 
-  // Early returns for different states
   if (isLoading) {
     return <LoaderScreen message="Authenticating, please wait..." />;
   }
 
   return (
-    //
     <AuthFormWrapper
       isLoading={isLoading}
       onSubmit={handleLogin}
-      heading="SignIn to your account"
+      heading="Sign In to Spread"
       error={error}
       isError={isError}
       formType="signin"
-      onChange={handleFormChanges}
     >
+      {/* OAuth Buttons */}
+      <div className="flex flex-col gap-2.5 w-full">
+        <OAuth service="google" />
+        <OAuth service="github" />
+      </div>
+
+      <Divider text="or sign in with email" className="my-3 border-inherit text-xs" />
+
       {/* Email Input */}
       <CommonInput
-        ref={userRef}
-        className="flex justify-start items-start gap-2 border rounded-lg w-full p-1 bg-inherit"
+        className="flex justify-start items-center gap-2 border border-inherit rounded-xl w-full px-3 py-1.5 bg-light dark:bg-dark text-xs sm:text-sm focus-within:ring-2 focus-within:ring-stone-400 dark:focus-within:ring-stone-600 transition-all"
         type="email"
         name="email"
         label="Email address"
         disabled={isLoading}
         required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         autoComplete="email"
+        placeholder="you@example.com"
         autoFocus
       />
+
       {/* Password Input */}
-      {passVisible && (
+      <div className="space-y-1">
         <CommonInput
-          className="flex justify-center items-start gap-2 w-full pr-2 border rounded-lg bg-inherit "
+          className="flex justify-between items-center gap-2 w-full px-3 py-1.5 border border-inherit rounded-xl bg-light dark:bg-dark text-xs sm:text-sm focus-within:ring-2 focus-within:ring-stone-400 dark:focus-within:ring-stone-600 transition-all"
+          type="password"
           name="password"
           label="Password"
           disabled={isLoading}
           required
           autoComplete="current-password"
+          placeholder="••••••••"
         >
           <EyeBtn />
         </CommonInput>
-      )}
 
-      {passVisible && (
-        <div className="flex justify-between mb-4 w-full">
-          <small>
-            <Link
-              to="/forgot/pass"
-              onClick={(e) => e.stopPropagation()}
-              state={{ email: currentInputValue }}
-              className="text-blue-600 hover:text-blue-800 underline dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              Forgot Password?
-            </Link>
-          </small>
+        <div className="flex justify-end pt-1">
+          <Link
+            to="/forgot/pass"
+            state={{ email }}
+            className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 font-medium transition-colors"
+          >
+            Forgot Password?
+          </Link>
         </div>
-      )}
-
-      <div className="mb-4 w-full">
-        {passVisible ? (
-          <CommenAuthBtn
-            type="submit"
-            className={`  ${
-              isLoading ? "cursor-wait opacity-50" : "hover:opacity-90"
-            }`}
-            disabled={isLoading}
-          >
-            {isLoading ? "Signing In..." : "Sign In"}
-          </CommenAuthBtn>
-        ) : (
-          <CommenAuthBtn
-            onClick={handleContinue}
-            disabled={!currentInputValue}
-            className={`${
-              !currentInputValue ? "cursor-not-allowed " : "hover:opacity-90"
-            }`}
-          >
-            Continue
-          </CommenAuthBtn>
-        )}
       </div>
-      <Divider text="or" className="mb-4 border-inherit" />
 
-      {!passVisible && (
-        <>
-          <div className="mb-4 w-full flex justify-center items-center text-nowrap gap-3">
-            <OAuth
-              className="border bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity"
-              service="google"
-            />
-            <OAuth
-              className="bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity"
-              service="github"
-            />
-          </div>
-        </>
-      )}
+      {/* Submit Button */}
+      <div className="pt-2 w-full">
+        <CommenAuthBtn
+          type="submit"
+          className="spread-btn-primary w-full py-2.5 text-xs sm:text-sm font-bold rounded-full shadow-md transition-all hover:scale-[1.02]"
+          disabled={isLoading}
+        >
+          {isLoading ? "Signing In..." : "Sign In"}
+        </CommenAuthBtn>
+      </div>
     </AuthFormWrapper>
   );
 }

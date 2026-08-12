@@ -1,4 +1,3 @@
-// axiosInstance.js
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -9,7 +8,19 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-//globle error handling
+// Automatically inject Authorization Bearer token header if present in localStorage
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("AccessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Global response error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -17,23 +28,20 @@ axiosInstance.interceptors.response.use(
 
     if (status === 401) {
       localStorage.removeItem("AccessToken");
-      console.error("Unauthorized. Logging out...");
+      console.error("Unauthorized request. Clearing local session token.");
     }
 
     if (status === 403) {
-      console.error("Forbidden");
+      console.error("Forbidden resource access");
     }
 
     if (status === 404) {
-      console.error("Not Found");
+      console.error("Requested endpoint not found");
     }
 
     if (status >= 500) {
-      console.error("Server Error");
+      console.error("Server error occurred");
     }
-
-    // Optionally display a global toast message
-    // showToast(error.response?.data?.message || 'Something went wrong');
 
     return Promise.reject(error);
   }

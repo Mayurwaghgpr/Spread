@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PopupBox } from "../../../components/utilityComp/PopupBox";
-import CommenAuthBtn from "../../Auth/components/CommenAuthBtn";
+import CommenAuthBtn from "../../auth/components/CommenAuthBtn";
 import { FolderPlus } from "lucide-react";
 
 export default function CreateNewGroupForm({ action, mutation }) {

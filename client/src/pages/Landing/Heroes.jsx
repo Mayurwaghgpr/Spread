@@ -62,10 +62,10 @@ function Heroes() {
         </div>
 
         <div className="flex items-center text-sm gap-3 sm:gap-4">
-          <ThemeBtn className="text-base sm:text-lg rounded-full p-1.5 sm:p-2 bg-light dark:bg-dark border border-inherit shadow-sm" Modes={Modes} />
+          <ThemeBtn className="text-base sm:text-lg rounded-full p-2 bg-stone-200/60 dark:bg-stone-800/60 border border-stone-300 dark:border-stone-700 shadow-sm hover:scale-105 transition-transform" Modes={Modes} />
           <Link
             to="/auth/signin"
-            className="spread-btn-primary text-xs px-4 sm:px-5 py-1.5 sm:py-2 inline-flex items-center justify-center font-semibold"
+            className="spread-btn-primary text-xs px-4 sm:px-5 py-1.5 sm:py-2 inline-flex items-center justify-center font-semibold rounded-full"
           >
             Sign In
           </Link>
@@ -80,7 +80,7 @@ function Heroes() {
             <div className="space-y-4 sm:space-y-6 text-left w-full">
               {/* Product Launch Badge */}
               <div className="inline-flex items-center gap-2 spread-pill px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs font-semibold">
-                <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500">{icons["glitter"]}</span>
+                <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-stone-700 dark:text-stone-300">{icons["glitter"]}</span>
                 <span>Introducing Spread AI Assistant 2.5</span>
               </div>
 
@@ -100,7 +100,7 @@ function Heroes() {
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
                 <button
-                  className="spread-btn-primary flex items-center gap-2 text-xs sm:text-sm font-semibold shadow-lg hover:scale-105 px-4 py-2 sm:px-5 sm:py-2.5"
+                  className="spread-btn-primary flex items-center gap-2 text-xs sm:text-sm font-semibold shadow-lg hover:scale-105 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full"
                   onClick={() => navigate("/auth/signin")}
                 >
                   Start Creating Free
@@ -108,7 +108,7 @@ function Heroes() {
                 </button>
 
                 <button
-                  className="spread-btn-secondary text-xs sm:text-sm font-semibold hover:scale-105 px-4 py-2 sm:px-5 sm:py-2.5"
+                  className="spread-btn-secondary text-xs sm:text-sm font-semibold hover:scale-105 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full"
                   onClick={() => navigate("/search")}
                 >
                   Explore Posts

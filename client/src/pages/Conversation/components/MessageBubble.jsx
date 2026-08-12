@@ -1,36 +1,38 @@
-import { BsCheck2All } from "react-icons/bs";
+import React, { forwardRef, memo } from "react";
 import TimeAgo from "../../../components/utilityComp/TimeAgo";
-import { forwardRef } from "react";
+import { CheckCheck } from "lucide-react";
 
 const MessageBubble = forwardRef(({ message, userId, readReceipt }, ref) => {
-  const isSender = message.senderId === userId;
-  const isRead = readReceipt?.includes(message.id);
+  if (!message) return null;
+
+  const isSender = message?.senderId === userId;
+  const isRead = readReceipt?.includes(message?.id);
 
   return (
     <div
       ref={ref}
-      className={`border-inherit max-w-[70%] sm:max-w-[50%] w-fit my-3 
-        z-0 ${isSender ? "ml-auto text-end" : "mr-auto"}
-      `}
+      className={`w-full flex my-1.5 ${isSender ? "justify-end" : "justify-start"}`}
     >
       <div
-        className={`relative flex flex-col gap-1 text-xs sm:text-sm break-words w-fit border border-inherit rounded-2xl px-4 py-2.5 ${
+        className={`relative flex flex-col gap-1 max-w-[82%] sm:max-w-[60%] text-xs sm:text-sm break-words px-4 py-2.5 shadow-sm transition-all animate-in fade-in duration-150 ${
           isSender
-            ? "ml-auto items-start text-start bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 rounded-br-none shadow-sm"
-            : "mr-auto items-end bg-[#f5f1ec] dark:bg-[#121212] text-stone-900 dark:text-stone-100 rounded-bl-none shadow-sm"
+            ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 rounded-2xl rounded-tr-xs"
+            : "spread-card bg-stone-200/70 dark:bg-stone-800/70 text-stone-900 dark:text-stone-100 border border-stone-300/50 dark:border-stone-700/50 rounded-2xl rounded-tl-xs"
         }`}
-        key={message?.id}
       >
-        <p className="w-full font-normal leading-relaxed">{message.content}</p>
+        <p className="w-full font-normal leading-relaxed whitespace-pre-wrap">
+          {message?.content || ""}
+        </p>
 
-        <div className="flex items-center justify-end gap-1.5 self-end mt-0.5 opacity-80">
-          <TimeAgo
-            className="text-[10px] font-medium"
-            date={message.createdAt}
-          />
+        <div
+          className={`flex items-center justify-end gap-1 self-end text-[10px] opacity-75 mt-0.5 ${
+            isSender ? "text-stone-300 dark:text-stone-600" : "text-stone-500 dark:text-stone-400"
+          }`}
+        >
+          {message?.createdAt && <TimeAgo date={message.createdAt} />}
           {isSender && (
-            <BsCheck2All
-              className={`text-sm ${isRead ? "text-emerald-500" : "text-stone-400"}`}
+            <CheckCheck
+              className={`w-3.5 h-3.5 ${isRead ? "text-stone-100 dark:text-stone-900 font-bold" : "opacity-60"}`}
             />
           )}
         </div>
@@ -39,4 +41,6 @@ const MessageBubble = forwardRef(({ message, userId, readReceipt }, ref) => {
   );
 });
 
-export default MessageBubble;
+MessageBubble.displayName = "MessageBubble";
+
+export default memo(MessageBubble);

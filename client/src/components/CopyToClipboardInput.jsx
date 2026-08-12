@@ -1,80 +1,66 @@
-import React, { useCallback, useRef, useState } from "react";
-const SyntaxHighlighter = lazy(() => import("react-syntax-highlighter"));
-import {
-  dark,
-  lightfair,
-  irBlack,
-} from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { FaCheck } from "react-icons/fa6";
-import { useSelector } from "react-redux";
-import { lazy } from "react";
-import useIcons from "../hooks/useIcons";
-const CopyToClipboardInput = ({ item }) => {
-  const [copySuccess, setCopySuccess] = useState("");
-  const contentref = useRef();
-  const icons = useIcons();
-  const { ThemeMode } = useSelector((state) => state.ui);
-  const handleCopyClick = useCallback(() => {
-    const inputValue =
-      item.type === "url"
-        ? contentref.current.innerText
-        : contentref.current.textContent;
+import { useState, useCallback, useMemo } from "react";
+import { Copy, Check } from "lucide-react";
 
-    navigator.clipboard.writeText(inputValue).then(
-      () => setCopySuccess("Copied code !"),
-      () => setCopySuccess("Failed to copy.")
-    );
-    let timeout = setTimeout(() => {
-      setCopySuccess("");
-    }, 2000);
-    return () => clearTimeout(timeout);
-  }, [item.type]);
+const CopyToClipboardInput = ({ item }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(() => {
+    if (!item?.code) return;
+    navigator.clipboard
+      .writeText(item.code)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch((err) => console.error("Copy error:", err));
+  }, [item?.code]);
+
+  const sanitizedCode = useMemo(() => item?.code || "", [item?.code]);
+  const languageClass = useMemo(() => item?.lang || "javascript", [item?.lang]);
 
   return (
-    <pre className={`border rounded-lg border-inherit`}>
-      <div className="w-full  min-h-[2.5rem] flex justify-end rounded-t-lg bg-light dark:bg-dark "></div>
-      <div className="sticky top-[7rem] w-full ">
-        <div className="absolute bottom-0 right-2 flex h-7 mb-1  items-center dark:bg-[#3c3c3c] bg-[#faf5f0] rounded-lg text-xs ">
-          <button
-            className="flex  w-full  px-4  justify-center items-center gap-3  "
-            onClick={handleCopyClick}
-          >
-            {copySuccess ? (
-              <span className=" rounded-md  flex gap-2 items-center  ">
-                <FaCheck />
-                {icons["done"]}
-                {copySuccess}
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                {" "}
-                {icons["code1"]}
-                Copy code
-              </span>
-            )}
-          </button>
+    <div className="w-full spread-card rounded-2xl border border-stone-200 dark:border-stone-800 shadow-xl overflow-hidden backdrop-blur-xl bg-stone-900 text-stone-100 my-4">
+      {/* Header Chrome */}
+      <div className="flex items-center justify-between px-4 py-2.5 bg-stone-950/80 border-b border-stone-800">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-stone-600/80" />
+            <div className="w-3 h-3 rounded-full bg-stone-500/80" />
+            <div className="w-3 h-3 rounded-full bg-stone-400/80" />
+          </div>
+          <span className="text-xs font-mono font-bold text-stone-400 uppercase tracking-wider ml-2">
+            {languageClass}
+          </span>
         </div>
+
+        {/* Copy Button */}
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 transition-colors cursor-pointer"
+          title="Copy code to clipboard"
+        >
+          {copied ? (
+            <>
+              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-emerald-400 font-bold">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy className="w-3.5 h-3.5" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
       </div>
 
-      <div className="w-full shadow-inner rounded-b-lg">
-        {
-          <div className=" rounded-b-lg overflow-hidden  " ref={contentref}>
-            {item.type === "code" ? (
-              <SyntaxHighlighter
-                language={item.lang}
-                style={ThemeMode === "dark" ? irBlack : lightfair}
-                wrapLines={true}
-                showLineNumbers={true}
-              >
-                {item.content}
-              </SyntaxHighlighter>
-            ) : (
-              <p className="w-full h-full"> {item.content}</p>
-            )}
-          </div>
-        }
+      {/* Code Display */}
+      <div className="p-4 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed">
+        <pre className="whitespace-pre-wrap break-words font-mono text-stone-200">
+          <code>{sanitizedCode}</code>
+        </pre>
       </div>
-    </pre>
+    </div>
   );
 };
 

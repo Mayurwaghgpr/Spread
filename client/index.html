@@ -4,10 +4,25 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="spread_logo_03_robopus.png" />
-<meta name="description"
-  content="Spread - A high-performance web app with fast loading, optimized UX, and seamless navigation. Experience speed and efficiency now!">
+  <meta name="description"
+    content="Spread - A high-performance web app with fast loading, optimized UX, and seamless navigation. Experience speed and efficiency now!">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spread</title>
+  
+  <!-- Instant Theme Persistence Script to prevent flash of wrong mode on refresh -->
+  <script>
+    (function () {
+      try {
+        var storedTheme = localStorage.getItem('ThemeMode') || 'system';
+        var isDark = storedTheme === 'dark' || (storedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 
 <body class="dark:bg-dark bg-light dark:text-white dark:*:border-[#191919] ">

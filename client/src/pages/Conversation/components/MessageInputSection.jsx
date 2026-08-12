@@ -1,7 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import FedInBtn from "../../../components/buttons/FedInBtn";
+import { useCallback, useEffect, useRef, useState } from "react";
 import CommonInput from "../../../components/inputComponents/CommonInput";
-import useIcons from "../../../hooks/useIcons";
 import { debounce } from "../../../utils/functions/debounce";
 import useSocket from "../../../hooks/useSocket";
 import { pushMessage } from "../../../store/slices/messangerSlice";
@@ -9,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import ChatApi from "../../../services/ChatApi";
 import { useMutation } from "@tanstack/react-query";
-import { use } from "react";
+import { Paperclip, Smile, Send } from "lucide-react";
 
 function MessageInputSection({
   conversationId,
@@ -22,7 +20,6 @@ function MessageInputSection({
   const { sendMessage } = ChatApi();
 
   const dispatch = useDispatch();
-  const icons = useIcons();
   const { socket } = useSocket();
 
   const sendTypingStatus = debounce(() => {
@@ -34,41 +31,38 @@ function MessageInputSection({
       image:
         conversationData.conversationType === "group" ? user.userImage : null,
     });
-  }, 500);
+  }, 400);
 
-  const sendStopTying = useCallback(() => {
+  const sendStopTyping = useCallback(() => {
     if (!socket || !conversationId || !user?.id) return;
     socket.emit("isStopedTyping", {
       conversationId,
       senderId: user.id,
     });
   }, [socket, conversationId, user?.id]);
-  // Handle input changes with debounced typing status
+
   const handleInput = useCallback(
     (e) => {
       const value = e.target.value;
       setMessage(value);
 
-      // Only send typing status if there's actual content
       if (value.trim()) {
         sendTypingStatus();
       }
 
-      // Clear existing timeout
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
 
-      // Set new timeout to stop typing
       typingTimeoutRef.current = setTimeout(() => {
-        sendStopTying();
-      }, 2000);
+        sendStopTyping();
+      }, 1800);
     },
-    [sendStopTying],
+    [sendTypingStatus, sendStopTyping]
   );
 
   const { mutate } = useMutation({
-    mutationKey: "sendMessage",
+    mutationKey: ["sendMessage"],
     mutationFn: (messageObj) => {
       sendMessage({
         conversationId: messageObj.conversationId,
@@ -83,13 +77,13 @@ function MessageInputSection({
       });
     },
     onSettled: () => {
-      sendTypingStatus(false);
+      sendStopTyping();
     },
     onError: (error) => {
       console.error("Error sending message:", error);
     },
   });
-  // Improved message sending with validation
+
   const handleSend = useCallback(async () => {
     const trimmedMessage = message.trim();
     if (!trimmedMessage || !user?.id || !conversationId || !socket) return;
@@ -105,9 +99,8 @@ function MessageInputSection({
     dispatch(pushMessage(messageObj));
     mutate(messageObj);
     setMessage("");
-  }, [message, socket, user?.id, conversationId, dispatch]);
+  }, [message, socket, user?.id, conversationId, dispatch, mutate]);
 
-  // Clear typing timeout on unmount
   useEffect(() => {
     return () => {
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
@@ -115,37 +108,51 @@ function MessageInputSection({
   }, []);
 
   return (
-    <div className="sticky bottom-0 z-20 bg-light dark:bg-dark flex justify-center items-center w-full h-fit border-t sm:px-5 px-2 pt-3 pb-5 border-inherit">
-      <div className="relative flex justify-center items-center gap-3 p-2 w-full max-w-2xl rounded-xl spread-card border border-inherit">
-        <div className="flex justify-start items-center sm:gap-2 w-full border-inherit">
-          <div className="flex justify-start items-center gap-1 w-fit border-inherit">
-            <FedInBtn className="sm:text-lg rounded-full p-2 hover:bg-light dark:hover:bg-dark text-stone-600 dark:text-stone-400 border border-inherit transition-colors">
-              {icons["attachPin"]}
-            </FedInBtn>
-            <FedInBtn className="sm:text-lg rounded-full p-2 hover:bg-light dark:hover:bg-dark text-stone-600 dark:text-stone-400 border border-inherit transition-colors">
-              {icons["smile"]}
-            </FedInBtn>
-          </div>
-          <CommonInput
-            className="relative px-2 w-full h-full border-0 bg-transparent text-stone-900 dark:text-stone-100 placeholder-stone-400 outline-none"
-            onChange={handleInput}
-            value={message}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            placeholder="Write a message..."
-          />
+    <div className="sticky bottom-0 z-20 p-3 sm:p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-100/60 dark:bg-stone-900/60 backdrop-blur-md flex justify-center items-center w-full">
+      <div className="flex items-center gap-2 p-1.5 w-full max-w-3xl spread-card rounded-full border border-stone-200 dark:border-stone-800 shadow-xl backdrop-blur-xl focus-within:ring-2 focus-within:ring-stone-400/50 transition-all">
+        <div className="flex items-center gap-1 pl-2 text-stone-500 dark:text-stone-400">
+          <button
+            type="button"
+            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+            aria-label="Attach file"
+          >
+            <Paperclip className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+            aria-label="Add emoji"
+          >
+            <Smile className="w-4 h-4" />
+          </button>
         </div>
-        <FedInBtn
-          className="flex justify-center items-center text-lg min-w-fit rounded-xl px-3 py-2 spread-btn-primary text-xs disabled:opacity-40"
-          action={handleSend}
+
+        <CommonInput
+          className="flex-1 px-2 py-1 bg-transparent text-xs sm:text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 border-none outline-none"
+          onChange={handleInput}
+          value={message}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          placeholder="Write a message..."
+        />
+
+        <button
+          type="button"
+          onClick={handleSend}
           disabled={!message.trim()}
+          className={`p-2.5 rounded-full spread-btn-primary flex items-center justify-center transition-transform ${
+            !message.trim()
+              ? "opacity-40 cursor-not-allowed"
+              : "hover:scale-105 cursor-pointer shadow-md"
+          }`}
+          aria-label="Send message"
         >
-          {icons["sendO"]}
-        </FedInBtn>
+          <Send className="w-3.5 h-3.5" />
+        </button>
       </div>
     </div>
   );

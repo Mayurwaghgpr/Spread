@@ -5,13 +5,13 @@ export function useLastItemObserver(
   isFetchingNextPage,
   isFetching,
   hasNextPage,
-  threshold = 1
+  threshold = 0.1
 ) {
   const intObserver = useRef(null);
 
   const lastItemRef = useCallback(
-    (post) => {
-      if (isFetchingNextPage || isFetching || !hasNextPage) return;
+    (node) => {
+      if (isFetchingNextPage || !hasNextPage) return;
 
       if (intObserver.current) intObserver.current.disconnect();
 
@@ -23,13 +23,14 @@ export function useLastItemObserver(
           }
         },
         {
-          threshold,
+          rootMargin: "250px",
+          threshold: Math.min(threshold, 0.1),
         }
       );
 
-      if (post) intObserver.current.observe(post);
+      if (node) intObserver.current.observe(node);
     },
-    [isFetchingNextPage, isFetching, hasNextPage, fetchNextPage, threshold]
+    [isFetchingNextPage, hasNextPage, fetchNextPage, threshold]
   );
 
   useEffect(() => {

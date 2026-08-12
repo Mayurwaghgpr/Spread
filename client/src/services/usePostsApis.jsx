@@ -7,7 +7,7 @@ function usePostsApis() {
         `/posts/feed/${endpoint || ""}`,
         {
           params: {
-            limit: 3,
+            limit: 5,
             lastTimestamp: pageParam,
             type: topic,
           },

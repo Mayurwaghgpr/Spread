@@ -1,77 +1,93 @@
 import { useEffect, useState } from "react";
 import CommonInput from "../../../components/inputComponents/CommonInput.jsx";
 import SelectedGroupMemberList from "./SelectedGroupMemberList.jsx";
-import Ibutton from "../../../components/buttons/Ibutton.jsx";
 import { useMutation } from "@tanstack/react-query";
 import ChatApi from "../../../services/ChatApi.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../store/slices/uiSlice.js";
 import { selectConversation } from "../../../store/slices/messangerSlice.js";
 import { useNavigate } from "react-router-dom";
-import useIcons from "../../../hooks/useIcons.jsx";
-function GroupCreation({ handleGroupConfig, hashMap, users }) {
-  const { isLogin, user } = useSelector((state) => state.auth);
+import { Camera } from "lucide-react";
+import Spinner from "../../../components/loaders/Spinner.jsx";
+
+function GroupCreation({ handleGroupConfig, hashMap, users, selectedMembers }) {
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const icons = useIcons();
   const [groupConfig, setGroupConfig] = useState({
     groupName: "",
     membersArr: [],
   });
   const { createGroup } = ChatApi();
-  const { mutate } = useMutation({
+
+  const { mutate, isLoading } = useMutation({
     mutationFn: () => createGroup(groupConfig),
     onSuccess: (data) => {
       sessionStorage.setItem(
         "conversationMeta",
         JSON.stringify(data.newGroupConversation)
       );
-      // console.log(first);
       dispatch(selectConversation(data.newGroupConversation));
-      navigate(`c?Id=${data.newGroupConversation.id}`, { replace: true });
-      dispatch(setToast({ message: data.message, type: "success" }));
+      navigate(`/messages/c?Id=${data.newGroupConversation.id}`, { replace: true });
+      dispatch(setToast({ message: data.message || "Group created ✨", type: "success" }));
     },
     onError: (error) => {
-      dispatch(setToast({ message: error.data.message, type: "error" }));
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to create group";
+      dispatch(setToast({ message: errorMessage, type: "error" }));
     },
   });
+
   useEffect(() => {
-    const usersObjArry = users
-      ?.map((userInMap) => hashMap[userInMap.id])
-      .filter((userObj) => userObj); // Adding user in membersArr whose id present in hashMap as key and data value e.g('5dss5a5-ds:{userId:'dasdsa'}')
+    const memberIds = selectedMembers ? Object.keys(selectedMembers) : [];
+    const membersArr = memberIds.map((id) => ({
+      memberId: id,
+      memberType: id === user.id ? "admin" : "member",
+    }));
 
     setGroupConfig((prev) => ({
       ...prev,
-      membersArr: [...usersObjArry, hashMap[user.id]], //Pushing data of the login user who is creating group **/ Its done separatly because 'users' array dose not contain login user/**
+      membersArr,
     }));
-  }, [hashMap, user, users]);
+  }, [selectedMembers, user.id]);
+
   return (
-    <div className="w-full border-inherit">
-      <div className="flex justify-start items-center gap-3 text-2xl p-3 w-full  border rounded-lg border-inherit">
-        <CommonInput
-          labelname={icons["pCamera"]}
-          type={"file"}
-          Iname="groupInput"
-          IClassName={"hidden cursor-pointer w-full"}
-        />
+    <div className="w-full space-y-4 p-4">
+      <div className="flex items-center gap-3 p-3 rounded-2xl spread-card border border-stone-200 dark:border-stone-800">
+        <div className="p-2.5 rounded-full bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100">
+          <Camera className="w-5 h-5" />
+        </div>
         <CommonInput
           onChange={(e) =>
             setGroupConfig((prev) => ({ ...prev, groupName: e.target.value }))
           }
-          className={"text-lg font-light w-full *:border-none"}
-          placeholder={"Group name"}
-          Iname={"groupName"}
+          className="text-sm font-semibold w-full bg-transparent outline-none border-none placeholder:text-stone-400 text-stone-900 dark:text-stone-100"
+          placeholder="Enter group name..."
+          Iname="groupName"
           required
         />
       </div>
+
       <SelectedGroupMemberList
         users={users}
         hashMap={hashMap}
         handleGroupConfig={handleGroupConfig}
+        selectedMembers={selectedMembers}
       />
-      <Ibutton className={"mx-auto p-1  rounded-full"} action={() => mutate()}>
-        Create
-      </Ibutton>
+
+      <div className="flex justify-center pt-2">
+        <button
+          type="button"
+          disabled={isLoading || !groupConfig.groupName.trim()}
+          onClick={() => mutate()}
+          className={`spread-btn-primary px-6 py-2.5 text-xs font-bold rounded-full shadow-md transition-all ${
+            isLoading || !groupConfig.groupName.trim()
+              ? "opacity-40 cursor-not-allowed"
+              : "hover:scale-105 cursor-pointer"
+          }`}
+        >
+          {isLoading ? <Spinner className="w-4 h-4 text-stone-900 dark:text-stone-100" /> : "Create Group ✨"}
+        </button>
+      </div>
     </div>
   );
 }

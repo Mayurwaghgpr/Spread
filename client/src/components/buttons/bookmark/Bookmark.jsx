@@ -1,36 +1,50 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useNavigate } from "react-router-dom";
 import useIcons from "../../../hooks/useIcons";
 import FedInBtn from "../FedInBtn";
-import { setUser } from "../../../store/slices/authSlice";
 import BookmarkBox from "./BookmarkBox";
 import usePostsApis from "../../../services/usePostsApis";
 
 function Bookmark({ className, post, children }) {
   const [optimisticId, setOptimisticId] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const timeoutRef = useRef(null);
+
   const { isLogin, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { savePost, addSavedPostToGroup } = usePostsApis();
   const icons = useIcons();
+
   const isBookmarked = useMemo(
     () => user?.savedPostsList?.some((savedPost) => savedPost?.id === post?.id),
     [user?.savedPostsList, post?.id],
   );
 
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIsMenuOpen(false);
+    }, 300); // 300ms grace period prevents accidental menu dismissal during cursor transition
+  };
+
   const savePostMutation = useMutation({
     mutationFn: ({ postId }) => savePost({ postId }),
     onSuccess: (data) => {
-      // dispatch(setUser({ ...user, savedPostsList: data.savedPostsList }));
       queryClient.invalidateQueries(["loggedInUser"]);
       dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
     },
     onError: (error) => {
-      setOptimisticId(false); // Revert optimistic update on error
+      setOptimisticId(false);
       dispatch(
         setToast({
           message: error.response?.data?.message || "Failed to update bookmark",
@@ -39,12 +53,13 @@ function Bookmark({ className, post, children }) {
       );
     },
     onMutate: () => {
-      setOptimisticId(true); // Optimistic update
+      setOptimisticId(true);
     },
     onSettled: () => {
-      setOptimisticId(false); // Revert optimistic update on error
+      setOptimisticId(false);
     },
   });
+
   const addtoGroupMutation = useMutation({
     mutationFn: ({ postId, groupName }) =>
       addSavedPostToGroup({ postId, groupName }),
@@ -53,15 +68,16 @@ function Bookmark({ className, post, children }) {
       dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
     },
     onError: (error) => {
-      setOptimisticId(false); // Revert optimistic update on error
+      setOptimisticId(false);
       dispatch(
         setToast({
-          message: error.data?.message || "Failed to update bookmark",
+          message: error.data?.message || "Failed to update bookmark group",
           type: "error",
         }),
       );
     },
   });
+
   const handleBookmark = useCallback(
     (e) => {
       e.stopPropagation();
@@ -76,18 +92,24 @@ function Bookmark({ className, post, children }) {
 
   const icon = useMemo(() => {
     if (optimisticId) {
-      // We are performing an action
       return isBookmarked ? icons["bookmarkO"] : icons["bookmarkFi"];
     } else {
-      // No action in progress
       return isBookmarked ? icons["bookmarkFi"] : icons["bookmarkO"];
     }
   }, [isBookmarked, optimisticId, icons]);
 
   return (
-    <div className="relative group border-inherit">
+    <div
+      className="relative inline-flex items-center border-inherit"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <FedInBtn
-        className={` ${isBookmarked ? "text-oplight dark:text-white" : ""} ${className}`}
+        className={`transition-all duration-200 hover:scale-110 active:scale-95 ${
+          isBookmarked
+            ? "text-stone-900 dark:text-stone-100 font-bold"
+            : "text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+        } ${className}`}
         id="bookmark"
         onClick={handleBookmark}
         aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
@@ -97,11 +119,16 @@ function Bookmark({ className, post, children }) {
         {children}
       </FedInBtn>
 
-      <BookmarkBox
-        postId={post?.id}
-        userId={post?.author?.id}
-        mutation={addtoGroupMutation.mutate}
-      />
+      {isLogin && (
+        <BookmarkBox
+          postId={post?.id}
+          userId={post?.author?.id}
+          isOpen={isMenuOpen}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          mutation={addtoGroupMutation.mutate}
+        />
+      )}
     </div>
   );
 }

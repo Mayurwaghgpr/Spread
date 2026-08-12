@@ -1,85 +1,67 @@
-import React, { useEffect } from "react";
 import PeoplesList from "./PeoplesList";
-import { useDispatch, useSelector } from "react-redux";
-import { setFollowInfo } from "../store/slices/profileSlice";
-import { createPortal } from "react-dom";
-import { useQuery } from "@tanstack/react-query";
-import useProfileApi from "../services/useProfileApis";
-import Follow from "./buttons/follow";
-import { useNavigate } from "react-router-dom";
-import ProfileListItemLoadingSkeleton from "./loaders/ProfileListItemLoadingSkeleton";
+import { memo } from "react";
+import { PopupBox } from "./utilityComp/PopupBox";
+import EmptyState from "./utilityComp/EmptyState";
+import { X, Users, UserCheck } from "lucide-react";
 
-function ProfileinfoCard({ className }) {
-  const dispatch = useDispatch();
-  const { fetchFollowInfo } = useProfileApi();
-  const { userProfile, FollowInfo } = useSelector((state) => state.profile);
-  const navigate = useNavigate();
-  const { data, isLoading } = useQuery({
-    queryKey: ["followInfo", userProfile?.id, FollowInfo?.Info],
-    queryFn: () =>
-      fetchFollowInfo({
-        FollowInfo: FollowInfo.Info,
-        profileId: userProfile.id,
-      }),
-  });
+function ProfileinfoCard({ action, kind, listData = [] }) {
+  const isFollowers = kind === "followers";
+  const title = isFollowers ? "Followers" : "Following";
+  const IconHeader = isFollowers ? Users : UserCheck;
 
-  useEffect(() => {
-    document.body.classList.add("overflow-hidden");
-
-    return () => {
-      document.body.classList.remove("overflow-hidden");
-    };
-  }, []);
-
-  return createPortal(
-    <div
-      onClick={() => dispatch(setFollowInfo(""))}
-      className={`flex justify-end items-end bg-black z-50 bg-opacity-20 fixed top-0 left-0  bottom-0 right-0 ${className}`}
+  return (
+    <PopupBox
+      action={action}
+      className="relative flex flex-col max-w-md w-full h-[75vh] sm:h-[70vh] spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl animate-in zoom-in-95 duration-150"
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className={`flex flex-col justify-start gap-10 sm:w-1/3 w-full sm:h-full h-[80%] p-8 bg-light dark:bg-dark border dark:border-[#383838] sm:animate-slide-in-right animate-slide-in-bottom  sm:rounded-xl  overflow-hidden `}
-      >
-        <h1 className="text-2xl ">{FollowInfo.Info}</h1>
-        <div className="relative h-full drop-shadow-sm">
-          {!isLoading ? (
-            data?.length ? (
-              <ul className="flex flex-col items-start w-full   gap-4 min-h-full">
-                {data.map((followings, idx) => (
-                  <PeoplesList
-                    className={
-                      " flex justify-between items-center w-full text-nowrap"
-                    }
-                    key={`${followings.id}-${idx}`} // Ensure unique key
-                    person={followings}
-                    index={idx}
-                    action={() =>
-                      navigate(
-                        `/profile/@${followings?.username}/${followings?.id}`
-                      )
-                    }
-                  >
-                    {" "}
-                    <Follow
-                      person={followings}
-                      className=" min-w-[80px] sm:min-w-[100px]  borderflex justify-center items-center transition-all px-5 duration-100  rounded-full"
-                    />
-                  </PeoplesList>
-                ))}
-              </ul>
-            ) : (
-              <div className="flex h-full w-full justify-center items-center">
-                <h1>No {FollowInfo.Info}</h1>
-              </div>
-            )
-          ) : (
-            <ProfileListItemLoadingSkeleton count={10} />
-          )}
+      {/* Header */}
+      <header className="p-4 sm:p-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-100/50 dark:bg-stone-800/30">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100">
+            <IconHeader className="w-5 h-5 text-stone-700 dark:text-stone-300" />
+          </div>
+          <div>
+            <h1 className="text-base font-extrabold text-stone-900 dark:text-stone-100 tracking-tight">
+              {title}
+            </h1>
+            <span className="text-xs text-stone-500 dark:text-stone-400 font-semibold">
+              {listData.length} {listData.length === 1 ? "person" : "people"}
+            </span>
+          </div>
         </div>
-      </div>
-    </div>,
-    document.getElementById("portal")
+
+        <button
+          type="button"
+          onClick={action}
+          aria-label="Close modal"
+          className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </header>
+
+      {/* People List */}
+      <main className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-1">
+        {listData && listData.length > 0 ? (
+          listData.map((person) => (
+            <PeoplesList key={person?.id || person?.username} person={person} />
+          ))
+        ) : (
+          <div className="flex h-full w-full items-center justify-center p-6 text-center">
+            <EmptyState
+              Icon={IconHeader}
+              heading={`No ${title.toLowerCase()} yet`}
+              description={
+                isFollowers
+                  ? "When users follow this profile, they will appear here."
+                  : "Accounts followed by this user will appear here."
+              }
+            />
+          </div>
+        )}
+      </main>
+    </PopupBox>
   );
 }
 
-export default ProfileinfoCard;
+export default memo(ProfileinfoCard);

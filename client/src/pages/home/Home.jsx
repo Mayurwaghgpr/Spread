@@ -47,7 +47,7 @@ function Home() {
         endpoint: selectedFeed,
       }),
     getNextPageParam: (lastPage) => {
-      return lastPage.length !== 0
+      return lastPage && Array.isArray(lastPage) && lastPage.length > 0
         ? lastPage[lastPage.length - 1]?.createdAt
         : undefined;
     },
@@ -59,7 +59,7 @@ function Home() {
     isFetchingNextPage,
     isFetching,
     hasNextPage,
-    1
+    0.1
   );
 
   if (isPostError) {
@@ -137,13 +137,13 @@ function Home() {
   const renderListFooter = () => (
     <div className="flex items-center justify-center w-full py-8">
       {isFetchingNextPage && (
-        <Spinner className="w-7 p-1 bg-[#f5f1ec] dark:bg-[#121212] text-stone-900 dark:text-stone-100" />
+        <Spinner className="w-7 p-1 text-stone-900 dark:text-stone-100" />
       )}
 
       {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 text-xs rounded-full spread-pill">
-            <BsPostcard className="w-4 h-4" />
+            <BsPostcard className="w-4 h-4 text-stone-700 dark:text-stone-300" />
             <span>You've seen all suggestions</span>
           </div>
         </div>

@@ -33,6 +33,9 @@ function SignUp() {
     isLoading: isCheckingUsername,
   } = useUsernameAvailability("");
 
+  const isSuccess = usernameStatus === "available";
+  const isErrorStatus = usernameStatus === "taken" || usernameStatus === "invalid";
+
   const { registerUser } = useAuthApi();
   const {
     isPending: isLoading,
@@ -99,59 +102,64 @@ function SignUp() {
 
       <Divider text="or" className="my-2 border-inherit text-[11px]" />
 
-      {/* Name Input */}
+      {/* Name Input - Independent from Username */}
       <CommonInput
         className="flex justify-start items-center gap-2 border border-inherit rounded-xl w-full px-3 py-1 bg-light dark:bg-dark text-xs sm:text-sm focus-within:ring-2 focus-within:ring-stone-400 dark:focus-within:ring-stone-600 transition-all mb-2"
         type="text"
         name="displayName"
-        label="Name"
+        label="Full Name"
         placeholder="Enter your name"
         disabled={isLoading}
         required
       />
 
-      {/* Username Field with Pixel-Perfect Live Verification */}
-      <div className="mb-2 space-y-0.5 w-full">
-        <CommonInput
-          label="Username"
-          className={`flex justify-between items-center gap-2 border rounded-xl w-full pr-3 py-1 bg-light dark:bg-dark text-xs sm:text-sm transition-all focus-within:ring-2 ${
-            usernameStatus === "taken" || usernameStatus === "invalid"
-              ? "border-red-500 focus-within:ring-red-300"
-              : usernameStatus === "available"
-              ? "border-emerald-500 focus-within:ring-emerald-300"
-              : "border-inherit focus-within:ring-stone-400 dark:focus-within:ring-stone-600"
-          }`}
-          type="text"
-          name="username"
-          value={username}
-          onChange={(e) => handleUsernameChange(e.target.value)}
-          placeholder="username (e.g. alex_dev)"
-          disabled={isLoading}
-          required
-        >
-          {/* Live Status Icon inside Input */}
-          <div className="flex items-center justify-center shrink-0 ml-1">
-            {isCheckingUsername && <Spinner className="w-3.5 h-3.5 text-stone-500" />}
-            {usernameStatus === "available" && (
-              <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-            )}
-            {(usernameStatus === "taken" || usernameStatus === "invalid") && (
-              <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
-            )}
-          </div>
-        </CommonInput>
+      {/* Username Field with Live Verification (Identical to ProfileEditor) */}
+      <div className="mb-2 space-y-1 w-full border-inherit">
+        <div className="relative border-inherit">
+          <CommonInput
+            className={`w-full px-3 py-1 bg-inherit border-2 rounded-xl transition-all duration-200 ${isErrorStatus
+              ? "border-red-500 focus:border-red-500"
+              : isSuccess
+                ? "border-green-500 focus:border-green-500"
+                : "border-inherit focus:border-blue-500"
+              }`}
+            type="text"
+            name="username"
+            label="User Name"
+            disabled={isLoading}
+            onChange={(e) => handleUsernameChange(e.target.value)}
+            maxLength={15}
+            value={username}
+            placeholder="Enter your username"
+            aria-invalid={isErrorStatus}
+            aria-describedby={isErrorStatus ? "username-error" : undefined}
+          />
 
-        {/* Live Status Feedback Message Below Input */}
-        {usernameMessage && (
-          <div
-            className={`text-[11px] font-semibold px-1 pt-0.5 flex items-center gap-1 ${
-              usernameStatus === "available"
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-red-500"
-            }`}
-          >
-            <span>{usernameMessage}</span>
+          {/* Loading/Status Icons positioned identical to ProfileEditor */}
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 border-inherit pointer-events-none">
+            {isCheckingUsername && <Spinner className="w-4 h-4 text-blue-500" />}
+            {isSuccess && <CheckCircle className="w-4 h-4 text-green-500" />}
+            {isErrorStatus && <AlertCircle className="w-4 h-4 text-red-500" />}
           </div>
+        </div>
+
+        {/* Error Message formatting identical to ProfileEditor */}
+        {isErrorStatus && usernameMessage && (
+          <p
+            id="username-error"
+            className="text-red-500 text-xs flex items-center gap-1.5 pt-0.5"
+          >
+            <AlertCircle className="w-3.5 h-3.5" />
+            {usernameMessage}
+          </p>
+        )}
+
+        {/* Available Success Message */}
+        {isSuccess && usernameMessage && (
+          <p className="text-green-500 text-xs flex items-center gap-1.5 pt-0.5">
+            <CheckCircle className="w-3.5 h-3.5" />
+            {usernameMessage}
+          </p>
         )}
 
         {/* Clickable Handle Suggestions */}
@@ -200,20 +208,6 @@ function SignUp() {
       >
         <EyeBtn />
       </CommonInput>
-
-      {/* Read Me Checkbox */}
-      <div className="flex items-center gap-2 w-full my-2">
-        <input
-          id="readme"
-          type="checkbox"
-          name="readme"
-          className="w-3.5 h-3.5 rounded border-stone-300 dark:border-stone-700 text-stone-900 focus:ring-stone-500 cursor-pointer"
-        />
-        <label htmlFor="readme" className="text-xs font-medium text-stone-700 dark:text-stone-300 cursor-pointer">
-          Read Me
-        </label>
-      </div>
-
       {/* Submit Button */}
       <div className="pt-1 w-full space-y-2">
         <CommenAuthBtn

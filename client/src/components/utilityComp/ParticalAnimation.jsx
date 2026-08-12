@@ -4,7 +4,7 @@ function ParticalAnimation() {
       {[...Array(20)].map((_, i) => (
         <div
           key={i}
-          className="absolute w-[1.5px] h-[1.5px] rounded-full animate-ping bg-white dark:bg-gradient-to-br dark:from-sky-300 dark:to-amber-200  z-20"
+          className="absolute w-[1.5px] h-[1.5px] rounded-full animate-ping bg-stone-400 dark:bg-stone-300 z-20"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,

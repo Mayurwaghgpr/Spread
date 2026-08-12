@@ -1,149 +1,99 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import Follow from "../../../components/buttons/follow";
-import { useDispatch, useSelector } from "react-redux";
-import { setFollowInfo } from "../../../store/slices/profileSlice";
-import userImageSrc from "../../../utils/functions/userImageSrc";
-import { LuMessagesSquare } from "react-icons/lu";
-import FormatedTime from "../../../components/utilityComp/FormatedTime";
 import ProfileImage from "../../../components/ProfileImage";
-import useIcons from "../../../hooks/useIcons";
-import usePrivateChatMutation from "../../../hooks/usePrivateChatMutation";
+import Follow from "../../../components/buttons/follow";
+import DisplayUsername from "../../../components/texts/DisplayUsername";
 import AbbreviateNumber from "../../../utils/components/AbbreviateNumber";
-import Ibutton from "../../../components/buttons/Ibutton";
-import FedInBtn from "../../../components/buttons/FedInBtn";
-import { setOpenBigFrame } from "../../../store/slices/uiSlice";
-import { PiSpinner } from "react-icons/pi";
+import FormatedTime from "../../../components/utilityComp/FormatedTime";
+import { Edit3, Calendar, Users, UserCheck } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const ProfileHeader = React.memo(({ profileId }) => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  const { userProfile } = useSelector((state) => state.profile);
-  const { userImageurl } = userImageSrc(userProfile);
-  const icons = useIcons();
-  const { privateChatMutaion, isPrivateLoading } = usePrivateChatMutation();
+function ProfileHeader({ userMeta, isSelf, onOpenDrawer }) {
+  const displayName =
+    userMeta?.displayName || userMeta?.username || "Spread Member";
+  const username = userMeta?.username || "";
 
-  const handleBigFrame = () => {
-    dispatch(
-      setOpenBigFrame({
-        src: userImageurl,
-        alt: userProfile?.username,
-        profile: true,
-      })
-    );
-  };
   return (
-    <div className="relative select-none flex flex-col border rounded-lg p-6 w-full justify-start  items-basline gap-10 dark:bg-inherit border-inherit px-4">
-      <div className="flex justify-start items-start gap-9 border-inherit">
-        <div className=" flex  flex-col  items-center justify-center text-center gap-3 ">
+    <div className="w-full flex flex-col items-center sm:items-start gap-6 p-6 sm:p-8 spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-xl backdrop-blur-xl">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between w-full gap-6">
+        {/* User Info & Avatar */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left min-w-0">
           <ProfileImage
-            onClick={handleBigFrame}
-            className={"sm:w-24 sm:h-24 w-20 h-20"}
-            image={userImageurl}
-            alt={userProfile?.username}
-            title={"user profile"}
+            className="w-20 h-20 sm:w-24 sm:h-24 rounded-full ring-2 ring-stone-300 dark:ring-stone-700 shadow-md shrink-0"
+            image={userMeta?.userImage}
+            alt={displayName}
           />
 
-          <div className=" w-full">
-            <h1 className="sm:text-3xl sm:hidden text-nowrap text-sm  font-medium">
-              {userProfile?.displayName}
+          <div className="space-y-1.5 min-w-0">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight truncate">
+              {displayName}
             </h1>
-            <span className="text-black text-xs dark:text-white text-opacity-70 dark:text-opacity-70 ">
-              {userProfile?.pronouns}
-            </span>
+
+            {username && (
+              <DisplayUsername
+                className="text-stone-500 dark:text-stone-400 font-semibold text-xs sm:text-sm"
+                username={`@${username}`}
+              />
+            )}
+
+            {userMeta?.createdAt && (
+              <div className="flex items-center justify-center sm:justify-start gap-1.5 text-xs text-stone-500 dark:text-stone-400 pt-1">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Joined </span>
+                <FormatedTime date={userMeta.createdAt} formate="MMMM yyyy" />
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="flex sm:flex-row flex-col  justify-between  gap-2   h-full ">
-          <div className="flex flex-col gap-1 justify-start  p-4 w-full ">
-            {/* <div className="flex justify-start items-center">{}</div> */}
-            <h1 className="sm:text-4xl sm:block hidden text-nowrap text-lg  font-medium">
-              {userProfile?.displayName}
-            </h1>
-            <div className="flex justify-start items-center gap-3 text-sm">
-              <FedInBtn
-                className={"no-underline "}
-                action={() =>
-                  dispatch(
-                    setFollowInfo({
-                      Info: "Followers",
-                      count: userProfile?.Followers?.length,
-                    })
-                  )
-                }
-              >
-                <AbbreviateNumber
-                  rawNumber={userProfile?.Followers?.length || 0}
-                />
-                <span>Followers</span>
-              </FedInBtn>
-              <FedInBtn
-                className={"no-underline"}
-                action={() =>
-                  dispatch(
-                    setFollowInfo({
-                      Info: "Following",
-                      count: userProfile?.Following?.length,
-                    })
-                  )
-                }
-              >
-                <AbbreviateNumber
-                  rawNumber={userProfile?.Following?.length || 0}
-                />
-                <span> Following</span>
-              </FedInBtn>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-start items-center text-sm  w-full  ">
-        <p className=" h-full w-full break-words ">{userProfile?.userInfo}</p>
-      </div>
-      <div className="flex flex-col items-start gap-4 border-inherit text-xl h-full sm:w-fit *:transition-all *:duration-300 ease-linear">
-        <FormatedTime
-          content={
-            <div className="flex justify-start items-center gap-2 text-sm no-underline">
-              {icons["calender"]}
-              <span>Joined</span>
-            </div>
-          }
-          className={
-            "relative text-xs w-fit text-black dark:text-white flex justify-center items-center gap-1  self-start"
-          }
-          date={user.createdAt}
-        />
-
-        {profileId !== user.id ? (
-          <div className="flex justify-start items-center gap-4 w-full sm:text-sm text-xs border-inherit">
-            <Follow
-              person={userProfile}
-              className={`flex justify-center items-center w-full sm:min-w-32 sm:h-9 h-6 p-3 py-2 spread-btn-primary rounded-xl`}
-            />
-            <Ibutton
-              action={() => privateChatMutaion(userProfile?.id)}
-              className="spread-btn-secondary p-2.5 rounded-xl border border-inherit flex items-center justify-center"
-            >
-              {isPrivateLoading ? (
-                <PiSpinner className="animate-spin" />
-              ) : (
-                <LuMessagesSquare />
-              )}
-            </Ibutton>
-          </div>
-        ) : (
-          <div className="">
+        {/* Action Button */}
+        <div className="shrink-0">
+          {isSelf ? (
             <Link
               to="/profileEditor"
-              className="spread-pill text-xs hover:opacity-80 transition-opacity"
+              className="spread-btn-secondary px-5 py-2 text-xs font-bold rounded-full shadow-sm flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer"
             >
-              Edit Profile
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>Edit Profile</span>
             </Link>
-          </div>
-        )}
+          ) : (
+            userMeta && <Follow person={userMeta} className="px-6 py-2 text-xs" />
+          )}
+        </div>
+      </div>
+
+      {/* Bio */}
+      {userMeta?.bio && (
+        <p className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 leading-relaxed max-w-2xl text-center sm:text-left">
+          {userMeta.bio}
+        </p>
+      )}
+
+      {/* Followers / Following Stats Pills */}
+      <div className="flex items-center gap-3 pt-2">
+        <button
+          type="button"
+          onClick={() => onOpenDrawer("followers")}
+          className="spread-pill text-xs px-4 py-2 font-bold flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer text-stone-800 dark:text-stone-200"
+        >
+          <Users className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+          <span>
+            <AbbreviateNumber rawNumber={userMeta?.Followers?.length || 0} /> Followers
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onOpenDrawer("following")}
+          className="spread-pill text-xs px-4 py-2 font-bold flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer text-stone-800 dark:text-stone-200"
+        >
+          <UserCheck className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+          <span>
+            <AbbreviateNumber rawNumber={userMeta?.Following?.length || 0} /> Following
+          </span>
+        </button>
       </div>
     </div>
   );
-});
+}
 
 export default ProfileHeader;

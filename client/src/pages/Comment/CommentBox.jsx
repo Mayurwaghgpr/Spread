@@ -1,7 +1,6 @@
 import { forwardRef, memo, useMemo, useRef, useState } from "react";
 import userImageSrc from "../../utils/functions/userImageSrc";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
-
 import PostsApis from "../../services/usePostsApis";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentCred } from "../../store/slices/postSlice";
@@ -10,62 +9,56 @@ import FormatedTime from "../../components/utilityComp/FormatedTime";
 import Menu from "../../components/menus/Menu";
 import useMenuConstant from "../../hooks/useMenuConstant";
 import ProfileImage from "../../components/ProfileImage";
-import Ibutton from "../../components/buttons/Ibutton";
-import useIcons from "../../hooks/useIcons";
 import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import Spinner from "../../components/loaders/Spinner";
 import DOMPurify from "dompurify";
 import useClickOutside from "../../hooks/useClickOutside";
+import { Heart, Reply, Pin, ChevronDown, ChevronUp } from "lucide-react";
 
 const CommentBox = forwardRef(
-  ({ comt, className, topCommentId, ...props }, ref) => {
+  ({ comt, className = "", topCommentId, ...props }, ref) => {
     const [openReplies, setOpenReplies] = useState("");
     const [optimisticLike, setOptimisticLike] = useState("");
 
     const { user } = useSelector((state) => state.auth);
     const { commentCred, postViewData } = useSelector((state) => state.posts);
-    const { hitLike, getReplies, deleteComtApi, pinComment } = PostsApis();
+    const { hitLike, getReplies, pinComment } = PostsApis();
     const dispatch = useDispatch();
 
     const { COMMENT_MENU } = useMenuConstant(comt, "comment");
-    const icons = useIcons();
     const menuRef = useRef(null);
     const { menuId, setMenuId } = useClickOutside(menuRef);
 
-    // Memoized values
     const commenterImg = useMemo(
       () => userImageSrc(comt?.commenter),
       [comt?.commenter]
     );
 
     const isLiked = useMemo(
-      () => comt?.commentLikes?.some((like) => like.likedBy === user.id),
-      [comt?.commentLikes, user.id]
+      () => comt?.commentLikes?.some((like) => like.likedBy === user?.id),
+      [comt?.commentLikes, user?.id]
     );
 
     const isTopComment = useMemo(
       () => comt?.topCommentId === null,
       [comt?.topCommentId]
     );
-    const isPostOwnerLiked = useMemo(
-      () =>
-        comt?.commentLikes?.find(
-          (like) => like.likedBy === postViewData.user?.id
-        ),
-      [comt?.commentLikes, postViewData.user?.id]
+
+    const isAuthor = useMemo(
+      () => comt?.commenter?.id === postViewData?.author?.id,
+      [comt?.commenter?.id, postViewData?.author?.id]
     );
 
-    const memoLike = useMemo(() => {
+    const likeCount = useMemo(() => {
+      const baseCount = comt?.commentLikes?.length || 0;
       if (optimisticLike === comt?.id && !isLiked) {
-        return <AbbreviateNumber rawNumber={comt?.commentLikes?.length + 1} />;
+        return baseCount + 1;
       } else if (isLiked && optimisticLike === comt?.id) {
-        return <AbbreviateNumber rawNumber={comt?.commentLikes?.length - 1} />;
-      } else {
-        return <AbbreviateNumber rawNumber={comt?.commentLikes?.length} />;
+        return Math.max(0, baseCount - 1);
       }
+      return baseCount;
     }, [optimisticLike, comt?.commentLikes?.length, comt?.id, isLiked]);
 
-    // Mutations
     const { mutate: pinMutation } = useMutation({
       mutationFn: (data) => pinComment(data),
       onSuccess: (data) => {
@@ -73,45 +66,24 @@ const CommentBox = forwardRef(
         dispatch(setToast({ message: "Comment pinned!", type: "success" }));
         setOptimisticLike("");
       },
-      onError: (error) => {
+      onError: () => {
         setOptimisticLike("");
-        dispatch(
-          setToast({
-            message: "Error occurred while pinning comment",
-            type: "error",
-          })
-        );
+        dispatch(setToast({ message: "Error pinning comment", type: "error" }));
       },
-      onSettled: () => {
-        setOptimisticLike("");
-      },
+      onSettled: () => setOptimisticLike(""),
     });
 
     const { mutate: likeMutation } = useMutation({
       mutationFn: (comtId) => hitLike(comtId),
       onSuccess: ({ message, updtCommentLikes }) => {
         comt.commentLikes = updtCommentLikes || [];
-        dispatch(
-          setToast({
-            message: `${message} the comment!`,
-            type: "success",
-          })
-        );
       },
-      onError: (error) => {
-        dispatch(
-          setToast({
-            message: "Error occurred while adding like",
-            type: "error",
-          })
-        );
+      onError: () => {
+        dispatch(setToast({ message: "Error adding like", type: "error" }));
       },
-      onSettled: () => {
-        setOptimisticLike("");
-      },
+      onSettled: () => setOptimisticLike(""),
     });
 
-    // Infinite query for replies
     const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
       useInfiniteQuery({
         queryKey: ["replies", comt?.id],
@@ -127,24 +99,22 @@ const CommentBox = forwardRef(
             ? lastPage.meta.currentPage + 1
             : undefined,
         refetchOnWindowFocus: false,
-        }
-      );
+      });
 
-    // Event handlers
     const handleRepliesClick = () => {
       setOpenReplies((prev) => (prev === "" ? comt?.id : ""));
     };
 
     const handleLikeClick = () => {
-      likeMutation(comt?.id);
       setOptimisticLike(comt?.id);
+      likeMutation(comt?.id);
     };
 
     const handleReplyClick = () => {
       dispatch(
         setCommentCred({
           ...commentCred,
-          topCommentId,
+          topCommentId: topCommentId || comt?.id,
           replyTo: comt?.commenter?.id,
           at: comt?.commenter?.username,
         })
@@ -157,139 +127,162 @@ const CommentBox = forwardRef(
 
     const replies = data?.pages.flatMap((page) => page.replies) || [];
 
-    // Loading state
     if (!comt) {
       return (
-        <div className={className}>
-          <article className="flex flex-col w-full justify-center items-start gap-2 select-none">
-            <div className="grid grid-cols-12 w-full gap-3">
-              <div className="col-span-1 w-8 h-8 sm:w-10 sm:h-10 rounded-full animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20" />
-              <div className="col-start-3 col-span-full">
-                <div className="w-1/4 my-2 h-4 rounded-full animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20" />
-                <div className="w-full p-3 h-6 rounded-full animate-pulse dark:bg-white bg-black bg-opacity-20 dark:bg-opacity-20" />
-              </div>
-            </div>
-          </article>
+        <div className="w-full p-2 animate-pulse flex items-start gap-3 border-b border-stone-200 dark:border-stone-800">
+          <div className="w-8 h-8 rounded-full bg-stone-300 dark:bg-stone-700 shrink-0" />
+          <div className="flex-1 space-y-2">
+            <div className="w-1/3 h-3 bg-stone-300 dark:bg-stone-700 rounded-full" />
+            <div className="w-full h-3.5 bg-stone-300 dark:bg-stone-700 rounded-full" />
+          </div>
         </div>
       );
     }
 
+    const showHeartFilled =
+      (optimisticLike === comt.id && !isLiked) ||
+      (optimisticLike === "" && isLiked);
+
     return (
-      <div id={`#${comt.commenter?.id}`} ref={ref} className={className}>
-        <article className=" group flex flex-col w-full justify-center items-start gap-2 select-none">
-          <div className="grid grid-cols-12 w-full gap-3">
-            <ProfileImage
-              className={`flex justify-center items-center col-span-1 rounded-full ${
-                isTopComment
-                  ? "sm:w-10 sm:h-10 w-8 h-8"
-                  : "sm:w-8 sm:h-8 w-6 h-6"
-              }`}
-              image={commenterImg?.userImageurl}
-              alt={comt?.commenter?.username}
-            />
-            <div className="flex flex-col justify-center items-start col-start-3 col-span-full w-full">
-              <div className="flex justify-between w-full items-center text-nowrap">
-                <div className="flex justify-start items-center text-nowrap gap-2 text-sm">
-                  <h1 className="font-semibold">{comt?.commenter?.username}</h1>
-                  {comt.pind && icons["pin"]}
-                  <FormatedTime
-                    date={comt.createdAt}
-                    className={`opacity-20 ${
-                      comt.topCommentId === null ? "text-xs" : "text-[.6rem]"
-                    }`}
-                    formate={"dd/MMM/yyyy"}
-                  />
-                  {comt.commenter?.id === postViewData?.user?.id && (
-                    <small className="opacity-20">author</small>
-                  )}
-                  {isPostOwnerLiked && (
-                    <div className="flex justify-start items-center gap-2 text-xs/10">
-                      {icons["heartFi"]}
-                      <ProfileImage
-                        className="w-5 h-5"
-                        image={postViewData.user.userImage}
-                      />
-                    </div>
-                  )}
-                </div>
-                <div className="hidden group-hover:block">
-                  <Menu
-                    className=" sm:absolute sm:top-5 right-0 sm:h-fit h-1/2 sm:p-1 p-6 z-10"
-                    ref={menuRef}
-                    menuId={menuId}
-                    setMenuId={setMenuId}
-                    items={COMMENT_MENU}
-                    content={comt}
-                  />
-                </div>
-              </div>
-              <div className="break-words w-[75%]">
-                <p
-                  className="w-full text-wrap break-words"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(comt.content || ""),
-                  }}
+      <div id={`#${comt.commenter?.id}`} ref={ref} className={`w-full border-b border-stone-200/70 dark:border-stone-800/70 pb-3.5 mb-2 ${className}`}>
+        <article className="group relative flex flex-col w-full hover:bg-stone-200/30 dark:hover:bg-stone-800/20 p-2.5 rounded-xl transition-colors space-y-1.5">
+          {/* Header Row */}
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <ProfileImage
+                className={`rounded-full ring-1 ring-stone-300 dark:ring-stone-700 shrink-0 ${
+                  isTopComment ? "w-8 h-8" : "w-7 h-7"
+                }`}
+                image={commenterImg?.userImageurl}
+                alt={comt?.commenter?.username}
+              />
+              <div className="flex items-center gap-2 text-xs truncate">
+                <span className="font-bold text-stone-900 dark:text-stone-100 truncate">
+                  {comt?.commenter?.displayName || comt?.commenter?.username}
+                </span>
+
+                {isAuthor && (
+                  <span className="spread-pill text-[10px] px-2 py-0.5 font-bold text-stone-700 dark:text-stone-300">
+                    Author
+                  </span>
+                )}
+
+                {comt.pind && (
+                  <span className="flex items-center gap-1 text-[10px] font-bold text-stone-600 dark:text-stone-400">
+                    <Pin className="w-3 h-3 fill-stone-600 dark:fill-stone-400" />
+                    Pinned
+                  </span>
+                )}
+
+                <FormatedTime
+                  date={comt.createdAt}
+                  className="text-[11px] text-stone-400 font-normal"
                 />
               </div>
-              <div className="flex justify-start items-center gap-3 my-3">
-                <Ibutton className="p-1 rounded-full" action={handleLikeClick}>
-                  {(() => {
-                    const showFilled =
-                      (optimisticLike === comt.id && !isLiked) ||
-                      (optimisticLike === "" && isLiked);
-                    return showFilled ? icons["heartFi"] : icons["heartO"];
-                  })()}
-                  {memoLike}
-                </Ibutton>
-                <Ibutton className="p-1 rounded-full" action={handleReplyClick}>
-                  Reply
-                </Ibutton>
-                {!comt.topCommentId && postViewData.user?.id === user?.id && (
-                  <Ibutton className="opacity-30" action={handlePinClick}>
-                    {icons["pin"]}
-                  </Ibutton>
-                )}
-              </div>
             </div>
+
+            <Menu
+              ref={menuRef}
+              menuId={menuId}
+              setMenuId={setMenuId}
+              items={COMMENT_MENU}
+              content={comt}
+            />
           </div>
-          {!comt.topCommentId && (
-            <Ibutton
-              className="ml-12 flex justify-center items-center gap-2 px-1 text-blue-500 rounded-full"
-              action={handleRepliesClick}
+
+          {/* Comment Body */}
+          <div className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 leading-relaxed pl-10">
+            <p
+              className="whitespace-pre-line break-words"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(comt.content || ""),
+              }}
+            />
+          </div>
+
+          {/* Actions Row */}
+          <div className="flex items-center gap-4 pl-10 pt-1 text-xs text-stone-500 dark:text-stone-400">
+            <button
+              type="button"
+              onClick={handleLikeClick}
+              className={`flex items-center gap-1.5 font-semibold hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer ${
+                showHeartFilled ? "text-rose-500" : ""
+              }`}
             >
-              {openReplies !== comt.id ? icons["arrowDown"] : icons["arrowUp"]}
-              Replies <AbbreviateNumber rawNumber={comt.replies?.length} />
-              {isLoading && <Spinner className="w-3 h-3 bg-black p-0.5" />}
-            </Ibutton>
+              <Heart
+                className={`w-3.5 h-3.5 ${
+                  showHeartFilled ? "fill-rose-500 text-rose-500" : ""
+                }`}
+              />
+              <AbbreviateNumber rawNumber={likeCount} />
+            </button>
+
+            <button
+              type="button"
+              onClick={handleReplyClick}
+              className="flex items-center gap-1 font-semibold hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+            >
+              <Reply className="w-3.5 h-3.5" />
+              <span>Reply</span>
+            </button>
+
+            {!comt.topCommentId && postViewData?.author?.id === user?.id && (
+              <button
+                type="button"
+                onClick={handlePinClick}
+                className="flex items-center gap-1 font-semibold hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+                title="Pin comment"
+              >
+                <Pin className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Thread Replies Button */}
+          {!comt.topCommentId && comt.replies?.length > 0 && (
+            <div className="pl-10 pt-1">
+              <button
+                type="button"
+                onClick={handleRepliesClick}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-700 dark:text-stone-300 hover:underline cursor-pointer"
+              >
+                {openReplies !== comt.id ? (
+                  <ChevronDown className="w-3.5 h-3.5" />
+                ) : (
+                  <ChevronUp className="w-3.5 h-3.5" />
+                )}
+                <span>
+                  {comt.replies.length} {comt.replies.length === 1 ? "reply" : "replies"}
+                </span>
+                {isLoading && <Spinner className="w-3 h-3 text-stone-900 dark:text-stone-100" />}
+              </button>
+            </div>
           )}
         </article>
+
+        {/* Nested Replies List */}
         {openReplies === comt.id && replies?.length > 0 && (
-          <>
-            {replies.map((replies) => (
+          <div className="border-l-2 border-stone-200 dark:border-stone-800 ml-4 pl-3 mt-2 space-y-2">
+            {replies.map((reply) => (
               <CommentBox
-                key={replies?.id}
-                className="animate-fedin.2s ml-3 flex px-3 justify-center items-start gap-2 text-xs w-[90%]"
-                comt={replies}
+                key={reply?.id}
+                comt={reply}
                 topCommentId={comt.id}
               />
             ))}
             {hasNextPage && (
-              <div className="w-full flex items-center gap-2 px-10">
-                <hr className="bg-black h-0.5 w-1/12" />
+              <div className="pt-2 pl-2">
                 <button
-                  className=""
+                  type="button"
                   onClick={() => fetchNextPage()}
                   disabled={!hasNextPage || isFetchingNextPage}
+                  className="text-xs font-semibold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 underline cursor-pointer"
                 >
-                  {isFetchingNextPage
-                    ? "Loading more..."
-                    : hasNextPage
-                      ? "View more..."
-                      : ""}
+                  {isFetchingNextPage ? "Loading replies..." : "View more replies"}
                 </button>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     );

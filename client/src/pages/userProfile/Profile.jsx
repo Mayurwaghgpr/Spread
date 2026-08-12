@@ -1,7 +1,8 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import PostPreview from "../../components/postsComp/PostPreview";
+import PostCardSkeleton from "../../components/loaders/PostCardSkeleton";
 import { setuserProfile } from "../../store/slices/profileSlice";
 import ProfileHeader from "./components/ProfileHeader";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
@@ -11,15 +12,30 @@ import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import useProfileApi from "../../services/useProfileApis";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import LoaderScreen from "../../components/loaders/loaderScreen";
+import EmptyState from "../../components/utilityComp/EmptyState";
 import { BsPostcard } from "react-icons/bs";
 
 function Profile() {
   const dispatch = useDispatch();
-  const { profileId } = useParams();
+  const params = useParams();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("posts");
+  const [activeDrawer, setActiveDrawer] = useState(null);
   const { fetchUserProfile, fetchUserData } = useProfileApi();
 
   const { isLogin, user } = useSelector((state) => state.auth);
-  const { FollowInfo } = useSelector((state) => state.profile);
+  const { userProfile } = useSelector((state) => state.profile);
+
+  // Safely resolve the effective profile ID or username
+  const effectiveProfileId = useMemo(() => {
+    if (params.profileId && params.profileId !== "undefined" && params.profileId !== "null") {
+      return params.profileId.replace(/^@/, "");
+    }
+    if (params.username && params.username !== "undefined" && params.username !== "null") {
+      return params.username.replace(/^@/, "");
+    }
+    return user?.id;
+  }, [params.profileId, params.username, user?.id]);
 
   // Profile data query
   const {
@@ -29,18 +45,29 @@ function Profile() {
     isLoading: isProfileLoading,
     data: profileData,
   } = useQuery({
-    queryKey: ["userProfile", profileId],
-    queryFn: async () => fetchUserProfile(profileId),
+    queryKey: ["userProfile", effectiveProfileId],
+    queryFn: async () => {
+      if (!effectiveProfileId || effectiveProfileId === "undefined") {
+        throw new Error("Invalid Profile ID");
+      }
+      return fetchUserProfile(effectiveProfileId);
+    },
     refetchOnWindowFocus: false,
-    enabled: !!profileId, // Only fetch if profileId exists
+    enabled: !!effectiveProfileId && effectiveProfileId !== "undefined",
   });
 
-  // Handle profile data with useEffect instead of deprecated onSuccess
   useEffect(() => {
     if (profileData) {
       dispatch(setuserProfile(profileData));
     }
   }, [profileData, dispatch]);
+
+  const activeProfileData = profileData || userProfile;
+
+  const isSelf = useMemo(
+    () => user?.id && activeProfileData?.id === user?.id,
+    [user?.id, activeProfileData?.id]
+  );
 
   // Posts data query
   const {
@@ -52,143 +79,158 @@ function Profile() {
     hasNextPage,
     error: postError,
   } = useInfiniteQuery({
-    queryKey: ["UserPosts", profileId],
+    queryKey: ["UserPosts", activeProfileData?.id || effectiveProfileId],
     queryFn: ({ pageParam = new Date().toISOString() }) =>
-      fetchUserData(profileId, pageParam),
+      fetchUserData(activeProfileData?.id || effectiveProfileId, pageParam),
     getNextPageParam: (lastPage) => {
-      return lastPage.length !== 0
-        ? lastPage[lastPage.length - 1].createdAt
+      return lastPage && Array.isArray(lastPage) && lastPage.length > 0
+        ? lastPage[lastPage.length - 1]?.createdAt
         : undefined;
     },
     refetchOnWindowFocus: false,
-    enabled: !!profileId && !isProfileError, // Only fetch posts if profile exists
+    enabled: !!(activeProfileData?.id || effectiveProfileId) && !isProfileError,
   });
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
     isProfileFetching,
-    hasNextPage
+    hasNextPage,
+    0.1
   );
 
-  // Memoize posts array
   const posts = useMemo(
-    () => postsData?.pages.flatMap((page) => page) || [],
+    () => postsData?.pages?.flatMap((page) => (Array.isArray(page) ? page : [])) || [],
     [postsData]
   );
 
-  // Error handling - separate profile and post errors
   if (isProfileError) {
-    const errorMessage = profileError?.data?.message || "Profile not found";
+    const errorMessage = profileError?.data?.message || profileError?.message || "Profile not found";
     const statusCode = profileError?.status || 404;
     return <ErrorPage message={errorMessage} statusCode={statusCode} />;
   }
 
-  if (isPostError && postError?.status !== 404) {
-    const errorMessage = postError?.data?.message || "Failed to load posts";
-    const statusCode = postError?.status || 500;
-    return <ErrorPage message={errorMessage} statusCode={statusCode} />;
+  if (isProfileLoading && !activeProfileData) {
+    return <LoaderScreen message="Loading profile..." />;
   }
-
-  // Show loading screen for initial profile load
-  if (isProfileLoading) {
-    return <LoaderScreen message={"Loading profile..."} />;
-  }
-
-  // Empty state component
-  const EmptyPostsState = () => {
-    if (profileId === user.id) {
-      return (
-        <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center sm:text-3xl border-dashed border-2 rounded-lg max-h-[38rem] h-full min-h-[13rem] border-inherit mx-5">
-          <p className="text-gray-600 dark:text-gray-400 mb-4">No posts yet</p>
-          {isLogin && (
-            <Link
-              to="/write"
-              className="sm:text-lg text-xs text-blue-500 hover:text-blue-600 font-medium transition-colors"
-            >
-              Add New Post +
-            </Link>
-          )}
-        </div>
-      );
-    }
-
-    return (
-      <div className="max-w-[38rem] min-w-[13rem] w-full flex flex-col justify-center items-center sm:text-3xl border-dashed border-2 rounded-lg max-h-[38rem] h-full min-h-[13rem] border-inherit mx-5">
-        <BsPostcard className="w-12 h-12 text-gray-400 mb-4" />
-        <p className="text-gray-600 dark:text-gray-400">No posts to show</p>
-      </div>
-    );
-  };
 
   return (
-    <section className="flex h-full w-full justify-start border-inherit">
-      <div className="flex flex-col h-full md:w-[80%] lg:w-[70%] w-full border-inherit">
-        <div id="Profile" className="flex-grow w-full sm:p-4 border-inherit">
-          <ProfileHeader profileId={profileId} />
+    <div className="flex flex-col items-center w-full min-h-screen border-inherit px-3 sm:px-6 py-6 max-w-4xl mx-auto space-y-6">
+      {/* Profile Header Card */}
+      <ProfileHeader
+        userMeta={activeProfileData}
+        isSelf={isSelf}
+        onOpenDrawer={(type) => setActiveDrawer(type)}
+      />
 
-          {/* Navigation Tabs */}
-          <div className="w-full flex gap-5 p-2 px-4 border-inherit">
-            <div className="w-full flex gap-5 underline-offset-[.5rem] transition-all duration-400">
-              <button
-                onClick={() => handleTabClick("home")}
-                className="hover:underline pb-1 cursor-pointer focus:outline-none focus:underline"
-                role="tab"
-                aria-selected="true"
-              >
-                Home
-              </button>
-              <button
-                onClick={() => handleTabClick("about")}
-                className="hover:underline pb-1 cursor-pointer focus:outline-none focus:underline"
-                role="tab"
-                aria-selected="false"
-              >
-                About
-              </button>
-            </div>
-          </div>
+      {/* Tabs Navigation */}
+      <div className="flex items-center justify-start gap-4 w-full border-b border-stone-200 dark:border-stone-800 pb-1">
+        <button
+          type="button"
+          onClick={() => setActiveTab("posts")}
+          className={`px-4 py-2 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer ${
+            activeTab === "posts"
+              ? "border-stone-900 dark:border-stone-100 text-stone-900 dark:text-stone-100"
+              : "border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+          }`}
+        >
+          Posts ({posts.length})
+        </button>
 
-          {/* Posts Content */}
-          <div className="py-20 w-full flex justify-center items-center flex-col  gap-5 border-inherit pt-5">
-            {/*posts if they exist */}
-            {posts.length > 0 &&
-              (isPostsLoading ? [...Array(3)] : posts).map((post, idx, arr) => (
-                <PostPreview
-                  className="border-b w-full border"
-                  ref={arr.length % 3 === 0 ? lastItemRef : null}
-                  key={post?.id || idx}
-                  post={post}
-                />
-              ))}
-
-            {/* loading spinner for infinite scroll */}
-            {isFetchingNextPage && (
-              <div className="w-full flex justify-center items-center h-24">
-                <Spinner className="w-10 h-10 border-t-black dark:border-t-white" />
-              </div>
-            )}
-            {/* empty state if no posts and not loading */}
-            {posts.length === 0 && !isPostsLoading && <EmptyPostsState />}
-
-            {/* End of list indicator */}
-            {!hasNextPage &&
-              !isFetchingNextPage &&
-              !isPostsLoading &&
-              posts.length > 0 && (
-                <div className="text-center py-8 w-full">
-                  <div className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 px-4 py-2 rounded-full">
-                    <BsPostcard className="w-4 h-4" />
-                    <span>You've seen all posts</span>
-                  </div>
-                </div>
-              )}
-          </div>
-        </div>
+        <button
+          type="button"
+          onClick={() => setActiveTab("about")}
+          className={`px-4 py-2 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer ${
+            activeTab === "about"
+              ? "border-stone-900 dark:border-stone-100 text-stone-900 dark:text-stone-100"
+              : "border-transparent text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+          }`}
+        >
+          About
+        </button>
       </div>
 
-      {FollowInfo.Info && <ProfileinfoCard className="" />}
-    </section>
+      {/* Posts Tab Section */}
+      {activeTab === "posts" && (
+        <div className="w-full space-y-4">
+          {/* Post Loading Skeletons */}
+          {isPostsLoading &&
+            Array(3)
+              .fill(null)
+              .map((_, idx) => <PostCardSkeleton key={`post-skel-${idx}`} />)}
+
+          {/* Posts List */}
+          {!isPostsLoading &&
+            posts.map((post, idx, arr) => (
+              <PostPreview
+                key={post.id}
+                ref={idx === arr.length - 1 ? lastItemRef : null}
+                post={post}
+              />
+            ))}
+
+          {/* Empty Posts State */}
+          {!isPostsLoading && posts.length === 0 && (
+            <div className="py-12 flex justify-center items-center text-center">
+              <EmptyState
+                Icon={BsPostcard}
+                heading="No stories published yet"
+                description={
+                  isSelf
+                    ? "Start writing your first story to share with the Spread community."
+                    : "This user hasn't published any stories yet."
+                }
+              />
+            </div>
+          )}
+
+          {/* Pagination Loader */}
+          {isFetchingNextPage && (
+            <div className="w-full flex justify-center items-center py-6">
+              <Spinner className="w-7 h-7 text-stone-900 dark:text-stone-100" />
+            </div>
+          )}
+
+          {/* End of list indicator */}
+          {!hasNextPage &&
+            !isFetchingNextPage &&
+            !isPostsLoading &&
+            posts.length > 0 && (
+              <div className="text-center py-8 w-full">
+                <div className="inline-flex items-center gap-2 px-4 py-2 text-xs rounded-full spread-pill">
+                  <BsPostcard className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+                  <span>You've seen all posts</span>
+                </div>
+              </div>
+            )}
+        </div>
+      )}
+
+      {/* About Tab Section */}
+      {activeTab === "about" && (
+        <div className="w-full spread-card p-6 sm:p-8 rounded-2xl border border-stone-200 dark:border-stone-800 space-y-4">
+          <h2 className="text-base font-bold text-stone-900 dark:text-stone-100">
+            About {activeProfileData?.displayName || activeProfileData?.username || "User"}
+          </h2>
+          <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
+            {activeProfileData?.bio || "No bio added yet."}
+          </p>
+        </div>
+      )}
+
+      {/* Followers / Following Drawer Modal */}
+      {activeDrawer && (
+        <ProfileinfoCard
+          action={() => setActiveDrawer(null)}
+          kind={activeDrawer}
+          listData={
+            activeDrawer === "followers"
+              ? activeProfileData?.Followers || []
+              : activeProfileData?.Following || []
+          }
+        />
+      )}
+    </div>
   );
 }
 

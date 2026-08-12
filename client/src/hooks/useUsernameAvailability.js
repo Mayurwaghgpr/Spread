@@ -41,7 +41,7 @@ export function useUsernameAvailability(initialUsername = "") {
         } else if (cleanVal.length > 15) {
           setMessage("Username must be 15 characters or less");
         } else {
-          setMessage("Only letters, numbers, and underscores allowed");
+          setMessage("Only letters, numbers, and underscores allowed (e.g. no '@' or spaces)");
         }
         setSuggestions([]);
         return;
@@ -90,27 +90,30 @@ export function useUsernameAvailability(initialUsername = "") {
   );
 
   const handleUsernameChange = useCallback(
-    (val) => {
-      const formatted = val.toLowerCase().replace(/[^a-z0-9_]/g, "");
-      setUsername(formatted);
-      latestQueryRef.current = formatted;
+    (rawVal) => {
+      // Store exact raw input so typed characters like '@' or spaces remain visible to the user
+      setUsername(rawVal);
+      const cleanVal = rawVal.trim();
+      latestQueryRef.current = cleanVal;
 
-      if (!formatted) {
+      if (!cleanVal) {
         setStatus("idle");
         setMessage("");
         setSuggestions([]);
-      } else if (!USERNAME_REGEX.test(formatted)) {
+      } else if (!USERNAME_REGEX.test(cleanVal)) {
         setStatus("invalid");
-        setMessage(
-          formatted.length < 3
-            ? "Username must be at least 3 characters"
-            : "Only letters, numbers, and underscores allowed"
-        );
+        if (cleanVal.length < 3) {
+          setMessage("Username must be at least 3 characters");
+        } else if (cleanVal.length > 15) {
+          setMessage("Username must be 15 characters or less");
+        } else {
+          setMessage("Only letters, numbers, and underscores allowed (e.g. no '@' or spaces)");
+        }
         setSuggestions([]);
       } else {
         setStatus("loading");
         setMessage("Checking availability...");
-        debouncedSearch(formatted);
+        debouncedSearch(cleanVal);
       }
     },
     [debouncedSearch]

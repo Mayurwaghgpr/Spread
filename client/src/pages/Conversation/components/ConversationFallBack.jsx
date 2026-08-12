@@ -1,22 +1,32 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import useDeviceSize from "../../../hooks/useDeviceSize";
+import { MessageSquarePlus, Sparkles } from "lucide-react";
 
 function ConversationFallBack() {
   const navigate = useNavigate();
+
   return (
-    <div className="md:flex flex-col hidden  justify-center items-start gap-3 w-[80%] p-32 pt-0 h-full ">
-      <h1 className="lg:text-3xl text-xl font-bold text-oplight ">
-        Select a conversation to start interaction with users
+    <div className="hidden sm:flex flex-1 flex-col justify-center items-start gap-4 h-full p-12 lg:p-24 max-w-2xl bg-transparent">
+      <div className="flex items-center gap-2.5 text-stone-600 dark:text-stone-400 font-bold text-xs uppercase tracking-wider">
+        <Sparkles className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+        <span>Spread Direct Messaging</span>
+      </div>
+
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight leading-tight">
+        Select a conversation to start interacting with users
       </h1>
-      <p className=" opacity-60 font-thin lg:text-sm text-xs">
-        You can create a new conversation by clicking on the +Icon button or
-        chose from existing conversations on the left.
+
+      <p className="text-sm lg:text-base text-stone-500 dark:text-stone-400 font-normal leading-relaxed">
+        Choose an active thread from your conversations list on the left, or create a new direct message thread to connect with people.
       </p>
+
       <button
-        className="px-4 py-2 lg:text-base text-sm text-nowrap dark:bg-white bg-oplight text-white dark:text-black rounded-full hover:opacity-80 transition-all duration-300"
+        type="button"
         onClick={() => navigate("new/c")}
+        className="spread-btn-primary px-6 py-3 text-xs sm:text-sm font-bold rounded-full shadow-md flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer mt-2"
       >
-        Start New Conversation
+        <MessageSquarePlus className="w-4 h-4 text-stone-900 dark:text-stone-100" />
+        <span>Start New Conversation</span>
       </button>
     </div>
   );

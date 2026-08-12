@@ -75,8 +75,8 @@ function LikesList({ mutate, isVisible, onMouseEnter, onMouseLeave }) {
       role="toolbar"
       aria-label="Reaction options"
     >
-      {/* Invisible Hover Bridge Buffer */}
-      <div className="absolute -bottom-4 left-0 right-0 h-4 bg-transparent pointer-events-auto" />
+      {/* Invisible Hover Bridge Buffer strictly aligned over Like button only */}
+      <div className="absolute -bottom-4 left-0 w-20 h-4 bg-transparent pointer-events-auto" />
 
       {REACTIONS.map((reaction, idx) => (
         <ReactionButton

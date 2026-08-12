@@ -56,7 +56,7 @@ function Like({ post, className }) {
     if (leaveTimerRef.current) {
       clearTimeout(leaveTimerRef.current);
     }
-    // Delay opening slightly (150ms) to prevent accidental popups when scrolling
+    // Delay opening slightly (150ms) to prevent accidental popups when scrolling or moving across
     hoverTimerRef.current = setTimeout(() => {
       setShowPopover(true);
     }, 150);
@@ -66,10 +66,10 @@ function Like({ post, className }) {
     if (hoverTimerRef.current) {
       clearTimeout(hoverTimerRef.current);
     }
-    // Grace period delay (350ms) before closing popover so movement is silky smooth
+    // Grace period delay (250ms) before closing popover
     leaveTimerRef.current = setTimeout(() => {
       setShowPopover(false);
-    }, 350);
+    }, 250);
   }, []);
 
   const handleLike = useCallback(
@@ -118,9 +118,7 @@ function Like({ post, className }) {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={`relative flex items-center cursor-pointer border-inherit ${className}`}
+      className={`relative flex items-center border-inherit ${className}`}
     >
       {/* Reactions popover menu */}
       <LikesList
@@ -130,10 +128,12 @@ function Like({ post, className }) {
         onMouseLeave={handleMouseLeave}
       />
 
-      {/* Like Button */}
+      {/* Like Button - Hover trigger only on Like Button */}
       <button
         onClick={handleLike}
-        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 hover:bg-[#f5f1ec] dark:hover:bg-[#121212] active:scale-95 ${
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 hover:bg-[#f5f1ec] dark:hover:bg-[#121212] active:scale-95 cursor-pointer ${
           currentReaction
             ? "text-stone-900 dark:text-stone-100"
             : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"

@@ -23,11 +23,13 @@ import {
 } from "../../store/slices/messangerSlice";
 import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import TimeAgo from "../../components/utilityComp/TimeAgo";
+import { Info, MessageSquare, AlertCircle } from "lucide-react";
+import Spinner from "../../components/loaders/Spinner";
 
 function ConversationSection() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { messages, selectedConversation } = useSelector(
-    (state) => state.messanger,
+    (state) => state.messanger
   );
 
   const [typingUsers, setTypingUsers] = useState([]);
@@ -40,22 +42,25 @@ function ConversationSection() {
   const navigate = useNavigate();
   const { getMessage } = ChatApi();
   const { socket } = useSocket();
-  const prevMessagesCount = useRef(0);
 
-  // Memoized conversation data
+  const safeMessages = useMemo(
+    () => (Array.isArray(messages) ? messages : []),
+    [messages]
+  );
+
   const conversationData = useMemo(() => {
     if (!selectedConversation) {
-      return { id: null, groupName: "Unknown", image: "", members: [] };
+      return { id: null, groupName: "Conversation", image: "", members: [] };
     }
 
     if (selectedConversation.conversationType === "private") {
       const oppositeMember = selectedConversation.members?.find(
-        (m) => m.id !== user?.id,
+        (m) => m.id !== user?.id
       );
       return {
         id: selectedConversation.id,
         image: oppositeMember?.userImage || "",
-        groupName: oppositeMember?.displayName || "Unknown",
+        groupName: oppositeMember?.displayName || oppositeMember?.username || "Direct Message",
         members: selectedConversation.members || [],
         conversationType: "private",
       };
@@ -63,13 +68,12 @@ function ConversationSection() {
 
     return {
       ...selectedConversation,
-      groupName: selectedConversation.groupName || "Unknown",
+      groupName: selectedConversation.groupName || "Group Chat",
       image: selectedConversation.image || "",
       members: selectedConversation.members || [],
     };
   }, [selectedConversation, user?.id]);
 
-  // Fetch messages
   const {
     isFetching,
     isFetchingNextPage,
@@ -83,18 +87,19 @@ function ConversationSection() {
     queryFn: ({ pageParam = new Date().toISOString() }) =>
       getMessage({ conversationId, pageParam }),
     getNextPageParam: (lastPage) => {
-      return lastPage.length !== 0
+      return lastPage && Array.isArray(lastPage) && lastPage.length !== 0
         ? lastPage[lastPage.length - 1].createdAt
-        : undefined; // Use last item timestamp as cursor
+        : undefined;
     },
+    enabled: !!conversationId,
     refetchOnWindowFocus: false,
     retry: 2,
   });
 
-  // Handle messages data with useEffect instead of deprecated onSuccess
   useEffect(() => {
-    if (messagesData) {
-      dispatch(addMessage(messagesData?.pages?.flatMap((page) => page)));
+    if (messagesData?.pages) {
+      const flatMsgs = messagesData.pages.flatMap((page) => (Array.isArray(page) ? page : []));
+      dispatch(addMessage(flatMsgs));
     }
   }, [messagesData, dispatch]);
 
@@ -103,52 +108,46 @@ function ConversationSection() {
     isFetchingNextPage,
     isFetching,
     hasNextPage,
-    // containerRef
+    0.1
   );
 
-  // Handle typing status
   const handleUserTyping = useCallback(
     ({ conversationId: convId, senderId, image }) => {
       if (convId !== conversationId) return;
-      console.log("started typing", senderId);
       setTypingUsers((prev) => {
-        const filteredUsers = prev.filter((user) => user.senderId !== senderId);
+        const filteredUsers = prev.filter((u) => u.senderId !== senderId);
         return [...filteredUsers, { senderId, image }];
       });
     },
-    [conversationId],
+    [conversationId]
   );
 
   const handleIsStopedTyping = useCallback(
     ({ conversationId: convId, senderId }) => {
       if (convId !== conversationId) return;
-      console.log("stoped", senderId);
       setTypingUsers((prev) =>
-        prev.filter((user) => user.senderId !== senderId),
+        prev.filter((u) => u.senderId !== senderId)
       );
     },
-    [conversationId],
+    [conversationId]
   );
 
-  // Handle incoming new message
   const handleNewMessage = useCallback(
     (msg) => {
-      if (msg.conversationId === conversationId && msg.senderId !== user?.id) {
+      if (msg?.conversationId === conversationId && msg?.senderId !== user?.id) {
         dispatch(pushMessage(msg));
         setTypingUsers((prev) =>
-          prev.filter((user) => user.senderId !== msg.senderId),
+          prev.filter((u) => u.senderId !== msg.senderId)
         );
       }
     },
-    [dispatch, user?.id, conversationId],
+    [dispatch, user?.id, conversationId]
   );
 
-  // Handle sending error
   const handleError = useCallback(() => {
     dispatch(popMessage());
   }, [dispatch]);
 
-  // Socket events
   useEffect(() => {
     if (!isLogin || !user?.id || !conversationId || !socket) return;
 
@@ -170,115 +169,109 @@ function ConversationSection() {
     socket,
     conversationId,
     handleUserTyping,
+    handleIsStopedTyping,
     handleNewMessage,
     handleError,
   ]);
 
   const isUsersTyping = useMemo(
-    () => typingUsers.some((typingUser) => typingUser.senderId !== user?.id),
-    [typingUsers, user?.id],
+    () => typingUsers.some((u) => u.senderId !== user?.id),
+    [typingUsers, user?.id]
   );
 
   const shouldObserve = hasNextPage && !isFetchingNextPage;
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-red-500">
-          Failed to load messages. Please try again.
+      <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+        <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 mb-2">
+          <AlertCircle className="w-6 h-6" />
+        </div>
+        <p className="text-sm font-bold text-stone-900 dark:text-stone-100">
+          Failed to load conversation
         </p>
+        <span className="text-xs text-stone-500">Please try refreshing the page</span>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-full max-h-full border-inherit bg-inherit flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 border-b border-inherit flex justify-between bg-light dark:bg-dark z-20 w-full h-fit py-2 px-7">
-        <div className="flex items-center gap-3 w-[80%]">
+    <div className="relative w-full h-full max-h-full border-inherit bg-stone-50/50 dark:bg-stone-950/50 flex flex-col min-w-0">
+      {/* Top Header Bar */}
+      <header className="sticky top-0 z-30 w-full border-b border-stone-200/70 dark:border-stone-800/70 px-4 sm:px-6 py-3 backdrop-blur-md flex items-center justify-between bg-transparent">
+        <div className="flex items-center gap-3 min-w-0">
           <ProfileImage
             onClick={() => navigate(`info?Id=${conversationId}`)}
-            className="w-10 h-10 min-w-fit cursor-pointer"
+            className="w-10 h-10 rounded-full ring-1 ring-stone-300 dark:ring-stone-700 cursor-pointer shrink-0"
             image={conversationData.image}
           />
-          <div className="flex flex-col items-start justify-center gap-1 overflow-hidden">
-            <h1 className="truncate font-medium text-sm">
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-sm font-bold text-stone-900 dark:text-stone-100 truncate">
               {conversationData.groupName}
             </h1>
-            {conversationData.members.length > 0 &&
-              conversationData.conversationType !== "private" && (
-                <ul className="flex gap-2 text-xs opacity-50">
-                  {conversationData.members.some((m) => m.id === user?.id) && (
-                    <li>You</li>
-                  )}
-                  <li>
-                    {conversationData.members
-                      .filter((m) => m.id !== user?.id)
-                      .map((m) => m.username)
-                      .join(", ")}
-                  </li>
-                  {conversationData.conversationType === "group" && (
-                    <li className="text-gray-400">
-                      ({conversationData.members.length} members)
-                    </li>
-                  )}
-                </ul>
-              )}
+            <span className="text-[11px] text-stone-500 dark:text-stone-400 font-semibold truncate">
+              {conversationData.conversationType === "private"
+                ? "Active now"
+                : `${conversationData.members?.length || 0} members`}
+            </span>
           </div>
         </div>
+
+        <button
+          type="button"
+          onClick={() => navigate(`info?Id=${conversationId}`)}
+          className="p-2 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/40 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+          title="Conversation info"
+        >
+          <Info className="w-5 h-5" />
+        </button>
       </header>
-      {/* <TimeAgo
-        className="opacity-95 absolute top-16 left-[47.9%] text-xs"
-        grouped={true}
-        date={new Date()}
-      /> */}
+
+      {/* Messages Canvas */}
       <section
         ref={containerRef}
-        className={`relative flex flex-col-reverse h-full  w-full px-5 border-inherit py-10 ${conversationId ? "sm:visible" : "hidden"} overflow-y-scroll [overflow-anchor:none]`}
+        className={`relative flex flex-col-reverse flex-1 w-full px-4 sm:px-6 py-6 border-inherit ${
+          conversationId ? "visible" : "hidden sm:flex"
+        } overflow-y-auto [overflow-anchor:none] space-y-reverse space-y-2`}
       >
-        {/* Messages */}
-        {messages.length === 0 && !isLoading && (
-          <div className="h-full w-full absolute top-0 left-0 flex justify-center items-center">
-            <p className="opacity-50">
-              No messages yet. Start the conversation!
+        {/* Empty Conversation State */}
+        {safeMessages.length === 0 && !isLoading && (
+          <div className="flex flex-col items-center justify-center h-full my-auto text-center py-12">
+            <div className="w-12 h-12 rounded-full bg-stone-200/60 dark:bg-stone-800/60 flex items-center justify-center mb-3 text-stone-500">
+              <MessageSquare className="w-6 h-6" />
+            </div>
+            <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100 mb-1">
+              No messages yet
+            </h3>
+            <p className="text-xs text-stone-500 dark:text-stone-400">
+              Send a greeting to start the conversation!
             </p>
           </div>
         )}
-        {/* {isLoading && !fetchNextPage && (
-          <div className="h-full w-full absolute top-0 left-0 flex justify-center items-center">
-            <Spinner className="w-10 h-10 bg-black p-1 dark:bg-white m-auto" />
-          </div>
-        )} */}
 
-        {/* Typing indicator */}
-        <div className="w-full h-16 border-inherit flex justify-start items-center">
-          {isUsersTyping && (
-            <div className="flex gap-1 my-4 border-inherit">
-              {conversationData.conversationType !== "private" &&
-                typingUsersDisplay.map((u) => (
-                  <ProfileImage
-                    key={u.senderId}
-                    className="w-6 h-6"
-                    image={u.image}
-                  />
-                ))}
-              <div className="relative flex items-center justify-center w-fit p-1.5 text-sm mt-2 bg-light dark:bg-dark border border-inherit rounded-xl rounded-tl-none">
-                <span className="typingLoader"></span>
-              </div>
+        {/* Typing Indicator Bubble */}
+        {isUsersTyping && (
+          <div className="w-full flex items-center gap-2 py-2">
+            <div className="spread-card px-3.5 py-2 rounded-2xl rounded-tl-xs border border-stone-200 dark:border-stone-800 text-xs text-stone-500 dark:text-stone-400 flex items-center gap-2">
+              <Spinner className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+              <span>Typing response...</span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
+        {/* Render Messages */}
         {!isLoading &&
-          messages?.map((msg, idx, arr) => {
-            const msgDate = new Date(msg.createdAt);
+          safeMessages.map((msg, idx, arr) => {
+            const msgDate = msg?.createdAt ? new Date(msg.createdAt) : new Date();
             const prevDate =
-              idx < arr.length - 1 ? new Date(arr[idx + 1].createdAt) : null;
+              idx < arr.length - 1 && arr[idx + 1]?.createdAt
+                ? new Date(arr[idx + 1].createdAt)
+                : null;
             const showDate =
               !prevDate || msgDate.toDateString() !== prevDate.toDateString();
 
             return (
-              <React.Fragment key={msg.id}>
+              <React.Fragment key={msg?.id || `msg-${idx}`}>
                 <MessageBubble
                   ref={
                     shouldObserve && idx === arr.length - 1 ? lastItemRef : null
@@ -287,9 +280,9 @@ function ConversationSection() {
                   userId={user?.id}
                 />
                 {showDate && (
-                  <div className="  flex justify-center text-xs">
+                  <div className="flex justify-center text-center my-3">
                     <TimeAgo
-                      className="opacity-95"
+                      className="text-[11px] font-bold text-stone-500 dark:text-stone-400 spread-pill px-3 py-1 rounded-full"
                       grouped={true}
                       date={msgDate}
                     />
@@ -298,23 +291,15 @@ function ConversationSection() {
               </React.Fragment>
             );
           })}
-
-        {/* {isFetchingNextPage && hasNextPage && (
-          <div className="p-4 w-full">
-            <Spinner className="w-5 h-5 bg-black p-1 dark:bg-white m-auto" />
-          </div>
-        )} */}
       </section>
 
-      {/* Input Section */}
-      <div className="flex-shrink-0 border-inherit">
-        <MessageInputSection
-          conversationId={conversationId}
-          conversationData={conversationData}
-          containerRef={containerRef}
-        />
-      </div>
-      {/* Outlet for sidebar/info panel */}
+      {/* Message Input Bar */}
+      <MessageInputSection
+        conversationId={conversationId}
+        conversationData={conversationData}
+        containerRef={containerRef}
+      />
+
       <Outlet
         context={{
           isGroup: selectedConversation?.conversationType === "group",

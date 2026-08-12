@@ -1,183 +1,185 @@
 import { useCallback } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { useSelector, useDispatch } from "react-redux";
-import { setElements } from "../../../store/slices/postSlice";
-import { setToast } from "../../../store/slices/uiSlice";
-import { useMutation } from "@tanstack/react-query";
-import PostsApis from "../../../services/usePostsApis";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import Spinner from "../../../components/loaders/Spinner";
-import { createPortal } from "react-dom";
 import CommonInput from "../../../components/inputComponents/CommonInput";
-import useIcons from "../../../hooks/useIcons";
-
-const DEFAULT_ELEMENT = { type: "text", data: "", id: uuidv4(), index: 0 };
+import { useDispatch, useSelector } from "react-redux";
+import { setElements } from "../../../store/slices/postSlice";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import PostsApis from "../../../services/usePostsApis";
+import { useMutation } from "@tanstack/react-query";
+import Spinner from "../../../components/loaders/Spinner";
+import { setToast } from "../../../store/slices/uiSlice";
+import { ArrowLeft, Sparkles, Upload, Send } from "lucide-react";
 
 function PostPreviewEditor() {
-  const [imageFiles, setImageFiles, handleTextChange] = useOutletContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const icons = useIcons();
+  const { postCreateApi } = PostsApis();
 
-  // const [Topic, setTopic] = useState();
-  const { elements } = useSelector((state) => state.posts);
-  const { AddNewPost } = PostsApis();
+  const { isDraftMode, isPublishLoading, isPostUpdating } = useOutletContext();
+  const { elements, imageElements } = useSelector((state) => state.posts);
 
-  const mutation = useMutation({
-    mutationFn: (NewPosts) => AddNewPost(NewPosts),
-    onSuccess: (response) => {
-      // queryClient.invalidateQueries(["posts"]);
-      dispatch(
-        setToast({
-          message: `New Blog ${response.message} fully created`,
-          type: "success",
-        })
-      );
-      dispatch(setElements([DEFAULT_ELEMENT]));
-      navigate("/", { replace: true });
-    },
-    onError: (error) => {
-      const errorMessage =
-        error.response?.error || "An error occurred. Please try again.";
-      dispatch(setToast({ message: errorMessage, type: "error" }));
-      dispatch(setElements([DEFAULT_ELEMENT]));
-      navigate(-1, { replace: true });
-    },
-  });
   const EditTitleImage = useCallback(
     (id, index, el) => {
-      const newImage = el.files[0];
-      const updatedElements = elements.map((el) =>
-        el.index === index ? { ...el, file: URL.createObjectURL(newImage) } : el
-      );
-      const updatedImageFiles = imageFiles.map((file) =>
-        file.index === index ? { ...file, file: newImage } : file
-      );
-      setImageFiles(updatedImageFiles);
-      dispatch(setElements(updatedElements));
+      const file = el.files[0];
+      if (file && elements) {
+        const updated = elements.map((item) =>
+          item.id === id
+            ? { ...item, file: URL.createObjectURL(file), rawFile: file }
+            : item
+        );
+        dispatch(setElements(updated));
+      }
     },
-    [dispatch, elements, imageFiles]
+    [elements, dispatch]
   );
 
-  const handeSubmit = useCallback((e) => {
-    if (elements.some((el) => el.data === "" && !el.file)) {
-      return;
-    }
+  const handleTextChange = useCallback(
+    (id, data) => {
+      if (elements) {
+        const updated = elements.map((item) =>
+          item.id === id ? { ...item, data } : item
+        );
+        dispatch(setElements(updated));
+      }
+    },
+    [elements, dispatch]
+  );
 
-    const formData = new FormData();
-    formData.append("blocks", JSON.stringify(elements));
-    imageFiles?.forEach((el, idx) => {
-      formData.append(`image-${el.index}`, el.file);
-      formData.append(`description-${el.index}`, el.data);
-    });
-    console.log(formData);
-    if (e === "fetch") {
-      mutation.mutate(formData);
-    }
-  }, []);
+  const { mutate: createPostMutate } = useMutation({
+    mutationFn: (data) => postCreateApi(data),
+    onSuccess: (data) => {
+      navigate(`/p/${data?.post?.title.replaceAll(" ", "-")}-${data?.post?.id}`);
+      dispatch(setToast({ message: data?.message || "Story published ✨", type: "success" }));
+    },
+    onError: (error) => {
+      dispatch(
+        setToast({
+          message: error?.response?.data?.message || error?.message || "Failed to publish post",
+          type: "error",
+        })
+      );
+    },
+  });
 
-  const imageElements = elements?.filter((el) => el.type === "image");
-
-  return createPortal(
-    <main className=" fixed top-0 right-0 z-50  px-10 bg-black/10   w-full flex justify-center min-h-screen h-full flex-col gap-10 m-auto items-center overflow-y-auto border-inherit">
-      <div className="w-full  ">
+  return (
+    <div
+      onClick={() => navigate(-1)}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-all duration-300 animate-in fade-in"
+      role="dialog"
+      aria-label="Post preview modal"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex flex-col w-full max-w-xl max-h-[90vh] spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl animate-in zoom-in-95 duration-150 p-6 sm:p-8 space-y-6 overflow-y-auto"
+      >
+        {/* Navigation Back Link */}
         <Link
-          className=" absolute right-5 text-xl top-5"
           to={-1}
-          replace={true}
+          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
         >
-          {icons["close"]}
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Editor</span>
         </Link>
-      </div>
-      <div className="flex flex-col justify-center items-center gap-10 bg-light h-fit max-w-3xl min-w-[36rem] dark:bg-black p-10 rounded-xl">
-        {" "}
-        <hgroup className="text-center ">
-          <h1 className="text-lg">Define your Preview</h1>
-          <p className="text-[.6rem] sm:text-sm px-10  dark:text-white  text-black dark:opacity-50 text-opacity-20"></p>
-        </hgroup>
-        <div className="  w-full  h-full flex flex-col  justify-center items-start gap-5 text-start border-inherit  ">
-          <h1 className="">Post Preview</h1>
-          <div className="flex justify-center h-20 w-full items-center bg-inherit">
-            <label className="relative flex h-full w-full" htmlFor="titleimage">
-              {imageElements?.length ? (
-                <img
-                  className=" object-cover object-center "
-                  src={imageElements[0]?.file}
-                  alt="title image"
-                  loading="lazy"
-                />
-              ) : (
-                <div className=" w-full h-full flex justify-center items-center hover:bg-gray-100 border-2 border-dashed border-inherit rounded-lg ">
-                  <p>Add Title Image</p>
-                </div>
-              )}
-            </label>
-            <input
-              className=""
-              hidden
-              type="file"
-              name=""
-              id="titleimage"
-              accept="image/*"
-              onChange={(el) =>
-                EditTitleImage(
-                  imageElements[0]?.id,
-                  imageElements[0]?.index,
-                  el.target
-                )
-              }
-            />
-          </div>
 
+        {/* Modal Header */}
+        <div className="space-y-1">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
+            Publish Story Preview
+            <Sparkles className="w-5 h-5 text-stone-700 dark:text-stone-300" />
+          </h2>
+          <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400">
+            Review your cover image, title, and subtitle before publishing to Spread
+          </p>
+        </div>
+
+        {/* Title Image Upload Area */}
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">
+            Cover Image
+          </label>
+          <label
+            htmlFor="titleimage"
+            className="relative flex items-center justify-center h-44 sm:h-52 w-full rounded-2xl border-2 border-dashed border-stone-300 dark:border-stone-700 hover:border-stone-500 dark:hover:border-stone-500 overflow-hidden bg-stone-100/60 dark:bg-stone-900/60 transition-all cursor-pointer group"
+          >
+            {imageElements?.length ? (
+              <img
+                className="w-full h-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300"
+                src={imageElements[0]?.file}
+                alt="Title preview cover"
+                loading="lazy"
+              />
+            ) : (
+              <div className="flex flex-col items-center gap-2 text-stone-500 group-hover:text-stone-900 dark:group-hover:text-stone-100 transition-colors">
+                <Upload className="w-8 h-8" />
+                <span className="text-xs font-semibold">Click to upload cover image</span>
+              </div>
+            )}
+          </label>
+          <input
+            hidden
+            type="file"
+            id="titleimage"
+            accept="image/*"
+            onChange={(el) =>
+              EditTitleImage(
+                imageElements[0]?.id,
+                imageElements[0]?.index,
+                el.target
+              )
+            }
+          />
+        </div>
+
+        {/* Preview Input Controls */}
+        <div className="space-y-4">
           <CommonInput
-            label={"Title"}
-            className=" p-1 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
+            label="Title"
+            className="p-3 w-full rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-100 text-sm font-semibold outline-none focus:ring-2 focus:ring-stone-400/50"
             type="text"
             name="title"
             defaultValue={elements[0]?.data}
-            title=""
-            placeholder="Write Preview title"
+            placeholder="Write preview title..."
             onChange={(e) => handleTextChange(elements[0]?.id, e.target.value)}
           />
+
           <CommonInput
+            label="Subtitle / Summary"
+            className="p-3 w-full rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-100 text-sm outline-none focus:ring-2 focus:ring-stone-400/50"
             type="text"
-            label={"Subetitle"}
-            name={"subtitle"}
-            className=" p-2 w-full border rounded-lg placeholder:text-sm  outline-none focus:border-black bg-inherit"
+            name="subtitle"
             defaultValue={elements[1]?.data}
-            placeholder=" Write Preview Subtitle"
+            placeholder="Write preview subtitle..."
             onChange={(e) => handleTextChange(elements[1]?.id, e.target.value)}
           />
+        </div>
 
-          <div className=" w-full flex my-7 gap-5 flex-col border-inherit">
-            <div className="h-full flex gap-3 items-start border-inherit">
-              <button
-                onClick={() => handeSubmit("fetch")}
-                className={`flex gap-2 ${
-                  mutation.isPending && " opacity-50 "
-                } dark:bg-white dark:text-black text-white bg-oplight px-4 py-2 rounded-full`}
-                disabled={mutation.isPending}
-              >
-                {mutation.isPending && (
-                  <Spinner
-                    className={" w-5 h-5 p-0.5 bg-black dark:bg-white"}
-                  />
-                )}
-                {mutation.isPending ? `Submitting...` : "Submit"}
-              </button>
+        {/* Modal Action Controls */}
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200 dark:border-stone-800">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="spread-pill text-xs font-semibold px-5 py-2.5 rounded-full hover:scale-105 transition-transform cursor-pointer"
+          >
+            Cancel
+          </button>
 
-              <Link
-                className=" border px-4 py-2 rounded-full border-inherit"
-                to={-1}
-              >
-                Cancel
-              </Link>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={() => createPostMutate(isDraftMode)}
+            disabled={isPublishLoading || isPostUpdating}
+            className="spread-btn-primary px-6 py-2.5 text-xs font-bold rounded-full shadow-md flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer"
+          >
+            {isPublishLoading || isPostUpdating ? (
+              <Spinner className="w-4 h-4 text-stone-900 dark:text-stone-100" />
+            ) : (
+              <>
+                <Send className="w-3.5 h-3.5" />
+                <span>{isDraftMode ? "Publish Story" : "Save Changes"}</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
-    </main>,
-    document.getElementById("portal")
+    </div>
   );
 }
 

@@ -256,7 +256,7 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
                 Spread AI Assistant
                 {isCached && (
                   <span className="text-[10px] px-2 py-0.5 rounded-full border border-inherit bg-[#f5f1ec] dark:bg-[#121212] text-stone-700 dark:text-stone-300 font-medium flex items-center gap-1">
-                    <span className="w-3 h-3 text-amber-500">{icons["bolt"]}</span> Cached
+                    <span className="w-3 h-3 text-stone-700 dark:text-stone-300">{icons["bolt"]}</span> Cached
                   </span>
                 )}
               </h2>

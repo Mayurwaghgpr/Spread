@@ -1,49 +1,59 @@
 import { memo, useMemo, useState } from "react";
-import Ibutton from "../../../components/buttons/Ibutton";
-import useIcons from "../../../hooks/useIcons";
+import { Bold, Italic, Underline, Link as LinkIcon, Check, X } from "lucide-react";
 
 const TextTools = ({ position, applyStyle }) => {
   const [url, setUrl] = useState("");
-  const icons = useIcons();
   const [isInputVisible, setInputVisible] = useState(false);
-  const [savedRange, setSavedRange] = useState(null); // Store selection range
+  const [savedRange, setSavedRange] = useState(null);
 
   if (!position) return null;
   const { x, y } = position;
 
-  // Store selection before opening input
   const handleShowInput = () => {
     const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-      setSavedRange(selection.getRangeAt(0)); // Save selection
+    if (selection && selection.rangeCount > 0) {
+      setSavedRange(selection.getRangeAt(0));
       setInputVisible(true);
     }
   };
 
-  const handleCreateLink = (e) => {
-    if (e.key === "Enter" && url.trim() && savedRange) {
-      const anchor = document.createElement("a");
-      anchor.href = url.trim();
-      anchor.target = "_blank"; // Open in new tab
-      anchor.rel = "noopener noreferrer";
+  const executeCreateLink = (targetUrl) => {
+    if (!targetUrl || !savedRange) return;
 
-      // Prevent contentEditable from interfering
-      anchor.setAttribute("contenteditable", "false");
-      anchor.classList // Add multiple classes
-        .add(
-          "text-blue-800",
-          "underline",
-          "hover:text-blue-500",
-          "cursor-pointer"
-        );
-      anchor.textContent = savedRange.toString(); // Keep selected text
+    let formattedUrl = targetUrl.trim();
+    if (!/^https?:\/\//i.test(formattedUrl)) {
+      formattedUrl = `https://${formattedUrl}`;
+    }
 
-      savedRange.deleteContents(); // Remove selected text
-      savedRange.insertNode(anchor); // Insert the link
+    const anchor = document.createElement("a");
+    anchor.href = formattedUrl;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+    anchor.setAttribute("contenteditable", "false");
+    anchor.classList.add(
+      "text-stone-900",
+      "dark:text-stone-100",
+      "underline",
+      "underline-offset-4",
+      "hover:opacity-80",
+      "cursor-pointer"
+    );
+    anchor.textContent = savedRange.toString();
 
+    savedRange.deleteContents();
+    savedRange.insertNode(anchor);
+
+    setInputVisible(false);
+    setUrl("");
+    setSavedRange(null);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      executeCreateLink(url);
+    } else if (e.key === "Escape") {
       setInputVisible(false);
-      setUrl("");
-      setSavedRange(null); // Reset saved range
     }
   };
 
@@ -51,66 +61,86 @@ const TextTools = ({ position, applyStyle }) => {
     () => [
       {
         action: () => applyStyle("Bold", null),
-        icon: "B",
-        className: "flex justify-center items-center border-black w-full",
-      },
-      {
-        action: () => applyStyle("Underline", null),
-        icon: "U",
-        className: "flex justify-center items-center border-black w-full",
-      },
-      {
-        action: handleShowInput, // Show input field when clicking the link button
-        icon: icons["link"],
-        className:
-          "flex justify-center items-center border-black w-full text-xl",
+        Icon: Bold,
+        label: "Bold",
       },
       {
         action: () => applyStyle("Italic", null),
-        icon: "I",
-        className: "flex justify-center items-center border-black w-full ",
+        Icon: Italic,
+        label: "Italic",
+      },
+      {
+        action: () => applyStyle("Underline", null),
+        Icon: Underline,
+        label: "Underline",
+      },
+      {
+        action: handleShowInput,
+        Icon: LinkIcon,
+        label: "Add Link",
       },
     ],
     [applyStyle]
   );
 
-  return isInputVisible ? (
+  return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="flex justify-evenly items-center gap-2 border p-2 bg-white dark:bg-black rounded-md transition-transform duration-100 z-50 absolute"
+      className="absolute z-50 transition-all duration-200 animate-in fade-in zoom-in-95"
       style={{
         left: x,
         top: y,
-        transform: "translate(-50%, -120%)",
+        transform: "translate(-50%, -130%)",
         whiteSpace: "nowrap",
       }}
     >
-      <input
-        placeholder="Enter URL"
-        className="w-full bg-inherit placeholder:text-inherit outline-none p-1 rounded-sm"
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        onKeyDown={handleCreateLink}
-      />
-      <button onClick={() => setInputVisible(false)}>{icons["close"]}</button>
-    </div>
-  ) : (
-    <div
-      className="bg-white  animate-fedin.2s  dark:bg-black border justify-evenly items-center p-2 px-5 rounded-md transition-transform duration-100 z-40 absolute"
-      style={{
-        left: x,
-        top: y,
-        transform: "translate(-50%, -120%)",
-        whiteSpace: "nowrap",
-      }}
-    >
-      <div className="flex w-full items-center gap-3 justify-between">
-        {options.map((option, idx) => (
-          <span key={idx} className={option.className}>
-            <Ibutton action={option.action}>{option.icon}</Ibutton>
-          </span>
-        ))}
+      <div className="relative spread-card p-1.5 rounded-2xl border border-stone-800 shadow-2xl backdrop-blur-xl bg-stone-900/95 text-stone-100 flex items-center gap-1">
+        {/* Floating Triangle Arrow Pointer */}
+        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-stone-900 border-b border-r border-stone-800" />
+
+        {isInputVisible ? (
+          <div className="flex items-center gap-2 px-1 py-0.5">
+            <LinkIcon className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+            <input
+              placeholder="Paste or type URL..."
+              className="bg-transparent text-xs text-stone-100 placeholder:text-stone-500 outline-none w-48 py-1 font-medium"
+              type="text"
+              autoFocus
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button
+              type="button"
+              onClick={() => executeCreateLink(url)}
+              className="p-1 rounded-lg hover:bg-stone-800 text-stone-300 hover:text-emerald-400 transition-colors cursor-pointer"
+              title="Apply Link"
+            >
+              <Check className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setInputVisible(false)}
+              className="p-1 rounded-lg hover:bg-stone-800 text-stone-400 hover:text-stone-100 transition-colors cursor-pointer"
+              title="Cancel"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        ) : (
+          options.map(({ action, Icon, label }) => (
+            <button
+              key={label}
+              type="button"
+              onClick={action}
+              aria-label={label}
+              title={label}
+              className="p-2 rounded-xl hover:bg-stone-800 text-stone-300 hover:text-stone-100 transition-all active:scale-95 cursor-pointer flex items-center justify-center"
+            >
+              <Icon className="w-4 h-4" />
+            </button>
+          ))
+        )}
       </div>
     </div>
   );

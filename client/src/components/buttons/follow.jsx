@@ -27,15 +27,16 @@ function Follow({ className = "", person }) {
       invalidateQueries();
       dispatch(
         setToast({
-          message: data.message + ` ${person?.displayName || "user"} ✨`,
+          message: `${data?.message || "Updated follow status"} ${person?.displayName || "user"} ✨`,
           type: "success",
         })
       );
     },
-    onError: (data) => {
+    onError: (error) => {
+      const msg = error?.response?.data?.message || error?.message || "Failed to update follow status";
       dispatch(
         setToast({
-          message: data.data.message + ` ${person?.displayName || "user"} ✨`,
+          message: `${msg} ✨`,
           type: "error",
         })
       );

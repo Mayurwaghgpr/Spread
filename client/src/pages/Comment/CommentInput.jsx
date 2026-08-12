@@ -11,20 +11,18 @@ import { useDispatch, useSelector } from "react-redux";
 import userImageSrc from "../../utils/functions/userImageSrc";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { setCommentCred } from "../../store/slices/postSlice";
-
 import PostsApis from "../../services/usePostsApis";
 import { setToast } from "../../store/slices/uiSlice";
 import Spinner from "../../components/loaders/Spinner";
-import ButtonSpinner from "../../components/loaders/ButtonSpinner";
 import ProfileImage from "../../components/ProfileImage";
-import Ibutton from "../../components/buttons/Ibutton";
-import useIcons from "../../hooks/useIcons";
 import data from "@emoji-mart/data";
-const Picker = lazy(() => import("@emoji-mart/react"));
 import EditableElementInput from "../../components/inputComponents/EditableElementInput";
 import { useNavigate, useParams } from "react-router-dom";
+import { Smile, Send } from "lucide-react";
 
-function CommentInput({ className }) {
+const Picker = lazy(() => import("@emoji-mart/react"));
+
+function CommentInput({ className = "" }) {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred, postViewData } = useSelector((state) => state.posts);
   const { ThemeMode } = useSelector((state) => state.ui);
@@ -37,7 +35,6 @@ function CommentInput({ className }) {
   const pickerRef = useRef();
   const emojiButtonRef = useRef();
   const inputRef = useRef();
-  const icons = useIcons();
   const navigate = useNavigate();
   const { id: routePostId } = useParams();
 
@@ -54,7 +51,7 @@ function CommentInput({ className }) {
       );
       if (inputRef.current) inputRef.current.innerText = "";
       dispatch(
-        setToast({ message: "You commented on this post", type: "success" })
+        setToast({ message: "Response published ✨", type: "success" })
       );
       queryClient.invalidateQueries(["TopComments"]);
     },
@@ -69,7 +66,7 @@ function CommentInput({ className }) {
     },
   });
 
-  const handelInput = useCallback(
+  const handleInput = useCallback(
     (content) => {
       dispatch(
         setCommentCred({
@@ -92,7 +89,7 @@ function CommentInput({ className }) {
     }
     if (!commentCred.content || !commentCred.content.trim()) {
       dispatch(
-        setToast({ message: "Comment content cannot be empty", type: "error" })
+        setToast({ message: "Response content cannot be empty", type: "error" })
       );
       return;
     }
@@ -104,11 +101,9 @@ function CommentInput({ className }) {
   }, [isLogin, commentCred, postViewData, routePostId, mutate, navigate, dispatch]);
 
   const handleEmojiSelect = (emoji) => {
-    // Insert emoji at cursor position or append to end
-    const currentText = commentCred.content;
+    const currentText = commentCred.content || "";
     const updatedText = currentText + emoji.native;
 
-    // Update Redux state
     dispatch(
       setCommentCred({
         ...commentCred,
@@ -117,16 +112,12 @@ function CommentInput({ className }) {
       })
     );
 
-    // Update the contentEditable div
     if (inputRef.current) {
       inputRef.current.innerText = updatedText;
     }
-
-    // Close the emoji picker
     setOpenEmojiPicker(false);
   };
 
-  // Handle clicks outside the emoji picker to close it
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -143,59 +134,70 @@ function CommentInput({ className }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [pickerRef, emojiButtonRef]);
+  }, []);
 
   useEffect(() => {
     if (commentCred.replyTo && inputRef?.current) {
-      //
-      inputRef.current.innerHTML = `<a href="#${commentCred.replyTo}" class="text-blue-500 cursor-pointer">@${commentCred.at}</a>`;
+      inputRef.current.innerHTML = `<a href="#${commentCred.replyTo}" class="text-stone-700 dark:text-stone-300 font-semibold cursor-pointer">@${commentCred.at}</a> `;
     }
-  }, [commentCred.replyTo]);
+  }, [commentCred.replyTo, commentCred.at]);
 
   return (
-    <div className={className}>
+    <div className={`flex items-center gap-3 w-full border-inherit ${className}`}>
       <ProfileImage
-        className={"min-w-10 min-h-10 h-10 w-10"}
+        className="w-9 h-9 rounded-full shrink-0 ring-1 ring-stone-300 dark:ring-stone-700"
         image={userImage.userImageurl}
         alt={user?.username}
       />
-      <EditableElementInput ref={inputRef} onChange={handelInput} />
-      <div className="relative flex justify-center items-center gap-2">
-        <div className="relative">
-          <Ibutton
-            className={"p-1 rounded-full"}
-            action={() => setOpenEmojiPicker(!openEmojiPicker)}
+
+      <div className="flex-1 flex items-center gap-2 spread-card px-3 py-1.5 rounded-2xl border border-stone-200 dark:border-stone-800 focus-within:ring-2 focus-within:ring-stone-400/50 transition-all">
+        <div className="flex-1 min-w-0">
+          <EditableElementInput ref={inputRef} onChange={handleInput} />
+        </div>
+
+        {/* Emoji Button */}
+        <div className="relative shrink-0">
+          <button
+            ref={emojiButtonRef}
+            type="button"
+            onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
+            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+            aria-label="Add emoji"
           >
-            {icons["smile"]}
-          </Ibutton>
-          <Suspense
-            fallback={
-              <Spinner className={"w-8 h-8 p-1 bg-black dark:bg-white"} />
-            }
-          >
-            {openEmojiPicker && (
-              <div ref={pickerRef} className="absolute bottom-12 right-0 z-10">
+            <Smile className="w-4 h-4" />
+          </button>
+
+          {openEmojiPicker && (
+            <div ref={pickerRef} className="absolute bottom-12 right-0 z-50 shadow-2xl rounded-2xl overflow-hidden">
+              <Suspense fallback={<Spinner className="w-5 h-5 text-stone-900 dark:text-stone-100 p-2" />}>
                 <Picker
                   data={data}
                   onEmojiSelect={handleEmojiSelect}
                   theme={ThemeMode === "dark" ? "dark" : "light"}
                 />
-              </div>
-            )}
-          </Suspense>
+              </Suspense>
+            </div>
+          )}
         </div>
 
-        <Ibutton
-          action={handleSend}
-          disabled={isLoading || !commentCred.content.trim()}
-          className={`${!commentCred.content.trim() && "text-gray-300"} text-2xl rounded-full p-2`}
+        {/* Send Button */}
+        <button
+          type="button"
+          onClick={handleSend}
+          disabled={isLoading || !commentCred?.content?.trim()}
+          className={`p-2 rounded-full spread-btn-primary flex items-center justify-center transition-transform ${
+            !commentCred?.content?.trim() || isLoading
+              ? "opacity-40 cursor-not-allowed"
+              : "hover:scale-105 cursor-pointer"
+          }`}
+          aria-label="Send response"
         >
           {isLoading ? (
-            <ButtonSpinner className="w-5 h-5 text-gray-700 dark:text-white" />
+            <Spinner className="w-3.5 h-3.5 text-stone-900 dark:text-stone-100" />
           ) : (
-            icons["sendO"]
+            <Send className="w-3.5 h-3.5" />
           )}
-        </Ibutton>
+        </button>
       </div>
     </div>
   );

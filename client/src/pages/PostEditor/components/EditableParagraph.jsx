@@ -11,9 +11,10 @@ const EditableParagraph = ({
   focusedIndex,
   setFocusedIndex,
 }) => {
-  const containerRef = useRef(null); // Ensure it's used properly
+  const containerRef = useRef(null);
   const { menuId: showToolbar, setMenuId: setShowToolbar } =
     useClickOutside(containerRef);
+
   const applyStyle = useCallback((style, value = null) => {
     if (document.queryCommandSupported(style)) {
       document.execCommand(style, false, value);
@@ -43,7 +44,7 @@ const EditableParagraph = ({
     const y = rect.top - containerRect.top;
 
     setShowToolbar({ x, y });
-  }, [index, inputRefs]);
+  }, [setShowToolbar]);
 
   const handleFocus = useCallback(() => {
     setFocusedIndex(index);
@@ -51,17 +52,21 @@ const EditableParagraph = ({
 
   if (index === 0 || index === 1) {
     return (
-      <div ref={containerRef} className="w-full h-full relative border-inherit">
+      <div ref={containerRef} className="w-full relative border-inherit my-1">
         {showToolbar && (
           <TextTools position={showToolbar} applyStyle={applyStyle} />
         )}
         <input
-          className={` rounded-lg border-inherit bg-inherit dark:bg-inherit border-gray-300 dark:border-white p-2 w-full min-h-10 z-10 dark:placeholder:text-white placeholder:text-black placeholder:opacity-50 outline-none cursor-text ${index === 0 ? "text-4xl font-semibold " : "text-2xl"}`}
+          className={`w-full bg-transparent border-none outline-none text-stone-900 dark:text-stone-100 placeholder:text-stone-300 dark:placeholder:text-stone-700 transition-colors ${
+            index === 0
+              ? "text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight py-2 leading-tight"
+              : "text-lg sm:text-xl md:text-2xl font-medium text-stone-600 dark:text-stone-400 py-1 leading-snug"
+          }`}
           ref={(el) => (inputRefs.current[index] = el)}
           onChange={(e) => handleTextChange(element.id, e.currentTarget.value)}
           onMouseUp={handleSelectedText}
           onKeyUp={handleSelectedText}
-          placeholder={index === 0 ? "Title" : "Subtitle"}
+          placeholder={index === 0 ? "Title" : "Tell your story..."}
           onKeyDown={(e) => {
             if (["Backspace", "Enter", "delete"].includes(e.key)) {
               handleKeyDown(e, element.id, index, "input");
@@ -75,7 +80,7 @@ const EditableParagraph = ({
   }
 
   return (
-    <div ref={containerRef} className="relative w-full h-full border-inherit">
+    <div ref={containerRef} className="relative w-full border-inherit my-1">
       {showToolbar && (
         <TextTools position={showToolbar} applyStyle={applyStyle} />
       )}
@@ -92,9 +97,9 @@ const EditableParagraph = ({
         onFocus={handleFocus}
         onMouseUp={handleSelectedText}
         onKeyUp={handleSelectedText}
-        className=" border-inherit border-gray-300 dark:border-white rounded-lg p-2 w-full min-h-10 z-10 outline-none cursor-text"
+        className="w-full bg-transparent border-none outline-none text-stone-800 dark:text-stone-200 text-base sm:text-lg leading-relaxed py-1 min-h-[2.5rem] cursor-text placeholder:text-stone-400 dark:placeholder:text-stone-600"
         role="textbox"
-        aria-placeholder="Editable paragraph"
+        aria-placeholder="Continue writing..."
       ></p>
     </div>
   );

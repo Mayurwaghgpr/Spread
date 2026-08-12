@@ -15,7 +15,7 @@ function usePrivateChatMutation() {
       mutationFn: (chatUserId) => startPrivateChat(chatUserId),
       onSuccess: (data) => {
         const { newPrivateConversation, message } = data;
-        localStorage.setItem(
+        sessionStorage.setItem(
           "conversationMeta",
           JSON.stringify(newPrivateConversation)
         );
@@ -24,11 +24,11 @@ function usePrivateChatMutation() {
         navigate(`/messages/c?Id=${newPrivateConversation.id}`, {
           replace: true,
         });
-        dispatch(setToast({ message: message, type: "success" }));
+        dispatch(setToast({ message: message || "Conversation started", type: "success" }));
       },
-      onError: () => {
+      onError: (error) => {
         const errorMessage =
-          error?.response?.data?.message || "Failed to start conversation";
+          error?.response?.data?.message || error?.message || "Failed to start conversation";
         dispatch(setToast({ message: errorMessage, type: "error" }));
       },
     });

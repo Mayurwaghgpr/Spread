@@ -9,22 +9,22 @@ import userImageSrc from "../../utils/functions/userImageSrc";
 import CommonInput from "../../components/inputComponents/CommonInput";
 import Selector from "../../components/utilityComp/Selector";
 import Spinner from "../../components/loaders/Spinner";
-import useIcons from "../../hooks/useIcons";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import { CheckCircle, AlertCircle, Camera, Trash2, Sparkles, User, Mail, FileText, ArrowLeft } from "lucide-react";
 import profileOutlook from "/ProfOutlook.png";
-import Paragraph from "../../components/texts/Paragraph";
+import { Link, useNavigate } from "react-router-dom";
+
 function ProfileEditor() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { editUserProfile, searchUsername } = useProfileApi();
   const uNameRef = useRef();
-  const [newInfo, setNewInfo] = useState();
+  const [newInfo, setNewInfo] = useState(user || {});
   const [profileImage, setProfileImage] = useState();
 
   const { userImageurl, IsUserFromOAth } = userImageSrc(newInfo);
-  const icons = useIcons();
 
-  // Username check mutation
+  // Username availability check mutation
   const {
     mutate: nameMutate,
     isPending: nameLoading,
@@ -50,23 +50,23 @@ function ProfileEditor() {
       dispatch(setUser(data));
       dispatch(
         setToast({
-          message: "Profile updated successfully!",
+          message: "Profile updated successfully! ✨",
           type: "success",
-        }),
+        })
       );
     },
-    onError: (error) => {
+    onError: (err) => {
       uNameRef.current?.blur();
       dispatch(
         setToast({
-          message: error?.data?.message || "Profile update failed.",
+          message: err?.response?.data?.message || err?.data?.message || "Profile update failed.",
           type: "error",
-        }),
+        })
       );
     },
   });
 
-  // Debounced input handlers
+  // Input change handler
   const handleInputChange = useCallback(
     (event) => {
       const { name, value, files } = event.target;
@@ -83,17 +83,17 @@ function ProfileEditor() {
         }));
       }
     },
-    [IsUserFromOAth],
+    [IsUserFromOAth]
   );
 
   const debouncedUsernameCheck = useMemo(
     () =>
       debounce((username) => {
-        if (username && username !== user.username) {
+        if (username && username !== user?.username) {
           nameMutate({ username });
         }
       }, 500),
-    [user.username],
+    [user?.username, nameMutate]
   );
 
   const handleUsernameChange = useCallback(
@@ -102,7 +102,7 @@ function ProfileEditor() {
       setNewInfo((prev) => ({ ...prev, username }));
       debouncedUsernameCheck(username);
     },
-    [debouncedUsernameCheck],
+    [debouncedUsernameCheck]
   );
 
   // Handle profile image removal
@@ -122,7 +122,7 @@ function ProfileEditor() {
     }
   }, [user]);
 
-  // Update profile image display based on current state
+  // Update profile image display preview
   const profileImgPreview = useMemo(() => {
     if (newInfo?.removeImage) return profileOutlook;
     if (newInfo?.NewImageFile) return URL.createObjectURL(newInfo.NewImageFile);
@@ -137,10 +137,8 @@ function ProfileEditor() {
 
   useEffect(() => {
     if (!newInfo?.NewImageFile) return;
-
     const tempUrl = URL.createObjectURL(newInfo.NewImageFile);
     setProfileImage(tempUrl);
-
     return () => URL.revokeObjectURL(tempUrl);
   }, [newInfo?.NewImageFile]);
 
@@ -159,43 +157,52 @@ function ProfileEditor() {
   const hasChanges = JSON.stringify(newInfo) !== JSON.stringify(user);
 
   return (
-    <div className=" mx-auto h-full sm:my-20 my-10 text-sm px-5 border-inherit ">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          Edit Profile
-        </h1>
-        <Paragraph className=" text-sm font-thin">
-          Update your personal information and profile settings
-        </Paragraph>
-      </div>
+    <div className="flex flex-col items-center w-full min-h-screen border-inherit px-3 sm:px-6 py-8 max-w-3xl mx-auto space-y-6">
+      {/* Back Navigation & Container Card */}
+      <div className="w-full spread-card p-6 sm:p-10 rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl backdrop-blur-xl space-y-8 animate-in fade-in duration-150">
+        
+        {/* Header Bar */}
+        <div className="flex items-center justify-between border-b border-stone-200/70 dark:border-stone-800/70 pb-5">
+          <Link
+            to={-1}
+            className="inline-flex items-center gap-2 text-xs font-bold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Profile</span>
+          </Link>
 
-      {/* Profile Image Section */}
-      <div className="border-inherit  ">
-        <div className="flex flex-col sm:flex-row items-center gap-8 border-inherit ">
-          {/* Profile Image */}
-          <div className="relative group">
-            <div className="relative w-32 h-32 rounded-full border-4  shadow-xl overflow-hidden ">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
+              Edit Profile
+              <Sparkles className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+            </h1>
+          </div>
+        </div>
+
+        {/* Profile Image Avatar Section */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 p-4 rounded-2xl bg-stone-100/50 dark:bg-stone-900/40 border border-stone-200/60 dark:border-stone-800/60">
+          <div className="relative group shrink-0">
+            <div className="w-28 h-28 rounded-full ring-4 ring-stone-300 dark:ring-stone-700 shadow-lg overflow-hidden relative">
               <img
                 className="w-full h-full object-cover object-top"
                 src={profileImage}
-                alt="Profile"
+                alt="Profile Avatar"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                <span className=" text-white opacity-0 group-hover:opacity-100 transition-all text-2xl duration-300">
-                  {icons["pCamera"]}
-                </span>
-              </div>
+              <label
+                htmlFor="fileInput"
+                className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100"
+              >
+                <Camera className="w-7 h-7 text-white" />
+              </label>
             </div>
 
-            {/* Edit Button */}
             <label
-              className="absolute bottom-2 text-sm right-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full cursor-pointer shadow-lg transition-all duration-200 hover:scale-110"
               htmlFor="fileInput"
-              aria-label="Change profile picture"
+              className="absolute -bottom-1 -right-1 spread-btn-primary p-2.5 rounded-full shadow-md cursor-pointer hover:scale-110 transition-transform"
+              title="Change avatar photo"
             >
-              {icons["edit"]}
+              <Camera className="w-4 h-4" />
             </label>
             <input
               className="hidden"
@@ -207,188 +214,209 @@ function ProfileEditor() {
             />
           </div>
 
-          {/* Profile Controls */}
-          <div className="flex-1 space-y-4 border-inherit ">
-            <div className="flex flex-col sm:flex-row gap-3 border-inherit ">
+          <div className="flex-1 space-y-3 text-center sm:text-left min-w-0">
+            <div>
+              <h3 className="text-sm font-extrabold text-stone-900 dark:text-stone-100">
+                Profile Photo
+              </h3>
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                Upload a high quality square avatar image (JPG, PNG, WebP)
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
               <button
+                type="button"
                 onClick={handleRemoveImage}
                 disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl border border-red-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/20 rounded-full hover:bg-red-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
-                {icons["delete"]}
-                Remove Image
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Remove Avatar</span>
               </button>
 
-              <Selector
-                name="pronouns"
-                className="px-4 py-2  border border-inherit bg-inherit rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                setOptions={handleInputChange}
-                options={["he/him", "she/her", "they/them"]}
-                defaultValue={newInfo?.pronouns}
-                disabled={isUpdating}
-              />
+              <div className="shrink-0">
+                <Selector
+                  name="pronouns"
+                  className="px-3.5 py-1.5 text-xs font-semibold spread-card rounded-full border border-stone-300 dark:border-stone-700 text-stone-900 dark:text-stone-100 outline-none cursor-pointer"
+                  setOptions={handleInputChange}
+                  options={["he/him", "she/her", "they/them"]}
+                  defaultValue={newInfo?.pronouns}
+                  disabled={isUpdating}
+                />
+              </div>
             </div>
-
-            <Paragraph className="text-sm  p-3 rounded-lg opacity-50 font-thin">
-              <span className="font-medium">Tip:</span> Upload high-quality
-              images in JPG, JPEG, or PNG format for the best results
-            </Paragraph>
           </div>
         </div>
-      </div>
 
-      {/* Form Fields Section */}
-      <div className="p-8 space-y-6 border-inherit">
-        {/* Username Field */}
-        <div className="space-y-2 border-inherit">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-            Username
-          </label>
-          <div className="relative border-inherit">
-            <CommonInput
-              ref={uNameRef}
-              className={`w-full px-4 py-3 bg-inherit border-2 rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900 ${isError
-                  ? "border-red-500 focus:border-red-500"
-                  : isSuccess
-                    ? "border-green-500 focus:border-green-500"
-                    : "border-inherit focus:border-blue-500"
+        {/* Form Inputs Grid */}
+        <div className="space-y-5">
+          {/* Username Field */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-stone-500" />
+              Username
+            </label>
+            <div className="relative">
+              <CommonInput
+                ref={uNameRef}
+                className={`w-full p-3 rounded-xl border bg-stone-50/50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-100 text-sm font-semibold outline-none transition-all ${
+                  isError
+                    ? "border-red-500 focus:ring-2 focus:ring-red-500/50"
+                    : isSuccess
+                    ? "border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
+                    : "border-stone-300 dark:border-stone-700 focus:ring-2 focus:ring-stone-400/50"
                 }`}
-              type="text"
-              name="username"
-              disabled={isUpdating}
-              onChange={handleUsernameChange}
-              maxLength={15}
-              defaultValue={newInfo?.username}
-              value={newInfo?.username}
-              placeholder="Enter your username"
-              aria-invalid={isError}
-              aria-describedby={isError ? "username-error" : undefined}
-            />
+                type="text"
+                name="username"
+                disabled={isUpdating}
+                onChange={handleUsernameChange}
+                maxLength={15}
+                defaultValue={newInfo?.username}
+                value={newInfo?.username}
+                placeholder="Enter unique username"
+                aria-invalid={isError}
+              />
 
-            {/* Loading/Status Icons */}
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 border-inherit">
-              {nameLoading && <Spinner className="w-5 h-5 text-blue-500" />}
-              {isSuccess && <CheckCircle className="w-5 h-5 text-green-500" />}
-              {isError && <AlertCircle className="w-5 h-5 text-red-500" />}
+              {/* Status Indicator Icon */}
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                {nameLoading && <Spinner className="w-4 h-4 text-stone-900 dark:text-stone-100" />}
+                {isSuccess && <CheckCircle className="w-4 h-4 text-emerald-500" />}
+                {isError && <AlertCircle className="w-4 h-4 text-red-500" />}
+              </div>
+            </div>
+
+            {isError && (
+              <p className="text-red-500 text-xs flex items-center gap-1.5 font-medium">
+                <AlertCircle className="w-3.5 h-3.5" />
+                {error?.data?.message || "Username is unavailable"}
+              </p>
+            )}
+
+            <div className="flex justify-between text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+              <span>Choose your unique handle</span>
+              <span>{newInfo?.username?.length || 0}/15</span>
             </div>
           </div>
 
-          {isError && (
-            <p
-              id="username-error"
-              className="text-red-500 text-sm flex items-center gap-2"
-            >
-              <AlertCircle className="w-4 h-4" />
-              {error?.data?.message || "Username error"}
-            </p>
-          )}
+          {/* Full Name & Email Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Display Name */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-stone-500" />
+                Display Name
+              </label>
+              <CommonInput
+                className="w-full p-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-100 text-sm font-semibold outline-none focus:ring-2 focus:ring-stone-400/50 transition-all"
+                type="text"
+                name="displayName"
+                disabled={isUpdating}
+                maxLength={50}
+                onChange={handleInputChange}
+                defaultValue={newInfo?.displayName}
+                value={newInfo?.displayName}
+                placeholder="Your full display name"
+              />
+              <div className="text-right text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+                {newInfo?.displayName?.length || 0}/50
+              </div>
+            </div>
 
-          <Paragraph className="flex justify-between text-xs">
-            <span>Choose a unique username</span>
-            <span>{newInfo?.username?.length || 0}/15</span>
-          </Paragraph>
-        </div>
+            {/* Email */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-stone-500" />
+                Email Address
+              </label>
+              <CommonInput
+                className="w-full p-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-100 text-sm outline-none focus:ring-2 focus:ring-stone-400/50 transition-all"
+                type="email"
+                name="email"
+                disabled={isUpdating}
+                maxLength={40}
+                onChange={handleInputChange}
+                defaultValue={newInfo?.email}
+                value={newInfo?.email}
+                placeholder="your.email@example.com"
+              />
+              <div className="text-right text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+                {newInfo?.email?.length || 0}/40
+              </div>
+            </div>
+          </div>
 
-        {/* Grid Layout for Other Fields */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-inherit">
-          {/* Display Name */}
-          <div className="space-y-2 border-inherit">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-              Full Name
+          {/* Bio Field */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-stone-500" />
+              Bio
             </label>
             <CommonInput
-              className="w-full px-4 py-3 bg-inherit border-2 border-inherit rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900"
+              className="w-full p-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/50 text-stone-900 dark:text-stone-100 text-sm outline-none focus:ring-2 focus:ring-stone-400/50 transition-all"
               type="text"
-              name="displayName"
+              name="bio"
               disabled={isUpdating}
-              maxLength={50}
+              maxLength={120}
               onChange={handleInputChange}
-              defaultValue={newInfo?.displayName}
-              value={newInfo?.displayName}
-              placeholder="Your full name"
+              defaultValue={newInfo?.bio}
+              value={newInfo?.bio}
+              placeholder="Tell the community about yourself..."
             />
-            <Paragraph className="text-xs  text-right ">
-              {newInfo?.displayName?.length || 0}/50
-            </Paragraph>
-          </div>
-
-          {/* Email */}
-          <div className="space-y-2 border-inherit">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-              Email Address
-            </label>
-            <CommonInput
-              className="w-full px-4 py-3 bg-inherit border-2 border-inherit rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900"
-              type="email"
-              name="email"
-              disabled={isUpdating}
-              maxLength={30}
-              onChange={handleInputChange}
-              defaultValue={newInfo?.email}
-              value={newInfo?.email}
-              placeholder="your.email@example.com"
-            />
-            <Paragraph className="text-xs  text-right">
-              {newInfo?.email?.length || 0}/30
-            </Paragraph>
+            <div className="flex justify-between text-[11px] text-stone-500 dark:text-stone-400 font-medium">
+              <span>Short profile description</span>
+              <span>{newInfo?.bio?.length || 0}/120</span>
+            </div>
           </div>
         </div>
 
-        {/* Bio Field - Full Width */}
-        <div className="space-y-2 border-inherit">
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-            Bio
-          </label>
-          <CommonInput
-            className="w-full px-4 py-3 bg-inherit border-2 border-inherit rounded-xl transition-all duration-200 focus:bg-white dark:focus:bg-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900"
-            type="text"
-            name="bio"
-            disabled={isUpdating}
-            maxLength={50}
-            onChange={handleInputChange}
-            defaultValue={newInfo?.bio}
-            placeholder="Tell us about yourself..."
-          />
-          <Paragraph className="flex justify-between text-xs ">
-            <span>A short description about yourself</span>
-            <span>{newInfo?.bio?.length || 0}/50</span>
-          </Paragraph>
-        </div>
-      </div>
-
-      {/* Footer with Save Button */}
-      <div className=" px-8 py-6 border-t  border-inherit ">
-        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+        {/* Footer Action Bar */}
+        <div className="pt-6 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <div className="text-xs font-semibold text-stone-500 dark:text-stone-400">
             {hasChanges ? (
-              <span className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
-                {icons["warning"]}
-                You have unsaved changes
+              <span className="flex items-center gap-1.5 text-stone-700 dark:text-stone-300">
+                <AlertCircle className="w-4 h-4 text-amber-500" />
+                Unsaved changes pending
               </span>
             ) : (
-              <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
-                {icons["check"]}
-                All changes saved
+              <span className="flex items-center gap-1.5 text-emerald-500">
+                <CheckCircle className="w-4 h-4 text-emerald-500" />
+                All profile information saved
               </span>
             )}
           </div>
 
-          <button
-            disabled={isUpdating || isError || !hasChanges}
-            onClick={handleSubmit}
-            className="px-8 py-3 bg-gray-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg flex items-center gap-2 min-w-32 justify-center"
-            aria-busy={isUpdating}
-          >
-            {isUpdating ? (
-              <>
-                <Spinner className="w-4 h-4" />
-                Saving...
-              </>
-            ) : (
-              <>Save Changes</>
-            )}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="spread-pill px-5 py-2.5 text-xs font-bold rounded-full hover:scale-105 transition-transform cursor-pointer"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              disabled={isUpdating || isError || !hasChanges}
+              onClick={handleSubmit}
+              className={`spread-btn-primary px-7 py-2.5 text-xs font-bold rounded-full shadow-md flex items-center justify-center gap-2 transition-transform ${
+                isUpdating || isError || !hasChanges
+                  ? "opacity-40 cursor-not-allowed"
+                  : "hover:scale-105 cursor-pointer"
+              }`}
+            >
+              {isUpdating ? (
+                <>
+                  <Spinner className="w-4 h-4 text-stone-900 dark:text-stone-100" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <span>Save Changes ✨</span>
+              )}
+            </button>
+          </div>
         </div>
+
       </div>
     </div>
   );

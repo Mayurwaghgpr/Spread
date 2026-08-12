@@ -3,8 +3,7 @@ import { usePostCreator } from "./hooks/usePostCreator";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import InputTypeSelector from "./components/InputTypeSelector";
-import useIcons from "../../hooks/useIcons";
-import Ibutton from "../../components/buttons/Ibutton";
+import { Send, ArrowLeft, Sparkles } from "lucide-react";
 
 function DynamicPostEditor() {
   const {
@@ -22,58 +21,70 @@ function DynamicPostEditor() {
   } = usePostCreator();
 
   const { elements } = useSelector((state) => state.posts);
-  const icons = useIcons();
   const navigate = useNavigate();
 
-  const checkAllMatch = elements.every(
-    (obj, i, arr) =>
-      (arr.length > 3 && obj.data !== undefined && obj.data !== "") ||
-      (arr.length > 3 && obj.file && obj.data === "")
-  );
+  const canPublish = elements.length >= 2 && elements[0]?.data?.trim() !== "";
 
   return (
-    <>
-      <section className="relative flex flex-col justify-between w-full border-inherit  ">
-        <Ibutton
-          action={() => navigate("/write/publish")}
-          className={`fixed  xl:top-[50%] xl:right-20 top-[85%] z-[50] right-7 text-sm flex justify-center items-center border rounded-full px-2  p-1 ${checkAllMatch ? "text-gray-600" : "text-gray-400 "} rounded-full flex justify-center items-center`}
-          disabled={elements.length > 3 ? false : true}
+    <div className="relative flex flex-col w-full min-h-screen border-inherit bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 pb-36">
+      {/* Sticky Top Header Navigation */}
+      <header className="sticky top-0 z-30 w-full  px-4 sm:px-8 py-3.5 backdrop-blur-md flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
         >
-          continue {icons["sendO"]}
-        </Ibutton>
-        <div
-          className={`flex flex-col justify-center items-center border-inherit mx-auto gap-2 pt-5 pb-32`}
+          <ArrowLeft className="w-4 h-4" />
+          <span>Exit Editor</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => navigate("/write/publish")}
+          disabled={!canPublish}
+          className={`spread-btn-primary text-xs font-bold px-5 py-2 rounded-full shadow-sm flex items-center gap-1.5 transition-all ${canPublish
+            ? "hover:scale-105 opacity-100 cursor-pointer"
+            : "opacity-40 cursor-not-allowed"
+            }`}
         >
-          {elements.map((element, index) => (
-            <div
-              key={element.id}
-              className="flex relative justify-start items-center gap-2 xl:w-[50rem] w-full px-2 border-inherit "
-            >
-              <div className="flex w-full min-h-10 border-inherit">
-                <ElementsProvider
-                  element={element}
-                  handleTextChange={handleTextChange}
-                  index={index}
-                  handleKeyDown={handleKeyDown}
-                  handleContentEditableChange={handleContentEditableChange}
-                  inputRefs={inputRefs}
-                  imageInputRef={imageInputRef}
-                  focusedIndex={focusedIndex}
-                  setFocusedIndex={setFocusedIndex}
-                />
-              </div>
+          <span>Continue</span>
+          <Send className="w-3.5 h-3.5" />
+        </button>
+      </header>
+
+      {/* Main Writing Canvas */}
+      <main className="w-full max-w-3xl mx-auto px-4 sm:px-8 py-8 sm:py-12 space-y-4 border-inherit">
+        {elements.map((element, index) => (
+          <div
+            key={element.id}
+            className="relative flex items-center w-full border-inherit group"
+          >
+            <div className="w-full min-h-[2.5rem] border-inherit">
+              <ElementsProvider
+                element={element}
+                handleTextChange={handleTextChange}
+                index={index}
+                handleKeyDown={handleKeyDown}
+                handleContentEditableChange={handleContentEditableChange}
+                inputRefs={inputRefs}
+                imageInputRef={imageInputRef}
+                focusedIndex={focusedIndex}
+                setFocusedIndex={setFocusedIndex}
+              />
             </div>
-          ))}
-        </div>
-        <InputTypeSelector
-          imageInputRef={imageInputRef}
-          addElement={addElement}
-          handleFileChange={handleFileChange}
-          className={`fixed sm:bottom-10 bottom-16 sm:right-1/2 flex justify-between items-end gap-3 p-3  bg-light dark:bg-dark border border-inherit sm:rounded-full rounded-lg transition-all duration-300 hover:scale-x-110 bg-opacity-35 backdrop-blur-md   pointer-events-none  *:transition-all *:duration-200 *:pointer-events-auto ease-in-out  *:size-[2rem] *:border *:rounded-full *:border-inherit`}
-        />
-      </section>
+          </div>
+        ))}
+      </main>
+
+      {/* Bottom Media Insertion Toolbar */}
+      <InputTypeSelector
+        imageInputRef={imageInputRef}
+        addElement={addElement}
+        handleFileChange={handleFileChange}
+      />
+
       <Outlet context={[imageFiles, setImageFiles, handleTextChange]} />
-    </>
+    </div>
   );
 }
 

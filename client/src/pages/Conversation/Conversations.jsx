@@ -38,26 +38,22 @@ function Messenger() {
         ])
       );
     },
-    [dispatch, user?.id, messageLogData]
+    [dispatch, user?.id, messageLogData, conversationId]
   );
 
   useEffect(() => {
     if (isLogin && user?.id && socket) {
-      // Listen for new messages
       socket.on("newMessage", handleNewMessage);
-
-      // Cleanup when unmounting or user logs out
       return () => {
         socket?.off("newMessage", handleNewMessage);
       };
     }
   }, [isLogin, user?.id, socket, handleNewMessage]);
-  return (
-    <main className=" h-screen w-full border-inherit sm:p-3">
-      <div className="flex h-full w-full  border sm:rounded-lg border-inherit overflow-hidden">
-        <ConversationLog />
-        {/* This Outlet will render the chat window or conversation details */}
 
+  return (
+    <main className="h-screen w-full border-inherit bg-transparent">
+      <div className="flex h-full w-full border-inherit overflow-hidden bg-transparent">
+        <ConversationLog />
         <Outlet />
       </div>
     </main>

@@ -4,31 +4,34 @@ import CreateNewGroupForm from "../../../pages/savedPosts/components/CreateNewGr
 import { useState } from "react";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useDispatch } from "react-redux";
+import { FolderPlus, BookmarkCheck } from "lucide-react";
+import Spinner from "../../loaders/Spinner";
 
-function BookmarkBox({ postId, mutation }) {
+function BookmarkBox({ postId, isOpen, onMouseEnter, onMouseLeave, mutation }) {
   const [isCreateGroupFormOpen, setIsCreateGroupFormOpen] = useState(false);
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { addSavedPostToGroup, fetchSavedPostsGroup } = usePostsApis();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["SavedPostGroups"],
     queryFn: fetchSavedPostsGroup,
   });
 
-  // Mutation for creating a new group and adding the post to it
   const { mutate: mutateWithNewGroup } = useMutation({
     mutationFn: (groupName) => addSavedPostToGroup({ postId, groupName }),
     onSuccess: (data) => {
       queryClient.invalidateQueries(["loggedInUser"]);
-      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
+      queryClient.invalidateQueries(["SavedPostGroups"]);
+      dispatch(setToast({ message: `${data?.message || "Saved to folder"} ✨`, type: "success" }));
     },
     onError: (error) => {
+      const msg = error?.response?.data?.message || error?.message || "Failed to update bookmark group";
       dispatch(
         setToast({
-          message: error.data?.message || "Failed to update bookmark",
+          message: msg,
           type: "error",
-        }),
+        })
       );
     },
     onSettled: () => {
@@ -38,54 +41,73 @@ function BookmarkBox({ postId, mutation }) {
 
   return (
     <>
-      <div className="z-40 group-hover:opacity-100 group-hover:pointer-events-auto opacity-0 pointer-events-none duration-200 transition-all absolute flex flex-col w-48 bg-white shadow-lg border border-gray-200 -left-20 top-5 rounded-xl overflow-hidden">
+      <div
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        className={`z-40 duration-200 transition-all absolute flex flex-col w-56 spread-card shadow-2xl border border-stone-200 dark:border-stone-800 right-0 top-7 rounded-2xl overflow-hidden backdrop-blur-xl before:content-[''] before:absolute before:-top-4 before:left-0 before:right-0 before:h-4 ${
+          isOpen
+            ? "opacity-100 pointer-events-auto translate-y-0"
+            : "opacity-0 pointer-events-none -translate-y-1"
+        }`}
+      >
         {/* Header */}
-        <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-200">
-          <h1 className="text-sm font-semibold text-gray-700">Save to Group</h1>
+        <div className="px-3.5 py-2.5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-100/50 dark:bg-stone-800/30">
+          <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
+            <BookmarkCheck className="w-3.5 h-3.5 text-stone-700 dark:text-stone-300" />
+            Save to Folder
+          </span>
         </div>
 
         {/* Content */}
-        <div className="flex flex-col p-2">
-          {/* Create new group button */}
+        <div className="flex flex-col p-2 space-y-2">
           <button
-            className="w-full text-left px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-150 font-medium"
-            onClick={() => setIsCreateGroupFormOpen(true)}
+            type="button"
+            className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 rounded-xl transition-colors font-medium text-left cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsCreateGroupFormOpen(true);
+            }}
           >
-            + Create new group
+            <FolderPlus className="w-3.5 h-3.5 text-stone-500" />
+            <span>Create new folder</span>
           </button>
 
-          {/* Divider */}
-          <div className="h-px bg-gray-200 my-1.5"></div>
+          <hr className="border-stone-200 dark:border-stone-800 my-0.5" />
 
-          {/* Select group section */}
-          <div className="px-3 py-1.5">
-            <h2 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">
-              Select Group
-            </h2>
-            {/* Add your group items here */}
-            <div className=" flex w-full">
-              {data?.groups ? (
-                data?.groups?.map((group, idx) => (
+          <div className="px-1 space-y-1.5">
+            <span className="text-[10px] font-semibold text-stone-500 uppercase tracking-wider block">
+              Your Folders
+            </span>
+
+            {isLoading ? (
+              <div className="flex items-center justify-center p-3">
+                <Spinner className="w-4 h-4 text-stone-500" />
+              </div>
+            ) : data?.groups && data.groups.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
+                {data.groups.map((group, idx) => (
                   <button
-                    key={idx}
-                    className={
-                      "border rounded-lg h-full text-xs text-black p-1"
-                    }
-                    onClick={() => {
+                    key={group?.groupName || idx}
+                    type="button"
+                    className="spread-pill text-[11px] font-semibold px-2.5 py-1 text-stone-800 dark:text-stone-200 hover:scale-105 transition-transform cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       mutation({ postId, groupName: group?.groupName });
                     }}
-                    //   count={group?.postCount}
                   >
-                    {group?.groupName}
+                    #{group?.groupName}
                   </button>
-                ))
-              ) : (
-                <div className="text-sm text-gray-600">No groups yet</div>
-              )}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-[11px] text-stone-500 italic px-1 py-1">
+                No folders created yet
+              </div>
+            )}
           </div>
         </div>
       </div>
+
       {isCreateGroupFormOpen && (
         <CreateNewGroupForm
           action={() => setIsCreateGroupFormOpen(false)}

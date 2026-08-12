@@ -27,21 +27,21 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
   const currentMode = Modes?.find((mode) => mode.value === activeMode);
 
   if (!separate) {
-    // Single toggle button
+    // Single toggle button (completely rounded pill/circle)
     return (
       <button
         onClick={changeTheme}
         aria-label={`Switch to ${Modes?.[(Modes.findIndex((mode) => mode.value === activeMode) + 1) % Modes.length]?.name || "next mode"}`}
-        className={`relative transition-all duration-200 focus-ring rounded-lg p-1.5 ${className}`}
+        className={`relative transition-all duration-200 focus-ring rounded-full p-2 flex items-center justify-center cursor-pointer ${className}`}
       >
-        <div className="transition-transform duration-200 hover:scale-110">
+        <div className="transition-transform duration-200 hover:scale-110 flex items-center justify-center">
           {icons?.[currentMode?.icon] ?? icons?.sun}
         </div>
       </button>
     );
   }
 
-  // Separate buttons for each theme
+  // Separate buttons for each theme (fully rounded pills)
   return (
     <div className={`flex gap-1.5 ${className}`}>
       {Modes?.map((mode) => {
@@ -53,7 +53,7 @@ function ThemeBtn({ Modes, className = "", separate = false }) {
             onClick={() => handleThemeSelect(mode.value)}
             aria-label={`Switch to ${mode.name}`}
             aria-pressed={isActive}
-            className={`group relative rounded-xl p-2 border transition-all duration-200 focus-ring ${
+            className={`group relative rounded-full p-2 border transition-all duration-200 focus-ring cursor-pointer ${
               isActive
                 ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900 border-transparent shadow-sm"
                 : "bg-laccent dark:bg-daccent text-gray-600 dark:text-gray-400 border-[#d8cebe] dark:border-[#2a2a2a] hover:bg-gray-200/60 dark:hover:bg-gray-800/60"

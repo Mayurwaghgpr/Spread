@@ -19,25 +19,27 @@ async function playDeleteSound() {
 }
 
 function useDeleteHandlers() {
-  const { DeletePostApi, deleteComtApi } = usePostsApis();
+  const { deletePostApi, deleteComtApi } = usePostsApis();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const location = useLocation();
   const dispatch = useDispatch();
 
   const { mutate: delPost, isPending: isPostDeleting } = useMutation({
-    mutationFn: DeletePostApi,
+    mutationFn: (postId) => deletePostApi(postId),
     onSuccess: async (data) => {
-      queryClient.invalidateQueries(["Allposts"]);
+      queryClient.invalidateQueries(["postsFeed"]);
+      queryClient.invalidateQueries(["userProfile"]);
       await playDeleteSound();
-      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
+      dispatch(setToast({ message: `${data?.message || "Post deleted"} ✨`, type: "success" }));
     },
-    onError: () => {
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to delete post. Please try again.";
       dispatch(
         setToast({
-          message: "Failed to delete post. Please try again.",
+          message: errorMessage,
           type: "error",
-        }),
+        })
       );
     },
     onSettled: () => {
@@ -49,16 +51,18 @@ function useDeleteHandlers() {
   });
 
   const { mutate: delComment, isPending: isCommentDeleting } = useMutation({
-    mutationFn: deleteComtApi,
+    mutationFn: (commentId) => deleteComtApi(commentId),
     onSuccess: (data) => {
-      dispatch(setToast({ message: `${data.message} ✨`, type: "success" }));
+      queryClient.invalidateQueries(["TopComments"]);
+      dispatch(setToast({ message: `${data?.message || "Comment deleted"} ✨`, type: "success" }));
     },
-    onError: () => {
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to delete comment. Please try again.";
       dispatch(
         setToast({
-          message: "Failed to delete comment. Please try again.",
+          message: errorMessage,
           type: "error",
-        }),
+        })
       );
     },
     onSettled: () => {

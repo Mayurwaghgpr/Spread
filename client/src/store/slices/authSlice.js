@@ -5,6 +5,7 @@ const initialState = {
   isLogin: false,
   user: {},
   loginPop: false,
+  isLoggingOut: false,
 };
 
 // Create a slice of the Redux store
@@ -21,10 +22,13 @@ const authSlice = createSlice({
     setloginPop: (state, action) => {
       state.loginPop = action.payload;
     },
+    setIsLoggingOut: (state, action) => {
+      state.isLoggingOut = action.payload;
+    },
   },
 });
 
 // Export actions and reducer
-export const { setIsLogin, setUser, setLoading, setloginPop } =
+export const { setIsLogin, setUser, setLoading, setloginPop, setIsLoggingOut } =
   authSlice.actions;
 export default authSlice.reducer;

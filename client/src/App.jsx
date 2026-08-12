@@ -12,49 +12,24 @@ import NotificationBox from "./components/notification/NotificationBox";
 import ConfirmationBox from "./components/utilityComp/ConfirmationBox";
 import ConfimationActionListener from "./components/utilityComp/ConfimationActionListener";
 import ShareToMediaBox from "./components/utilityComp/ShareToMediaBox";
-// Lazy load components with better error boundaries
+import LoggingOutOverlay from "./components/loaders/LoggingOutOverlay";
 
 const WelcomeLoginBox = lazy(
   () => import("./components/utilityComp/WelcomeLoginBox"),
 );
-// Constants for better maintainability
-const THEME_STORAGE_KEY = "ThemeMode";
 
 function App() {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
   const { socket } = useSocket();
 
-  const [systemTheme, setSystemTheme] = useState(
-    () => window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
-
-  // Memoize path checks for better performance
-  // const pathChecks = useMemo(
-  //   () => ({
-  //     isMessagesPath: pathname.startsWith("/messages"),
-  //     isWritePath: pathname.startsWith("/write"),
-  //     isSearchPath: pathname.startsWith("/search"),
-  //     showSidebar:
-  //       isLogin &&
-  //       !pathname.startsWith("/write") &&
-  //       // !pathname.startsWith("/messages") &&
-  //       !pathname.startsWith("/search") &&
-  //       !pathname.startsWith("/analysis") &&
-  //       !pathname.startsWith("/view"),
-  //   }),
-  //   [pathname, isLogin]
-  // );
-
-  // Unified theme management
+  // Unified theme management & persistence
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
-      const activeMode = ThemeMode || "system";
+      const activeMode = ThemeMode || localStorage.getItem("ThemeMode") || "system";
       const isDarkMode =
         activeMode === "dark" ||
         (activeMode === "system" && mediaQuery.matches);
@@ -63,6 +38,12 @@ function App() {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
+      }
+
+      try {
+        localStorage.setItem("ThemeMode", activeMode);
+      } catch (e) {
+        console.error("Error persisting ThemeMode:", e);
       }
     };
 
@@ -87,6 +68,7 @@ function App() {
       <ImageInBigFrame />
       <ShareToMediaBox />
       <ConfimationActionListener />
+      <LoggingOutOverlay />
 
       <PersistentUser />
       {loginPop && (

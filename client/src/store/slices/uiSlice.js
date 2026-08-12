@@ -1,5 +1,13 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
-const Theme = localStorage.getItem("ThemeMode");
+
+const getSavedTheme = () => {
+  try {
+    return localStorage.getItem("ThemeMode") || "system";
+  } catch (e) {
+    return "system";
+  }
+};
+
 const defaultConfirmBox = {
   message: "",
   title: "",
@@ -10,13 +18,14 @@ const defaultConfirmBox = {
   event: "",
   contentId: "",
 };
+
 const initialState = {
   confirmBox: defaultConfirmBox,
   isConfirm: {
     status: false,
   },
   ToastState: [],
-  ThemeMode: Theme,
+  ThemeMode: getSavedTheme(),
   isScale: false,
   menuOpen: true,
   openBigFrame: null,
@@ -47,7 +56,7 @@ const uiSlice = createSlice({
       );
 
       if (existingToast) {
-        existingToast.count = (existingToast.count || 1) + 1; // Increase count if already present
+        existingToast.count = (existingToast.count || 1) + 1;
         existingToast.message = action.payload.message;
       } else {
         state.ToastState = [
@@ -61,13 +70,18 @@ const uiSlice = createSlice({
         (el) => el.id !== action.payload,
       );
     },
-    removeAllToast: (state, action) => {
-      state.ToastState = [];
+    removeAllToast: () => {
+      return { ...initialState, ThemeMode: getSavedTheme(), ToastState: [] };
     },
     setThemeMode: (state, action) => {
       state.ThemeMode = action.payload;
+      try {
+        localStorage.setItem("ThemeMode", action.payload);
+      } catch (e) {
+        console.error("Failed to save ThemeMode to localStorage:", e);
+      }
     },
-    setIsScale: (state, action) => {
+    setIsScale: (state) => {
       state.isScale = !state.isScale;
     },
     setMenuOpen: (state) => {
@@ -76,9 +90,6 @@ const uiSlice = createSlice({
     setOpenNotification: (state) => {
       state.openNotification = !state.openNotification;
     },
-    // setFocusedIndex: (state,action) => {
-    //   state.focusedIndex= action.payload
-    // },
     setOpenBigFrame: (state, action) => {
       state.openBigFrame = action.payload;
     },

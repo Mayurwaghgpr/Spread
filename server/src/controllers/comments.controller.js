@@ -100,18 +100,8 @@ export const getTopComments = async (req, res, next) => {
           },
         ],
         order: [
-          [
-            // Fully qualify the column "pind" with the table alias "Comment"
-            sequelize.literal(`
-            CASE
-              WHEN "Comment"."pind" = true THEN 1
-              WHEN "Comment"."pind" = false THEN 2
-              ELSE 3
-            END
-          `),
-            "ASC", // Ensures `true` (1) comes first, then `false` (2), then `null` (3)
-          ],
-          ["createdAt", "DESC"], // Optional: Sort by creation time within the same `pind` group
+          ["pind", "DESC"],
+          ["createdAt", "DESC"],
         ],
         limit,
         offset: (page - 1) * limit,

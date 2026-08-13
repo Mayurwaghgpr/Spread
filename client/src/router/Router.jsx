@@ -26,6 +26,10 @@ const About = lazy(() => import("../pages/About"));
 const ReadList = lazy(() => import("../pages/savedPosts/ReadList"));
 const Settings = lazy(() => import("../pages/settings/Settings"));
 const General = lazy(() => import("../pages/settings/General"));
+const AccountSettings = lazy(() => import("../pages/settings/AccountSettings"));
+const NotificationSettings = lazy(() => import("../pages/settings/NotificationSettings"));
+const GithubSyncSettings = lazy(() => import("../pages/settings/GithubSyncSettings"));
+const SecuritySettings = lazy(() => import("../pages/settings/SecuritySettings"));
 const Conversations = lazy(() => import("../pages/Conversation/Conversations"));
 const ConversationSection = lazy(
   () => import("../pages/Conversation/ConversationSection"),
@@ -183,10 +187,34 @@ function Router() {
             }
           />
           <Route
+            path="account"
+            element={
+              <ProtectedRoutes>
+                <AccountSettings />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="notifications"
+            element={
+              <ProtectedRoutes>
+                <NotificationSettings />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
             path="github/sync"
             element={
               <ProtectedRoutes>
-                <div>GitHub Sync Feature Coming Soon</div>
+                <GithubSyncSettings />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="security"
+            element={
+              <ProtectedRoutes>
+                <SecuritySettings />
               </ProtectedRoutes>
             }
           />

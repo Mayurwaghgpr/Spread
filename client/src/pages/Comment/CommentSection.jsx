@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { lazy } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,18 +9,23 @@ import { setCommentCred } from "../../store/slices/postSlice";
 import { useNavigate } from "react-router-dom";
 import CommentBox from "./CommentBox";
 import EmptyState from "../../components/utilityComp/EmptyState";
-import { X, MessageSquare, AlertCircle } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 const CommentInput = lazy(() => import("./CommentInput"));
 
 const LOADING_SKELETON_COUNT = 6;
 
 function CommentSection() {
+  const icons = useIcons();
   const { isLogin } = useSelector((state) => state.auth);
   const { commentCred, postViewData } = useSelector((state) => state.posts);
   const { getComments } = PostsApis();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Mobile touch drag-to-dismiss state
+  const [dragY, setDragY] = useState(0);
+  const touchStartY = useRef(0);
 
   const resetCommentCred = useMemo(
     () => ({
@@ -59,10 +64,9 @@ function CommentSection() {
     0.1
   );
 
-  const comments = useMemo(
-    () => TopComments?.pages?.flatMap((page) => page.comments) || [],
-    [TopComments]
-  );
+  const comments = useMemo(() => {
+    return TopComments?.pages?.flatMap((page) => page.comments || page.data || []) || [];
+  }, [TopComments]);
 
   const commentPins = useMemo(
     () => comments.filter((comment) => comment.pind),
@@ -74,17 +78,36 @@ function CommentSection() {
     dispatch(setCommentCred(resetCommentCred));
   }, [navigate, dispatch, resetCommentCred]);
 
-  const handleModalClick = useCallback((e) => {
+  const handleModalClick = (e) => {
     e.stopPropagation();
-  }, []);
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e) => {
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - touchStartY.current;
+    if (deltaY > 0) {
+      setDragY(deltaY);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (dragY > 80) {
+      handleCloseModal();
+    }
+    setDragY(0);
+  };
 
   const renderErrorState = useCallback(() => {
     if (!errorPosts) return null;
 
     return (
       <div className="flex flex-col items-center gap-2 text-center py-8 px-4">
-        <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400">
-          <AlertCircle className="w-6 h-6" />
+        <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xl">
+          {icons.error}
         </div>
         <h3 className="text-sm font-bold text-stone-900 dark:text-stone-100">
           Failed to load comments
@@ -94,24 +117,36 @@ function CommentSection() {
         </p>
       </div>
     );
-  }, [errorPosts]);
+  }, [errorPosts, icons]);
 
   return (
     <div
       onClick={handleCloseModal}
-      className="fixed inset-0 z-50 flex items-center justify-center sm:justify-end bg-black/50 backdrop-blur-sm p-3 sm:p-6 transition-all duration-300 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:justify-end bg-black/60 backdrop-blur-sm p-0 sm:p-6 transition-all duration-300 animate-in fade-in"
       role="dialog"
       aria-label="Comments modal"
     >
       <div
         onClick={handleModalClick}
-        className="flex flex-col w-full max-w-md h-[88vh] sm:h-[92vh] spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl animate-in slide-in-from-bottom-5 sm:slide-in-from-right-5"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        style={{
+          transform: dragY > 0 ? `translateY(${dragY}px)` : undefined,
+          transition: dragY === 0 ? "transform 0.25s ease-out" : "none",
+        }}
+        className="flex flex-col w-full max-w-md h-[52vh] sm:h-[92vh] spread-card rounded-t-3xl sm:rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl animate-in slide-in-from-bottom-full sm:slide-in-from-right-5 duration-300 ease-out"
       >
+        {/* Mobile Drag Handle Pill */}
+        <div className="sm:hidden w-full flex justify-center py-2.5 bg-stone-100/50 dark:bg-stone-800/30 border-b border-stone-200/40 dark:border-stone-800/40 cursor-grab active:cursor-grabbing">
+          <div className="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-stone-700" />
+        </div>
+
         {/* Header */}
-        <header className="p-4 sm:p-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-100/50 dark:bg-stone-800/30">
+        <header className="p-3.5 sm:p-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-100/50 dark:bg-stone-800/30">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100">
-              <MessageSquare className="w-5 h-5 text-stone-700 dark:text-stone-300" />
+            <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 text-lg">
+              {icons.comment}
             </div>
             <div>
               <h1 className="text-base font-extrabold text-stone-900 dark:text-stone-100 tracking-tight">
@@ -127,14 +162,14 @@ function CommentSection() {
             type="button"
             onClick={handleCloseModal}
             aria-label="Close comments"
-            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-xl"
           >
-            <X className="w-5 h-5" />
+            {icons.close}
           </button>
         </header>
 
         {/* Comments List Main Body */}
-        <main className="flex-1 overflow-y-auto p-4 space-y-4">
+        <main className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-4">
           {(isLoading
             ? Array(LOADING_SKELETON_COUNT).fill(null)
             : comments
@@ -163,7 +198,7 @@ function CommentSection() {
           {!isLoading && !isFetching && !errorPosts && comments.length === 0 && (
             <div className="flex h-full w-full items-center justify-center p-6 text-center">
               <EmptyState
-                Icon={MessageSquare}
+                Icon={icons.comment}
                 heading="No comments yet"
                 description={
                   isLogin

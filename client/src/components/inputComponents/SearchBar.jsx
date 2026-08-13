@@ -6,7 +6,7 @@ const SearchBar = ({ className, inputAction, btnAction, ...props }) => {
   return (
     <div className={`flex justify-center items-center  ${className}`}>
       <input
-        className=" p-2 w-full outline-none bg-inherit"
+        className=" p-2 w-full outline-none bg-inherit text-[16px] sm:text-xs"
         placeholder="Search"
         type="search"
         onChange={inputAction}

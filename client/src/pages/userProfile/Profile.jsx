@@ -13,9 +13,10 @@ import useProfileApi from "../../services/useProfileApis";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import LoaderScreen from "../../components/loaders/loaderScreen";
 import EmptyState from "../../components/utilityComp/EmptyState";
-import { BsPostcard } from "react-icons/bs";
+import useIcons from "../../hooks/useIcons";
 
 function Profile() {
+  const icons = useIcons();
   const dispatch = useDispatch();
   const params = useParams();
   const navigate = useNavigate();
@@ -115,16 +116,17 @@ function Profile() {
   }
 
   return (
-    <div className="flex flex-col items-center w-full min-h-screen border-inherit px-3 sm:px-6 py-6 max-w-4xl mx-auto space-y-6">
+    <div className="flex flex-col items-center w-full min-h-screen border-inherit px-3 sm:px-6 py-4 sm:py-6 max-w-4xl mx-auto space-y-5 sm:space-y-6">
       {/* Profile Header Card */}
       <ProfileHeader
         userMeta={activeProfileData}
         isSelf={isSelf}
         onOpenDrawer={(type) => setActiveDrawer(type)}
+        postsCount={posts.length}
       />
 
       {/* Tabs Navigation */}
-      <div className="flex items-center justify-start gap-4 w-full border-b border-stone-200 dark:border-stone-800 pb-1">
+      <div className="flex items-center justify-start gap-2 sm:gap-4 w-full border-b border-stone-200 dark:border-stone-800 pb-1">
         <button
           type="button"
           onClick={() => setActiveTab("posts")}
@@ -173,7 +175,7 @@ function Profile() {
           {!isPostsLoading && posts.length === 0 && (
             <div className="py-12 flex justify-center items-center text-center">
               <EmptyState
-                Icon={BsPostcard}
+                Icon={icons.post}
                 heading="No stories published yet"
                 description={
                   isSelf
@@ -198,7 +200,7 @@ function Profile() {
             posts.length > 0 && (
               <div className="text-center py-8 w-full">
                 <div className="inline-flex items-center gap-2 px-4 py-2 text-xs rounded-full spread-pill">
-                  <BsPostcard className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+                  <span className="text-stone-700 dark:text-stone-300 text-sm">{icons.post}</span>
                   <span>You've seen all posts</span>
                 </div>
               </div>
@@ -223,6 +225,7 @@ function Profile() {
         <ProfileinfoCard
           action={() => setActiveDrawer(null)}
           kind={activeDrawer}
+          profileId={activeProfileData?.id || effectiveProfileId}
           listData={
             activeDrawer === "followers"
               ? activeProfileData?.Followers || []

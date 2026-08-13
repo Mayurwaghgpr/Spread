@@ -40,7 +40,7 @@ const CommonInput = forwardRef(
             placeholder={placeholder}
             required={required}
             disabled={disabled}
-            className={`px-3 py-2 w-full border-inherit bg-inherit outline-none `}
+            className={`px-3 py-2 w-full border-inherit bg-inherit outline-none text-[16px] sm:text-sm`}
             {...props}
           />
           {children}

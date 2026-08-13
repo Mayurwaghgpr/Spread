@@ -7,10 +7,11 @@ import { useLastItemObserver } from "../../hooks/useLastItemObserver";
 import useProfileApi from "../../services/useProfileApis";
 import usePostsApis from "../../services/usePostsApis";
 import { useParams, useNavigate } from "react-router-dom";
-import { BookmarkCheck, Folder } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 import EmptyState from "../../components/utilityComp/EmptyState";
 
 const ReadList = () => {
+  const icons = useIcons();
   const { getArchivedPosts } = useProfileApi();
   const { fetchSavedPostsGroup } = usePostsApis();
   const { group } = useParams();
@@ -24,27 +25,21 @@ const ReadList = () => {
 
   const {
     data,
-    isFetching,
     fetchNextPage,
+    hasNextPage,
     isFetchingNextPage,
     isLoading,
-    hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ["saved_posts", group || "all"],
-    queryFn: ({ pageParam = new Date().toISOString() }) =>
-      getArchivedPosts({ pageParam, group }),
-    getNextPageParam: (lastPage) => {
-      return lastPage.length !== 0
-        ? lastPage[lastPage.length - 1]?.createdAt
-        : undefined;
-    },
-    refetchOnWindowFocus: false,
+    queryKey: ["readList", group],
+    queryFn: ({ pageParam = 1 }) =>
+      getArchivedPosts({ page: pageParam, group: group !== "All" ? group : undefined }),
+    getNextPageParam: (lastPage) =>
+      lastPage?.meta?.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
   });
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
     isFetchingNextPage,
-    isFetching,
     hasNextPage
   );
 
@@ -60,8 +55,8 @@ const ReadList = () => {
       {/* Hero Header Section */}
       <div className="w-full spread-card p-6 rounded-2xl border border-stone-200 dark:border-stone-800 space-y-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 border border-stone-300/50 dark:border-stone-700/50 shrink-0">
-            <BookmarkCheck className="w-7 h-7" />
+          <div className="p-3 rounded-2xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 border border-stone-300/50 dark:border-stone-700/50 shrink-0 text-xl">
+            {icons.bookmarkFi}
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight">
@@ -84,29 +79,30 @@ const ReadList = () => {
                   : "text-stone-700 dark:text-stone-300"
               }`}
             >
-              <Folder className="w-3.5 h-3.5" />
+              <span className="text-xs">{icons.folder}</span>
               All Saved
             </button>
 
-            {groupsData.groups.map((item) => (
+            {groupsData.groups.map((grp) => (
               <button
-                key={item?.groupName}
-                onClick={() => navigate(`/bookmarks/${item?.groupName}`)}
+                key={grp.groupName}
+                onClick={() => navigate(`/bookmarks/${grp.groupName}`)}
                 className={`spread-pill text-xs font-semibold px-3 py-1.5 flex items-center gap-1.5 transition-transform hover:scale-105 cursor-pointer ${
-                  activeGroup === item?.groupName
+                  activeGroup === grp.groupName
                     ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-bold"
                     : "text-stone-700 dark:text-stone-300"
                 }`}
               >
-                #{item?.groupName}
+                <span className="text-xs">{icons.folder}</span>
+                #{grp.groupName}
               </button>
             ))}
           </div>
         )}
       </div>
 
-      {/* Main Posts Feed List */}
-      <div className="w-full space-y-4 border-inherit">
+      {/* Main Content List */}
+      <div className="w-full space-y-4">
         {isLoading ? (
           Array.from({ length: 4 }, (_, idx) => (
             <PostCardSkeleton key={`saved-skeleton-${idx}`} />
@@ -114,7 +110,7 @@ const ReadList = () => {
         ) : posts.length === 0 ? (
           <div className="spread-card p-10 rounded-2xl flex flex-col items-center justify-center text-center my-4">
             <EmptyState
-              Icon={BookmarkCheck}
+              Icon={icons.bookmarkFi}
               heading={
                 activeGroup === "All"
                   ? "No Saved Posts Yet"
@@ -124,30 +120,24 @@ const ReadList = () => {
             />
             <button
               onClick={() => navigate("/")}
-              className="spread-btn-primary text-xs font-semibold px-5 py-2 mt-4 hover:scale-105 transition-transform"
+              className="mt-4 spread-btn-primary text-xs px-5 py-2 rounded-full font-bold cursor-pointer"
             >
               Explore Feed
             </button>
           </div>
         ) : (
-          posts.map((post, idx) => {
-            const isLastItem = idx === posts.length - 1;
-            return (
-              <PostPreview
-                className="w-full"
-                ref={isLastItem ? lastItemRef : null}
-                key={post?.id || `saved-${idx}`}
-                post={post}
-                Saved={true}
-              />
-            );
-          })
+          posts.map((post, idx) => (
+            <PostPreview
+              ref={idx === posts.length - 1 ? lastItemRef : null}
+              key={post.id || `saved-post-${idx}`}
+              post={post}
+            />
+          ))
         )}
 
-        {/* Loading Footer */}
         {isFetchingNextPage && (
-          <div className="w-full flex justify-center items-center py-6">
-            <Spinner className="w-7 h-7 text-stone-900 dark:text-stone-100" />
+          <div className="flex justify-center p-4">
+            <Spinner className="w-6 h-6 text-stone-900 dark:text-stone-100" />
           </div>
         )}
       </div>

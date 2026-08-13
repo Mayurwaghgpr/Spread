@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { PopupBox } from "../../../components/utilityComp/PopupBox";
 import CommenAuthBtn from "../../auth/components/CommenAuthBtn";
-import { FolderPlus } from "lucide-react";
+import useIcons from "../../../hooks/useIcons";
 
 export default function CreateNewGroupForm({ action, mutation }) {
+  const icons = useIcons();
   const [groupName, setGroupName] = useState("");
 
   const handleCreateGroup = (e) => {
@@ -20,8 +21,8 @@ export default function CreateNewGroupForm({ action, mutation }) {
       className="p-6 w-96 max-w-md flex flex-col gap-5 spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl backdrop-blur-xl"
     >
       <div className="flex items-center gap-3 border-b border-stone-200 dark:border-stone-800 pb-3">
-        <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100">
-          <FolderPlus className="w-5 h-5" />
+        <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 text-lg">
+          {icons.folderPlus}
         </div>
         <div>
           <h2 className="text-base font-bold text-stone-900 dark:text-stone-100">

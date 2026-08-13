@@ -22,7 +22,7 @@ const PeoplesList = forwardRef(
 
         <div className="flex flex-col min-w-0 flex-1 text-left">
           <span className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 truncate">
-            {person?.displayName || "Unknown User"}
+            {person?.displayName || person?.username || "Unknown User"}
           </span>
           <span className="text-[11px] text-stone-500 dark:text-stone-400 truncate">
             @{person?.username || "username"}

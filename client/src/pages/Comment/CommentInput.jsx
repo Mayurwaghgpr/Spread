@@ -18,11 +18,12 @@ import ProfileImage from "../../components/ProfileImage";
 import data from "@emoji-mart/data";
 import EditableElementInput from "../../components/inputComponents/EditableElementInput";
 import { useNavigate, useParams } from "react-router-dom";
-import { Smile, Send } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 const Picker = lazy(() => import("@emoji-mart/react"));
 
 function CommentInput({ className = "" }) {
+  const icons = useIcons();
   const { isLogin, user } = useSelector((state) => state.auth);
   const { commentCred, postViewData } = useSelector((state) => state.posts);
   const { ThemeMode } = useSelector((state) => state.ui);
@@ -161,10 +162,10 @@ function CommentInput({ className = "" }) {
             ref={emojiButtonRef}
             type="button"
             onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
-            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-base"
             aria-label="Add emoji"
           >
-            <Smile className="w-4 h-4" />
+            {icons.smile}
           </button>
 
           {openEmojiPicker && (
@@ -185,7 +186,7 @@ function CommentInput({ className = "" }) {
           type="button"
           onClick={handleSend}
           disabled={isLoading || !commentCred?.content?.trim()}
-          className={`p-2 rounded-full spread-btn-primary flex items-center justify-center transition-transform ${
+          className={`p-2 rounded-full spread-btn-primary flex items-center justify-center transition-transform text-xs ${
             !commentCred?.content?.trim() || isLoading
               ? "opacity-40 cursor-not-allowed"
               : "hover:scale-105 cursor-pointer"
@@ -195,7 +196,7 @@ function CommentInput({ className = "" }) {
           {isLoading ? (
             <Spinner className="w-3.5 h-3.5 text-stone-900 dark:text-stone-100" />
           ) : (
-            <Send className="w-3.5 h-3.5" />
+            icons.sendFi
           )}
         </button>
       </div>

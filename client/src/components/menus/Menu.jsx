@@ -1,12 +1,15 @@
-import { forwardRef, memo } from "react";
+import { forwardRef, memo, useState, useRef } from "react";
 import useIcons from "../../hooks/useIcons";
-import { MoreHorizontal, Trash2, Link as LinkIcon, Share2, Edit3 } from "lucide-react";
 
 const Menu = forwardRef(function (
   { content, items, className = "", menuId, setMenuId },
   ref,
 ) {
   const icons = useIcons();
+
+  // Mobile drag-to-dismiss state
+  const [dragY, setDragY] = useState(0);
+  const touchStartY = useRef(0);
 
   if (!content || !items || !items.length) return null;
 
@@ -17,18 +20,41 @@ const Menu = forwardRef(function (
     setMenuId((prev) => (prev === content?.id ? null : content?.id));
   };
 
-  const getLucideIcon = (iconName) => {
+  const handleClose = () => {
+    setMenuId(null);
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e) => {
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - touchStartY.current;
+    if (deltaY > 0) {
+      setDragY(deltaY);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (dragY > 60) {
+      handleClose();
+    }
+    setDragY(0);
+  };
+
+  const renderItemIcon = (iconName) => {
     switch (iconName) {
       case "link":
-        return <LinkIcon className="w-4 h-4 text-stone-500 dark:text-stone-400" />;
+        return <span className="text-stone-500 dark:text-stone-400 text-sm">{icons.link}</span>;
       case "share":
-        return <Share2 className="w-4 h-4 text-stone-500 dark:text-stone-400" />;
+        return <span className="text-stone-500 dark:text-stone-400 text-sm">{icons.share}</span>;
       case "delete1":
       case "delete":
-        return <Trash2 className="w-4 h-4 text-red-500" />;
+        return <span className="text-red-500 text-sm">{icons.delete}</span>;
       case "penO":
       case "edit":
-        return <Edit3 className="w-4 h-4 text-stone-700 dark:text-stone-300" />;
+        return <span className="text-stone-700 dark:text-stone-300 text-sm">{icons.edit}</span>;
       default:
         return icons[iconName] || null;
     }
@@ -45,25 +71,37 @@ const Menu = forwardRef(function (
         type="button"
         onClick={toggleMenu}
         aria-label="Post actions menu"
-        className="p-1.5 rounded-full hover:bg-stone-200/60 dark:hover:bg-stone-800/60 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors active:scale-95 cursor-pointer flex items-center justify-center"
+        className="p-1.5 rounded-full hover:bg-stone-200/60 dark:hover:bg-stone-800/60 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors active:scale-95 cursor-pointer flex items-center justify-center min-w-[36px] min-h-[36px] text-lg"
       >
-        <MoreHorizontal className="w-5 h-5" />
+        {icons.ThreeDot}
       </button>
 
       {/* Backdrop for Closing Menu */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-transparent"
-          onClick={() => setMenuId(null)}
+          className="fixed inset-0 z-40 bg-black/50 sm:bg-transparent backdrop-blur-xs sm:backdrop-blur-none transition-opacity"
+          onClick={handleClose}
         />
       )}
 
-      {/* Popover Menu Container */}
+      {/* Menu Container: Draggable Bottom Sheet on Mobile, Absolute Popover on Desktop */}
       {isOpen && (
         <div
-          className={`absolute right-0 top-9 z-50 min-w-[170px] spread-card p-1.5 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-2xl backdrop-blur-xl bg-stone-100/95 dark:bg-stone-900/95 animate-in fade-in zoom-in-95 duration-150 origin-top-right ${className}`}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{
+            transform: dragY > 0 ? `translateY(${dragY}px)` : undefined,
+            transition: dragY === 0 ? "transform 0.2s ease-out" : "none",
+          }}
+          className={`fixed inset-x-0 bottom-0 z-50 w-full max-h-[50vh] sm:max-h-none sm:w-auto sm:min-w-[180px] sm:absolute sm:right-0 sm:top-9 sm:bottom-auto sm:left-auto spread-card p-4 sm:p-1.5 rounded-t-3xl sm:rounded-2xl border border-stone-200 dark:border-stone-800 shadow-2xl backdrop-blur-xl bg-stone-100/95 dark:bg-stone-900/95 animate-in slide-in-from-bottom-full sm:animate-in sm:fade-in sm:zoom-in-95 duration-300 ease-out origin-bottom sm:origin-top-right flex flex-col justify-between ${className}`}
         >
-          <ul className="flex flex-col gap-0.5 text-xs font-semibold text-stone-800 dark:text-stone-200">
+          {/* Mobile Drag Handle Bar */}
+          <div className="sm:hidden w-full flex justify-center pb-3 cursor-grab active:cursor-grabbing">
+            <div className="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-stone-700" />
+          </div>
+
+          <ul className="flex flex-col gap-1 sm:gap-0.5 text-xs font-semibold text-stone-800 dark:text-stone-200 overflow-y-auto">
             {items.map((item) => {
               const isDelete = item.id.includes("delete");
               return (
@@ -75,19 +113,29 @@ const Menu = forwardRef(function (
                       setMenuId(null);
                       item.action(content.id);
                     }}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-colors text-left cursor-pointer ${
+                    className={`w-full flex items-center gap-3 px-3.5 py-3 sm:py-2 rounded-xl transition-colors text-left cursor-pointer ${
                       isDelete
-                        ? "text-red-600 dark:text-red-400 hover:bg-red-500/10"
-                        : "hover:bg-stone-200/70 dark:hover:bg-stone-800/70"
+                        ? "text-red-600 dark:text-red-400 hover:bg-red-500/10 active:bg-red-500/20"
+                        : "hover:bg-stone-200/70 dark:hover:bg-stone-800/70 active:bg-stone-200 dark:active:bg-stone-800"
                     }`}
                   >
-                    <span className="shrink-0">{getLucideIcon(item.icon)}</span>
-                    <span className="truncate">{item.itemName}</span>
+                    <span className="shrink-0">{renderItemIcon(item.icon)}</span>
+                    <span className="truncate text-xs font-bold sm:font-semibold">{item.itemName}</span>
                   </button>
                 </li>
               );
             })}
           </ul>
+
+          <div className="sm:hidden pt-3">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="w-full py-2.5 text-xs font-bold text-stone-600 dark:text-stone-400 bg-stone-200/60 dark:bg-stone-800/60 rounded-xl hover:bg-stone-300 dark:hover:bg-stone-700 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )}
     </div>

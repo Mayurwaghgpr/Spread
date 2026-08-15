@@ -1,7 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
-import { Copy, Check } from "lucide-react";
+import useIcons from "../hooks/useIcons";
 
 const CopyToClipboardInput = ({ item }) => {
+  const icons = useIcons();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(() => {
@@ -42,12 +43,12 @@ const CopyToClipboardInput = ({ item }) => {
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="text-emerald-400 text-xs">{icons.check}</span>
               <span className="text-emerald-400 font-bold">Copied!</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5" />
+              <span className="text-xs">{icons.copy}</span>
               <span>Copy</span>
             </>
           )}

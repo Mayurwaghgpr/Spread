@@ -4,10 +4,11 @@ import CreateNewGroupForm from "../../../pages/savedPosts/components/CreateNewGr
 import { useState } from "react";
 import { setToast } from "../../../store/slices/uiSlice";
 import { useDispatch } from "react-redux";
-import { FolderPlus, BookmarkCheck } from "lucide-react";
+import useIcons from "../../../hooks/useIcons";
 import Spinner from "../../loaders/Spinner";
 
 function BookmarkBox({ postId, isOpen, onMouseEnter, onMouseLeave, mutation }) {
+  const icons = useIcons();
   const [isCreateGroupFormOpen, setIsCreateGroupFormOpen] = useState(false);
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -44,16 +45,16 @@ function BookmarkBox({ postId, isOpen, onMouseEnter, onMouseLeave, mutation }) {
       <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className={`z-40 duration-200 transition-all absolute flex flex-col w-56 spread-card shadow-2xl border border-stone-200 dark:border-stone-800 right-0 top-7 rounded-2xl overflow-hidden backdrop-blur-xl before:content-[''] before:absolute before:-top-4 before:left-0 before:right-0 before:h-4 ${
+        className={`absolute top-full right-0 mt-2 w-56 spread-card rounded-2xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl z-50 transition-all duration-200 ${
           isOpen
-            ? "opacity-100 pointer-events-auto translate-y-0"
+            ? "opacity-100 translate-y-0"
             : "opacity-0 pointer-events-none -translate-y-1"
         }`}
       >
         {/* Header */}
         <div className="px-3.5 py-2.5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-100/50 dark:bg-stone-800/30">
           <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
-            <BookmarkCheck className="w-3.5 h-3.5 text-stone-700 dark:text-stone-300" />
+            <span className="text-stone-700 dark:text-stone-300 text-xs">{icons.bookmarkO}</span>
             Save to Folder
           </span>
         </div>
@@ -68,7 +69,7 @@ function BookmarkBox({ postId, isOpen, onMouseEnter, onMouseLeave, mutation }) {
               setIsCreateGroupFormOpen(true);
             }}
           >
-            <FolderPlus className="w-3.5 h-3.5 text-stone-500" />
+            <span className="text-stone-500 text-xs">{icons.plus}</span>
             <span>Create new folder</span>
           </button>
 

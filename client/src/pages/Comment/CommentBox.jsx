@@ -1,6 +1,6 @@
 import { forwardRef, memo, useMemo, useRef, useState } from "react";
 import userImageSrc from "../../utils/functions/userImageSrc";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import PostsApis from "../../services/usePostsApis";
 import { useDispatch, useSelector } from "react-redux";
 import { setCommentCred } from "../../store/slices/postSlice";
@@ -13,12 +13,14 @@ import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import Spinner from "../../components/loaders/Spinner";
 import DOMPurify from "dompurify";
 import useClickOutside from "../../hooks/useClickOutside";
-import { Heart, Reply, Pin, ChevronDown, ChevronUp } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 const CommentBox = forwardRef(
   ({ comt, className = "", topCommentId, ...props }, ref) => {
+    const icons = useIcons();
     const [openReplies, setOpenReplies] = useState("");
     const [optimisticLike, setOptimisticLike] = useState("");
+    const queryClient = useQueryClient();
 
     const { user } = useSelector((state) => state.auth);
     const { commentCred, postViewData } = useSelector((state) => state.posts);
@@ -62,8 +64,10 @@ const CommentBox = forwardRef(
     const { mutate: pinMutation } = useMutation({
       mutationFn: (data) => pinComment(data),
       onSuccess: (data) => {
-        comt.pind = data.pind;
-        dispatch(setToast({ message: "Comment pinned!", type: "success" }));
+        const newPinnedState = data?.result?.pind !== undefined ? data.result.pind : (data?.pind !== undefined ? data.pind : !comt.pind);
+        comt.pind = newPinnedState;
+        queryClient.invalidateQueries(["TopComments"]);
+        dispatch(setToast({ message: newPinnedState ? "Comment pinned!" : "Comment unpinned!", type: "success" }));
         setOptimisticLike("");
       },
       onError: () => {
@@ -169,7 +173,7 @@ const CommentBox = forwardRef(
 
                 {comt.pind && (
                   <span className="flex items-center gap-1 text-[10px] font-bold text-stone-600 dark:text-stone-400">
-                    <Pin className="w-3 h-3 fill-stone-600 dark:fill-stone-400" />
+                    <span className="text-xs">{icons.pin}</span>
                     Pinned
                   </span>
                 )}
@@ -209,11 +213,9 @@ const CommentBox = forwardRef(
                 showHeartFilled ? "text-rose-500" : ""
               }`}
             >
-              <Heart
-                className={`w-3.5 h-3.5 ${
-                  showHeartFilled ? "fill-rose-500 text-rose-500" : ""
-                }`}
-              />
+              <span className="text-sm">
+                {showHeartFilled ? icons.redHeartFi : icons.heartO}
+              </span>
               <AbbreviateNumber rawNumber={likeCount} />
             </button>
 
@@ -222,7 +224,7 @@ const CommentBox = forwardRef(
               onClick={handleReplyClick}
               className="flex items-center gap-1 font-semibold hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
             >
-              <Reply className="w-3.5 h-3.5" />
+              <span className="text-xs">{icons.reply}</span>
               <span>Reply</span>
             </button>
 
@@ -233,7 +235,7 @@ const CommentBox = forwardRef(
                 className="flex items-center gap-1 font-semibold hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
                 title="Pin comment"
               >
-                <Pin className="w-3.5 h-3.5" />
+                <span className="text-xs">{icons.pin}</span>
               </button>
             )}
           </div>
@@ -246,11 +248,9 @@ const CommentBox = forwardRef(
                 onClick={handleRepliesClick}
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-700 dark:text-stone-300 hover:underline cursor-pointer"
               >
-                {openReplies !== comt.id ? (
-                  <ChevronDown className="w-3.5 h-3.5" />
-                ) : (
-                  <ChevronUp className="w-3.5 h-3.5" />
-                )}
+                <span className="text-xs">
+                  {openReplies !== comt.id ? icons.arrowDown : icons.arrowUp}
+                </span>
                 <span>
                   {comt.replies.length} {comt.replies.length === 1 ? "reply" : "replies"}
                 </span>

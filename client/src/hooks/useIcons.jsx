@@ -1,9 +1,5 @@
 import {
   BsAlphabetUppercase,
-  BsArrowLeft,
-  BsBell,
-  BsBellFill,
-  BsBookmark,
   BsCamera,
   BsCameraVideo,
   BsCheck2Circle,
@@ -11,24 +7,13 @@ import {
   BsEye,
   BsEyeSlash,
   BsFacebook,
-  BsFillBookmarkFill,
-  BsFillMoonStarsFill,
-  BsGear,
-  BsGearFill,
   BsHandThumbsUp,
   BsHandThumbsUpFill,
-  BsHeart,
-  BsHeartFill,
   BsInfoCircle,
-  BsLink,
   BsLinkedin,
   BsPen,
   BsPenFill,
-  BsPeople,
-  BsPerson,
-  BsPostcard,
   BsReddit,
-  BsSendFill,
   BsThreeDotsVertical,
   BsTwitterX,
   BsWhatsapp,
@@ -38,7 +23,6 @@ import {
   MdDone,
   MdEmail,
   MdErrorOutline,
-  MdHandshake,
   MdOutlineDeveloperMode,
   MdOutlineKeyboardDoubleArrowLeft,
   MdOutlineKeyboardDoubleArrowRight,
@@ -47,96 +31,119 @@ import {
   IoAttach,
   IoCallOutline,
   IoEarth,
-  IoHappyOutline,
   IoHomeOutline,
   IoHomeSharp,
   IoLibraryOutline,
   IoLibrarySharp,
   IoPersonAddOutline,
-  IoSearch,
-  IoSearchOutline,
-  IoSunny,
 } from "react-icons/io5";
 import {
   PiHandsClappingFill,
   PiImageThin,
   PiPlus,
   PiTrashSimpleLight,
+  PiAlarm,
 } from "react-icons/pi";
-import { MdAutoAwesome } from "react-icons/md";
-
 import {
   FaBookOpen,
-  FaCircleCheck,
   FaCode,
-  FaCreativeCommons,
   FaHandHoldingHeart,
-  FaHandshake,
-  FaRegComment,
+  FaUserTag,
 } from "react-icons/fa6";
 import {
   RiQuillPenFill,
   RiQuillPenLine,
-  RiUserFollowLine,
 } from "react-icons/ri";
 import { VscMention } from "react-icons/vsc";
-import { FaUserTag } from "react-icons/fa6";
-import { PiAlarm } from "react-icons/pi";
-import { BiCalendarAlt, BiRepost, BiShare, BiTrash } from "react-icons/bi";
+import { BiRepost, BiShare, BiTrash } from "react-icons/bi";
 import { GrGoogle, GrSystem } from "react-icons/gr";
-import { IoCloseOutline } from "react-icons/io5";
-import { AiOutlineMessage, AiOutlineSend } from "react-icons/ai";
 import {
   LuGithub,
   LuHandshake,
   LuLogOut,
   LuMonitorSmartphone,
+  LuUserCheck,
+  LuUsers,
+  LuUser,
+  LuSlidersHorizontal,
+  LuShieldCheck,
+  LuKeyRound,
+  LuFolder,
+  LuFolderPlus,
+  LuBookmark,
+  LuBookmarkCheck,
+  LuCornerUpLeft,
+  LuMessageSquare,
+  LuNewspaper,
+  LuCalendarDays,
+  LuPencil,
+  LuRefreshCw,
+  LuX,
+  LuSearch,
+  LuSend,
+  LuHeart,
+  LuPin,
+  LuChevronDown,
+  LuChevronUp,
+  LuArrowLeft,
+  LuSmile,
+  LuBell,
+  LuVolume2,
+  LuSun,
+  LuMoon,
+  LuCheck,
+  LuSparkles,
+  LuLink,
+  LuCopy,
 } from "react-icons/lu";
 import {
+  TbTrendingUp,
   TbMessageCircle,
   TbMessageCircleFilled,
-  TbTrendingUp,
 } from "react-icons/tb";
-import { CiCircleCheck, CiMenuBurger, CiWarning } from "react-icons/ci";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { TiPin, TiArrowSync } from "react-icons/ti";
+import { CiMenuBurger, CiWarning } from "react-icons/ci";
 import { WiStars } from "react-icons/wi";
-import { FiEdit3, FiExternalLink } from "react-icons/fi";
-import { CircleCheck } from "lucide-react";
-import { HiOutlineBolt, HiOutlineDocumentText, HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
-import { IoCopyOutline } from "react-icons/io5";
+import { FiExternalLink } from "react-icons/fi";
+import {
+  HiOutlineBolt,
+  HiOutlineDocumentText,
+  HiOutlineChatBubbleLeftRight,
+  HiHeart,
+} from "react-icons/hi2";
+
 function useIcons() {
   return {
     // A
     addPersonO: <IoPersonAddOutline />,
     alphabetUp: <BsAlphabetUppercase />,
-    appreciate: <MdAutoAwesome />,
-    arrowL: <BsArrowLeft />,
-    arrowUp: <IoIosArrowUp />,
-    arrowDown: <IoIosArrowDown />,
+    appreciate: <LuSparkles className="text-amber-500" />,
+    arrowL: <LuArrowLeft />,
+    arrowUp: <LuChevronUp />,
+    arrowDown: <LuChevronDown />,
     attachPin: <IoAttach />,
 
     // B
-    bellFi: <BsBellFill />,
-    bellO: <BsBell />,
-    bookmarkFi: <BsFillBookmarkFill />,
-    bookmarkO: <BsBookmark />,
+    bellFi: <LuBell className="fill-current" />,
+    bellO: <LuBell />,
+    bookmarkFi: <LuBookmarkCheck className="fill-current text-stone-900 dark:text-stone-100" />,
+    bookmarkO: <LuBookmark />,
     book: <FaBookOpen />,
     bolt: <HiOutlineBolt />,
 
     // C
-    calender: <BiCalendarAlt />,
+    calender: <LuCalendarDays />,
     callO: <IoCallOutline />,
     celebration: <MdCelebration />,
     cheer: <PiHandsClappingFill />,
-    close: <IoCloseOutline />,
+    close: <LuX />,
     code1: <FaCode />,
-    comment: <FaRegComment />,
+    comment: <LuMessageSquare />,
     creative: <MdOutlineDeveloperMode />,
-    check: <BsCheck2Circle />,
-    circleCheck: <FaCircleCheck />,
-    copy: <IoCopyOutline />,
+    check: <LuCheck />,
+    circleCheck: <BsCheck2Circle />,
+    copy: <LuCopy />,
     chatTab: <HiOutlineChatBubbleLeftRight />,
+
     // D
     desktopO: <LuMonitorSmartphone />,
     done: <MdDone color="green" />,
@@ -146,22 +153,25 @@ function useIcons() {
     doubleArrowR: <MdOutlineKeyboardDoubleArrowRight />,
     doubleArrowL: <MdOutlineKeyboardDoubleArrowLeft />,
     docTab: <HiOutlineDocumentText />,
+
     // E
     error: <MdErrorOutline color="red" />,
     earth: <IoEarth />,
-    edit: <FiEdit3 />,
+    edit: <LuPencil />,
     eye: <BsEye />,
     eyeSlash: <BsEyeSlash />,
     exLink: <FiExternalLink />,
     email: <MdEmail />,
+
     // F
-    follow: <RiUserFollowLine />,
+    follow: <LuUserCheck />,
     fetherFi: <RiQuillPenFill />,
     fetherO: <RiQuillPenLine />,
     facebook: <BsFacebook />,
+
     // G
-    gearFi: <BsGearFill />,
-    gearO: <BsGear />,
+    gearFi: <LuSlidersHorizontal />,
+    gearO: <LuSlidersHorizontal />,
     glitter: <WiStars className="" />,
     github: <LuGithub />,
     google: <GrGoogle />,
@@ -171,25 +181,19 @@ function useIcons() {
     helpful: <FaHandHoldingHeart />,
     homeFi: <IoHomeSharp />,
     homeO: <IoHomeOutline />,
-    redHeartFi: <BsHeartFill color="red" />,
-    heartFi: <BsHeartFill className="text-gray-600" />,
-    heartO: <BsHeart />,
+    redHeartFi: <HiHeart className="text-red-500 fill-red-500" />,
+    heartFi: <LuHeart className="fill-stone-600" />,
+    heartO: <LuHeart />,
     handshack: <LuHandshake />,
 
     // I
     image1: <PiImageThin />,
     info: <BsInfoCircle />,
 
-    // J
-    // Placeholder for future grouping
-
-    // K
-    // Placeholder for future grouping
-
     // L
     libraryFi: <IoLibrarySharp />,
     libraryO: <IoLibraryOutline />,
-    link: <BsLink />,
+    link: <LuLink />,
     logout: <LuLogOut />,
     like: <BsHandThumbsUpFill />,
     likeO: <BsHandThumbsUp />,
@@ -199,53 +203,49 @@ function useIcons() {
     mention: <VscMention />,
     message: <TbMessageCircle />,
     messageFi: <TbMessageCircleFilled />,
-    messageDoted: <AiOutlineMessage />,
-    moonFi: <BsFillMoonStarsFill />,
+    messageDoted: <LuMessageSquare />,
+    moonFi: <LuMoon />,
     menu: <CiMenuBurger />,
-
-    // N
-    // Placeholder for future grouping
-
-    // O
-    // Placeholder for future grouping
 
     // P
     pCamera: <BsCamera />,
     penFi: <BsPenFill />,
     penO: <BsPen />,
-    people: <BsPeople />,
-    pin: <TiPin />,
+    people: <LuUsers />,
+    pin: <LuPin />,
     plus: <PiPlus />,
-    person: <BsPerson />,
-    post: <BsPostcard />,
-
-    // Q
-    // Placeholder for future grouping
+    person: <LuUser />,
+    post: <LuNewspaper />,
 
     // R
     reminder: <PiAlarm />,
     repost: <BiRepost />,
     reddit: <BsReddit />,
-    refresh: <TiArrowSync />,
+    refresh: <LuRefreshCw />,
+
     // S
-    search: <IoSearch />,
-    searchO: <IoSearchOutline />,
-    sendO: <AiOutlineSend />,
-    smile: <IoHappyOutline />,
+    search: <LuSearch />,
+    searchO: <LuSearch />,
+    sendO: <LuSend />,
+    smile: <LuSmile />,
     success: <MdDone color="green" />,
-    sun: <IoSunny />,
+    sun: <LuSun />,
     system: <GrSystem />,
     share: <BiShare />,
-    sendFi: <BsSendFill />,
+    sendFi: <LuSend />,
+
     // T
     tag: <FaUserTag />,
     ThreeDot: <BsThreeDotsVertical />,
 
     // U
-    // Placeholder for future grouping
+    userCheck: <LuUserCheck />,
+    users: <LuUsers />,
+    user: <LuUser />,
 
     // V
     vCamera: <BsCameraVideo />,
+    volume: <LuVolume2 />,
 
     // W
     warning: <CiWarning />,
@@ -254,11 +254,13 @@ function useIcons() {
     // X
     XCom: <BsTwitterX />,
 
-    // Y
-    // Placeholder for future grouping
-
-    // Z
-    // Placeholder for future grouping
+    // S
+    sliders: <LuSlidersHorizontal />,
+    shieldCheck: <LuShieldCheck />,
+    key: <LuKeyRound />,
+    reply: <LuCornerUpLeft />,
+    folder: <LuFolder />,
+    folderPlus: <LuFolderPlus />,
   };
 }
 

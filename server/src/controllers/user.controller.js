@@ -67,13 +67,20 @@ export const getUserPostsById = async (req, res, next) => {
 
 // Get followers of the current user
 export const getFollowers = async (req, res, next) => {
-  const userId = req?.params?.userId || req.authUser.id;
+  const userId = req?.params?.userId || req.authUser?.id;
   try {
     const user = await User.findByPk(userId, {
-      include: [{ model: User, as: "Followers" }],
+      include: [
+        {
+          model: User,
+          as: "Followers",
+          attributes: ["id", "username", "displayName", "userImage", "bio"],
+          through: { attributes: [] },
+        },
+      ],
     });
 
-    res.status(200).json(user.Followers);
+    res.status(200).json(user?.Followers || []);
   } catch (error) {
     next(error);
   }
@@ -81,14 +88,21 @@ export const getFollowers = async (req, res, next) => {
 
 // Get users that the current user is following
 export const getFollowing = async (req, res, next) => {
-  const userId = req?.params?.userId || req.authUser.id;
+  const userId = req?.params?.userId || req.authUser?.id;
 
   try {
     const user = await User.findByPk(userId, {
-      include: [{ model: User, as: "Following" }],
+      include: [
+        {
+          model: User,
+          as: "Following",
+          attributes: ["id", "username", "displayName", "userImage", "bio"],
+          through: { attributes: [] },
+        },
+      ],
     });
 
-    res.status(200).json(user.Following);
+    res.status(200).json(user?.Following || []);
   } catch (error) {
     console.log("Error while get followings", error.message);
     next(error);

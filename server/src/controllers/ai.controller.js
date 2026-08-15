@@ -71,6 +71,56 @@ const fetchImagePart = async (url) => {
   }
 };
 
+const CANDIDATE_MODELS = [
+  "gemini-2.0-flash",
+  "gemini-1.5-flash",
+  "gemini-1.5-pro",
+];
+
+/**
+ * Executes a streaming generation call with fallback across candidate Gemini models.
+ */
+const executeStreamWithFallback = async (params) => {
+  let lastError = null;
+  for (const model of CANDIDATE_MODELS) {
+    try {
+      const response = await genAI.models.generateContentStream({
+        ...params,
+        model,
+      });
+      return response;
+    } catch (err) {
+      console.warn(
+        `Gemini model '${model}' error (${err.status || err.message}). Attempting next candidate...`
+      );
+      lastError = err;
+    }
+  }
+  throw lastError || new Error("All AI service models are currently busy.");
+};
+
+/**
+ * Executes a single generation call with fallback across candidate Gemini models.
+ */
+const executeContentWithFallback = async (params) => {
+  let lastError = null;
+  for (const model of CANDIDATE_MODELS) {
+    try {
+      const response = await genAI.models.generateContent({
+        ...params,
+        model,
+      });
+      return response;
+    } catch (err) {
+      console.warn(
+        `Gemini model '${model}' error (${err.status || err.message}). Attempting next candidate...`
+      );
+      lastError = err;
+    }
+  }
+  throw lastError || new Error("All AI service models are currently busy.");
+};
+
 /**
  * Generate Structured AI Analysis with Streaming and Caching
  */
@@ -159,8 +209,7 @@ ${commentsText ? `<comments>\n${commentsText}\n</comments>` : ""}
       ...imageParts,
     ];
 
-    const response = await genAI.models.generateContentStream({
-      model: "gemini-2.5-flash",
+    const response = await executeStreamWithFallback({
       contents,
       config: {
         responseMimeType: "application/json",
@@ -188,6 +237,7 @@ ${commentsText ? `<comments>\n${commentsText}\n</comments>` : ""}
       } catch (err) {
         parsedResult = {
           summary: fullOutput,
+          promptChips: [],
           keyTakeaways: [],
           sentiment: { overall: "NEUTRAL", score: 70, breakdown: "Automated summary generated." },
           actionableItems: [],
@@ -204,8 +254,12 @@ ${commentsText ? `<comments>\n${commentsText}\n</comments>` : ""}
     res.end();
   } catch (error) {
     console.error("AI Analysis Streaming error:", error);
+    const is503 = error?.status === 503 || error?.message?.includes("503") || error?.message?.includes("high demand");
+    const userMessage = is503
+      ? "Spread AI is currently experiencing high demand. Please try again in a few moments."
+      : error.message || "AI Analysis Failed";
     res.write(
-      `data: ${JSON.stringify({ type: "error", message: error.message || "AI Analysis Failed" })}\n\n`
+      `data: ${JSON.stringify({ type: "error", message: userMessage })}\n\n`
     );
     res.end();
   }
@@ -257,8 +311,7 @@ ${formattedHistory ? `Previous Chat History:\n${formattedHistory}\n` : ""}
 User Question: ${message}
 `;
 
-    const response = await genAI.models.generateContentStream({
-      model: "gemini-2.5-flash",
+    const response = await executeStreamWithFallback({
       contents: promptText,
     });
 
@@ -272,8 +325,12 @@ User Question: ${message}
     res.end();
   } catch (error) {
     console.error("AI Chat Streaming error:", error);
+    const is503 = error?.status === 503 || error?.message?.includes("503") || error?.message?.includes("high demand");
+    const userMessage = is503
+      ? "Spread AI is currently experiencing high demand. Please try again in a few moments."
+      : error.message || "AI Chat Failed";
     res.write(
-      `data: ${JSON.stringify({ type: "error", message: error.message || "AI Chat Failed" })}\n\n`
+      `data: ${JSON.stringify({ type: "error", message: userMessage })}\n\n`
     );
     res.end();
   }
@@ -295,8 +352,7 @@ export const generateTagsForPosts = async (req, res, next) => {
 Post Title: ${title || ""}
 Post Content: ${typeof content === "string" ? content : JSON.stringify(content)}`;
 
-    const response = await genAI.models.generateContent({
-      model: "gemini-2.5-flash",
+    const response = await executeContentWithFallback({
       contents: prompt,
       config: {
         responseMimeType: "application/json",

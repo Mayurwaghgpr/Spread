@@ -15,6 +15,12 @@ STRUCTURED OUTPUT FORMAT:
 You MUST return a JSON object with the exact following keys:
 {
   "summary": "A clear 2-3 sentence executive summary of the post.",
+  "promptChips": [
+    {
+      "label": "💡 Short Emoji Label (2-4 words)",
+      "prompt": "Specific engaging follow-up question tailored directly to this post's topic, claims, or codebase."
+    }
+  ],
   "keyTakeaways": [
     {
       "phrase": "Highlighted Key Concept",
@@ -32,6 +38,7 @@ You MUST return a JSON object with the exact following keys:
   ]
 }
 
+Provide 3 to 4 dynamic promptChips directly relevant to the specific subject matter, technical details, or claims of the post.
 Ensure all JSON strings are clean, well-formatted, and contain valid JSON without markdown wrapping if raw JSON is requested.
 `;
 

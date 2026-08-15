@@ -18,13 +18,13 @@ class UserService {
           model: User,
           as: "Followers",
           through: { attributes: [] },
-          attributes: ["id"],
+          attributes: ["id", "username", "displayName", "userImage", "bio"],
         },
         {
           model: User,
           as: "Following",
           through: { attributes: [] },
-          attributes: ["id"],
+          attributes: ["id", "username", "displayName", "userImage", "bio"],
         },
         {
           model: Post,

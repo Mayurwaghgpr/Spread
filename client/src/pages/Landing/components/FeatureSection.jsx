@@ -65,7 +65,7 @@ export default function FeatureSection() {
   }, [features.length]);
 
   return (
-    <section className="relative w-full py-16 sm:py-24 px-4 sm:px-6 overflow-hidden bg-light dark:bg-dark border-y border-inherit">
+    <section className="relative w-full py-16 sm:py-24 px-4 sm:px-6 overflow-hidden bg-transparent border-y border-inherit">
       <div className="relative space-y-8 sm:space-y-12 max-w-6xl mx-auto border-inherit">
         {/* Section Header */}
         <Heading

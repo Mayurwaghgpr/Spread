@@ -5,7 +5,7 @@ function Footer() {
   const icons = useIcons();
 
   return (
-    <footer className="relative bg-light dark:bg-dark text-stone-900 dark:text-stone-100 border-t border-inherit py-12 sm:py-16 px-4 sm:px-8 overflow-hidden">
+    <footer className="relative bg-transparent text-stone-900 dark:text-stone-100 border-t border-inherit py-12 sm:py-16 px-4 sm:px-8 overflow-hidden">
       <div className="relative max-w-6xl mx-auto flex flex-col gap-10 w-full">
         {/* Main Footer Content */}
         <div className="flex flex-col lg:flex-row items-start justify-between gap-10 lg:gap-16 w-full">

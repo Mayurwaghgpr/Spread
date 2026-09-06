@@ -150,7 +150,7 @@ function Heroes() {
         <FeatureSection />
 
         {/* How It Works Section */}
-        <section className="relative py-16 sm:py-24 px-4 sm:px-6 bg-light dark:bg-dark border-t border-inherit">
+        <section className="relative py-16 sm:py-24 px-4 sm:px-6 bg-transparent border-t border-inherit">
           <div className="max-w-6xl mx-auto border-inherit">
             <Heading
               title={"How It Works"}

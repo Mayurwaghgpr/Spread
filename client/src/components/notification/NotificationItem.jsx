@@ -44,30 +44,59 @@ function NotificationItem({ className = "", data, onClickItem }) {
     }
   };
 
+  const getBadgeMeta = (type) => {
+    switch (type) {
+      case "like":
+        return {
+          icon: icons["redHeartFi"] || icons["heartFi"],
+          badgeBg: "bg-rose-50 dark:bg-rose-950/90 text-rose-500 border-rose-200 dark:border-rose-800",
+        };
+      case "comment":
+        return {
+          icon: icons["comment"] || icons["messageDoted"],
+          badgeBg: "bg-blue-50 dark:bg-blue-950/90 text-blue-500 border-blue-200 dark:border-blue-800",
+        };
+      case "follow":
+        return {
+          icon: icons["follow"] || icons["userCheck"],
+          badgeBg: "bg-violet-50 dark:bg-violet-950/90 text-violet-500 border-violet-200 dark:border-violet-800",
+        };
+      default:
+        return {
+          icon: icons["bellFi"] || icons["bellO"],
+          badgeBg: "bg-amber-50 dark:bg-amber-950/90 text-amber-500 border-amber-200 dark:border-amber-800",
+        };
+    }
+  };
+
+  const badge = getBadgeMeta(data?.type);
+
   return (
     <div
       onClick={handleClick}
-      className={`flex items-start justify-between gap-3 w-full p-3.5 rounded-xl border border-inherit cursor-pointer transition-all duration-200 hover:bg-[#f5f1ec] dark:hover:bg-[#121212] ${
+      className={`group flex items-start justify-between gap-3 w-full p-3 rounded-xl border transition-all duration-150 cursor-pointer ${
         !data?.read
-          ? "bg-[#f5f1ec] dark:bg-[#121212]"
-          : "bg-light dark:bg-dark"
+          ? "bg-stone-100 dark:bg-stone-800/60 border-stone-200 dark:border-stone-700/60 shadow-xs"
+          : "bg-transparent hover:bg-stone-100/70 dark:hover:bg-stone-800/40 border-transparent hover:border-stone-200/60 dark:hover:border-stone-800/60"
       } ${className}`}
     >
       <div className="flex items-start gap-3 flex-1 min-w-0">
         <div className="relative shrink-0 mt-0.5">
           {data?.actor?.userImage ? (
             <ProfileImage
-              className="w-9 h-9 rounded-full overflow-hidden border border-inherit object-cover"
+              className="w-9 h-9 rounded-full overflow-hidden ring-1 ring-stone-200 dark:ring-stone-700 object-cover"
               image={data?.actor?.userImage}
               alt={actorName}
             />
           ) : (
-            <div className="flex justify-center items-center w-9 h-9 rounded-full bg-[#f5f1ec] dark:bg-[#121212] text-stone-800 dark:text-stone-200 text-base border border-inherit">
-              {icons[data?.type] || icons["bellFi"]}
+            <div className="flex justify-center items-center w-9 h-9 rounded-full bg-stone-200 dark:bg-stone-800 text-stone-800 dark:text-stone-200 text-xs font-bold ring-1 ring-stone-300 dark:ring-stone-700">
+              {actorName.charAt(0).toUpperCase()}
             </div>
           )}
-          <span className="absolute -bottom-1 -right-1 flex justify-center items-center w-4 h-4 rounded-full bg-light dark:bg-dark border border-inherit text-[10px]">
-            {icons[data?.type] || "🔔"}
+          <span
+            className={`absolute -bottom-1 -right-1 flex justify-center items-center w-4 h-4 rounded-full border text-[9px] shadow-xs ${badge.badgeBg}`}
+          >
+            {badge.icon}
           </span>
         </div>
         <div className="flex flex-col gap-0.5 flex-1 min-w-0">
@@ -80,13 +109,13 @@ function NotificationItem({ className = "", data, onClickItem }) {
               : messageText}
           </p>
           <FormatedTime
-            className="text-[10px] text-stone-500 dark:text-stone-400 font-medium"
+            className="text-[10px] text-stone-400 dark:text-stone-500 font-medium"
             date={data?.createdAt || data?.timestamp}
           />
         </div>
       </div>
       {!data?.read && (
-        <span className="w-2 h-2 rounded-full bg-stone-900 dark:bg-stone-100 shrink-0 mt-2" />
+        <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-2 shadow-xs" />
       )}
     </div>
   );

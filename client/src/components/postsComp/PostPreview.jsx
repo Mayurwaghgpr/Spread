@@ -21,6 +21,7 @@ import useClickOutside from "../../hooks/useClickOutside";
 import useMenuConstant from "../../hooks/useMenuConstant";
 import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
 import FedInBtn from "../buttons/FedInBtn";
+import FormatedTime from "../utilityComp/FormatedTime";
 
 const PostPreview = forwardRef(({ post, className = "", Saved }, ref) => {
   const { commentCred } = useSelector((state) => state.posts);
@@ -53,24 +54,31 @@ const PostPreview = forwardRef(({ post, className = "", Saved }, ref) => {
   return (
     <article
       ref={ref}
-      className={`spread-card flex w-full flex-col rounded-2xl transition-all duration-200 hover:border-stone-400 dark:hover:border-stone-600 ${className}`}
+      className={`spread-card p-4 sm:p-5 flex w-full flex-col rounded-2xl transition-all duration-200 hover:border-stone-400 dark:hover:border-stone-600 hover:shadow-xs ${className}`}
     >
       <div className="flex flex-col justify-between gap-3 sm:gap-4 w-full h-full">
         {/* Header with user profile */}
         <header className="flex justify-between items-center gap-2 sm:gap-3 text-xs sm:text-sm">
           <Link
             to={`/profile/@${post?.author?.username}/${post?.author?.id}`}
-            className="flex items-center gap-2.5 min-w-0 flex-shrink-0 focus-ring rounded-lg"
+            className="flex items-center gap-2.5 min-w-0 flex-shrink-0 focus-ring rounded-lg group"
           >
             <ProfileImage
-              className="h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 hover:opacity-80 rounded-full border border-inherit object-cover"
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-full border border-stone-200 dark:border-stone-800 group-hover:opacity-80 object-cover"
               image={post && userImageurl}
             />
-            <div className="text-xs sm:text-sm flex flex-col min-w-0">
+            <div className="text-xs flex flex-col min-w-0">
               {post ? (
-                <p className="font-semibold text-stone-900 dark:text-stone-100 capitalize hover:underline truncate">
-                  {post?.author?.username}
-                </p>
+                <>
+                  <p className="font-bold text-stone-900 dark:text-stone-100 group-hover:underline truncate">
+                    {post?.author?.displayName || post?.author?.username}
+                  </p>
+                  {post?.createdAt && (
+                    <span className="text-[11px] text-stone-500 dark:text-stone-400">
+                      <FormatedTime date={post.createdAt} formate="d LLL yyy" />
+                    </span>
+                  )}
+                </>
               ) : (
                 <span className="w-16 sm:w-20 h-3 animate-pulse bg-stone-300 dark:bg-stone-700 rounded-xl" />
               )}
@@ -80,7 +88,7 @@ const PostPreview = forwardRef(({ post, className = "", Saved }, ref) => {
           {/* Topic badge */}
           {post?.topic && (
             <span className="spread-pill text-[11px] truncate max-w-[120px] sm:max-w-[180px]">
-              {post?.topic}
+              #{post?.topic}
             </span>
           )}
         </header>

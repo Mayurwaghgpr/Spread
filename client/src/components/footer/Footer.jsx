@@ -76,6 +76,11 @@ function Footer() {
                     For Creators
                   </Link>
                 </li>
+                <li>
+                  <Link to="/about" className="hover:text-stone-900 dark:hover:text-stone-100 transition-colors">
+                    About Us
+                  </Link>
+                </li>
               </ul>
             </div>
 

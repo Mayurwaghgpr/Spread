@@ -54,6 +54,16 @@ const AIResponse = lazy(() => import("../components/aiComp/AiResponse"));
 const ConversationFallBack = lazy(
   () => import("../pages/Conversation/components/ConversationFallBack"),
 );
+const PrivacyPolicy = lazy(() => import("../pages/static/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("../pages/static/TermsOfService"));
+const CookiePolicy = lazy(() => import("../pages/static/CookiePolicy"));
+const HelpCenter = lazy(() => import("../pages/static/HelpCenter"));
+const ContactUs = lazy(() => import("../pages/static/ContactUs"));
+const Creators = lazy(() => import("../pages/static/Creators"));
+const Showcase = lazy(() => import("../pages/static/Showcase"));
+const CommunityEvents = lazy(() => import("../pages/static/CommunityEvents"));
+const Blog = lazy(() => import("../pages/static/Blog"));
+const Features = lazy(() => import("../pages/static/Features"));
 
 const ROUTES = {
   HOME: "/",
@@ -70,6 +80,16 @@ const ROUTES = {
   AUTH_SIGNIN: "/auth/signin",
   AUTH_SIGNUP: "/auth/signup",
   ABOUT: "/about",
+  PRIVACY: "/privacy",
+  TERMS: "/terms",
+  COOKIES: "/cookies",
+  HELP: "/help",
+  CONTACT: "/contact",
+  CREATORS: "/creators",
+  SHOWCASE: "/showcase",
+  EVENTS: "/events",
+  BLOG: "/blog",
+  FEATURES: "/features",
   FORGOT_PASS: "/forgot/pass",
   RESET_PASS: "/reset/pass/:token",
   ERROR: "/error",
@@ -118,6 +138,96 @@ function Router() {
         }
       />
 
+      {/* Public Informational & Static Pages */}
+      <Route
+        path={ROUTES.ABOUT}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <About />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.PRIVACY}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <PrivacyPolicy />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.TERMS}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <TermsOfService />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.COOKIES}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <CookiePolicy />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.HELP}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <HelpCenter />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.CONTACT}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <ContactUs />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.CREATORS}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <Creators />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.SHOWCASE}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <Showcase />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.EVENTS}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <CommunityEvents />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.BLOG}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <Blog />
+          </Suspense>
+        }
+      />
+      <Route
+        path={ROUTES.FEATURES}
+        element={
+          <Suspense fallback={<LoaderScreen />}>
+            <Features />
+          </Suspense>
+        }
+      />
+
       <Route path="/" element={<Layout />}>
         {/* Home Route */}
         <Route
@@ -133,7 +243,6 @@ function Router() {
           }
         />
 
-        <Route path={ROUTES.ABOUT} element={<About />} />
         <Route path={ROUTES.FORGOT_PASS} element={<ForgotPass />} />
         <Route path={ROUTES.RESET_PASS} element={<ResetPassword />} />
         <Route path={ROUTES.ERROR} element={<SomethingWentWrong />} />
@@ -248,14 +357,10 @@ function Router() {
         <Route path="/profile/:profileId" element={<Profile />} />
         <Route path="/analysis" element={<AIResponse />} />
 
-        {/* Other Protected Routes */}
+        {/* Search & Explore Route */}
         <Route
           path={ROUTES.SEARCH}
-          element={
-            <ProtectedRoutes>
-              <SearchBox />
-            </ProtectedRoutes>
-          }
+          element={<SearchBox />}
         />
 
         <Route path={ROUTES.SAVED.main}>

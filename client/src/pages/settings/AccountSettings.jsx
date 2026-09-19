@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import userImageSrc from "../../utils/functions/userImageSrc";
 import ProfileImage from "../../components/ProfileImage";
-import { Mail, Shield, ExternalLink } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function AccountSettings() {
+  const icons = useIcons();
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { userImageurl } = userImageSrc(user);
@@ -37,7 +38,7 @@ function AccountSettings() {
               @{user?.username || "username"}
             </p>
             <div className="flex items-center gap-1.5 pt-1 text-[11px] text-stone-500 dark:text-stone-400">
-              <Mail className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-xs">{icons.email}</span>
               <span className="truncate">{user?.email || "No email linked"}</span>
             </div>
           </div>
@@ -49,7 +50,7 @@ function AccountSettings() {
             onClick={() => navigate(`/profile/@${user?.username}/${user?.id}`)}
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl border border-stone-300 dark:border-stone-700 text-stone-800 dark:text-stone-200 hover:bg-stone-200/60 dark:hover:bg-stone-800/60 transition-colors cursor-pointer"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            <span className="text-xs">{icons.exLink}</span>
             <span>View Profile</span>
           </button>
         </div>
@@ -62,7 +63,7 @@ function AccountSettings() {
             Authentication
           </span>
           <div className="flex items-center gap-2 pt-1 text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
-            <Shield className="w-4 h-4 text-emerald-500" />
+            <span className="text-emerald-500 text-sm">{icons.shieldCheck}</span>
             <span>{user?.signedWith === "manual" ? "Password Authenticated" : `${user?.signedWith || "Google"} OAuth`}</span>
           </div>
         </div>

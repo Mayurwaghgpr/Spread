@@ -108,10 +108,17 @@ function Heroes() {
                 </button>
 
                 <button
-                  className="spread-btn-secondary text-xs sm:text-sm font-semibold hover:scale-105 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full"
-                  onClick={() => navigate("/search")}
+                  type="button"
+                  className="spread-btn-secondary text-xs sm:text-sm font-semibold hover:scale-105 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full cursor-pointer flex items-center gap-1.5"
+                  onClick={() => {
+                    const featureElement = document.getElementById("features");
+                    if (featureElement) {
+                      featureElement.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
                 >
-                  Explore Posts
+                  <span>Explore Posts</span>
+                  <span className="text-xs">↓</span>
                 </button>
               </div>
 

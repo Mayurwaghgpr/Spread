@@ -60,14 +60,17 @@ function MainNavBar() {
   }, [location.pathname, userProfile?.id, user?.id]);
 
   return (
-    <header className=" sticky  z-40 px-5 sm:pr-8 lg:pr-20 py-3 bg-light dark:bg-dark backdrop-blur-xl  border-inherit ">
-      <nav className=" border-inherit">
-        <div className="flex items-center justify-between border-inherit">
-          <div className="w-full border-inherit">
+    <header className="sticky top-0 z-40 px-5 sm:px-8 py-2.5 bg-[#fffdfa]/85 dark:bg-[#09090b]/85 backdrop-blur-md border-b border-stone-200/60 dark:border-stone-800/60 transition-colors">
+      <nav className="w-full">
+        <div className="flex items-center justify-between">
+          <div className="w-full flex items-center">
             {deviceSize > 720 && (
               <button
                 onClick={() => dispatch(setMenuOpen())}
-                className={`border border-inherit rounded-lg  ${menuOpen ? " hidden" : "xl:block hidden"}  p-1 `}
+                className={`border border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg ${
+                  menuOpen ? "hidden" : "xl:block hidden"
+                } p-1.5 transition-colors cursor-pointer text-stone-600 dark:text-stone-300`}
+                aria-label="Toggle navigation menu"
               >
                 {icons["menu"]}
               </button>

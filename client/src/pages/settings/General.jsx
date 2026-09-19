@@ -1,10 +1,11 @@
 import { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setThemeMode, setIsScale } from "../../store/slices/uiSlice";
-import { Sun, Moon, Laptop, Check, Sliders, Sparkles } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function General() {
   const dispatch = useDispatch();
+  const icons = useIcons();
   const { ThemeMode, isScale } = useSelector((state) => state.ui);
   const activeMode = ThemeMode || "system";
 
@@ -12,21 +13,21 @@ function General() {
     {
       value: "light",
       name: "Light Mode",
-      icon: Sun,
+      icon: icons.sun,
       bg: "bg-stone-100 text-stone-900 border-stone-300",
       previewBg: "bg-white border-stone-200 text-stone-800",
     },
     {
       value: "dark",
       name: "Dark Mode",
-      icon: Moon,
+      icon: icons.moonFi,
       bg: "bg-stone-900 text-stone-100 border-stone-700",
       previewBg: "bg-stone-950 border-stone-800 text-stone-200",
     },
     {
       value: "system",
       name: "System Default",
-      icon: Laptop,
+      icon: icons.desktopO,
       bg: "bg-stone-800 text-stone-100 border-stone-600",
       previewBg: "bg-gradient-to-r from-stone-100 to-stone-900 text-stone-500",
     },
@@ -37,7 +38,7 @@ function General() {
       <div>
         <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
           <span>Appearance & Theme</span>
-          <Sparkles className="w-4 h-4 text-amber-500" />
+          <span className="text-sm">{icons.appreciate}</span>
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
           Customize the visual theme and layout density of your Spread workspace.
@@ -79,15 +80,15 @@ function General() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Icon className="w-4 h-4 text-stone-800 dark:text-stone-200" />
+                    <span className="text-base text-stone-800 dark:text-stone-200">{opt.icon}</span>
                     <span className="text-xs font-bold text-stone-900 dark:text-stone-100">
                       {opt.name}
                     </span>
                   </div>
 
                   {isActive && (
-                    <div className="w-5 h-5 rounded-full bg-stone-900 text-white dark:bg-stone-100 dark:text-stone-900 flex items-center justify-center">
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    <div className="w-5 h-5 rounded-full bg-stone-900 text-white dark:bg-stone-100 dark:text-stone-900 flex items-center justify-center text-xs">
+                      {icons.check}
                     </div>
                   )}
                 </div>
@@ -101,8 +102,8 @@ function General() {
       <div className="pt-2">
         <div className="p-4 rounded-2xl bg-stone-100/60 dark:bg-stone-800/40 border border-stone-200 dark:border-stone-800 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200">
-              <Sliders className="w-4 h-4" />
+            <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200 text-sm">
+              {icons.sliders}
             </div>
             <div>
               <h3 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">

@@ -2,9 +2,10 @@ import { memo } from "react";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../store/slices/uiSlice";
 import LogoutBtn from "../../components/buttons/LogoutBtn";
-import { ShieldCheck, Monitor, Trash2, Key } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function SecuritySettings() {
+  const icons = useIcons();
   const dispatch = useDispatch();
 
   const handleClearCache = () => {
@@ -21,7 +22,7 @@ function SecuritySettings() {
       <div>
         <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
           <span>Security & Sessions</span>
-          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+          <span className="text-emerald-500 text-base">{icons.shieldCheck}</span>
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
           Manage device sessions, authentication, and local data storage.
@@ -36,8 +37,8 @@ function SecuritySettings() {
 
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200">
-              <Monitor className="w-4 h-4" />
+            <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200 text-sm">
+              {icons.desktopO}
             </div>
             <div>
               <h3 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">
@@ -58,8 +59,8 @@ function SecuritySettings() {
       {/* Storage & Clear Cache Utility */}
       <div className="p-4 rounded-2xl bg-stone-100/60 dark:bg-stone-800/40 border border-stone-200 dark:border-stone-800 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200">
-            <Trash2 className="w-4 h-4" />
+          <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200 text-sm">
+            {icons.delete}
           </div>
           <div>
             <h3 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">

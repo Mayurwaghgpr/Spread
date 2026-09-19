@@ -4,10 +4,10 @@ import useIcons from "../../hooks/useIcons";
 import useAiApi from "../../services/useAiApi";
 
 const DEFAULT_PROMPT_CHIPS = [
-  { label: "💡 Explain simply", prompt: "Explain this post in simple terms for a beginner." },
-  { label: "🔍 Fact check claims", prompt: "Extract and fact-check the major claims made in this post." },
-  { label: "⚡ Key takeaways", prompt: "What are the practical takeaways and action items from this post?" },
-  { label: "💬 Reader sentiment", prompt: "Summarize the community sentiment based on comments and post tone." },
+  { label: "⚡ Key takeaways", prompt: "What are the practical takeaways and key action items from this post?" },
+  { label: "💡 Explain simply", prompt: "Explain the core ideas of this post in simple terms for a beginner." },
+  { label: "🔍 Technical critique", prompt: "What are the architectural trade-offs, limitations, or alternatives to the approach described?" },
+  { label: "💬 Community sentiment", prompt: "Summarize the community sentiment and reader perspective on this topic." },
 ];
 
 const AIDrawer = ({ isOpen, onClose, postData }) => {
@@ -23,12 +23,30 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
+  // Loading animation step
+  const [loadingStep, setLoadingStep] = useState(0);
+
   // Mobile touch drag-to-dismiss state
   const [dragY, setDragY] = useState(0);
   const touchStartY = useRef(0);
   const chatBottomRef = useRef(null);
 
   const postId = postData?.id || postData?._id;
+
+  // Rotating loading step messages for realistic, engaging perception
+  useEffect(() => {
+    if (!isOpen) return;
+    const steps = [
+      "Reading article & extracting structure...",
+      "Analyzing technical concepts...",
+      "Synthesizing community sentiment...",
+      "Finalizing executive brief...",
+    ];
+    const interval = setInterval(() => {
+      setLoadingStep((prev) => (prev + 1) % steps.length);
+    }, 1200);
+    return () => clearInterval(interval);
+  }, [isOpen]);
 
   // TanStack Query for AI Post Analysis
   const {
@@ -170,7 +188,7 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
 
   const copyToClipboard = () => {
     if (!intelligenceData) return;
-    const textToCopy = `Spread AI Summary: ${intelligenceData.summary}\n\nKey Takeaways:\n${intelligenceData.keyTakeaways
+    const textToCopy = `Spread AI Brief: ${intelligenceData.summary}\n\nKey Takeaways:\n${intelligenceData.keyTakeaways
       ?.map((t) => `- ${t.phrase}: ${t.detail}`)
       .join("\n")}`;
     navigator.clipboard.writeText(textToCopy);
@@ -192,10 +210,17 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
 
   if (!isOpen) return null;
 
+  const loadingStepLabels = [
+    "Reading post & understanding context...",
+    "Extracting key architectural concepts...",
+    "Synthesizing reader sentiment...",
+    "Compiling executive brief...",
+  ];
+
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-end sm:items-stretch justify-center sm:justify-end bg-black/60 backdrop-blur-md transition-all duration-300 cursor-pointer animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-end sm:items-stretch justify-center sm:justify-end bg-black/40 backdrop-blur-sm transition-opacity duration-200 cursor-pointer animate-in fade-in"
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -206,44 +231,49 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
           transform: dragY > 0 ? `translateY(${dragY}px)` : undefined,
           transition: dragY === 0 ? "transform 0.25s ease-out" : "none",
         }}
-        className="w-full max-w-lg h-[86vh] sm:h-full spread-card bg-[#fff9f3] dark:bg-[#121212] text-stone-900 dark:text-stone-100 border-t sm:border-t-0 sm:border-l border-stone-200 dark:border-stone-800 shadow-2xl rounded-t-3xl sm:rounded-none flex flex-col justify-between animate-in slide-in-from-bottom-full sm:slide-in-from-right-full duration-300 ease-out cursor-default overflow-hidden backdrop-blur-2xl"
+        className="w-full max-w-lg h-[90vh] sm:h-full bg-white dark:bg-[#0c0c0e] text-stone-900 dark:text-stone-100 border-t sm:border-t-0 sm:border-l border-stone-200 dark:border-stone-800 shadow-2xl rounded-t-2xl sm:rounded-none flex flex-col justify-between animate-in slide-in-from-bottom-full sm:slide-in-from-right-full duration-250 ease-out cursor-default overflow-hidden font-sans"
       >
-        {/* Mobile Drag Handle Bar */}
-        <div className="sm:hidden w-full flex justify-center py-2.5 bg-stone-200/50 dark:bg-stone-800/40 border-b border-stone-200/40 dark:border-stone-800/40 cursor-grab active:cursor-grabbing shrink-0">
-          <div className="w-12 h-1.5 rounded-full bg-stone-400/60 dark:bg-stone-600/60" />
+        {/* Mobile Pull Handle */}
+        <div className="sm:hidden w-full flex justify-center py-2 bg-transparent cursor-grab active:cursor-grabbing shrink-0">
+          <div className="w-10 h-1 rounded-full bg-stone-300 dark:bg-stone-700" />
         </div>
 
-        {/* Header Bar */}
-        <div className="p-4 sm:p-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-100/60 dark:bg-stone-900/60 backdrop-blur-md shrink-0">
+        {/* Minimalist Professional Header (X/Grok style) */}
+        <header className="px-5 py-3.5 border-b border-stone-100 dark:border-stone-800/80 flex items-center justify-between bg-white/80 dark:bg-[#0c0c0e]/80 backdrop-blur-md shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="p-2.5 rounded-2xl bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 shadow-md shrink-0 flex items-center justify-center text-lg">
+            {/* Elegant AI glyph */}
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-stone-900 to-stone-700 dark:from-stone-100 dark:to-stone-300 text-stone-100 dark:text-stone-900 flex items-center justify-center text-sm shadow-xs shrink-0">
               {icons.appreciate}
             </div>
-            <div className="min-w-0 space-y-0.5">
+
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h2 className="font-extrabold text-sm sm:text-base tracking-tight text-stone-900 dark:text-stone-100 flex items-center gap-1.5">
-                  Spread AI Insights
-                  {isCached && (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full border border-stone-300 dark:border-stone-700 bg-stone-200/60 dark:bg-stone-800/60 text-stone-700 dark:text-stone-300 font-bold flex items-center gap-1 shrink-0">
-                      <span className="text-amber-500 text-xs">{icons.bolt}</span>
-                      Fast
-                    </span>
-                  )}
+                <h2 className="font-semibold text-sm tracking-tight text-stone-900 dark:text-stone-100">
+                  Spread Intelligence
                 </h2>
+                <span className="text-[10px] font-medium px-1.5 py-0.2 rounded bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 font-mono">
+                  Gemini 2.5
+                </span>
+                {isCached && (
+                  <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium flex items-center gap-0.5">
+                    <span className="text-xs">{icons.bolt}</span>
+                    Cached
+                  </span>
+                )}
               </div>
-              <p className="text-xs text-stone-500 dark:text-stone-400 truncate max-w-[170px] sm:max-w-xs font-medium">
+              <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate max-w-[210px] sm:max-w-xs">
                 {postData?.title || "Post Analysis"}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1 shrink-0">
             <button
               type="button"
               onClick={refetchAnalysis}
               disabled={isAnalyzing}
-              title="Refresh AI Analysis"
-              className="p-2 rounded-xl border border-stone-200 dark:border-stone-800 hover:bg-stone-200/60 dark:hover:bg-stone-800/60 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors disabled:opacity-40 cursor-pointer text-lg"
+              title="Refresh Analysis"
+              className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/60 transition-colors disabled:opacity-40 cursor-pointer text-base"
             >
               <span className={`inline-block ${isAnalyzing ? "animate-spin text-amber-500" : ""}`}>
                 {icons.refresh}
@@ -252,216 +282,229 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl border border-stone-200 dark:border-stone-800 hover:bg-stone-200/60 dark:hover:bg-stone-800/60 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-xl"
+              title="Close Panel"
+              className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/60 transition-colors cursor-pointer text-lg"
             >
               {icons.close}
             </button>
           </div>
+        </header>
+
+        {/* Sleek Underline Tab Switcher (Industry Standard) */}
+        <div className="px-5 border-b border-stone-100 dark:border-stone-800/80 flex items-center gap-6 text-xs shrink-0 bg-white dark:bg-[#0c0c0e]">
+          <button
+            type="button"
+            onClick={() => setActiveTab("summary")}
+            className={`py-2.5 font-medium transition-colors relative cursor-pointer flex items-center gap-1.5 ${
+              activeTab === "summary"
+                ? "text-stone-900 dark:text-stone-100 font-semibold"
+                : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-300"
+            }`}
+          >
+            <span>Overview</span>
+            {activeTab === "summary" && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-stone-900 dark:bg-stone-100 rounded-full" />
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("chat")}
+            className={`py-2.5 font-medium transition-colors relative cursor-pointer flex items-center gap-1.5 ${
+              activeTab === "chat"
+                ? "text-stone-900 dark:text-stone-100 font-semibold"
+                : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-300"
+            }`}
+          >
+            <span>Discussion</span>
+            {chatMessages.length > 0 && (
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-mono">
+                {chatMessages.length}
+              </span>
+            )}
+            {activeTab === "chat" && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-stone-900 dark:bg-stone-100 rounded-full" />
+            )}
+          </button>
         </div>
 
-        {/* Minimalist Tab Switcher */}
-        <div className="px-4 pt-3 pb-1 shrink-0">
-          <div className="grid grid-cols-2 p-1 rounded-2xl bg-stone-200/60 dark:bg-stone-800/60 border border-stone-300/40 dark:border-stone-700/40">
-            <button
-              type="button"
-              onClick={() => setActiveTab("summary")}
-              className={`py-2 text-xs font-extrabold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                activeTab === "summary"
-                  ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 shadow-sm"
-                  : "text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
-              }`}
-            >
-              <span className="text-sm">{icons.docTab}</span>
-              <span>AI Summary</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("chat")}
-              className={`py-2 text-xs font-extrabold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                activeTab === "chat"
-                  ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 shadow-sm"
-                  : "text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
-              }`}
-            >
-              <span className="text-sm">{icons.chatTab}</span>
-              <span>Ask AI {chatMessages.length > 0 && `(${chatMessages.length})`}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Body Content */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 text-stone-800 dark:text-stone-200">
+        {/* Scrollable Content Body */}
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5 text-stone-800 dark:text-stone-200">
           {error ? (
-            <div className="p-5 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400 text-xs space-y-2">
-              <p className="font-black text-sm">AI Analysis Error</p>
-              <p className="leading-relaxed">{error}</p>
+            <div className="p-4 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 text-xs space-y-2">
+              <p className="font-semibold text-red-700 dark:text-red-400">Analysis Unavailable</p>
+              <p className="text-red-600/90 dark:text-red-300/90 leading-relaxed">{error}</p>
               <button
                 type="button"
                 onClick={refetchAnalysis}
-                className="mt-2 px-4 py-2 rounded-xl bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 font-bold hover:opacity-90 transition-all text-xs cursor-pointer"
+                className="mt-1 px-3 py-1.5 rounded-lg bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 font-semibold hover:opacity-90 transition-opacity text-xs cursor-pointer"
               >
-                Retry Analysis
+                Retry
               </button>
             </div>
           ) : activeTab === "summary" ? (
-            /* AI Summary View */
-            <div className="space-y-4">
+            /* Executive Brief View */
+            <div className="space-y-5">
+              {/* High-End Loading State */}
               {isAnalyzing && !intelligenceData && !streamRawText ? (
-                <div className="space-y-4 py-6">
-                  <div className="flex items-center gap-2 text-xs font-bold text-stone-500 dark:text-stone-400 animate-pulse">
-                    <span className="animate-spin text-amber-500 text-sm">{icons.appreciate}</span>
-                    <span>Spread AI is analyzing post & community context...</span>
+                <div className="space-y-5 py-3">
+                  {/* Dynamic Status Pill */}
+                  <div className="flex items-center gap-2 text-xs font-medium text-stone-600 dark:text-stone-400">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                    <span>{loadingStepLabels[loadingStep]}</span>
                   </div>
-                  <div className="h-28 bg-stone-200/50 dark:bg-stone-800/40 rounded-2xl border border-stone-300/40 dark:border-stone-800 animate-pulse"></div>
-                  <div className="h-40 bg-stone-200/50 dark:bg-stone-800/40 rounded-2xl border border-stone-300/40 dark:border-stone-800 animate-pulse"></div>
+
+                  {/* Prose Skeleton Loader */}
+                  <div className="space-y-2.5">
+                    <div className="h-3.5 bg-stone-200/70 dark:bg-stone-800/70 rounded-md w-full animate-pulse" />
+                    <div className="h-3.5 bg-stone-200/70 dark:bg-stone-800/70 rounded-md w-[92%] animate-pulse" />
+                    <div className="h-3.5 bg-stone-200/70 dark:bg-stone-800/70 rounded-md w-[85%] animate-pulse" />
+                    <div className="h-3.5 bg-stone-200/70 dark:bg-stone-800/70 rounded-md w-[60%] animate-pulse" />
+                  </div>
+
+                  {/* Cards Skeleton */}
+                  <div className="pt-2 space-y-3">
+                    <div className="h-16 bg-stone-100 dark:bg-stone-900/60 rounded-xl border border-stone-200/50 dark:border-stone-800/60 animate-pulse" />
+                    <div className="h-16 bg-stone-100 dark:bg-stone-900/60 rounded-xl border border-stone-200/50 dark:border-stone-800/60 animate-pulse" />
+                  </div>
                 </div>
               ) : intelligenceData ? (
                 <>
-                  {/* Executive Summary Block */}
-                  <div className="p-5 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-100/70 dark:bg-stone-900/70 shadow-sm space-y-3">
+                  {/* Executive Brief Card */}
+                  <section className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xs font-black text-stone-900 dark:text-stone-100 uppercase tracking-wider flex items-center gap-2">
-                        <span className="text-amber-500 text-sm">{icons.appreciate}</span>
-                        What You Need To Know
-                      </h3>
+                      <span className="text-[11px] font-semibold tracking-wider text-stone-500 uppercase">
+                        Executive Summary
+                      </span>
                       <button
                         type="button"
                         onClick={copyToClipboard}
-                        className="flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+                        className="flex items-center gap-1 text-[11px] text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
                       >
-                        {copied ? (
-                          <>
-                            <span className="text-emerald-500 text-sm">{icons.check}</span>
-                            <span className="text-emerald-500 font-bold">Copied</span>
-                          </>
-                        ) : (
-                          <>
-                            <span className="text-sm">{icons.copy}</span>
-                            <span>Copy</span>
-                          </>
-                        )}
+                        <span className="text-xs">{copied ? icons.check : icons.copy}</span>
+                        <span>{copied ? "Copied" : "Copy"}</span>
                       </button>
                     </div>
-                    <p className="text-xs sm:text-sm leading-relaxed text-stone-800 dark:text-stone-200 font-medium">
-                      {intelligenceData.summary}
-                    </p>
-                  </div>
 
-                  {/* AI Quick Action Prompts Bar */}
-                  <div className="space-y-2 pt-1">
-                    <p className="text-[11px] font-bold text-stone-500 dark:text-stone-400 uppercase tracking-wider">
-                      Ask AI Follow-ups
-                    </p>
-                    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                    <div className="p-4 rounded-xl bg-stone-50/80 dark:bg-[#111114] border border-stone-200/60 dark:border-stone-800/80 text-[13px] leading-relaxed text-stone-800 dark:text-stone-200 font-normal">
+                      {intelligenceData.summary}
+                    </div>
+                  </section>
+
+                  {/* Suggested Prompts (Grok/Claude pill strip) */}
+                  <section className="space-y-2">
+                    <span className="text-[11px] font-semibold tracking-wider text-stone-500 uppercase">
+                      Follow-up Exploration
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
                       {activePromptChips.map((chip, idx) => (
                         <button
                           key={idx}
                           type="button"
                           onClick={() => handleSendMessage(chip.prompt)}
                           disabled={isChatStreaming}
-                          className="text-xs px-3.5 py-2 rounded-xl border border-stone-300 dark:border-stone-700 bg-stone-200/50 dark:bg-stone-800/60 hover:bg-stone-300/70 dark:hover:bg-stone-700/80 text-stone-800 dark:text-stone-200 transition-all font-bold whitespace-nowrap shrink-0 cursor-pointer shadow-xs active:scale-95"
+                          className="text-xs px-3 py-1.5 rounded-full border border-stone-200 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/50 hover:border-stone-400 dark:hover:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800/70 text-stone-700 dark:text-stone-300 font-medium transition-all cursor-pointer shadow-2xs"
                         >
                           {chip.label}
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </section>
 
-                  {/* Key Concepts & Insights */}
+                  {/* Key Takeaways & Architectural Concepts */}
                   {intelligenceData.keyTakeaways?.length > 0 && (
-                    <div className="space-y-3 pt-2">
-                      <h3 className="text-xs font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider">
-                        Key Insights & Context
-                      </h3>
-                      <div className="space-y-2.5">
+                    <section className="space-y-2.5">
+                      <span className="text-[11px] font-semibold tracking-wider text-stone-500 uppercase">
+                        Key Architectural Insights
+                      </span>
+                      <div className="space-y-2">
                         {intelligenceData.keyTakeaways.map((item, idx) => (
                           <div
                             key={idx}
-                            className="p-4 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-100/50 dark:bg-stone-900/60 space-y-1.5"
+                            className="p-3.5 rounded-xl bg-stone-50/50 dark:bg-[#111114]/60 border border-stone-200/50 dark:border-stone-800/60 space-y-1 hover:border-stone-300 dark:hover:border-stone-700 transition-colors"
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <span className="font-extrabold text-xs sm:text-sm text-stone-900 dark:text-stone-100 flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
-                                {item.phrase || `Insight #${idx + 1}`}
+                              <span className="font-semibold text-xs sm:text-[13px] text-stone-900 dark:text-stone-100 flex items-center gap-2">
+                                <span className="text-amber-500 text-xs font-mono">0{idx + 1}</span>
+                                {item.phrase || `Concept #${idx + 1}`}
                               </span>
                               {item.confidenceScore && (
-                                <span className="text-[10px] px-2 py-0.5 rounded-full border border-stone-300 dark:border-stone-700 bg-stone-200/60 dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold shrink-0">
-                                  {item.confidenceScore}% confidence
+                                <span className="text-[10px] text-stone-500 dark:text-stone-400 font-mono">
+                                  {item.confidenceScore}% match
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed pl-3.5">
+                            <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed pl-5">
                               {item.detail}
                             </p>
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </section>
                   )}
 
-                  {/* Community & Reader Sentiment */}
+                  {/* Community Sentiment Meter */}
                   {intelligenceData.sentiment && (
-                    <div className="p-4 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-100/50 dark:bg-stone-900/60 space-y-2.5">
+                    <section className="p-3.5 rounded-xl bg-stone-50/50 dark:bg-[#111114]/60 border border-stone-200/50 dark:border-stone-800/60 space-y-2">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-black text-stone-500 dark:text-stone-400 uppercase tracking-wider flex items-center gap-1.5">
-                          <span className="text-emerald-500 text-sm">{icons.grow}</span>
-                          Community Sentiment
-                        </h3>
-                        <span className="text-xs font-black tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25">
-                          {intelligenceData.sentiment.overall || "POSITIVE"}
+                        <span className="text-xs font-semibold text-stone-800 dark:text-stone-200 flex items-center gap-1.5">
+                          <span className="text-emerald-500">{icons.grow}</span>
+                          Community Reception
+                        </span>
+                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          {intelligenceData.sentiment.overall || "POSITIVE"} • {intelligenceData.sentiment.score || 88}%
                         </span>
                       </div>
-                      <div className="w-full bg-stone-200 dark:bg-stone-800 h-2 rounded-full overflow-hidden">
+                      <div className="w-full bg-stone-200 dark:bg-stone-800 h-1.5 rounded-full overflow-hidden">
                         <div
-                          className="bg-emerald-500 h-full rounded-full transition-all duration-500"
-                          style={{ width: `${intelligenceData.sentiment.score || 85}%` }}
+                          className="bg-emerald-500 h-full rounded-full transition-all duration-700"
+                          style={{ width: `${intelligenceData.sentiment.score || 88}%` }}
                         />
                       </div>
-                      <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed font-medium">
+                      <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed">
                         {intelligenceData.sentiment.breakdown}
                       </p>
-                    </div>
+                    </section>
                   )}
                 </>
               ) : (
-                /* Streaming fallback preview */
-                <div className="p-4 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-100/50 dark:bg-stone-900/50 text-xs text-stone-800 dark:text-stone-200 font-mono whitespace-pre-wrap leading-relaxed">
+                /* Streaming fallback */
+                <div className="p-4 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-mono leading-relaxed whitespace-pre-wrap">
                   {streamRawText}
-                  <span className="inline-block w-2 h-4 bg-stone-900 dark:bg-stone-100 animate-pulse ml-1 align-middle"></span>
+                  <span className="inline-block w-1.5 h-3.5 bg-stone-900 dark:bg-stone-100 animate-pulse ml-1 align-middle" />
                 </div>
               )}
             </div>
           ) : (
-            /* Interactive AI Q&A Chat View */
-            <div className="flex flex-col h-full justify-between space-y-3">
-              {/* Quick Action Prompt Chips */}
-              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 shrink-0">
+            /* Discussion / Interactive Chat View */
+            <div className="flex flex-col h-full justify-between space-y-4">
+              {/* Quick Chip Shortcuts */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 shrink-0">
                 {activePromptChips.map((chip, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => handleSendMessage(chip.prompt)}
                     disabled={isChatStreaming}
-                    className="text-xs px-3 py-1.5 rounded-full border border-stone-300 dark:border-stone-700 bg-stone-200/50 dark:bg-stone-800/80 hover:bg-stone-300 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 transition-all font-bold whitespace-nowrap shrink-0 cursor-pointer"
+                    className="text-xs px-3 py-1 rounded-full border border-stone-200 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/50 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-400 whitespace-nowrap shrink-0 transition-colors cursor-pointer"
                   >
                     {chip.label}
                   </button>
                 ))}
               </div>
 
-              {/* Chat Messages Log */}
-              <div className="flex-1 space-y-3 min-h-[220px] overflow-y-auto pr-1">
+              {/* Chat Messages */}
+              <div className="flex-1 space-y-3 min-h-[240px] overflow-y-auto pr-0.5">
                 {chatMessages.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-center text-stone-500 space-y-2">
-                    <div className="p-3.5 rounded-2xl bg-stone-200/50 dark:bg-stone-800/50 border border-stone-300 dark:border-stone-700 text-xl">
-                      {icons.person}
+                  <div className="flex flex-col items-center justify-center py-16 text-center text-stone-500 space-y-2">
+                    <div className="w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-900 flex items-center justify-center text-stone-400">
+                      {icons.appreciate}
                     </div>
-                    <p className="text-xs font-extrabold text-stone-900 dark:text-stone-100">
-                      Ask Spread AI follow-up questions
+                    <p className="text-xs font-semibold text-stone-800 dark:text-stone-200">
+                      Ask anything about this article
                     </p>
-                    <p className="text-[11px] max-w-xs text-stone-400 font-medium">
-                      Spread AI has complete context on this post and reader discussions.
+                    <p className="text-[11px] max-w-xs text-stone-400">
+                      Spread AI is equipped with full post context, code samples, and community comments.
                     </p>
                   </div>
                 ) : (
@@ -473,17 +516,17 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
                       }`}
                     >
                       <div
-                        className={`max-w-[88%] sm:max-w-[85%] p-3.5 rounded-2xl text-xs leading-relaxed ${
+                        className={`max-w-[85%] sm:max-w-[80%] p-3.5 rounded-2xl text-xs sm:text-[13px] leading-relaxed ${
                           msg.sender === "user"
-                            ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-bold rounded-tr-xs shadow-md"
-                            : "bg-stone-200/70 dark:bg-stone-800/70 text-stone-800 dark:text-stone-200 rounded-tl-xs border border-stone-300/50 dark:border-stone-700/50 font-medium"
+                            ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 rounded-tr-xs font-medium shadow-xs"
+                            : "bg-stone-100/90 dark:bg-[#141416] text-stone-800 dark:text-stone-200 rounded-tl-xs border border-stone-200/60 dark:border-stone-800/60"
                         }`}
                       >
                         {msg.text || (
-                          <span className="flex items-center gap-1 py-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce"></span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce [animation-delay:0.2s]"></span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce [animation-delay:0.4s]"></span>
+                          <span className="flex items-center gap-1.5 py-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce [animation-delay:0.2s]" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-stone-400 animate-bounce [animation-delay:0.4s]" />
                           </span>
                         )}
                       </div>
@@ -496,34 +539,38 @@ const AIDrawer = ({ isOpen, onClose, postData }) => {
           )}
         </div>
 
-        {/* Floating Input Capsule Bar */}
-        <div className="p-3.5 border-t border-stone-200 dark:border-stone-800 bg-stone-100/90 dark:bg-stone-900/90 backdrop-blur-md shrink-0">
+        {/* Minimalist Integrated Input Bar */}
+        <footer className="p-3.5 border-t border-stone-100 dark:border-stone-800/80 bg-white/90 dark:bg-[#0c0c0e]/90 backdrop-blur-md shrink-0 space-y-1.5">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSendMessage();
             }}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-stone-100/80 dark:bg-[#151518] border border-stone-200/80 dark:border-stone-800/80 focus-within:border-stone-400 dark:focus-within:border-stone-600 transition-colors"
           >
             <input
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Ask Spread AI about this post..."
-              className="flex-1 px-4 py-2.5 text-[16px] sm:text-xs rounded-full border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500/40 transition-all font-medium"
+              placeholder="Ask follow-up questions or request details..."
+              className="flex-1 text-xs bg-transparent text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none font-medium"
             />
             <button
               type="submit"
               disabled={!inputMessage.trim() || isChatStreaming}
-              className="p-2.5 rounded-full bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 flex items-center justify-center shrink-0 cursor-pointer shadow-md text-sm"
+              className="p-1.5 rounded-lg bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 hover:opacity-90 transition-opacity disabled:opacity-30 flex items-center justify-center shrink-0 cursor-pointer text-xs"
             >
               {icons.sendFi}
             </button>
           </form>
-        </div>
+          <p className="text-[10px] text-center text-stone-400 dark:text-stone-500">
+            Gemini 2.5 Flash • Spread AI may produce inaccurate insights.
+          </p>
+        </footer>
       </div>
     </div>
   );
 };
 
 export default memo(AIDrawer);
+

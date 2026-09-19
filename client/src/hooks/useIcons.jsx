@@ -95,6 +95,8 @@ import {
   LuSparkles,
   LuLink,
   LuCopy,
+  LuGitBranch,
+  LuArrowUpRight,
 } from "react-icons/lu";
 import {
   TbTrendingUp,
@@ -120,6 +122,7 @@ function useIcons() {
     arrowL: <LuArrowLeft />,
     arrowUp: <LuChevronUp />,
     arrowDown: <LuChevronDown />,
+    arrowUpRight: <LuArrowUpRight />,
     attachPin: <IoAttach />,
 
     // B
@@ -174,6 +177,7 @@ function useIcons() {
     gearO: <LuSlidersHorizontal />,
     glitter: <WiStars className="" />,
     github: <LuGithub />,
+    gitBranch: <LuGitBranch />,
     google: <GrGoogle />,
     grow: <TbTrendingUp />,
 

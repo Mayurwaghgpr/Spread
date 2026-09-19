@@ -1,9 +1,10 @@
 import { memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../store/slices/uiSlice";
-import { Bell, Mail, MessageSquare, Volume2, Sparkles } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function NotificationSettings() {
+  const icons = useIcons();
   const dispatch = useDispatch();
   const [preferences, setPreferences] = useState({
     push: true,
@@ -28,25 +29,25 @@ function NotificationSettings() {
   const notificationOptions = [
     {
       key: "push",
-      icon: Bell,
+      icon: icons.bellO,
       title: "Push Notifications",
       description: "Receive instant notifications for likes, comments, and mentions.",
     },
     {
       key: "messages",
-      icon: MessageSquare,
+      icon: icons.message,
       title: "Direct Messages",
       description: "Alerts when you receive direct messages or group chats.",
     },
     {
       key: "email",
-      icon: Mail,
+      icon: icons.email,
       title: "Email Digests",
       description: "Weekly summary of trending stories and account activity.",
     },
     {
       key: "sound",
-      icon: Volume2,
+      icon: icons.volume,
       title: "Sound Effects",
       description: "Play subtle audio cues for reactions and messages.",
     },
@@ -57,7 +58,7 @@ function NotificationSettings() {
       <div>
         <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
           <span>Notifications & Preferences</span>
-          <Sparkles className="w-4 h-4 text-amber-500" />
+          <span className="text-sm">{icons.appreciate}</span>
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
           Control how and when you receive updates from Spread.
@@ -66,7 +67,6 @@ function NotificationSettings() {
 
       <div className="space-y-3">
         {notificationOptions.map((opt) => {
-          const Icon = opt.icon;
           const isChecked = preferences[opt.key];
 
           return (
@@ -76,8 +76,8 @@ function NotificationSettings() {
               className="p-4 rounded-2xl bg-stone-100/60 dark:bg-stone-800/40 border border-stone-200 dark:border-stone-800 flex items-center justify-between gap-4 cursor-pointer hover:border-stone-300 dark:hover:border-stone-700 transition-all"
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200 shrink-0">
-                  <Icon className="w-4 h-4" />
+                <div className="p-2.5 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-800 dark:text-stone-200 shrink-0 text-sm">
+                  {opt.icon}
                 </div>
                 <div className="min-w-0 space-y-0.5">
                   <h3 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100">

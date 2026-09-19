@@ -9,12 +9,23 @@ function Settings() {
 
   const settingItems = useMemo(
     () => [
-      { name: "General & Theme", iconKey: "sliders", stub: "", exact: true },
+      { name: "General & Theme", iconKey: "sliders", path: "/setting", exact: true },
+      { name: "Account", iconKey: "person", path: "/setting/account" },
+      { name: "Notifications", iconKey: "bellO", path: "/setting/notifications" },
+      { name: "GitHub Sync", iconKey: "github", path: "/setting/github/sync" },
+      { name: "Security", iconKey: "shieldCheck", path: "/setting/security" },
     ],
     []
   );
 
-  const currentPath = location.pathname.replace(/^\/setting\/?/, "");
+  const currentPath = location.pathname.replace(/\/$/, "");
+
+  const isTabActive = (setting) => {
+    if (setting.exact) {
+      return currentPath === "/setting";
+    }
+    return currentPath === setting.path || currentPath.startsWith(setting.path + "/");
+  };
 
   const handleClose = () => {
     navigate(-1);
@@ -29,7 +40,7 @@ function Settings() {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-4xl h-[88vh] sm:h-[82vh] spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl flex flex-col sm:flex-row animate-in zoom-in-95 duration-150"
+        className="relative w-full max-w-4xl h-[88vh] sm:h-[82vh] spread-card p-0 rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl flex flex-col sm:flex-row animate-in zoom-in-95 duration-150"
       >
         {/* Desktop Sidebar */}
         <aside className="hidden sm:flex flex-col w-64 border-r border-stone-200 dark:border-stone-800 p-5 bg-stone-100/60 dark:bg-stone-900/60 shrink-0 justify-between">
@@ -50,20 +61,17 @@ function Settings() {
 
             <nav className="space-y-1">
               {settingItems.map((setting) => {
-                const isActive = setting.exact
-                  ? currentPath === "" || currentPath === "/"
-                  : currentPath.startsWith(setting.stub);
+                const isActive = isTabActive(setting);
 
                 return (
                   <Link
                     key={setting.name}
-                    to={setting.stub}
+                    to={setting.path}
                     replace={true}
-                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all ${
-                      isActive
-                        ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 shadow-md"
-                        : "text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800/60 hover:text-stone-900 dark:hover:text-stone-100"
-                    }`}
+                    className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all ${isActive
+                      ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 shadow-md"
+                      : "text-stone-600 dark:text-stone-400 hover:bg-stone-200/60 dark:hover:bg-stone-800/60 hover:text-stone-900 dark:hover:text-stone-100"
+                      }`}
                   >
                     <span className="shrink-0 text-sm">{icons[setting.iconKey]}</span>
                     <span className="truncate">{setting.name}</span>
@@ -107,20 +115,17 @@ function Settings() {
           {/* Mobile Scrollable Navigation Bar */}
           <div className="sm:hidden flex overflow-x-auto p-2 border-b border-stone-200 dark:border-stone-800 bg-stone-100/40 dark:bg-stone-900/40 gap-1 shrink-0 no-scrollbar">
             {settingItems.map((setting) => {
-              const isActive = setting.exact
-                ? currentPath === "" || currentPath === "/"
-                : currentPath.startsWith(setting.stub);
+              const isActive = isTabActive(setting);
 
               return (
                 <Link
                   key={setting.name}
-                  to={setting.stub}
+                  to={setting.path}
                   replace={true}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-                    isActive
-                      ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 shadow-sm"
-                      : "text-stone-600 dark:text-stone-400 hover:bg-stone-200/50 dark:hover:bg-stone-800/50"
-                  }`}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${isActive
+                    ? "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 shadow-sm"
+                    : "text-stone-600 dark:text-stone-400 hover:bg-stone-200/50 dark:hover:bg-stone-800/50"
+                    }`}
                 >
                   <span className="text-xs">{icons[setting.iconKey]}</span>
                   <span>{setting.name}</span>

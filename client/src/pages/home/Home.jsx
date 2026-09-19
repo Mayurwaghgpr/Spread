@@ -13,7 +13,6 @@ import useIcons from "../../hooks/useIcons";
 import Ibutton from "../../components/buttons/Ibutton";
 import ErrorPage from "../ErrorPages/ErrorPage";
 import EmptyState from "../../components/utilityComp/EmptyState";
-import { BsPostcard } from "react-icons/bs";
 
 function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -143,8 +142,8 @@ function Home() {
       {!hasNextPage && !isFetchingNextPage && posts.length > 0 && (
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 text-xs rounded-full spread-pill">
-            <BsPostcard className="w-4 h-4 text-stone-700 dark:text-stone-300" />
-            <span>You've seen all suggestions</span>
+            <span className="w-4 h-4 text-emerald-500">{Icons.circleCheck}</span>
+            <span>You&apos;ve seen all suggestions</span>
           </div>
         </div>
       )}
@@ -157,21 +156,21 @@ function Home() {
       <div className="flex flex-col flex-1 min-w-0 border-inherit">
         {/* Navigation Tabs Header */}
         <nav
-          className="sticky top-0 z-10 w-full spread-card p-2 rounded-2xl mb-4 backdrop-blur-md"
+          className="sticky top-0 z-10 w-full px-4 py-2.5 rounded-2xl mb-4 bg-[#fffdfa]/85 dark:bg-[#09090b]/85 backdrop-blur-md border border-stone-200/60 dark:border-stone-800/60 shadow-2xs"
           role="navigation"
           aria-label="Feed navigation"
         >
           <div className="flex items-center justify-start text-sm">
-            <ul className="flex items-center gap-6 px-3 w-full">
+            <ul className="flex items-center gap-6 w-full">
               {navigationItems.map((item) => (
                 <li key={item.id} className="flex items-center justify-center">
                   <Ibutton
                     action={item.onClick}
                     aria-label={item.ariaLabel}
                     id={item.id}
-                    className={`capitalize font-bold text-xs sm:text-sm transition-all pb-1 ${
+                    className={`font-semibold text-xs sm:text-[13px] transition-all pb-1.5 cursor-pointer relative ${
                       item.isActive
-                        ? "text-stone-900 dark:text-stone-100 border-b-2 border-stone-900 dark:border-stone-100"
+                        ? "text-stone-900 dark:text-stone-100 font-bold border-b-2 border-stone-900 dark:border-stone-100"
                         : "text-stone-500 hover:text-stone-800 dark:hover:text-stone-200"
                     }`}
                   >

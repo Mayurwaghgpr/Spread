@@ -1,9 +1,10 @@
 import { memo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setToast } from "../../store/slices/uiSlice";
-import { GitBranch, Github, CheckCircle2, ArrowUpRight, Sparkles } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function GithubSyncSettings() {
+  const icons = useIcons();
   const dispatch = useDispatch();
   const [repoName, setRepoName] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
@@ -26,7 +27,7 @@ function GithubSyncSettings() {
       <div>
         <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
           <span>GitHub Integration</span>
-          <Github className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+          <span className="text-base text-stone-700 dark:text-stone-300">{icons.github}</span>
         </h2>
         <p className="text-xs text-stone-500 dark:text-stone-400">
           Sync Markdown posts directly from your public or private GitHub repositories.
@@ -36,7 +37,7 @@ function GithubSyncSettings() {
       {/* Feature Banner Card */}
       <div className="p-5 rounded-3xl bg-gradient-to-br from-stone-900 via-stone-800 to-stone-950 text-stone-100 shadow-xl space-y-3 relative overflow-hidden">
         <div className="flex items-center gap-2 text-xs font-bold text-amber-400">
-          <Sparkles className="w-4 h-4" />
+          <span className="text-sm">{icons.appreciate}</span>
           <span>Developer Integration</span>
         </div>
         <h3 className="text-base font-extrabold tracking-tight">
@@ -54,8 +55,8 @@ function GithubSyncSettings() {
         </label>
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
-              <GitBranch className="w-4 h-4" />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400 text-sm">
+              {icons.gitBranch}
             </div>
             <input
               type="text"

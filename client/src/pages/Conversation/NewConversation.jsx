@@ -12,13 +12,14 @@ import GroupCreation from "./components/GroupCreation";
 import SelectedGroupMemberList from "./components/SelectedGroupMemberList";
 import Spinner from "../../components/loaders/Spinner";
 import usePrivateChatMutation from "../../hooks/usePrivateChatMutation";
-import { Users, ArrowLeft, Search, Sparkles } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 const NewConversation = () => {
   const [search, setSearch] = useState("");
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
   const [next, setNext] = useState(false);
   const { user } = useSelector((state) => state.auth);
+  const icons = useIcons();
   const [selectedMembers, setSelectedMembers] = useState({
     [user.id]: { memberId: user.id, memberType: "admin" },
   });
@@ -90,7 +91,7 @@ const NewConversation = () => {
               onClick={() => (!next ? handleCancelGroup() : setNext(false))}
               className="flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <span className="w-4 h-4 flex items-center justify-center">{icons.arrowL}</span>
               <span>Back</span>
             </button>
           ) : (
@@ -99,7 +100,7 @@ const NewConversation = () => {
 
           <h2 className="text-base font-extrabold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-1.5">
             <span>{isCreatingGroup ? "Create Group" : "New Message"}</span>
-            <Sparkles className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+            <span className="w-4 h-4 text-stone-700 dark:text-stone-300 flex items-center justify-center">{icons.sparkles}</span>
           </h2>
 
           {isCreatingGroup && canProceedToNext && !next ? (
@@ -124,7 +125,9 @@ const NewConversation = () => {
               placeholder="Search users by name or handle..."
               className="w-full p-2.5 pl-9 text-xs rounded-xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-stone-100 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-stone-400/50"
             />
-            <Search className="w-3.5 h-3.5 absolute left-3 top-3 text-stone-400 pointer-events-none" />
+            <span className="w-3.5 h-3.5 absolute left-3 top-3 text-stone-400 pointer-events-none flex items-center justify-center">
+              {icons.search}
+            </span>
           </div>
 
           {isCreatingGroup && canProceedToNext && (
@@ -142,7 +145,7 @@ const NewConversation = () => {
                 onClick={() => setIsCreatingGroup(true)}
                 className="spread-pill text-xs font-semibold px-3 py-1.5 flex items-center gap-1.5 hover:scale-105 transition-transform cursor-pointer text-stone-800 dark:text-stone-200"
               >
-                <Users className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+                <span className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400 flex items-center justify-center">{icons.users}</span>
                 <span>New Group Chat</span>
               </button>
             </div>

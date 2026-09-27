@@ -8,7 +8,6 @@ import CommonInput from "../../components/inputComponents/CommonInput.jsx";
 import OAuth from "./OAuth";
 import EyeBtn from "../../components/buttons/EyeBtn";
 import AuthFormWrapper from "./AuthFormWrapper";
-import LoaderScreen from "../../components/loaders/loaderScreen";
 import { setToast } from "../../store/slices/uiSlice.js";
 import CommenAuthBtn from "./components/CommenAuthBtn.jsx";
 import Divider from "./components/Divider.jsx";
@@ -61,10 +60,6 @@ function SignIn() {
     },
     [mutate, dispatch]
   );
-
-  if (isLoading) {
-    return <LoaderScreen message="Authenticating, please wait..." />;
-  }
 
   return (
     <AuthFormWrapper

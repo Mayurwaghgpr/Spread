@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import CommonInput from "../../../components/inputComponents/CommonInput";
 import { useDispatch, useSelector } from "react-redux";
 import { setElements } from "../../../store/slices/postSlice";
@@ -7,15 +7,27 @@ import PostsApis from "../../../services/usePostsApis";
 import { useMutation } from "@tanstack/react-query";
 import Spinner from "../../../components/loaders/Spinner";
 import { setToast } from "../../../store/slices/uiSlice";
-import { ArrowLeft, Sparkles, Upload, Send } from "lucide-react";
+import useIcons from "../../../hooks/useIcons";
 
 function PostPreviewEditor() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const icons = useIcons();
   const { postCreateApi } = PostsApis();
 
   const { isDraftMode, isPublishLoading, isPostUpdating } = useOutletContext();
   const { elements, imageElements } = useSelector((state) => state.posts);
+
+  // Escape key closes modal (Jakob's Law convention)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        navigate(-1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate]);
 
   const EditTitleImage = useCallback(
     (id, index, el) => {
@@ -65,26 +77,37 @@ function PostPreviewEditor() {
       onClick={() => navigate(-1)}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-all duration-300 animate-in fade-in"
       role="dialog"
+      aria-modal="true"
       aria-label="Post preview modal"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col w-full max-w-xl max-h-[90vh] spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl animate-in zoom-in-95 duration-150 p-6 sm:p-8 space-y-6 overflow-y-auto"
+        className="relative flex flex-col w-full max-w-xl max-h-[90vh] spread-card rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl animate-in zoom-in-95 duration-150 p-6 sm:p-8 space-y-6 overflow-y-auto"
       >
-        {/* Navigation Back Link */}
-        <Link
-          to={-1}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Editor</span>
-        </Link>
+        {/* Navigation & Close Bar */}
+        <div className="flex items-center justify-between">
+          <Link
+            to={-1}
+            className="inline-flex items-center gap-2 text-xs font-semibold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
+          >
+            <span className="w-4 h-4 flex items-center justify-center">{icons.arrowL}</span>
+            <span>Back to Editor</span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+            aria-label="Close preview modal"
+          >
+            <span className="w-4 h-4 flex items-center justify-center">{icons.close}</span>
+          </button>
+        </div>
 
         {/* Modal Header */}
         <div className="space-y-1">
           <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
             Publish Story Preview
-            <Sparkles className="w-5 h-5 text-stone-700 dark:text-stone-300" />
+            <span className="w-5 h-5 flex items-center justify-center">{icons.sparkles}</span>
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400">
             Review your cover image, title, and subtitle before publishing to Spread
@@ -109,7 +132,7 @@ function PostPreviewEditor() {
               />
             ) : (
               <div className="flex flex-col items-center gap-2 text-stone-500 group-hover:text-stone-900 dark:group-hover:text-stone-100 transition-colors">
-                <Upload className="w-8 h-8" />
+                <span className="w-8 h-8 flex items-center justify-center">{icons.upload}</span>
                 <span className="text-xs font-semibold">Click to upload cover image</span>
               </div>
             )}
@@ -172,7 +195,7 @@ function PostPreviewEditor() {
               <Spinner className="w-4 h-4 text-stone-900 dark:text-stone-100" />
             ) : (
               <>
-                <Send className="w-3.5 h-3.5" />
+                <span className="w-3.5 h-3.5 flex items-center justify-center">{icons.sendFi}</span>
                 <span>{isDraftMode ? "Publish Story" : "Save Changes"}</span>
               </>
             )}

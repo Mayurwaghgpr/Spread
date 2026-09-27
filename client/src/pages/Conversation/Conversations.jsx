@@ -10,7 +10,7 @@ import useSocket from "../../hooks/useSocket";
 
 function Messenger() {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const { messageLogData } = useSelector((state) => state.messanger);
+  const { conversationLogData } = useSelector((state) => state.messanger);
   const dispatch = useDispatch();
 
   const { socket } = useSocket();
@@ -19,26 +19,28 @@ function Messenger() {
 
   const handleNewMessage = useCallback(
     (msg) => {
-      const filterLog = messageLogData.filter(
-        (log) => log.id !== msg.conversationId
-      );
-      const logWithNewMessage = messageLogData.find(
-        (log) => log.id === msg.conversationId
-      );
+      const logs = Array.isArray(conversationLogData) ? conversationLogData : [];
+      const filterLog = logs.filter((log) => log.id !== msg.conversationId);
+      const logWithNewMessage = logs.find((log) => log.id === msg.conversationId);
+
       if (msg.senderId !== user?.id && msg.conversationId === conversationId) {
         dispatch(pushMessage(msg));
       }
-      if (!logWithNewMessage) return;
-      dispatch(
-        setConversationLogData([
-          ...(logWithNewMessage
-            ? [{ ...logWithNewMessage, lastMessage: msg.content }]
-            : []),
-          ...filterLog,
-        ])
-      );
+
+      if (logWithNewMessage) {
+        dispatch(
+          setConversationLogData([
+            {
+              ...logWithNewMessage,
+              lastMessage: "Encrypted message",
+              updatedAt: msg.createdAt || new Date().toISOString(),
+            },
+            ...filterLog,
+          ])
+        );
+      }
     },
-    [dispatch, user?.id, messageLogData, conversationId]
+    [dispatch, user?.id, conversationLogData, conversationId]
   );
 
   useEffect(() => {

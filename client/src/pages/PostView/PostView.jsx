@@ -162,6 +162,26 @@ function PostView() {
     <div className="relative flex justify-center items-start w-full min-h-screen overflow-y-auto px-4 sm:px-6 py-6 sm:py-10 border-inherit">
       <div className="relative max-w-3xl w-full flex flex-col items-center gap-6 border-inherit mb-36">
         <article className="relative w-full flex flex-col items-center gap-6 border-inherit animate-fedin1s">
+          {/* Back Navigation Bar following Jakob's Law */}
+          <div className="w-full flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100 transition-colors cursor-pointer group focus-ring rounded-lg py-1 px-1.5 -ml-1.5"
+            >
+              <span className="text-base transition-transform group-hover:-translate-x-0.5">
+                {icons.arrowL}
+              </span>
+              <span>Back</span>
+            </button>
+
+            {postViewData?.topic && (
+              <span className="spread-pill text-xs font-semibold">
+                #{postViewData.topic}
+              </span>
+            )}
+          </div>
+
           <PostHeader
             postView={postViewData}
             userImageurl={userImageurl}
@@ -169,7 +189,7 @@ function PostView() {
           />
 
           {/* Sleek Action Dock */}
-          <div className="flex justify-between items-center text-xs sm:text-sm py-2 px-4 w-full bg-stone-100/80 dark:bg-[#121215]/80 border border-stone-200/80 dark:border-stone-800/80 rounded-full backdrop-blur-xs">
+          <div className="flex justify-between items-center text-xs sm:text-sm py-2 px-4 w-full bg-[#fffdfa]/90 dark:bg-[#121215]/90 border border-[#e5dfd5] dark:border-[#232328] rounded-full backdrop-blur-md shadow-xs">
             <div className="flex items-center gap-4">
               <Like post={postViewData} />
               <FedInBtn

@@ -19,7 +19,12 @@ const messangerSlice = createSlice({
       state.messages = action.payload;
     },
     pushMessage: (state, action) => {
-      state.messages.unshift(action.payload);
+      if (!state.messages.some((message) => message?.id === action.payload?.id)) {
+        state.messages.unshift(action.payload);
+      }
+    },
+    removeMessage: (state, action) => {
+      state.messages = state.messages.filter((message) => message?.id !== action.payload);
     },
     popMessage: (state, action) => {
       state.messages.shift();
@@ -38,6 +43,7 @@ export const {
   selectConversation,
   setConversationLogData,
   pushMessage,
+  removeMessage,
   addMessage,
   popMessage,
 } = messangerSlice.actions;

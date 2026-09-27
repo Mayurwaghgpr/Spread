@@ -5,6 +5,7 @@ import PostPreview from "../../components/postsComp/PostPreview";
 import PostCardSkeleton from "../../components/loaders/PostCardSkeleton";
 import { setuserProfile } from "../../store/slices/profileSlice";
 import ProfileHeader from "./components/ProfileHeader";
+import AboutTab from "./components/AboutTab";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Spinner from "../../components/loaders/Spinner";
 import ProfileinfoCard from "../../components/ProfileinfoCard";
@@ -210,14 +211,12 @@ function Profile() {
 
       {/* About Tab Section */}
       {activeTab === "about" && (
-        <div className="w-full spread-card p-6 sm:p-8 rounded-2xl border border-stone-200 dark:border-stone-800 space-y-4">
-          <h2 className="text-base font-bold text-stone-900 dark:text-stone-100">
-            About {activeProfileData?.displayName || activeProfileData?.username || "User"}
-          </h2>
-          <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
-            {activeProfileData?.bio || "No bio added yet."}
-          </p>
-        </div>
+        <AboutTab
+          userMeta={activeProfileData}
+          isSelf={isSelf}
+          posts={posts}
+          profileId={activeProfileData?.id || effectiveProfileId}
+        />
       )}
 
       {/* Followers / Following Drawer Modal */}

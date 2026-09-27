@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { PopupBox } from "../../components/utilityComp/PopupBox";
 import { Link, Outlet, useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { Info, Image, Users, X } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function ConversationInfo() {
+  const icons = useIcons();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -15,22 +16,22 @@ function ConversationInfo() {
         id: "info",
         linkName: "Details",
         stub: `/messages/c/info?Id=${conversationId}`,
-        icon: Info,
+        icon: icons.infoCircle,
       },
       {
         id: "attach",
         linkName: "Media & Files",
         stub: `/messages/c/info/attach?Id=${conversationId}`,
-        icon: Image,
+        icon: icons.image,
       },
       {
         id: "members",
         linkName: "Members",
         stub: `/messages/c/info/members?Id=${conversationId}`,
-        icon: Users,
+        icon: icons.users,
       },
     ],
-    [conversationId]
+    [conversationId, icons]
   );
 
   return (
@@ -47,15 +48,14 @@ function ConversationInfo() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="sm:hidden p-1 rounded-full text-stone-500 hover:text-stone-900 dark:hover:text-stone-100"
+            className="sm:hidden p-1 rounded-full text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 text-sm"
           >
-            <X className="w-4 h-4" />
+            {icons.close}
           </button>
         </div>
 
         <nav className="flex sm:flex-col gap-1 overflow-x-auto sm:overflow-x-visible">
           {sideNav.map((item) => {
-            const Icon = item.icon;
             const isActive = location.pathname + location.search === item.stub;
 
             return (
@@ -68,7 +68,9 @@ function ConversationInfo() {
                     : "text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-200/40 dark:hover:bg-stone-800/30"
                 }`}
               >
-                <Icon className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+                <span className="text-base text-stone-700 dark:text-stone-300">
+                  {item.icon}
+                </span>
                 <span>{item.linkName}</span>
               </Link>
             );

@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import PersistentUser from "./utils/components/PersistentUser";
-import useSocket from "./hooks/useSocket";
+import ChatApi from "./services/ChatApi";
+import { getOrCreateEncryptionIdentity } from "./utils/e2ee";
 import Router from "./router/Router";
 import LoaderScreen from "./components/loaders/loaderScreen";
 import ToastContainer from "./components/utilityComp/ToastContainer";
@@ -14,6 +15,8 @@ import ConfimationActionListener from "./components/utilityComp/ConfimationActio
 import ShareToMediaBox from "./components/utilityComp/ShareToMediaBox";
 import LoggingOutOverlay from "./components/loaders/LoggingOutOverlay";
 
+import { useChatNotifications } from "./hooks/useChatNotifications";
+
 const WelcomeLoginBox = lazy(
   () => import("./components/utilityComp/WelcomeLoginBox"),
 );
@@ -22,7 +25,10 @@ function App() {
   const { pathname } = useLocation();
   const { isLogin, loginPop, user } = useSelector((state) => state.auth);
   const { ThemeMode } = useSelector((state) => state.ui);
-  const { socket } = useSocket();
+  const { publishEncryptionIdentity } = ChatApi();
+
+  // Global Real-time Chat Notification listener (suppression, toasts, sound & title badge)
+  useChatNotifications();
 
   // Unified theme management & persistence
   useEffect(() => {
@@ -53,12 +59,34 @@ function App() {
     return () => mediaQuery.removeEventListener("change", applyTheme);
   }, [ThemeMode]);
 
-  // Handle socket registration
+  // Publish only the public half of the device-bound E2EE identity. The
+  // private CryptoKey remains non-extractable in IndexedDB on this browser.
   useEffect(() => {
-    if (socket && user?.id) {
-      socket.emit("register", user.id);
+    if (!isLogin || !user?.id) return;
+    let cancelled = false;
+    getOrCreateEncryptionIdentity()
+      .then(({ publicKey }) => publishEncryptionIdentity(publicKey))
+      .catch((error) => {
+        const status = error?.response?.status || error?.status;
+        if (status === 409) {
+          // Account already has an encryption identity established
+          return;
+        }
+        if (!cancelled) console.error("Unable to initialize secure messaging", error);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isLogin, user?.id]);
+
+  // Ensure Service Worker is active for background Web Push notifications
+  useEffect(() => {
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch((err) => {
+        console.warn("Service worker registration error:", err);
+      });
     }
-  }, [socket, user?.id]);
+  }, []);
 
   return (
     <>

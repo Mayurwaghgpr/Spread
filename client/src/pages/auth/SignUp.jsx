@@ -13,10 +13,11 @@ import AuthFormWrapper from "./AuthFormWrapper.jsx";
 import Divider from "./components/Divider.jsx";
 import CommenAuthBtn from "./components/CommenAuthBtn.jsx";
 import { useUsernameAvailability } from "../../hooks/useUsernameAvailability.js";
-import { CheckCircle, AlertCircle } from "lucide-react";
+import useIcons from "../../hooks/useIcons.jsx";
 import Spinner from "../../components/loaders/Spinner.jsx";
 
 function SignUp() {
+  const icons = useIcons();
   const [validation, setValidation] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -138,8 +139,8 @@ function SignUp() {
           {/* Loading/Status Icons positioned identical to ProfileEditor */}
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 border-inherit pointer-events-none">
             {isCheckingUsername && <Spinner className="w-4 h-4 text-blue-500" />}
-            {isSuccess && <CheckCircle className="w-4 h-4 text-green-500" />}
-            {isErrorStatus && <AlertCircle className="w-4 h-4 text-red-500" />}
+            {isSuccess && <span className="w-4 h-4 text-green-500 flex items-center justify-center">{icons.circleCheck}</span>}
+            {isErrorStatus && <span className="w-4 h-4 text-red-500 flex items-center justify-center">{icons.circleAlert}</span>}
           </div>
         </div>
 
@@ -149,7 +150,7 @@ function SignUp() {
             id="username-error"
             className="text-red-500 text-xs flex items-center gap-1.5 pt-0.5"
           >
-            <AlertCircle className="w-3.5 h-3.5" />
+            <span className="w-3.5 h-3.5 flex items-center justify-center">{icons.circleAlert}</span>
             {usernameMessage}
           </p>
         )}
@@ -157,7 +158,7 @@ function SignUp() {
         {/* Available Success Message */}
         {isSuccess && usernameMessage && (
           <p className="text-green-500 text-xs flex items-center gap-1.5 pt-0.5">
-            <CheckCircle className="w-3.5 h-3.5" />
+            <span className="w-3.5 h-3.5 flex items-center justify-center">{icons.circleCheck}</span>
             {usernameMessage}
           </p>
         )}

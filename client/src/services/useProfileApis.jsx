@@ -103,6 +103,24 @@ function useProfileApi() {
     }
   };
 
+  const updateAboutCanvas = async (payload) => {
+    try {
+      const response = await axiosInstance.post(`/user/about/update`, payload);
+      return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
+  const pinUserPost = async (postId) => {
+    try {
+      const response = await axiosInstance.post(`/user/pin-post`, { postId });
+      return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
   return {
     fetchUserData,
     fetchUserProfile,
@@ -110,6 +128,8 @@ function useProfileApi() {
     searchUsername,
     getArchivedPosts,
     fetchFollowInfo,
+    updateAboutCanvas,
+    pinUserPost,
   };
 }
 

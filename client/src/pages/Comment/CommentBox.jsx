@@ -133,11 +133,11 @@ const CommentBox = forwardRef(
 
     if (!comt) {
       return (
-        <div className="w-full p-2 animate-pulse flex items-start gap-3 border-b border-stone-200 dark:border-stone-800">
-          <div className="w-8 h-8 rounded-full bg-stone-300 dark:bg-stone-700 shrink-0" />
+        <div className="w-full p-2 animate-pulse flex items-start gap-3 border-b border-[#e5dfd5]/60 dark:border-[#232328]/60">
+          <div className="w-8 h-8 rounded-full bg-stone-200 dark:bg-stone-800 shrink-0" />
           <div className="flex-1 space-y-2">
-            <div className="w-1/3 h-3 bg-stone-300 dark:bg-stone-700 rounded-full" />
-            <div className="w-full h-3.5 bg-stone-300 dark:bg-stone-700 rounded-full" />
+            <div className="w-1/3 h-3 bg-stone-200 dark:bg-stone-800 rounded-full" />
+            <div className="w-full h-3.5 bg-stone-200 dark:bg-stone-800 rounded-full" />
           </div>
         </div>
       );
@@ -148,8 +148,8 @@ const CommentBox = forwardRef(
       (optimisticLike === "" && isLiked);
 
     return (
-      <div id={`#${comt.commenter?.id}`} ref={ref} className={`w-full border-b border-stone-200/70 dark:border-stone-800/70 pb-3.5 mb-2 ${className}`}>
-        <article className="group relative flex flex-col w-full hover:bg-stone-200/30 dark:hover:bg-stone-800/20 p-2.5 rounded-xl transition-colors space-y-1.5">
+      <div id={`#${comt.commenter?.id}`} ref={ref} className={`w-full border-b border-[#e5dfd5]/60 dark:border-[#232328]/60 pb-3.5 mb-2 ${className}`}>
+        <article className="group relative flex flex-col w-full hover:bg-[#f7f4ee]/70 dark:hover:bg-[#18181d]/60 p-2.5 rounded-xl transition-colors space-y-1.5">
           {/* Header Row */}
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -262,7 +262,7 @@ const CommentBox = forwardRef(
 
         {/* Nested Replies List */}
         {openReplies === comt.id && replies?.length > 0 && (
-          <div className="border-l-2 border-stone-200 dark:border-stone-800 ml-4 pl-3 mt-2 space-y-2">
+          <div className="border-l-2 border-[#e5dfd5] dark:border-[#232328] ml-4 pl-3 mt-2 space-y-2">
             {replies.map((reply) => (
               <CommentBox
                 key={reply?.id}

@@ -35,7 +35,7 @@ function CommentSection() {
       content: "",
       replyTo: null,
     }),
-    [commentCred]
+    [commentCred],
   );
 
   const {
@@ -48,7 +48,8 @@ function CommentSection() {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["TopComments", postViewData?.id],
-    queryFn: ({ pageParam = 1 }) => getComments({ postId: postViewData?.id, pageParam }),
+    queryFn: ({ pageParam = 1 }) =>
+      getComments({ postId: postViewData?.id, pageParam }),
     enabled: !!postViewData?.id,
     getNextPageParam: (lastPage) =>
       lastPage.meta.hasNextPage ? lastPage.meta.currentPage + 1 : undefined,
@@ -61,16 +62,19 @@ function CommentSection() {
     isFetchingNextPage,
     isFetching,
     hasNextPage,
-    0.1
+    0.1,
   );
 
   const comments = useMemo(() => {
-    return TopComments?.pages?.flatMap((page) => page.comments || page.data || []) || [];
+    return (
+      TopComments?.pages?.flatMap((page) => page.comments || page.data || []) ||
+      []
+    );
   }, [TopComments]);
 
   const commentPins = useMemo(
     () => comments.filter((comment) => comment.pind),
-    [comments]
+    [comments],
   );
 
   const handleCloseModal = useCallback(() => {
@@ -122,7 +126,7 @@ function CommentSection() {
   return (
     <div
       onClick={handleCloseModal}
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:justify-end bg-black/60 backdrop-blur-sm p-0 sm:p-6 transition-all duration-300 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:justify-end bg-black/40 backdrop-blur-sm p-0 sm:p-6 transition-all duration-300 animate-in fade-in"
       role="dialog"
       aria-label="Comments modal"
     >
@@ -135,17 +139,17 @@ function CommentSection() {
           transform: dragY > 0 ? `translateY(${dragY}px)` : undefined,
           transition: dragY === 0 ? "transform 0.25s ease-out" : "none",
         }}
-        className="flex flex-col w-full max-w-md h-[52vh] sm:h-[92vh] spread-card rounded-t-3xl sm:rounded-3xl border border-stone-200 dark:border-stone-800 shadow-2xl overflow-hidden backdrop-blur-xl animate-in slide-in-from-bottom-full sm:slide-in-from-right-5 duration-300 ease-out"
+        className="flex flex-col w-full max-w-md h-[52vh] sm:h-[92vh] bg-[#fffdfa] dark:bg-[#121215] text-stone-900 dark:text-stone-100 rounded-t-3xl sm:rounded-3xl border border-[#e5dfd5] dark:border-[#232328] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-full sm:slide-in-from-right-5 duration-300 ease-out"
       >
         {/* Mobile Drag Handle Pill */}
-        <div className="sm:hidden w-full flex justify-center py-2.5 bg-stone-100/50 dark:bg-stone-800/30 border-b border-stone-200/40 dark:border-stone-800/40 cursor-grab active:cursor-grabbing">
+        <div className="sm:hidden w-full flex justify-center py-2.5 bg-[#f7f4ee]/70 dark:bg-[#16161b]/70 border-b border-[#e5dfd5]/60 dark:border-[#232328]/60 cursor-grab active:cursor-grabbing">
           <div className="w-12 h-1.5 rounded-full bg-stone-300 dark:bg-stone-700" />
         </div>
 
         {/* Header */}
-        <header className="p-3.5 sm:p-5 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between bg-stone-100/50 dark:bg-stone-800/30">
+        <header className="p-3.5 sm:p-5 border-b border-[#e5dfd5] dark:border-[#232328] flex items-center justify-between bg-[#fffdfa]/90 dark:bg-[#121215]/90 backdrop-blur-md">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 text-lg">
+            <div className="w-9 h-9 rounded-xl bg-[#f7f4ee] dark:bg-[#1c1c22] border border-[#e5dfd5] dark:border-[#2a2a32] text-stone-800 dark:text-stone-200 flex items-center justify-center text-lg shadow-xs">
               {icons.comment}
             </div>
             <div>
@@ -162,14 +166,14 @@ function CommentSection() {
             type="button"
             onClick={handleCloseModal}
             aria-label="Close comments"
-            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-xl"
+            className="p-1.5 rounded-full hover:bg-[#f7f4ee] dark:hover:bg-[#1c1c22] text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-xl"
           >
             {icons.close}
           </button>
         </header>
 
         {/* Comments List Main Body */}
-        <main className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-4">
+        <main className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-4 bg-[#fffdfa] dark:bg-[#121215]">
           {(isLoading
             ? Array(LOADING_SKELETON_COUNT).fill(null)
             : comments
@@ -195,25 +199,28 @@ function CommentSection() {
           )}
 
           {/* Empty state */}
-          {!isLoading && !isFetching && !errorPosts && comments.length === 0 && (
-            <div className="flex h-full w-full items-center justify-center p-6 text-center">
-              <EmptyState
-                Icon={icons.comment}
-                heading="No comments yet"
-                description={
-                  isLogin
-                    ? "Be the first to share your thoughts and start the conversation!"
-                    : "Sign in to join the conversation and share your thoughts."
-                }
-              />
-            </div>
-          )}
+          {!isLoading &&
+            !isFetching &&
+            !errorPosts &&
+            comments.length === 0 && (
+              <div className="flex h-full w-full items-center justify-center p-6 text-center">
+                <EmptyState
+                  Icon={icons.comment}
+                  heading="No comments yet"
+                  description={
+                    isLogin
+                      ? "Be the first to share your thoughts and start the conversation!"
+                      : "Sign in to join the conversation and share your thoughts."
+                  }
+                />
+              </div>
+            )}
 
           {renderErrorState()}
         </main>
 
         {/* Comment Input Footer */}
-        <footer className="p-3 sm:p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-100/60 dark:bg-stone-900/60 backdrop-blur-md">
+        <footer className="p-3 sm:p-4 border-t border-[#e5dfd5] dark:border-[#232328] bg-[#fffdfa]/95 dark:bg-[#121215]/95 backdrop-blur-md">
           <CommentInput />
         </footer>
       </div>

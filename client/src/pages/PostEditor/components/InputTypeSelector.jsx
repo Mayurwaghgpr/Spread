@@ -1,13 +1,7 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsScale } from "../../../store/slices/uiSlice";
-import { Type, Link as LinkIcon, Code, Image as ImageIcon, ChevronLeft, ChevronRight } from "lucide-react";
-
-const BUTTON_CONFIGS = [
-  { type: "text", Icon: Type, label: "Add paragraph text" },
-  { type: "url", Icon: LinkIcon, label: "Add URL link" },
-  { type: "code", Icon: Code, label: "Add code block" },
-];
+import useIcons from "../../../hooks/useIcons";
 
 function InputTypeSelector({
   imageInputRef,
@@ -17,8 +11,18 @@ function InputTypeSelector({
 }) {
   const { isScale } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
+  const icons = useIcons();
 
   const toggleScale = useCallback(() => dispatch(setIsScale()), [dispatch]);
+
+  const buttonConfigs = useMemo(
+    () => [
+      { type: "text", icon: icons.type, label: "Add paragraph text" },
+      { type: "url", icon: icons.link, label: "Add URL link" },
+      { type: "code", icon: icons.code, label: "Add code block" },
+    ],
+    [icons]
+  );
 
   return (
     <div
@@ -26,7 +30,7 @@ function InputTypeSelector({
         isScale ? "translate-y-0 opacity-100" : "sm:translate-y-0 sm:opacity-100 translate-y-20 opacity-0"
       } ${className}`}
     >
-      {BUTTON_CONFIGS.map(({ type, Icon, label }) => (
+      {buttonConfigs.map(({ type, icon, label }) => (
         <button
           key={type}
           type="button"
@@ -40,7 +44,7 @@ function InputTypeSelector({
           <span className="absolute -top-10 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center px-2.5 py-1 text-[11px] font-semibold bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 rounded-lg shadow-lg whitespace-nowrap animate-in fade-in duration-150">
             {label}
           </span>
-          <Icon className="w-4 h-4" />
+          <span className="w-4 h-4 flex items-center justify-center">{icon}</span>
         </button>
       ))}
 
@@ -54,7 +58,7 @@ function InputTypeSelector({
         <span className="absolute -top-10 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center px-2.5 py-1 text-[11px] font-semibold bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 rounded-lg shadow-lg whitespace-nowrap animate-in fade-in duration-150">
           Upload Image
         </span>
-        <ImageIcon className="w-4 h-4" />
+        <span className="w-4 h-4 flex items-center justify-center">{icons.image}</span>
       </label>
 
       <input
@@ -74,10 +78,15 @@ function InputTypeSelector({
         aria-label={isScale ? "Hide toolbar" : "Show toolbar"}
         className="sm:hidden p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 cursor-pointer"
       >
-        {!isScale ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        {!isScale ? (
+          <span className="w-4 h-4 flex items-center justify-center">{icons.chevronRight}</span>
+        ) : (
+          <span className="w-4 h-4 flex items-center justify-center">{icons.chevronLeft}</span>
+        )}
       </button>
     </div>
   );
 }
 
 export default memo(InputTypeSelector);
+

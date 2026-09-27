@@ -21,9 +21,12 @@ function PersistentUser({ children }) {
   // Handle successful authentication
   useEffect(() => {
     if (isSuccess && data) {
-      console.log("PersistentUser: User authenticated successfully", data);
+      const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+      if (parsedData?.AccessToken) {
+        localStorage.setItem("AccessToken", parsedData.AccessToken);
+      }
       dispatch(setIsLogin(true));
-      dispatch(setUser(typeof data === 'string' ? JSON.parse(data) : data));
+      dispatch(setUser(parsedData));
     }
   }, [isSuccess, data, dispatch]);
 

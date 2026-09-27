@@ -1,0 +1,25 @@
+{
+  "name": "Spread",
+  "short_name": "Spread",
+  "description": "High-performance blogging and community messaging platform",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#191919",
+  "icons": [
+    {
+      "src": "/spread_logo_03_robopus-min.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/spread_logo_03_robopus.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { io } from "socket.io-client";
 
@@ -8,50 +8,51 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const useSocket = () => {
   const { isLogin, user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const [socketInstance, setSocketInstance] = useState(socket);
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
   useEffect(() => {
     if (isLogin && user?.id) {
       if (!socket) {
+        const rawToken = localStorage.getItem("AccessToken");
+        const token =
+          rawToken && rawToken !== "null" && rawToken !== "undefined"
+            ? rawToken
+            : "";
+
         socket = io(BASE_URL, {
-          query: {
-            connectedUserId: user.id,
-            activeConversationId: conversationId,
+          auth: {
+            token,
           },
           withCredentials: true,
+          autoConnect: true,
         });
+
         socket.on("connect", () => {
-          // console.log("✅ Socket connected");
-          socket.emit("register", user.id);
+          // Socket connected
         });
 
         socket.on("connect_error", (err) => {
-          // console.error("Socket connect error:", err);
+          // Socket connection error
         });
-
-        socket.connect();
-      } else {
-        socket.emit("updateActiveConversation", conversationId);
       }
+      setSocketInstance(socket);
+    } else if (socket) {
+      socket.disconnect();
+      socket = null;
+      setSocketInstance(null);
     }
-
-    return () => {
-      if (!isLogin && socket) {
-        socket.disconnect();
-        socket = null;
-      }
-    };
-  }, [isLogin, user?.id, conversationId]);
+  }, [isLogin, user?.id]);
 
   const disconnectSocket = () => {
     if (socket) {
       socket.disconnect();
       socket = null;
+      setSocketInstance(null);
     }
   };
 
-  return { socket, disconnectSocket };
+  return { socket: socketInstance, disconnectSocket };
 };
 
 export default useSocket;

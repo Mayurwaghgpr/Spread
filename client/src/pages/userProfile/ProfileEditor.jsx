@@ -9,11 +9,12 @@ import userImageSrc from "../../utils/functions/userImageSrc";
 import CommonInput from "../../components/inputComponents/CommonInput";
 import Selector from "../../components/utilityComp/Selector";
 import Spinner from "../../components/loaders/Spinner";
-import { CheckCircle, AlertCircle, Camera, Trash2, Sparkles, User, Mail, FileText, ArrowLeft } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 import profileOutlook from "/ProfOutlook.png";
 import { Link, useNavigate } from "react-router-dom";
 
 function ProfileEditor() {
+  const icons = useIcons();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -167,14 +168,14 @@ function ProfileEditor() {
             to={-1}
             className="inline-flex items-center gap-2 text-xs font-bold text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm">{icons.arrowL}</span>
             <span>Back to Profile</span>
           </Link>
 
           <div className="flex items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
               Edit Profile
-              <Sparkles className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+              <span className="text-stone-700 dark:text-stone-300 text-sm">{icons.sparkles}</span>
             </h1>
           </div>
         </div>
@@ -193,7 +194,7 @@ function ProfileEditor() {
                 htmlFor="fileInput"
                 className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100"
               >
-                <Camera className="w-7 h-7 text-white" />
+                <span className="text-2xl text-white">{icons.camera}</span>
               </label>
             </div>
 
@@ -202,7 +203,7 @@ function ProfileEditor() {
               className="absolute -bottom-1 -right-1 spread-btn-primary p-2.5 rounded-full shadow-md cursor-pointer hover:scale-110 transition-transform"
               title="Change avatar photo"
             >
-              <Camera className="w-4 h-4" />
+              <span className="text-xs">{icons.camera}</span>
             </label>
             <input
               className="hidden"
@@ -231,7 +232,7 @@ function ProfileEditor() {
                 disabled={!newInfo?.NewImageFile && !newInfo?.userImage}
                 className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-red-600 dark:text-red-400 bg-red-500/10 border border-red-500/20 rounded-full hover:bg-red-500/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <span className="text-xs">{icons.trash}</span>
                 <span>Remove Avatar</span>
               </button>
 
@@ -254,7 +255,7 @@ function ProfileEditor() {
           {/* Username Field */}
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-stone-500" />
+              <span className="text-stone-500">{icons.user}</span>
               Username
             </label>
             <div className="relative">
@@ -281,14 +282,14 @@ function ProfileEditor() {
               {/* Status Indicator Icon */}
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
                 {nameLoading && <Spinner className="w-4 h-4 text-stone-900 dark:text-stone-100" />}
-                {isSuccess && <CheckCircle className="w-4 h-4 text-emerald-500" />}
-                {isError && <AlertCircle className="w-4 h-4 text-red-500" />}
+                {isSuccess && <span className="text-emerald-500">{icons.circleCheck}</span>}
+                {isError && <span className="text-red-500">{icons.circleAlert}</span>}
               </div>
             </div>
 
             {isError && (
               <p className="text-red-500 text-xs flex items-center gap-1.5 font-medium">
-                <AlertCircle className="w-3.5 h-3.5" />
+                <span>{icons.circleAlert}</span>
                 {error?.data?.message || "Username is unavailable"}
               </p>
             )}
@@ -304,7 +305,7 @@ function ProfileEditor() {
             {/* Display Name */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-stone-500" />
+                <span className="text-stone-500">{icons.user}</span>
                 Display Name
               </label>
               <CommonInput
@@ -326,7 +327,7 @@ function ProfileEditor() {
             {/* Email */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-stone-500" />
+                <span className="text-stone-500">{icons.email}</span>
                 Email Address
               </label>
               <CommonInput
@@ -349,7 +350,7 @@ function ProfileEditor() {
           {/* Bio Field */}
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-stone-500" />
+              <span className="text-stone-500">{icons.fileText}</span>
               Bio
             </label>
             <CommonInput
@@ -375,12 +376,12 @@ function ProfileEditor() {
           <div className="text-xs font-semibold text-stone-500 dark:text-stone-400">
             {hasChanges ? (
               <span className="flex items-center gap-1.5 text-stone-700 dark:text-stone-300">
-                <AlertCircle className="w-4 h-4 text-amber-500" />
+                <span className="text-amber-500">{icons.circleAlert}</span>
                 Unsaved changes pending
               </span>
             ) : (
               <span className="flex items-center gap-1.5 text-emerald-500">
-                <CheckCircle className="w-4 h-4 text-emerald-500" />
+                <span className="text-emerald-500">{icons.circleCheck}</span>
                 All profile information saved
               </span>
             )}

@@ -2,17 +2,15 @@ import React, {
   useCallback,
   forwardRef,
   memo,
-  useEffect,
   useMemo,
   useRef,
 } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import Bookmark from "../buttons/bookmark/Bookmark";
 import Like from "../buttons/Like/Like";
 import Menu from "../menus/Menu";
-import { setCommentCred } from "../../store/slices/postSlice";
 
 import ProfileImage from "../ProfileImage";
 import userImageSrc from "../../utils/functions/userImageSrc";
@@ -24,7 +22,6 @@ import FedInBtn from "../buttons/FedInBtn";
 import FormatedTime from "../utilityComp/FormatedTime";
 
 const PostPreview = forwardRef(({ post, className = "", Saved }, ref) => {
-  const { commentCred } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userImageurl } = userImageSrc(post?.author);
@@ -40,10 +37,6 @@ const PostPreview = forwardRef(({ post, className = "", Saved }, ref) => {
   const Comments = useMemo(() => {
     return post?.comments?.filter((comment) => comment.topCommentId === null);
   }, [post?.comments]);
-
-  useEffect(() => {
-    dispatch(setCommentCred({ ...commentCred, postId: post?.id }));
-  }, [post?.id, dispatch]);
 
   const handelComment = useCallback(() => {
     if (post?.author?.username && post?.id) {

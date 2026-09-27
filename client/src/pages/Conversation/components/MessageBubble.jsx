@@ -1,8 +1,9 @@
 import React, { forwardRef, memo } from "react";
 import TimeAgo from "../../../components/utilityComp/TimeAgo";
-import { CheckCheck } from "lucide-react";
+import useIcons from "../../../hooks/useIcons";
 
 const MessageBubble = forwardRef(({ message, userId, readReceipt }, ref) => {
+  const icons = useIcons();
   if (!message) return null;
 
   const isSender = message?.senderId === userId;
@@ -25,15 +26,27 @@ const MessageBubble = forwardRef(({ message, userId, readReceipt }, ref) => {
         </p>
 
         <div
-          className={`flex items-center justify-end gap-1 self-end text-[10px] opacity-75 mt-0.5 ${
+          className={`flex items-center justify-end gap-1 self-end text-[10px] opacity-75 mt-0.5 select-none ${
             isSender ? "text-stone-300 dark:text-stone-600" : "text-stone-500 dark:text-stone-400"
           }`}
         >
-          {message?.createdAt && <TimeAgo date={message.createdAt} />}
-          {isSender && (
-            <CheckCheck
-              className={`w-3.5 h-3.5 ${isRead ? "text-stone-100 dark:text-stone-900 font-bold" : "opacity-60"}`}
+          {message?.createdAt && (
+            <TimeAgo
+              date={message.createdAt}
+              timeOnly={true}
+              className="text-[10px] font-medium"
             />
+          )}
+          {isSender && (
+            <span
+              className={`text-xs ${
+                isRead
+                  ? "text-emerald-400 dark:text-emerald-600 font-bold"
+                  : "opacity-60"
+              }`}
+            >
+              {icons.checkCheck}
+            </span>
           )}
         </div>
       </div>

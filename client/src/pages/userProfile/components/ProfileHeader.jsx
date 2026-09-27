@@ -74,6 +74,17 @@ function ProfileHeader({ userMeta, isSelf, onOpenDrawer }) {
         </p>
       )}
 
+      {/* Current Focus status pill if set */}
+      {userMeta?.currentFocus && (
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20 text-xs font-semibold max-w-xl">
+          <span className="relative flex h-1.5 w-1.5 shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500"></span>
+          </span>
+          <span className="truncate">{userMeta.currentFocus}</span>
+        </div>
+      )}
+
       {/* Followers / Following Stats Pills */}
       <div className="flex items-center flex-wrap gap-2.5 sm:gap-3 pt-1">
         <button

@@ -1,10 +1,11 @@
 import { memo, useMemo, useState } from "react";
-import { Bold, Italic, Underline, Link as LinkIcon, Check, X } from "lucide-react";
+import useIcons from "../../../hooks/useIcons";
 
 const TextTools = ({ position, applyStyle }) => {
   const [url, setUrl] = useState("");
   const [isInputVisible, setInputVisible] = useState(false);
   const [savedRange, setSavedRange] = useState(null);
+  const icons = useIcons();
 
   if (!position) return null;
   const { x, y } = position;
@@ -61,26 +62,26 @@ const TextTools = ({ position, applyStyle }) => {
     () => [
       {
         action: () => applyStyle("Bold", null),
-        Icon: Bold,
+        icon: icons.bold,
         label: "Bold",
       },
       {
         action: () => applyStyle("Italic", null),
-        Icon: Italic,
+        icon: icons.italic,
         label: "Italic",
       },
       {
         action: () => applyStyle("Underline", null),
-        Icon: Underline,
+        icon: icons.underline,
         label: "Underline",
       },
       {
         action: handleShowInput,
-        Icon: LinkIcon,
+        icon: icons.link,
         label: "Add Link",
       },
     ],
-    [applyStyle]
+    [applyStyle, icons]
   );
 
   return (
@@ -100,7 +101,9 @@ const TextTools = ({ position, applyStyle }) => {
 
         {isInputVisible ? (
           <div className="flex items-center gap-2 px-1 py-0.5">
-            <LinkIcon className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+            <span className="w-3.5 h-3.5 text-stone-400 shrink-0 flex items-center justify-center">
+              {icons.link}
+            </span>
             <input
               placeholder="Paste or type URL..."
               className="bg-transparent text-xs text-stone-100 placeholder:text-stone-500 outline-none w-48 py-1 font-medium"
@@ -115,20 +118,22 @@ const TextTools = ({ position, applyStyle }) => {
               onClick={() => executeCreateLink(url)}
               className="p-1 rounded-lg hover:bg-stone-800 text-stone-300 hover:text-emerald-400 transition-colors cursor-pointer"
               title="Apply Link"
+              aria-label="Apply Link"
             >
-              <Check className="w-3.5 h-3.5" />
+              <span className="w-3.5 h-3.5 flex items-center justify-center">{icons.check}</span>
             </button>
             <button
               type="button"
               onClick={() => setInputVisible(false)}
               className="p-1 rounded-lg hover:bg-stone-800 text-stone-400 hover:text-stone-100 transition-colors cursor-pointer"
               title="Cancel"
+              aria-label="Cancel"
             >
-              <X className="w-3.5 h-3.5" />
+              <span className="w-3.5 h-3.5 flex items-center justify-center">{icons.close}</span>
             </button>
           </div>
         ) : (
-          options.map(({ action, Icon, label }) => (
+          options.map(({ action, icon, label }) => (
             <button
               key={label}
               type="button"
@@ -137,7 +142,7 @@ const TextTools = ({ position, applyStyle }) => {
               title={label}
               className="p-2 rounded-xl hover:bg-stone-800 text-stone-300 hover:text-stone-100 transition-all active:scale-95 cursor-pointer flex items-center justify-center"
             >
-              <Icon className="w-4 h-4" />
+              <span className="w-4 h-4 flex items-center justify-center">{icon}</span>
             </button>
           ))
         )}

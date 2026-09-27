@@ -1,5 +1,5 @@
-import { memo, useMemo, useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { memo, useMemo, useState, useCallback } from "react";
+import { useLocation, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import ThemeBtn from "../buttons/ThemeBtn";
@@ -28,30 +28,18 @@ const Modes = [
     icon: "desktopO",
   },
 ];
-function MainNavBar() {
-  const [deviceSize, setDeviceSize] = useState(window.innerWidth);
 
+function MainNavBar() {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { userProfile } = useSelector((state) => state.profile);
   const { menuOpen } = useSelector((state) => state.ui);
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const { userImageurl } = userImageSrc(user);
   const location = useLocation();
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
   const icons = useIcons();
-
-  useEffect(() => {
-    const handleResize = () => {
-      setDeviceSize(window.innerWidth);
-    };
-
-    // Set initial size
-    setDeviceSize(window.innerWidth);
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const isProfileActive = useMemo(() => {
     return (
@@ -59,50 +47,129 @@ function MainNavBar() {
     );
   }, [location.pathname, userProfile?.id, user?.id]);
 
-  return (
-    <header className="sticky top-0 z-40 px-5 sm:px-8 py-2.5 bg-[#fffdfa]/85 dark:bg-[#09090b]/85 backdrop-blur-md border-b border-stone-200/60 dark:border-stone-800/60 transition-colors">
-      <nav className="w-full">
-        <div className="flex items-center justify-between">
-          <div className="w-full flex items-center">
-            {deviceSize > 720 && (
-              <button
-                onClick={() => dispatch(setMenuOpen())}
-                className={`border border-stone-200 dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg ${
-                  menuOpen ? "hidden" : "xl:block hidden"
-                } p-1.5 transition-colors cursor-pointer text-stone-600 dark:text-stone-300`}
-                aria-label="Toggle navigation menu"
-              >
-                {icons["menu"]}
-              </button>
-            )}
-          </div>
-          {/* Right Section */}
-          <div className="flex items-center gap-4 border-inherit">
-            <ThemeBtn className="" Modes={Modes} />
-            {isLogin && (
-              <>
-                {/* Notification Bell */}
-                <NotifictionBell />
-                {/* User Profile Section */}
-                <div className="relative group border-inherit">
-                  <ProfileImage
-                    onClick={() => dispatch(setMenuOpen())}
-                    className={`box-content border-3  w-7 h-7 rounded-full cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-lg ${
-                      isProfileActive
-                        ? "border-gray-500 dark:border-gray-400 ring-2 ring-gray-200 dark:ring-gray-800"
-                        : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
-                    }`}
-                    image={userImageurl}
-                    alt={user?.displayName}
-                    disabled={deviceSize > 720}
-                  />
+  const toggleDropdown = useCallback(() => {
+    setIsDropdownOpen((prev) => !prev);
+  }, []);
 
-                  {/* Desktop Tooltip */}
-                  <DesktopTooltip />
-                </div>
-              </>
-            )}
-          </div>
+  const closeDropdown = useCallback(() => {
+    setIsDropdownOpen(false);
+  }, []);
+
+  return (
+    <header className="sticky top-0 z-40 px-3.5 sm:px-6 py-2.5 bg-[#fffdfa]/90 dark:bg-[#09090b]/90 backdrop-blur-md border-b border-[#e5dfd5]/80 dark:border-[#232328]/80 transition-colors">
+      <nav className="w-full flex items-center justify-between" aria-label="Global header">
+        {/* Left Section: Brand & Sidebar Toggle */}
+        <div className="flex items-center gap-3">
+          {/* Sidebar Toggle (visible whenever sidebar is closed or on mobile/tablet) */}
+          {isLogin && (
+            <button
+              type="button"
+              onClick={() => dispatch(setMenuOpen())}
+              className={`p-1.5 rounded-xl border border-[#e5dfd5] dark:border-[#232328] hover:bg-[#f7f4ee] dark:hover:bg-[#18181c] transition-colors cursor-pointer text-stone-700 dark:text-stone-300 ${
+                menuOpen ? "xl:hidden flex" : "flex"
+              } items-center justify-center`}
+              aria-label="Toggle navigation menu"
+            >
+              <span className="text-base flex items-center justify-center">
+                {icons["menu"]}
+              </span>
+            </button>
+          )}
+
+          {/* Logo & Brand Name (Jakob's Law: always anchor home on left) */}
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 group focus-ring rounded-xl py-0.5 px-1 -ml-1 transition-transform active:scale-95"
+            aria-label="Spread Home"
+          >
+            <img
+              src="/spread_logo_03_robopus.png"
+              alt="Spread"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-contain shrink-0 group-hover:opacity-90"
+            />
+            <span className="font-extrabold tracking-tight text-base sm:text-lg text-stone-900 dark:text-stone-100">
+              Spread
+            </span>
+          </Link>
+        </div>
+
+        {/* Right Section: Actions & Profile */}
+        <div className="flex items-center gap-2 sm:gap-3.5">
+          {/* Quick Write Story Link (Desktop/Tablet) */}
+          {isLogin && (
+            <Link
+              to="/write"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-stone-700 dark:text-stone-200 hover:bg-[#f7f4ee] dark:hover:bg-[#18181c] border border-transparent hover:border-[#e5dfd5] dark:hover:border-[#232328] transition-all cursor-pointer"
+            >
+              <span className="text-sm">{icons.fetherO || icons.edit}</span>
+              <span>Write</span>
+            </Link>
+          )}
+
+          {/* Quick Search Shortcut */}
+          <Link
+            to="/search"
+            aria-label="Search stories"
+            className="p-1.5 rounded-xl text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-[#f7f4ee] dark:hover:bg-[#18181c] transition-colors text-base flex items-center justify-center"
+          >
+            {icons["search"]}
+          </Link>
+
+          {/* Theme Mode Toggle */}
+          <ThemeBtn Modes={Modes} />
+
+          {isLogin ? (
+            <>
+              {/* Notification Bell */}
+              <NotifictionBell />
+
+              {/* User Profile Avatar with Click Dropdown */}
+              <div className="relative">
+                <button
+                  type="button"
+                  id="user-menu-button"
+                  aria-expanded={isDropdownOpen}
+                  aria-haspopup="true"
+                  onClick={toggleDropdown}
+                  className={`rounded-full focus-ring transition-transform active:scale-95 cursor-pointer block p-0.5 ${
+                    isProfileActive
+                      ? "ring-2 ring-stone-900 dark:ring-stone-100"
+                      : "hover:opacity-90"
+                  }`}
+                  aria-label="User profile menu"
+                >
+                  <ProfileImage
+                    as="div"
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-[#e5dfd5] dark:border-[#232328] object-cover"
+                    image={userImageurl}
+                    alt={user?.displayName || user?.username}
+                  />
+                </button>
+
+                {/* Accessible Profile Dropdown Menu */}
+                <DesktopTooltip
+                  isOpen={isDropdownOpen}
+                  onClose={closeDropdown}
+                />
+              </div>
+            </>
+          ) : (
+            /* Logged-Out Actions: Sign In & Sign Up */
+            <div className="flex items-center gap-2">
+              <Link
+                to="/auth/signin"
+                className="px-3 py-1.5 text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/auth/signup"
+                className="spread-btn-primary px-3.5 py-1.5 text-xs font-bold rounded-full shadow-xs"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
     </header>

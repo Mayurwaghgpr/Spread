@@ -118,7 +118,6 @@ function SideBar() {
                   image={userImageurl}
                   alt={user?.username}
                   title="user profile"
-                  disabled
                 />
               </div>
 

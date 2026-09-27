@@ -12,7 +12,6 @@ import {
   setNotificationStatePush,
 } from "../../store/slices/notificationSlice";
 import Spinner from "../loaders/Spinner";
-import useSocket from "../../hooks/useSocket";
 
 function NotificationBox() {
   const { openNotification } = useSelector((state) => state.ui);
@@ -20,7 +19,6 @@ function NotificationBox() {
   const Icon = useIcons();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const { socket } = useSocket();
   const { fetchNotifications, markAllRead } = notificationApi();
 
   const { data: notificationData, isLoading } = useQuery({
@@ -37,19 +35,6 @@ function NotificationBox() {
     }
   }, [notificationData, dispatch]);
 
-  useEffect(() => {
-    if (!socket) return;
-    const handleNewNotification = (newNotification) => {
-      dispatch(setNotificationStatePush(newNotification));
-      queryClient.invalidateQueries(["unreadNotificationsCount"]);
-    };
-
-    socket.on("notification", handleNewNotification);
-    return () => {
-      socket.off("notification", handleNewNotification);
-    };
-  }, [socket, dispatch, queryClient]);
-
   const handeClick = useCallback((e) => {
     e.stopPropagation();
     dispatch(setOpenNotification());
@@ -64,6 +49,18 @@ function NotificationBox() {
       console.error(err);
     }
   };
+
+  // Close notification panel on Escape key
+  useEffect(() => {
+    if (!openNotification) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        dispatch(setOpenNotification());
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [openNotification, dispatch]);
 
   return (
     <div

@@ -177,10 +177,23 @@ function useAiApi() {
     }
   };
 
+  /**
+   * Generate AI-assisted profile creator summary & writing themes
+   */
+  const fetchAiProfileSummary = async () => {
+    try {
+      const response = await axiosInstance.post("/ai/profile-summary");
+      return response.data;
+    } catch (error) {
+      throw error.response || error;
+    }
+  };
+
   return {
     fetchAIAnalysisStream,
     fetchAIChatStream,
     fetchAITags,
+    fetchAiProfileSummary,
   };
 }
 

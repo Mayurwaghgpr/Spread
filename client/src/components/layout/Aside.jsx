@@ -50,13 +50,13 @@ function Aside({ className, handleTopicClick }) {
 
       {/* Footer Legal & Copyright */}
       <footer className="pt-4 border-t border-stone-200 dark:border-stone-800 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-stone-500 dark:text-stone-400 font-medium">
-        <Link to="#" className="hover:underline hover:text-stone-800 dark:hover:text-stone-200">
+        <Link to="/terms" className="hover:underline hover:text-stone-800 dark:hover:text-stone-200 transition-colors">
           Terms of Service
         </Link>
-        <Link to="#" className="hover:underline hover:text-stone-800 dark:hover:text-stone-200">
+        <Link to="/privacy" className="hover:underline hover:text-stone-800 dark:hover:text-stone-200 transition-colors">
           Privacy Policy
         </Link>
-        <span>© 2024 Spread</span>
+        <span>© {new Date().getFullYear()} Spread</span>
       </footer>
     </aside>
   );

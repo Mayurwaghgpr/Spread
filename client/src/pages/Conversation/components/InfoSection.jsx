@@ -8,13 +8,16 @@ import ChatApi from "../../../services/ChatApi";
 
 import { setToast } from "../../../store/slices/uiSlice";
 import { selectConversation } from "../../../store/slices/messangerSlice";
-import { Bell, Trash2, Ban, Users } from "lucide-react";
+import useIcons from "../../../hooks/useIcons";
+import EncryptionSecurityModal from "./EncryptionSecurityModal";
 
 function InfoSection() {
+  const icons = useIcons();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { selectedConversation } = useSelector((state) => state.messanger);
   const [isOptMute, setIsOptMute] = useState(false);
+  const [showSecurityModal, setShowSecurityModal] = useState(false);
 
   const { setMessageToMute } = ChatApi();
 
@@ -93,8 +96,8 @@ function InfoSection() {
             alt={currentConversationProfileInfo?.groupName}
           />
           {isGroup && (
-            <div className="absolute -bottom-1 -right-1 p-1 rounded-full bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 shadow-sm">
-              <Users className="w-3.5 h-3.5" />
+            <div className="absolute -bottom-1 -right-1 p-1 rounded-full bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 shadow-sm text-xs">
+              {icons.users}
             </div>
           )}
         </div>
@@ -117,11 +120,41 @@ function InfoSection() {
           Chat Settings
         </h3>
 
+        {/* End-to-End Encryption Card */}
+        <div
+          onClick={() => setShowSecurityModal(true)}
+          className="flex items-center justify-between p-3 rounded-2xl spread-card border border-stone-200 dark:border-stone-800 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all cursor-pointer group"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && setShowSecurityModal(true)}
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform text-lg">
+              {icons.shieldCheck}
+            </div>
+            <div>
+              <span className="text-xs font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
+                <span>End-to-End Encryption</span>
+                <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  Active
+                </span>
+              </span>
+              <span className="text-[11px] text-stone-500 dark:text-stone-400 block">
+                Messages are encrypted on your device. Tap to learn more.
+              </span>
+            </div>
+          </div>
+
+          <div className="text-stone-400 dark:text-stone-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors text-sm pr-1">
+            {icons.arrowUpRight}
+          </div>
+        </div>
+
         {/* Mute Notifications Toggle */}
         <div className="flex items-center justify-between p-3 rounded-2xl spread-card border border-stone-200 dark:border-stone-800 transition-colors">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100">
-              <Bell className="w-4 h-4" />
+            <div className="p-2 rounded-xl bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100 text-base">
+              {icons.bellO}
             </div>
             <div>
               <span className="text-xs font-bold text-stone-900 dark:text-stone-100 block">
@@ -145,7 +178,7 @@ function InfoSection() {
             type="button"
             className="flex items-center gap-3 p-3 rounded-2xl spread-card border border-stone-200 dark:border-stone-800 text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors text-xs font-bold w-full text-left cursor-pointer"
           >
-            <Trash2 className="w-4 h-4" />
+            <span className="text-base">{icons.trash}</span>
             <span>Clear Chat History</span>
           </button>
 
@@ -153,11 +186,16 @@ function InfoSection() {
             type="button"
             className="flex items-center gap-3 p-3 rounded-2xl spread-card border border-stone-200 dark:border-stone-800 text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors text-xs font-bold w-full text-left cursor-pointer"
           >
-            <Ban className="w-4 h-4" />
+            <span className="text-base">{icons.ban}</span>
             <span>Block Conversation</span>
           </button>
         </div>
       </div>
+
+      <EncryptionSecurityModal
+        isOpen={showSecurityModal}
+        onClose={() => setShowSecurityModal(false)}
+      />
     </div>
   );
 }

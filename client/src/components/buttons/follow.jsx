@@ -29,16 +29,19 @@ function Follow({ className = "", person }) {
         setToast({
           message: `${data?.message || "Updated follow status"} ${person?.displayName || "user"} ✨`,
           type: "success",
-        })
+        }),
       );
     },
     onError: (error) => {
-      const msg = error?.response?.data?.message || error?.message || "Failed to update follow status";
+      const msg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to update follow status";
       dispatch(
         setToast({
           message: `${msg} ✨`,
           type: "error",
-        })
+        }),
       );
     },
   });
@@ -53,7 +56,7 @@ function Follow({ className = "", person }) {
       if (!user?.id || !person?.id) return;
       mutate({ followerId: user.id, followedId: person.id });
     },
-    [isLogin, user?.id, person?.id, mutate, navigate]
+    [isLogin, user?.id, person?.id, mutate, navigate],
   );
 
   return (
@@ -64,7 +67,7 @@ function Follow({ className = "", person }) {
           ? "bg-[#f5f1ec] dark:bg-[#121212] text-stone-800 dark:text-stone-200 border-inherit hover:border-red-500 hover:text-red-500"
           : "bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 border-transparent hover:opacity-90 shadow-sm"
       }`}
-      disabled={isLoading}
+      disabled={isLoading || person?.id === user?.id}
       aria-label={
         isFollowing
           ? `Unfollow ${person?.username || "user"}`
@@ -77,7 +80,9 @@ function Follow({ className = "", person }) {
         <span>You</span>
       ) : isFollowing ? (
         <div className="flex items-center justify-center">
-          <span className="opacity-100 group-hover:opacity-0 transition-opacity">Following</span>
+          <span className="opacity-100 group-hover:opacity-0 transition-opacity">
+            Following
+          </span>
           <span className="absolute left-0 right-0 opacity-0 group-hover:opacity-100 text-red-500 transition-opacity font-bold text-center">
             Unfollow
           </span>

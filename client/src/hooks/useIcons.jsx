@@ -17,6 +17,8 @@ import {
   BsThreeDotsVertical,
   BsTwitterX,
   BsWhatsapp,
+  BsYoutube,
+  BsDiscord,
 } from "react-icons/bs";
 import {
   MdCelebration,
@@ -92,11 +94,40 @@ import {
   LuSun,
   LuMoon,
   LuCheck,
+  LuCheckCheck,
   LuSparkles,
   LuLink,
   LuCopy,
-  LuGitBranch,
   LuArrowUpRight,
+  LuGitBranch,
+  LuLock,
+  LuLockKeyhole,
+  LuCircleAlert,
+  LuInfo,
+  LuPaperclip,
+  LuBan,
+  LuTrash2,
+  LuImage,
+  LuMessageSquarePlus,
+  LuCompass,
+  LuGlobe,
+  LuTrophy,
+  LuAward,
+  LuHash,
+  LuZap,
+  LuFlame,
+  LuFileText,
+  LuTarget,
+  LuBold,
+  LuItalic,
+  LuUnderline,
+  LuCode,
+  LuType,
+  LuChevronLeft,
+  LuChevronRight,
+  LuUpload,
+  LuTriangleAlert,
+  LuUserPlus,
 } from "react-icons/lu";
 import {
   TbTrendingUp,
@@ -117,6 +148,7 @@ function useIcons() {
   return {
     // A
     addPersonO: <IoPersonAddOutline />,
+    alertTriangle: <LuTriangleAlert />,
     alphabetUp: <BsAlphabetUppercase />,
     appreciate: <LuSparkles className="text-amber-500" />,
     arrowL: <LuArrowLeft />,
@@ -124,10 +156,13 @@ function useIcons() {
     arrowDown: <LuChevronDown />,
     arrowUpRight: <LuArrowUpRight />,
     attachPin: <IoAttach />,
+    award: <LuAward />,
 
     // B
+    ban: <LuBan />,
     bellFi: <LuBell className="fill-current" />,
     bellO: <LuBell />,
+    bold: <LuBold />,
     bookmarkFi: <LuBookmarkCheck className="fill-current text-stone-900 dark:text-stone-100" />,
     bookmarkO: <LuBookmark />,
     book: <FaBookOpen />,
@@ -136,13 +171,19 @@ function useIcons() {
     // C
     calender: <LuCalendarDays />,
     callO: <IoCallOutline />,
+    camera: <BsCamera />,
     celebration: <MdCelebration />,
     cheer: <PiHandsClappingFill />,
+    chevronLeft: <LuChevronLeft />,
+    chevronRight: <LuChevronRight />,
     close: <LuX />,
+    code: <LuCode />,
     code1: <FaCode />,
     comment: <LuMessageSquare />,
+    compass: <LuCompass />,
     creative: <MdOutlineDeveloperMode />,
     check: <LuCheck />,
+    checkCheck: <LuCheckCheck />,
     circleCheck: <BsCheck2Circle />,
     copy: <LuCopy />,
     chatTab: <HiOutlineChatBubbleLeftRight />,
@@ -153,6 +194,7 @@ function useIcons() {
     duration: <BsClockHistory />,
     delete: <BiTrash />,
     delete1: <PiTrashSimpleLight />,
+    discord: <BsDiscord />,
     doubleArrowR: <MdOutlineKeyboardDoubleArrowRight />,
     doubleArrowL: <MdOutlineKeyboardDoubleArrowLeft />,
     docTab: <HiOutlineDocumentText />,
@@ -171,6 +213,8 @@ function useIcons() {
     fetherFi: <RiQuillPenFill />,
     fetherO: <RiQuillPenLine />,
     facebook: <BsFacebook />,
+    flame: <LuFlame className="text-amber-500" />,
+    fileText: <LuFileText />,
 
     // G
     gearFi: <LuSlidersHorizontal />,
@@ -178,10 +222,12 @@ function useIcons() {
     glitter: <WiStars className="" />,
     github: <LuGithub />,
     gitBranch: <LuGitBranch />,
+    globe: <LuGlobe />,
     google: <GrGoogle />,
     grow: <TbTrendingUp />,
 
     // H
+    hash: <LuHash />,
     helpful: <FaHandHoldingHeart />,
     homeFi: <IoHomeSharp />,
     homeO: <IoHomeOutline />,
@@ -191,13 +237,17 @@ function useIcons() {
     handshack: <LuHandshake />,
 
     // I
+    image: <LuImage />,
     image1: <PiImageThin />,
     info: <BsInfoCircle />,
+    italic: <LuItalic />,
 
     // L
     libraryFi: <IoLibrarySharp />,
     libraryO: <IoLibraryOutline />,
     link: <LuLink />,
+    lock: <LuLock />,
+    lockKeyhole: <LuLockKeyhole />,
     logout: <LuLogOut />,
     like: <BsHandThumbsUpFill />,
     likeO: <BsHandThumbsUp />,
@@ -208,10 +258,15 @@ function useIcons() {
     message: <TbMessageCircle />,
     messageFi: <TbMessageCircleFilled />,
     messageDoted: <LuMessageSquare />,
+    messageSquare: <LuMessageSquare />,
+    messagePlus: <LuMessageSquarePlus />,
+    circleAlert: <LuCircleAlert />,
+    infoCircle: <LuInfo />,
     moonFi: <LuMoon />,
     menu: <CiMenuBurger />,
 
     // P
+    paperclip: <LuPaperclip />,
     pCamera: <BsCamera />,
     penFi: <BsPenFill />,
     penO: <BsPen />,
@@ -232,6 +287,7 @@ function useIcons() {
     searchO: <LuSearch />,
     sendO: <LuSend />,
     smile: <LuSmile />,
+    sparkles: <LuSparkles />,
     success: <MdDone color="green" />,
     sun: <LuSun />,
     system: <GrSystem />,
@@ -239,11 +295,29 @@ function useIcons() {
     sendFi: <LuSend />,
 
     // T
+    type: <LuType />,
+    toastSuccess: <LuCheck className="stroke-[2.5]" />,
+    toastError: <LuCircleAlert className="stroke-[2.2]" />,
+    toastWarning: <LuCircleAlert className="stroke-[2.2]" />,
+    toastInfo: <LuInfo className="stroke-[2.2]" />,
+    toastLoading: <LuRefreshCw className="animate-spin stroke-[2.2]" />,
+    toastClose: <LuX className="stroke-[2]" />,
+    toastCopy: <LuCopy className="stroke-[2]" />,
+    toastUndo: <LuCornerUpLeft className="stroke-[2]" />,
+    toastChevronDown: <LuChevronDown className="stroke-[2]" />,
+    toastChevronUp: <LuChevronUp className="stroke-[2]" />,
+    toastCheck: <LuCheck className="stroke-[2.5]" />,
+    trash: <LuTrash2 />,
     tag: <FaUserTag />,
+    target: <LuTarget />,
+    trophy: <LuTrophy className="text-amber-500" />,
     ThreeDot: <BsThreeDotsVertical />,
 
     // U
+    underline: <LuUnderline />,
+    upload: <LuUpload />,
     userCheck: <LuUserCheck />,
+    userPlus: <LuUserPlus />,
     users: <LuUsers />,
     user: <LuUser />,
 
@@ -257,6 +331,12 @@ function useIcons() {
 
     // X
     XCom: <BsTwitterX />,
+
+    // Y
+    youtube: <BsYoutube className="text-red-500" />,
+
+    // Z
+    zap: <LuZap className="text-amber-500" />,
 
     // S
     sliders: <LuSlidersHorizontal />,

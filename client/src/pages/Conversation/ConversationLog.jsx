@@ -12,11 +12,12 @@ import Spinner from "../../components/loaders/Spinner";
 import SearchBar from "../../components/inputComponents/SearchBar";
 import ProfileImage from "../../components/ProfileImage";
 import TimeAgo from "../../components/utilityComp/TimeAgo";
-import { ArrowLeft, UserPlus, Search, MessageSquare, Users } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function MessageLog() {
+  const icons = useIcons();
   const { user } = useSelector((state) => state.auth);
-  const { conversationLogData } = useSelector((state) => state.messanger);
+  const { conversationLogData, selectedConversation } = useSelector((state) => state.messanger);
   const { getConversations } = ChatApi();
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("Id");
@@ -48,6 +49,19 @@ function MessageLog() {
       dispatch(setConversationLogData(conversationsData?.pages?.flatMap((page) => page)));
     }
   }, [conversationsData, dispatch]);
+
+  // Synchronize selected conversation when arriving from notification links or URL param
+  useEffect(() => {
+    if (conversationId && conversationLogData && conversationLogData.length > 0) {
+      if (!selectedConversation || selectedConversation.id !== conversationId) {
+        const matching = conversationLogData.find((c) => c.id === conversationId);
+        if (matching) {
+          dispatch(selectConversation(matching));
+          sessionStorage.setItem("conversationMeta", JSON.stringify(matching));
+        }
+      }
+    }
+  }, [conversationId, conversationLogData, selectedConversation, dispatch]);
 
   const { lastItemRef } = useLastItemObserver(
     fetchNextPage,
@@ -81,10 +95,10 @@ function MessageLog() {
             <button
               type="button"
               onClick={() => navigate("/")}
-              className="p-1.5 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/40 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer"
+              className="p-1.5 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/40 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-lg"
               aria-label="Back"
             >
-              <ArrowLeft className="w-5 h-5" />
+              {icons.arrowL}
             </button>
             <h1 className="text-lg font-extrabold text-stone-900 dark:text-stone-100 tracking-tight">
               Messages
@@ -94,10 +108,10 @@ function MessageLog() {
           <button
             type="button"
             onClick={() => navigate("new/c")}
-            className="p-2 rounded-full hover:bg-stone-200/60 dark:hover:bg-stone-800/60 text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100 transition-colors cursor-pointer"
+            className="p-2 rounded-full hover:bg-stone-200/60 dark:hover:bg-stone-800/60 text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100 transition-colors cursor-pointer text-lg"
             title="Start new conversation"
           >
-            <UserPlus className="w-5 h-5" />
+            {icons.addPersonO}
           </button>
         </div>
 
@@ -109,7 +123,9 @@ function MessageLog() {
             placeholder="Search conversations..."
             className="w-full p-2.5 pl-9 text-xs rounded-xl bg-stone-200/40 dark:bg-stone-800/40 border border-stone-300/50 dark:border-stone-700/50 text-stone-900 dark:text-stone-100 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-stone-400/50"
           />
-          <Search className="w-3.5 h-3.5 absolute left-3 top-3 text-stone-400 pointer-events-none" />
+          <div className="absolute left-3 top-3 text-stone-400 pointer-events-none text-xs">
+            {icons.searchO}
+          </div>
         </div>
       </header>
 
@@ -147,8 +163,8 @@ function MessageLog() {
                     alt={displayName}
                   />
                   {isGroup && (
-                    <div className="absolute -bottom-1 -right-1 p-0.5 rounded-full bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900">
-                      <Users className="w-2.5 h-2.5" />
+                    <div className="absolute -bottom-1 -right-1 p-0.5 rounded-full bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 text-[10px]">
+                      {icons.users}
                     </div>
                   )}
                 </div>
@@ -163,8 +179,17 @@ function MessageLog() {
                       date={conv?.updatedAt}
                     />
                   </div>
-                  <p className="text-xs text-stone-500 dark:text-stone-400 truncate leading-relaxed">
-                    {conv?.lastMessage || "No messages yet"}
+                  <p className="text-xs text-stone-500 dark:text-stone-400 truncate leading-relaxed flex items-center gap-1">
+                    {conv?.lastMessage ? (
+                      <>
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 shrink-0">
+                          {icons.lock}
+                        </span>
+                        <span className="truncate">Encrypted message</span>
+                      </>
+                    ) : (
+                      "No messages yet"
+                    )}
                   </p>
                 </div>
               </Link>
@@ -172,7 +197,9 @@ function MessageLog() {
           })
         ) : (
           <div className="flex flex-col items-center justify-center py-12 text-center text-stone-500">
-            <MessageSquare className="w-8 h-8 mb-2 opacity-50" />
+            <div className="w-8 h-8 mb-2 opacity-50 flex items-center justify-center text-2xl">
+              {icons.messageSquare}
+            </div>
             <p className="text-xs font-semibold">No conversations found</p>
           </div>
         )}

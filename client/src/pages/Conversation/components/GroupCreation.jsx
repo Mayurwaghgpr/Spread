@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToast } from "../../../store/slices/uiSlice.js";
 import { selectConversation } from "../../../store/slices/messangerSlice.js";
 import { useNavigate } from "react-router-dom";
-import { Camera } from "lucide-react";
+import useIcons from "../../../hooks/useIcons.jsx";
 import Spinner from "../../../components/loaders/Spinner.jsx";
 
 function GroupCreation({ handleGroupConfig, hashMap, users, selectedMembers }) {
+  const icons = useIcons();
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ function GroupCreation({ handleGroupConfig, hashMap, users, selectedMembers }) {
     <div className="w-full space-y-4 p-4">
       <div className="flex items-center gap-3 p-3 rounded-2xl spread-card border border-stone-200 dark:border-stone-800">
         <div className="p-2.5 rounded-full bg-stone-200/60 dark:bg-stone-800/60 text-stone-900 dark:text-stone-100">
-          <Camera className="w-5 h-5" />
+          <span className="w-5 h-5 flex items-center justify-center">{icons.camera}</span>
         </div>
         <CommonInput
           onChange={(e) =>

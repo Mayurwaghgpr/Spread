@@ -28,7 +28,7 @@ function ChatApi() {
       const result = await axiosInstance.get(`/messaging/c/messages`, {
         withCredentials: true,
         params: {
-          limit: 2,
+          limit: 30,
           conversationId,
           lastTimestamp: pageParam,
         },
@@ -39,24 +39,34 @@ function ChatApi() {
     }
   };
   const sendMessage = async ({
+    id,
     conversationId,
-    senderId,
     content,
     replyedTo,
-    createdAt,
   }) => {
     try {
       const result = await axiosInstance.post(`/messaging/c/send/message`, {
+        id,
         conversationId,
-        senderId,
         content,
         replyedTo,
-        createdAt,
       });
       return result.data;
     } catch (error) {
       throw error.response || error;
     }
+  };
+
+  const publishEncryptionIdentity = async (publicKey) => {
+    const result = await axiosInstance.put(`/messaging/keys/identity`, { publicKey });
+    return result.data;
+  };
+
+  const getConversationEncryptionKeys = async (conversationId) => {
+    const result = await axiosInstance.get(`/messaging/c/encryption-keys`, {
+      params: { conversationId },
+    });
+    return result.data.keys;
   };
 
   const getConversations = async ({ pageParam }) => {
@@ -90,6 +100,8 @@ function ChatApi() {
     createGroup,
     setMessageToMute,
     sendMessage,
+    publishEncryptionIdentity,
+    getConversationEncryptionKeys,
   };
 }
 

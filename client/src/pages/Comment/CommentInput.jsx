@@ -151,7 +151,7 @@ function CommentInput({ className = "" }) {
         alt={user?.username}
       />
 
-      <div className="flex-1 flex items-center gap-2 spread-card px-3 py-1.5 rounded-2xl border border-stone-200 dark:border-stone-800 focus-within:ring-2 focus-within:ring-stone-400/50 transition-all">
+      <div className="flex-1 flex items-center gap-2 bg-[#f7f4ee] dark:bg-[#16161b] px-3 py-1.5 rounded-2xl border border-[#e5dfd5] dark:border-[#26262e] focus-within:ring-2 focus-within:ring-stone-400/30 transition-all">
         <div className="flex-1 min-w-0">
           <EditableElementInput ref={inputRef} onChange={handleInput} />
         </div>
@@ -162,7 +162,7 @@ function CommentInput({ className = "" }) {
             ref={emojiButtonRef}
             type="button"
             onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
-            className="p-1.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-base"
+            className="p-1.5 rounded-full hover:bg-stone-200/60 dark:hover:bg-stone-800/60 text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 transition-colors cursor-pointer text-base"
             aria-label="Add emoji"
           >
             {icons.smile}

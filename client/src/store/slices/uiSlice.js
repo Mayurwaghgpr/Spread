@@ -51,18 +51,62 @@ const uiSlice = createSlice({
     },
 
     setToast: (state, action) => {
-      const existingToast = state.ToastState.find(
-        (toast) => toast.type === action.payload.type,
+      const payload = action.payload || {};
+      const targetId = payload.id;
+
+      // 1. Direct ID lookup (for state morphing like loading -> success/error)
+      if (targetId) {
+        const existingById = state.ToastState.find((t) => t.id === targetId);
+        if (existingById) {
+          Object.assign(existingById, {
+            ...payload,
+            updatedAt: Date.now(),
+          });
+          return;
+        }
+      }
+
+      // 2. Intelligent duplicate detection: only match exact same message and type
+      const incomingType = payload.type || "default";
+      const incomingMsg = payload.message || "";
+      const duplicateToast = state.ToastState.find(
+        (t) => t.type === incomingType && t.message === incomingMsg
       );
 
-      if (existingToast) {
-        existingToast.count = (existingToast.count || 1) + 1;
-        existingToast.message = action.payload.message;
+      if (duplicateToast) {
+        duplicateToast.count = (duplicateToast.count || 1) + 1;
+        duplicateToast.updatedAt = Date.now();
+        if (payload.action) duplicateToast.action = payload.action;
+        if (payload.duration !== undefined) duplicateToast.duration = payload.duration;
       } else {
-        state.ToastState = [
-          ...state.ToastState,
-          { id: nanoid(), count: 1, ...action.payload },
-        ].slice(-3);
+        const newToast = {
+          id: targetId || nanoid(),
+          type: incomingType,
+          message: incomingMsg,
+          title: payload.title || "",
+          description: payload.description || "",
+          duration:
+            payload.duration !== undefined
+              ? payload.duration
+              : incomingType === "loading"
+              ? Infinity
+              : 4500,
+          action: payload.action || null,
+          details: payload.details || null,
+          count: 1,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          ...payload,
+        };
+        // Keep up to 4 most recent toasts visible to prevent viewport clogging
+        state.ToastState = [...state.ToastState, newToast].slice(-4);
+      }
+    },
+    updateToast: (state, action) => {
+      const { id, ...updates } = action.payload || {};
+      const target = state.ToastState.find((t) => t.id === id);
+      if (target) {
+        Object.assign(target, updates, { updatedAt: Date.now() });
       }
     },
     removeToast: (state, action) => {
@@ -70,8 +114,8 @@ const uiSlice = createSlice({
         (el) => el.id !== action.payload,
       );
     },
-    removeAllToast: () => {
-      return { ...initialState, ThemeMode: getSavedTheme(), ToastState: [] };
+    removeAllToast: (state) => {
+      state.ToastState = [];
     },
     setThemeMode: (state, action) => {
       state.ThemeMode = action.payload;
@@ -104,6 +148,7 @@ export const {
   resetConfirmBox,
   setIsConfirm,
   setToast,
+  updateToast,
   removeToast,
   setThemeMode,
   setIsScale,

@@ -7,10 +7,11 @@ import Spinner from "../../components/loaders/Spinner";
 import EmptyState from "../../components/utilityComp/EmptyState";
 import Follow from "../../components/buttons/follow";
 import AbbreviateNumber from "../../utils/components/AbbreviateNumber";
-import { UserPlus, Sparkles, Users, AlertCircle } from "lucide-react";
+import useIcons from "../../hooks/useIcons";
 
 function Suggestions() {
   const { fetchPeopel } = usePublicApis();
+  const icons = useIcons();
 
   const {
     data,
@@ -21,6 +22,7 @@ function Suggestions() {
     isLoading,
     isError,
     error,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ["PeopleSuggestionsPage"],
     queryFn: ({ pageParam = new Date().toISOString() }) =>
@@ -53,12 +55,16 @@ function Suggestions() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="p-3 rounded-2xl bg-stone-200/70 dark:bg-stone-800/70 text-stone-900 dark:text-stone-100 shrink-0">
-              <UserPlus className="w-7 h-7 text-stone-700 dark:text-stone-300" />
+              <span className="w-7 h-7 text-stone-700 dark:text-stone-300 flex items-center justify-center text-2xl">
+                {icons.userPlus}
+              </span>
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100 tracking-tight flex items-center gap-2">
                 Discover People
-                <Sparkles className="w-4 h-4 text-stone-700 dark:text-stone-300" />
+                <span className="w-4 h-4 text-stone-700 dark:text-stone-300 flex items-center justify-center">
+                  {icons.sparkles}
+                </span>
               </h1>
               <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400">
                 Connect with tech writers, developers, and creators on Spread
@@ -70,7 +76,7 @@ function Suggestions() {
         {/* Stats Highlight Bar */}
         {!isLoading && !isError && peoples.length > 0 && (
           <div className="pt-2 border-t border-stone-200/60 dark:border-stone-800/60 flex items-center gap-2 text-xs font-semibold text-stone-600 dark:text-stone-400">
-            <Users className="w-4 h-4 text-stone-500" />
+            <span className="w-4 h-4 text-stone-500 flex items-center justify-center">{icons.users}</span>
             <span>Showing <AbbreviateNumber rawNumber={peoples.length} /> suggested creators</span>
           </div>
         )}
@@ -101,11 +107,11 @@ function Suggestions() {
           </div>
         )}
 
-        {/* Error State */}
+        {/* Error State with Jakob's Law recovery button */}
         {isError && (
           <div className="flex flex-col items-center justify-center py-12 text-center space-y-3">
             <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400">
-              <AlertCircle className="w-6 h-6" />
+              <span className="w-6 h-6 flex items-center justify-center text-xl">{icons.circleAlert}</span>
             </div>
             <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
               Unable to load suggestions
@@ -113,6 +119,13 @@ function Suggestions() {
             <p className="text-xs text-stone-500 dark:text-stone-400 max-w-sm">
               {error?.message || "An unexpected error occurred. Please try again later."}
             </p>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="spread-btn-secondary text-xs px-4 py-2 rounded-full mt-2 cursor-pointer font-semibold"
+            >
+              Try Again
+            </button>
           </div>
         )}
 
@@ -145,7 +158,7 @@ function Suggestions() {
             {!hasNextPage && !isFetchingNextPage && peoples.length > 0 && (
               <div className="text-center py-6">
                 <div className="inline-flex items-center gap-2 text-xs font-semibold text-stone-600 dark:text-stone-400 spread-pill px-4 py-2 rounded-full">
-                  <Users className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400" />
+                  <span className="w-3.5 h-3.5 text-stone-600 dark:text-stone-400 flex items-center justify-center">{icons.users}</span>
                   <span>You've explored all user suggestions</span>
                 </div>
               </div>
@@ -155,7 +168,7 @@ function Suggestions() {
             {peoples.length === 0 && !isLoading && (
               <div className="py-12 flex justify-center items-center text-center">
                 <EmptyState
-                  Icon={UserPlus}
+                  Icon={icons.userPlus}
                   heading="No suggestions found"
                   description="Check back later for new members joining Spread."
                 />

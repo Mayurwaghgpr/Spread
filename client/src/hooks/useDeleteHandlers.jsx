@@ -39,6 +39,7 @@ function useDeleteHandlers() {
         setToast({
           message: errorMessage,
           type: "error",
+          details: error?.response?.data || error?.message,
         })
       );
     },
@@ -62,6 +63,7 @@ function useDeleteHandlers() {
         setToast({
           message: errorMessage,
           type: "error",
+          details: error?.response?.data || error?.message,
         })
       );
     },

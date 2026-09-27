@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, lazy, Suspense } from "react";
 import Spinner from "../../../components/loaders/Spinner";
-import { Code2, ChevronDown } from "lucide-react";
+import useIcons from "../../../hooks/useIcons";
 
 const Editor = lazy(() => import("@monaco-editor/react"));
 
@@ -20,6 +20,7 @@ const SUPPORTED_LANGUAGES = [
 ];
 
 const CodeEditor = ({ content = {}, onUpdate }) => {
+  const icons = useIcons();
   const [language, setLanguage] = useState(content?.lang || "javascript");
   const [code, setCode] = useState(content?.code || "// Write code snippet here...\n");
   const editorRef = useRef(null);
@@ -57,7 +58,7 @@ const CodeEditor = ({ content = {}, onUpdate }) => {
             <div className="w-3 h-3 rounded-full bg-stone-400/80" />
           </div>
           <span className="text-xs font-bold text-stone-400 flex items-center gap-1.5 ml-2">
-            <Code2 className="w-3.5 h-3.5 text-stone-400" />
+            <span className="w-3.5 h-3.5 text-stone-400 flex items-center justify-center">{icons.code}</span>
             Code Block
           </span>
         </div>
@@ -75,7 +76,9 @@ const CodeEditor = ({ content = {}, onUpdate }) => {
               </option>
             ))}
           </select>
-          <ChevronDown className="w-3.5 h-3.5 text-stone-400 absolute right-2 pointer-events-none" />
+          <span className="w-3.5 h-3.5 text-stone-400 absolute right-2 pointer-events-none flex items-center justify-center">
+            {icons.arrowDown}
+          </span>
         </div>
       </div>
 

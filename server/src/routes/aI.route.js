@@ -5,6 +5,7 @@ import {
   generateAIAnalysis,
   generateAIChat,
   generateTagsForPosts,
+  generateAIProfileSummary,
 } from "../controllers/ai.controller.js";
 
 const router = express.Router();
@@ -21,5 +22,6 @@ const aiRateLimiter = rateLimit({
 router.post("/analysis", IsAuth, aiRateLimiter, generateAIAnalysis);
 router.post("/chat", IsAuth, aiRateLimiter, generateAIChat);
 router.post("/tags", IsAuth, aiRateLimiter, generateTagsForPosts);
+router.post("/profile-summary", IsAuth, aiRateLimiter, generateAIProfileSummary);
 
 export default router;

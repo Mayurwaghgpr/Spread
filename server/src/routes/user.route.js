@@ -6,6 +6,8 @@ import {
   getFollowers,
   getFollowing,
   searchForUsername,
+  updateAboutCanvas,
+  pinUserPost,
 } from "../controllers/user.controller.js";
 import IsAuth from "../middlewares/isAuth.middleware.js";
 import { multerFileUpload } from "../middlewares/multer.middleware.js";
@@ -21,6 +23,8 @@ router.get("/following/:userId", IsAuth, getFollowing);
 
 // Post Routes
 router.post("/profile/edit", IsAuth, multerFileUpload, EditUserProfile);
+router.post("/about/update", IsAuth, updateAboutCanvas);
+router.post("/pin-post", IsAuth, pinUserPost);
 router.post("/search/username", searchForUsername);
 
 export default router;

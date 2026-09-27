@@ -59,6 +59,49 @@ const User = db.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    // This is intentionally public. The corresponding non-extractable private
+    // key is generated and kept in the user's browser, never on this server.
+    encryptionPublicKey: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
+    // Spread Profile Canvas fields
+    currentFocus: {
+      type: DataTypes.STRING(250),
+      allowNull: true,
+    },
+    aboutStory: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    interests: {
+      type: DataTypes.JSONB,
+      defaultValue: [],
+    },
+    skills: {
+      type: DataTypes.JSONB,
+      defaultValue: [],
+    },
+    socialLinks: {
+      type: DataTypes.JSONB,
+      defaultValue: {},
+    },
+    pinnedPostId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    profilePreferences: {
+      type: DataTypes.JSONB,
+      defaultValue: {
+        showStats: true,
+        showInterests: true,
+        showAiSummary: true,
+      },
+    },
+    aiProfileSummary: {
+      type: DataTypes.JSONB,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,
@@ -66,20 +109,26 @@ const User = db.define(
 );
 
 function generateProfileLink(user) {
-  return `${process.env.FRONT_END_URL}/profile/@${user.username}/${user.id}`;
+  const username = user.username || user.dataValues?.username;
+  const id = user.id || user.dataValues?.id;
+  if (!username || !id) return user.profileLink || null;
+  return `${process.env.FRONT_END_URL}/profile/@${username}/${id}`;
 }
 
 // beforeCreate — single DB insert
 User.beforeCreate(async (user) => {
-  const username = await genUniqueUserName(user.email);
-  user.username = username;
+  if (!user.username) {
+    const username = await genUniqueUserName(user.email);
+    user.username = username;
+  }
   user.profileLink = generateProfileLink(user);
 });
 
-// afterUpdate — update profile link if username changes
-User.afterUpdate(async (user) => {
-  user.profileLink = generateProfileLink(user);
-  await user.save();
+// beforeUpdate — update profile link if username changes without triggering infinite loop
+User.beforeUpdate((user) => {
+  if (user.changed("username")) {
+    user.profileLink = generateProfileLink(user);
+  }
 });
 
 export default User;

@@ -7,6 +7,7 @@ import PostTag from "./posts/postTags.model.js";
 import SavedPost from "./savedPost.model.js";
 import Comments from "./comments.model.js";
 import Notification from "./notification.model.js";
+import PushSubscription from "./pushSubscription.model.js";
 
 // Messaging Models
 import Conversation from "./messaging/conversation.model.js";
@@ -43,6 +44,7 @@ Follow.belongsTo(User, {
 // ================== POSTS & TAGS ==================
 User.hasMany(Post, { foreignKey: "authorId", as: "posts" });
 Post.belongsTo(User, { foreignKey: "authorId", as: "author" });
+User.belongsTo(Post, { as: "pinnedPost", foreignKey: "pinnedPostId" });
 
 // Post blocks (paragraphs, code snippets, etc.)
 Post.hasMany(PostBlock, { as: "postBlocks", foreignKey: "postId" });
@@ -158,6 +160,18 @@ Notification.belongsTo(User, {
   allowNull: true,
 });
 
+// ================== PUSH NOTIFICATIONS ==================
+User.hasMany(PushSubscription, {
+  foreignKey: "userId",
+  as: "pushSubscriptions",
+  onDelete: "CASCADE",
+});
+PushSubscription.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+  onDelete: "CASCADE",
+});
+
 // ================== EXPORT MODELS ==================
 export {
   User,
@@ -174,4 +188,5 @@ export {
   Attachments,
   ReadReceipt,
   Notification,
+  PushSubscription,
 };

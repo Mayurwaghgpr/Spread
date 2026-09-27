@@ -1,128 +1,91 @@
-import Messages from "../models/messaging/messages.model.js";
+import Members from "../models/messaging/members.model.js";
 import redisClient from "../utils/redisClient.js";
-import Conversation from "../models/messaging/conversation.model.js";
 import sockIo from "../socket.js";
+
+const isConversationMember = (conversationId, userId) =>
+  Members.findOne({ where: { conversationId, memberId: userId } });
+
+const validConversationId = (value) =>
+  typeof value === "string" &&
+  (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value) ||
+   /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(value));
 
 export default function socketHandlers() {
   const io = sockIo.getIo();
   io.on("connection", async (socket) => {
-    // console.log(socket.handshake.query)
-    const { connectedUserId, activeConversationId } = socket.handshake.query;
-    console.log(`Connected user: ${connectedUserId} (${socket.id})`);
-    console.log(`active conv: `, activeConversationId);
-
-    if (connectedUserId) {
-      socket.join(`user:${connectedUserId}`);
-    }
-    // Check and create room if server has restared and client is still in conversation
-    const roomExists = io.sockets.adapter.rooms
-      .get(activeConversationId)
-      ?.has(socket.id);
-    if (activeConversationId && !roomExists) {
-      socket.join(activeConversationId);
-      socket.emit("reconnected", {
-        conversationId: activeConversationId,
-        socketId: socket.id,
-      });
+    const userId = socket.data.userId;
+    const cacheKey = `sockets:user:${userId}`;
+    await redisClient.set(cacheKey, socket.id);
+    if (userId) {
+      socket.join(`user:${userId}`);
     }
 
-    // Register user with socket ID
-    socket.on("register", async (userId) => {
-      const cacheKey = `sockets:user:${userId}`;
-      await redisClient.set(cacheKey, socket.id);
-      console.log(`User ${userId} registered with socket ID ${socket.id}`);
-    });
-
-    // Join a conversation room
-    socket.on("joinConversation", (conversationId) => {
-      socket.join(conversationId);
-      console.log(
-        `User ${connectedUserId} joined conversation: ${conversationId}`,
-      );
-    });
-
-    // Leave a conversation room
-    socket.on("leaveConversation", (conversationId) => {
-      socket.leave(conversationId);
-      // console.log(`User left conversation: ${conversationId}`);
-    });
-
-    socket.on("isTyping", ({ conversationId, senderId, image }) => {
-      io.to(conversationId).emit("isTyping", {
-        conversationId,
-        senderId,
-        image,
-      });
-    });
-    socket.on("isStopedTyping", ({ conversationId, senderId }) => {
-      io.to(conversationId).emit("isStopedTyping", {
-        conversationId,
-        senderId,
-      });
-    });
-    // Send message and broadcast to conversation
-    socket.on(
-      "sendMessage",
-      async ({ conversationId, senderId, content, replyedTo }) => {
-        try {
-          io.to(conversationId).emit("newMessage", {
-            conversationId,
-            senderId,
-            content,
-            replyedTo: replyedTo ? replyedTo : "",
-            createdAt: new Date().toISOString(),
-          });
-          // console.log("Message sent:", {
-          //   conversationId,
-          //   senderId,
-          //   content,
-          //   replyedTo: replyedTo ? replyedTo : "",
-          // });
-          // // Push to Redis Stream for async storage
-          // await redisClient.xAdd(
-          //   "message_queue",
-          //   "*", //ID
-          //   {
-          //     conversationId: conversationId,
-          //     senderId: senderId,
-          //     content: content,
-          //     replyedTo: replyedTo ? replyedTo : "",
-          //   }
-          // );
-
-          await Messages.create({
-            conversationId,
-            senderId,
-            content,
-            replyedTo,
-          });
-          await Conversation.update(
-            { lastMessage: content },
-            { where: { id: conversationId } },
-          );
-        } catch (error) {
-          console.error("Error sending message:", error);
-          io.to(conversationId).emit("ErrorSendMessage", {
-            message: "Failed to send message" + error,
-          });
-        }
-      },
-    );
-
-    // Mark message as read
-    socket.on("markAsRead", async ({ messageId, userId }) => {
+    socket.on("joinConversation", async (conversationId, acknowledgement) => {
       try {
-        // await ReadReceipt.create({ messageId, userId });
-        io.emit("messageRead", { messageId, userId });
-      } catch (error) {
-        console.error("Error marking message as read:", error);
+        if (!validConversationId(conversationId) || !(await isConversationMember(conversationId, userId))) {
+          acknowledgement?.({ ok: false, error: "Access denied" });
+          return;
+        }
+        await socket.join(`conversation:${conversationId}`);
+        acknowledgement?.({ ok: true });
+      } catch (err) {
+        console.error(`[Socket] Error joining conversation: ${err.message}`);
+        acknowledgement?.({ ok: false, error: err.message });
       }
     });
 
-    // Handle user disconnect
+    socket.on("leaveConversation", (conversationId) => {
+      if (validConversationId(conversationId)) {
+        socket.leave(`conversation:${conversationId}`);
+      }
+    });
+
+    socket.on("isTyping", async (data) => {
+      try {
+        const conversationId = typeof data === "string" ? data : data?.conversationId;
+        if (!validConversationId(conversationId)) return;
+
+        // Fast path: if socket already in room, broadcast directly
+        if (!socket.rooms.has(`conversation:${conversationId}`)) {
+          if (!(await isConversationMember(conversationId, userId))) return;
+          await socket.join(`conversation:${conversationId}`);
+        }
+        socket.to(`conversation:${conversationId}`).emit("isTyping", {
+          conversationId,
+          senderId: userId,
+        });
+      } catch (err) {
+        console.error(`[Socket] Error in isTyping: ${err.message}`);
+      }
+    });
+
+    socket.on("isStopedTyping", async (data) => {
+      try {
+        const conversationId = typeof data === "string" ? data : data?.conversationId;
+        if (!validConversationId(conversationId)) return;
+
+        if (!socket.rooms.has(`conversation:${conversationId}`)) {
+          if (!(await isConversationMember(conversationId, userId))) return;
+          await socket.join(`conversation:${conversationId}`);
+        }
+        socket.to(`conversation:${conversationId}`).emit("isStopedTyping", {
+          conversationId,
+          senderId: userId,
+        });
+      } catch (err) {
+        console.error(`[Socket] Error in isStopedTyping: ${err.message}`);
+      }
+    });
+
     socket.on("disconnect", async () => {
-      // console.log("User disconnected:", socket.id);
-      await redisClient.del(`sockets:user:${connectedUserId}`);
+      try {
+        // Do not remove a newer connection for the same user.
+        if ((await redisClient.get(cacheKey)) === socket.id) {
+          await redisClient.del(cacheKey);
+        }
+      } catch (err) {
+        console.error(`[Socket] Error during disconnect: ${err.message}`);
+      }
     });
   });
 }

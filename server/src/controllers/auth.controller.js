@@ -84,19 +84,29 @@ export const signIn = async (req, res, next) => {
 export const getLoginUser = async (req, res, next) => {
   try {
     const userInfo = await redisClient.get(req.authUser.id);
+    let userData = null;
     if (userInfo) {
-      return res.status(200).json(JSON.parse(userInfo));
+      userData = JSON.parse(userInfo);
+    } else {
+      userData = await userService.finduser({
+        id: req.authUser.id,
+      });
+      if (userData) {
+        await redisClient.set(
+          req.authUser.id,
+          JSON.stringify(userData)
+        );
+      }
     }
-    const userInfoFromDatabase = await userService.finduser({
-      id: req.authUser.id,
+    const token =
+      req.cookies?.AccessToken ||
+      req.header("Authorization")?.replace("Bearer ", "");
+
+    const plainUserData = userData?.toJSON ? userData.toJSON() : userData;
+    res.status(200).json({
+      ...plainUserData,
+      AccessToken: token,
     });
-    if (userInfoFromDatabase) {
-      await redisClient.set(
-        req.authUser.id,
-        JSON.stringify(userInfoFromDatabase)
-      );
-    }
-    res.status(200).json(userInfoFromDatabase);
   } catch (error) {
     console.error("Error during fetching user data", error);
     next(error);

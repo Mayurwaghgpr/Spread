@@ -11,18 +11,32 @@ import { EXPIRATION } from "../config/constants.js";
 import userService from "../services/user.service.js";
 import { bloomFilter } from "../utils/BloomFilter.js";
 
-// Get user profile
+// Get user profile (supports UUID or username)
 export const getUserProfile = async (req, res, next) => {
-  const id = req?.params?.id;
+  const rawId = req?.params?.id;
   try {
-    const cachedUserData = await redisClient.get(id);
+    if (!rawId) {
+      return res.status(400).json({ message: "User identifier is required" });
+    }
+    const cleanId = rawId.replace(/^@/, "");
+
+    const cachedUserData = await redisClient.get(cleanId);
     if (cachedUserData !== null) {
       return res.status(200).json(JSON.parse(cachedUserData));
     }
 
-    const userInfo = await userService.finduser({ id });
+    const isUuid =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        cleanId
+      );
+    const query = isUuid ? { id: cleanId } : { username: cleanId };
 
-    await redisClient.setEx(id, EXPIRATION, JSON.stringify(userInfo));
+    const userInfo = await userService.finduser(query);
+    if (!userInfo) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await redisClient.setEx(cleanId, EXPIRATION, JSON.stringify(userInfo));
     return res.status(200).json(userInfo);
   } catch (error) {
     console.error("Error fetching user profile:", error);
@@ -149,6 +163,18 @@ export const EditUserProfile = async (req, res, next) => {
 
     delete updatedData.userFromOAuth;
 
+    // Safely parse JSON fields if provided via FormData
+    const jsonFields = ["interests", "skills", "socialLinks", "profilePreferences", "aiProfileSummary"];
+    for (const field of jsonFields) {
+      if (typeof updatedData[field] === "string") {
+        try {
+          updatedData[field] = JSON.parse(updatedData[field]);
+        } catch (e) {
+          // keep as is if not parseable
+        }
+      }
+    }
+
     // Track username changes in Bloom Filter
     if (updatedData.username) {
       bloomFilter.add(updatedData.username);
@@ -161,18 +187,101 @@ export const EditUserProfile = async (req, res, next) => {
     });
 
     if (updatedUser) {
+      const fullUser = await userService.finduser({ id: req.authUser.id });
+      const payload = fullUser || updatedUser;
       await redisClient.setEx(
         req.authUser.id,
         EXPIRATION,
-        JSON.stringify(updatedUser)
+        JSON.stringify(payload)
       );
-      res.status(200).json(updatedUser);
+      if (payload.username) {
+        await redisClient.setEx(
+          payload.username,
+          EXPIRATION,
+          JSON.stringify(payload)
+        );
+      }
+      res.status(200).json(payload);
     } else {
       res.status(400).json({ message: "User not found" });
     }
   } catch (err) {
     console.error("Error updating profile:", err);
     next(err);
+  }
+};
+
+// Update Spread About Canvas
+export const updateAboutCanvas = async (req, res, next) => {
+  const userId = req.authUser?.id;
+  const {
+    currentFocus,
+    aboutStory,
+    interests,
+    skills,
+    socialLinks,
+    pinnedPostId,
+    profilePreferences,
+    aiProfileSummary,
+  } = req.body;
+
+  try {
+    const updatePayload = {};
+    if (currentFocus !== undefined) updatePayload.currentFocus = currentFocus;
+    if (aboutStory !== undefined) updatePayload.aboutStory = aboutStory;
+    if (interests !== undefined) updatePayload.interests = Array.isArray(interests) ? interests : [];
+    if (skills !== undefined) updatePayload.skills = Array.isArray(skills) ? skills : [];
+    if (socialLinks !== undefined) updatePayload.socialLinks = typeof socialLinks === "object" ? socialLinks : {};
+    if (pinnedPostId !== undefined) updatePayload.pinnedPostId = pinnedPostId || null;
+    if (profilePreferences !== undefined) updatePayload.profilePreferences = profilePreferences;
+    if (aiProfileSummary !== undefined) updatePayload.aiProfileSummary = aiProfileSummary;
+
+    await User.update(updatePayload, { where: { id: userId } });
+
+    const freshUser = await userService.finduser({ id: userId });
+    if (freshUser) {
+      await redisClient.setEx(userId, EXPIRATION, JSON.stringify(freshUser));
+      if (freshUser.username) {
+        await redisClient.setEx(freshUser.username, EXPIRATION, JSON.stringify(freshUser));
+      }
+      return res.status(200).json(freshUser);
+    }
+
+    res.status(404).json({ message: "User not found" });
+  } catch (error) {
+    console.error("Error updating About canvas:", error);
+    next(error);
+  }
+};
+
+// Pin or Unpin a story for the profile
+export const pinUserPost = async (req, res, next) => {
+  const userId = req.authUser?.id;
+  const { postId } = req.body;
+
+  try {
+    if (postId) {
+      const post = await Post.findOne({ where: { id: postId, authorId: userId } });
+      if (!post) {
+        return res.status(404).json({ message: "Story not found or unauthorized to pin" });
+      }
+    }
+
+    await User.update({ pinnedPostId: postId || null }, { where: { id: userId } });
+
+    const freshUser = await userService.finduser({ id: userId });
+    if (freshUser) {
+      await redisClient.setEx(userId, EXPIRATION, JSON.stringify(freshUser));
+      if (freshUser.username) {
+        await redisClient.setEx(freshUser.username, EXPIRATION, JSON.stringify(freshUser));
+      }
+      return res.status(200).json(freshUser);
+    }
+
+    res.status(400).json({ message: "Could not update pinned story" });
+  } catch (error) {
+    console.error("Error pinning story:", error);
+    next(error);
   }
 };
 

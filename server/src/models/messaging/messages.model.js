@@ -8,7 +8,8 @@ const Messages = db.define("Messages", {
     primaryKey: true,
   },
   content: {
-    type: DataTypes.STRING,
+    // An E2EE envelope, never plaintext. See client/src/utils/e2ee.js.
+    type: DataTypes.JSONB,
     allowNull: false,
   },
   conversationId: {

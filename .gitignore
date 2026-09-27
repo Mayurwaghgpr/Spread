@@ -3,6 +3,8 @@ server/config/config.json
 server/images/userImages/*
 server/images/*.{jpg,png}
 server/migrations/
+!server/migrations/
+!server/migrations/*.sql
  dump.rdb
 # Logs
 logs

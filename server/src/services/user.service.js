@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import User from "../models/user.model.js";
 import Post from "../models/posts/posts.model.js";
+import Likes from "../models/likes.model.js";
+import Comments from "../models/comments.model.js";
 import { SALT_ROUNDS } from "../config/constants.js";
 import genUniqueUserName from "../utils/UserNameGenerator.js";
 import { bloomFilter } from "../utils/BloomFilter.js";
@@ -37,10 +39,69 @@ class UserService {
           through: { attributes: [] },
           attributes: ["id"],
         },
+        {
+          model: Post,
+          as: "pinnedPost",
+          attributes: [
+            "id",
+            "title",
+            "subtitle",
+            "previewImage",
+            "createdAt",
+            "publishedAt",
+            "slug",
+          ],
+          include: [
+            {
+              model: Likes,
+              as: "Likes",
+              attributes: ["id"],
+            },
+            {
+              model: Comments,
+              as: "comments",
+              attributes: ["id"],
+            },
+          ],
+        },
       ],
     });
 
-    return userInfo || null;
+    if (!userInfo) return null;
+
+    const plainUser = userInfo.toJSON ? userInfo.toJSON() : { ...userInfo };
+    delete plainUser.password;
+    delete plainUser.refreshToken;
+
+    try {
+      const [totalPosts, totalLikes] = await Promise.all([
+        Post.count({ where: { authorId: plainUser.id } }),
+        Likes.count({
+          include: [
+            {
+              model: Post,
+              as: "likedPost",
+              where: { authorId: plainUser.id },
+              attributes: [],
+            },
+          ],
+        }),
+      ]);
+
+      plainUser.creatorStats = {
+        totalPosts: totalPosts || 0,
+        totalLikes: totalLikes || 0,
+        memberSince: plainUser.createdAt,
+      };
+    } catch (statsErr) {
+      plainUser.creatorStats = {
+        totalPosts: plainUser.posts?.length || 0,
+        totalLikes: 0,
+        memberSince: plainUser.createdAt,
+      };
+    }
+
+    return plainUser;
   }
 
   async register({ email, password, displayName, username }) {

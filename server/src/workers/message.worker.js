@@ -24,6 +24,12 @@ async function processMessages() {
         id,
         message: { content, conversationId, senderId, replyedTo },
       } of result[0].messages) {
+        // This worker is retained for a future queued delivery path. Refuse
+        // the old plaintext stream format if it is ever enabled again.
+        if (!content || content.v !== 1) {
+          await redisClient.xDel("message_queue", id);
+          continue;
+        }
         console.log(`Processing message ID: ${id}`, {
           content,
           conversationId,
@@ -41,7 +47,7 @@ async function processMessages() {
             { transaction: t }
           );
           await Conversation.update(
-            { lastMessage: content },
+            { lastMessage: "Encrypted message" },
             { where: { id: conversationId }, transaction: t }
           );
         });

@@ -6,6 +6,8 @@ import {
   CHAT_SYSTEM_PROMPT,
 } from "../prompts/post-analysis.js";
 import redisClient from "../utils/redisClient.js";
+import Post from "../models/posts/posts.model.js";
+import User from "../models/user.model.js";
 
 dotenv.config();
 
@@ -365,5 +367,97 @@ Post Content: ${typeof content === "string" ? content : JSON.stringify(content)}
   } catch (error) {
     console.error("Generate Tags Error:", error.message);
     res.status(500).json({ message: "Failed to generate tags" });
+  }
+};
+
+/**
+ * Generate AI-Assisted Creator Summary & Writing Themes based strictly on published stories
+ */
+export const generateAIProfileSummary = async (req, res, next) => {
+  try {
+    const userId = req.authUser?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const [user, posts] = await Promise.all([
+      User.findByPk(userId, {
+        attributes: ["id", "displayName", "username", "bio", "interests", "skills"],
+      }),
+      Post.findAll({
+        where: { authorId: userId },
+        attributes: ["id", "title", "subtitle", "createdAt"],
+        order: [["createdAt", "DESC"]],
+        limit: 10,
+      }),
+    ]);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!posts || posts.length === 0) {
+      return res.status(200).json({
+        summary: `${user.displayName || user.username} has not published any stories on Spread yet. Once stories are published, Spread AI will synthesize recurring themes and focus areas.`,
+        writingThemes: Array.isArray(user.interests) && user.interests.length > 0
+          ? user.interests.slice(0, 5)
+          : ["Storytelling", "Knowledge Sharing"],
+        hasPosts: false,
+      });
+    }
+
+    const postsText = posts
+      .map((p, idx) => `${idx + 1}. "${p.title}" - ${p.subtitle || ""}`)
+      .join("\n");
+
+    const interestsText = Array.isArray(user.interests) && user.interests.length > 0
+      ? `Author's stated interests: ${user.interests.join(", ")}`
+      : "";
+
+    const prompt = `You are an editorial curator for Spread, an intellectual storytelling and knowledge-sharing platform.
+Analyze this author's published stories and provide:
+1. "summary": A concise, natural, 2-3 sentence overview describing their perspective, what domains they write about, and what readers can expect from their catalog. Write in the third person. Keep the tone warm, intellectual, and grounded. Do NOT invent credentials, companies, or degrees not explicitly mentioned in their stories.
+2. "writingThemes": An array of 3 to 6 overarching themes or domain tags (e.g., ["Systems Design", "Developer Experience", "AI Ethics"]).
+
+Author: ${user.displayName || user.username}
+Bio: ${user.bio || "None provided"}
+${interestsText}
+
+Published Stories:
+${postsText}
+
+Return ONLY valid JSON matching this schema:
+{
+  "summary": "...",
+  "writingThemes": ["..."]
+}`;
+
+    const response = await executeContentWithFallback({
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+      },
+    });
+
+    const responseText = response.text || "{}";
+    let parsed;
+    try {
+      parsed = JSON.parse(responseText);
+    } catch (e) {
+      const cleaned = responseText.replace(/```json|```/g, "").trim();
+      parsed = JSON.parse(cleaned);
+    }
+
+    return res.status(200).json({
+      summary: parsed?.summary || "",
+      writingThemes: Array.isArray(parsed?.writingThemes) ? parsed.writingThemes : [],
+      hasPosts: true,
+      generatedAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("AI Profile Summary Error:", error);
+    res.status(500).json({
+      message: error.message || "Failed to generate AI profile summary",
+    });
   }
 };

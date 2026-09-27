@@ -86,7 +86,7 @@ function MessageLog() {
 
   return (
     <aside
-      className={`${conversationId ? "hidden sm:flex" : "flex"} flex-col w-full sm:w-80 lg:w-96 border-r border-stone-200/70 dark:border-stone-800/70 shrink-0 h-full bg-transparent border-inherit`}
+      className={`${conversationId ? "hidden sm:flex" : "flex"} flex-col w-full sm:w-80 lg:w-96 border-r  dark:border-stone-800/70 shrink-0 h-full bg-transparent border-inherit`}
     >
       {/* Immersed Header */}
       <header className="sticky top-0 z-20 w-full border-b border-stone-200/70 dark:border-stone-800/70 p-4 space-y-3 bg-transparent backdrop-blur-md">
@@ -150,11 +150,10 @@ function MessageLog() {
                 replace={conversationId !== null}
                 onClick={() => handleSelectConversation(conv)}
                 ref={idx === arr.length - 1 ? lastItemRef : null}
-                className={`flex items-center gap-3 p-3 rounded-2xl transition-all cursor-pointer ${
-                  isSelected
+                className={`flex items-center gap-3 p-3 rounded-2xl transition-all cursor-pointer ${isSelected
                     ? "bg-stone-200/80 dark:bg-stone-800/80 text-stone-900 dark:text-stone-100 font-semibold"
                     : "hover:bg-stone-200/50 dark:hover:bg-stone-800/40 text-stone-700 dark:text-stone-300"
-                }`}
+                  }`}
               >
                 <div className="relative shrink-0">
                   <ProfileImage
